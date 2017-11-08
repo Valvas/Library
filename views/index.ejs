@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <% include include/head.ejs %>
+  <body class='logon-body'>
+    <div class='logon-form-popup'>
+      <p id='logon-form-title' class='logon-form-title'>CONNEXION</p>
+      <form>
+        <input placeholder='Adresse Email' id='logon-form-email-input' type='text' /></br>
+        <input placeholder='Mot De Passe' id='logon-form-password-input' type='password' />
+        <button id='logon-form-send-button' class='logon-form-send-button'><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+        <p id='logon-form-forgotten-password' class='logon-form-question'>Mot de passe oublié ?</p>
+      </form>
+    </div>
+    <% include include/scripts.ejs %>
+    <script src='/js/index/logon.js'></script>
+  </body>
+</html>
