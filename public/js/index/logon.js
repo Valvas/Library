@@ -3,33 +3,27 @@ window.onload = $(function()
   $('body').on('click', '#logon-form-send-button', function(target)
   {
     target.preventDefault();
+    
+    $(document.getElementById('logon-form-email-input')).val() == '' ?
+    $(document.getElementById('logon-form-email-input')).css('border', '1px solid #FF0921'):
+    $(document.getElementById('logon-form-email-input')).css('border', '1px solid #DDDDDD');
+    
+    $(document.getElementById('logon-form-password-input')).val() == '' ?
+    $(document.getElementById('logon-form-password-input')).css('border', '1px solid #FF0921'):
+    $(document.getElementById('logon-form-password-input')).css('border', '1px solid #DDDDDD');
 
-    var check = true;
-    
-    if($(document.getElementById('logon-form-email-input')).val() == '')
+    if($(document.getElementById('logon-form-email-input')).val() != '' && $(document.getElementById('logon-form-password-input')).val() != '')
     {
-      $(document.getElementById('logon-form-email-input')).css('border', '1px solid #FF0921');
-      check = false;
-    }
-    
-    else{ $(document.getElementById('logon-form-email-input')).css('border', '1px solid #DDDDDD') }
-    
-    if($(document.getElementById('logon-form-password-input')).val() == '')
-    {
-      $(document.getElementById('logon-form-password-input')).css('border', '1px solid #FF0921');
-      check = false;
-    }
-    
-    else{ $(document.getElementById('logon-form-password-input')).css('border', '1px solid #DDDDDD') }
-            
-    var email = $('#logon-form-email-input').val(), password = $('#logon-form-password-input').val();
+      var email = $('#logon-form-email-input').val(), password = $('#logon-form-password-input').val();
 
-    if(check)
-    {
       $.ajax(
       {
-        type: 'PUT', timeout: 2000, dataType: 'JSON', data: { 'email-address': email, 'uncrypted-password': password }, url: '/', success: function(){},
-        error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); }     
+        type: 'PUT', timeout: 2000, dataType: 'JSON', data: { 'emailAddress': email, 'uncryptedPassword': password }, url: '/', success: function(){},
+        error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); } 
+
+      }).done(function(json)
+      {
+        json['result'] == true ? location = '/home' : printError(json['message']);
       });
     }
   });

@@ -1,0 +1,20 @@
+{
+  "database":
+  {
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "root",
+    "library_database": "library",
+    "rights_table": "rights",
+    "auth_table": "account",
+    "files_table": "files"
+  },
+
+  "salt": "$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
+  "path_to_root_storage": "C:/Users/dev/Desktop/removal",
+
+  "file_ext":
+  {
+    "txt": "txt"
+  }
+}

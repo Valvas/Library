@@ -21,7 +21,7 @@
 .nav-menu-element-bug-report
 {
   top:1%;
-  left:97%;
+  left:95%;
   cursor:pointer;
   position:absolute;
   font-size:x-large;
@@ -29,7 +29,7 @@
 
 .nav-menu-element-bug-report:hover
 {
-  color:#77B5FE;
+  color:#FF0921;
 }
 
 .nav-menu-element:hover

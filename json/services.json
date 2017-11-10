@@ -1,0 +1,31 @@
+{
+  "info":
+  {
+    "name": "Informatique"
+  },
+
+  "service02":
+  {
+    "name": "Service 02"
+  },
+
+  "service03":
+  {
+    "name": "Service 03"
+  },
+
+  "service04":
+  {
+    "name": "Service 04"
+  },
+
+  "service05":
+  {
+    "name": "Service 05"
+  },
+
+  "service06":
+  {
+    "name": "Service 06"
+  }
+}

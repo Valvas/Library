@@ -1,0 +1,5 @@
+{
+  "no_account_found": "Adresse email ou mot de passe incorrect.",
+  "account_not_activated": "Votre compte n'est pas encore activé, un email avec un lien d'activation vous a été envoyé.",
+  "account_suspended": "Votre compte est actuellement suspendu, contactez votre administrateur."
+}

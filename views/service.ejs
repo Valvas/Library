@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <% include include/head.ejs %>
+  <body class='private-section-body'>
+    <% include include/menu.ejs %>
+    <% include include/navigation.ejs %>
+    <div id='service-main-block' class='service-main-block' name='<%= identifier %>'>
+      <p id='service-main-block-title' class='service-main-block-title'><%= service %></p>
+    </div>
+    <% include include/scripts.ejs %>
+    <% include include/aside_scripts.ejs %>
+    <script src='/js/service/onload.js'></script>
+    <script src='/js/service/delete.js'></script>
+  </body>
+</html>
