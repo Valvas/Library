@@ -16,5 +16,10 @@
   "file_ext":
   {
     "txt": "txt"
+  },
+
+  "ext_accepted":
+  {
+    "info": { "0": "txt" }
   }
 }

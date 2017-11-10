@@ -26,6 +26,11 @@ window.onload = $(function()
 
   $('body').on('click', '#popup-perform-button', function(event)
   {
+    $('#popup-cancel-button').hide();
+    $('#popup-perform-button').hide();
+
+    $('#popup').append(`<i class='fa fa-spinner fa-pulse fa-2x fa-fw'></i><span class='sr-only'>En cours...</span>`)
+
     $.ajax(
     {
       type: 'DELETE', timeout: 2000, dataType: 'JSON', data: { file: $(event.target).parent().attr('name'), service: $(document.getElementById('service-main-block')).attr('name')}, url: '/service/delete-file', success: function(){},
@@ -33,21 +38,32 @@ window.onload = $(function()
                   
     }).done(function(json)
     {
-      if(json['is_in_database'] == undefined) printError('500 - INTERNAL SERVER ERROR - FILE NOT DELETED');
-      else if(json['is_in_database'] == false) printError('Le fichier est introuvable (il a peut-être déjà été supprimé).');
-      else if(json['is_part_of_service'] == undefined) printError('500 - INTERNAL SERVER ERROR - FILE NOT DELETED');
-      else if(json['is_part_of_service'] == false) printError('Ce fichier n\'est pas affecté au service actuel.');
-      else if(json['can_delete_files'] == undefined) printError('500 - INTERNAL SERVER ERROR - FILE NOT DELETED');
-      else if(json['can_delete_files'] == false) printError('Vous n\'avez pas le droit de supprimer ce fichier.');
-      else if(json['file_deleted_from_hardware'] == undefined) printError('500 - INTERNAL SERVER ERROR - FILE NOT DELETED');
-      else if(json['file_deleted_from_hardware'] == false) printError('Le fichier n\'a pas pu être supprimé. Veuillez réessayer ultérieurement.');
-      else if(json['file_deleted_from_database'] == undefined) printError('500 - INTERNAL SERVER ERROR - (Le fichier a bien été supprimé sur le disque mais va continuer à apparaître dans la liste).');
-      else if(json['file_deleted_from_database'] == false) printError('500 - INTERNAL SERVER ERROR - (Le fichier a bien été supprimé sur le disque mais va continuer à apparaître dans la liste).');
-      
+      if(json['file_deleted_from_database'] == true) 
+      {
+        printSuccess('Fichier supprimé.');
+
+        $(document.getElementById($(event.target).parent().attr('name'))).fadeOut(1000, function() 
+        { 
+          $(document.getElementById($(event.target).parent().attr('name'))).remove();
+
+          var files = document.getElementsByName('service-main-block-file');
+
+          if(files.length == 0) printMessage('Aucun fichier associé à ce service pour le moment.');
+
+          for(var i = 0; i < files.length; i++)
+          {
+            i % 2 == 0 ? $(files[i]).attr('class', 'service-main-block-file-even') : $(files[i]).attr('class', 'service-main-block-file-odd');
+          }
+        });
+      }
+
+      else
+      {
+        printError('Une erreur est survenue. Fichier non supprimé. Veuillez réessayer ultérieurement.')
+      }
+
       if(document.getElementById('popup')) $(document.getElementById('popup')).remove();
       if(document.getElementById('veil')) $(document.getElementById('veil')).remove();
-
-      $(document.getElementById($(event.target).parent().attr('name'))).remove();
     });
   });
 

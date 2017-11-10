@@ -5,6 +5,7 @@ let express = require('express');
 let services          = require('../functions/services');
 let account           = require('../functions/accounts/functions');
 let files             = require('../functions/files');
+let config            = require('../json/config');
 
 let router = express.Router();
 
@@ -54,6 +55,18 @@ router.delete('/delete-file', function(req, res)
   {
     res.status(200).send(result);
   });
+});
+
+/****************************************************************************************************/
+
+router.put('/get-ext-accepted', function(req, res)
+{
+  if(req.body.service == undefined) res.status(406).send(false);
+
+  else
+  {
+    config['ext_accepted'][req.body.service] == undefined ? res.status(200).send({}) : res.status(200).send(config['ext_accepted'][req.body.service]);
+  }
 });
 
 /****************************************************************************************************/

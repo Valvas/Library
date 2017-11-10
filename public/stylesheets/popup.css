@@ -17,7 +17,7 @@
 @media all and (min-width: 960px) and (max-width: 1679px)
 {
   .veil{ height:100%; width:100%; position:fixed; top:0; left:0; opacity:0.5; background-color:#000000; z-index:1; }
-  .popup{ color:#000000; text-align:center; width:30%; top:20%; left:35%; position:fixed; z-index:2; background-color:#FFFFFF; padding:2%; }
+  .popup{ color:#000000; text-align:center; width:30%; top:20%; left:35%; position:fixed; z-index:2; background-color:#FFFFFF; padding:1%; }
   .popup-cancel-button{ width:30%; margin:5% 5% 5% 5%; }
   .popup-perform-button{ width:30%; margin:5% 5% 5% 5%; }
 }
@@ -25,14 +25,14 @@
 @media all and (min-width: 1680px)
 {
   .veil{ height:100%; width:100%; position:fixed; top:0; left:0; opacity:0.5; background-color:#000000; z-index:1; }
-  .popup{ color:#000000; text-align:center; width:20%; top:20%; left:40%; position:fixed; z-index:2; background-color:#FFFFFF; padding:2%; }
+  .popup{ color:#000000; text-align:center; width:20%; top:20%; left:40%; position:fixed; z-index:2; background-color:#FFFFFF; padding:1%; }
   .popup-cancel-button{ width:30%; margin:5% 5% 5% 5%; }
   .popup-perform-button{ width:30%; margin:5% 5% 5% 5%; }
 }
 
 .popup-title
 {
-  margin-top:5%;
+  margin-top:1%;
   font-size:large;
   text-decoration:underline;
   font-family:raleway-regular;
@@ -80,4 +80,18 @@
 {
   color:#223344;
   background-color:#DD0D00;
+}
+
+.popup-close-button
+{
+  width:100%;
+  cursor:pointer;
+  color:#223344;
+  font-size:large;
+  text-align:right;
+}
+
+.popup-close-button:hover
+{
+  color:#FF0921;
 }
