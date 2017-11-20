@@ -44,6 +44,19 @@
   font-family:raleway-light;
 }
 
+.popup-error-message
+{
+  margin:5%;
+  color:#FF0921;
+  font-family:raleway-light;
+}
+
+.popup-file-input
+{
+  width:80%;
+  margin:2% 8% 2% 8%;
+}
+
 .popup-info
 {
   margin:2%;

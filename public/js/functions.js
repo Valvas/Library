@@ -8,6 +8,8 @@ function openUploadFilePopup(object, ext) :
   object  -> { title: string | undefined, message: string | undefined, perform: string | undefined }
   ext     -> [ string, string ]
 
+function updateFilesList() 
+
 */
 
 function createConfirmationPopup(object, name)
@@ -162,6 +164,42 @@ function openUploadFilePopup(object, ext)
   $(info)       .appendTo(popup);
   $(input)      .appendTo(popup);
   $(perform)    .appendTo(popup);
+}
+
+/****************************************************************************************************/
+
+function updateFilesList(service, callback)
+{
+  $.ajax(
+  {
+    type: 'PUT', timeout: 2000, dataType: 'JSON', data: { service: service }, url: '/service/get-files-list', success: function(){},
+    error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); }
+                
+  }).done(function(json)
+  {        
+    var x = 0;
+  
+    var loop = function(file)
+    {
+      if(!document.getElementById(file['tag']))
+      {
+        x  % 2 == 0 ?
+        $(`<tr id='${file['tag']}' name='service-main-block-file' class='service-main-block-file-even'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table')):
+        $(`<tr id='${file['tag']}' name='service-main-block-file' class='service-main-block-file-odd'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
+
+        if(json['rights']['download_files'] == 1) $('<i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>').appendTo($(document.getElementById(file['tag'])).find('[name="service-main-block-buttons"]'));
+        if(json['rights']['remove_files'] == 1) $('<i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>').appendTo($(document.getElementById(file['tag'])).find('[name="service-main-block-buttons"]'));
+      }
+
+      x++;
+  
+      if(Object.keys(json['files'])[x] != undefined) loop(json['files'][Object.keys(json['files'])[x]]);
+    }
+  
+    json['files'].length > 0 ? loop(json['files'][Object.keys(json['files'])[x]]) : printMessage('Aucun fichier associé à ce service pour le moment.');
+
+    callback();
+  });
 }
 
 /****************************************************************************************************/

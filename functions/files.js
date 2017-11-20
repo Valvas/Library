@@ -3,8 +3,53 @@
 let fs                = require('fs');
 let config            = require('../json/config');
 let accounts          = require('./accounts/functions');
+let encryption        = require('./encryption');
 
 let files = module.exports = {};
+
+/****************************************************************************************************/
+
+// Callback : 0 -> error, 1 -> file already exists
+
+files.uploadFile = function(file, service, account, mysqlConnector, callback)
+{
+  fs.stat(`${config['path_to_root_storage']}/${service}/${file.originalname}`, function(err, stat)
+  {
+    if(err && err['code'] != 'ENOENT'){ callback(false, 0); }
+
+    else if(stat != undefined){ callback(false, 1); }
+
+    else
+    {
+      encryption.encryptPassword(file['originalname'] + Date.now().toString(), function(encrypted)
+      {
+        if(encrypted == false) callback(false, 0);
+    
+        else
+        {
+          let sql = `INSERT INTO ${config['database']['library_database']}.${config['database']['files_table']}` +
+                    `(name, type, account, service, tag) VALUES` +
+                    `("${file['originalname'].split('.')[0]}", "${file['originalname'].split('.')[1]}", "${account}", "${service}", "${encrypted}")`;
+    
+          mysqlConnector.query(sql, function(err, result)
+          {
+            err ? callback(false, 0) : 
+            
+            fs.copyFile(`${config['path_to_temp_storage']}/${file.originalname}`, `${config['path_to_root_storage']}/${service}/${file.originalname}`, function(err)
+            {
+              err ? callback(false, 0) : 
+    
+              fs.unlink(`${config['path_to_temp_storage']}/${file.originalname}`, function(err)
+              {
+                err ? callback(false, 0) : callback(true);
+              });
+            });
+          });
+        }
+      });
+    }
+  });
+}
 
 /****************************************************************************************************/
 

@@ -12,6 +12,7 @@
 
   "salt": "$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
   "path_to_root_storage": "C:/Users/dev/Desktop/removal",
+  "path_to_temp_storage": "C:/Users/dev/Desktop/removal/temp",
 
   "file_ext":
   {
