@@ -2,20 +2,18 @@
 
 let express = require('express');
 
+let users = require('../../functions/admin/users');
+
 let router = express.Router();
 
 /****************************************************************************************************/
 
 router.get('/', function(req, res)
 {
-  req.session.identifier == undefined ? res.redirect('/') : res.render('home');
-});
-
-/****************************************************************************************************/
-
-router.get('/get-last-news', function(req, res)
-{
-  res.status(200).send(require('../json/news.json'));
+  users.getAccountList(req.app.get('mysqlConnector'), function(result)
+  {
+    res.render('./admin/users', { links: require('../../json/admin').aside, location: 'users', users: result, services: require('../../json/services') });
+  });
 });
 
 /****************************************************************************************************/

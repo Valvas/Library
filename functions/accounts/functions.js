@@ -20,3 +20,19 @@ module.exports.getUserRightsTowardsService = function(service, account, mysqlCon
 }
 
 /****************************************************************************************************/
+
+//0 -> error, 1 -> account not found, 2 -> not admin, 3 -> admin
+
+module.exports.checkIfUserIsAdmin = function(account, mysqlConnector, callback)
+{
+  mysqlConnector.query(`SELECT * FROM ${config['database']['library_database']}.${config['database']['auth_table']} WHERE email = "${account}"`, function(err, result)
+  {
+    if(err){ callback(0); }
+
+    else if(result.length == 0) callback(1);
+
+    else{ result[0]['is_admin'] == 0 ? callback(2) : callback(3); }
+  });
+}
+
+/****************************************************************************************************/

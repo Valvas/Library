@@ -40,7 +40,7 @@ function checkIfAccountAlreadyExists(account, mysqlConnector, callback)
     {
       if(result.length > 0)
       {
-        mysqlConnector.query(`UPDATE ${config['database']['library_database']}.${config['database']['auth_table']} SET lastname = "${account['lastname']}", firstname = "${account['firstname']}", service = "${account['service']}" WHERE email = "${account['email']}"`, function(err, result)
+        mysqlConnector.query(`UPDATE ${config['database']['library_database']}.${config['database']['auth_table']} SET lastname = "${account['lastname']}", firstname = "${account['firstname']}", service = "${account['service']}", is_admin = ${account['is_admin']} WHERE email = "${account['email']}"`, function(err, result)
         {
           err ? callback(false) : callback(true);
         });
@@ -52,7 +52,7 @@ function checkIfAccountAlreadyExists(account, mysqlConnector, callback)
         {
           uncryptedPassword == false ? callback(false) :
           
-          mysqlConnector.query(`INSERT INTO ${config['database']['library_database']}.${config['database']['auth_table']} (email, lastname, firstname, service, password, activated, suspended) VALUES ("${account['email']}", "${account['lastname']}", "${account['firstname']}", "${account['service']}", "${encryptedPassword}", 0, 0)`, function(err, result)
+          mysqlConnector.query(`INSERT INTO ${config['database']['library_database']}.${config['database']['auth_table']} (email, lastname, firstname, service, password, activated, suspended, is_admin) VALUES ("${account['email']}", "${account['lastname']}", "${account['firstname']}", "${account['service']}", "${encryptedPassword}", 1, 0, ${account['is_admin']})`, function(err, result)
           {
             err ? callback(false) :
 

@@ -2,15 +2,13 @@
 
 let express = require('express');
 
-let account = require('../functions/accounts/functions');
-
 let router = express.Router();
 
 /****************************************************************************************************/
 
-router.get('/get-aside-links', function(req, res)
+router.get('/', function(req, res)
 {
-  res.status(200).send(require('../json/services.json'));
+  res.render('./admin/services', { links: require('../../json/admin').aside, location: 'services', services: require('../../json/services') });
 });
 
 /****************************************************************************************************/

@@ -9,6 +9,55 @@ let files = module.exports = {};
 
 /****************************************************************************************************/
 
+//Callback : 0 -> error, 1 -> file not found, 2 -> unauthorized
+
+files.downloadFile = function(file, service, account, mysqlConnector, callback)
+{
+  mysqlConnector.query(`SELECT * FROM ${config['database']['library_database']}.${config['database']['files_table']} WHERE tag = "${file}"`, function(err, result)
+  {
+    if(err){ callback(false, 0); }
+
+    else
+    {
+      if(result.length == 0){ callback(false, 1); }
+
+      else
+      {
+        if(result[0]['service'] != service){ callback(false, 1); }
+
+        else
+        {
+          accounts.getUserRightsTowardsService(service, account, mysqlConnector, function(rights)
+          {
+            if(rights == false){ callback(false, 0); }
+  
+            else
+            {
+              if(rights['download_files'] == 0){ callback(false, 2); }
+  
+              else
+              {
+                fs.stat(`${config['path_to_root_storage']}/${service}/${result[0]['name']}.${result[0]['type']}`, function(err, stat)
+                {
+                  if(err && err['code'] != 'ENOENT'){ callback(false, 0); }
+                  
+                  else if(err && err['code'] == 'ENOENT'){ callback(false, 1); }
+  
+                  else if(stat == undefined){ callback(false, 1); }
+  
+                  else{ callback(`${result[0]['name']}.${result[0]['type']}`); }
+                });
+              }
+            }
+          });
+        }
+      }
+    }
+  });
+}
+
+/****************************************************************************************************/
+
 // Callback : 0 -> error, 1 -> file already exists
 
 files.uploadFile = function(file, service, account, mysqlConnector, callback)
@@ -21,7 +70,7 @@ files.uploadFile = function(file, service, account, mysqlConnector, callback)
 
     else
     {
-      encryption.encryptPassword(file['originalname'] + Date.now().toString(), function(encrypted)
+      encryption.encryptIdentifier(Date.now().toString(), function(encrypted)
       {
         if(encrypted == false) callback(false, 0);
     

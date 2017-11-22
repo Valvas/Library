@@ -119,4 +119,26 @@ router.post('/post-new-file', upload.single('file'), function(req, res)
 
 /****************************************************************************************************/
 
+router.get('/download-file/:service/:file', function(req, res)
+{
+  req.params.file == undefined || req.params.service == undefined ? res.status(406).send('ERROR [406] - MISSING DATA !') :
+
+  files.downloadFile(req.params.file, req.params.service, req.session.identifier, req.app.get('mysqlConnector'), function(result, code)
+  {
+    if(result == false)
+    {
+      if(code == 0){ res.status(500).send('ERROR [500] - INTERNAL SERVER ERROR !'); }
+      if(code == 1){ res.status(404).send('ERROR [404] - FILE NOT FOUND !'); }
+      if(code == 2){ res.status(500).send('ERROR [401] - NOT AUTHORIZED !'); }
+    }
+
+    else
+    {
+      res.download(`${config['path_to_root_storage']}/${req.params.service}/${result}`);
+    }
+  });
+});
+
+/****************************************************************************************************/
+
 module.exports = router;

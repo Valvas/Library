@@ -1,0 +1,9 @@
+<div id='admin-aside' class='aside-navigation-block'>
+  <% for(var key in links){ %>
+    <% if(location == key){ %>
+      <a id='<%= key %>' href='/admin/<%= key %>' class='aside-navigation-block-element-selected'><%= links[key] %></a>
+    <% } else{ %>
+      <a id='<%= key %>' href='/admin/<%= key %>' class='aside-navigation-block-element'><%= links[key] %></a>
+    <% } %>
+  <% } %>
+</div>

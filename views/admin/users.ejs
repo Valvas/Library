@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <% include ../include/head.ejs %>
+  <body class='private-section-body'>
+    <% include ../include/menu.ejs %>
+    <% include ../include/admin_aside.ejs %>
+    <div class='admin-main-block'>
+      <div class='info'>Cliquez sur un utilisateur</div>
+      <table class='admin-users-table'>
+        <tr>
+          <th class='admin-users-table-email'>Adresse Email</th>
+          <th class='admin-users-table-lastname'>Nom</th>
+          <th class='admin-users-table-firstname'>Prénom</th>
+          <th class='admin-users-table-service'>Service</th>
+          <th class='admin-users-table-activated'>Activé</th>
+          <th class='admin-users-table-suspended'>Suspendu</th>
+          <th class='admin-users-table-admin'>Admin</th>
+        </tr>
+        <% if(users != false) %>
+        <% { %>
+          <% for(var key in users) %>
+          <% { %>
+            <% var c; Object.keys(users).indexOf(key) % 2 == 0 ? c = 'odd' : c = 'even'; %>
+              <tr class='<%= c %>'>
+                <td><%= users[key]['email'] %></td>
+                <td><%= users[key]['lastname'] %></td>
+                <td><%= users[key]['firstname'] %></td>
+                <td><%= services[users[key]['service']]['name'] %></td>
+                <td><% if(users[key]['activated'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
+                <td><% if(users[key]['suspended'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
+                <td><% if(users[key]['is_admin'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
+              </tr>
+          <% } %>
+        <% } %>
+      </table>
+    </div>
+    <% include ../include/scripts.ejs %>
+    <script src='/js/navigation/onload.js'></script>
+    <script src='/js/navigation/links.js'></script>
+    <script src='/js/navigation/logout.js'></script>
+  </body>
+</html>

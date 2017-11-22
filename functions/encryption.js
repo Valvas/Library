@@ -1,6 +1,8 @@
 let bcrypt            = require('bcrypt');
 let config            = require('../json/config');
 
+/****************************************************************************************************/
+
 module.exports.encryptPassword = function(password, callback)
 {
   bcrypt.hash(password, config['salt'], function(err, result)
@@ -8,6 +10,8 @@ module.exports.encryptPassword = function(password, callback)
     err != undefined ? callback(false) : callback(result);
   });
 }
+
+/****************************************************************************************************/
 
 module.exports.getRandomPassword = function(callback)
 {
@@ -31,4 +35,29 @@ module.exports.getRandomPassword = function(callback)
   }
 
   loop();
+}
+
+/****************************************************************************************************/
+
+module.exports.encryptIdentifier = function(identifier, callback)
+{
+  let encryptedIdentifier = '';
+  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  let i = 0;
+  
+    let loop = function()
+    {
+        i++;
+  
+        encryptedIdentifier += characters.charAt(Math.floor(Math.random() * characters.length));
+  
+        if(i == 31) encryptedIdentifier += identifier.toString();
+
+        i < 64 ? loop() : 
+
+        callback(encryptedIdentifier)
+    }
+  
+    loop();
 }

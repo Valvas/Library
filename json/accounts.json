@@ -4,6 +4,7 @@
     "email": "vincent.valvas@groupepei.fr",
     "lastname": "Valvas",
     "firstname": "Vincent",
-    "service": "info"
+    "service": "info",
+    "is_admin": 1
   }
 }

@@ -10,6 +10,7 @@ let cookieParser      = require('cookie-parser');
 let session           = require('express-session');
 
 let auth              = require('./auth');
+let adminAuth         = require('./admin_auth');
 let config            = require('./json/config');
 let accounts          = require('./functions/accounts/init');
 let database          = require('./functions/database/init');
@@ -17,7 +18,13 @@ let database          = require('./functions/database/init');
 let root              = require('./routes/root');
 let home              = require('./routes/home');
 let menu              = require('./routes/menu');
+let rights            = require('./routes/rights');
 let service           = require('./routes/service');
+
+let adminRoot         = require('./routes/admin/root');
+let adminUser         = require('./routes/admin/user');
+let adminParams       = require('./routes/admin/params');
+let adminService      = require('./routes/admin/service');
 
 let connection = mysql.createConnection(
 {
@@ -32,7 +39,8 @@ app.use(session(
 {
   secret: 'sdgdsfgd7ugdq87dfsd8glqgOkoh56hhqshoOHU9870jfoqo7y',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie: {  }
 }));
 
 app.set('views', path.join(__dirname, 'views'));
@@ -47,13 +55,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', root);
-app.use('/home', home);
 app.use('/menu', menu);
+app.use('/home', home);
+app.use('/rights', rights);
 app.use('/service', auth, service);
+app.use('/admin', auth, adminAuth, adminRoot);
+app.use('/admin/users', auth, adminAuth, adminUser);
+app.use('/admin/params', auth, adminAuth, adminParams);
+app.use('/admin/services', auth, adminAuth, adminService);
 
 app.use(function(req, res, next) 
 {
-  res.redirect('/');
+  res.render('404');
 });
 
 database.createDatabases(connection, function(result, message)

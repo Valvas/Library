@@ -1,0 +1,88 @@
+.admin-users-table
+{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th.admin-users-table-email{ width:25%; }
+
+th.admin-users-table-lastname{ width:15%; }
+
+th.admin-users-table-firstname{ width:15%; }
+
+th.admin-users-table-service{ width:15%; }
+
+th.admin-users-table-activated{ width:10%; }
+
+th.admin-users-table-suspended{ width:10%; }
+
+th.admin-users-table-admin{ width:10%; }
+
+.admin-users-table tr td
+{ 
+  padding:1%; 
+  font-family:raleway-light;
+}
+
+.admin-users-table tr td{ cursor:pointer; }
+
+.admin-users-table tr:hover
+{
+  font-weight:bold;
+  background-color:#CCDDFF;
+}
+
+.admin-users-table .odd{ background-color:#FFFFFF; }
+
+.admin-users-table .even{ background-color:#EEEEEE; }
+
+.admin-users-table tr th
+{
+  padding:1%;
+  color:white;
+  text-align:left;
+  background-color:#77B5FE;
+  font-family:raleway-light-italic;
+}
+
+.admin-main-block
+{
+  margin:5% 0 5% 0;
+  vertical-align:top;
+}
+
+.admin-main-block .info
+{
+  padding:1%;
+  color:#FFFFFF;
+  text-align:center;
+  border-radius:8px;
+  font-family:barlow;
+  margin:2.5% 0 2.5% 0;
+  border:1px solid #FFFACD;
+  background-color:#CCC79A;
+}
+
+@media all and (max-width: 767px)
+{
+  .admin-main-block{ width:90%; }
+  .admin-main-block .info{ width:50%; }
+}
+
+@media all and (min-width: 768px) and (max-width: 959px)
+{
+  .admin-main-block{ width:90%; }
+  .admin-main-block .info{ width:40%; }
+}
+
+@media all and (min-width: 960px) and (max-width: 1679px)
+{
+  .admin-main-block{ display:inline-block; width:75%; }
+  .admin-main-block .info{ width:30%; }
+}
+
+@media all and (min-width: 1680px)
+{
+  .admin-main-block{ display:inline-block; width:75%; }
+  .admin-main-block .info{ width:20%; }
+}

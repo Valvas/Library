@@ -10,7 +10,7 @@ let router = express.Router();
 
 router.get('/', function(req, res)
 {
-  res.render('index');
+  req.session.identifier == undefined ? res.render('index') : res.redirect('/home');
 });
 
 /****************************************************************************************************/
@@ -31,13 +31,30 @@ router.put('/', function(req, res)
 
       else
       {
-        req.session.active = true;
         req.session.identifier = account['email'];
+        req.session.lastname = account['lastname'];
+        req.session.firstname = account['firstname'];
 
         res.status(200).send({ result: true });
       }
     }
   });
+});
+
+/****************************************************************************************************/
+
+router.get('/logout', function(req, res)
+{
+  req.session.destroy();
+
+  res.status(200).send();
+});
+
+/****************************************************************************************************/
+
+router.get('/afk-time', function(req, res)
+{
+  req.session.identifier == undefined ? res.status(401).send('ERROR [401] - AUTHENTICATION REQUIRED !') : res.status(200).send({ time: require('../json/config.json')['inactivity-timeout'] });
 });
 
 /****************************************************************************************************/
