@@ -8,6 +8,8 @@ let account           = require('../functions/accounts/functions');
 let files             = require('../functions/files');
 let config            = require('../json/config');
 
+let accountRights     = require('../functions/accounts/rights');
+
 let storage = multer.diskStorage(
 {
   destination: function (req, file, callback){ callback(null, config['path_to_temp_storage']); },
@@ -24,47 +26,29 @@ router.get('/:service', function(req, res)
 {
   !(req.params.service in require('../json/services')) ? res.render('404') :
 
-  req.app.get('mysqlConnector').query(`SELECT * FROM ${require('../json/config')['database']['library_database']}.${require('../json/config')['database']['rights_table']} WHERE service = "${req.params.service}" AND account = "${req.session.identifier}"`, function(err, rights)
+  accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), function(success, rights)
   {
-    if(err) res.status(500).send('500 - INTERNAL SERVER ERROR');
-
-    else{ rights.length == 0 ? res.render('block') : res.render('service', { service: require('../json/services')[req.params.service]['name'], identifier: req.params.service }); }
-  });
-});
-
-/****************************************************************************************************/
-
-router.put('/get-user-rights', function(req, res)
-{
-  req.body.service == undefined ? res.status(406).send(false) :
-
-  account.getUserRightsTowardsService(req.body.service, req.session.identifier, req.app.get('mysqlConnector'), function(rights)
-  {
-    if(rights == false) res.status(500).send('500 - INTERNAL SERVER ERROR');
-
-    else{ rights == undefined ? res.status(401).send(false) : res.status(200).send(rights); }
-  });
-});
-
-/****************************************************************************************************/
-
-router.put('/get-files-list', function(req, res)
-{
-  req.body.service == undefined ? res.status(406).send(false) :
-
-  services.getFilesFromOneService(req.body.service, req.app.get('mysqlConnector'), function(files)
-  {
-    files == false ? res.status(500).send('500 - INTERNAL SERVER ERROR') : 
-
-    account.getUserRightsTowardsService(req.body.service, req.session.identifier, req.app.get('mysqlConnector'), function(rights)
+    if(success == false)
     {
-      if(rights == false) res.status(500).send('500 - INTERNAL SERVER ERROR');
-
-      else
+      switch(rights)
       {
-        rights == undefined ? res.status(401).send(false) : res.status(200).send({files, rights});
+        case 0: res.render('block', { message: `Erreur interne du serveur, veuillez réessayer` });
+        case 1: res.render('block', { message: `La requête ne peut pas être traitée car des données sont manquantes` });
+        case 2: res.render('block', { message: `Compte introuvable, veuillez signaler cette erreur` });
+        case 3: res.render('block', { message: `Le service demandé n'existe pas ou n'existe plus` });
+        case 4: res.render('block', { message: `Vous n'êtes pas autorisé(e) à accéder à cette page` });
       }
-    });
+    }
+
+    else
+    {
+      services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), function(files)
+      {
+        files == false ?
+        res.render('block', { message: `Erreur interne du serveur, veuillez réessayer` }) :
+        res.render('service', { location: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rights, files: files });
+      }); 
+    }
   });
 });
 

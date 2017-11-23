@@ -16,6 +16,14 @@
   position:fixed;
 }
 
+.block-page-message
+{
+  color:#223344;
+  font-size:large;
+  text-align:center;
+  font-family:barlow;
+}
+
 .error-popup
 {
   width:100%;

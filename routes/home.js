@@ -8,14 +8,7 @@ let router = express.Router();
 
 router.get('/', function(req, res)
 {
-  req.session.identifier == undefined ? res.redirect('/') : res.render('home');
-});
-
-/****************************************************************************************************/
-
-router.get('/get-last-news', function(req, res)
-{
-  res.status(200).send(require('../json/news.json'));
+  req.session.identifier == undefined ? res.redirect('/') : res.render('home', { location: 'home', links: require('../json/services'), news: require('../json/news') });
 });
 
 /****************************************************************************************************/

@@ -66,7 +66,7 @@ app.use('/admin/services', auth, adminAuth, adminService);
 
 app.use(function(req, res, next) 
 {
-  res.render('404');
+  res.render('block', { message: `404 - La page recherchée n'existe pas` });
 });
 
 database.createDatabases(connection, function(result, message)

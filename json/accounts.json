@@ -5,6 +5,9 @@
     "lastname": "Valvas",
     "firstname": "Vincent",
     "service": "info",
+    "suspended": 0,
+    "activated": 1,
+    "password": "",
     "is_admin": 1
   }
 }

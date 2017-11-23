@@ -8,7 +8,7 @@ let app = express();
 
 module.exports = function(req, res, next)
 {
-  req.session.identifier != undefined ? next() : res.render('block');
+  req.session.uuid != undefined ? next() : res.render('block', { message: `L'accès à cette page requiert une authentification` });
 };
 
 /*****************************************************************************************************************************/

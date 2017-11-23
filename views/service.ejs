@@ -3,13 +3,39 @@
   <% include include/head.ejs %>
   <body class='private-section-body'>
     <% include include/menu.ejs %>
-    <% include include/navigation.ejs %>
+    <% include include/aside.ejs %>
     <div id='service-main-block' class='service-main-block' name='<%= identifier %>'>
       <p id='service-main-block-title' class='service-main-block-title'><%= service %></p>
+      <% if(rights['upload_files'] == 1) { %>
+        <button id='service-main-block-file-buttons-upload' class='service-main-block-file-buttons-upload'>
+          <i class='fa fa-upload service-main-block-file-buttons-upload-icon' aria-hidden='true'></i>Ajouter
+        </button>
+      <% } %>
+      <table id='service-main-block-table' class='service-main-block-table'>
+        <tr class='service-main-block-table-legend'>
+          <th class='service-main-block-file-name'>Nom du fichier</th>
+          <th class='service-main-block-file-type'>Extension</th>
+          <th class='service-main-block-file-account'>Propriétaire</th>
+          <th class='service-main-block-file-buttons'></th>
+        </tr>
+        <% for(var i = 0; i < files.length; i++) { %>
+          <tr id='<%= files[i]['tag'] %>' name='service-main-block-file' class='service-main-block-file-even'>
+            <td class='service-main-block-file-name'><%= files[i]['name'] %></td>
+            <td class='service-main-block-file-type'><%= files[i]['type'] %></td>
+            <td class='service-main-block-file-account'><%= files[i]['account'] %></td>
+            <td name='service-main-block-buttons' class='service-main-block-file-buttons'>
+              <% if(rights['download_files'] == 1) { %>
+                <i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>
+              <% } %>
+              <% if(rights['remove_files'] == 1) { %>
+                <i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>
+              <% } %>
+            </td>
+          </tr>
+        <% } %>
+      </table>
     </div>
     <% include include/scripts.ejs %>
-    <% include include/aside_scripts.ejs %>
-    <script src='/js/service/onload.js'></script>
     <script src='/js/service/delete.js'></script>
     <script src='/js/service/upload.js'></script>
     <script src='/js/service/download.js'></script>

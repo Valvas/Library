@@ -1,79 +1,46 @@
 'use strict';
 
-let encryption        = require('../encryption');
-let config            = require('../../json/config');
-let accounts          = require('../../json/accounts');
+let creation      = require('./creation');
+let encrypter     = require('../encryption');
+let accounts      = require('../../json/accounts');
 
 /****************************************************************************************************/
 
-module.exports.createAccounts = function(mysqlConnector, callback)
+module.exports.createAccounts = function(SQLConnector, callback)
 {
   let x = 0;
+  let log = [];
 
-  let loopToBrowseAccounts = function(account)
+  let accountCreationLoop = function()
   {
-    checkIfAccountAlreadyExists(account, mysqlConnector, function(result)
+    encrypter.getRandomPassword(function(clearPassword)
     {
-      if(result == false) callback('ERROR : could not create accounts !');
+      clearPassword == false ? callback(`${log.join('\n') + '\n' + `[ERROR] : server failure, could not create account "${accounts[Object.keys(accounts)[x]].email}" !`}`) :
 
-      else
+      creation.createNewAccount(
       {
-        x++;
+        "emailAddress": accounts[Object.keys(accounts)[x]].email,
+        "lastName": accounts[Object.keys(accounts)[x]].lastname,
+        "firstName": accounts[Object.keys(accounts)[x]].firstname,
+        "clearPassword": clearPassword,
+        "isActivated": accounts[Object.keys(accounts)[x]].activated,
+        "isSuspended": accounts[Object.keys(accounts)[x]].suspended,
+        "service": accounts[Object.keys(accounts)[x]].service,
+        "isAdmin": accounts[Object.keys(accounts)[x]].is_admin
+      }, SQLConnector, function(success, uuid)
+      {
+        if(success == false && uuid == 0) log.push(`[ERROR] : server failure, could not create account "${accounts[Object.keys(accounts)[x]].email}" !`);
+        if(success == false && uuid == 1) log.push(`[INFO] : account "${accounts[Object.keys(accounts)[x]].email}" already exists !`);
+        if(success == false && uuid == 2) log.push(`[ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" because service "${accounts[Object.keys(accounts)[x]].service}" does not exist !`);
 
-        Object.keys(accounts)[x] == undefined ? callback('INFO : accounts created !') : loopToBrowseAccounts(accounts[Object.keys(accounts)[x]]);
-      }
+        if(success) log.push(`[SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with password "${clearPassword}" ! UUID -> ${uuid}`);
+          
+        Object.keys(accounts)[x += 1] == undefined ? callback(log.join('\n')) : accountCreationLoop();
+      });
     });
   }
 
-  Object.keys(accounts)[x] == undefined ? callback('INFO : no account to create !') : loopToBrowseAccounts(accounts[Object.keys(accounts)[x]]);
-}
-
-/****************************************************************************************************/
-
-function checkIfAccountAlreadyExists(account, mysqlConnector, callback)
-{
-  mysqlConnector.query(`SELECT id FROM ${config['database']['library_database']}.${config['database']['auth_table']} WHERE email = "${account['email']}"`, function(err, result)
-  {
-    if(err) callback(false);
-
-    else
-    {
-      if(result.length > 0)
-      {
-        mysqlConnector.query(`UPDATE ${config['database']['library_database']}.${config['database']['auth_table']} SET lastname = "${account['lastname']}", firstname = "${account['firstname']}", service = "${account['service']}", is_admin = ${account['is_admin']} WHERE email = "${account['email']}"`, function(err, result)
-        {
-          err ? callback(false) : callback(true);
-        });
-      }
-
-      else
-      {
-        encryption.getRandomPassword(function(uncryptedPassword, encryptedPassword)
-        {
-          uncryptedPassword == false ? callback(false) :
-          
-          mysqlConnector.query(`INSERT INTO ${config['database']['library_database']}.${config['database']['auth_table']} (email, lastname, firstname, service, password, activated, suspended, is_admin) VALUES ("${account['email']}", "${account['lastname']}", "${account['firstname']}", "${account['service']}", "${encryptedPassword}", 1, 0, ${account['is_admin']})`, function(err, result)
-          {
-            err ? callback(false) :
-
-            sendCredentialsByEmail(account['email'], uncryptedPassword, function(result)
-            {
-              result ? callback(true) : callback(false);
-            });
-          });
-        });
-      }
-    }
-  });
-}
-
-/****************************************************************************************************/
-
-function sendCredentialsByEmail(emailAddress, uncryptedPassword, callback)
-{
-  console.log(uncryptedPassword);
-
-  callback(true);
+  Object.keys(accounts)[x] == undefined ? callback('[INFO] : no account to create !') : accountCreationLoop();
 }
 
 /****************************************************************************************************/

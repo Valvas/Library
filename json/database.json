@@ -11,13 +11,14 @@
           "activated": "BOOLEAN NOT NULL",
           "suspended": "BOOLEAN NOT NULL",
           "service": "VARCHAR(255) NOT NULL",
-          "is_admin": "BOOLEAN NOT NULL"
+          "is_admin": "BOOLEAN NOT NULL",
+          "uuid": "VARCHAR(255) NOT NULL"
       },
 
       "rights":
       {
           "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-          "account": "VARCHAR(255) NOT NULL",
+          "account_id": "INT UNSIGNED",
           "service": "VARCHAR(255) NOT NULL",
           "upload_files": "BOOLEAN NOT NULL",
           "download_files": "BOOLEAN NOT NULL",

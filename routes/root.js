@@ -31,6 +31,7 @@ router.put('/', function(req, res)
 
       else
       {
+        req.session.uuid = account['uuid'];
         req.session.identifier = account['email'];
         req.session.lastname = account['lastname'];
         req.session.firstname = account['firstname'];

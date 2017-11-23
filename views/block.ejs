@@ -4,10 +4,9 @@
   <body class='logon-body'>
     <% include include/logs.ejs %>
     <div class='logon-form-popup'>
-        <p class='logon-form-question'>Vous n'avez pas le droit d'accéder à cette page !</p>
-        <p class='page-not-found-link' id='page-not-found-link'>Accueil</p>
+        <p class='block-page-message'><%= message %></p>
+        <a class='page-not-found-link' id='page-not-found-link' href='/home'>Accueil</a>
     </div>
     <script src='/js/jQuery.js'></script>
-    <script src='/js/404/link.js'></script>
   </body>
 </html>
