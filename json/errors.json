@@ -1,0 +1,9 @@
+{
+  "10001": "une requête dans la base de données a échoué",
+  "10002": "votre compte n'a pas été trouvé dans la base de données",
+  "10003": "le fichier n'a pas été trouvé sur le disque (il a peut-être déjà été supprimé)",
+  "10004": "le fichier n'a pas été trouvé dans la base de données (il a peut-être déjà été supprimé)",
+  "10005": "le fichier n'a pas pu être supprimé sur le disque (il a peut-être déjà été supprimé)",
+  "10006": "le fichier n'a pas pu être supprimé dans la base de données (il a peut-être déjà été supprimé)",
+  "10007": "vous n'êtes pas autorisé(e) à supprimer ce fichier"
+}

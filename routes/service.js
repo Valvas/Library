@@ -3,10 +3,13 @@
 let express = require('express');
 let multer  = require('multer');
 
-let services          = require('../functions/services');
-let account           = require('../functions/accounts/functions');
-let files             = require('../functions/files');
 let config            = require('../json/config');
+let errors            = require('../json/errors');
+let success           = require('../json/success');
+let services          = require('../functions/services');
+let constants         = require('../functions/constants');
+let filesRemoval      = require('../functions/files/delete');
+let account           = require('../functions/accounts/functions');
 
 let accountRights     = require('../functions/accounts/rights');
 
@@ -58,9 +61,42 @@ router.delete('/delete-file', function(req, res)
 {
   req.body.file == undefined || req.body.service == undefined ? res.status(406).send(false) :
 
-  files.deleteFile(req.body.file, req.body.service, req.session.identifier, req.app.get('mysqlConnector'), function(result)
+  filesRemoval.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), function(returnObject)
   {
-    res.status(200).send(result);
+    if(returnObject['findFileInTheDatabaseUsingItsUUID']['result'] == false)
+    {
+      res.status(500).send({ result: false, message: `ERROR [500] - ${errors[returnObject['findFileInTheDatabaseUsingItsUUID']['code']]} !` });
+    }
+
+    else if(returnObject['checkIfUserHasTheRightToDeleteFiles']['result'] == false)
+    {
+      res.status(403).send({ result: false, message: `ERROR [403] - ${errors[returnObject['checkIfUserHasTheRightToDeleteFiles']['code']]} !` });
+    }
+
+    else
+    {
+      if(returnObject['deleteFileFromHardware']['result'] == true && returnObject['deleteFileFromDatabase']['result'] == true)
+      {
+        res.status(200).send({ result: true, success: success[FILE_DELETED].charAt(0).toUpperCase() + success[FILE_DELETED].slice(1) })
+      }
+
+      else
+      {
+        let errorMessages = [];
+        
+        if(returnObject['deleteFileFromHardware']['result'] == false)
+        {
+          errorMessages.push(`${errors[returnObject['deleteFileFromHardware']['code']].charAt(0).toUpperCase() + errors[returnObject['deleteFileFromHardware']['code']].slice(1)} !`);
+        }
+        
+        if(returnObject['deleteFileFromDatabase']['result'] == false)
+        {
+          errorMessages.push(`${errors[returnObject['deleteFileFromDatabase']['code']].charAt(0).toUpperCase() + errors[returnObject['deleteFileFromDatabase']['code']].slice(1)} !`);
+        }
+
+        if()
+      }
+    }
   });
 });
 
@@ -80,47 +116,14 @@ router.put('/get-ext-accepted', function(req, res)
 
 router.post('/post-new-file', upload.single('file'), function(req, res)
 {
-  req.file == undefined || req.body.service == undefined ? res.status(406).send('ERROR : No file provided !') :
   
-  account.getUserRightsTowardsService(req.body.service, req.session.identifier, req.app.get('mysqlConnector'), function(rights)
-  {
-    rights == false ? res.status(500).send('ERROR : Internal server error !') :
-
-    rights['upload_files'] == 0 ? res.status(403).send('ERROR : cette action requiert des droits !') : 
-    
-    files.uploadFile(req.file, req.body.service, req.session.identifier, req.app.get('mysqlConnector'), function(result, code)
-    {
-      if(result == false)
-      {
-        if(code == 0){ res.status(500).send(false); }
-        if(code == 1){ res.status(200).send(false); }
-      }
-
-      else{ res.status(200).send(true); }
-    });
-  });
 });
 
 /****************************************************************************************************/
 
 router.get('/download-file/:service/:file', function(req, res)
 {
-  req.params.file == undefined || req.params.service == undefined ? res.status(406).send('ERROR [406] - MISSING DATA !') :
-
-  files.downloadFile(req.params.file, req.params.service, req.session.identifier, req.app.get('mysqlConnector'), function(result, code)
-  {
-    if(result == false)
-    {
-      if(code == 0){ res.status(500).send('ERROR [500] - INTERNAL SERVER ERROR !'); }
-      if(code == 1){ res.status(404).send('ERROR [404] - FILE NOT FOUND !'); }
-      if(code == 2){ res.status(500).send('ERROR [401] - NOT AUTHORIZED !'); }
-    }
-
-    else
-    {
-      res.download(`${config['path_to_root_storage']}/${req.params.service}/${result}`);
-    }
-  });
+  
 });
 
 /****************************************************************************************************/

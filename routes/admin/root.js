@@ -8,7 +8,7 @@ let router = express.Router();
 
 router.get('/', function(req, res)
 {
-  res.render('./admin/home', { links: require('../../json/admin').aside, location: 'home', news: require('../../json/admin_news') });
+  res.render('./admin/home', { links: require('../../json/admin').aside, location: 'admin', news: require('../../json/admin_news') });
 });
 
 /****************************************************************************************************/

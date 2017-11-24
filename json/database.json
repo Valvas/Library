@@ -33,7 +33,7 @@
           "type": "VARCHAR(255) NOT NULL",
           "account": "VARCHAR(255) NOT NULL",
           "service": "VARCHAR(255) NOT NULL",
-          "tag": "VARCHAR(255) NOT NULL"
+          "uuid": "VARCHAR(255) NOT NULL"
       },
 
       "comments":

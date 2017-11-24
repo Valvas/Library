@@ -32,6 +32,26 @@
   color:#FF0921;
 }
 
+.nav-menu-element
+{
+  margin:0;
+  cursor:pointer;
+  color:#223344;
+  font-size:large;
+  text-decoration:none;
+  font-family:raleway-regular;
+}
+
+.nav-menu-element-selected
+{
+  margin:0;
+  cursor:pointer;
+  color:#77B5FE;
+  font-size:large;
+  text-decoration:none;
+  font-family:raleway-regular;
+}
+
 .nav-menu-element:hover
 { 
   color:#77B5FE;
@@ -41,6 +61,7 @@
 {
   .nav-menu-title{ width:100%; }
   .nav-menu-element{ text-align:center; cursor:pointer; width:100%; }
+  .nav-menu-element-selected{ text-align:center; cursor:pointer; width:100%; }
   .nav-menu-elements-container{ width:100%; }
 }
 
@@ -54,13 +75,15 @@
 @media all and (min-width: 960px) and (max-width: 1679px)
 {
   .nav-menu-title{ display:inline-block; width:20%; }
-  .nav-menu-element{ text-align:center; cursor:pointer; display:inline-block; width:20%; }
+  .nav-menu-element{ text-align:center; cursor:pointer; display:inline-block; width:30%; }
+  .nav-menu-element-selected{ text-align:center; cursor:pointer; display:inline-block; width:30%; }
   .nav-menu-elements-container{ display:inline-block; width:60%; vertical-align:top; margin:2% 0; }
 }
 
 @media all and (min-width: 1680px)
 {
   .nav-menu-title{ display:inline-block; width:20%; }
-  .nav-menu-element{ text-align:center; cursor:pointer; display:inline-block; width:20%; }
+  .nav-menu-element{ text-align:center; cursor:pointer; display:inline-block; width:30%; }
+  .nav-menu-element-selected{ text-align:center; cursor:pointer; display:inline-block; width:30%; }
   .nav-menu-elements-container{ display:inline-block; width:60%; vertical-align:top; margin:2% 0; }
 }

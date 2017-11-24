@@ -8,6 +8,7 @@ const MISSING_DATA = 1;
 const ACCOUNT_NOT_FOUND = 2;
 const SERVICE_NOT_FOUND = 3;
 const UNAUTHORIZED_TO_ACCESS_SERVICE = 4;
+const USER_IS_NOT_ADMIN = 5;
 
 /****************************************************************************************************/
 
@@ -88,6 +89,52 @@ module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, 
             rows.length == 0 ? callback(false, UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(true, rows[0]);
           }
         });
+      }
+    }
+  });
+}
+
+/****************************************************************************************************/
+
+/**
+ * Get a boolean which is true if user is admin and false if he is not.
+ * @arg {String} accountUUID - the UUID associated to the account to check
+ * @arg {Object} SQLConnector - a SQL connector ro perform queries to the database
+ * @return {Boolean}
+ */
+module.exports.checkIfUserIsAdmin = function(accountUUID, SQLConnector, callback)
+{
+  typeof(accountUUID) != 'string' || SQLConnector == undefined ? callback(false, MISSING_DATA) :
+
+  SQLSelect.SQLSelectQuery(
+  {
+    "databaseName": config.database.library_database,
+    "tableName": config.database.auth_table,
+  
+    "args": { "0": "is_admin" },
+  
+    "where":
+    {
+      "=":
+      {
+        "0":
+        {
+          "key": "uuid",
+          "value": accountUUID
+        }
+      }
+    }
+  }, SQLConnector, function(success, rows)
+  {
+    if(success == false) callback(false, ERROR);
+
+    else
+    {
+      if(rows.length == 0) callback(false, ACCOUNT_NOT_FOUND);
+      
+      else
+      {
+        rows[0].is_admin == 0 ? callback(false, USER_IS_NOT_ADMIN) : callback(true, undefined);
       }
     }
   });
