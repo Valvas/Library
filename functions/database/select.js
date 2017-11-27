@@ -1,5 +1,7 @@
 'use strict';
 
+let constants = require('../constants');
+
 /*
   queryObject ->
   {
@@ -68,7 +70,7 @@ module.exports.SQLSelectQuery = function(query, connector, callback)
       
       connector.query(sql, function(err, result)
       {
-        err ? callback(false, undefined) : callback(true, result);
+        err ? callback(false, constants.SQL_SERVER_ERROR) : callback(true, result);
       });
     });
   }
@@ -79,7 +81,7 @@ module.exports.SQLSelectQuery = function(query, connector, callback)
 
   connector.query(sql, function(err, result)
   {
-    err ? callback(false, undefined) : callback(true, result);
+    err ? callback(false, constants.SQL_SERVER_ERROR) : callback(true, result);
   });
 }
 

@@ -1,5 +1,7 @@
 'use strict';
 
+let constants = require('../constants');
+
 /*
   queryObject ->
   {
@@ -17,7 +19,15 @@
   callback -> [true] + [uuid] : success | [false] + [undefined] : error
 */
 
-module.exports.SQLInsertQuery = function(queryObject, sqlConnector, callback)
+/****************************************************************************************************/
+
+/**
+ * Perform an insert query to the database.
+ * @arg {Object} queryObject - a JSON object with all parameters for the query
+ * @arg {Object} SQLConnector - a SQL connector to perform queries to the database
+ * @return {Boolean}
+ */
+module.exports.SQLInsertQuery = function(queryObject, SQLConnector, callback)
 {
   let database = queryObject.databaseName;
   let table = queryObject.tableName;
@@ -27,8 +37,10 @@ module.exports.SQLInsertQuery = function(queryObject, sqlConnector, callback)
 
   let uuid = require('uuid').v4();
 
-  sqlConnector.query(`INSERT INTO ${database}.${table} (${keys},uuid) VALUES (${values},"${uuid}")`, function(err, result)
+  SQLConnector.query(`INSERT INTO ${database}.${table} (${keys},uuid) VALUES (${values},"${uuid}")`, function(err, result)
   {
-    err ? callback(false, undefined) : callback(true, uuid);
+    err ? callback(false, constants.SQL_SERVER_ERROR) : callback(true, uuid);
   });
 }
+
+/****************************************************************************************************/

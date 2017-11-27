@@ -5,5 +5,17 @@
   "10004": "le fichier n'a pas été trouvé dans la base de données (il a peut-être déjà été supprimé)",
   "10005": "le fichier n'a pas pu être supprimé sur le disque (il a peut-être déjà été supprimé)",
   "10006": "le fichier n'a pas pu être supprimé dans la base de données (il a peut-être déjà été supprimé)",
-  "10007": "vous n'êtes pas autorisé(e) à supprimer ce fichier"
+  "10007": "vous n'êtes pas autorisé(e) à supprimer des fichiers",
+  "10008": "fichier manquant dans la requête",
+  "10009": "des données sont manquantes dans la requête",
+  "10010": "service introuvable",
+  "10011": "vous n'êtes pas autorisé(e) à accéder à ce service",
+  "10012": "vous ne possédez pas les droits d'administration",
+  "10013": "vous n'êtes pas autorisé(e) à ajouter des fichiers",
+  "10014": "le fichier n'a pas pu être copié du dossier temporaire vers le dossier de destination",
+  "10015": "le fichier n'a pas pu être supprimé du dossier temporaire",
+  "10016": "ce fichier existe déjà",
+  "10017": "une requête sur la manipulation de fichiers a échoué",
+  "10018": "la précédente version du fichier n'a pas pu être supprimée du disque",
+  "10019": "la précédente version du fichier n'a pas pu être supprimée de la base de données"
 }

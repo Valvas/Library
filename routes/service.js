@@ -9,9 +9,9 @@ let success           = require('../json/success');
 let services          = require('../functions/services');
 let constants         = require('../functions/constants');
 let filesRemoval      = require('../functions/files/delete');
-let account           = require('../functions/accounts/functions');
-
+let filesAdding       = require('../functions/files/adding');
 let accountRights     = require('../functions/accounts/rights');
+let account           = require('../functions/accounts/functions');
 
 let storage = multer.diskStorage(
 {
@@ -29,29 +29,33 @@ router.get('/:service', function(req, res)
 {
   !(req.params.service in require('../json/services')) ? res.render('404') :
 
-  accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), function(success, rights)
+  accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, rightsOrErrorCode)
   {
-    if(success == false)
-    {
-      switch(rights)
-      {
-        case 0: res.render('block', { message: `Erreur interne du serveur, veuillez réessayer` });
-        case 1: res.render('block', { message: `La requête ne peut pas être traitée car des données sont manquantes` });
-        case 2: res.render('block', { message: `Compte introuvable, veuillez signaler cette erreur` });
-        case 3: res.render('block', { message: `Le service demandé n'existe pas ou n'existe plus` });
-        case 4: res.render('block', { message: `Vous n'êtes pas autorisé(e) à accéder à cette page` });
-      }
-    }
+    if(trueOrFalse == false) res.render('block', { message: errors[rightsOrErrorCode] });
 
     else
     {
-      services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), function(files)
+      services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), function(trueOrFalse, filesObjectOrErrorCode)
       {
-        files == false ?
-        res.render('block', { message: `Erreur interne du serveur, veuillez réessayer` }) :
-        res.render('service', { location: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rights, files: files });
+        trueOrFalse == false ?
+        res.render('block', { message: `Erreur [500] - ${errors[filesObjectOrErrorCode]} !` }) :
+        res.render('service', { location: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrErrorCode, files: filesObjectOrErrorCode });
       }); 
     }
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/post-new-file', upload.single('file'), function(req, res)
+{
+  req.file == undefined || req.body.service == undefined ? res.status(406).send(`ERROR [406] : ${errors[constants.NO_FILE_PROVIDED_IN_REQUEST]} !`) :
+  
+  filesAdding.addOneFile(req.body.service, req.file, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, entryUuidOrErrorCode)
+  {
+    trueOrFalse ? 
+    res.status(200).send({ result: true, success: entryUuidOrErrorCode }) :
+    res.status(200).send({ result: false, error: errors[entryUuidOrErrorCode] });
   });
 });
 
@@ -65,24 +69,25 @@ router.delete('/delete-file', function(req, res)
   {
     if(returnObject['findFileInTheDatabaseUsingItsUUID']['result'] == false)
     {
-      res.status(500).send({ result: false, message: `ERROR [500] - ${errors[returnObject['findFileInTheDatabaseUsingItsUUID']['code']]} !` });
+      res.status(500).send({ result: false, error: `ERROR [500] - ${errors[returnObject['findFileInTheDatabaseUsingItsUUID']['code']]} !` });
     }
 
     else if(returnObject['checkIfUserHasTheRightToDeleteFiles']['result'] == false)
     {
-      res.status(403).send({ result: false, message: `ERROR [403] - ${errors[returnObject['checkIfUserHasTheRightToDeleteFiles']['code']]} !` });
+      res.status(403).send({ result: false, error: `ERROR [403] - ${errors[returnObject['checkIfUserHasTheRightToDeleteFiles']['code']]} !` });
     }
 
     else
     {
       if(returnObject['deleteFileFromHardware']['result'] == true && returnObject['deleteFileFromDatabase']['result'] == true)
       {
-        res.status(200).send({ result: true, success: success[FILE_DELETED].charAt(0).toUpperCase() + success[FILE_DELETED].slice(1) })
+        res.status(200).send({ result: true, success: success[constants.FILE_DELETED].charAt(0).toUpperCase() + success[constants.FILE_DELETED].slice(1) })
       }
 
       else
       {
         let errorMessages = [];
+        let successMessages = [];
         
         if(returnObject['deleteFileFromHardware']['result'] == false)
         {
@@ -94,7 +99,19 @@ router.delete('/delete-file', function(req, res)
           errorMessages.push(`${errors[returnObject['deleteFileFromDatabase']['code']].charAt(0).toUpperCase() + errors[returnObject['deleteFileFromDatabase']['code']].slice(1)} !`);
         }
 
-        if()
+        if(returnObject['deleteFileFromHardware']['result'] == true)
+        {
+          successMessages.push(`${success[returnObject['deleteFileFromHardware']['code']].charAt(0).toUpperCase() + success[returnObject['deleteFileFromHardware']['code']].slice(1)} !`);
+        }
+
+        if(returnObject['deleteFileFromDatabase']['result'] == true)
+        {
+          successMessages.push(`${success[returnObject['deleteFileFromDatabase']['code']].charAt(0).toUpperCase() + success[returnObject['deleteFileFromDatabase']['code']].slice(1)} !`);
+        }
+
+        errorMessages.length == 2 ?
+        res.status(200).send({ result: false, error: errorMessages.join('\n') }) :
+        res.status(200).send({ result: false, success: successMessages.join('\n'), error: errorMessages.join('\n') });
       }
     }
   });
@@ -114,16 +131,31 @@ router.put('/get-ext-accepted', function(req, res)
 
 /****************************************************************************************************/
 
-router.post('/post-new-file', upload.single('file'), function(req, res)
+router.get('/download-file/:service/:file', function(req, res)
 {
   
 });
 
 /****************************************************************************************************/
 
-router.get('/download-file/:service/:file', function(req, res)
+router.put('/get-files-list', function(req, res)
 {
-  
+  req.body.service == undefined ? res.status(406).send({ result: false, error: `Erreur [406] - ${errors[constants[MISSING_DATA_IN_REQUEST]]} !` }) :
+
+  services.getFilesFromOneService(req.body.service, req.app.get('mysqlConnector'), function(trueOrFalse, filesObjectOrErrorCode)
+  {
+    if(trueOrFalse == false) res.status(200).send({ result: false, error: errors[constants[filesObjectOrErrorCode]] });
+
+    else
+    {
+      accountRights.getUserRightsTowardsService(req.body.service, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, rightsObjectOrErrorCode)
+      {
+        trueOrFalse ? 
+        res.status(200).send({ result: true, files: filesObjectOrErrorCode, rights: rightsObjectOrErrorCode }) : 
+        res.status(200).send({ result: false, error: errors[constants[rightsObjectOrErrorCode]] });
+      });
+    }
+  });
 });
 
 /****************************************************************************************************/

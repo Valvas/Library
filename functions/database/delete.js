@@ -64,7 +64,7 @@ module.exports.SQLDeleteQuery = function(query, connector, callback)
       
       connector.query(sql, function(err, result)
       {
-        err ? callback(false, SQL_SERVER_ERROR) : callback(true, result.affectedRows());
+        err ? callback(false, SQL_SERVER_ERROR) : callback(true, result.affectedRows);
       });
     });
   }

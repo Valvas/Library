@@ -1,5 +1,6 @@
 window.onload = $(function()
 {
+  var socket = io('/service');
   
   $('body').on('click', '#service-main-block-file-buttons-upload', function()
   {
@@ -47,20 +48,19 @@ window.onload = $(function()
         if(result == false)
         {
           $('#upload-popup-input').css('border', '1px solid red');
-          $(`<div id='upload-popup-error-message' class='popup-error-message'>Un fichier du même nom existe déjà.</div>`).appendTo('#upload-popup').insertBefore('#upload-popup-perform-button');
+          $(`<div id='upload-popup-error-message' class='popup-error-message'>${result['error']}</div>`).appendTo('#upload-popup').insertBefore('#upload-popup-perform-button');
         }
 
         else
         {
+          socket.emit('new_file', { 'room': $(document.getElementById('service-main-block')).attr('name'), 'uuid': result['success'] });
+
           $('body').off('click', '#upload-popup-perform-button');
 
-          updateFilesList($(document.getElementById('service-main-block')).attr('name'), function()
-          {
-            $('#upload-popup').remove();
-            $('#veil').remove();
+          $('#upload-popup').remove();
+          $('#veil').remove();
     
-            printSuccess('Fichier envoyé.');
-          });
+          printSuccess('Fichier envoyé.');
         }
       });
     });

@@ -1,5 +1,7 @@
 window.onload = $(function()
 {
+  var socket = io('/service');
+
   /****************************************************************************************************/
 
   $('body').on('click', '[name="service-main-block-buttons-delete"]', function(event)
@@ -43,11 +45,11 @@ window.onload = $(function()
                     
       }).done(function(json)
       {
-        if(json['file_deleted_from_database'] == true) 
+        if(json['result'] == true) 
         {
-          printSuccess('Fichier supprimé.');
+          socket.emit('delete_file', { room: $(document.getElementById('service-main-block')).attr('name'), fileUUID: $(event.target).parent().attr('name') });
   
-          $(document.getElementById($(event.target).parent().attr('name'))).fadeOut(1000, function() 
+          /*$(document.getElementById($(event.target).parent().attr('name'))).fadeOut(1000, function() 
           { 
             $(document.getElementById($(event.target).parent().attr('name'))).remove();
   
@@ -57,9 +59,9 @@ window.onload = $(function()
   
             for(var i = 0; i < files.length; i++)
             {
-              i % 2 == 0 ? $(files[i]).attr('class', 'service-main-block-file-even') : $(files[i]).attr('class', 'service-main-block-file-odd');
+              i % 2 == 0 ? $(files[i]).attr('class', 'service-main-block-file-odd') : $(files[i]).attr('class', 'service-main-block-file-even');
             }
-          });
+          });*/
         }
   
         else

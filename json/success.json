@@ -3,5 +3,8 @@
   "20002": "fichier supprimé de la base de données",
   "20003": "vous êtes autorisé(e) à supprimer ce fichier",
   "20004": "fichier trouvé dans la base de données",
-  "20005": "fichier supprimé"
+  "20005": "fichier supprimé",
+  "20006": "vous possédez les droits d'administration",
+  "20007": "le fichier a bien été enregistré",
+  "20008": "vous êtes autorisé(e) à ajouter des fichiers"
 }

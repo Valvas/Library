@@ -175,29 +175,32 @@ function updateFilesList(service, callback)
     error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); }
                 
   }).done(function(json)
-  {        
-    var x = 0;
-  
-    var loop = function(file)
+  {
+    if(json['result'] == false) printError('Impossible de mettre à jour la liste des fichiers');
+    
+    else
     {
-      if(!document.getElementById(file['tag']))
-      {
-        x  % 2 == 0 ?
-        $(`<tr id='${file['tag']}' name='service-main-block-file' class='service-main-block-file-even'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table')):
-        $(`<tr id='${file['tag']}' name='service-main-block-file' class='service-main-block-file-odd'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
+      var x = 0;
 
-        if(json['rights']['download_files'] == 1) $('<i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>').appendTo($(document.getElementById(file['tag'])).find('[name="service-main-block-buttons"]'));
-        if(json['rights']['remove_files'] == 1) $('<i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>').appendTo($(document.getElementById(file['tag'])).find('[name="service-main-block-buttons"]'));
+      var loop = function(file)
+      {
+        if(!document.getElementById(file['uuid']))
+        {
+          printMessage('Un nouveau fichier a été ajouté');
+
+          x  % 2 == 0 ?
+          $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-odd'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table')):
+          $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-even'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
+  
+          if(json['rights']['download_files'] == 1) $('<i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
+          if(json['rights']['remove_files'] == 1) $('<i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
+        }
+
+        Object.keys(json['files'])[x += 1] != undefined ? loop(json['files'][Object.keys(json['files'])[x]]) : callback();
       }
 
-      x++;
-  
-      if(Object.keys(json['files'])[x] != undefined) loop(json['files'][Object.keys(json['files'])[x]]);
+      json['files'].length > 0 ? loop(json['files'][Object.keys(json['files'])[x]]) : printMessage('Aucun fichier associé à ce service pour le moment.');
     }
-  
-    json['files'].length > 0 ? loop(json['files'][Object.keys(json['files'])[x]]) : printMessage('Aucun fichier associé à ce service pour le moment.');
-
-    callback();
   });
 }
 

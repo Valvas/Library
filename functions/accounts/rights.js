@@ -1,14 +1,8 @@
 'use strict';
 
+let constants   = require('../constants');
 let config      = require('../../json/config');
 let SQLSelect   = require('../database/select');
-
-const ERROR = 0;
-const MISSING_DATA = 1;
-const ACCOUNT_NOT_FOUND = 2;
-const SERVICE_NOT_FOUND = 3;
-const UNAUTHORIZED_TO_ACCESS_SERVICE = 4;
-const USER_IS_NOT_ADMIN = 5;
 
 /****************************************************************************************************/
 
@@ -17,11 +11,11 @@ const USER_IS_NOT_ADMIN = 5;
  * @arg {String} serviceName - the key associated to the service from the JSON file "services.json"
  * @arg {String} accountUUID - the UUID associated to the account
  * @arg {Object} SQLConnector - a SQL connector to perform queries to the database
- * @arg {Function} callback - Success : get a boolean and a JSON object | Error : get a boolean and an integer
+ * @return {Boolean}
  */
 module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, SQLConnector, callback)
 {
-  serviceName == undefined || accountUUID == undefined || SQLConnector == undefined ? callback(false, MISSING_DATA) :
+  serviceName == undefined || accountUUID == undefined || SQLConnector == undefined ? callback(false, constants.MISSING_DATA_IN_REQUEST) :
 
   SQLSelect.SQLSelectQuery(
   {
@@ -41,17 +35,17 @@ module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, 
         }
       }
     }
-  }, SQLConnector, function(success, rows)
+  }, SQLConnector, function(trueOrFalse, rowsOrError)
   {
-    if(success == false) callback(false, ERROR);
+    if(trueOrFalse == false) callback(false, constants.SQL_SERVER_ERROR);
 
     else
     {
-      if(rows.length == 0) callback(false, ACCOUNT_NOT_FOUND);
+      if(rowsOrError.length == 0) callback(false, constants.ACCOUNT_NOT_FOUND);
 
       else
       {
-        !(serviceName in require('../../json/services')) ? callback(false, SERVICE_NOT_FOUND) :
+        !(serviceName in require('../../json/services')) ? callback(false, constants.SERVICE_NOT_FOUND) :
 
         SQLSelect.SQLSelectQuery(
         {
@@ -69,7 +63,7 @@ module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, 
                 "0":
                 {
                   "key": "account_id",
-                  "value": rows[0].id
+                  "value": rowsOrError[0].id
                 },
 
                 "1":
@@ -80,13 +74,13 @@ module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, 
               }
             }
           }
-        }, SQLConnector, function(success, rows)
+        }, SQLConnector, function(trueOrFalse, rowsOrError)
         {
-          if(success == false) callback(false, ERROR);
+          if(trueOrFalse == false) callback(false, constants.SQL_SERVER_ERROR);
           
           else
           { 
-            rows.length == 0 ? callback(false, UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(true, rows[0]);
+            rowsOrError.length == 0 ? callback(false, constants.UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(true, rowsOrError[0]);
           }
         });
       }
@@ -104,7 +98,7 @@ module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, 
  */
 module.exports.checkIfUserIsAdmin = function(accountUUID, SQLConnector, callback)
 {
-  typeof(accountUUID) != 'string' || SQLConnector == undefined ? callback(false, MISSING_DATA) :
+  typeof(accountUUID) != 'string' || SQLConnector == undefined ? callback(false, constants.MISSING_DATA_IN_REQUEST) :
 
   SQLSelect.SQLSelectQuery(
   {
@@ -124,17 +118,17 @@ module.exports.checkIfUserIsAdmin = function(accountUUID, SQLConnector, callback
         }
       }
     }
-  }, SQLConnector, function(success, rows)
+  }, SQLConnector, function(trueOrFalse, rowsOrError)
   {
-    if(success == false) callback(false, ERROR);
+    if(trueOrFalse == false) callback(false, constants.SQL_SERVER_ERROR);
 
     else
     {
-      if(rows.length == 0) callback(false, ACCOUNT_NOT_FOUND);
+      if(rowsOrError.length == 0) callback(false, constants.ACCOUNT_NOT_FOUND);
       
       else
       {
-        rows[0].is_admin == 0 ? callback(false, USER_IS_NOT_ADMIN) : callback(true, undefined);
+        rowsOrError[0].is_admin == 0 ? callback(false, constants.USER_IS_NOT_ADMIN) : callback(true, constants.USER_IS_ADMIN);
       }
     }
   });

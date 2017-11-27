@@ -1,12 +1,14 @@
 'use strict';
 
-let fs                = require(fs);
+let fs                = require('fs');
 
 let constants         = require('../constants');
 let config            = require('../../json/config');
 let SQLDelete         = require('../database/delete');
 let SQLSelect         = require('../database/select');
 let accountRights     = require('../accounts/rights');
+
+let fileRemoval = module.exports = {};
 
 /****************************************************************************************************/
 
@@ -18,7 +20,7 @@ let accountRights     = require('../accounts/rights');
  * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
  * @return {Object}
  */
-module.exports.deleteOneFile = function(service, fileUUID, accountUUID, SQLConnector, callback)
+fileRemoval.deleteOneFile = function(service, fileUUID, accountUUID, SQLConnector, callback)
 {
   let returnObject = {};
 
@@ -28,7 +30,7 @@ module.exports.deleteOneFile = function(service, fileUUID, accountUUID, SQLConne
 
     else
     {
-      returnObject['findFileInTheDatabaseUsingItsUUID'] = { 'result': true, 'code': FILE_FOUND_IN_THE_DATABASE };
+      returnObject['findFileInTheDatabaseUsingItsUUID'] = { 'result': true, 'code': constants.FILE_FOUND_IN_THE_DATABASE };
 
       checkIfUserHasTheRightToDeleteFiles(service, accountUUID, SQLConnector, function(trueOrFalse, returnCode)
       {
@@ -38,14 +40,14 @@ module.exports.deleteOneFile = function(service, fileUUID, accountUUID, SQLConne
         {
           returnObject['checkIfUserHasTheRightToDeleteFiles'] = { 'result': true, 'code': returnCode };
     
-          deleteFileFromHardware(service, fileNameOrErrorCode, function(trueOrFalse, returnCode)
+          fileRemoval.deleteFileFromHardware(service, fileNameOrErrorCode, function(trueOrFalse, returnCode)
           {
             returnObject['deleteFileFromHardware'] = { 'result': trueOrFalse, 'code': returnCode };
     
-            deleteFileFromDatabase(fileUUID, SQLConnector, function(trueOrFalse, returnCode)
+            fileRemoval.deleteFileFromDatabase(fileUUID, SQLConnector, function(trueOrFalse, returnCode)
             {
               returnObject['deleteFileFromDatabase'] = { 'result': trueOrFalse, 'code': returnCode };
-    
+  
               callback(returnObject);
             });
           });
@@ -90,7 +92,7 @@ function findFileInTheDatabaseUsingItsUUID(service, fileUUID, SQLConnector, call
   
       else
       {
-        fileDataOrErrorCode == 0 ? callback(false, FILE_NOT_FOUND_IN_DATABASE) : callback(true, `${fileDataOrErrorCode[0].name}.${fileDataOrErrorCode[0].type}`);
+        fileDataOrErrorCode == 0 ? callback(false, constants.FILE_NOT_FOUND_IN_DATABASE) : callback(true, `${fileDataOrErrorCode[0].name}.${fileDataOrErrorCode[0].type}`);
       }
     });
 }
@@ -112,7 +114,7 @@ function checkIfUserHasTheRightToDeleteFiles(service, accountUUID, SQLConnector,
 
     else
     {
-      rightsObjectOrErrorCode.remove_files == 0 ? callback(false, UNAUTHORIZED_TO_DELETE_FILES) : callback(true, AUTHORIZED_TO_DELETE_FILES);
+      rightsObjectOrErrorCode.remove_files == 0 ? callback(false, constants.UNAUTHORIZED_TO_DELETE_FILES) : callback(true, constants.AUTHORIZED_TO_DELETE_FILES);
     }
   });
 }
@@ -125,15 +127,15 @@ function checkIfUserHasTheRightToDeleteFiles(service, accountUUID, SQLConnector,
  * @arg {String} file - the name of the file with its extension
  * @return {Boolean}
  */
-function deleteFileFromHardware(service, file, callback)
+fileRemoval.deleteFileFromHardware = function(service, file, callback)
 {
   fs.stat(`${config['path_to_root_storage']}/${service}/${file}`, function(err, stat)
   {
-    err ? callback(false, FILE_NOT_FOUND_ON_DISK) :
+    err ? callback(false, constants.FILE_NOT_FOUND_ON_DISK) :
 
     fs.unlink(`${config['path_to_root_storage']}/${service}/${file}`, function(err)
     {
-      err ? callback(false, FILE_NOT_DELETED_FROM_DISK) : callback(true, FILE_DELETED_FROM_DISK);
+      err ? callback(false, constants.FILE_NOT_DELETED_FROM_DISK) : callback(true, constants.FILE_DELETED_FROM_DISK);
     });
   });
 }
@@ -146,7 +148,7 @@ function deleteFileFromHardware(service, file, callback)
  * @arg {Object} SQLConnector - a SQL connector to perform queries to the database
  * @return {Boolean}
  */
-function deleteFileFromDatabase(fileUUID, SQLConnector, callback)
+fileRemoval.deleteFileFromDatabase = function(fileUUID, SQLConnector, callback)
 {
   SQLDelete.SQLDeleteQuery(
   {
@@ -170,7 +172,7 @@ function deleteFileFromDatabase(fileUUID, SQLConnector, callback)
 
     else
     {
-      deletedRowsOrErrorCode == 0 ? callback(false, FILE_NOT_FOUND_IN_DATABASE) : callback(true, FILE_DELETED_FROM_DATABASE);
+      deletedRowsOrErrorCode == 0 ? callback(false, constants.FILE_NOT_FOUND_IN_DATABASE) : callback(true, constants.FILE_DELETED_FROM_DATABASE);
     }
   });
 }
