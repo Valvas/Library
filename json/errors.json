@@ -17,5 +17,10 @@
   "10016": "ce fichier existe déjà",
   "10017": "une requête sur la manipulation de fichiers a échoué",
   "10018": "la précédente version du fichier n'a pas pu être supprimée du disque",
-  "10019": "la précédente version du fichier n'a pas pu être supprimée de la base de données"
+  "10019": "la précédente version du fichier n'a pas pu être supprimée de la base de données",
+  "10020": "vous n'êtes pas autorisé(e) à télécharger des fichiers",
+  "10021": "le dossier n'a pas été trouvé sur le disque",
+  "10022": "le chemin ne mène pas à un dossier",
+  "10023": "vous n'êtes pas autorisé(e) à lire ou écrire dans ce fichier/dossier",
+  "10024": "le dossier existe déjà"
 }

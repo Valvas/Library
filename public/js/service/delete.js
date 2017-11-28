@@ -48,20 +48,6 @@ window.onload = $(function()
         if(json['result'] == true) 
         {
           socket.emit('delete_file', { room: $(document.getElementById('service-main-block')).attr('name'), fileUUID: $(event.target).parent().attr('name') });
-  
-          /*$(document.getElementById($(event.target).parent().attr('name'))).fadeOut(1000, function() 
-          { 
-            $(document.getElementById($(event.target).parent().attr('name'))).remove();
-  
-            var files = document.getElementsByName('service-main-block-file');
-  
-            if(files.length == 0) printMessage('Aucun fichier associé à ce service pour le moment.');
-  
-            for(var i = 0; i < files.length; i++)
-            {
-              i % 2 == 0 ? $(files[i]).attr('class', 'service-main-block-file-odd') : $(files[i]).attr('class', 'service-main-block-file-even');
-            }
-          });*/
         }
   
         else

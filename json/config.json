@@ -12,7 +12,9 @@
 
   "salt": "$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
   "path_to_root_storage": "C:/Users/dev/Desktop/removal",
-  "path_to_temp_storage": "C:/Users/dev/Desktop/removal/temp",
+  "path_to_temp_storage": "C:/Users/dev/Desktop/removal/STATIC_tmp",
+  "path_to_bin_storage": "C:/Users/dev/Desktop/removal/STATIC_bin",
+  "path_to_logs_storage": "C:/Users/dev/Desktop/removal/STATIC_logs",
 
   "inactivity-timeout": 300000,
 

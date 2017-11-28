@@ -18,12 +18,13 @@
       "rights":
       {
           "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-          "account_id": "INT UNSIGNED",
+          "account": "VARCHAR(255) NOT NULL",
           "service": "VARCHAR(255) NOT NULL",
           "upload_files": "BOOLEAN NOT NULL",
           "download_files": "BOOLEAN NOT NULL",
           "remove_files": "BOOLEAN NOT NULL",
-          "post_comments": "BOOLEAN NOT NULL"
+          "post_comments": "BOOLEAN NOT NULL",
+          "uuid": "VARCHAR(255) NOT NULL"
       },
 
       "files":
@@ -41,7 +42,8 @@
           "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
           "content": "TEXT(512) NOT NULL",
           "account": "VARCHAR(255) NOT NULL",
-          "file_id": "INT NOT NULL"
+          "file": "VARCHAR(255) NOT NULL",
+          "uuid": "VARCHAR(255) NOT NULL"
       }
   }
 }

@@ -1,16 +1,3 @@
-/* 
-
-function createConfirmationPopup(object, name) : 
-  object  -> { title: string, message: string, info: string, perform: string, cancel: string }
-  popupID -> @NonNull string
-  name    -> string
-
-function openUploadFilePopup(object, ext) : 
-  object  -> { title: string, message: string, perform: string }
-  ext     -> [ string, string ]
-
-*/
-
 function createConfirmationPopup(object, popupID, popupName)
 {
   var veil      = document.createElement('div');
@@ -186,8 +173,6 @@ function updateFilesList(service, callback)
       {
         if(!document.getElementById(file['uuid']))
         {
-          printMessage('Un nouveau fichier a été ajouté');
-
           x  % 2 == 0 ?
           $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-odd'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table')):
           $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-even'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));

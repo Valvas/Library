@@ -2,13 +2,14 @@
 
 let fs                = require('fs');
 
+let filesCommon       = require('./common');
 let constants         = require('../constants');
 let config            = require('../../json/config');
 let SQLDelete         = require('../database/delete');
 let SQLSelect         = require('../database/select');
 let accountRights     = require('../accounts/rights');
 
-let fileRemoval = module.exports = {};
+let fileDeleting = module.exports = {};
 
 /****************************************************************************************************/
 
@@ -20,7 +21,7 @@ let fileRemoval = module.exports = {};
  * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
  * @return {Object}
  */
-fileRemoval.deleteOneFile = function(service, fileUUID, accountUUID, SQLConnector, callback)
+fileDeleting.deleteOneFile = function(service, fileUUID, accountUUID, SQLConnector, callback)
 {
   let returnObject = {};
 
@@ -40,11 +41,11 @@ fileRemoval.deleteOneFile = function(service, fileUUID, accountUUID, SQLConnecto
         {
           returnObject['checkIfUserHasTheRightToDeleteFiles'] = { 'result': true, 'code': returnCode };
     
-          fileRemoval.deleteFileFromHardware(service, fileNameOrErrorCode, function(trueOrFalse, returnCode)
+          fileDeleting.deleteFileFromHardware(service, fileNameOrErrorCode, function(trueOrFalse, returnCode)
           {
             returnObject['deleteFileFromHardware'] = { 'result': trueOrFalse, 'code': returnCode };
     
-            fileRemoval.deleteFileFromDatabase(fileUUID, SQLConnector, function(trueOrFalse, returnCode)
+            fileDeleting.deleteFileFromDatabase(fileUUID, SQLConnector, function(trueOrFalse, returnCode)
             {
               returnObject['deleteFileFromDatabase'] = { 'result': trueOrFalse, 'code': returnCode };
   
@@ -127,15 +128,20 @@ function checkIfUserHasTheRightToDeleteFiles(service, accountUUID, SQLConnector,
  * @arg {String} file - the name of the file with its extension
  * @return {Boolean}
  */
-fileRemoval.deleteFileFromHardware = function(service, file, callback)
+fileDeleting.deleteFileFromHardware = function(service, file, callback)
 {
   fs.stat(`${config['path_to_root_storage']}/${service}/${file}`, function(err, stat)
   {
     err ? callback(false, constants.FILE_NOT_FOUND_ON_DISK) :
 
-    fs.unlink(`${config['path_to_root_storage']}/${service}/${file}`, function(err)
+    moveFileToBin(service, file, (trueOrFalse, returnedCode) =>
     {
-      err ? callback(false, constants.FILE_NOT_DELETED_FROM_DISK) : callback(true, constants.FILE_DELETED_FROM_DISK);
+      if(trueOrFalse == false){console.log(require('../../json/errors')[returnedCode])} //WRITE LOGS HERE
+
+      fs.unlink(`${config['path_to_root_storage']}/${service}/${file}`, function(err)
+      {
+        err ? callback(false, constants.FILE_NOT_DELETED_FROM_DISK) : callback(true, constants.FILE_DELETED_FROM_DISK);
+      });
     });
   });
 }
@@ -148,7 +154,7 @@ fileRemoval.deleteFileFromHardware = function(service, file, callback)
  * @arg {Object} SQLConnector - a SQL connector to perform queries to the database
  * @return {Boolean}
  */
-fileRemoval.deleteFileFromDatabase = function(fileUUID, SQLConnector, callback)
+fileDeleting.deleteFileFromDatabase = function(fileUUID, SQLConnector, callback)
 {
   SQLDelete.SQLDeleteQuery(
   {
@@ -176,3 +182,27 @@ fileRemoval.deleteFileFromDatabase = function(fileUUID, SQLConnector, callback)
     }
   });
 }
+
+/****************************************************************************************************/
+
+function moveFileToBin(service, file, callback)
+{
+  let date = new Date(Date.now());
+  
+  let deletedFileName = `${file.split('.')[0]}_${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()} ${date.getHours()}h${date.getMinutes()}m${date.getSeconds()}s.${file.split('.')[1]}`;
+
+  filesCommon.createFolder(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`, config.path_to_bin_storage, (trueOrFalse, folderPathOrErrorCode) =>
+  {
+    if(trueOrFalse == false) callback(false, folderPathOrErrorCode);
+
+    else
+    {
+      fs.copyFile(`${config.path_to_root_storage}/${service}/${file}`, `${folderPathOrErrorCode}/${deletedFileName}`, (err) =>
+      {
+        err ? callback(false, constants.FILE_SYSTEM_ERROR) : callback(true, constants.SUCCESS_COPYING_FILE);
+      });
+    }
+  });
+}
+
+/****************************************************************************************************/

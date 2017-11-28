@@ -17,7 +17,6 @@ let database          = require('./functions/database/init');
 
 let root              = require('./routes/root');
 let home              = require('./routes/home');
-let menu              = require('./routes/menu');
 let rights            = require('./routes/rights');
 let service           = require('./routes/service');
 
@@ -55,7 +54,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', root);
-app.use('/menu', menu);
 app.use('/home', home);
 app.use('/rights', rights);
 app.use('/service', auth, service);
@@ -73,9 +71,12 @@ database.createDatabases(connection, function(result, message)
 { 
   console.log(message);
 
-  accounts.createAccounts(connection, function(message)
+  accounts.createAccounts(connection, function()
   {
-    console.log(message);
+    accounts.createRights(connection, function()
+    {
+
+    });
   });
 });
 

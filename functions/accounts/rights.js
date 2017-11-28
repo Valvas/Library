@@ -15,77 +15,52 @@ let SQLSelect   = require('../database/select');
  */
 module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, SQLConnector, callback)
 {
-  serviceName == undefined || accountUUID == undefined || SQLConnector == undefined ? callback(false, constants.MISSING_DATA_IN_REQUEST) :
+  if(serviceName == undefined || accountUUID == undefined || SQLConnector == undefined) callback(false, constants.MISSING_DATA_IN_REQUEST);
 
-  SQLSelect.SQLSelectQuery(
+  else
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.auth_table,
-  
-    "args": { "0": "id" },
-  
-    "where":
+    !(serviceName in require('../../json/services')) ? callback(false, constants.SERVICE_NOT_FOUND) :
+
+    SQLSelect.SQLSelectQuery(
     {
-      "=":
+      "databaseName": config.database.library_database,
+      "tableName": config.database.rights_table,
+      
+      "args": 
+      { 
+        "0": "*" 
+      },
+      
+      "where":
       {
-        "0":
+        "AND":
         {
-          "key": "uuid",
-          "value": accountUUID
-        }
-      }
-    }
-  }, SQLConnector, function(trueOrFalse, rowsOrError)
-  {
-    if(trueOrFalse == false) callback(false, constants.SQL_SERVER_ERROR);
-
-    else
-    {
-      if(rowsOrError.length == 0) callback(false, constants.ACCOUNT_NOT_FOUND);
-
-      else
-      {
-        !(serviceName in require('../../json/services')) ? callback(false, constants.SERVICE_NOT_FOUND) :
-
-        SQLSelect.SQLSelectQuery(
-        {
-          "databaseName": config.database.library_database,
-          "tableName": config.database.rights_table,
-        
-          "args": { "0": "*" },
-        
-          "where":
+          "=":
           {
-            "AND":
+            "0":
             {
-              "=":
-              {
-                "0":
-                {
-                  "key": "account_id",
-                  "value": rowsOrError[0].id
-                },
+              "key": "account",
+              "value": accountUUID
+            },
 
-                "1":
-                {
-                  "key": "service",
-                  "value": serviceName
-                }
-              }
+            "1":
+            {
+              "key": "service",
+              "value": serviceName
             }
           }
-        }, SQLConnector, function(trueOrFalse, rowsOrError)
-        {
-          if(trueOrFalse == false) callback(false, constants.SQL_SERVER_ERROR);
-          
-          else
-          { 
-            rowsOrError.length == 0 ? callback(false, constants.UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(true, rowsOrError[0]);
-          }
-        });
+        }
       }
-    }
-  });
+    }, SQLConnector, function(trueOrFalse, rightsObjectOrErrorCode)
+    {
+      if(trueOrFalse == false) callback(false, constants.rightsObjectOrErrorCode);
+      
+      else
+      { 
+        rightsObjectOrErrorCode.length == 0 ? callback(false, constants.UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(true, rightsObjectOrErrorCode[0]);
+      }
+    });
+  }
 }
 
 /****************************************************************************************************/

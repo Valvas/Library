@@ -8,9 +8,10 @@ let errors            = require('../json/errors');
 let success           = require('../json/success');
 let services          = require('../functions/services');
 let constants         = require('../functions/constants');
-let filesRemoval      = require('../functions/files/delete');
 let filesAdding       = require('../functions/files/adding');
+let filesDeleting     = require('../functions/files/deleting');
 let accountRights     = require('../functions/accounts/rights');
+let filesDownloading  = require('../functions/files/downloading');
 let account           = require('../functions/accounts/functions');
 
 let storage = multer.diskStorage(
@@ -31,14 +32,14 @@ router.get('/:service', function(req, res)
 
   accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, rightsOrErrorCode)
   {
-    if(trueOrFalse == false) res.render('block', { message: errors[rightsOrErrorCode] });
+    if(trueOrFalse == false) res.render('block', { message: `${errors[rightsOrErrorCode].charAt(0).toUpperCase()}${errors[rightsOrErrorCode].slice(1)}` });
 
     else
     {
       services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), function(trueOrFalse, filesObjectOrErrorCode)
       {
         trueOrFalse == false ?
-        res.render('block', { message: `Erreur [500] - ${errors[filesObjectOrErrorCode]} !` }) :
+        res.render('block', { message: `Erreur [500] - ${errors[filesObjectOrErrorCode].charAt(0).toUpperCase()}${errors[filesObjectOrErrorCode].slice(1)} !` }) :
         res.render('service', { location: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrErrorCode, files: filesObjectOrErrorCode });
       }); 
     }
@@ -49,7 +50,7 @@ router.get('/:service', function(req, res)
 
 router.post('/post-new-file', upload.single('file'), function(req, res)
 {
-  req.file == undefined || req.body.service == undefined ? res.status(406).send(`ERROR [406] : ${errors[constants.NO_FILE_PROVIDED_IN_REQUEST]} !`) :
+  req.file == undefined || req.body.service == undefined ? res.status(406).send(`ERROR [406] : ${errors[constants.NO_FILE_PROVIDED_IN_REQUEST].charAt(0).toUpperCase()}${errors[constants.NO_FILE_PROVIDED_IN_REQUEST].slice(1)} !`) :
   
   filesAdding.addOneFile(req.body.service, req.file, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, entryUuidOrErrorCode)
   {
@@ -65,7 +66,7 @@ router.delete('/delete-file', function(req, res)
 {
   req.body.file == undefined || req.body.service == undefined ? res.status(406).send(false) :
 
-  filesRemoval.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), function(returnObject)
+  filesDeleting.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), function(returnObject)
   {
     if(returnObject['findFileInTheDatabaseUsingItsUUID']['result'] == false)
     {
@@ -133,7 +134,12 @@ router.put('/get-ext-accepted', function(req, res)
 
 router.get('/download-file/:service/:file', function(req, res)
 {
-  
+  filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, fileNameOrErrorCode)
+  {
+    trueOrFalse == false ? res.render('block', { message: errors[fileNameOrErrorCode] }) :
+
+    res.download(`${config.path_to_root_storage}/${req.params.service}/${fileNameOrErrorCode}`);
+  });
 });
 
 /****************************************************************************************************/

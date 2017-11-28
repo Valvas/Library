@@ -1,0 +1,47 @@
+{
+  "0":
+  {
+    "account": "user1",
+    "service": "test",
+    "upload_files": 0,
+    "download_files": 0,
+    "remove_files": 0,
+    "post_comments": 0
+  },
+  "1":
+  {
+    "account": "user2",
+    "service": "test",
+    "upload_files": 0,
+    "download_files": 0,
+    "remove_files": 0,
+    "post_comments": 1
+  },
+  "2":
+  {
+    "account": "user3",
+    "service": "test",
+    "upload_files": 0,
+    "download_files": 1,
+    "remove_files": 0,
+    "post_comments": 1
+  },
+  "3":
+  {
+    "account": "user4",
+    "service": "test",
+    "upload_files": 1,
+    "download_files": 1,
+    "remove_files": 0,
+    "post_comments": 1
+  },
+  "4":
+  {
+    "account": "user5",
+    "service": "test",
+    "upload_files": 1,
+    "download_files": 1,
+    "remove_files": 1,
+    "post_comments": 1
+  }
+}
