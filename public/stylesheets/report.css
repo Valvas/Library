@@ -1,0 +1,341 @@
+/****************************************************************************************************/
+
+.report-popup
+{ 
+  z-index:1;
+  padding:0;
+  overflow:auto;
+  position:fixed; 
+  background-color:#334455;
+}
+
+.report-popup-title
+{
+  color:#FFFFFF;
+  text-align:center;
+  font-family:raleway-light;
+}
+
+.report-popup-label
+{
+  color:#FFFFFF;
+  font-family:raleway-italic;
+}
+
+.report-popup-list
+{
+  font-family:raleway-light;
+}
+
+.report-popup-description
+{
+  padding:0;
+  resize:none;
+  border:none;
+  font-family:raleway-light;
+}
+
+.report-popup-send
+{
+  border:none;
+  cursor:pointer;
+  color:#FFFFFF;
+  border-radius:4px;
+  background-color:#77B5FE;
+}
+
+.report-popup-cancel
+{
+  border:none;
+  cursor:pointer;
+  color:#FFFFFF;
+  border-radius:4px;
+  background-color:#FF0921;
+}
+
+.report-popup-send:hover, .report-popup-cancel:hover{ color:#445566; }
+.report-popup-send:hover{ background-color:#5593DC; }
+.report-popup-cancel:hover{ background-color:#DD0700; }
+
+/****************************************************************************************************/
+
+@media all and (max-width: 639px)
+{
+  .report-popup
+  {
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+  }
+
+  .report-popup-send, .report-popup-cancel
+  {
+    width:15%;
+    padding:1%;
+    font-size:large;
+    text-align:center;
+    border-radius:50%;
+    height:calc(100vw * 0.15);
+  }
+
+  .report-popup-title
+  {
+    width:92%;
+    font-size:x-large;
+    margin:4% 4% 8% 4%;
+  }
+
+  .report-popup-label
+  {
+    width:92%;
+    font-size:large;
+    margin:3% 4% 1% 4%;
+  }
+
+  .report-popup-list
+  {
+    width:92%;
+    font-size:large;
+    margin:1% 4% 1% 4%;
+  }
+
+  .report-popup-description
+  {
+    width:90%;
+    height:30vh;
+    font-size:large;
+    overflow-y:scroll;
+    margin:1% 4% 1% 4%;
+    padding:1% 1% 1% 1%;
+  }
+
+  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-cancel{ margin:4% 0 4% 4%; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 640px) and (max-width: 767px)
+{
+  .report-popup
+  {
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+  }
+
+  .report-popup-send, .report-popup-cancel
+  {
+    width:15%;
+    padding:1%;
+    font-size:large;
+    text-align:center;
+    border-radius:50%;
+    height:calc(100vw * 0.15);
+  }
+
+  .report-popup-title
+  {
+    width:92%;
+    font-size:x-large;
+    margin:4% 4% 8% 4%;
+  }
+
+  .report-popup-label
+  {
+    width:92%;
+    font-size:large;
+    margin:3% 4% 1% 4%;
+  }
+
+  .report-popup-list
+  {
+    width:92%;
+    font-size:large;
+    margin:1% 4% 1% 4%;
+  }
+
+  .report-popup-description
+  {
+    width:90%;
+    height:30vh;
+    font-size:large;
+    overflow-y:scroll;
+    margin:1% 4% 1% 4%;
+    padding:1% 1% 1% 1%;
+  }
+
+  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-cancel{ margin:4% 0 4% 4%; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 768px) and (max-width: 959px)
+{
+  .report-popup
+  {
+    top:10%;
+    left:30%;
+    width:40%;
+  }
+
+  .report-popup-send, .report-popup-cancel
+  {
+    width:15%;
+    padding:1%;
+    font-size:large;
+    text-align:center;
+    border-radius:50%;
+    height:calc(40vw * 0.15);
+  }
+
+  .report-popup-title
+  {
+    width:92%;
+    font-size:x-large;
+    margin:4% 4% 8% 4%;
+  }
+
+  .report-popup-label
+  {
+    width:92%;
+    font-size:large;
+    margin:3% 4% 1% 4%;
+  }
+
+  .report-popup-list
+  {
+    width:92%;
+    font-size:large;
+    margin:1% 4% 1% 4%;
+  }
+
+  .report-popup-description
+  {
+    width:90%;
+    height:30vh;
+    font-size:large;
+    overflow-y:scroll;
+    margin:1% 4% 1% 4%;
+    padding:1% 1% 1% 1%;
+  }
+
+  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-cancel{ margin:4% 0 4% 4%; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 960px) and (max-width: 1679px)
+{
+  .report-popup
+  {
+    top:10%;
+    left:35%;
+    width:30%;
+  }
+
+  .report-popup-send, .report-popup-cancel
+  {
+    width:15%;
+    padding:1%;
+    font-size:large;
+    text-align:center;
+    border-radius:50%;
+    height:calc(30vw * 0.15);
+  }
+
+  .report-popup-title
+  {
+    width:92%;
+    font-size:x-large;
+    margin:4% 4% 8% 4%;
+  }
+
+  .report-popup-label
+  {
+    width:92%;
+    font-size:large;
+    margin:3% 4% 1% 4%;
+  }
+
+  .report-popup-list
+  {
+    width:92%;
+    font-size:large;
+    margin:1% 4% 1% 4%;
+  }
+
+  .report-popup-description
+  {
+    width:90%;
+    height:30vh;
+    font-size:large;
+    overflow-y:scroll;
+    margin:1% 4% 1% 4%;
+    padding:1% 1% 1% 1%;
+  }
+
+  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-cancel{ margin:4% 0 4% 4%; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 1680px)
+{
+  .report-popup
+  {
+    top:10%;
+    left:40%;
+    width:20%;
+  }
+
+  .report-popup-send, .report-popup-cancel
+  {
+    width:15%;
+    padding:1%;
+    font-size:large;
+    text-align:center;
+    border-radius:50%;
+    height:calc(20vw * 0.15);
+  }
+
+  .report-popup-title
+  {
+    width:92%;
+    font-size:x-large;
+    margin:4% 4% 8% 4%;
+  }
+
+  .report-popup-label
+  {
+    width:92%;
+    font-size:large;
+    margin:3% 4% 1% 4%;
+  }
+
+  .report-popup-list
+  {
+    width:92%;
+    font-size:large;
+    margin:1% 4% 1% 4%;
+  }
+
+  .report-popup-description
+  {
+    width:90%;
+    height:30vh;
+    font-size:large;
+    margin:1% 4% 1% 4%;
+    padding:1% 1% 1% 1%;
+  }
+
+  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-cancel{ margin:4% 0 4% 4%; }
+}
+
+/****************************************************************************************************/

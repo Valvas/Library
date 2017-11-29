@@ -1,3 +1,5 @@
+/****************************************************************************************************/
+
 function createConfirmationPopup(object, popupID, popupName)
 {
   var veil      = document.createElement('div');
@@ -33,6 +35,106 @@ function createConfirmationPopup(object, popupID, popupName)
   $(info)       .appendTo(popup);
   $(perform)    .appendTo(popup);
   $(cancel)     .appendTo(popup);
+}
+
+/****************************************************************************************************/
+
+function createAdminUserEditPopup(currentValue, inputType, inputId)
+{
+  var veil      = document.createElement('div');
+  var info      = document.createElement('div');
+  var popup     = document.createElement('div');
+  var title     = document.createElement('div');
+  var message   = document.createElement('div');
+
+  var value     = document.createElement('input');
+
+  var cancel    = document.createElement('button');
+  var perform   = document.createElement('button');
+
+  $(veil)       .attr({ id: 'veil',                                 class: 'veil'});
+  $(info)       .attr({ id: 'admin-users-popup-info',               class: 'admin-users-popup-info'});
+  $(title)      .attr({ id: 'admin-users-popup-title',              class: 'admin-users-popup-title'});
+  $(popup)      .attr({ id: 'admin-users-popup',                    class: 'admin-users-popup'});
+  $(cancel)     .attr({ id: 'admin-users-popup-cancel',             class: 'admin-users-popup-cancel'});
+  $(message)    .attr({ id: 'admin-users-popup-message',            class: 'admin-users-popup-message'});
+  $(perform)    .attr({ id: 'admin-users-popup-perform',            class: 'admin-users-popup-perform'});
+
+  $(value)      .attr({ id: 'admin-users-popup-value',              class: 'admin-users-popup-value',        type: inputType});
+
+  $(info)       .text('popup_text');
+  $(title)      .text('popup_title');
+  $(cancel)     .text('Annuler');
+  $(perform)    .text('Envoyer');
+  $(message)    .text('popup_message'); 
+  
+  $(veil)       .appendTo('body');
+  $(popup)      .appendTo('body');
+
+  $(title)      .appendTo(popup);
+  $(message)    .appendTo(popup);
+  $(value)      .appendTo(popup);
+  $(info)       .appendTo(popup);
+  $(perform)    .appendTo(popup);
+  $(cancel)     .appendTo(popup);
+}
+
+/****************************************************************************************************/
+
+/**
+ * Open the popup that is used to send a report
+ * @arg {Object} obj - a JSON object with the text content of each element of the popup
+ */
+function openReportPopup(obj)
+{
+  $('#report-popup').remove();
+
+  var veil              = document.createElement('div');
+  var popup             = document.createElement('div');
+  var title             = document.createElement('div');
+  var listLabel         = document.createElement('div');
+  var descriptionLabel  = document.createElement('div');
+
+  var list              = document.createElement('select');
+  var description       = document.createElement('textarea');
+
+  var cancelButton      = document.createElement('button');
+  var sendButton        = document.createElement('button');
+
+  $(veil)               .attr({ id: 'veil',                                 class: 'veil'});
+  $(popup)              .attr({ id: 'report-popup',                         class: 'report-popup'});
+  $(list)               .attr({ id: 'report-popup-list',                    class: 'report-popup-list'});
+  $(sendButton)         .attr({ id: 'report-popup-send',                    class: 'report-popup-send'});
+  $(listLabel)          .attr({ id: 'report-popup-list-label',              class: 'report-popup-label'});
+  $(descriptionLabel)   .attr({ id: 'report-popup-description-label',       class: 'report-popup-label'});
+  $(title)              .attr({ id: 'report-popup-title',                   class: 'report-popup-title'});
+  $(cancelButton)       .attr({ id: 'report-popup-cancel',                  class: 'report-popup-cancel'});
+  $(description)        .attr({ id: 'report-popup-description',             class: 'report-popup-description',        maxlength: '1024'});
+
+  $(title)              .text(obj.title);
+  $(listLabel)          .text(obj.listLabel);
+  $(descriptionLabel)   .text(obj.descriptionLabel);
+
+  $(cancelButton)       .html(`<i class="fa fa-times fa-fw" aria-hidden="true"></i>`);
+  $(sendButton)         .html(`<i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i>`);
+  
+  $(`<option value='null'></option>`).appendTo(list);
+
+  for(var key in obj['list'])
+  {
+    $(`<option value='${key}'>${obj['list'][key]}</option>`).appendTo(list);
+  }
+
+  $(veil)               .appendTo('body');
+  $(popup)              .appendTo('body');
+
+  $(title)              .appendTo(popup);
+  $(listLabel)          .appendTo(popup);
+  $(list)               .appendTo(popup);
+  $(descriptionLabel)   .appendTo(popup);
+  $(description)        .appendTo(popup);
+  $(sendButton)         .appendTo(popup);
+  $(cancelButton)       .appendTo(popup);
 }
 
 /****************************************************************************************************/

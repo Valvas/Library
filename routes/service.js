@@ -12,7 +12,6 @@ let filesAdding       = require('../functions/files/adding');
 let filesDeleting     = require('../functions/files/deleting');
 let accountRights     = require('../functions/accounts/rights');
 let filesDownloading  = require('../functions/files/downloading');
-let account           = require('../functions/accounts/functions');
 
 let storage = multer.diskStorage(
 {

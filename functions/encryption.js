@@ -38,26 +38,3 @@ module.exports.getRandomPassword = function(callback)
 }
 
 /****************************************************************************************************/
-
-module.exports.encryptIdentifier = function(identifier, callback)
-{
-  let encryptedIdentifier = '';
-  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  let i = 0;
-  
-    let loop = function()
-    {
-        i++;
-  
-        encryptedIdentifier += characters.charAt(Math.floor(Math.random() * characters.length));
-  
-        if(i == 31) encryptedIdentifier += identifier.toString();
-
-        i < 64 ? loop() : 
-
-        callback(encryptedIdentifier)
-    }
-  
-    loop();
-}

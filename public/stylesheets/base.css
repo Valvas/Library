@@ -6,6 +6,8 @@
 @import url('service.css');
 @import url('popup.css');
 @import url('admin.css');
+@import url('report.css');
+@import url('aside.css');
 @import url('forgotten_password.css');
 
 .logs-block
@@ -82,68 +84,4 @@
 {
   margin:0;
   background-color:#FFFFFF;
-}
-
-.aside-navigation-block
-{
-  display:inline-block;
-  list-style-type:none;
-}
-
-.aside-navigation-block-element
-{
-  display:block;
-  cursor:pointer;
-  color:#000000;
-  text-decoration:none;
-  font-family:raleway-light;
-}
-
-.aside-navigation-block-element:hover
-{
-  color:#77B5FE;
-  background-color:#EEEEEE;
-}
-
-.aside-navigation-block-element-selected
-{
-  display:block;
-  cursor:pointer;
-  color:#77B5FE;
-  text-decoration:none;
-  padding:10% 0 10% 15%;
-  font-family:raleway-light;
-}
-
-.aside-navigation-block-element-selected:hover
-{
-  background-color:#EEEEEE;
-}
-
-@media all and (max-width: 767px)
-{
-  .aside-navigation-block{ margin-top:2%; width:100%; }
-  .aside-navigation-block-element{ padding:5% 0 5% 5%; }
-  .aside-navigation-block-element-selected{ padding:5% 0 5% 5%; }
-}
-
-@media all and (min-width: 768px) and (max-width: 959px)
-{
-  .aside-navigation-block{ margin-top:5%; width:20%; }
-  .aside-navigation-block-element{ padding:10% 0 10% 15%; }
-  .aside-navigation-block-element-selected{ padding:5% 0 5% 5%; }
-}
-
-@media all and (min-width: 960px) and (max-width: 1679px)
-{
-  .aside-navigation-block{ margin-top:5%; width:20%; }
-  .aside-navigation-block-element{ padding:10% 0 10% 15%; }
-  .aside-navigation-block-element-selected{ padding:10% 0 10% 15%; }
-}
-
-@media all and (min-width: 1680px)
-{
-  .aside-navigation-block{ margin-top:5%; width:20%; }
-  .aside-navigation-block-element{ padding:10% 0 10% 15%; }
-  .aside-navigation-block-element-selected{ padding:10% 0 10% 15%; }
 }

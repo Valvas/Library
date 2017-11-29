@@ -1,15 +1,14 @@
 .home-news-block
 {
-    margin:0;
     font-family:Arial;
-    display:inline-block;
     vertical-align:top;
+    display:inline-block;
 }
 
 .home-news-block-element
 {
-    margin:0 0 2px 0;
-    padding:2% 5% 2% 5%;
+    margin:0;
+    padding:2vh 2vw 2vh 2vw;
     background-color:#FFFFFF;
 }
 
@@ -33,22 +32,27 @@
     font-family:raleway-light;
 }
 
-@media all and (max-width: 767px)
+@media all and (max-width: 639px)
 {
-    .home-news-block{ width:90%; }
+    .home-news-block{ width:calc(95vw - 10px); margin:5vh 3vw 5vh 1vw; }
+}
+
+@media all and (min-width: 768px) and (max-width: 767px)
+{
+    .home-news-block{ width:calc(95vw - 10px); margin:5vh 3vw 5vh 1vw; }
 }
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-    .home-news-block{ width:60%; }
+    .home-news-block{ width:calc(70vw - 10px); margin:5vh 3vw 5vh 1vw; }
 }
 
 @media all and (min-width: 960px) and (max-width: 1679px)
 {
-    .home-news-block{ width:60%; }
+    .home-news-block{ width:calc(70vw - 10px); margin:5vh 3vw 5vh 1vw; }
 }
 
 @media all and (min-width: 1680px)
 {
-    .home-news-block{ width:60%; }
+    .home-news-block{ width:calc(75vw - 10px); margin:5vh 3vw 5vh 1vw; }
 }

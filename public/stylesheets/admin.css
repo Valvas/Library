@@ -1,3 +1,31 @@
+/****************************************************************************************************
+POPUP
+****************************************************************************************************/
+
+@media all and (max-width: 767px)
+{
+  .admin-users-popup{ color:#FFFFFF; background-color:#334455; text-align:center; width:100%; height:100%; top:0; left:0; position:fixed; z-index:2; }
+}
+
+@media all and (min-width: 768px) and (max-width: 959px)
+{
+  .admin-users-popup{ color:#FFFFFF; background-color:#334455; text-align:center; width:100%; height:100%; top:0; left:0; position:fixed; z-index:2; }
+}
+
+@media all and (min-width: 960px) and (max-width: 1679px)
+{
+  .admin-users-popup{ color:#000000; text-align:center; width:30%; top:20%; left:35%; position:fixed; z-index:2; background-color:#FFFFFF; padding:1%; }
+}
+
+@media all and (min-width: 1680px)
+{
+  .admin-users-popup{ color:#000000; text-align:center; width:20%; top:20%; left:40%; position:fixed; z-index:2; background-color:#FFFFFF; padding:1%; }
+}
+
+/****************************************************************************************************
+HOME
+****************************************************************************************************/
+
 .admin-users-table
 {
   width:100%;
@@ -85,4 +113,73 @@ th.admin-users-table-admin{ width:10%; }
 {
   .admin-main-block{ display:inline-block; width:75%; }
   .admin-main-block .info{ width:20%; }
+}
+
+/****************************************************************************************************
+USER
+****************************************************************************************************/
+
+.admin-main-block a.return
+{
+  width:15%;
+  padding:1%;
+  display:block;
+  font-size:large;
+  color:#FFFFFF;
+  text-align:center;
+  font-family:barlow;
+  text-decoration:none;
+  margin:2.5% 2.5% 2.5% 2.5%;
+  background-color:#8ED744;
+}
+
+.admin-main-block a.return:hover
+{
+  color:#223344;
+  background-color:#6CB522;
+}
+
+.admin-main-block div.block
+{
+  margin:1% 2.5% 1% 2.5%;
+  border:1px solid #66A4ED;
+}
+
+.admin-main-block div.block div.key
+{
+  width:30%;
+  padding:1%;
+  color:#FFFFFF;
+  font-size:large;
+  display:inline-block;
+  font-family:raleway-italic;
+  background-color:#66A4ED;
+}
+
+.admin-main-block div.block div.value
+{
+  width:50%;
+  padding:1%;
+  text-align:left;
+  font-size:large;
+  display:inline-block;
+  font-family:raleway-regular;
+}
+
+.admin-main-block div.block button.edit
+{
+  width:16%;
+  padding:1%;
+  border:none;
+  cursor:pointer;
+  color:#FFFFFF;
+  font-size:large;
+  font-family:raleway-italic;
+  background-color:#556677;
+}
+
+.admin-main-block div.block button.edit:hover
+{
+  color:#DCDCDC;
+  background-color:#223344;
 }

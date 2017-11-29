@@ -1,17 +1,67 @@
 'use strict';
 
-let config = require('../../json/config');
+let constants                  = require('../constants');
+let config                     = require('../../json/config');
+let SQLSelect                  = require('../database/select');
 
 /****************************************************************************************************/
 
-module.exports.getAccountList = function(mysqlConnector, callback)
+module.exports.getAccountList = function(SQLConnector, callback)
 {
-  mysqlConnector.query(`SELECT * FROM ${config['database']['library_database']}.${config['database']['auth_table']}`, function(err, accounts)
+  SQLSelect.SQLSelectQuery(
   {
-    if(err) callback(false);
+    "databaseName": config.database.library_database,
+    "tableName": config.database.auth_table,
 
-    else{ callback(accounts); }
+    "args":
+    {
+      "0": "*"
+    },
+
+    "where":
+    {
+
+    }
+  }, SQLConnector, (trueOrFalse, rowsOrErrorCode) =>
+  {
+    callback(trueOrFalse, rowsOrErrorCode);
   });
 };
+
+/****************************************************************************************************/
+
+module.exports.getAccountFromUUID = function(accountUUID, SQLConnector, callback)
+{
+  SQLSelect.SQLSelectQuery(
+  {
+    "databaseName": config.database.library_database,
+    "tableName": config.database.auth_table,
+  
+    "args":
+    {
+      "0": "*"
+    },
+  
+    "where":
+    {
+      "=":
+      {
+        "0":
+        {
+          "key": "uuid",
+          "value": accountUUID
+        }
+      }
+    }
+  }, SQLConnector, (trueOrFalse, rowsOrErrorCode) =>
+  {
+    if(trueOrFalse == false) callback(false, constants.SQL_SERVER_ERROR);
+
+    else
+    {
+      rowsOrErrorCode.length == 0 ? callback(false, constants.ACCOUNT_NOT_FOUND) : callback(true, rowsOrErrorCode[0]);
+    }
+  });
+}
 
 /****************************************************************************************************/

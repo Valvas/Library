@@ -3,16 +3,16 @@
   <% include include/head.ejs %>
   <body class='private-section-body'>
     <% include include/menu.ejs %>
-    <% include include/aside.ejs %>
-    <div class='home-news-block'>
-      <% for(var key in news){ %>
-        <div class='home-news-block-element'>
-          <p class='home-news-block-element-title'><%= news[key]['title'] %></p>
-          <p class='home-news-block-element-date'><%= news[key]['date'] %></p>
-          <p class='home-news-block-element-content'><%= news[key]['content'] %></p>
-        </div>
-      <% } %>
-    </div>
+    <% include include/aside.ejs %><!-- @SuppressWhitespace
+    --><div class='home-news-block'>
+        <% for(var key in news){ %>
+          <div class='home-news-block-element'>
+            <p class='home-news-block-element-title'><%= news[key]['title'] %></p>
+            <p class='home-news-block-element-date'><%= news[key]['date'] %></p>
+            <p class='home-news-block-element-content'><%= news[key]['content'] %></p>
+          </div>
+        <% } %>
+      </div>
     <% include include/scripts.ejs %>
   </body>
 </html>

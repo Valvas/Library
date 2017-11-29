@@ -18,7 +18,7 @@ let constants         = require('../constants');
 
     "where":
     {
-      "or":
+      "OR":
       {
         "=":
         {

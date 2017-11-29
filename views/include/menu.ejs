@@ -1,11 +1,12 @@
-<% include logs.ejs %>
 <nav id='nav-menu' class='nav-menu'>
-    <p class='nav-menu-title'>LIBRARY</p>
-    <div id='nav-menu-elements-container' class='nav-menu-elements-container'>
-        <a href='/home' <% if(location == 'home') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='home-link' name='home'>Accueil</a>
-        <a href='/admin' <% if(location == 'admin') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='admin-link' name='admin'>Administration</a>
-        <a href='/logout' class='nav-menu-element' id='logout-link' name='logout'>Déconnexion</a>
-    </div>
-    <i class='fa fa-exclamation nav-menu-element-bug-report' aria-hidden="true"></i>
+  <p class='nav-menu-title'>LIBRARY</p><!-- @SuppressWhitespace
+   --><div id='nav-menu-elements-container' class='nav-menu-elements-container'>
+        <a href='/home' <% if(location == 'home') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='home-link' name='home'>Accueil</a><!-- @SuppressWhitespace
+        --><a href='/services' <% if(location == 'services') { %> class='nav-menu-element-selected nav-menu-element-responsive' <% } else { %> class='nav-menu-element nav-menu-element-responsive' <% } %> id='services-link' name='services'>Services</a><!-- @SuppressWhitespace
+        --><a href='/admin' <% if(location == 'admin') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='admin-link' name='admin'>Administration</a><!-- @SuppressWhitespace
+        --><a href='/logout' class='nav-menu-element' id='logout-link' name='logout'>Déconnexion</a>
+      </div>
+    <i id='report-button' class='fa fa-exclamation nav-menu-element-bug-report' aria-hidden="true"></i>
 </nav>
+<% include logs.ejs %>
 <div class='nav-menu-separation-bar'></div>

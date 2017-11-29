@@ -1,0 +1,127 @@
+/****************************************************************************************************/
+
+.aside-navigation-block
+{
+  display:inline-block;
+  list-style-type:none;
+}
+
+.aside-navigation-block-element, .aside-navigation-block-element-selected
+{
+  display:block;
+  cursor:pointer;
+  font-size:large;
+  text-decoration:none;
+  font-family:raleway-light;
+}
+
+.aside-navigation-block-element:hover, .aside-navigation-block-element-selected:hover
+{
+  color:#77B5FE;
+}
+
+/****************************************************************************************************/
+
+@media all and (max-width: 639px)
+{
+  .aside-navigation-block
+  { 
+    display:none;
+  }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 640px) and (max-width: 767px)
+{
+  .aside-navigation-block
+  { 
+    display:none;
+  }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 768px) and (max-width: 959px)
+{
+  .aside-navigation-block
+  { 
+    width:25%; 
+    margin:5% 0 5% 0;
+    background-color:#FFFFFF;
+  }
+
+  .aside-navigation-block-element, .aside-navigation-block-element-selected
+  {
+    padding:2%;
+    color:#000000;
+  }
+
+  .aside-navigation-block-element-selected
+  {
+    color:#77B5FE;
+  }
+
+  .aside-navigation-block-element:hover, .aside-navigation-block-element-selected:hover
+  {
+    background-color:#EEEEEE;
+  }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 960px) and (max-width: 1679px)
+{
+  .aside-navigation-block
+  { 
+    width:25%;
+    margin:5% 0 5% 0;
+    background-color:#FFFFFF;
+  }
+
+  .aside-navigation-block-element, .aside-navigation-block-element-selected
+  {
+    padding:2%;
+    color:#000000;
+  }
+
+  .aside-navigation-block-element-selected
+  {
+    color:#77B5FE;
+  }
+
+  .aside-navigation-block-element:hover, .aside-navigation-block-element-selected:hover
+  {
+    background-color:#EEEEEE;
+  }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 1680px)
+{
+  .aside-navigation-block
+  { 
+    width:20%;
+    margin:5% 0 5% 0;
+    background-color:#FFFFFF;
+  }
+
+  .aside-navigation-block-element, .aside-navigation-block-element-selected
+  {
+    padding:2%;
+    color:#000000;
+  }
+
+  .aside-navigation-block-element-selected
+  {
+    color:#77B5FE;
+  }
+
+  .aside-navigation-block-element:hover, .aside-navigation-block-element-selected:hover
+  {
+    background-color:#EEEEEE;
+  }
+}
+
+/****************************************************************************************************/
