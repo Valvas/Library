@@ -1,7 +1,6 @@
 'use strict';
 
 let SQLCommon         = require('./common');
-let constants         = require('../constants');
 
 /*
   queryObject ->
@@ -71,7 +70,7 @@ module.exports.SQLSelectQuery = function(query, connector, callback)
       
       connector.query(sql, function(err, result)
       {
-        err ? callback(false, constants.SQL_SERVER_ERROR) : callback(true, result);
+        err ? callback(false, err.message) : callback(true, result);
       });
     });
   }
@@ -82,7 +81,7 @@ module.exports.SQLSelectQuery = function(query, connector, callback)
 
   connector.query(sql, function(err, result)
   {
-    err ? callback(false, constants.SQL_SERVER_ERROR) : callback(true, result);
+    err ? callback(false, err.message) : callback(true, result);
   });
 }
 

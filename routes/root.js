@@ -1,25 +1,28 @@
 'use strict';
 
 let express           = require('express');
+let errors            = require('../json/errors');
+let success           = require('../json/success');
 let messages          = require('../json/messages');
 let logon             = require('../functions/logon');
+let constants         = require('../functions/constants');
 
 let router = express.Router();
 
 /****************************************************************************************************/
 
-router.get('/', function(req, res)
+router.get('/', (req, res) =>
 {
-  req.session.identifier == undefined ? res.render('index') : res.redirect('/home');
+  req.session.uuid == undefined ? res.render('index') : res.redirect('/home');
 });
 
 /****************************************************************************************************/
 
-router.put('/', function(req, res)
+router.put('/', (req, res) =>
 {
   req.body.emailAddress == undefined || req.body.uncryptedPassword == undefined ? res.status(406).send('406 - MISSING DATA') :
 
-  logon.checkIfAccountExistsUsingCredentialsProvided(req.body.emailAddress, req.body.uncryptedPassword, req.app.get('mysqlConnector'), function(result, account)
+  logon.checkIfAccountExistsUsingCredentialsProvided(req.body.emailAddress, req.body.uncryptedPassword, req.app.get('mysqlConnector'), (result, account) =>
   {
     if(result == false) res.status(500).send('500 - INTERNAL SERVER ERROR');
 
@@ -41,7 +44,7 @@ router.put('/', function(req, res)
 
 /****************************************************************************************************/
 
-router.get('/logout', function(req, res)
+router.get('/logout', (req, res) =>
 {
   req.session.destroy();
 
@@ -50,9 +53,9 @@ router.get('/logout', function(req, res)
 
 /****************************************************************************************************/
 
-router.get('/afk-time', function(req, res)
+router.get('/afk-time', (req, res) =>
 {
-  req.session.identifier == undefined ? res.status(401).send('ERROR [401] - AUTHENTICATION REQUIRED !') : res.status(200).send({ time: require('../json/config.json')['inactivity-timeout'] });
+  req.session.uuid == undefined ? res.status(401).send('ERROR [401] - AUTHENTICATION REQUIRED !') : res.status(200).send({ time: require('../json/config.json')['inactivity-timeout'] });
 });
 
 /****************************************************************************************************/

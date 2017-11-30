@@ -143,22 +143,75 @@ td.service-main-block-file-buttons
   padding:1% 5% 1% 0;
 }
 
-@media all and (max-width: 767px)
+.services-main-block{ width:95%; margin:2.5%; }
+
+.services-main-block-element{ cursor:pointer; text-decoration:none; font-family:raleway-regular; padding:2% 5% 2% 5%; font-size:large; color:#FFFFFF; background-color:#77B5FE; border-radius:8px; text-align:center; }
+
+.services-main-block-element:hover{ color:#223344; background-color:#5593DC; }
+
+/****************************************************************************************************/
+
+@media all and (max-width: 639px)
 {
-  .service-main-block{ width:90%; margin:2.5%; display:inline-block; vertical-align:top; padding:1%; }
+  .service-main-block{ width:95%; margin:2.5%; }
+
+  .services-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
 }
+
+/****************************************************************************************************/
+
+@media all and (min-width: 640px) and (max-width: 767px)
+{
+  .service-main-block{ width:95%; margin:2.5%; }
+
+  .services-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
+}
+
+/****************************************************************************************************/
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .service-main-block{ width:90%; margin:2.5%; display:inline-block; vertical-align:top; padding:1%; }
+  .service-main-block{ width:70%; margin:2.5%; display:inline-block; vertical-align:top; }
+  
+  .services-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
 }
+
+/****************************************************************************************************/
 
 @media all and (min-width: 960px) and (max-width: 1679px)
 {
-  .service-main-block{ width:65%; margin:2.5%; display:inline-block; vertical-align:top; padding:1%; }
+  .service-main-block{ width:70%; margin:2.5%; display:inline-block; vertical-align:top; }
+  
+  .services-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
 }
+
+/****************************************************************************************************/
 
 @media all and (min-width: 1680px)
 {
-  .service-main-block{ width:65%; margin:2.5%; display:inline-block; vertical-align:top; padding:1%; }
+  .service-main-block{ width:75%; margin:2.5%; display:inline-block; vertical-align:top; }
+  
+  .services-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
 }
+
+/****************************************************************************************************/

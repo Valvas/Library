@@ -1,8 +1,8 @@
 input
 {
   width:60%;
-  padding:8px;
-  margin:0 20% 16px 20%;
+  padding:2%;
+  margin:0 20% 5% 20%;
   border:1px solid #DDDDDD;
 }
 
@@ -14,7 +14,6 @@ input
 
 .logon-form-title
 {
-  color:#334455;
   text-align:center;
   font-size:x-large;
   font-family:oneday;
@@ -27,15 +26,14 @@ input
 
 .logon-form-send-button
 {
-  width:10%;
+  padding:2%;
   border:none;
-  padding:4px;
   color:white;
   cursor:pointer;
   font-size:large;
+  border-radius:2px;
   text-align:center;
   font-family:agency;
-  margin:0 20% 16px 70%;
   background-color:#77B5FE;
 }
 
@@ -70,22 +68,56 @@ input
   color:#223344;
 }
 
-@media all and (max-width: 767px)
+@media all and (max-width: 639px)
 {
-  .logon-form-popup{ padding:32px; background-color:#FFFFFF; width:100%; margin:0; }
+  .logon-form-popup{ background-color:#334455; margin:5%; }
+
+  .logon-form-title{ color:#FFFFFF; }
+
+  .logon-form-send-button{ width:20%; margin:0 20% 5% 60%; }
+
+  .logon-form-question{ color:#FFFFFF; font-size:normal; }
+
+  .logon-form-question:hover{ color:#CBCBCB; }
+}
+
+@media all and (min-width: 640px) and (max-width: 767px)
+{
+  .logon-form-popup{ background-color:#334455; margin:5%; }
+
+  .logon-form-title{ color:#FFFFFF; }
+
+  .logon-form-send-button{ width:15%; margin:0 20% 5% 65%; }
+
+  .logon-form-question{ color:#FFFFFF; font-size:normal; }
+
+  .logon-form-question:hover{ color:#CBCBCB; }
 }
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .logon-form-popup{ padding:32px; background-color:#FFFFFF; width:100%; margin:0; }
+  .logon-form-popup{ background-color:#FFFFFF; width:70%; margin:5% 10% 5% 10%; padding:5%; }
+
+  .logon-form-send-button{ width:15%; margin:0 20% 5% 65%; }
 }
 
-@media all and (min-width: 960px) and (max-width: 1679px)
+@media all and (min-width: 960px) and (max-width: 1279px)
 {
-  .logon-form-popup{ padding:32px; background-color:#FFFFFF; width:45%; margin:5% 30% 5% 25%; }
+  .logon-form-popup{ background-color:#FFFFFF; width:45%; margin:5% 22.5% 5% 22.5%; padding:2.5% 5% 2.5% 5%; }
+
+  .logon-form-send-button{ width:15%; margin:0 20% 5% 65%; }
+}
+
+@media all and (min-width: 1280px) and (max-width: 1679px)
+{
+  .logon-form-popup{ background-color:#FFFFFF; width:30%; margin:5% 30% 5% 30%; padding:1% 5% 1% 5%; }
+  
+  .logon-form-send-button{ width:15%; margin:0 20% 5% 65%; }
 }
 
 @media all and (min-width: 1680px)
 {
-  .logon-form-popup{ padding:32px; background-color:#FFFFFF; width:30%; margin:5% 35% 5% 30%; }
+  .logon-form-popup{ background-color:#FFFFFF; width:20%; margin:5% 35% 5% 35%; padding:1% 2.5% 1% 2.5%; }
+
+  .logon-form-send-button{ width:15%; margin:0 20% 5% 65%; }
 }

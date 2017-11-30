@@ -1,7 +1,5 @@
 'use strict';
 
-let constants = require('../constants');
-
 /*
   queryObject ->
   {
@@ -39,7 +37,7 @@ module.exports.SQLInsertQuery = function(queryObject, SQLConnector, callback)
 
   SQLConnector.query(`INSERT INTO ${database}.${table} (${keys},uuid) VALUES (${values},"${uuid}")`, function(err, result)
   {
-    err ? callback(false, constants.SQL_SERVER_ERROR) : callback(true, uuid);
+    err ? callback(false, err.message) : callback(true, uuid);
   });
 }
 

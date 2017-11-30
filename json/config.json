@@ -7,7 +7,8 @@
     "library_database": "library",
     "rights_table": "rights",
     "auth_table": "account",
-    "files_table": "files"
+    "files_table": "files",
+    "reports_table": "reports"
   },
 
   "salt": "$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
@@ -26,5 +27,24 @@
   "ext_accepted":
   {
     "info": { "0": "txt" }
+  },
+
+  "reports_status":
+  {
+    "0":
+    {
+      "name": "En cours",
+      "color": "#77B5FE"
+    },
+    "1":
+    {
+      "name": "Fermé",
+      "color": "#FF6347"
+    },
+    "2":
+    {
+      "name": "Résolu",
+      "color": "#7FDD4C"
+    }
   }
 }

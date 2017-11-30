@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <% include include/head.ejs %>
+  <body class='private-section-body'>
+    <% include include/menu.ejs %>
+    <div class='services-main-block'>
+      <% for(var key in services){ %><!-- @SuppressWhitespace
+      --><a href='/service/<%= key %>' class='services-main-block-element'><%= services[key]['name'] %></a><!-- @SuppressWhitespace
+      --><% } %>
+    </div>
+    <% include include/scripts.ejs %>
+  </body>
+</html>

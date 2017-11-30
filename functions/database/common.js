@@ -50,8 +50,6 @@ SQLCommon.returnStatement = function(object, operands, callback)
       operands.pop();
 
       statement += array.join(` ${operands.slice(-1)} `);
-
-      operands.pop();
       
       Object.keys(object)[x] == undefined ? callback(statement) : first();
     }

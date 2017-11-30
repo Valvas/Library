@@ -25,6 +25,13 @@ let router = express.Router();
 
 /****************************************************************************************************/
 
+router.get('/', function(req, res)
+{
+  res.render('services', { location: 'services', services: require('../json/services') });
+});
+
+/****************************************************************************************************/
+
 router.get('/:service', function(req, res)
 {
   !(req.params.service in require('../json/services')) ? res.render('404') :

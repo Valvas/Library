@@ -44,6 +44,18 @@
           "account": "VARCHAR(255) NOT NULL",
           "file": "VARCHAR(255) NOT NULL",
           "uuid": "VARCHAR(255) NOT NULL"
+      },
+
+      "reports":
+      {
+        "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+        "report_type": "VARCHAR(255) NOT NULL",
+        "report_subject": "VARCHAR(255) NOT NULL",
+        "report_content": "TEXT(1024) NOT NULL",
+        "report_account": "VARCHAR(255) NOT NULL",
+        "report_date": "INT UNSIGNED NOT NULL",
+        "report_status": "INT NOT NULL",
+        "uuid": "VARCHAR(255) NOT NULL"
       }
   }
 }

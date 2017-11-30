@@ -17,6 +17,7 @@ let database          = require('./functions/database/init');
 
 let root              = require('./routes/root');
 let home              = require('./routes/home');
+let reports           = require('./routes/reports');
 let service           = require('./routes/service');
 
 let adminRoot         = require('./routes/admin/root');
@@ -54,6 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', root);
 app.use('/home', home);
+app.use('/reports', auth, reports);
 app.use('/service', auth, service);
 app.use('/admin', auth, adminAuth, adminRoot);
 app.use('/admin/users', auth, adminAuth, adminUser);

@@ -8,13 +8,13 @@
 @import url('admin.css');
 @import url('report.css');
 @import url('aside.css');
-@import url('forgotten_password.css');
 
 .logs-block
 {
   top:5%;
   left:20%;
   width:60%;
+  z-index:99;
   position:fixed;
 }
 

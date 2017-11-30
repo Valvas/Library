@@ -93,8 +93,11 @@ function openReportPopup(obj)
   var popup             = document.createElement('div');
   var title             = document.createElement('div');
   var listLabel         = document.createElement('div');
+  var infoMessage       = document.createElement('div');
+  var subjectLabel      = document.createElement('div');
   var descriptionLabel  = document.createElement('div');
 
+  var subject           = document.createElement('input');
   var list              = document.createElement('select');
   var description       = document.createElement('textarea');
 
@@ -103,22 +106,27 @@ function openReportPopup(obj)
 
   $(veil)               .attr({ id: 'veil',                                 class: 'veil'});
   $(popup)              .attr({ id: 'report-popup',                         class: 'report-popup'});
+  $(infoMessage)        .attr({ id: 'report-popup-info',                    class: 'report-popup-info'});
   $(list)               .attr({ id: 'report-popup-list',                    class: 'report-popup-list'});
   $(sendButton)         .attr({ id: 'report-popup-send',                    class: 'report-popup-send'});
   $(listLabel)          .attr({ id: 'report-popup-list-label',              class: 'report-popup-label'});
   $(descriptionLabel)   .attr({ id: 'report-popup-description-label',       class: 'report-popup-label'});
   $(title)              .attr({ id: 'report-popup-title',                   class: 'report-popup-title'});
+  $(subjectLabel)       .attr({ id: 'report-popup-subject-label',           class: 'report-popup-label'});
   $(cancelButton)       .attr({ id: 'report-popup-cancel',                  class: 'report-popup-cancel'});
   $(description)        .attr({ id: 'report-popup-description',             class: 'report-popup-description',        maxlength: '1024'});
+  $(subject)            .attr({ id: 'report-popup-subject',                 class: 'report-popup-subject',            maxlength: '64',           type: 'text'});
 
   $(title)              .text(obj.title);
   $(listLabel)          .text(obj.listLabel);
+  $(infoMessage)        .text(obj.infoMessage);
+  $(subjectLabel)       .text(obj.subjectLabel);
   $(descriptionLabel)   .text(obj.descriptionLabel);
 
   $(cancelButton)       .html(`<i class="fa fa-times fa-fw" aria-hidden="true"></i>`);
   $(sendButton)         .html(`<i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i>`);
   
-  $(`<option value='null'></option>`).appendTo(list);
+  $(`<option value=''></option>`).appendTo(list);
 
   for(var key in obj['list'])
   {
@@ -131,8 +139,11 @@ function openReportPopup(obj)
   $(title)              .appendTo(popup);
   $(listLabel)          .appendTo(popup);
   $(list)               .appendTo(popup);
+  $(subjectLabel)       .appendTo(popup);
+  $(subject)            .appendTo(popup);
   $(descriptionLabel)   .appendTo(popup);
   $(description)        .appendTo(popup);
+  $(infoMessage)        .appendTo(popup);
   $(sendButton)         .appendTo(popup);
   $(cancelButton)       .appendTo(popup);
 }

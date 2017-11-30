@@ -26,6 +26,7 @@ const FOLDER_NOT_FOUND                                                          
 const IS_NOT_A_DIRECTORY                                                          = 10022;
 const UNAUTHORIZED_TO_READ_OR_RIGHT_IN_THE_TARGET                                 = 10023;
 const FOLDER_ALREADY_EXISTS                                                       = 10024;
+const AUTHENTICATION_REQUIRED                                                     = 10025;
 
 /******************************************************************************************
 SUCCESS
@@ -40,6 +41,7 @@ const USER_IS_ADMIN                                                             
 const FILE_ADDED_ON_DISK                                                          = 20007;
 const AUTHORIZED_TO_ADD_FILES                                                     = 20008;
 const SUCCESS_COPYING_FILE                                                        = 20009;
+const SUCCESS_POSTING_REPORT                                                      = 20010;
 
 /******************************************************************************************
 EXPORTS
@@ -71,6 +73,7 @@ module.exports =
   IS_NOT_A_DIRECTORY: IS_NOT_A_DIRECTORY,
   UNAUTHORIZED_TO_READ_OR_RIGHT_IN_THE_TARGET: UNAUTHORIZED_TO_READ_OR_RIGHT_IN_THE_TARGET,
   FOLDER_ALREADY_EXISTS: FOLDER_ALREADY_EXISTS,
+  AUTHENTICATION_REQUIRED: AUTHENTICATION_REQUIRED,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -80,5 +83,6 @@ module.exports =
   USER_IS_ADMIN: USER_IS_ADMIN,
   FILE_ADDED_ON_DISK: FILE_ADDED_ON_DISK,
   AUTHORIZED_TO_ADD_FILES: AUTHORIZED_TO_ADD_FILES,
-  SUCCESS_COPYING_FILE: SUCCESS_COPYING_FILE
+  SUCCESS_COPYING_FILE: SUCCESS_COPYING_FILE,
+  SUCCESS_POSTING_REPORT: SUCCESS_POSTING_REPORT
 }

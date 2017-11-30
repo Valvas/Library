@@ -1,7 +1,6 @@
 'use strict';
 
 let SQLCommon         = require('./common');
-let constants         = require('../constants');
 
 /*
   queryObject ->
@@ -64,7 +63,7 @@ module.exports.SQLDeleteQuery = function(query, connector, callback)
       
       connector.query(sql, function(err, result)
       {
-        err ? callback(false, SQL_SERVER_ERROR) : callback(true, result.affectedRows);
+        err ? callback(false, err.message) : callback(true, result.affectedRows);
       });
     });
   }
@@ -75,7 +74,7 @@ module.exports.SQLDeleteQuery = function(query, connector, callback)
 
   connector.query(sql, function(err, result)
   {
-    err ? callback(false, SQL_SERVER_ERROR) : callback(true, result.affectedRows());
+    err ? callback(false, err.message) : callback(true, result.affectedRows());
   });
 }
 

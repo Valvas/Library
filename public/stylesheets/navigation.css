@@ -131,7 +131,7 @@
 
   .nav-menu-element, .nav-menu-element-selected
   {
-    width:25%;
+    width:20%;
     color:#FFFFFF;
     display:inline-block;
     margin:2.5% 0 2.5% 0;
@@ -204,7 +204,7 @@
 
   .nav-menu-element, .nav-menu-element-selected
   {
-    width:25%;
+    width:20%;
     color:#223344;
     display:inline-block;
     margin:2.5% 2.5% 2.5% 2.5%;
@@ -238,10 +238,10 @@
 
   .nav-menu-element, .nav-menu-element-selected
   {
-    width:25%;
+    width:20%;
     color:#223344;
+    margin:1% 1% 1% 1%;
     display:inline-block;
-    margin:2.5% 2.5% 2.5% 2.5%;
   }
 
   .nav-menu-element-selected

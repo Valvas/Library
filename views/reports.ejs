@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <% include include/head.ejs %>
+  <body class='private-section-body'>
+    <% include include/menu.ejs %>
+    <% include include/aside.ejs %><!-- @SuppressWhitespace
+    --><div>
+        <table>
+          <tr>
+            <th>Type</th>
+            <th>Sujet</th>
+            <th>Date</th>
+            <th>Contenu</th>
+            <th>Statut</th>
+          </tr>
+          <% for(var key in reports) { %>
+            <tr>
+              <td><%= reports[key]['report_type'] %></td>
+              <td><%= reports[key]['report_subject'] %></td>
+              <td><%= reports[key]['report_date'] %></td>
+              <td><%= reports[key]['report_content'] %></td>
+              <td style='color:<%= status[reports[key]['report_status']]['color'] %>'><%= status[reports[key]['report_status']]['name'] %></td>
+            </tr>
+          <% } %>
+        </table>
+      </div>
+    <% include include/scripts.ejs %>
+  </body>
+</html>
