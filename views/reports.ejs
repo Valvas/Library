@@ -4,26 +4,43 @@
   <body class='private-section-body'>
     <% include include/menu.ejs %>
     <% include include/aside.ejs %><!-- @SuppressWhitespace
-    --><div>
-        <table>
-          <tr>
-            <th>Type</th>
-            <th>Sujet</th>
-            <th>Date</th>
-            <th>Contenu</th>
-            <th>Statut</th>
+    --><div class='reports-main-block'>
+        <div class='counter'>Rapports: <%= Object.keys(reports).length %></div>
+        <div class='filters'>
+          <% for(var i = 0; i < Object.keys(types).length; i++) { %><!-- @SuppressWhitespace
+            --><div class='filter'>
+              <input type='checkbox' name='<%= Object.keys(types)[i] %>' checked><!-- @SuppressWhitespace
+              --><div class='label'><%= types[Object.keys(types)[i]] %></div>
+            </div>
+          <% } %><!-- @SuppressWhitespace
+          --><div class='filter'>
+            <div class='label'>Statut</div>
+            <select class='filter'>
+              <option value='all'>Tous</option>
+              <% for(var i = 0; i < Object.keys(status).length; i++) { %>
+                <option style='color:<%= status[Object.keys(status)[i]]['color'] %>' value='<%= Object.keys(status)[i] %>'><%= status[Object.keys(status)[i]]['name'] %></option>
+              <% } %>
+            </select>
+          </div>
+        </div>
+        <table class='reports-table'>
+          <tr class='reports-table-legend-row'>
+            <th class='type'>Type</th>
+            <th class='date hide'>Date</th>
+            <th class='subject'>Sujet</th>
+            <th class='status'>Statut</th>
           </tr>
-          <% for(var key in reports) { %>
-            <tr>
-              <td><%= reports[key]['report_type'] %></td>
-              <td><%= reports[key]['report_subject'] %></td>
-              <td><%= reports[key]['report_date'] %></td>
-              <td><%= reports[key]['report_content'] %></td>
-              <td style='color:<%= status[reports[key]['report_status']]['color'] %>'><%= status[reports[key]['report_status']]['name'] %></td>
+          <% for(var i = 0; i < Object.keys(reports).length; i++) { %>
+            <tr class='report <%= reports[i]['report_type'] %> <%= reports[i]['report_status'] %> <% if(i % 2 == 0){ %>odd<% } else{ %>even<% } %>'>
+              <td><%= types[reports[i]['report_type']] %></td>
+              <td class='hide'><%= reports[i]['report_date'] %></td>
+              <td><%= reports[i]['report_subject'] %></td>
+              <td style='color:<%= status[reports[i]['report_status']]['color'] %>'><%= status[reports[i]['report_status']]['name'] %></td>
             </tr>
           <% } %>
         </table>
       </div>
     <% include include/scripts.ejs %>
+    <script src='/js/report/filters.js'></script>
   </body>
 </html>

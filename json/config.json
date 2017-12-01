@@ -44,7 +44,13 @@
     "2":
     {
       "name": "Résolu",
-      "color": "#7FDD4C"
+      "color": "#6ECC3B"
     }
+  },
+
+  "reports_type":
+  {
+    "bug": "Bug",
+    "upgrade": "Fonctionnalité"
   }
 }

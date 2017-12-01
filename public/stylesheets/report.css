@@ -1,4 +1,179 @@
+/****************************************************************************************************
+TABLE
+****************************************************************************************************/
+
+.reports-main-block
+{
+  vertical-align:top;
+  display:inline-block;
+  margin:5% 2.5% 5% 2.5%;
+}
+
+.reports-main-block .counter
+{
+  color:#334455;
+  font-size:large;
+  font-weight:bold;
+  text-align:right;
+  font-family:barlow;
+  margin:2.5% 2.5% 2.5% 2.5%;
+}
+
+.reports-main-block .filters
+{
+  margin:2.5% 2.5% 2.5% 2.5%;
+}
+
+.reports-main-block .filters .filter
+{
+  display:inline-block;
+}
+
+.reports-main-block .filters .filter input, .reports-main-block .filters .filter select
+{
+  width:auto;
+  cursor:pointer;
+  margin:0 2% 0 2%;
+  display:inline-block;
+}
+
+.reports-main-block .filters .filter .label
+{
+  font-family:barlow;
+  display:inline-block;
+}
+
+.reports-main-block .reports-table
+{
+  width:100%;
+  table-layout:fixed;
+  border-collapse:collapse;
+}
+
+.reports-main-block .reports-table .reports-table-legend-row
+{
+  color:#FFFFFF;
+  font-size:large;
+  text-align:left;
+  background-color:#77B5FE;
+  font-family:raleway-italic;
+}
+
+.reports-main-block .reports-table td
+{
+  word-wrap:break-word;
+  overflow-wrap:break-word;
+  font-family:raleway-light;
+}
+
+.reports-main-block .reports-table tr.report
+{
+  cursor:pointer;
+}
+
+.reports-main-block .reports-table tr.report.even
+{
+  background-color:#EEEEEE;
+}
+
+.reports-main-block .reports-table tr.report.odd
+{
+  background-color:#FFFFFF;
+}
+
+.reports-main-block .reports-table tr.report:hover
+{
+  font-weight:bold;
+  background-color:#CCDDFF;
+}
+
 /****************************************************************************************************/
+
+@media all and (max-width: 639px)
+{
+  .reports-main-block{ width:95%; }
+  .reports-main-block .filters .filter{ width:50%; }
+  .reports-main-block .reports-table .hide{ display:none; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:3%; }
+
+  .reports-main-block .reports-table th.type{ width:19%; }
+  .reports-main-block .reports-table th.status{ width:19%; }
+  .reports-main-block .reports-table th.subject{ width:44%; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 640px) and (max-width: 767px)
+{
+  .reports-main-block{ width:95%; }
+  .reports-main-block .filters .filter{ width:33%; }
+  .reports-main-block .reports-table .hide{ display:none; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:2.5%; }
+
+  .reports-main-block .reports-table th.type{ width:20%; }
+  .reports-main-block .reports-table th.status{ width:20%; }
+  .reports-main-block .reports-table th.subject{ width:45%; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 768px) and (max-width: 959px)
+{
+  .reports-main-block{ width:75%; }
+  .reports-main-block .filters .filter{ width:30%; }
+  .reports-main-block .reports-table .hide{ display:none; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:2.5%; }
+
+  .reports-main-block .reports-table th.type{ width:20%; }
+  .reports-main-block .reports-table th.status{ width:20%; }
+  .reports-main-block .reports-table th.subject{ width:45%; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 960px) and (max-width: 1279px)
+{
+  .reports-main-block{ width:75%; }
+  .reports-main-block .filters .filter{ width:25%; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:2%; }
+
+  .reports-main-block .reports-table th.type{ width:11%; }
+  .reports-main-block .reports-table th.date{ width:21%; }
+  .reports-main-block .reports-table th.status{ width:11%; }
+  .reports-main-block .reports-table th.subject{ width:41%; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 1280px) and (max-width: 1679px)
+{
+  .reports-main-block{ width:75%; }
+  .reports-main-block .filters .filter{ width:20%; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:1.5%; }
+
+  .reports-main-block .reports-table th.type{ width:12%; }
+  .reports-main-block .reports-table th.date{ width:22%; }
+  .reports-main-block .reports-table th.status{ width:12%; }
+  .reports-main-block .reports-table th.subject{ width:42%; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 1680px)
+{
+  .reports-main-block{ width:80%; }
+  .reports-main-block .filters .filter{ width:15%; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:1%; }
+
+  .reports-main-block .reports-table th.type{ width:13%; }
+  .reports-main-block .reports-table th.date{ width:23%; }
+  .reports-main-block .reports-table th.status{ width:13%; }
+  .reports-main-block .reports-table th.subject{ width:43%; }
+}
+
+/****************************************************************************************************
+POPUP
+****************************************************************************************************/
 
 .report-popup
 { 
@@ -11,52 +186,73 @@
 
 .report-popup-title
 {
+  width:92%;
   color:#FFFFFF;
   text-align:center;
+  font-size:x-large;
+  margin:4% 4% 8% 4%;
   font-family:raleway-light;
 }
 
 .report-popup-label
 {
+  width:92%;
   color:#FFFFFF;
+  font-size:large;
+  margin:3% 4% 1% 4%;
   font-family:raleway-italic;
 }
 
 .report-popup-list
 {
+  width:92%;
+  font-size:large;
+  margin:1% 4% 1% 4%;
   font-family:raleway-light;
 }
 
 .report-popup-subject
 {
+  width:88%;
   padding:1%;
+  margin:1% 4% 1% 4%;
   font-family:raleway-light;
 }
 
 .report-popup-description
 {
+  width:90%;
   padding:0;
+  height:30vh;
   resize:none;
   border:none;
+  font-size:large;
+  margin:1% 4% 1% 4%;
+  padding:1% 1% 1% 1%;
   font-family:raleway-light;
 }
 
 .report-popup-send
 {
-  border:none;
-  cursor:pointer;
-  color:#FFFFFF;
-  border-radius:4px;
   background-color:#77B5FE;
 }
 
 .report-popup-cancel
 {
+  margin:4% 0 4% 4%;
+  background-color:#FF0921;
+}
+
+.report-popup-send, .report-popup-cancel
+{
+  width:15%;
+  padding:1%;
   border:none;
   cursor:pointer;
+  font-size:large;
   color:#FFFFFF;
-  border-radius:4px;
-  background-color:#FF0921;
+  text-align:center;
+  border-radius:50%;
 }
 
 .report-popup-info
@@ -76,311 +272,55 @@
 
 @media all and (max-width: 639px)
 {
-  .report-popup
-  {
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-  }
+  .report-popup{ top:0; left:0; width:100%; height:100%; }
 
-  .report-popup-send, .report-popup-cancel
-  {
-    width:15%;
-    padding:1%;
-    font-size:large;
-    text-align:center;
-    border-radius:50%;
-    height:calc(100vw * 0.15);
-  }
-
-  .report-popup-title
-  {
-    width:92%;
-    font-size:x-large;
-    margin:4% 4% 8% 4%;
-  }
-
-  .report-popup-label
-  {
-    width:92%;
-    font-size:large;
-    margin:3% 4% 1% 4%;
-  }
-
-  .report-popup-list
-  {
-    width:92%;
-    font-size:large;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-subject
-  {
-    width:88%;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-description
-  {
-    width:90%;
-    height:30vh;
-    font-size:large;
-    overflow-y:scroll;
-    margin:1% 4% 1% 4%;
-    padding:1% 1% 1% 1%;
-  }
+  .report-popup-send, .report-popup-cancel{ height:calc(100vw * 0.15); }
 
   .report-popup-send{ margin:4% 0 4% 62%; }
-  .report-popup-cancel{ margin:4% 0 4% 4%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 640px) and (max-width: 767px)
 {
-  .report-popup
-  {
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-  }
+  .report-popup{ top:0; left:0; width:100%; height:100%; }
 
-  .report-popup-send, .report-popup-cancel
-  {
-    width:15%;
-    padding:1%;
-    font-size:200%;
-    text-align:center;
-    border-radius:50%;
-    height:calc(100vw * 0.15);
-  }
-
-  .report-popup-title
-  {
-    width:92%;
-    font-size:x-large;
-    margin:4% 4% 8% 4%;
-  }
-
-  .report-popup-label
-  {
-    width:92%;
-    font-size:large;
-    margin:3% 4% 1% 4%;
-  }
-
-  .report-popup-list
-  {
-    width:92%;
-    font-size:large;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-subject
-  {
-    width:88%;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-description
-  {
-    width:90%;
-    height:30vh;
-    font-size:large;
-    overflow-y:scroll;
-    margin:1% 4% 1% 4%;
-    padding:1% 1% 1% 1%;
-  }
+  .report-popup-send, .report-popup-cancel{ height:calc(100vw * 0.15); }
 
   .report-popup-send{ margin:4% 0 4% 62%; }
-  .report-popup-cancel{ margin:4% 0 4% 4%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .report-popup
-  {
-    top:10%;
-    left:30%;
-    width:40%;
-  }
+  .report-popup{ top:10%; left:30%; width:40%; }
 
-  .report-popup-send, .report-popup-cancel
-  {
-    width:15%;
-    padding:1%;
-    font-size:200%;
-    text-align:center;
-    border-radius:50%;
-    height:calc(40vw * 0.15);
-  }
-
-  .report-popup-title
-  {
-    width:92%;
-    font-size:x-large;
-    margin:4% 4% 8% 4%;
-  }
-
-  .report-popup-label
-  {
-    width:92%;
-    font-size:large;
-    margin:3% 4% 1% 4%;
-  }
-
-  .report-popup-list
-  {
-    width:92%;
-    font-size:large;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-subject
-  {
-    width:88%;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-description
-  {
-    width:90%;
-    height:30vh;
-    font-size:large;
-    overflow-y:scroll;
-    margin:1% 4% 1% 4%;
-    padding:1% 1% 1% 1%;
-  }
+  .report-popup-send, .report-popup-cancel{ height:calc((100vw * 0.4) * 0.15); }
 
   .report-popup-send{ margin:4% 0 4% 62%; }
-  .report-popup-cancel{ margin:4% 0 4% 4%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 960px) and (max-width: 1679px)
 {
-  .report-popup
-  {
-    top:10%;
-    left:35%;
-    width:30%;
-  }
+  .report-popup{ top:10%; left:35%; width:30%; }
 
-  .report-popup-send, .report-popup-cancel
-  {
-    width:15%;
-    padding:1%;
-    font-size:large;
-    text-align:center;
-    border-radius:50%;
-    height:calc(30vw * 0.15);
-  }
-
-  .report-popup-title
-  {
-    width:92%;
-    font-size:x-large;
-    margin:4% 4% 8% 4%;
-  }
-
-  .report-popup-label
-  {
-    width:92%;
-    font-size:large;
-    margin:3% 4% 1% 4%;
-  }
-
-  .report-popup-list
-  {
-    width:90%;
-    font-size:large;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-subject
-  {
-    width:88%;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-description
-  {
-    width:90%;
-    height:30vh;
-    font-size:large;
-    overflow-y:scroll;
-    margin:1% 4% 1% 4%;
-    padding:1% 1% 1% 1%;
-  }
+  .report-popup-send, .report-popup-cancel{ height:calc((100vw * 0.3) * 0.15); }
 
   .report-popup-send{ margin:4% 0 4% 62%; }
-  .report-popup-cancel{ margin:4% 0 4% 4%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 1680px)
 {
-  .report-popup
-  {
-    top:10%;
-    left:40%;
-    width:20%;
-  }
+  .report-popup{ top:10%; left:40%; width:20%; }
 
-  .report-popup-send, .report-popup-cancel
-  {
-    width:15%;
-    padding:1%;
-    font-size:large;
-    text-align:center;
-    border-radius:50%;
-    height:calc(20vw * 0.15);
-  }
-
-  .report-popup-title
-  {
-    width:92%;
-    font-size:x-large;
-    margin:4% 4% 8% 4%;
-  }
-
-  .report-popup-label
-  {
-    width:92%;
-    font-size:large;
-    margin:3% 4% 1% 4%;
-  }
-
-  .report-popup-list
-  {
-    width:92%;
-    font-size:large;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-subject
-  {
-    width:88%;
-    margin:1% 4% 1% 4%;
-  }
-
-  .report-popup-description
-  {
-    width:90%;
-    height:30vh;
-    font-size:large;
-    margin:1% 4% 1% 4%;
-    padding:1% 1% 1% 1%;
-  }
+  .report-popup-send, .report-popup-cancel{ height:calc((100vw * 0.2) * 0.15); }
 
   .report-popup-send{ margin:4% 0 4% 62%; }
-  .report-popup-cancel{ margin:4% 0 4% 4%; }
 }
 
 /****************************************************************************************************/

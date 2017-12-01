@@ -17,7 +17,7 @@ router.get('/', (req, res) =>
   report.getReports(req.app.get('mysqlConnector'), (trueOrFalse, rowsOrErrorCode) =>
   {
     trueOrFalse ?
-    res.render('reports', { location: 'reports', links: require('../json/services'), reports: rowsOrErrorCode, status: config.reports_status }) :
+    res.render('reports', { location: 'reports', links: require('../json/services'), reports: rowsOrErrorCode, status: config.reports_status, types: config.reports_type }) :
     res.render('block', { message: errors[rowsOrErrorCode].charAt(0).toUpperCase() + errors[rowsOrErrorCode].slice(1) });
   });
 });
