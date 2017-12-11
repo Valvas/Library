@@ -1,5 +1,7 @@
 'use strict';
 
+global.__root = __dirname;
+
 let path              = require('path');
 let mysql             = require('mysql');
 let logger            = require('morgan');
@@ -17,6 +19,7 @@ let database          = require('./functions/database/init');
 
 let root              = require('./routes/root');
 let home              = require('./routes/home');
+let file              = require('./routes/file');
 let reports           = require('./routes/reports');
 let service           = require('./routes/service');
 
@@ -55,6 +58,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', root);
 app.use('/home', home);
+app.use('/file', auth, file);
 app.use('/reports', auth, reports);
 app.use('/service', auth, service);
 app.use('/admin', auth, adminAuth, adminRoot);

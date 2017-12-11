@@ -4,11 +4,20 @@
     "host": "127.0.0.1",
     "user": "root",
     "password": "root",
+    "name": "library",
+    "dbms": "MySQL",
     "library_database": "library",
     "rights_table": "rights",
     "auth_table": "account",
     "files_table": "files",
-    "reports_table": "reports"
+    "reports_table": "reports",
+    "report_comments_table": "report_comments",
+
+    "tables":
+    {
+      "files": "files",
+      "rights": "rights"
+    }
   },
 
   "salt": "$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
@@ -21,12 +30,26 @@
 
   "file_ext":
   {
-    "txt": "txt"
+    "txt": "Texte",
+    "doc": "Word (1997-2003)",
+    "docx": "Word",
+    "pdf": "PDF",
+    "xls": "Excel (1997-2003)",
+    "xlsx": "Excel",
+    "ppt": "Power Point (1997-2003)",
+    "pptx": "Power Point",
+    "mp3": "Audio",
+    "mp4": "Vidéo",
+    "png": "Image",
+    "jpg": "Image",
+    "zip": "Archive ZIP",
+    "rar": "Archive RAR"
   },
 
   "ext_accepted":
   {
-    "info": { "0": "txt" }
+    "info": { "0": "txt" },
+    "test": { "0": "txt" }
   },
 
   "reports_status":

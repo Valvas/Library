@@ -39,7 +39,7 @@ module.exports.addOneFile = function(service, file, accountUUID, SQLConnector, c
   
           else
           {
-            stats  != undefined ? fileStatus.on_disk = true : fileStatus.on_disk = false;
+            stats == undefined ? fileStatus.on_disk = false : fileStatus.on_disk = true;
   
             SQLSelect.SQLSelectQuery(
             {

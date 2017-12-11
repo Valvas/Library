@@ -3,10 +3,9 @@
   <% include include/head.ejs %>
   <body class='logon-body'>
     <% include include/logs.ejs %>
-    <div class='logon-form-popup'>
-        <p class='block-page-message'><%= message %></p>
-        <a class='page-not-found-link' id='page-not-found-link' href='/home'>Accueil</a>
+    <div class='block-page'>
+        <p class='message'><%= message %></p>
+        <a class='link' href='/home'>Accueil</a>
     </div>
-    <script src='/js/jQuery.js'></script>
   </body>
 </html>

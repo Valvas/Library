@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <title>Library - File</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/file.css" />
+  <body class='private-section-body'>
+    <% include include/menu.ejs %>
+    <% include include/aside.ejs %><!-- @SuppressWhitespace
+    --><div class='file-main-block'>
+        <div class='container'>
+          <div class='label'>Nom du fichier<span class='dots'> :</span></div><!-- @SuppressWhitespace
+          --><div class='value'><%= file['name'] %></div>  
+        </div>
+      </div>
+    <% include include/scripts.ejs %>
+  </body>
+</html>

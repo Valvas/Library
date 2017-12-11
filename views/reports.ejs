@@ -15,8 +15,8 @@
           <% } %><!-- @SuppressWhitespace
           --><div class='filter'>
             <div class='label'>Statut</div>
-            <select class='filter'>
-              <option value='all'>Tous</option>
+            <select id='status' class='filter'>
+              <option style='color:#000000' value='all'>Tous</option>
               <% for(var i = 0; i < Object.keys(status).length; i++) { %>
                 <option style='color:<%= status[Object.keys(status)[i]]['color'] %>' value='<%= Object.keys(status)[i] %>'><%= status[Object.keys(status)[i]]['name'] %></option>
               <% } %>
@@ -31,7 +31,7 @@
             <th class='status'>Statut</th>
           </tr>
           <% for(var i = 0; i < Object.keys(reports).length; i++) { %>
-            <tr class='report <%= reports[i]['report_type'] %> <%= reports[i]['report_status'] %> <% if(i % 2 == 0){ %>odd<% } else{ %>even<% } %>'>
+            <tr id='<%= reports[i]['report_uuid'] %>' class='report <%= reports[i]['report_type'] %> <%= reports[i]['report_status'] %> <% if(i % 2 == 0){ %>odd<% } else{ %>even<% } %>'>
               <td><%= types[reports[i]['report_type']] %></td>
               <td class='hide'><%= reports[i]['report_date'] %></td>
               <td><%= reports[i]['report_subject'] %></td>
@@ -42,5 +42,6 @@
       </div>
     <% include include/scripts.ejs %>
     <script src='/js/report/filters.js'></script>
+    <script src='/js/report/links.js'></script>
   </body>
 </html>

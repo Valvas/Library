@@ -15,7 +15,7 @@ let services = module.exports = {};
  * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
  * @return {Boolean}
  */
-services.getFilesFromOneService = function(service, SQLConnector, callback)
+services.getFilesFromOneService = (service, SQLConnector, callback) =>
 {
   SQLConnector == undefined || service == undefined ? callback(false, constants.MISSING_DATA_IN_REQUEST) :
 
@@ -37,18 +37,32 @@ services.getFilesFromOneService = function(service, SQLConnector, callback)
         }
       }
     }
-  }, SQLConnector, function(trueOrFalse, rowsOrErrorCode)
+  }, SQLConnector, (trueOrFalse, rowsOrErrorCode) =>
   {
     if(trueOrFalse == false) callback(false, rowsOrErrorCode);
 
     else
     {
-      rowsOrErrorCode.length == 0 ? callback(true, {}) :
+      if(rowsOrErrorCode.length == 0) callback(true, {});
 
-      getFilesOwners(rowsOrErrorCode, SQLConnector, function(trueOrFalse, filesObjectOrErrorCode)
+      else
       {
-        trueOrFalse ? callback(true, filesObjectOrErrorCode) : callback(false, filesObjectOrErrorCode);
-      });
+        var x = 0;
+        
+        var fileLoop = () =>
+        {
+          rowsOrErrorCode[x]['type'] = config['file_ext'][rowsOrErrorCode[x]['type']];
+
+          rowsOrErrorCode[x += 1] != undefined ? fileLoop() :
+
+          getFilesOwners(rowsOrErrorCode, SQLConnector, function(trueOrFalse, filesObjectOrErrorCode)
+          {
+            trueOrFalse ? callback(true, filesObjectOrErrorCode) : callback(false, filesObjectOrErrorCode);
+          });
+        }
+
+        fileLoop();
+      }
     }
   });
 }

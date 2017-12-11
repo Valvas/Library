@@ -27,6 +27,8 @@ const IS_NOT_A_DIRECTORY                                                        
 const UNAUTHORIZED_TO_READ_OR_RIGHT_IN_THE_TARGET                                 = 10023;
 const FOLDER_ALREADY_EXISTS                                                       = 10024;
 const AUTHENTICATION_REQUIRED                                                     = 10025;
+const REPORT_NOT_FOUND                                                            = 10026;
+const UNAUTHORIZED_TO_ACCESS_THIS_FILE                                            = 10027;
 
 /******************************************************************************************
 SUCCESS
@@ -74,6 +76,8 @@ module.exports =
   UNAUTHORIZED_TO_READ_OR_RIGHT_IN_THE_TARGET: UNAUTHORIZED_TO_READ_OR_RIGHT_IN_THE_TARGET,
   FOLDER_ALREADY_EXISTS: FOLDER_ALREADY_EXISTS,
   AUTHENTICATION_REQUIRED: AUTHENTICATION_REQUIRED,
+  REPORT_NOT_FOUND: REPORT_NOT_FOUND,
+  UNAUTHORIZED_TO_ACCESS_THIS_FILE: UNAUTHORIZED_TO_ACCESS_THIS_FILE,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

@@ -1,61 +1,71 @@
 {
   "library":
   {
-      "account":
-      {
-          "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-          "email": "VARCHAR(255) NOT NULL",
-          "lastname": "VARCHAR(255) NOT NULL",
-          "firstname": "VARCHAR(255) NOT NULL",
-          "password": "VARCHAR(255) NOT NULL",
-          "activated": "BOOLEAN NOT NULL",
-          "suspended": "BOOLEAN NOT NULL",
-          "service": "VARCHAR(255) NOT NULL",
-          "is_admin": "BOOLEAN NOT NULL",
-          "uuid": "VARCHAR(255) NOT NULL"
-      },
+    "account":
+    {
+      "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "email": "VARCHAR(255) NOT NULL",
+      "lastname": "VARCHAR(255) NOT NULL",
+      "firstname": "VARCHAR(255) NOT NULL",
+      "password": "VARCHAR(255) NOT NULL",
+      "activated": "BOOLEAN NOT NULL",
+      "suspended": "BOOLEAN NOT NULL",
+      "service": "VARCHAR(255) NOT NULL",
+      "is_admin": "BOOLEAN NOT NULL",
+      "uuid": "VARCHAR(255) NOT NULL"
+    },
 
-      "rights":
-      {
-          "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-          "account": "VARCHAR(255) NOT NULL",
-          "service": "VARCHAR(255) NOT NULL",
-          "upload_files": "BOOLEAN NOT NULL",
-          "download_files": "BOOLEAN NOT NULL",
-          "remove_files": "BOOLEAN NOT NULL",
-          "post_comments": "BOOLEAN NOT NULL",
-          "uuid": "VARCHAR(255) NOT NULL"
-      },
+    "rights":
+    {
+      "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "account": "VARCHAR(255) NOT NULL",
+      "service": "VARCHAR(255) NOT NULL",
+      "upload_files": "BOOLEAN NOT NULL",
+      "download_files": "BOOLEAN NOT NULL",
+      "remove_files": "BOOLEAN NOT NULL",
+      "post_comments": "BOOLEAN NOT NULL",
+      "uuid": "VARCHAR(255) NOT NULL"
+    },
 
-      "files":
-      {
-          "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-          "name": "VARCHAR(255) NOT NULL",
-          "type": "VARCHAR(255) NOT NULL",
-          "account": "VARCHAR(255) NOT NULL",
-          "service": "VARCHAR(255) NOT NULL",
-          "uuid": "VARCHAR(255) NOT NULL"
-      },
+    "files":
+    {
+      "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "name": "VARCHAR(255) NOT NULL",
+      "type": "VARCHAR(255) NOT NULL",
+      "account": "VARCHAR(255) NOT NULL",
+      "service": "VARCHAR(255) NOT NULL",
+      "uuid": "VARCHAR(255) NOT NULL"
+    },
 
-      "comments":
-      {
-          "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-          "content": "TEXT(512) NOT NULL",
-          "account": "VARCHAR(255) NOT NULL",
-          "file": "VARCHAR(255) NOT NULL",
-          "uuid": "VARCHAR(255) NOT NULL"
-      },
+    "file_comments":
+    {
+      "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "content": "TEXT(512) NOT NULL",
+      "account": "VARCHAR(255) NOT NULL",
+      "file": "VARCHAR(255) NOT NULL",
+      "uuid": "VARCHAR(255) NOT NULL",
+      "date": "BIGINT UNSIGNED NOT NULL"
+    },
 
-      "reports":
-      {
-        "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-        "report_type": "VARCHAR(255) NOT NULL",
-        "report_subject": "VARCHAR(255) NOT NULL",
-        "report_content": "TEXT(1024) NOT NULL",
-        "report_account": "VARCHAR(255) NOT NULL",
-        "report_date": "INT UNSIGNED NOT NULL",
-        "report_status": "INT NOT NULL",
-        "uuid": "VARCHAR(255) NOT NULL"
-      }
+    "reports":
+    {
+      "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "report_type": "VARCHAR(255) NOT NULL",
+      "report_subject": "VARCHAR(255) NOT NULL",
+      "report_content": "TEXT(1024) NOT NULL",
+      "report_account": "VARCHAR(255) NOT NULL",
+      "report_date": "INT UNSIGNED NOT NULL",
+      "report_status": "INT NOT NULL",
+      "uuid": "VARCHAR(255) NOT NULL"
+    },
+
+    "report_comments":
+    {
+      "id": "INT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "content": "TEXT(512) NOT NULL",
+      "report": "VARCHAR(255) NOT NULL",
+      "uuid": "VARCHAR(255) NOT NULL",
+      "date": "BIGINT UNSIGNED NOT NULL"
+    }
   }
 }

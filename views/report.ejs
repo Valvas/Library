@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <% include include/head.ejs %>
+  <body class='private-section-body'>
+    <% include include/menu.ejs %>
+    <% include include/aside.ejs %><!-- @SuppressWhitespace
+    --><div class='reports-main-block'>
+        <div class='report-detail'>
+          <div class='subject'><%= report['report_subject'] %></div><!-- @SuppressWhitespace
+          --><div class='label'>Statut : </div><!-- @SuppressWhitespace
+          --><div style='color:<%= status[report['report_status']]['color'] %>' class='status'><%= status[report['report_status']]['name'] %></div></br>
+          <div class='label'>Date : </div><!-- @SuppressWhitespace
+          --><div class='date'><%= report['report_date'] %></div>
+          <div class='type'>Type : <span style='font-family:barlow'><%= types[report['report_type']] %></span></div>
+          <div class='label'>Description : </div>
+          <div class='description'><%= report['report_content'] %></div>
+          <div class='comments-block'>
+          <div class='title'>Avancement : </div>
+          <% if(typeof(report['comments']) !== 'object' || Object.keys(report['comments']).length == 0){ %>
+          <div class='no-comment'>Aucune mise à jour</div>
+          <% } else{ %>
+          <% for(var i = 0; i < Object.keys(report['comments']).length; i++){ console.log(report['comments'])%>
+            <div class='comment'>
+              <div class='date'><%= report['comments'][i]['date'] %></div>
+              <div class='content'><%= report['comments'][i]['content'] %></div>
+            </div>
+          <% } } %>
+          </div>
+        </div>
+      </div>
+    <% include include/scripts.ejs %>
+    <script src='/js/report/filters.js'></script>
+  </body>
+</html>

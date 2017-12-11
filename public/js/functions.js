@@ -240,14 +240,12 @@ function openUploadFilePopup(object, ext)
   $(message)    .attr({ id: 'upload-popup-message',         class: 'popup-message'});
   $(perform)    .attr({ id: 'upload-popup-perform-button',  class: 'popup-perform-button'});
 
-  if(ext.length > 0) ext = ext.map(i => '.' + i )
-
   ext.length == 0 ?
   $(input)      .attr({ id: 'upload-popup-input',           class: 'popup-file-input',      type: 'file',     name: 'file',     accept: '*' }) :
   $(input)      .attr({ id: 'upload-popup-input',           class: 'popup-file-input',      type: 'file',     name: 'file',     accept: `${ext.join()}` });
 
   ext.length == 0 ?
-  $(info)       .text('(Extensions acceptées: toutes)') :
+  $(info)       .text('(Extensions acceptées: aucunes)') :
   $(info)       .text(`(Extensions acceptées: ${ext.join()})`);
 
   $(title)      .text(object['title']                           || 'ENVOYER UN FICHIER');

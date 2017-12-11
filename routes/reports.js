@@ -40,4 +40,16 @@ router.post('/', (req, res) =>
 
 /****************************************************************************************************/
 
+router.get('/:report', (req, res) =>
+{
+  report.getReport(req.params.report, req.app.get('mysqlConnector'), (falseOrReportObject, errorStatus, errorCode) =>
+  {
+    falseOrReportObject == false ?
+    res.render('block', { message: errors[errorCode].charAt(0).toUpperCase() + errors[errorCode].slice(1) }) :
+    res.render('report', { links: require('../json/services'), report: falseOrReportObject, status: config.reports_status, types: config.reports_type });
+  });
+});
+
+/****************************************************************************************************/
+
 module.exports = router;

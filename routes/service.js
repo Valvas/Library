@@ -61,7 +61,7 @@ router.post('/post-new-file', upload.single('file'), function(req, res)
   filesAdding.addOneFile(req.body.service, req.file, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, entryUuidOrErrorCode)
   {
     trueOrFalse ? 
-    res.status(200).send({ result: true, success: entryUuidOrErrorCode }) :
+    res.status(200).send({ result: true, uuid: entryUuidOrErrorCode }) :
     res.status(200).send({ result: false, error: errors[entryUuidOrErrorCode] });
   });
 });
@@ -132,7 +132,9 @@ router.put('/get-ext-accepted', function(req, res)
 
   else
   {
-    config['ext_accepted'][req.body.service] == undefined ? res.status(200).send({}) : res.status(200).send(config['ext_accepted'][req.body.service]);
+    config['ext_accepted'][req.body.service] == undefined ? 
+    res.status(404).send({ result: false }) : 
+    res.status(200).send({ result: true, ext: config['ext_accepted'][req.body.service] });
   }
 });
 
