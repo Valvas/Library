@@ -1,184 +1,116 @@
 'use strict';
 
-let fs                = require('fs');
+var fs                      = require('fs');
 
-let constants         = require('../constants');
-let config            = require('../../json/config');
-let SQLInsert         = require('../database/insert');
-let SQLSelect         = require('../database/select');
-let SQLDelete         = require('../database/delete');
-let accountRights     = require('../accounts/rights');
+var params                  = require(`${__root}/json/config`);
+var constants               = require(`${__root}/functions/constants`);
+var fileLogs                = require(`${__root}/functions/files/logs`);
+var fileDeleting            = require(`${__root}/functions/files/deleting`);
+var accountRights           = require(`${__root}/functions/accounts/rights`);
+var databaseManager         = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-/**
- * Add a file on the disk and add an entry in the database.
- * @arg {String} service - the name of the service to which the file is associated
- * @arg {Object} file - an object with all data about file to add
- * @arg {String} accountUUID - the UUID of the user which must have the right to add files for the current service
- * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
- * @return {Boolean}
- */
-module.exports.addOneFile = function(service, file, accountUUID, SQLConnector, callback)
+module.exports.addOneFile = (service, file, accountUUID, databaseConnector, callback) =>
 {
-  let fileStatus = {};
+  file.originalname.split('.').length < 2 ? callback(false, 406, constants.UNAUTHORIZED_FILE) :
 
-  accountRights.getUserRightsTowardsService(service, accountUUID, SQLConnector, function(trueOrFalse, rightsObjectOrErrorCode)
+  accountRights.getUserRightsTowardsService(service, accountUUID, databaseConnector, (rightsOrFalse, errorStatus, errorCode) =>
   {
-    if(trueOrFalse == false) callback(false, rightsObjectOrErrorCode);
+    if(rightsOrFalse == false) callback(false, errorStatus, errorCode);
 
     else
     {
-      if(rightsObjectOrErrorCode['add_files'] == 0) callback(false, constants.UNAUTHORIZED_TO_ADD_FILES);
+      rightsOrFalse.add_files == 0 ? callback(false, 403, constants.UNAUTHORIZED_TO_ADD_FILES) :
 
-      else
+      databaseManager.selectQuery(
       {
-        fs.stat(`${config['path_to_root_storage']}/${service}/${file.originalname}`, function(err, stats)
+        'databaseName': params.database.name,
+        'tableName': params.database.tables.files,
+
+        'args': { '0': 'id' },
+
+        'where':
         {
-          if(err != undefined && err.code != 'ENOENT') callback(false, constants.FILE_SYSTEM_ERROR);
-  
-          else
+          'AND':
           {
-            stats == undefined ? fileStatus.on_disk = false : fileStatus.on_disk = true;
-  
-            SQLSelect.SQLSelectQuery(
+            '=':
             {
-              "databaseName": config.database.library_database,
-              "tableName": config.database.files_table,
-          
-              "args": { "0": "uuid" },
-              
-              "where":
+              '0':
               {
-                "AND":
-                {
-                  "=":
-                  {
-                    "0":
-                    {
-                      "key": "name",
-                      "value": file.originalname.split('.')[0]
-                    },
-      
-                    "1":
-                    {
-                      "key": "type",
-                      "value": file.originalname.split('.')[1]
-                    },
-      
-                    "2":
-                    {
-                      "key": "service",
-                      "value": service
-                    }
-                  }
-                }
+                'key': 'name',
+                'value': file.originalname.split('.')[0]
+              },
+              '1':
+              {
+                'key': 'type',
+                'value': file.originalname.split('.')[1]
+              },
+              '2':
+              {
+                'key': 'service',
+                'value': service
               }
-            }, SQLConnector, function(trueOrFalse, rowsOrErrorCode)
+            }
+          }
+        }
+      }, databaseConnector, (boolean, fileOrErrorMessage) =>
+      {
+        if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+
+        else
+        {
+          fileOrErrorMessage.length > 0 ? callback(false, 406, constants.FILE_ALREADY_EXISTS) :
+
+          fs.stat(`${params.path_to_root_storage}/${service}/${file.originalname}`, (err, stats) =>
+          {
+            if(err  && err.code != 'ENOENT') callback(false, 500, constants.FILE_SYSTEM_ERROR);
+
+            else
             {
-              if(trueOrFalse == false) callback(false, rowsOrErrorCode);
-  
+              if(stats != undefined)
+              {
+                fileDeleting.moveFileToBin(service, file.originalname, (boolean, errorStatus, errorCode) =>
+                {
+                  boolean == false ? callback(false, errorStatus, errorCode) :
+
+                  addNewFileOnDiskAndInDatabase(service, file, accountUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
+                  {
+                    boolean ? callback(true) : callback(false, errorStatus, errorCode);
+                  });
+                });
+              }
+
               else
               {
-                rowsOrErrorCode.length > 0 ? fileStatus.in_database = true : fileStatus.in_database = false;
-
-                if(fileStatus.on_disk == true && fileStatus.in_database == true) callback(false, constants.FILE_ALREADY_EXISTS);
-
-                if(fileStatus.on_disk == true && fileStatus.in_database == false)
+                addNewFileOnDiskAndInDatabase(service, file, accountUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
                 {
-                  deleteOldFileFromDiskBeforeAddingNewOne(service, file, accountUUID, SQLConnector, function(trueOrFalse, fileUuidOrErrorCode)
-                  {
-                    trueOrFalse ? callback(true, fileUuidOrErrorCode) : callback(false, fileUuidOrErrorCode);
-                  });
-                }
+                  if(boolean == false) callback(false, errorStatus, errorCode);
 
-                if(fileStatus.on_disk == false && fileStatus.in_database == true)
-                {
-                  deleteOldFileFromDatabaseBeforeAddingNewOne(service, file, rowsOrErrorCode[0].uuid, accountUUID, SQLConnector, function(trueOrFalse, fileUuidOrErrorCode)
+                  else
                   {
-                    trueOrFalse ? callback(true, fileUuidOrErrorCode) : callback(false, fileUuidOrErrorCode);
-                  });
-                }
-                
-                if(fileStatus.on_disk == false && fileStatus.in_database == false)
-                {
-                  addNewFileOnDiskAndInDatabase(service, file, accountUUID, SQLConnector, function(trueOrFalse, entryUuidOrErrorCode)
-                  {
-                    trueOrFalse ? callback(true, entryUuidOrErrorCode) : callback(false, entryUuidOrErrorCode);
-                  });
-                }
+                    var logObj =
+                    {
+                      'service': service,
+                      'fileName': file.originalname.split('.')[0],
+                      'fileExt': file.originalname.split('.')[1],
+                      'content':
+                      {
+                        'account': accountUUID,
+                        'action': 'upload'
+                      }
+                    }
+
+                    fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
+                    {
+                      boolean ? callback(true) : callback(false, errorStatus, errorCode);
+                    });
+                  }
+                });
               }
-            });
-          }
-        });
-      }
-    }
-  });
-}
-
-/****************************************************************************************************/
-
-/**
- * Used when a file has been found on the disk but has no associated entry in the database
- * @arg {String} service - the name of the service to which belongs the file
- * @arg {Object} file - a JSON object with all informations about the file
- * @arg {String} accountUUID - the UUID of the user to which belongs the file
- * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
- * @return {Boolean}
- */
-function deleteOldFileFromDiskBeforeAddingNewOne(service, file, accountUUID, SQLConnector, callback)
-{
-  fs.unlink(`${config['path_to_root_storage']}/${service}/${file.originalname}`, function(err)
-  {
-    err ? callback(false, constants.OLD_FILE_NOT_DELETED_FROM_DISK) :
-
-    addNewFileOnDiskAndInDatabase(service, file, accountUUID, SQLConnector, function(trueOrFalse, entryUuidOrErrorCode)
-    {
-      trueOrFalse ? callback(true, entryUuidOrErrorCode) : callback(false, entryUuidOrErrorCode);
-    });
-  });
-}
-
-/****************************************************************************************************/
-
-/**
- * Used when an entry has been found for the file in the database but does not exist on the disk
- * @arg {String} service - the name of the service to which belongs the file
- * @arg {Object} file - a JSON object with all informations about the file
- * @arg {String} fileUUID - a string that is the UUID associated to the current file
- * @arg {String} accountUUID - the UUID of the user to which belongs the file
- * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
- * @return {Boolean}
- */
-function deleteOldFileFromDatabaseBeforeAddingNewOne(service, file, fileUUID, accountUUID, SQLConnector, callback)
-{
-  SQLDelete.SQLDeleteQuery(
-  {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.files_table,
-
-    "where":
-    {
-      "=":
-      {
-        "0":
-        {
-          "key": "uuid",
-          "value": fileUUID
+            }
+          });
         }
-      }
-    }
-  }, SQLConnector, function(trueOrFalse, affectedRowsOrErrorCode)
-  {
-    if(trueOrFalse == false) callback(false, affectedRowsOrErrorCode);
-
-    else
-    {
-      affectedRowsOrErrorCode == 0 ? callback(false, constants.OLD_FILE_NOT_DELETED_FROM_DATABASE) :
-
-      addNewFileOnDiskAndInDatabase(service, file, accountUUID, SQLConnector, function(trueOrFalse, entryUuidOrErrorCode)
-      {
-        trueOrFalse ? callback(true, entryUuidOrErrorCode) : callback(false, entryUuidOrErrorCode);
       });
     }
   });
@@ -186,41 +118,35 @@ function deleteOldFileFromDatabaseBeforeAddingNewOne(service, file, fileUUID, ac
 
 /****************************************************************************************************/
 
-/**
- * Move the new file to the folder associated to the service before creating a new entry in the database
- * @arg {String} service - the name of the service which belongs the file
- * @arg {Object} file - a JSON object with all informations about the file
- * @arg {String} accountUUID - the UUID of the user to which belongs the file
- * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
- * @return {Boolean}
- */
-function addNewFileOnDiskAndInDatabase(service, file, accountUUID, SQLConnector, callback)
+function addNewFileOnDiskAndInDatabase(service, file, accountUUID, databaseConnector, callback)
 {
-  SQLInsert.SQLInsertQuery(
+  databaseManager.insertQuery(
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.files_table,
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.files,
+
+    'uuid': true,
       
-    "args":
+    'args':
     {
-      "name": file.originalname.split('.')[0],
-      "type": file.originalname.split('.')[1],
-      "account": accountUUID,
-      "service": service
+      'name': file.originalname.split('.')[0],
+      'type': file.originalname.split('.')[1],
+      'account': accountUUID,
+      'service': service
     }
-  }, SQLConnector, function(trueOrFalse, entryUuidOrErrorCode)
+  }, databaseConnector, (boolean, uuidOrErrorMessage) =>
   {
-    if(trueOrFalse == false) callback(false, entryUuidOrErrorCode);
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
     else
     {
-      fs.copyFile(`${config['path_to_temp_storage']}/${file.originalname}`, `${config['path_to_root_storage']}/${service}/${file.originalname}`, function(err)
+      fs.copyFile(`${params.path_to_temp_storage}/${file.originalname}`, `${params.path_to_root_storage}/${service}/${file.originalname}`, (err) =>
       {
-        err ? callback(false, constants.FAILED_TO_MOVE_FILE_FROM_TMP) : 
+        err ? callback(false, 500, constants.FAILED_TO_MOVE_FILE_FROM_TMP) : 
   
-        fs.unlink(`${config['path_to_temp_storage']}/${file.originalname}`, function(err)
+        fs.unlink(`${params.path_to_temp_storage}/${file.originalname}`, (err) =>
         {
-          err ? callback(false, constants.FAILED_TO_DELETE_FILE_FROM_TMP) : callback(true, entryUuidOrErrorCode);
+          err ? callback(false, 500, constants.FAILED_TO_DELETE_FILE_FROM_TMP) : callback(true);
         });
       });
     }

@@ -15,11 +15,11 @@ let SQLSelect   = require('../database/select');
  */
 module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, SQLConnector, callback)
 {
-  if(serviceName == undefined || accountUUID == undefined || SQLConnector == undefined) callback(false, constants.MISSING_DATA_IN_REQUEST);
+  if(serviceName == undefined || accountUUID == undefined || SQLConnector == undefined) callback(false, 406, constants.MISSING_DATA_IN_REQUEST);
 
   else
   {
-    !(serviceName in require('../../json/services')) ? callback(false, constants.SERVICE_NOT_FOUND) :
+    !(serviceName in require('../../json/services')) ? callback(false, 404, constants.SERVICE_NOT_FOUND) :
 
     SQLSelect.SQLSelectQuery(
     {
@@ -53,11 +53,11 @@ module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, 
       }
     }, SQLConnector, function(trueOrFalse, rightsObjectOrErrorCode)
     {
-      if(trueOrFalse == false) callback(false, constants.rightsObjectOrErrorCode);
+      if(trueOrFalse == false) callback(false, 500, constants.SQL_SERVER_ERROR);
       
       else
       { 
-        rightsObjectOrErrorCode.length == 0 ? callback(false, constants.UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(true, rightsObjectOrErrorCode[0]);
+        rightsObjectOrErrorCode.length == 0 ? callback(false, 403, constants.UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(rightsObjectOrErrorCode[0]);
       }
     });
   }

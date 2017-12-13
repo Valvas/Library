@@ -1,49 +1,44 @@
 'use strict';
 
-let constants           = require('./constants');
-let encryption          = require('./encryption');
-let config              = require('../json/config');
-let SQLSelect           = require('./database/select');
-
-let services = module.exports = {};
+var params              = require(`${__root}/json/config`);
+var constants           = require(`${__root}/functions/constants`);
+var encryption          = require(`${__root}/functions/encryption`);
+var databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-/**
- * Get file information for the given service
- * @arg {String} service - the name of the service from which files must be searched
- * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
- * @return {Boolean}
- */
-services.getFilesFromOneService = (service, SQLConnector, callback) =>
+module.exports.getFilesFromOneService = (service, databaseConnector, callback) =>
 {
-  SQLConnector == undefined || service == undefined ? callback(false, constants.MISSING_DATA_IN_REQUEST) :
+  databaseConnector == undefined || service == undefined ? callback(false, 406, constants.MISSING_DATA_IN_REQUEST) :
 
-  SQLSelect.SQLSelectQuery(
+  databaseManager.selectQuery(
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.files_table,
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.files,
   
-    "args": { "0": "name", "1": "type", "2": "account", "3": "uuid" },
+    'args': 
+    { 
+      '0': '*' 
+    },
       
-    "where":
+    'where':
     {
-      "=":
+      '=':
       {
-        "0":
+        '0':
         {
-          "key": "service",
-          "value": service
+          'key': 'service',
+          'value': service
         }
       }
     }
-  }, SQLConnector, (trueOrFalse, rowsOrErrorCode) =>
+  }, databaseConnector, (boolean, rowsOrErrorMessage) =>
   {
-    if(trueOrFalse == false) callback(false, rowsOrErrorCode);
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
     else
     {
-      if(rowsOrErrorCode.length == 0) callback(true, {});
+      if(rowsOrErrorMessage.length == 0) callback({});
 
       else
       {
@@ -51,13 +46,13 @@ services.getFilesFromOneService = (service, SQLConnector, callback) =>
         
         var fileLoop = () =>
         {
-          rowsOrErrorCode[x]['type'] = config['file_ext'][rowsOrErrorCode[x]['type']];
+          rowsOrErrorMessage[x]['type'] = params['file_ext'][rowsOrErrorMessage[x]['type']];
 
-          rowsOrErrorCode[x += 1] != undefined ? fileLoop() :
+          rowsOrErrorMessage[x += 1] != undefined ? fileLoop() :
 
-          getFilesOwners(rowsOrErrorCode, SQLConnector, function(trueOrFalse, filesObjectOrErrorCode)
+          getFilesOwners(rowsOrErrorMessage, databaseConnector, (filesOrFalse, errorStatus, errorCode) =>
           {
-            trueOrFalse ? callback(true, filesObjectOrErrorCode) : callback(false, filesObjectOrErrorCode);
+            filesOrFalse == false ? callback(false, errorStatus, errorCode) : callback(filesOrFalse);
           });
         }
 
@@ -69,39 +64,33 @@ services.getFilesFromOneService = (service, SQLConnector, callback) =>
 
 /****************************************************************************************************/
 
-/**
- * Get owner's name for each file gotten for the service
- * @arg {Object} files - a JSON object with all file information
- * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
- * @return {Boolean}
- */
-function getFilesOwners(files, SQLConnector, callback)
+function getFilesOwners(files, databaseConnector, callback)
 {
-  let x = 0;
+  var x = 0;
 
-  let loop = function(file)
+  var loop = (file) =>
   {
-    SQLSelect.SQLSelectQuery(
+    databaseManager.selectQuery(
     {
-      "databaseName": config.database.library_database,
-      "tableName": config.database.auth_table,
+      'databaseName': params.database.name,
+      'tableName': params.database.tables.accounts,
       
-      "args": { "0": "firstname", "1": "lastname" },
+      'args': { '0': 'firstname', '1': 'lastname' },
           
-      "where":
+      'where':
       {
-        "=":
+        '=':
         {
-          "0":
+          '0':
           {
-            "key": "uuid",
-            "value": file.account
+            'key': 'uuid',
+            'value': file.account
           }
         }
       }
-    }, SQLConnector, function(trueOrFalse, rowsOrErrorCode)
+    }, databaseConnector, (boolean, rowsOrErrorCode) =>
     {
-      if(trueOrFalse == false) callback(false, rowsOrErrorCode);
+      if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
       else
       {
@@ -109,7 +98,7 @@ function getFilesOwners(files, SQLConnector, callback)
         files[Object.keys(files)[x]]['account'] = '??????' : 
         files[Object.keys(files)[x]]['account'] = `${rowsOrErrorCode[0]['firstname']} ${rowsOrErrorCode[0]['lastname'].toUpperCase()}`;
         
-        Object.keys(files)[x += 1] != undefined ? loop(files[Object.keys(files)[x]]) : callback(true, files);
+        Object.keys(files)[x += 1] != undefined ? loop(files[Object.keys(files)[x]]) : callback(files);
       }
     });
   }

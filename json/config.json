@@ -16,7 +16,8 @@
     "tables":
     {
       "files": "files",
-      "rights": "rights"
+      "rights": "rights",
+      "accounts": "account"
     }
   },
 
@@ -25,6 +26,10 @@
   "path_to_temp_storage": "C:/Users/dev/Desktop/removal/STATIC_tmp",
   "path_to_bin_storage": "C:/Users/dev/Desktop/removal/STATIC_bin",
   "path_to_logs_storage": "C:/Users/dev/Desktop/removal/STATIC_logs",
+  "path_to_file_logs_storage": "STATIC_file",
+  "path_to_logon_logs_storage": "STATIC_logon",
+  "path_to_admin_logs_storage": "STATIC_admin",
+  "path_to_account_logs_storage": "STATIC_account",
 
   "inactivity-timeout": 300000,
 
@@ -49,7 +54,7 @@
   "ext_accepted":
   {
     "info": { "0": "txt" },
-    "test": { "0": "txt" }
+    "test": { "0": "txt", "1": "doc", "2": "docx" }
   },
 
   "reports_status":

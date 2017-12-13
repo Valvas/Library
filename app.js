@@ -71,13 +71,11 @@ app.use(function(req, res, next)
   res.render('block', { message: `404 - La page recherchée n'existe pas` });
 });
 
-database.createDatabases(connection, function(result, message)
+database.createDatabases(connection, () =>
 { 
-  console.log(message);
-
-  accounts.createAccounts(connection, function()
+  accounts.createAccounts(connection, () =>
   {
-    accounts.createRights(connection, function()
+    accounts.createRights(connection, () =>
     {
 
     });

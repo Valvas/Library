@@ -1,205 +1,137 @@
 'use strict';
 
-let fs                = require('fs');
+var fs                      = require('fs');
 
-let filesCommon       = require('./common');
-let constants         = require('../constants');
-let config            = require('../../json/config');
-let SQLDelete         = require('../database/delete');
-let SQLSelect         = require('../database/select');
-let accountRights     = require('../accounts/rights');
+var params                  = require(`${__root}/json/config`);
+var constants               = require(`${__root}/functions/constants`);
+var fileLogs                = require(`${__root}/functions/files/logs`);
+var fileCommon              = require(`${__root}/functions/files/common`);
+var accountRights           = require(`${__root}/functions/accounts/rights`);
+var databaseManager         = require(`${__root}/functions/database/${params.database.dbms}`);
 
-let fileDeleting = module.exports = {};
+var fileDeleting = module.exports = {};
 
 /****************************************************************************************************/
 
-/**
- * Delete a file from the disk and from the database.
- * @arg {String} service - the name of the service to which the file is associated
- * @arg {String} fileUUID - the UUID of the file to delete from the database
- * @arg {String} accountUUID - the UUID of the user which must have the right to delete files for the current service
- * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
- * @return {Object}
- */
-fileDeleting.deleteOneFile = function(service, fileUUID, accountUUID, SQLConnector, callback)
+fileDeleting.deleteOneFile = (service, fileUUID, accountUUID, databaseConnector, callback) =>
 {
-  let returnObject = {};
-
-  findFileInTheDatabaseUsingItsUUID(service, fileUUID, SQLConnector, function(trueOrFalse, fileNameOrErrorCode)
+  accountRights.getUserRightsTowardsService(service, accountUUID, databaseConnector, (rightsOrFalse, errorStatus, errorCode) =>
   {
-    if(trueOrFalse == false) callback({ 'findFileInTheDatabaseUsingItsUUID': { 'result': false, 'code': fileNameOrErrorCode } });
+    if(rightsOrFalse == false) callback(false, errorStatus, errorCode);
 
     else
     {
-      returnObject['findFileInTheDatabaseUsingItsUUID'] = { 'result': true, 'code': constants.FILE_FOUND_IN_THE_DATABASE };
+      rightsOrFalse.remove_files == 0 ? callback(false, 403, constants.UNAUTHORIZED_TO_DELETE_FILES) :
 
-      checkIfUserHasTheRightToDeleteFiles(service, accountUUID, SQLConnector, function(trueOrFalse, returnCode)
+      databaseManager.selectQuery(
       {
-        if(trueOrFalse == false) callback({ 'checkIfUserHasTheRightToDeleteFiles': { 'result': false, 'code': returnCode } });
-    
+        'databaseName': params.database.name,
+        'tableName': params.database.tables.files,
+
+        'args': { '0': '*' },
+  
+        'where':
+        {
+          '=':
+          {
+            '0':
+            {
+              'key': 'uuid',
+              'value': fileUUID
+            }
+          }
+        }
+      }, databaseConnector, (boolean, fileOrErrorMessage) =>
+      {
+        if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+
         else
         {
-          returnObject['checkIfUserHasTheRightToDeleteFiles'] = { 'result': true, 'code': returnCode };
-    
-          fileDeleting.deleteFileFromHardware(service, fileNameOrErrorCode, function(trueOrFalse, returnCode)
+          fileOrErrorMessage.length == 0 ? callback(false, 404, constants.FILE_NOT_FOUND_IN_DATABASE) :
+
+          databaseManager.deleteQuery(
           {
-            returnObject['deleteFileFromHardware'] = { 'result': trueOrFalse, 'code': returnCode };
-    
-            fileDeleting.deleteFileFromDatabase(fileUUID, SQLConnector, function(trueOrFalse, returnCode)
+            'databaseName': params.database.name,
+            'tableName': params.database.tables.files,
+      
+            'where':
             {
-              returnObject['deleteFileFromDatabase'] = { 'result': trueOrFalse, 'code': returnCode };
+              '=':
+              {
+                '0':
+                {
+                  'key': 'uuid',
+                  'value': fileUUID
+                }
+              }
+            }
+          }, databaseConnector, (boolean, deletedRowsOrErrorMessage) =>
+          {
+            if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+      
+            else
+            {
+              deletedRowsOrErrorMessage.length == 0 ? callback(false, 500, constants.FILE_NOT_DELETED_FROM_DATABASE) :
+      
+              fs.stat(`${params.path_to_root_storage}/${service}/${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (err, stats) =>
+              {
+                err ? callback(false, 404, constants.FILE_NOT_FOUND_ON_DISK) :
+
+                fileDeleting.moveFileToBin(service, `${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (boolean, errorStatus, errorCode) =>
+                {
+                  boolean == false ? callback(false, errorStatus, errorCode) :
+
+                  fs.unlink(`${params.path_to_root_storage}/${service}/${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (err) =>
+                  {
+                    if(err) callback(false, 500, constants.FILE_NOT_DELETED_FROM_DISK);
+                    
+                    else
+                    {
+                      var logObj =
+                      {
+                        'service': service,
+                        'fileName': fileOrErrorMessage[0].name,
+                        'fileExt': fileOrErrorMessage[0].type,
+                        'content':
+                        {
+                          'account': accountUUID,
+                          'action': 'delete'
+                        }
+                      }
   
-              callback(returnObject);
-            });
+                      fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
+                      {
+                        boolean ? callback(true) : callback(false, errorStatus, errorCode);
+                      });
+                    }
+                  });
+                });
+              });
+            }
           });
         }
       });
-    } 
-  });
-}
-
-/****************************************************************************************************/
-
-/**
- * Find a file from the database using its UUID
- * @arg {String} service - the name of the service to which the file belongs
- * @arg {String} fileUUID - the UUID of the file to find in the database
- * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
- * @return {String}
- */
-function findFileInTheDatabaseUsingItsUUID(service, fileUUID, SQLConnector, callback)
-{
-  SQLSelect.SQLSelectQuery(
-    {
-      "databaseName": config.database.library_database,
-      "tableName": config.database.files_table,
-
-      "args": { "0": "name", "1": "type" },
-    
-      "where":
-      {
-        "=":
-        {
-          "0":
-          {
-            "key": "uuid",
-            "value": fileUUID
-          }
-        }
-      }
-    }, SQLConnector, function(success, fileDataOrErrorCode)
-    {
-      if(success == false) callback(false, fileDataOrErrorCode);
-  
-      else
-      {
-        fileDataOrErrorCode == 0 ? callback(false, constants.FILE_NOT_FOUND_IN_DATABASE) : callback(true, `${fileDataOrErrorCode[0].name}.${fileDataOrErrorCode[0].type}`);
-      }
-    });
-}
-
-/****************************************************************************************************/
-
-/**
- * Check if user has the right to delete a file for the current service
- * @arg {String} service - the name of the service to which user must have the right to delete files
- * @arg {String} accountUUID - the UUID associated to the account to check
- * @arg {Object} SQLConnector - a SQL connector to perform queries in the database
- * @return {Boolean}
- */
-function checkIfUserHasTheRightToDeleteFiles(service, accountUUID, SQLConnector, callback)
-{
-  accountRights.getUserRightsTowardsService(service, accountUUID, SQLConnector, function(trueOrFalse, rightsObjectOrErrorCode)
-  {
-    if(trueOrFalse == false) callback(false, rightsObjectOrErrorCode);
-
-    else
-    {
-      rightsObjectOrErrorCode.remove_files == 0 ? callback(false, constants.UNAUTHORIZED_TO_DELETE_FILES) : callback(true, constants.AUTHORIZED_TO_DELETE_FILES);
     }
   });
 }
 
 /****************************************************************************************************/
 
-/**
- * Delete a file from its folder
- * @arg {String} service - the name of the service to which belongs the file
- * @arg {String} file - the name of the file with its extension
- * @return {Boolean}
- */
-fileDeleting.deleteFileFromHardware = function(service, file, callback)
+fileDeleting.moveFileToBin = (service, file, callback) =>
 {
-  fs.stat(`${config['path_to_root_storage']}/${service}/${file}`, function(err, stat)
-  {
-    err ? callback(false, constants.FILE_NOT_FOUND_ON_DISK) :
-
-    moveFileToBin(service, file, (trueOrFalse, returnedCode) =>
-    {
-      if(trueOrFalse == false){console.log(require('../../json/errors')[returnedCode])} //WRITE LOGS HERE
-
-      fs.unlink(`${config['path_to_root_storage']}/${service}/${file}`, function(err)
-      {
-        err ? callback(false, constants.FILE_NOT_DELETED_FROM_DISK) : callback(true, constants.FILE_DELETED_FROM_DISK);
-      });
-    });
-  });
-}
-
-/****************************************************************************************************/
-
-/**
- * Delete a file from the database
- * @arg {String} fileUUID - the UUID associated to the file to delete
- * @arg {Object} SQLConnector - a SQL connector to perform queries to the database
- * @return {Boolean}
- */
-fileDeleting.deleteFileFromDatabase = function(fileUUID, SQLConnector, callback)
-{
-  SQLDelete.SQLDeleteQuery(
-  {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.files_table,
+  var date = new Date(Date.now());
   
-    "where":
-    {
-      "=":
-      {
-        "0":
-        {
-          "key": "uuid",
-          "value": fileUUID
-        }
-      }
-    }
-  }, SQLConnector, function(success, deletedRowsOrErrorCode)
+  var deletedFileName = `${file.split('.')[0]}_${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()} ${date.getHours()}h${date.getMinutes()}m${date.getSeconds()}s.${file.split('.')[1]}`;
+
+  fileCommon.createFolder(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`, params.path_to_bin_storage, (pathOrFalse, errorStatus, errorCode) =>
   {
-    if(success == false) callback(false, deletedRowsOrErrorCode);
+    if(pathOrFalse == false) callback(false, errorStatus, errorCode);
 
     else
     {
-      deletedRowsOrErrorCode == 0 ? callback(false, constants.FILE_NOT_FOUND_IN_DATABASE) : callback(true, constants.FILE_DELETED_FROM_DATABASE);
-    }
-  });
-}
-
-/****************************************************************************************************/
-
-function moveFileToBin(service, file, callback)
-{
-  let date = new Date(Date.now());
-  
-  let deletedFileName = `${file.split('.')[0]}_${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()} ${date.getHours()}h${date.getMinutes()}m${date.getSeconds()}s.${file.split('.')[1]}`;
-
-  filesCommon.createFolder(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`, config.path_to_bin_storage, (trueOrFalse, folderPathOrErrorCode) =>
-  {
-    if(trueOrFalse == false) callback(false, folderPathOrErrorCode);
-
-    else
-    {
-      fs.copyFile(`${config.path_to_root_storage}/${service}/${file}`, `${folderPathOrErrorCode}/${deletedFileName}`, (err) =>
+      fs.copyFile(`${params.path_to_root_storage}/${service}/${file}`, `${pathOrFalse}/${deletedFileName}`, (err) =>
       {
-        err ? callback(false, constants.FILE_SYSTEM_ERROR) : callback(true, constants.SUCCESS_COPYING_FILE);
+        err ? callback(false, 500, constants.FILE_SYSTEM_ERROR) : callback(true);
       });
     }
   });

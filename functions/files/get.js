@@ -72,9 +72,42 @@ module.exports.getFile = (fileUUID, accountUUID, databaseConnector, callback) =>
 
         else
         {
-          rightsOrErrorMessage.length == 0 ? 
-          callback(false, 403, constants.UNAUTHORIZED_TO_ACCESS_THIS_FILE) :
-          callback(fileOrErrorMessage[0]);
+          rightsOrErrorMessage.length == 0 ? callback(false, 403, constants.UNAUTHORIZED_TO_ACCESS_THIS_FILE) :
+
+          databaseManager.selectQuery(
+          {
+            'databaseName': params.database.name,
+            'tableName': params.database.tables.accounts,
+        
+            'args':
+            {
+              '0': '*'
+            },
+
+            'where':
+            {
+              '=':
+              {
+                '0':
+                {
+                  'key': 'uuid',
+                  'value': fileOrErrorMessage[0]['account']
+                }
+              }
+            }
+          }, databaseConnector, (boolean, accountOrErrorMessage) =>
+          {
+            if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+
+            else
+            {
+              accountOrErrorMessage.length == 0 ? 
+              fileOrErrorMessage[0]['account'] = '????????' :
+              fileOrErrorMessage[0]['account'] = `${accountOrErrorMessage[0]['firstname'].charAt(0).toUpperCase()}${accountOrErrorMessage[0]['firstname'].slice(1)} ${accountOrErrorMessage[0]['lastname'].toUpperCase()}`;
+
+              callback(fileOrErrorMessage[0]);
+            }
+          });
         }
       });
     }

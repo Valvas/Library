@@ -25,5 +25,7 @@
   "10024": "le dossier existe déjà",
   "10025": "cette action requiert d'être authentifié",
   "10026": "rapport non trouvé",
-  "10027": "vous n'êtes pas autorisé(e) à accéder à ce fichier"
+  "10027": "vous n'êtes pas autorisé(e) à accéder à ce fichier",
+  "10028": "échec de la création d'un dossier",
+  "10029": "type de fichier non-autorisé"
 }

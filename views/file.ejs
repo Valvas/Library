@@ -9,11 +9,20 @@
     <% include include/menu.ejs %>
     <% include include/aside.ejs %><!-- @SuppressWhitespace
     --><div class='file-main-block'>
-        <div class='container'>
-          <div class='label'>Nom du fichier<span class='dots'> :</span></div><!-- @SuppressWhitespace
-          --><div class='value'><%= file['name'] %></div>  
+        <a href='/service/<%= file['service'] %>' class='return'><i class="fa fa-angle-left icon" aria-hidden="true"></i><div class='label'>Retour</div></a>
+        <div class='info'>
+          <div class='name'>Nom : <%= file['name'] %>.<%= file['type'] %></div>
+          <div class='type'>Type : <%= ext[file['type']] %></div>
+          <div class='type'>Propriétaire : <%= file['account'] %></div>
+        </div><!-- @SuppressWhitespace
+        --><div class='actions'>
+          <button <% if(rights['download_files'] == 1){ %> class='download' <% } else{ %> class='inactive' <% } %>><i class="fa fa-download icon" aria-hidden="true"></i><div class='label'>Télécharger</div></button><!-- @SuppressWhitespace
+          --><button <% if(rights['remove_files'] == 1){ %> class='delete' <% } else{ %> class='inactive' <% } %>><i class="fa fa-trash icon" aria-hidden="true"></i><div class='label'>Supprimer</div></button>
         </div>
-      </div>
+        <div class='comments'>
+          
+        </div>
+    </div>
     <% include include/scripts.ejs %>
   </body>
 </html>

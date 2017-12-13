@@ -1,139 +1,97 @@
 'use strict';
 
-let encrypter     = require('../encryption');
-let rights        = require('../../json/rights');
-let config        = require('../../json/config');
-let accounts      = require('../../json/accounts');
+var encrypter     = require('../encryption');
+var rights        = require('../../json/rights');
+var config        = require('../../json/config');
+var accounts      = require('../../json/accounts');
 
-let SQLSelect     = require('../database/select');
-let SQLInsert     = require('../database/insert');
-let SQLDelete     = require('../database/delete');
+var SQLSelect     = require('../database/select');
+var SQLInsert     = require('../database/insert');
+var SQLDelete     = require('../database/delete');
+
+var params              = require(`${__root}/json/config`);
+var databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-module.exports.createAccounts = function(SQLConnector, callback)
+module.exports.createAccounts = (databaseConnector, callback) =>
 {
-  let x = 0;
+  var x = 0;
 
-  let accountCreationLoop = function()
+  var accountCreationLoop = () =>
   {
-    encrypter.getRandomPassword(function(clearPassword)
+    encrypter.getRandomPassword((clearPassword) =>
     {
       if(clearPassword == false)
       {
-        console.log(`[${config.database.library_database}][${config.database.auth_table}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (encryption error) !`);
+        console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (encryption error) !`);
 
         Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
       }
 
       else
       {
-        encrypter.encryptPassword(clearPassword, function(encryptedPassword)
+        encrypter.encryptPassword(clearPassword, (encryptedPassword) =>
         {
           if(encryptedPassword == false)
           {
-            console.log(`[${config.database.library_database}][${config.database.auth_table}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (encryption error) !`);
+            console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (encryption error) !`);
             
             Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
           }
 
           else
           {
-            SQLSelect.SQLSelectQuery(
+            databaseManager.selectQuery(
             {
-              "databaseName": config.database.library_database,
-              "tableName": config.database.auth_table,
+              'databaseName': params.database.name,
+              'tableName': params.database.tables.accounts,
             
-              "args":
+              'args':
               {
-                "0": "password"
+                '0': 'password'
               },
             
-              "where":
+              'where':
               {
-                "=":
+                '=':
                 {
-                  "0":
+                  '0':
                   {
-                    "key": "email",
-                    "value": accounts[Object.keys(accounts)[x]].email
+                    'key': 'email',
+                    'value': accounts[Object.keys(accounts)[x]].email
                   }
                 }
               }
-            }, SQLConnector, function(trueOrFalse, rowsOrErrorCode)
+            }, databaseConnector, (boolean, passwordOrErrorCode) =>
             {
-              if(trueOrFalse == false)
+              if(boolean == false)
               {
-                console.log(`[${config.database.library_database}][${config.database.auth_table}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (SQL error) !`);
+                console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (SQL error) !`);
                 
                 Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
               }
 
               else
               {
-                if(rowsOrErrorCode.length > 0) encryptedPassword = rowsOrErrorCode[0].password;
+                if(passwordOrErrorCode.length > 0) encryptedPassword = passwordOrErrorCode[0].password;
 
-                SQLDelete.SQLDeleteQuery(
+                createOrUpdateAccount(passwordOrErrorCode.length > 0, accounts[Object.keys(accounts)[x]], encryptedPassword, databaseConnector, (boolean) =>
                 {
-                  "databaseName": config.database.library_database,
-                  "tableName": config.database.auth_table,
-                
-                  "where":
+                  if(boolean == false)
                   {
-                    "=":
-                    {
-                      "0":
-                      {
-                        "key": "email",
-                        "value": accounts[Object.keys(accounts)[x]].email
-                      }
-                    }
-                  }
-                }, SQLConnector, function(trueOrFalse, deletedRowsOrErrorCode)
-                {
-                  if(trueOrFalse == false)
-                  {
-                    console.log(`[${config.database.library_database}][${config.database.auth_table}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (SQL error) !`);
+                    console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (SQL error) !`);
                     
                     Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
                   }
 
                   else
                   {
-                    SQLInsert.SQLInsertQuery(
-                    {
-                      "databaseName": config.database.library_database,
-                      "tableName": config.database.auth_table,
+                    passwordOrErrorCode.length == 0 ?
+                    console.log(`[${config.database.library_database}][${config.database.auth_table}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with password : "${clearPassword}" !`) :
+                    console.log(`[${config.database.library_database}][${config.database.auth_table}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with unchanged password !`);
                     
-                      "args":
-                      {
-                        "email": accounts[Object.keys(accounts)[x]].email,
-                        "lastname": accounts[Object.keys(accounts)[x]].lastname,
-                        "firstname": accounts[Object.keys(accounts)[x]].firstname,
-                        "password": encryptedPassword,
-                        "activated": accounts[Object.keys(accounts)[x]].activated,
-                        "suspended": accounts[Object.keys(accounts)[x]].suspended,
-                        "service": accounts[Object.keys(accounts)[x]].service,
-                        "is_admin": accounts[Object.keys(accounts)[x]].is_admin
-                      }
-                    }, SQLConnector, function(trueOrFalse, entryUuidOrErrorCode)
-                    {
-                      if(trueOrFalse == false)
-                      {
-                        console.log(`[${config.database.library_database}][${config.database.auth_table}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (SQL error) !`);
-                        
-                        Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
-                      }
-
-                      else
-                      {
-                        rowsOrErrorCode.length == 0 ?
-                        console.log(`[${config.database.library_database}][${config.database.auth_table}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with password : "${clearPassword}" !`) :
-                        console.log(`[${config.database.library_database}][${config.database.auth_table}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with unchanged password !`);
-                        
-                        Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
-                      }
-                    });
+                    Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
                   }
                 });
               }
@@ -158,94 +116,185 @@ module.exports.createAccounts = function(SQLConnector, callback)
 
 /****************************************************************************************************/
 
-module.exports.createRights = function(SQLConnector, callback)
+function createOrUpdateAccount(boolean, account, password, databaseConnector, callback)
 {
-  let x = 0;
+  boolean ?
 
-  let rightsCreationLoop = function()
+  databaseManager.updateQuery(
+  {
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.accounts,
+
+    'args':
+    {
+      'email': account.email,
+      'lastname': account.lastname,
+      'firstname': account.firstname,
+      'password': password,
+      'activated': account.activated,
+      'suspended': account.suspended,
+      'service': account.service,
+      'is_admin': account.is_admin
+    },
+
+    'where':
+    {
+      '=':
+      {
+        '0':
+        {
+          'key': 'email',
+          'value': account.email
+        }
+      }
+    }
+  }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
+  {
+    boolean == false ? callback(false) : callback(true);
+  }) :
+
+  databaseManager.insertQuery(
+  {
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.accounts,
+
+    'uuid': true,
+
+    'args':
+    {
+      'email': account.email,
+      'lastname': account.lastname,
+      'firstname': account.firstname,
+      'password': password,
+      'activated': account.activated,
+      'suspended': account.suspended,
+      'service': account.service,
+      'is_admin': account.is_admin
+    }
+  }, databaseConnector, (boolean, uuidOrErrorMessage) =>
+  {
+    boolean == false ? callback(false) : callback(true);
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.createRights = (databaseConnector, callback) =>
+{
+  var x = 0;
+
+  var rightsCreationLoop = () =>
   {
     SQLSelect.SQLSelectQuery(
     {
-      "databaseName": config.database.library_database,
-      "tableName": config.database.auth_table,
+      'databaseName': params.database.name,
+      'tableName': params.database.tables.accounts,
   
-      "args":
+      'args':
       {
-        "0": "uuid"
+        '0': 'uuid'
       },
   
-      "where":
+      'where':
       {
-        "=":
+        '=':
         {
-          "0":
+          '0':
           {
-            "key": "email",
-            "value": rights[Object.keys(rights)[x]].account
+            'key': 'email',
+            'value': rights[Object.keys(rights)[x]].account
           }
         }
       }
-    }, SQLConnector, function(trueOrFalse, rowsOrErrorCode)
+    }, databaseConnector, (boolean, accountOrErrorMessage) =>
     {
-      if(trueOrFalse == false) console.log(`[${config.database.library_database}][${config.database.rights_table}][ERROR] : could not create rights for "${rights[Object.keys(rights)[x]].service}" for "${rights[Object.keys(rights)[x]].account}" (SQL error) !`);
-
-      if(rowsOrErrorCode.length == 0)
+      if(boolean == false)
       {
-        console.log(`[${config.database.library_database}][${config.database.rights_table}][ERROR] : could not create rights for "${rights[Object.keys(rights)[x]].service}" for "${rights[Object.keys(rights)[x]].account}" (account not found) !`);
+        console.log(`[${params.database.name}][${params.database.tables.rights}][ERROR] : could not create rights for "${rights[Object.keys(rights)[x]].service}" for "${rights[Object.keys(rights)[x]].account}" (SQL error) !`);
         
         Object.keys(rights)[x += 1] == undefined ? callback() : rightsCreationLoop();
       }
 
       else
       {
-        SQLDelete.SQLDeleteQuery(
+        if(accountOrErrorMessage.length == 0)
         {
-          "databaseName": config.database.library_database,
-          "tableName": config.database.rights_table,
-      
-          "where":
+          console.log(`[${params.database.name}][${params.database.tables.rights}][ERROR] : could not create rights for "${rights[Object.keys(rights)[x]].service}" for "${rights[Object.keys(rights)[x]].account}" (account not found) !`);
+          
+          Object.keys(rights)[x += 1] == undefined ? callback() : rightsCreationLoop();
+        }
+
+        else
+        {
+          var account = rights[Object.keys(rights)[x]].account;
+          rights[Object.keys(rights)[x]].account = accountOrErrorMessage[0].uuid;
+          
+          databaseManager.selectQuery(
           {
-            "=":
+            'databaseName': params.database.name,
+            'tableName': params.database.tables.rights,
+        
+            'args':
             {
-              "0":
+              '0': 'uuid'
+            },
+        
+            'where':
+            {
+              'AND':
               {
-                "key": "account",
-                "value": rowsOrErrorCode[0].uuid
+                '=':
+                {
+                  '0':
+                  {
+                    'key': 'account',
+                    'value': rights[Object.keys(rights)[x]].account
+                  },
+                  '1':
+                  {
+                    'key': 'service',
+                    'value': rights[Object.keys(rights)[x]].service
+                  }
+                }
               }
             }
-          }
-        }, SQLConnector, function(trueOrFalse, deletedRowsOrErrorCode)
-        {
-          SQLInsert.SQLInsertQuery(
+          }, databaseConnector, (boolean, rightsOrErrorMessage) =>
           {
-            "databaseName": config.database.library_database,
-            "tableName": config.database.rights_table,
-        
-            "args":
+            if(boolean == false)
             {
-              "account": rowsOrErrorCode[0].uuid,
-              "service": rights[Object.keys(rights)[x]].service,
-              "upload_files": rights[Object.keys(rights)[x]].upload_files,
-              "download_files": rights[Object.keys(rights)[x]].download_files,
-              "remove_files": rights[Object.keys(rights)[x]].remove_files,
-              "post_comments": rights[Object.keys(rights)[x]].post_comments,
+              console.log(`[${params.database.name}][${params.database.tables.rights}][ERROR] : could not create rights for "${rights[Object.keys(rights)[x]].service}" for "${rights[Object.keys(rights)[x]].account}" (SQL error) !`);
+              
+              Object.keys(rights)[x += 1] == undefined ? callback() : rightsCreationLoop();
             }
-          }, SQLConnector, function(trueOrFalse, entryUuidOrErrorCode)
-          {
-            trueOrFalse == false ?
-            console.log(`[${config.database.library_database}][${config.database.rights_table}][ERROR] : could not create rights for "${rights[Object.keys(rights)[x]].service}" for "${rights[Object.keys(rights)[x]].account}" (SQL error) !`) :
-            console.log(`[${config.database.library_database}][${config.database.rights_table}][SUCCESS] : rights created for "${rights[Object.keys(rights)[x]].service}" for "${rights[Object.keys(rights)[x]].account}" !`);
 
-            Object.keys(rights)[x += 1] == undefined ? callback() : rightsCreationLoop();
+            else
+            {
+              createOrUpdateRights(rightsOrErrorMessage.length > 0, rights[Object.keys(rights)[x]], databaseConnector, (boolean) =>
+              {
+                if(boolean == false)
+                {
+                  console.log(`[${params.database.name}][${params.database.tables.rights}][ERROR] : could not create rights for "${rights[Object.keys(rights)[x]].service}" for "${rights[Object.keys(rights)[x]].account}" (SQL error) !`);
+                  
+                  Object.keys(rights)[x += 1] == undefined ? callback() : rightsCreationLoop();
+                }
+
+                else
+                {
+                  console.log(`[${params.database.name}][${params.database.tables.rights}][SUCCESS] : rights created for "${rights[Object.keys(rights)[x]].service}" for "${account}" !`);
+                  
+                  Object.keys(rights)[x += 1] == undefined ? callback() : rightsCreationLoop();
+                }
+              });
+            }
           });
-        });
+        }
       }
     });
   }
 
   if(Object.keys(rights)[x] == undefined)
   {
-    console.log(`[${config.database.library_database}][${config.database.rights_table}][INFO] : no rights to create !`);
+    console.log(`[${params.database.name}][${params.database.tables.rights}][INFO] : no rights to create !`);
     callback();
   }
 
@@ -253,6 +302,73 @@ module.exports.createRights = function(SQLConnector, callback)
   {
     rightsCreationLoop();
   }
+}
+
+/****************************************************************************************************/
+
+function createOrUpdateRights(boolean, rights, databaseConnector, callback)
+{
+  boolean ?
+
+  databaseManager.updateQuery(
+  {
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.rights,
+
+    'args':
+    {
+      'account': rights.account,
+      'service': rights.service,
+      'upload_files': rights.upload_files,
+      'download_files': rights.download_files,
+      'remove_files': rights.remove_files,
+      'post_comments': rights.post_comments,
+    },
+
+    'where':
+    {
+      'AND':
+      {
+        '=':
+        {
+          '0':
+          {
+            'key': 'account',
+            'value': rights.account
+          },
+          '1':
+          {
+            'key': 'service',
+            'value': rights.service
+          }
+        }
+      }
+    }
+  }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
+  {
+    boolean == false ? callback(false) : callback(true);
+  }) :
+
+  databaseManager.insertQuery(
+  {
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.rights,
+
+    'uuid': true,
+
+    'args':
+    {
+      'account': rights.account,
+      'service': rights.service,
+      'upload_files': rights.upload_files,
+      'download_files': rights.download_files,
+      'remove_files': rights.remove_files,
+      'post_comments': rights.post_comments,
+    }
+  }, databaseConnector, (boolean, uuidOrErrorMessage) =>
+  {
+    boolean == false ? callback(false) : callback(true);
+  });
 }
 
 /****************************************************************************************************/

@@ -71,27 +71,16 @@ window.onload = $(function()
             $.ajax(
             {
               type: 'POST', timeout: 2000, data: data, processData: false, contentType: false, url: '/service/post-new-file', success: function(){},
-              error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); }
+              error: (xhr, status, error) => { printError(xhr.responseJSON.message); }
                                 
-            }).done(function(json)
+            }).done((json) =>
             {
-              if(json.result == false)
-              {
-                $('#upload-popup-input').css('border', '1px solid red');
-                $(`<div id='upload-popup-error-message' class='popup-error-message'>${json.error}</div>`).appendTo('#upload-popup').insertBefore('#upload-popup-perform-button');
-              }
+              socket.emit('new_file', { 'room': $(document.getElementById('service-main-block')).attr('name'), 'uuid': json.uuid });
             
-              else
-              {
-                socket.emit('new_file', { 'room': $(document.getElementById('service-main-block')).attr('name'), 'uuid': json.uuid });
-            
-                $('body').off('click', '#upload-popup-perform-button');
-            
-                $('#upload-popup').remove();
-                $('#veil').remove();
+              $('#upload-popup').remove();
+              $('#veil').remove();
                 
-                printSuccess('Fichier envoyé.');
-              }
+              printSuccess('Fichier envoyé.');
             });
           }
         }

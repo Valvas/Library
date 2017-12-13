@@ -29,6 +29,8 @@ const FOLDER_ALREADY_EXISTS                                                     
 const AUTHENTICATION_REQUIRED                                                     = 10025;
 const REPORT_NOT_FOUND                                                            = 10026;
 const UNAUTHORIZED_TO_ACCESS_THIS_FILE                                            = 10027;
+const COULD_NOT_CREATE_FOLDER                                                     = 10028;
+const UNAUTHORIZED_FILE                                                           = 10029;
 
 /******************************************************************************************
 SUCCESS
@@ -78,6 +80,8 @@ module.exports =
   AUTHENTICATION_REQUIRED: AUTHENTICATION_REQUIRED,
   REPORT_NOT_FOUND: REPORT_NOT_FOUND,
   UNAUTHORIZED_TO_ACCESS_THIS_FILE: UNAUTHORIZED_TO_ACCESS_THIS_FILE,
+  COULD_NOT_CREATE_FOLDER: COULD_NOT_CREATE_FOLDER,
+  UNAUTHORIZED_FILE: UNAUTHORIZED_FILE,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

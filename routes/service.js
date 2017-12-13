@@ -1,52 +1,53 @@
 'use strict';
 
-let express = require('express');
-let multer  = require('multer');
+var express           = require('express');
+var multer            = require('multer');
 
-let config            = require('../json/config');
-let errors            = require('../json/errors');
-let success           = require('../json/success');
-let services          = require('../functions/services');
-let constants         = require('../functions/constants');
-let filesAdding       = require('../functions/files/adding');
-let filesDeleting     = require('../functions/files/deleting');
-let accountRights     = require('../functions/accounts/rights');
-let filesDownloading  = require('../functions/files/downloading');
+var services          = require('../functions/services');
+var constants         = require('../functions/constants');
+var filesAdding       = require('../functions/files/adding');
+var filesDeleting     = require('../functions/files/deleting');
+var accountRights     = require('../functions/accounts/rights');
+var filesDownloading  = require('../functions/files/downloading');
 
-let storage = multer.diskStorage(
+var errors            = require(`${__root}/json/errors`);
+var params            = require(`${__root}/json/config`);
+var success           = require(`${__root}/json/success`);
+
+var storage = multer.diskStorage(
 {
-  destination: function (req, file, callback){ callback(null, config['path_to_temp_storage']); },
-  filename: function (req, file, callback){ callback(null, file.originalname); }
+  destination: (req, file, callback) => { callback(null, params.path_to_temp_storage); },
+  filename: (req, file, callback) => { callback(null, file.originalname); }
 });
  
-let upload = multer({ storage: storage });
+var upload = multer({ storage: storage });
 
-let router = express.Router();
+var router = express.Router();
 
 /****************************************************************************************************/
 
-router.get('/', function(req, res)
+router.get('/', (req, res) =>
 {
   res.render('services', { location: 'services', services: require('../json/services') });
 });
 
 /****************************************************************************************************/
 
-router.get('/:service', function(req, res)
+router.get('/:service', (req, res) =>
 {
   !(req.params.service in require('../json/services')) ? res.render('404') :
 
-  accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, rightsOrErrorCode)
+  accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
   {
-    if(trueOrFalse == false) res.render('block', { message: `${errors[rightsOrErrorCode].charAt(0).toUpperCase()}${errors[rightsOrErrorCode].slice(1)}` });
+    if(rightsOrFalse == false) res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
 
     else
     {
-      services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), function(trueOrFalse, filesObjectOrErrorCode)
+      services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), (filesOrFalse, errorStatus, errorCode) =>
       {
-        trueOrFalse == false ?
-        res.render('block', { message: `Erreur [500] - ${errors[filesObjectOrErrorCode].charAt(0).toUpperCase()}${errors[filesObjectOrErrorCode].slice(1)} !` }) :
-        res.render('service', { location: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrErrorCode, files: filesObjectOrErrorCode });
+        filesOrFalse == false ?
+        res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)} !` }) :
+        res.render('service', { location: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrFalse, files: filesOrFalse });
       }); 
     }
   });
@@ -54,121 +55,74 @@ router.get('/:service', function(req, res)
 
 /****************************************************************************************************/
 
-router.post('/post-new-file', upload.single('file'), function(req, res)
+router.post('/post-new-file', upload.single('file'), (req, res) =>
 {
-  req.file == undefined || req.body.service == undefined ? res.status(406).send(`ERROR [406] : ${errors[constants.NO_FILE_PROVIDED_IN_REQUEST].charAt(0).toUpperCase()}${errors[constants.NO_FILE_PROVIDED_IN_REQUEST].slice(1)} !`) :
+  req.file == undefined || req.body.service == undefined ? res.status(406).send({ result: false, message: `Erreur [406] - ${errors[constants.MISSING_DATA_IN_REQUEST]} !` }) :
   
-  filesAdding.addOneFile(req.body.service, req.file, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, entryUuidOrErrorCode)
+  filesAdding.addOneFile(req.body.service, req.file, req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
   {
-    trueOrFalse ? 
-    res.status(200).send({ result: true, uuid: entryUuidOrErrorCode }) :
-    res.status(200).send({ result: false, error: errors[entryUuidOrErrorCode] });
+    boolean ? 
+    res.status(200).send({ result: true, message: `${success[20010].charAt(0).toUpperCase()}${success[20010].slice(1)}` }) :
+    res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
   });
 });
 
 /****************************************************************************************************/
 
-router.delete('/delete-file', function(req, res)
+router.delete('/delete-file', (req, res) =>
 {
   req.body.file == undefined || req.body.service == undefined ? res.status(406).send(false) :
 
-  filesDeleting.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), function(returnObject)
+  filesDeleting.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
   {
-    if(returnObject['findFileInTheDatabaseUsingItsUUID']['result'] == false)
-    {
-      res.status(500).send({ result: false, error: `ERROR [500] - ${errors[returnObject['findFileInTheDatabaseUsingItsUUID']['code']]} !` });
-    }
-
-    else if(returnObject['checkIfUserHasTheRightToDeleteFiles']['result'] == false)
-    {
-      res.status(403).send({ result: false, error: `ERROR [403] - ${errors[returnObject['checkIfUserHasTheRightToDeleteFiles']['code']]} !` });
-    }
-
-    else
-    {
-      if(returnObject['deleteFileFromHardware']['result'] == true && returnObject['deleteFileFromDatabase']['result'] == true)
-      {
-        res.status(200).send({ result: true, success: success[constants.FILE_DELETED].charAt(0).toUpperCase() + success[constants.FILE_DELETED].slice(1) })
-      }
-
-      else
-      {
-        let errorMessages = [];
-        let successMessages = [];
-        
-        if(returnObject['deleteFileFromHardware']['result'] == false)
-        {
-          errorMessages.push(`${errors[returnObject['deleteFileFromHardware']['code']].charAt(0).toUpperCase() + errors[returnObject['deleteFileFromHardware']['code']].slice(1)} !`);
-        }
-        
-        if(returnObject['deleteFileFromDatabase']['result'] == false)
-        {
-          errorMessages.push(`${errors[returnObject['deleteFileFromDatabase']['code']].charAt(0).toUpperCase() + errors[returnObject['deleteFileFromDatabase']['code']].slice(1)} !`);
-        }
-
-        if(returnObject['deleteFileFromHardware']['result'] == true)
-        {
-          successMessages.push(`${success[returnObject['deleteFileFromHardware']['code']].charAt(0).toUpperCase() + success[returnObject['deleteFileFromHardware']['code']].slice(1)} !`);
-        }
-
-        if(returnObject['deleteFileFromDatabase']['result'] == true)
-        {
-          successMessages.push(`${success[returnObject['deleteFileFromDatabase']['code']].charAt(0).toUpperCase() + success[returnObject['deleteFileFromDatabase']['code']].slice(1)} !`);
-        }
-
-        errorMessages.length == 2 ?
-        res.status(200).send({ result: false, error: errorMessages.join('\n') }) :
-        res.status(200).send({ result: false, success: successMessages.join('\n'), error: errorMessages.join('\n') });
-      }
-    }
+    boolean ?
+    res.status(200).send({ result: true, message: `${success[20005].charAt(0).toUpperCase()}${success[20005].slice(1)}` }) :
+    res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
   });
 });
 
 /****************************************************************************************************/
 
-router.put('/get-ext-accepted', function(req, res)
+router.put('/get-ext-accepted', (req, res) =>
 {
   if(req.body.service == undefined) res.status(406).send(false);
 
   else
   {
-    config['ext_accepted'][req.body.service] == undefined ? 
+    params['ext_accepted'][req.body.service] == undefined ? 
     res.status(404).send({ result: false }) : 
-    res.status(200).send({ result: true, ext: config['ext_accepted'][req.body.service] });
+    res.status(200).send({ result: true, ext: params['ext_accepted'][req.body.service] });
   }
 });
 
 /****************************************************************************************************/
 
-router.get('/download-file/:service/:file', function(req, res)
+router.get('/download-file/:service/:file', (req, res) =>
 {
-  filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, fileNameOrErrorCode)
+  filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), (fileOrFalse, errorStatus, errorCode) =>
   {
-    trueOrFalse == false ? res.render('block', { message: errors[fileNameOrErrorCode] }) :
+    fileOrFalse == false ? res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
 
-    res.download(`${config.path_to_root_storage}/${req.params.service}/${fileNameOrErrorCode}`);
+    res.download(`${params.path_to_root_storage}/${req.params.service}/${fileOrFalse}`);
   });
 });
 
 /****************************************************************************************************/
 
-router.put('/get-files-list', function(req, res)
+router.put('/get-files-list', (req, res) =>
 {
-  req.body.service == undefined ? res.status(406).send({ result: false, error: `Erreur [406] - ${errors[constants[MISSING_DATA_IN_REQUEST]]} !` }) :
+  req.body.service == undefined ? res.status(406).send({ result: false, message: `Erreur [406] - ${errors[constants.MISSING_DATA_IN_REQUEST]} !` }) :
 
-  services.getFilesFromOneService(req.body.service, req.app.get('mysqlConnector'), function(trueOrFalse, filesObjectOrErrorCode)
+  accountRights.getUserRightsTowardsService(req.body.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
   {
-    if(trueOrFalse == false) res.status(200).send({ result: false, error: errors[constants[filesObjectOrErrorCode]] });
+    rightsOrFalse == false ? res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
 
-    else
+    services.getFilesFromOneService(req.body.service, req.app.get('mysqlConnector'), (filesOrFalse, errorStatus, errorCode) =>
     {
-      accountRights.getUserRightsTowardsService(req.body.service, req.session.uuid, req.app.get('mysqlConnector'), function(trueOrFalse, rightsObjectOrErrorCode)
-      {
-        trueOrFalse ? 
-        res.status(200).send({ result: true, files: filesObjectOrErrorCode, rights: rightsObjectOrErrorCode }) : 
-        res.status(200).send({ result: false, error: errors[constants[rightsObjectOrErrorCode]] });
-      });
-    }
+      filesOrFalse == false ? 
+      res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+      res.status(200).send({ result: true, files: filesOrFalse, rights: rightsOrFalse });
+    });
   });
 });
 

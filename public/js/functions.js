@@ -270,9 +270,9 @@ function updateFilesList(service, callback)
   $.ajax(
   {
     type: 'PUT', timeout: 2000, dataType: 'JSON', data: { service: service }, url: '/service/get-files-list', success: function(){},
-    error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); }
+    error: function(xhr, status, error){ printError(xhr.responseJSON.message); }
                 
-  }).done(function(json)
+  }).done((json) =>
   {
     if(json['result'] == false) printError('Impossible de mettre à jour la liste des fichiers');
     
