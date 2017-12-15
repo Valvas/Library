@@ -81,10 +81,6 @@ function createAdminUserEditPopup(currentValue, inputType, inputId)
 
 /****************************************************************************************************/
 
-/**
- * Open the popup that is used to send a report
- * @arg {Object} obj - a JSON object with the text content of each element of the popup
- */
 function openReportPopup(obj)
 {
   $('#report-popup').remove();
@@ -144,6 +140,42 @@ function openReportPopup(obj)
   $(descriptionLabel)   .appendTo(popup);
   $(description)        .appendTo(popup);
   $(infoMessage)        .appendTo(popup);
+  $(sendButton)         .appendTo(popup);
+  $(cancelButton)       .appendTo(popup);
+}
+
+/****************************************************************************************************/
+
+function openReportCommentPopup(titleContent)
+{
+  $('#report-comment-popup').remove();
+
+  var veil              = document.createElement('div');
+  var popup             = document.createElement('div');
+  var title             = document.createElement('div');
+
+  var description       = document.createElement('textarea');
+
+  var cancelButton      = document.createElement('button');
+  var sendButton        = document.createElement('button');
+
+  $(veil)               .attr({ id: 'veil',                                 class: 'veil'});
+  $(popup)              .attr({ id: 'report-comment-popup',                 class: 'report-popup'});
+  $(sendButton)         .attr({ id: 'report-comment-popup-send',            class: 'report-popup-send'});
+  $(title)              .attr({ id: 'report-comment-popup-title',           class: 'report-popup-title'});
+  $(cancelButton)       .attr({ id: 'report-comment-popup-cancel',          class: 'report-popup-cancel'});
+  $(description)        .attr({ id: 'report-comment-popup-description',     class: 'report-popup-description',        maxlength: '1024'});
+
+  $(title)              .text(titleContent);
+
+  $(cancelButton)       .html(`<i class="fa fa-times fa-fw" aria-hidden="true"></i>`);
+  $(sendButton)         .html(`<i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i>`);
+
+  $(veil)               .appendTo('body');
+  $(popup)              .appendTo('body');
+
+  $(title)              .appendTo(popup);
+  $(description)        .appendTo(popup);
   $(sendButton)         .appendTo(popup);
   $(cancelButton)       .appendTo(popup);
 }
@@ -269,34 +301,29 @@ function updateFilesList(service, callback)
 {
   $.ajax(
   {
-    type: 'PUT', timeout: 2000, dataType: 'JSON', data: { service: service }, url: '/service/get-files-list', success: function(){},
-    error: function(xhr, status, error){ printError(xhr.responseJSON.message); }
+    type: 'PUT', timeout: 2000, dataType: 'JSON', data: { service: service }, url: '/service/get-files-list', success: () => {},
+    error: (xhr, status, error) => { printError(xhr.responseJSON.message); }
                 
   }).done((json) =>
-  {
-    if(json['result'] == false) printError('Impossible de mettre à jour la liste des fichiers');
-    
-    else
+  {   
+    var x = 0;
+
+    var loop = (file) =>
     {
-      var x = 0;
-
-      var loop = function(file)
+      if(!document.getElementById(file['uuid']))
       {
-        if(!document.getElementById(file['uuid']))
-        {
-          x  % 2 == 0 ?
-          $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-odd'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table')):
-          $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-even'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
+        x  % 2 == 0 ?
+        $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-odd'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account hide-1x hide-2x hide-3x'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'></td></tr>`).appendTo(document.getElementById('service-main-block-table')):
+        $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-even'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account hide-1x hide-2x hide-3x'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
   
-          if(json['rights']['download_files'] == 1) $('<i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
-          if(json['rights']['remove_files'] == 1) $('<i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
-        }
-
-        Object.keys(json['files'])[x += 1] != undefined ? loop(json['files'][Object.keys(json['files'])[x]]) : callback();
+        if(json['rights']['download_files'] == 1) $('<i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
+        if(json['rights']['remove_files'] == 1) $('<i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
       }
 
-      json['files'].length > 0 ? loop(json['files'][Object.keys(json['files'])[x]]) : printMessage('Aucun fichier associé à ce service pour le moment.');
+      Object.keys(json['files'])[x += 1] != undefined ? loop(json['files'][Object.keys(json['files'])[x]]) : callback();
     }
+
+    json['files'].length > 0 ? loop(json['files'][Object.keys(json['files'])[x]]) : printMessage('Aucun fichier associé à ce service pour le moment.');
   });
 }
 

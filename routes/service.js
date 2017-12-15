@@ -28,7 +28,7 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  res.render('services', { location: 'services', services: require('../json/services') });
+  res.render('services', { navigationLocation: 'services', asideLocation: '', services: require('../json/services') });
 });
 
 /****************************************************************************************************/
@@ -39,15 +39,15 @@ router.get('/:service', (req, res) =>
 
   accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
   {
-    if(rightsOrFalse == false) res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+    if(rightsOrFalse == false) res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
 
     else
     {
       services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), (filesOrFalse, errorStatus, errorCode) =>
       {
         filesOrFalse == false ?
-        res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)} !` }) :
-        res.render('service', { location: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrFalse, files: filesOrFalse });
+        res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+        res.render('service', { navigationLocation: 'services', asideLocation: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrFalse, files: filesOrFalse });
       }); 
     }
   });

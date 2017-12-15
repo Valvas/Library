@@ -1,14 +1,14 @@
 'use strict';
 
-const express = require('express');
+var express = require('express');
 
-let app = express();
+var app = express();
 
 /*****************************************************************************************************************************/
 
-module.exports = function(req, res, next)
+module.exports = (req, res, next) =>
 {
-  req.session.uuid != undefined ? next() : res.render('block', { message: `L'accès à cette page requiert une authentification` });
+  req.session.uuid != undefined ? next() : res.render('block', { message: `Erreur [401] - L'accès à cette page requiert une authentification` });
 };
 
 /*****************************************************************************************************************************/

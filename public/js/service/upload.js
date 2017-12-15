@@ -1,15 +1,15 @@
-window.onload = $(function()
+window.onload = $(() =>
 {
   var socket = io('/service');
   
-  $('body').on('click', '#service-main-block-file-buttons-upload', function()
+  $('body').on('click', '#service-main-block-file-buttons-upload', () =>
   {
     $.ajax(
     {
       type: 'PUT', timeout: 2000, dataType: 'JSON', data: { service: $(document.getElementById('service-main-block')).attr('name') }, url: '/service/get-ext-accepted', success: function(){},
-      error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); }
+      error: (xhr, status, error) => { printError(`ERROR [${xhr['status']}] - ${error} !`); }
                     
-    }).done(function(json)
+    }).done((json) =>
     {
       json.result == false ? printError('Une requête vers le serveur a échoué') :
 
@@ -24,7 +24,7 @@ window.onload = $(function()
 
   /****************************************************************************************************/
 
-  $('body').on('click', '#upload-popup-close', function(event)
+  $('body').on('click', '#upload-popup-close', (event) =>
   {
     if(document.getElementById('upload-popup')) $(document.getElementById('upload-popup')).remove();
     if(document.getElementById('veil')) $(document.getElementById('veil')).remove();
@@ -32,16 +32,16 @@ window.onload = $(function()
 
   /****************************************************************************************************/
 
-  $('body').on('click', '#upload-popup-perform-button', function(event)
+  $('body').on('click', '#upload-popup-perform-button', (event) =>
   {
     $('#upload-popup-input')[0]['files'][0] == undefined ? $('#upload-popup-input').css('border', '1px solid red') :
 
     $.ajax(
     {
       type: 'PUT', timeout: 2000, dataType: 'JSON', data: { service: $(document.getElementById('service-main-block')).attr('name') }, url: '/service/get-ext-accepted', success: function(){},
-      error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); }
+      error: (xhr, status, error) => { printError(`ERROR [${xhr['status']}] - ${error} !`); }
                       
-    }).done(function(json)
+    }).done((json) =>
     {
       if(json.result == false) printError('Une requête vers le serveur a échoué');
 
@@ -70,7 +70,7 @@ window.onload = $(function()
             
             $.ajax(
             {
-              type: 'POST', timeout: 2000, data: data, processData: false, contentType: false, url: '/service/post-new-file', success: function(){},
+              type: 'POST', timeout: 2000, data: data, processData: false, contentType: false, url: '/service/post-new-file', success: () => {},
               error: (xhr, status, error) => { printError(xhr.responseJSON.message); }
                                 
             }).done((json) =>
@@ -90,7 +90,7 @@ window.onload = $(function()
 
   /****************************************************************************************************/
 
-  $('body').on('click', '#upload-popup-input', function()
+  $('body').on('click', '#upload-popup-input', () =>
   {
     $('#upload-popup-input').css('border', '1px solid black');
     $('#upload-popup-error-message').remove();

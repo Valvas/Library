@@ -1,63 +1,57 @@
 'use strict';
 
-let constants   = require('../constants');
-let config      = require('../../json/config');
-let SQLSelect   = require('../database/select');
+var params                = require(`${__root}/json/config`);
+var services              = require(`${__root}/json/services`);
+var constants             = require(`${__root}/functions/constants`);
+var databaseManager       = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-/**
- * Get a JSON object with the rights toward given service for given account
- * @arg {String} serviceName - the key associated to the service from the JSON file "services.json"
- * @arg {String} accountUUID - the UUID associated to the account
- * @arg {Object} SQLConnector - a SQL connector to perform queries to the database
- * @return {Boolean}
- */
-module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, SQLConnector, callback)
+module.exports.getUserRightsTowardsService = (serviceName, accountUUID, databaseConnector, callback) =>
 {
-  if(serviceName == undefined || accountUUID == undefined || SQLConnector == undefined) callback(false, 406, constants.MISSING_DATA_IN_REQUEST);
+  if(serviceName == undefined || accountUUID == undefined || databaseConnector == undefined) callback(false, 406, constants.MISSING_DATA_IN_REQUEST);
 
   else
   {
-    !(serviceName in require('../../json/services')) ? callback(false, 404, constants.SERVICE_NOT_FOUND) :
+    !(serviceName in services) ? callback(false, 404, constants.SERVICE_NOT_FOUND) :
 
-    SQLSelect.SQLSelectQuery(
+    databaseManager.selectQuery(
     {
-      "databaseName": config.database.library_database,
-      "tableName": config.database.rights_table,
+      'databaseName': params.database.name,
+      'tableName': params.database.tables.rights,
       
-      "args": 
+      'args': 
       { 
-        "0": "*" 
+        '0': '*' 
       },
       
-      "where":
+      'where':
       {
-        "AND":
+        'AND':
         {
-          "=":
+          '=':
           {
-            "0":
+            '0':
             {
-              "key": "account",
-              "value": accountUUID
+              'key': 'account',
+              'value': accountUUID
             },
 
-            "1":
+            '1':
             {
-              "key": "service",
-              "value": serviceName
+              'key': 'service',
+              'value': serviceName
             }
           }
         }
       }
-    }, SQLConnector, function(trueOrFalse, rightsObjectOrErrorCode)
+    }, databaseConnector, (boolean, rightsOrErrorMessage) =>
     {
-      if(trueOrFalse == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+      if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
       
       else
       { 
-        rightsObjectOrErrorCode.length == 0 ? callback(false, 403, constants.UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(rightsObjectOrErrorCode[0]);
+        rightsOrErrorMessage.length == 0 ? callback(false, 403, constants.UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(rightsOrErrorMessage[0]);
       }
     });
   }
@@ -65,45 +59,42 @@ module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, 
 
 /****************************************************************************************************/
 
-/**
- * Get a boolean which is true if user is admin and false if he is not.
- * @arg {String} accountUUID - the UUID associated to the account to check
- * @arg {Object} SQLConnector - a SQL connector ro perform queries to the database
- * @return {Boolean}
- */
-module.exports.checkIfUserIsAdmin = function(accountUUID, SQLConnector, callback)
+module.exports.checkIfUserIsAdmin = (accountUUID, databaseConnector, callback) =>
 {
-  typeof(accountUUID) != 'string' || SQLConnector == undefined ? callback(false, constants.MISSING_DATA_IN_REQUEST) :
+  typeof(accountUUID) != 'string' || databaseConnector == undefined ? callback(false, 406, constants.MISSING_DATA_IN_REQUEST) :
 
-  SQLSelect.SQLSelectQuery(
+  databaseManager.selectQuery(
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.auth_table,
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.accounts,
   
-    "args": { "0": "is_admin" },
+    'args': 
+    { 
+      '0': 'is_admin' 
+    },
   
-    "where":
+    'where':
     {
-      "=":
+      '=':
       {
-        "0":
+        '0':
         {
-          "key": "uuid",
-          "value": accountUUID
+          'key': 'uuid',
+          'value': accountUUID
         }
       }
     }
-  }, SQLConnector, function(trueOrFalse, rowsOrError)
+  }, databaseConnector, (boolean, adminStatusOrErrorMessage) =>
   {
-    if(trueOrFalse == false) callback(false, constants.SQL_SERVER_ERROR);
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
     else
     {
-      if(rowsOrError.length == 0) callback(false, constants.ACCOUNT_NOT_FOUND);
+      if(adminStatusOrErrorMessage.length == 0) callback(false, 404, constants.ACCOUNT_NOT_FOUND);
       
       else
       {
-        rowsOrError[0].is_admin == 0 ? callback(false, constants.USER_IS_NOT_ADMIN) : callback(true, constants.USER_IS_ADMIN);
+        adminStatusOrErrorMessage[0].is_admin == 0 ? callback(false, 403, constants.USER_IS_NOT_ADMIN) : callback(true);
       }
     }
   });

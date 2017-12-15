@@ -1,8 +1,11 @@
 {
   "aside":
   {
+    "home": "Accueil",
     "users": "Utilisateurs",
     "services": "Services",
+    "rights": "Droits",
+    "reports": "Rapports",
     "params": "Paramètres"
   }
 }

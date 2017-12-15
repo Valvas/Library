@@ -8,7 +8,7 @@
   <body class='private-section-body'>
     <% include include/menu.ejs %>
     <% include include/aside.ejs %><!-- @SuppressWhitespace
-    --><div class='file-main-block'>
+    --><div id='<%= file['uuid'] %>' name='<%= file['service'] %>' class='file-main-block'>
         <a href='/service/<%= file['service'] %>' class='return'><i class="fa fa-angle-left icon" aria-hidden="true"></i><div class='label'>Retour</div></a>
         <div class='info'>
           <div class='name'>Nom : <%= file['name'] %>.<%= file['type'] %></div>
@@ -24,5 +24,7 @@
         </div>
     </div>
     <% include include/scripts.ejs %>
+    <script src='/js/file/download.js'></script>
+    <script src='/js/file/delete.js'></script>
   </body>
 </html>

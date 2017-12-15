@@ -27,5 +27,9 @@
   "10026": "rapport non trouvé",
   "10027": "vous n'êtes pas autorisé(e) à accéder à ce fichier",
   "10028": "échec de la création d'un dossier",
-  "10029": "type de fichier non-autorisé"
+  "10029": "type de fichier non-autorisé",
+  "10030": "le cryptage d'une donnée a échoué",
+  "10031": "votre compte n'est pas activé",
+  "10032": "votre compte est actuellement suspendu",
+  "10033": "commentaire introuvable"
 }

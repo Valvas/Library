@@ -1,41 +1,49 @@
-window.onload = $(function()
+window.onload = $(() =>
 {
   var socket = io('/service');
   
-  socket.on('connect', function() 
+  socket.on('connect', () =>
   {
     socket.emit('join_service', $(document.getElementById('service-main-block')).attr('name'));
   });
   
-  socket.on('new_file', function()
+  socket.on('new_file', () =>
   {
-    updateFilesList($(document.getElementById('service-main-block')).attr('name'), function(){});
+    updateFilesList($(document.getElementById('service-main-block')).attr('name'), () => {});
   });
 
-  socket.on('delete_file', function(fileUUID)
+  socket.on('delete_file', (fileUUID) =>
   {
     printSuccess('Un fichier a été supprimé.');
 
-    $(document.getElementById(fileUUID)).fadeOut(1000, function() 
-    { 
-      $(document.getElementById(fileUUID)).remove();
+    if(!$('.service-main-block-table'))
+    {
 
-      var files = document.getElementsByName('service-main-block-file');
+    }
 
-      if(files.length == 0) printMessage('Aucun fichier associé à ce service pour le moment.');
-
-      var i = 0;
-
-      var loop = function()
-      {
-        i % 2 == 0 ? $(files[i]).attr('class', 'service-main-block-file-odd') : $(files[i]).attr('class', 'service-main-block-file-even');
-
-        i++;
-
-        i < files.length ? loop() : updateFilesList($(document.getElementById('service-main-block')).attr('name'), function(){});
-      }
-
-      loop();
-    });
+    else
+    {
+      $(document.getElementById(fileUUID)).fadeOut(1000, () =>
+      { 
+        $(document.getElementById(fileUUID)).remove();
+  
+        var files = document.getElementsByName('service-main-block-file');
+  
+        if(files.length == 0) printMessage('Aucun fichier associé à ce service pour le moment.');
+  
+        var i = 0;
+  
+        var loop = () =>
+        {
+          i % 2 == 0 ? $(files[i]).attr('class', 'service-main-block-file-odd') : $(files[i]).attr('class', 'service-main-block-file-even');
+  
+          i++;
+  
+          i < files.length ? loop() : updateFilesList($(document.getElementById('service-main-block')).attr('name'), () => {});
+        }
+  
+        loop();
+      });
+    }
   });
 });

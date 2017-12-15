@@ -1,15 +1,9 @@
 'use strict';
 
-var encrypter     = require('../encryption');
-var rights        = require('../../json/rights');
-var config        = require('../../json/config');
-var accounts      = require('../../json/accounts');
-
-var SQLSelect     = require('../database/select');
-var SQLInsert     = require('../database/insert');
-var SQLDelete     = require('../database/delete');
-
 var params              = require(`${__root}/json/config`);
+var rights              = require(`${__root}/json/rights`);
+var accounts            = require(`${__root}/json/accounts`);
+var encrypter           = require(`${__root}/functions/encryption`);
 var databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
@@ -88,8 +82,8 @@ module.exports.createAccounts = (databaseConnector, callback) =>
                   else
                   {
                     passwordOrErrorCode.length == 0 ?
-                    console.log(`[${config.database.library_database}][${config.database.auth_table}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with password : "${clearPassword}" !`) :
-                    console.log(`[${config.database.library_database}][${config.database.auth_table}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with unchanged password !`);
+                    console.log(`[${params.database.name}][${params.database.tables.accounts}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with password : "${clearPassword}" !`) :
+                    console.log(`[${params.database.name}][${params.database.tables.accounts}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with unchanged password !`);
                     
                     Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
                   }
@@ -104,7 +98,7 @@ module.exports.createAccounts = (databaseConnector, callback) =>
 
   if(Object.keys(accounts)[x] == undefined)
   {
-    console.log(`[${config.database.library_database}][${config.database.auth_table}][INFO] : no accounts to create !`);
+    console.log(`[${params.database.name}][${params.database.tables.accounts}][INFO] : no accounts to create !`);
     callback();
   }
   
@@ -185,7 +179,7 @@ module.exports.createRights = (databaseConnector, callback) =>
 
   var rightsCreationLoop = () =>
   {
-    SQLSelect.SQLSelectQuery(
+    databaseManager.selectQuery(
     {
       'databaseName': params.database.name,
       'tableName': params.database.tables.accounts,

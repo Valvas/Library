@@ -25,7 +25,7 @@ window.onload = $(function()
 
   $('body').on('click', '#report-popup-cancel', (event) =>
   {
-    $('body').css('overflow', 'auto');
+    $('body').css('overflow', '');
     $('#report-popup').remove();
     $('#veil').remove();
   });
@@ -58,7 +58,7 @@ window.onload = $(function()
     {
       $.ajax(
       {
-        type: 'POST', timeout: 2000, dataType: 'JSON', data: { reportType: $('#report-popup-list').val(), reportSubject: $('#report-popup-subject').val(), reportContent: $('#report-popup-description').val() }, url: '/reports', success: function(){},
+        type: 'POST', timeout: 2000, dataType: 'JSON', data: { reportType: $('#report-popup-list').val(), reportSubject: $('#report-popup-subject').val(), reportContent: $('#report-popup-description').val() }, url: '/reports', success: () => {},
         error: (xhr, status, error) => printError(JSON.parse(xhr.responseText).message)
                       
       }).done((json) =>

@@ -1,10 +1,10 @@
 <nav id='nav-menu' class='nav-menu'>
   <p class='nav-menu-title'>LIBRARY</p><!-- @SuppressWhitespace
    --><div id='nav-menu-elements-container' class='nav-menu-elements-container'>
-        <a href='/home' <% if(typeof(location) !== 'undefined' && location == 'home') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='home-link' name='home'>Accueil</a><!-- @SuppressWhitespace
-        --><a href='/service' <% if(typeof(location) !== 'undefined' && location == 'services') { %> class='nav-menu-element-selected nav-menu-element-responsive' <% } else { %> class='nav-menu-element nav-menu-element-responsive' <% } %> id='services-link' name='services'>Services</a><!-- @SuppressWhitespace
-        --><a href='/reports' <% if(typeof(location) !== 'undefined' && location == 'reports') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='reports-link' name='services'>Rapports</a><!-- @SuppressWhitespace
-        --><a href='/admin' <% if(typeof(location) !== 'undefined' && location == 'admin') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='admin-link' name='admin'>Administration</a><!-- @SuppressWhitespace
+        <a href='/home' <% if(typeof(navigationLocation) !== 'undefined' && navigationLocation == 'home') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='home-link' name='home'>Accueil</a><!-- @SuppressWhitespace
+        --><a href='/service' <% if(typeof(navigationLocation) !== 'undefined' && navigationLocation == 'services') { %> class='nav-menu-element-selected nav-menu-element-responsive' <% } else { %> class='nav-menu-element nav-menu-element-responsive' <% } %> id='services-link' name='services'>Services</a><!-- @SuppressWhitespace
+        --><a href='/reports' <% if(typeof(navigationLocation) !== 'undefined' && navigationLocation == 'reports') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='reports-link' name='services'>Rapports</a><!-- @SuppressWhitespace
+        --><a href='/admin/home' <% if(typeof(navigationLocation) !== 'undefined' && navigationLocation == 'admin') { %> class='nav-menu-element-selected' <% } else { %> class='nav-menu-element' <% } %> id='admin-link' name='admin'>Administration</a><!-- @SuppressWhitespace
         --><a href='/logout' class='nav-menu-element' id='logout-link' name='logout'>Déconnexion</a>
       </div>
     <i id='report-button' class='fa fa-exclamation nav-menu-element-bug-report' aria-hidden="true"></i>

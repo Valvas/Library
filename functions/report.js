@@ -1,54 +1,60 @@
 'use strict';
 
-let SQLManager           = require('./database');
-let constants            = require('./constants');
-let config               = require('../json/config');
+var logs                      = require(`${__root}/json/logs`);
+var params                    = require(`${__root}/json/config`);
+var errors                    = require(`${__root}/json/errors`);
+var logGet                    = require(`${__root}/functions/logs/get`);
+var constants                 = require(`${__root}/functions/constants`);
+var dateFormat                = require(`${__root}/functions/format/date`);
+var reportsGet                = require(`${__root}/functions/reports/get`);
+var commentGet                = require(`${__root}/functions/comments/get`);
+var accountGet                = require(`${__root}/functions/accounts/get`);
+var databaseManager           = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-module.exports.getReports = (SQLConnector, callback) =>
+module.exports.getReports = (databaseConnector, callback) =>
 {
-  SQLManager.SQLSelectQuery(
+  databaseManager.selectQuery(
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.reports_table,
-
-    "args":
-    {
-      "0": "*"
-    },
-
-    "where":
-    {
-
-    }
-  }, SQLConnector, (trueOrFalse, rowsOrErrorMessage) =>
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.reports,
+    'args': { '0': '*' },
+    'where': { }
+  }, databaseConnector, (boolean, reportsOrErrorMessage) =>
   {
-    if(trueOrFalse == false) callback(false, constants.SQL_SERVER_ERROR);
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
-    let obj = {};
-    let x = 0;
-
-    let loop = function()
+    else
     {
-      obj[x] = {};
+      var x = 0;
+      var obj = {};
 
-      let date = new Date(rowsOrErrorMessage[x].report_date * 1000);
+      var reportLoop = () =>
+      {
+        obj[x] = {};
+ 
+        obj[x]['report_uuid'] = reportsOrErrorMessage[x]['uuid'];
+        obj[x]['report_type'] = reportsOrErrorMessage[x]['report_type'];
+        obj[x]['report_status'] = reportsOrErrorMessage[x]['report_status'];
+        obj[x]['report_subject'] = reportsOrErrorMessage[x]['report_subject'];
+        obj[x]['report_content'] = reportsOrErrorMessage[x]['report_content'];
 
-      rowsOrErrorMessage[x]['report_content'].length > 64 ?
-      obj[x]['report_content'] = `${rowsOrErrorMessage[x]['report_content'].slice(0, 60)}...` :
-      obj[x]['report_content'] = rowsOrErrorMessage[x]['report_content'];
+        dateFormat.getStringifyDateFromTimestamp(reportsOrErrorMessage[x]['report_date'], (dateOrFalse, errorStatus, errorCode) =>
+        {
+          if(dateOrFalse == false) callback(false, errorStatus, errorCode);
 
-      obj[x]['report_uuid'] = rowsOrErrorMessage[x]['uuid'];
-      obj[x]['report_type'] = rowsOrErrorMessage[x]['report_type'];
-      obj[x]['report_subject'] = rowsOrErrorMessage[x]['report_subject'];
-      obj[x]['report_status'] = rowsOrErrorMessage[x]['report_status'];
-      obj[x]['report_date'] = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+          else
+          {
+            obj[x]['report_date'] = dateOrFalse;
 
-      rowsOrErrorMessage[x += 1] != undefined ? loop() : callback(true, obj);
+            reportsOrErrorMessage[x += 1] == undefined ? callback(obj) : reportLoop();
+          }
+        });
+      }
+
+      reportsOrErrorMessage.length == 0 ? callback({}) : reportLoop();
     }
-
-    rowsOrErrorMessage.length == 0 ? callback(true, {}) : loop();
   });
 }
 
@@ -56,123 +62,150 @@ module.exports.getReports = (SQLConnector, callback) =>
 
 module.exports.getReport = (reportUUID, databaseConnector, callback) =>
 {
-  SQLManager.SQLSelectQuery(
+  reportsGet.getReportUsingUUID(reportUUID, databaseConnector, (reportOrFalse, errorStatus, errorCode) =>
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.reports_table,
-
-    "args":
-    {
-      "0": "*"
-    },
-
-    "where":
-    {
-      "=":
-      {
-        "0":
-        {
-          "key": "uuid",
-          "value": reportUUID
-        }
-      }
-    }
-  }, databaseConnector, (boolean, rowsOrErrorMessage) =>
-  {
-    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+    if(reportOrFalse == false) callback(false, errorStatus, errorCode);
 
     else
     {
-      if(rowsOrErrorMessage.length == 0) callback(false, 404, constants.REPORT_NOT_FOUND);
-      
-      else
+      dateFormat.getStringifyDateFromTimestamp(reportOrFalse['report_date'], (dateOrFalse, errorStatus, errorCode) =>
       {
-        var obj = {};
+        if(dateOrFalse == false) callback(false, errorStatus, errorCode);
 
-        var date = new Date(rowsOrErrorMessage[0]['report_date'] * 1000);
-
-        rowsOrErrorMessage[0]['report_date'] = `${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}/${date.getMonth() + 1 < 10 ? '0' + date.getMonth() + 1 : date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours() < 10 ? '0' + date.getHours() : date.getHours()}:${date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()}:${date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()}`;
-
-        obj = rowsOrErrorMessage[0];
-
-        SQLManager.SQLSelectQuery(
+        else
         {
-          "databaseName": config.database.library_database,
-          "tableName": config.database.report_comments_table,
-        
-          "args":
+          reportOrFalse['report_date'] = dateOrFalse;
+
+          var obj = reportOrFalse;
+
+          logGet.getReportLogs(obj.id, databaseConnector, (logsOrFalse, errorStatus, errorCode) =>
           {
-            "0": "*"
-          },
-        
-          "where":
-          {
-            "=":
+            var x = 0;
+            obj.logs = {};
+
+            var logsLoop = () =>
             {
-              "0":
+              accountGet.getAccountUsingID(logsOrFalse[x].account, databaseConnector, (accountOrErrorMessage, errorStatus, errorCode) =>
               {
-                "key": "report",
-                "value": reportUUID
-              }
+                var array = [];
+                
+                obj.logs[x] = {};
+
+                dateFormat.getStringifyDateFromTimestamp(logsOrFalse[x]['date'], (dateOrFalse, errorStatus, errorCode) =>
+                {
+                  if(dateOrFalse == false) callback(false, errorStatus, errorCode);
+
+                  else
+                  {
+                    obj.logs[x]['type'] = logsOrFalse[x]['type'];
+                    obj.logs[x]['date'] = dateOrFalse;
+
+                    var label = logs.report_logs[obj.logs[x]['type']];
+
+                    var label = logs.report_logs[obj.logs[x]['type']];
+                    
+                    var y = -1;
+    
+                    accountOrErrorMessage == false ? array = ['??????', '??????'] : array = [accountOrErrorMessage.firstname, accountOrErrorMessage.lastname.toUpperCase()];
+
+                    label = label.replace(/VALUE/g, () => { return array[y += 1]; });
+
+                    obj.logs[x]['label'] = label;
+
+                    if(obj.logs[x]['type'] == 1)
+                    {
+                      commentGet.getReportCommentUsingLogID(logsOrFalse[x]['id'], databaseConnector, (commentOrFalse, errorStatus, errorCode) =>
+                      {
+                        obj.logs[x]['comment'] = {};
+
+                        if(commentOrFalse == false)
+                        {
+                          obj.logs[x]['comment']['message'] = errors[errorCode];
+                        }
+
+                        else
+                        {
+                          obj.logs[x]['comment']['message'] = commentOrFalse.content;
+                        }
+
+                        obj.logs[x]['comment']['read'] = commentOrFalse.seen;
+
+                        logsOrFalse[x += 1] == undefined ? callback(obj) : logsLoop();
+                      });
+                    }
+
+                    else
+                    {
+                      logsOrFalse[x += 1] == undefined ? callback(obj) : logsLoop();
+                    }
+                  }
+                });
+              });
             }
-          }
-        }, databaseConnector, (boolean, commentsOrErrorMessage) =>
-        {
-          if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
-          else
-          {
-            obj.comments = {};
-
-            if(commentsOrErrorMessage.length == 0) callback(obj);
-
-            else
-            {
-              var x = 0;
-
-              var commentsLoop = () =>
-              {
-                var date = new Date(commentsOrErrorMessage[x]['date']);
-
-                commentsOrErrorMessage[x]['date'] = `${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}/${date.getMonth() + 1 < 10 ? '0' + date.getMonth() + 1 : date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours() < 10 ? '0' + date.getHours() : date.getHours()}:${date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()}:${date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()}`;
-
-                obj.comments[x] = commentsOrErrorMessage[x];
-
-                commentsOrErrorMessage[x += 1] == undefined ? callback(obj) : commentsLoop();
-              }
-
-              commentsLoop();
-            }
-          }
-        });
-      }
+            logsOrFalse.length == 0 ? callback({}) : logsLoop();
+          });
+        }
+      });
     }
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.saveReport = (reportType, reportSubject, reportContent, accountUUID, SQLConnector, callback) =>
+module.exports.addComment = (reportUUID, comment, accountUUID, databaseConnector, callback) =>
 {
-  SQLManager.SQLInsertQuery(
+  reportUUID == undefined || comment == undefined || accountUUID == undefined || databaseConnector == undefined ?
+
+  callback(false, 406, constants.MISSING_DATA_IN_REQUEST) :
+
+  accountGet.getAccountUsingUUID(accountUUID, databaseConnector, (accountOrFalse, errorStatus, errorCode) =>
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.reports_table,
+    accountOrFalse == false ? callback(false, errorStatus, errorCode) :
 
-    "uuid": true,
-
-    "args":
+    reportsGet.getReportUsingUUID(reportUUID, databaseConnector, (reportOrFalse, errorStatus, errorCode) =>
     {
-      "report_type": reportType,
-      "report_subject": reportSubject,
-      "report_content": reportContent,
-      "report_account": accountUUID,
-      "report_date": new Date(Date.now()) / 1000,
-      "report_status": 0
-    }
-  }, SQLConnector, (trueOrFalse, uuidOrErrorMessage) =>
-  {
-    trueOrFalse ? callback(true, uuidOrErrorMessage) : callback(false, constants.SQL_SERVER_ERROR);
+      reportOrFalse == false ? callback(false, errorStatus, errorCode) :
+
+      databaseManager.insertQuery(
+      {
+        'databaseName': params.database.name,
+        'tableName': params.database.tables.report_logs,
+            
+        'uuid': false,
+            
+        'args':
+        {
+          'date': Date.now(),
+          'account': accountOrFalse.id,
+          'type': 1,
+          'report': reportOrFalse.id
+        }
+      }, databaseConnector, (boolean, insertedIdOrErrorMessage) =>
+      {
+        boolean == false ? callback(false, 500, constants.SQL_SERVER_ERROR) :
+    
+        databaseManager.insertQuery(
+        {
+          'databaseName': params.database.name,
+          'tableName': params.database.tables.report_comments,
+              
+          'uuid': false,
+              
+          'args':
+          {
+            'date': Date.now(),
+            'account': accountOrFalse.id,
+            'log': insertedIdOrErrorMessage,
+            'content': comment,
+            'seen': 0
+          }
+        }, databaseConnector, (boolean, insertedIdOrErrorMessage) =>
+        {
+          boolean ? callback(true) : callback(false, 500, constants.SQL_SERVER_ERROR);
+        });
+      });
+    });
   });
 }
 

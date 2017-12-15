@@ -59,11 +59,27 @@ TABLE
   font-family:raleway-italic;
 }
 
+.reports-main-block .reports-table .reports-table-legend-row.admin
+{
+  background-color:#E84E4F;
+}
+
+.reports-main-block .admin-warning
+{
+  padding:1%;
+  color:#FFFFFF;
+  text-align:center;
+  border-radius:8px;
+  font-family:barlow;
+  margin:2.5% 0 2.5% 0;
+  background-color:#E84E4F;
+}
+
 .reports-main-block .reports-table td
 {
+  font-family:barlow;
   word-wrap:break-word;
   overflow-wrap:break-word;
-  font-family:raleway-light;
 }
 
 .reports-main-block .reports-table tr.report
@@ -90,6 +106,7 @@ TABLE
 .reports-main-block .report-detail .subject
 {
   font-size:x-large;
+  word-wrap:break-word;
   font-family:raleway-regular;
 }
 
@@ -128,6 +145,21 @@ TABLE
   font-family:raleway-light;
 }
 
+.reports-main-block .report-detail .comment-button
+{
+  padding:2%;
+  border:none;
+  cursor:pointer;
+  color:#FFFFFF;
+  font-family:barlow;
+  background-color:#77B5FE;
+}
+
+.reports-main-block .report-detail .comment-button:hover
+{
+  color:#000000;
+}
+
 .reports-main-block .report-detail .comments-block
 {
   width:90%;
@@ -156,19 +188,38 @@ TABLE
   background-color:#778899;
 }
 
-.reports-main-block .report-detail .comments-block .comment .date
+.reports-main-block .report-detail .comments-block .log-0{ background-color:#77B5FE; }
+.reports-main-block .report-detail .comments-block .log-1{ background-color:#CCC79A; }
+.reports-main-block .report-detail .comments-block .log-2{ background-color:#77B5FE; }
+.reports-main-block .report-detail .comments-block .log-3{ background-color:#E84E4F; }
+.reports-main-block .report-detail .comments-block .log-4{ background-color:#7FDD4C; }
+
+.reports-main-block .report-detail .comments-block .comment .log-date
 {
   margin:0;
-  padding:2%;
   color:#223344;
+  font-size:large;
+  font-family:barlow;
+  padding:1% 2.5% 1% 2.5%;
 }
 
-.reports-main-block .report-detail .comments-block .comment .content
+.reports-main-block .report-detail .comments-block .comment .log-label
 {
   margin:0;
-  padding:2%;
+  color:#223344;
+  font-size:large;
   text-align:justify;
+  padding:1% 2.5% 1% 2.5%;
   font-family:raleway-light;
+}
+
+.reports-main-block .report-detail .comments-block .comment .log-message
+{
+  margin:0 0 0 5%;
+  color:#334455;
+  text-align:justify;
+  padding:1% 2.5% 2.5% 2.5%;
+  font-family:raleway-italic;
 }
 
 /****************************************************************************************************/
@@ -188,6 +239,8 @@ TABLE
   .reports-main-block .report-detail .label{ margin:2.5% 2.5% 2.5% 5%; display:inline-block; }
   .reports-main-block .report-detail .date{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
   .reports-main-block .report-detail .status{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
+
+  .reports-main-block .report-detail .comment-button{ width:56%; margin:2.5% 0 2.5% 40%; }
 }
 
 /****************************************************************************************************/
@@ -207,6 +260,8 @@ TABLE
   .reports-main-block .report-detail .label{ margin:2.5% 2.5% 2.5% 5%; display:inline-block; }
   .reports-main-block .report-detail .date{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
   .reports-main-block .report-detail .status{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
+
+  .reports-main-block .report-detail .comment-button{ width:40%; margin:2.5% 0 2.5% 60%; }
 }
 
 /****************************************************************************************************/
@@ -226,6 +281,8 @@ TABLE
   .reports-main-block .report-detail .label{ margin:2.5% 2.5% 2.5% 5%; display:inline-block; }
   .reports-main-block .report-detail .date{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
   .reports-main-block .report-detail .status{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
+
+  .reports-main-block .report-detail .comment-button{ width:40%; margin:2.5% 0 2.5% 60%; }
 }
 
 /****************************************************************************************************/
@@ -246,6 +303,8 @@ TABLE
   .reports-main-block .report-detail .date{ width:80%; margin:2.5% 5% 2.5% 10%; }
   .reports-main-block .report-detail .subject{ width:60%; margin:5% 2.5% 5% 5%; display:inline-block; }
   .reports-main-block .report-detail .status{ width:25%; margin:5% 5% 2.5% 2.5%; text-align:right; display:inline-block; vertical-align:top; }
+
+  .reports-main-block .report-detail .comment-button{ width:30%; margin:2.5% 0 2.5% 70%; padding:1%; }
 }
 
 /****************************************************************************************************/
@@ -266,6 +325,8 @@ TABLE
   .reports-main-block .report-detail .date{ width:80%; margin:2.5% 5% 2.5% 10%; }
   .reports-main-block .report-detail .subject{ width:60%; margin:5% 2.5% 5% 5%; display:inline-block; }
   .reports-main-block .report-detail .status{ width:25%; margin:5% 5% 2.5% 2.5%; text-align:right; display:inline-block; vertical-align:top; }
+
+  .reports-main-block .report-detail .comment-button{ width:30%; margin:2.5% 0 2.5% 70%; padding:1%; }
 }
 
 /****************************************************************************************************/
@@ -286,6 +347,8 @@ TABLE
   .reports-main-block .report-detail .date{ width:80%; margin:2.5% 5% 2.5% 10%; }
   .reports-main-block .report-detail .subject{ width:60%; margin:5% 2.5% 5% 5%; display:inline-block; }
   .reports-main-block .report-detail .status{ width:25%; margin:5% 5% 2.5% 2.5%; text-align:right; display:inline-block; vertical-align:top; }
+
+  .reports-main-block .report-detail .comment-button{ width:25%; margin:2.5% 0 2.5% 75%; padding:1%; }
 }
 
 /****************************************************************************************************

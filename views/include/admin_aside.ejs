@@ -1,6 +1,6 @@
 <div id='admin-aside' class='aside-navigation-block'>
   <% for(var key in links){ %>
-    <% if(typeof(location) !== 'undefined' && location == key){ %>
+    <% if(typeof(asideLocation) !== 'undefined' && asideLocation == key){ %>
       <a id='<%= key %>' href='/admin/<%= key %>' class='aside-navigation-block-element-selected'><%= links[key] %></a>
     <% } else{ %>
       <a id='<%= key %>' href='/admin/<%= key %>' class='aside-navigation-block-element'><%= links[key] %></a>

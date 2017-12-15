@@ -17,7 +17,10 @@
     {
       "files": "files",
       "rights": "rights",
-      "accounts": "account"
+      "accounts": "account",
+      "reports": "reports",
+      "report_logs": "report_logs",
+      "report_comments": "report_comments"
     }
   },
 
@@ -31,7 +34,7 @@
   "path_to_admin_logs_storage": "STATIC_admin",
   "path_to_account_logs_storage": "STATIC_account",
 
-  "inactivity-timeout": 300000,
+  "inactivity_timeout": 300000,
 
   "file_ext":
   {

@@ -8,7 +8,7 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  req.session.uuid == undefined ? res.redirect('/') : res.render('home', { navigationLocation: 'home', asideLocation: '', links: require('../json/services'), news: require('../json/news') });
+  res.render('./admin/rights', { links: require('../../json/admin').aside, navigationLocation: 'admin', asideLocation: 'rights' });
 });
 
 /****************************************************************************************************/

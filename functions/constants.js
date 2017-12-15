@@ -31,6 +31,10 @@ const REPORT_NOT_FOUND                                                          
 const UNAUTHORIZED_TO_ACCESS_THIS_FILE                                            = 10027;
 const COULD_NOT_CREATE_FOLDER                                                     = 10028;
 const UNAUTHORIZED_FILE                                                           = 10029;
+const ENCRYPTION_FAILED                                                           = 10030;
+const ACCOUNT_NOT_ACTIVATED                                                       = 10031;
+const ACCOUNT_SUSPENDED                                                           = 10032;
+const COMMENT_NOT_FOUND                                                           = 10033;
 
 /******************************************************************************************
 SUCCESS
@@ -46,6 +50,7 @@ const FILE_ADDED_ON_DISK                                                        
 const AUTHORIZED_TO_ADD_FILES                                                     = 20008;
 const SUCCESS_COPYING_FILE                                                        = 20009;
 const SUCCESS_POSTING_REPORT                                                      = 20010;
+const COMMENT_ADDED                                                               = 20011;
 
 /******************************************************************************************
 EXPORTS
@@ -82,6 +87,10 @@ module.exports =
   UNAUTHORIZED_TO_ACCESS_THIS_FILE: UNAUTHORIZED_TO_ACCESS_THIS_FILE,
   COULD_NOT_CREATE_FOLDER: COULD_NOT_CREATE_FOLDER,
   UNAUTHORIZED_FILE: UNAUTHORIZED_FILE,
+  ENCRYPTION_FAILED: ENCRYPTION_FAILED,
+  ACCOUNT_NOT_ACTIVATED: ACCOUNT_NOT_ACTIVATED,
+  ACCOUNT_SUSPENDED: ACCOUNT_SUSPENDED,
+  COMMENT_NOT_FOUND: COMMENT_NOT_FOUND,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -92,5 +101,6 @@ module.exports =
   FILE_ADDED_ON_DISK: FILE_ADDED_ON_DISK,
   AUTHORIZED_TO_ADD_FILES: AUTHORIZED_TO_ADD_FILES,
   SUCCESS_COPYING_FILE: SUCCESS_COPYING_FILE,
-  SUCCESS_POSTING_REPORT: SUCCESS_POSTING_REPORT
+  SUCCESS_POSTING_REPORT: SUCCESS_POSTING_REPORT,
+  COMMENT_ADDED: COMMENT_ADDED
 }

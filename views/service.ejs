@@ -24,12 +24,7 @@
             <td class='service-main-block-file-type'><%= files[i]['type'] %></td>
             <td class='service-main-block-file-account hide-1x hide-2x hide-3x'><%= files[i]['account'] %></td>
             <td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'>
-              <% if(rights['download_files'] == 1) { %>
-                <i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>
-              <% } %>
-              <% if(rights['remove_files'] == 1) { %>
-                <i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>
-              <% } %>
+              <% if(rights['download_files'] == 1) { %><i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i><% } if(rights['remove_files'] == 1) { %><i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i><% } %>
             </td>
           </tr>
         <% } %>

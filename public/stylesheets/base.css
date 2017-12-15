@@ -12,9 +12,6 @@
 
 .logs-block
 {
-  top:5%;
-  left:20%;
-  width:60%;
   z-index:99;
   position:fixed;
 }
@@ -28,7 +25,7 @@
 
 .error-popup
 {
-  width:100%;
+  width:98%;
   padding:1%;
   margin-top:1%;
   color:#FFFFFF;
@@ -41,7 +38,7 @@
 
 .success-popup
 {
-  width:100%;
+  width:98%;
   padding:1%;
   margin-top:1%;
   color:#FFFFFF;
@@ -54,7 +51,7 @@
 
 .message-popup
 {
-  width:100%;
+  width:98%;
   padding:1%;
   margin-top:1%;
   color:#000000;
@@ -85,3 +82,37 @@
   margin:0;
   background-color:#FFFFFF;
 }
+
+/****************************************************************************************************/
+
+@media (max-width: 639px)
+{
+  .logs-block{ top:10%; left:2.5%; width:95%; }
+}
+
+@media (min-width: 640px) and (max-width: 767px)
+{
+  .logs-block{ top:10%; left:10%; width:80%; }
+}
+
+@media (min-width: 768px) and (max-width: 959px)
+{
+  .logs-block{ top:10%; left:10%; width:80%; }
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+  .logs-block{ top:10%; left:15%; width:70%; }
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+  .logs-block{ top:10%; left:20%; width:60%; }
+}
+
+@media (min-width: 1680px)
+{
+  .logs-block{ top:10%; left:25%; width:50%; }
+}
+
+/****************************************************************************************************/

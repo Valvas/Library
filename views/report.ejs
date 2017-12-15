@@ -5,7 +5,7 @@
     <% include include/menu.ejs %>
     <% include include/aside.ejs %><!-- @SuppressWhitespace
     --><div class='reports-main-block'>
-        <div class='report-detail'>
+        <div id='report-detail' name='<%= report['uuid'] %>' class='report-detail'>
           <div class='subject'><%= report['report_subject'] %></div><!-- @SuppressWhitespace
           --><div class='label'>Statut : </div><!-- @SuppressWhitespace
           --><div style='color:<%= status[report['report_status']]['color'] %>' class='status'><%= status[report['report_status']]['name'] %></div></br>
@@ -15,20 +15,29 @@
           <div class='label'>Description : </div>
           <div class='description'><%= report['report_content'] %></div>
           <div class='comments-block'>
+          <button class='comment-button'>Ajouter un commentaire</button>
           <div class='title'>Avancement : </div>
-          <% if(typeof(report['comments']) !== 'object' || Object.keys(report['comments']).length == 0){ %>
+          <% if(typeof(report['logs']) !== 'object' || Object.keys(report['logs']).length == 0){ %>
           <div class='no-comment'>Aucune mise à jour</div>
           <% } else{ %>
-          <% for(var i = 0; i < Object.keys(report['comments']).length; i++){ console.log(report['comments'])%>
-            <div class='comment'>
-              <div class='date'><%= report['comments'][i]['date'] %></div>
-              <div class='content'><%= report['comments'][i]['content'] %></div>
+          <% for(var i = 0; i < Object.keys(report['logs']).length; i++){ %>
+            <div class='comment log-<%= report['logs'][i]['type'] %>'>
+              <div class='log-date'><%= report['logs'][i]['date'] %></div>
+              <div class='log-label'><%= report['logs'][i]['label'] %></div>
+              <% if(typeof(report['logs'][i]['comment']) !== 'undefined'){ %>
+                <div class='log-message'><%= report['logs'][i]['comment']['message'] %></div>
+                <% if(report['logs'][i]['comment']['read'] == 0){ %>
+                  <div><i class="fa fa-close"></i>Non-lu</div>
+                <% } else{ %>
+                  <div><i class="fa fa-check" aria-hidden="true"></i>Lu</div>
+                <% } %>
+              <% } %>
             </div>
           <% } } %>
           </div>
         </div>
       </div>
     <% include include/scripts.ejs %>
-    <script src='/js/report/filters.js'></script>
+    <script src='/js/report/comment.js'></script>
   </body>
 </html>

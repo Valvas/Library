@@ -1,65 +1,65 @@
 'use strict';
 
-let constants                  = require('../constants');
-let config                     = require('../../json/config');
-let SQLSelect                  = require('../database/select');
+var params                     = require(`${__root}/json/config`);
+var constants                  = require(`${__root}/functions/constants`);
+var databaseManager            = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-module.exports.getAccountList = function(SQLConnector, callback)
+module.exports.getAccountList = (databaseConnector, callback) =>
 {
-  SQLSelect.SQLSelectQuery(
+  databaseManager.selectQuery(
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.auth_table,
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.accounts,
 
-    "args":
+    'args':
     {
-      "0": "*"
+      '0': '*'
     },
 
-    "where":
+    'where':
     {
 
     }
-  }, SQLConnector, (trueOrFalse, rowsOrErrorCode) =>
+  }, databaseConnector, (boolean, accountsOrErrorCode) =>
   {
-    callback(trueOrFalse, rowsOrErrorCode);
+    boolean ? callback(accountsOrErrorCode) : callback(false, 500, constants.SQL_SERVER_ERROR);
   });
 };
 
 /****************************************************************************************************/
 
-module.exports.getAccountFromUUID = function(accountUUID, SQLConnector, callback)
+module.exports.getAccountFromUUID = (accountUUID, databaseConnector, callback) =>
 {
-  SQLSelect.SQLSelectQuery(
+  databaseManager.selectQuery(
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.auth_table,
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.accounts,
   
-    "args":
+    'args':
     {
-      "0": "*"
+      '0': '*'
     },
   
-    "where":
+    'where':
     {
-      "=":
+      '=':
       {
-        "0":
+        '0':
         {
-          "key": "uuid",
-          "value": accountUUID
+          'key': 'uuid',
+          'value': accountUUID
         }
       }
     }
-  }, SQLConnector, (trueOrFalse, rowsOrErrorCode) =>
+  }, databaseConnector, (boolean, accountOrErrorCode) =>
   {
-    if(trueOrFalse == false) callback(false, constants.SQL_SERVER_ERROR);
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
     else
     {
-      rowsOrErrorCode.length == 0 ? callback(false, constants.ACCOUNT_NOT_FOUND) : callback(true, rowsOrErrorCode[0]);
+      accountOrErrorCode.length == 0 ? callback(false, 404, constants.ACCOUNT_NOT_FOUND) : callback(accountOrErrorCode[0]);
     }
   });
 }

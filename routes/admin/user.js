@@ -1,33 +1,32 @@
 'use strict';
 
-let express = require('express');
+var express          = require('express');
+var errors           = require(`${__root}/json/errors`);
+var adminUsers       = require(`${__root}/functions/admin/users`);
 
-let errors           = require('../../json/errors');
-let users            = require('../../functions/admin/users');
-
-let router = express.Router();
+var router = express.Router();
 
 /****************************************************************************************************/
 
-router.get('/', function(req, res)
+router.get('/', (req, res) =>
 {
-  users.getAccountList(req.app.get('mysqlConnector'), (trueOrFalse, rowsOrErrorCode) =>
+  adminUsers.getAccountList(req.app.get('mysqlConnector'), (accountsOrFalse, errorStatus, errorCode) =>
   {
-    trueOrFalse ?
-    res.render('./admin/users', { links: require('../../json/admin').aside, location: 'users', users: rowsOrErrorCode, services: require('../../json/services') }) :
-    res.render('block', { message: errors[rowsOrErrorCode].charAt(0).toUpperCase() + errors[rowsOrErrorCode].slice(1) });
+    accountsOrFalse == false ?
+    res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+    res.render('./admin/users', { links: require('../../json/admin').aside, navigationLocation: 'admin', asideLocation: 'users', users: accountsOrFalse, services: require('../../json/services') });
   });
 });
 
 /****************************************************************************************************/
 
-router.get('/:accountUUID', function(req, res)
+router.get('/:accountUUID', (req, res) =>
 {
-  users.getAccountFromUUID(req.params.accountUUID, req.app.get('mysqlConnector'), (trueOrFalse, userObjectOrErrorCode) =>
+  adminUsers.getAccountFromUUID(req.params.accountUUID, req.app.get('mysqlConnector'), (accountOrFalse, errorStatus, errorCode) =>
   {
-    trueOrFalse ?
-    res.render('./admin/user', { links: require('../../json/admin').aside, location: 'users', account: userObjectOrErrorCode, services: require('../../json/services') }) :
-    res.render('block', { message: errors[userObjectOrErrorCode].charAt(0).toUpperCase() + errors[userObjectOrErrorCode].slice(1) });
+    accountOrFalse == false ?
+    res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+    res.render('./admin/user', { links: require('../../json/admin').aside, location: 'users', account: accountOrFalse, services: require('../../json/services') });
   });
 });
 
