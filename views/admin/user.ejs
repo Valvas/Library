@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html>
   <% include ../include/head.ejs %>
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/user/edit.css' />
   <body class='private-section-body'>
     <% include ../include/menu.ejs %>
     <% include ../include/admin_aside.ejs %>
-    <div class='admin-main-block'>
+    <div class='admin-main-block' name='<%= account['uuid'] %>'>
       <a class='return' href='/admin/users'>Retour</a>
-      <div class='block'>
-        <div class='key'>Adresse email</div
-        ><div class='value'><%= account['email'] %></div
-        ><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
+      <div id='email' name='text' class='block'>
+        <div class='key'>Adresse email</div><!-- @SuppressWhitespace
+        --><div class='value'><%= account['email'] %></div><!-- @SuppressWhitespace
+        --><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
       </div>
-      <div class='block'>
-        <div class='key'>Nom</div
-        ><div class='value'><%= account['lastname'] %></div
-        ><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
+      <div id='lastname' name='text' class='block'>
+        <div class='key'>Nom</div><!-- @SuppressWhitespace
+        --><div class='value'><%= account['lastname'] %></div><!-- @SuppressWhitespace
+        --><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
       </div>
-      <div class='block'>
-        <div class='key'>Prénom</div
-        ><div class='value'><%= account['firstname'] %></div
-        ><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
+      <div id='firstname' name='text' class='block'>
+        <div class='key'>Prénom</div><!-- @SuppressWhitespace
+        --><div class='value'><%= account['firstname'] %></div><!-- @SuppressWhitespace
+        --><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
       </div>
-      <div class='block'>
-        <div class='key'>Service</div
-        ><div class='value'><%= services[account['service']]['name'] %></div
-        ><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
+      <div id='service' name='select' class='block'>
+        <div class='key'>Service</div><!-- @SuppressWhitespace
+        --><div class='value'><%= services[account['service']]['name'] %></div><!-- @SuppressWhitespace
+        --><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
       </div>
+      <div id='is_admin' name='select' class='block'>
+        <div class='key'>Administrateur</div><!-- @SuppressWhitespace
+        --><div class='value'><% if(account['is_admin'] == 1){ %>Oui<% } else{ %>Non<% } %></div><!-- @SuppressWhitespace
+        --><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
+      </div>
+      <button>Suspendre</button>
     </div>
     <% include ../include/scripts.ejs %>
+    <script src='/js/afk.js'></script>
     <script src='/js/admin/user.js'></script>
   </body>
 </html>

@@ -33,28 +33,6 @@ router.get('/', (req, res) =>
 
 /****************************************************************************************************/
 
-router.get('/:service', (req, res) =>
-{
-  !(req.params.service in require('../json/services')) ? res.render('404') :
-
-  accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
-  {
-    if(rightsOrFalse == false) res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
-
-    else
-    {
-      services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), (filesOrFalse, errorStatus, errorCode) =>
-      {
-        filesOrFalse == false ?
-        res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
-        res.render('service', { navigationLocation: 'services', asideLocation: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrFalse, files: filesOrFalse });
-      }); 
-    }
-  });
-});
-
-/****************************************************************************************************/
-
 router.post('/post-new-file', upload.single('file'), (req, res) =>
 {
   req.file == undefined || req.body.service == undefined ? res.status(406).send({ result: false, message: `Erreur [406] - ${errors[constants.MISSING_DATA_IN_REQUEST]} !` }) :
@@ -123,6 +101,35 @@ router.put('/get-files-list', (req, res) =>
       res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
       res.status(200).send({ result: true, files: filesOrFalse, rights: rightsOrFalse });
     });
+  });
+});
+
+/****************************************************************************************************/
+
+router.get('/get-list', (req, res) =>
+{
+  res.status(200).send({ result: true, services: require(`${__root}/json/services`) });
+});
+
+/****************************************************************************************************/
+
+router.get('/:service', (req, res) =>
+{
+  !(req.params.service in require('../json/services')) ? res.render('404') :
+
+  accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
+  {
+    if(rightsOrFalse == false) res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
+
+    else
+    {
+      services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), (filesOrFalse, errorStatus, errorCode) =>
+      {
+        filesOrFalse == false ?
+        res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+        res.render('service', { navigationLocation: 'services', asideLocation: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrFalse, files: filesOrFalse });
+      }); 
+    }
   });
 });
 

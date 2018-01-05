@@ -1,0 +1,160 @@
+/****************************************************************************************************/
+
+.private-section-body .admin-main-block .block
+{
+  width:100%;
+  margin:1% 0 1% 0;
+}
+
+.private-section-body .admin-main-block .block .key
+{
+  padding:1%;
+  overflow:hidden;
+  display:inline-block;
+  text-overflow:ellipsis;
+  background-color:#77B5FE;
+  font-family:raleway-italic;
+}
+
+.private-section-body .admin-main-block .block .value
+{
+  padding:1%;
+  overflow:hidden;
+  vertical-align:top;
+  display:inline-block;
+  text-overflow:ellipsis;
+  font-family:raleway-regular;
+}
+
+.private-section-body .admin-main-block .block .edit
+{
+  padding:1%;
+  border:none;
+  cursor:pointer;
+  color:#FFFFFF;
+  vertical-align:top;
+  display:inline-block;
+  font-family:raleway-italic;
+  background-color:#556677;
+}
+
+.private-section-body .admin-main-block .block .edit:hover
+{
+  color:#DCDCDC;
+  background-color:#223344;
+}
+
+.admin-main-block a.return
+{
+  display:block;
+  color:#223344;
+  font-size:large;
+  font-family:barlow;
+  text-decoration:none;
+  text-decoration:underline;
+  margin:2.5% 2.5% 2.5% 2.5%;
+}
+
+.admin-main-block a.return:hover
+{
+  color:#667788;
+}
+
+.user-edit-popup
+{
+  top:20%;
+  z-index:99;
+  position:fixed;
+  background-color:#FFFFFF;
+}
+
+.user-edit-popup .user-edit-popup-input
+{
+  padding:2.5%;
+}
+
+.user-edit-popup .user-edit-popup-confirm{ background-color:#77B5FE; }
+
+.user-edit-popup .user-edit-popup-cancel{ background-color:#FF0921; }
+
+.user-edit-popup button{ border-radius:50%; color:#FFFFFF; border:none; padding:0; cursor:pointer; }
+.user-edit-popup button:hover{ color:#223344; }
+
+/****************************************************************************************************/
+
+@media all and (max-width: 639px)
+{
+  .private-section-body .admin-main-block .block{ border:1px solid #000000; }
+  .private-section-body .admin-main-block .block .key{ width:98%; }
+  .private-section-body .admin-main-block .block .value{ width:98%; }
+  .private-section-body .admin-main-block .block .edit{ width:50%; margin:0 0 0 50%; }
+
+  .user-edit-popup{ width:95%; left:2.5%; }
+  .user-edit-popup .user-edit-popup-input{ width:90%; margin:5% 2.5% 5% 2.5%; }
+  .user-edit-popup .user-edit-popup-cancel{ width:15%; height:calc((100vw * 0.95) * 0.15); font-size:large; margin:0 2.5% 5% 0; }
+  .user-edit-popup .user-edit-popup-confirm{ width:15%; height:calc((100vw * 0.95) * 0.15); font-size:large; margin:0 2.5% 5% 65%; }
+}
+
+@media all and (min-width: 640px) and (max-width: 767px)
+{
+  .private-section-body .admin-main-block .block{ border:1px solid #000000; }
+  .private-section-body .admin-main-block .block .key{ width:98%; }
+  .private-section-body .admin-main-block .block .value{ width:98%; }
+  .private-section-body .admin-main-block .block .edit{ width:40%; margin:0 0 0 60%; }
+
+  .user-edit-popup{ width:95%; left:2.5%; }
+  .user-edit-popup .user-edit-popup-input{ width:90%; margin:5% 2.5% 5% 2.5%; }
+  .user-edit-popup .user-edit-popup-cancel{ width:10%; height:calc((100vw * 0.95) * 0.1); font-size:large; margin:0 2.5% 5% 0; }
+  .user-edit-popup .user-edit-popup-confirm{ width:10%; height:calc((100vw * 0.95) * 0.1); font-size:large; margin:0 2.5% 5% 75%; }
+}
+
+@media all and (min-width: 768px) and (max-width: 959px)
+{
+  .private-section-body .admin-main-block .block{ border:1px solid #000000; }
+  .private-section-body .admin-main-block .block .key{ width:98%; }
+  .private-section-body .admin-main-block .block .value{ width:98%; }
+  .private-section-body .admin-main-block .block .edit{ width:40%; margin:0 0 0 60%; }
+
+  .user-edit-popup{ width:80%; left:10%; }
+  .user-edit-popup .user-edit-popup-input{ width:90%; margin:5% 2.5% 5% 2.5%; }
+  .user-edit-popup .user-edit-popup-cancel{ width:10%; height:calc((100vw * 0.8) * 0.1); font-size:large; margin:0 2.5% 5% 0; }
+  .user-edit-popup .user-edit-popup-confirm{ width:10%; height:calc((100vw * 0.8) * 0.1); font-size:large; margin:0 2.5% 5% 75%; }
+}
+
+@media all and (min-width: 960px) and (max-width: 1279px)
+{
+  .private-section-body .admin-main-block .block .key{ width:98%; }
+  .private-section-body .admin-main-block .block .value{ width:98%; }
+  .private-section-body .admin-main-block .block .edit{ width:40%; margin:0 0 0 60%; }
+
+  .user-edit-popup{ width:70%; left:15%; }
+  .user-edit-popup .user-edit-popup-input{ width:65%; margin:5% 2.5% 5% 2.5%; display:inline-block; }
+  .user-edit-popup .user-edit-popup-cancel{ width:10%; height:calc((100vw * 0.7) * 0.1); font-size:large; margin:0 1% 5% 0; display:inline-block; }
+  .user-edit-popup .user-edit-popup-confirm{ width:10%; height:calc((100vw * 0.7) * 0.1); font-size:large; margin:0 1% 5% 1%; display:inline-block; }
+}
+
+@media all and (min-width: 1280px) and (max-width: 1679px)
+{
+  .private-section-body .admin-main-block .block .key{ width:18%; }
+  .private-section-body .admin-main-block .block .value{ width:58%; }
+  .private-section-body .admin-main-block .block .edit{ width:18%; }
+
+  .user-edit-popup{ width:50%; left:25%; }
+  .user-edit-popup .user-edit-popup-input{ width:65%; margin:5% 2.5% 5% 2.5%; }
+  .user-edit-popup .user-edit-popup-cancel{ width:10%; height:calc((100vw * 0.5) * 0.1); font-size:large; margin:0 1% 5% 0; display:inline-block; }
+  .user-edit-popup .user-edit-popup-confirm{ width:10%; height:calc((100vw * 0.5) * 0.1); font-size:large; margin:0 1% 5% 1%; display:inline-block; }
+}
+
+@media all and (min-width: 1680px)
+{
+  .private-section-body .admin-main-block .block .key{ width:18%; }
+  .private-section-body .admin-main-block .block .value{ width:58%; }
+  .private-section-body .admin-main-block .block .edit{ width:18%; }
+
+  .user-edit-popup{ width:40%; left:30%; }
+  .user-edit-popup .user-edit-popup-input{ width:65%; margin:5% 2.5% 5% 2.5%; }
+  .user-edit-popup .user-edit-popup-cancel{ width:10%; height:calc((100vw * 0.4) * 0.1); font-size:large; margin:0 1% 5% 0; display:inline-block; }
+  .user-edit-popup .user-edit-popup-confirm{ width:10%; height:calc((100vw * 0.4) * 0.1); font-size:large; margin:0 1% 5% 1%; display:inline-block; }
+}
+
+/****************************************************************************************************/

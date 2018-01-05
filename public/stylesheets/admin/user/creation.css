@@ -1,0 +1,52 @@
+/****************************************************************************************************/
+
+.create-user-form{ margin:5%; }
+.create-user-form .title{ font-size:large; margin:5%; font-family:raleway-regular; }
+.create-user-form .select{ margin:1% 5% 1% 5%; width:90%; }
+.create-user-form .select label{ display:inline-block; font-family:raleway-regular; }
+.create-user-form input{ padding:1%; border:1px solid #DDDDDD; }
+.create-user-form button{ margin:5%; }
+
+@media all and (max-width: 639px)
+{
+  .create-user-form{ width:90%; }
+  .create-user-form input{ width:80%; margin:1% 15% 1% 5%; }
+  .create-user-form .select label{ width:40%; }
+}
+
+@media all and (min-width: 640px) and (max-width: 767px)
+{
+  .create-user-form{ width:90%; }
+  .create-user-form input{ width:80%; margin:1% 15% 1% 5%; }
+  .create-user-form .select label{ width:40%; }
+}
+
+@media all and (min-width: 768px) and (max-width: 959px)
+{
+  .create-user-form{ width:70%; display:inline-block; vertical-align:top; }
+  .create-user-form input{ width:60%; margin:1% 35% 1% 5%; }
+  .create-user-form .select label{ width:35%; }
+}
+
+@media all and (min-width: 960px) and (max-width: 1279px)
+{
+  .create-user-form{ width:70%; display:inline-block; vertical-align:top; }
+  .create-user-form input{ width:60%; margin:1% 35% 1% 5%; }
+  .create-user-form .select label{ width:30%; }
+}
+
+@media all and (min-width: 1280px) and (max-width: 1679px)
+{
+  .create-user-form{ width:70%; display:inline-block; vertical-align:top; }
+  .create-user-form input{ width:50%; margin:1% 45% 1% 5%; }
+  .create-user-form .select label{ width:25%; }
+}
+
+@media all and (min-width: 1680px)
+{
+  .create-user-form{ width:75%; display:inline-block; vertical-align:top; }
+  .create-user-form input{ width:40%; margin:1% 55% 1% 5%; }
+  .create-user-form .select label{ width:20%; }
+}
+
+/****************************************************************************************************/

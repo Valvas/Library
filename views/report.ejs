@@ -27,9 +27,9 @@
               <% if(typeof(report['logs'][i]['comment']) !== 'undefined'){ %>
                 <div class='log-message'><%= report['logs'][i]['comment']['message'] %></div>
                 <% if(report['logs'][i]['comment']['read'] == 0){ %>
-                  <div><i class="fa fa-close"></i>Non-lu</div>
+                  <div class='not-read'><i class="fa fa-close"></i>Non-lu</div>
                 <% } else{ %>
-                  <div><i class="fa fa-check" aria-hidden="true"></i>Lu</div>
+                  <div class='read'><i class="fa fa-check" aria-hidden="true"></i>Lu</div>
                 <% } %>
               <% } %>
             </div>
@@ -38,6 +38,7 @@
         </div>
       </div>
     <% include include/scripts.ejs %>
+    <script src='/js/afk.js'></script>
     <script src='/js/report/comment.js'></script>
   </body>
 </html>

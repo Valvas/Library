@@ -97,6 +97,8 @@
     color:#77B5FE;
   }
 
+  .menu-hidden-element-small{ display:none; }
+
   .nav-menu-separation-bar
   {
     display:none;
@@ -142,6 +144,8 @@
     color:#77B5FE;
   }
 
+  .menu-hidden-element-small{ display:none; }
+
   .nav-menu-separation-bar
   {
     display:none;
@@ -181,6 +185,8 @@
     color:#77B5FE;
   }
 
+  .menu-hidden-element-large{ display:none; }
+
   .nav-menu-element-responsive{ display:none; }
 }
 
@@ -215,6 +221,8 @@
     color:#77B5FE;
   }
 
+  .menu-hidden-element-large{ display:none; }
+
   .nav-menu-element-responsive{ display:none; }
 }
 
@@ -248,6 +256,8 @@
   {
     color:#77B5FE;
   }
+
+  .menu-hidden-element-large{ display:none; }  
 
   .nav-menu-element-responsive{ display:none; }
 }

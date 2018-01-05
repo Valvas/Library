@@ -203,9 +203,9 @@ td.service-main-block-file-buttons
 
 .services-main-block{ width:95%; margin:2.5%; }
 
-.services-main-block-element{ cursor:pointer; text-decoration:none; font-family:raleway-regular; padding:2% 5% 2% 5%; font-size:large; color:#FFFFFF; background-color:#77B5FE; border-radius:8px; text-align:center; }
+.services-main-block-element, .admin-main-block-element{ cursor:pointer; text-decoration:none; font-family:raleway-regular; padding:2% 5% 2% 5%; font-size:large; color:#FFFFFF; background-color:#77B5FE; border-radius:8px; text-align:center; }
 
-.services-main-block-element:hover{ color:#223344; background-color:#5593DC; }
+.services-main-block-element:hover, .admin-main-block-element:hover{ color:#223344; background-color:#5593DC; }
 
 /****************************************************************************************************/
 
@@ -213,7 +213,7 @@ td.service-main-block-file-buttons
 {
   .service-main-block{ width:95%; margin:2.5%; }
 
-  .services-main-block-element
+  .services-main-block-element, .admin-main-block-element
   {
     margin:2.5%;
     display:inline-block;
@@ -226,7 +226,7 @@ td.service-main-block-file-buttons
 {
   .service-main-block{ width:95%; margin:2.5%; }
 
-  .services-main-block-element
+  .services-main-block-element, .admin-main-block-element
   {
     margin:2.5%;
     display:inline-block;
@@ -239,7 +239,7 @@ td.service-main-block-file-buttons
 {
   .service-main-block{ width:70%; margin:2.5%; display:inline-block; vertical-align:top; }
   
-  .services-main-block-element
+  .services-main-block-element, .admin-main-block-element
   {
     margin:2.5%;
     display:inline-block;
@@ -252,7 +252,7 @@ td.service-main-block-file-buttons
 {
   .service-main-block{ width:70%; margin:2.5%; display:inline-block; vertical-align:top; }
   
-  .services-main-block-element
+  .services-main-block-element, .admin-main-block-element
   {
     margin:2.5%;
     display:inline-block;
@@ -265,7 +265,7 @@ td.service-main-block-file-buttons
 {
   .service-main-block{ width:70%; margin:2.5%; display:inline-block; vertical-align:top; }
   
-  .services-main-block-element
+  .services-main-block-element, .admin-main-block-element
   {
     margin:2.5%;
     display:inline-block;
@@ -278,7 +278,7 @@ td.service-main-block-file-buttons
 {
   .service-main-block{ width:75%; margin:2.5%; display:inline-block; vertical-align:top; }
   
-  .services-main-block-element
+  .services-main-block-element, .admin-main-block-element
   {
     margin:2.5%;
     display:inline-block;

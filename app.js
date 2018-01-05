@@ -6,6 +6,7 @@ var path              = require('path');
 var mysql             = require('mysql');
 var logger            = require('morgan');
 var express           = require('express');
+var nodemailer        = require('nodemailer');
 var bodyParser        = require('body-parser');
 var favicon           = require('serve-favicon');
 var cookieParser      = require('cookie-parser');
@@ -37,6 +38,22 @@ var connection = mysql.createConnection(
   password : config['database']['password']
 });
 
+var transporter = nodemailer.createTransport(
+{
+  host: config.email.host,
+  port: config.email.port,
+  secure: config.email.secure,
+  auth: 
+  {
+    user: config.email.auth.user,
+    pass: config.email.auth.pass
+  },
+  tls: 
+  {
+    rejectUnauthorized: false
+  }
+});
+
 var app = express();
 
 app.use(session(
@@ -51,6 +68,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.set('mysqlConnector', connection);
+app.set('transporter', transporter);
 
 app.use(logger('dev'));
 app.use(cookieParser());

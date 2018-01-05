@@ -384,3 +384,91 @@ function openWarningPopup(remainingTime)
 }
 
 /****************************************************************************************************/
+
+function openInputPopup(obj)
+{
+  var veil      = document.createElement('div');
+  var popup     = document.createElement('div');
+
+  var input     = document.createElement('input');
+
+  var confirm   = document.createElement('button');
+  var cancel    = document.createElement('button');
+
+  $(veil)       .attr({ id: 'user-edit-veil',           class: 'veil'});
+  $(popup)      .attr({ id: 'user-edit-popup',          class: 'user-edit-popup'});
+
+  $(input)      .attr({ id: 'user-edit-popup-input',    type: obj.type,       placeholder: obj.placeholder,       class: 'user-edit-popup-input',     name: obj.name });
+
+  $(input)      .val(obj.value);
+
+  $(confirm)    .attr({ id: 'user-edit-popup-confirm',  class: 'user-edit-popup-confirm '});
+  $(cancel)     .attr({ id: 'user-edit-popup-cancel',  class: 'user-edit-popup-cancel '});
+
+  $(confirm)    .html('<i class="fa fa-send" aria-hidden="true"></i>');
+  $(cancel)     .html('<i class="fa fa-close" aria-hidden="true"></i>');
+
+  $(veil)       .appendTo('body');
+  $(popup)      .appendTo('body');
+
+  $(input)      .appendTo(popup);
+  $(confirm)    .appendTo(popup);
+  $(cancel)     .appendTo(popup);
+}
+
+/****************************************************************************************************/
+
+function openSelectPopup(obj)
+{
+  var veil      = document.createElement('div');
+  var popup     = document.createElement('div');
+
+  var select    = document.createElement('select');
+
+  var confirm   = document.createElement('button');
+  var cancel    = document.createElement('button');
+
+  $(veil)       .attr({ id: 'user-edit-veil',           class: 'veil'});
+  $(popup)      .attr({ id: 'user-edit-popup',          class: 'user-edit-popup'});
+
+  $(select)     .attr({ id: 'user-edit-popup-input',    class: 'user-edit-popup-input',     name: obj.name });
+
+  $(confirm)    .attr({ id: 'user-edit-popup-confirm',  class: 'user-edit-popup-confirm '});
+  $(cancel)     .attr({ id: 'user-edit-popup-cancel',  class: 'user-edit-popup-cancel '});
+
+  $(confirm)    .html('<i class="fa fa-send" aria-hidden="true"></i>');
+  $(cancel)     .html('<i class="fa fa-close" aria-hidden="true"></i>');
+
+  var option  = document.createElement('option');
+  
+  $(option).appendTo(select);
+
+  var x  = 0;
+
+  var loop = () =>
+  {
+    var option  = document.createElement('option');
+
+    $(option).attr('value', Object.keys(obj.values)[x]);
+
+    $(option).text(obj.values[Object.keys(obj.values)[x]]);
+
+    $(option).appendTo(select);
+
+    if(Object.keys(obj.values)[x += 1] != undefined) loop();
+
+    else
+    {
+      $(veil)       .appendTo('body');
+      $(popup)      .appendTo('body');
+
+      $(select)     .appendTo(popup);
+      $(confirm)    .appendTo(popup);
+      $(cancel)     .appendTo(popup);
+    }
+  }
+
+  loop();
+}
+
+/****************************************************************************************************/

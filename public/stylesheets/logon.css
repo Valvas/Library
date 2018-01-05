@@ -55,6 +55,7 @@ input
 .logon-form-question
 {
   width:60%;
+  display:block;
   cursor:pointer;
   color:#667788;
   font-family:Arial;

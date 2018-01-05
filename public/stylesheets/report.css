@@ -188,6 +188,36 @@ TABLE
   background-color:#778899;
 }
 
+.reports-main-block .report-detail .comments-block .comment .read
+{
+  width:98%;
+  color:#1FA055;
+  font-size:large;
+  text-align:right;
+  padding:1% 1% 1% 1%;
+  font-family:raleway-regular;
+}
+
+.reports-main-block .report-detail .comments-block .comment .not-read
+{
+  width:98%;
+  color:#E84E4F;
+  font-size:large;
+  text-align:right;
+  padding:1% 1% 1% 1%;
+  font-family:raleway-regular;
+}
+
+.reports-main-block .report-detail .comments-block .admin-comment
+{
+  cursor:pointer;
+}
+
+.reports-main-block .report-detail .comments-block .admin-comment:hover
+{
+  opacity:0.8;
+}
+
 .reports-main-block .report-detail .comments-block .log-0{ background-color:#77B5FE; }
 .reports-main-block .report-detail .comments-block .log-1{ background-color:#CCC79A; }
 .reports-main-block .report-detail .comments-block .log-2{ background-color:#77B5FE; }

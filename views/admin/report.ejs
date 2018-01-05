@@ -17,13 +17,16 @@
           <div class='comments-block'>
           <div class='title'>Commentaires : </div>
           <% for(var i = 0; i < Object.keys(report['comments']).length; i++){ %>
-            <div>
-              <div><%= report['comments'][i]['date'] %> - <%= report['comments'][i]['account'] %> - <%= report['comments'][i]['seen'] %></div>
-              <div><%= report['comments'][i]['content'] %></div>
+            <div id='<%= report['comments'][i]['id'] %>' name='<%= report['comments'][i]['seen'] %>' class='comment admin-comment <% if(report['comments'][i]['seen'] == 0){ %>log-3<% } else{ %>log-0<% } %>'>
+              <div class='log-date'><%= report['comments'][i]['date'] %></div>
+              <div class='log-label'><%= report['comments'][i]['account'] %></div>
+              <div class='log-message'><%= report['comments'][i]['content'] %></div>
             </div>
           <% } %>
         </div>
       </div>
     <% include ../include/scripts.ejs %>
+    <script src='/js/admin/reports/update.js'></script>
+    <script src='/js/afk.js'></script>
   </body>
 </html>

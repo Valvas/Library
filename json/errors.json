@@ -31,5 +31,14 @@
   "10030": "le cryptage d'une donnée a échoué",
   "10031": "votre compte n'est pas activé",
   "10032": "votre compte est actuellement suspendu",
-  "10033": "commentaire introuvable"
+  "10033": "commentaire introuvable",
+  "10034": "format de l'adresse email incorrect",
+  "10035": "format du nom incorrect",
+  "10036": "format du prénom incorrect",
+  "10037": "statut administrateur manquant",
+  "10038": "email non-envoyé",
+  "10039": "adresse email déjà utilisée",
+  "10040": "impossible de modifier cette donnée",
+  "10041": "le compte n'a pas été mis à jour",
+  "10042": "ce statut administrateur n'existe pas"
 }

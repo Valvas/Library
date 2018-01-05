@@ -35,6 +35,15 @@ const ENCRYPTION_FAILED                                                         
 const ACCOUNT_NOT_ACTIVATED                                                       = 10031;
 const ACCOUNT_SUSPENDED                                                           = 10032;
 const COMMENT_NOT_FOUND                                                           = 10033;
+const WRONG_EMAIL_FORMAT                                                          = 10034;
+const WRONG_LASTNAME_FORMAT                                                       = 10035;
+const WRONG_FIRSTNAME_FORMAT                                                      = 10036;
+const ADMIN_STATUS_IS_MISSING                                                     = 10037;
+const MAIL_NOT_SENT                                                               = 10038;
+const EMAIL_ALREADY_IN_USE                                                        = 10039;
+const UNABLE_TO_MODIFY_THIS_VALUE                                                 = 10040;
+const ACCOUNT_NOT_UPDATED                                                         = 10041;
+const INCORRECT_ADMIN_STATUS                                                      = 10042;
 
 /******************************************************************************************
 SUCCESS
@@ -51,6 +60,9 @@ const AUTHORIZED_TO_ADD_FILES                                                   
 const SUCCESS_COPYING_FILE                                                        = 20009;
 const SUCCESS_POSTING_REPORT                                                      = 20010;
 const COMMENT_ADDED                                                               = 20011;
+const NEW_PASSWORD_SENT                                                           = 20012;
+const ACCOUNT_SUCCESSFULLY_CREATED                                                = 20013;
+const ACCOUNT_UPDATED_SUCCESSFULLY                                                = 20014;
 
 /******************************************************************************************
 EXPORTS
@@ -91,6 +103,15 @@ module.exports =
   ACCOUNT_NOT_ACTIVATED: ACCOUNT_NOT_ACTIVATED,
   ACCOUNT_SUSPENDED: ACCOUNT_SUSPENDED,
   COMMENT_NOT_FOUND: COMMENT_NOT_FOUND,
+  WRONG_EMAIL_FORMAT: WRONG_EMAIL_FORMAT,
+  WRONG_LASTNAME_FORMAT: WRONG_LASTNAME_FORMAT,
+  WRONG_FIRSTNAME_FORMAT: WRONG_FIRSTNAME_FORMAT,
+  ADMIN_STATUS_IS_MISSING: ADMIN_STATUS_IS_MISSING,
+  MAIL_NOT_SENT: MAIL_NOT_SENT,
+  EMAIL_ALREADY_IN_USE: EMAIL_ALREADY_IN_USE,
+  UNABLE_TO_MODIFY_THIS_VALUE: UNABLE_TO_MODIFY_THIS_VALUE,
+  ACCOUNT_NOT_UPDATED: ACCOUNT_NOT_UPDATED,
+  INCORRECT_ADMIN_STATUS: INCORRECT_ADMIN_STATUS,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -102,5 +123,8 @@ module.exports =
   AUTHORIZED_TO_ADD_FILES: AUTHORIZED_TO_ADD_FILES,
   SUCCESS_COPYING_FILE: SUCCESS_COPYING_FILE,
   SUCCESS_POSTING_REPORT: SUCCESS_POSTING_REPORT,
-  COMMENT_ADDED: COMMENT_ADDED
+  COMMENT_ADDED: COMMENT_ADDED,
+  NEW_PASSWORD_SENT: NEW_PASSWORD_SENT,
+  ACCOUNT_SUCCESSFULLY_CREATED: ACCOUNT_SUCCESSFULLY_CREATED,
+  ACCOUNT_UPDATED_SUCCESSFULLY: ACCOUNT_UPDATED_SUCCESSFULLY
 }

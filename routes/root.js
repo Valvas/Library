@@ -3,8 +3,11 @@
 var express           = require('express');
 var params            = require(`${__root}/json/config`);
 var errors            = require(`${__root}/json/errors`);
+var success           = require(`${__root}/json/success`);
 var logon             = require(`${__root}/functions/logon`);
 var constants         = require(`${__root}/functions/constants`);
+var accountsReset     = require(`${__root}/functions/accounts/reset`);
+var accountsCreate    = require(`${__root}/functions/accounts/create`);
 
 var router = express.Router();
 
@@ -39,6 +42,43 @@ router.put('/', (req, res) =>
         res.status(200).send({ result: true });
       }
     }
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/', (req, res) =>
+{
+  req.body.email == undefined || req.body.lastname == undefined || req.body.firstname == undefined || req.body.service == undefined || req.body.admin == undefined ? 
+  
+  res.status(406).send({ result: false, message: errors[10009] }) :
+
+  accountsCreate.createAccount(req.body, req.app.get('mysqlConnector'), req.app.get('transporter'), (boolean, errorStatus, errorCode) =>
+  {
+    boolean ? 
+    res.status(201).send({ result: true, message: `${success[constants.ACCOUNT_SUCCESSFULLY_CREATED].charAt(0).toUpperCase()}${success[constants.ACCOUNT_SUCCESSFULLY_CREATED].slice(1)}` }) : 
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+  });
+});
+
+/****************************************************************************************************/
+
+router.get('/reset-password', (req, res) =>
+{
+  res.render('reset_password');
+});
+
+/****************************************************************************************************/
+
+router.put('/reset-password', (req, res) =>
+{
+  req.body.email == undefined ? res.status(406).send({ result: false, message: errors[10009] }) :
+
+  accountsReset.resetPassword(req.body.email, req.app.get('mysqlConnector'), req.app.get('transporter'), (boolean, errorStatus, errorCode) =>
+  {
+    boolean == false ?
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) : 
+    res.status(200).send({ result: true, message: `${success[constants.NEW_PASSWORD_SENT].charAt(0).toUpperCase()}${success[constants.NEW_PASSWORD_SENT].slice(1)}` });
   });
 });
 

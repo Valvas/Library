@@ -29,22 +29,9 @@ HOME
 .admin-users-table
 {
   width:100%;
+  table-layout:fixed;
   border-collapse:collapse;
 }
-
-th.admin-users-table-email{ width:25%; }
-
-th.admin-users-table-lastname{ width:15%; }
-
-th.admin-users-table-firstname{ width:15%; }
-
-th.admin-users-table-service{ width:15%; }
-
-th.admin-users-table-activated{ width:10%; }
-
-th.admin-users-table-suspended{ width:10%; }
-
-th.admin-users-table-admin{ width:10%; }
 
 .admin-users-table tr td
 { 
@@ -73,6 +60,12 @@ th.admin-users-table-admin{ width:10%; }
   font-family:raleway-light-italic;
 }
 
+.admin-users-table td, .admin-users-table th
+{
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
 .admin-main-block
 {
   margin:5% 0 5% 0;
@@ -91,95 +84,124 @@ th.admin-users-table-admin{ width:10%; }
   background-color:#CCC79A;
 }
 
-@media all and (max-width: 767px)
+.admin-main-block .create
 {
-  .admin-main-block{ width:90%; }
+  border:none;
+  cursor:pointer;
+  color:#112233;
+  font-size:large;
+  border-radius:50%;
+  background-color:#77B5FE;
+}
+
+.admin-main-block .create:hover
+{
+  background-color:#66A4ED;
+}
+
+@media all and (max-width: 479px)
+{
+  .admin-main-block{ margin:0 5% 0 5%; width:90%; }
   .admin-main-block .info{ width:50%; }
+  .admin-main-block .create{ height:calc((100vw * 0.9) * 0.15); width:15%; margin:5% 0 0 85%; }
+
+  th.admin-users-table-service{ display:none; }
+  td.admin-users-table-service{ display:none; }
+  th.admin-users-table-activated{ display:none; }
+  td.admin-users-table-activated{ display:none; }
+  th.admin-users-table-suspended{ display:none; }
+  td.admin-users-table-suspended{ display:none; }
+  th.admin-users-table-admin{ display:none; }
+  td.admin-users-table-admin{ display:none; }
+
+  th.admin-users-table-email{ width:40%; }
+  th.admin-users-table-lastname{ width:30%; }
+  th.admin-users-table-firstname{ width:30%; }
+}
+
+@media all and (min-width: 480px) and (max-width: 767px)
+{
+  .admin-main-block{ margin:0 5% 0 5%; width:90%; }
+  .admin-main-block .info{ width:50%; }
+  .admin-main-block .create{ height:calc((100vw * 0.9) * 0.1); width:10%; margin:5% 0 0 90%; }
+
+  th.admin-users-table-service{ display:none; }
+  td.admin-users-table-service{ display:none; }
+  th.admin-users-table-activated{ display:none; }
+  td.admin-users-table-activated{ display:none; }
+  th.admin-users-table-suspended{ display:none; }
+  td.admin-users-table-suspended{ display:none; }
+  th.admin-users-table-admin{ display:none; }
+  td.admin-users-table-admin{ display:none; }
+
+  th.admin-users-table-email{ width:40%; }
+  th.admin-users-table-lastname{ width:30%; }
+  th.admin-users-table-firstname{ width:30%; }
 }
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .admin-main-block{ width:90%; }
+  .admin-main-block{ display:inline-block; width:70%; }
   .admin-main-block .info{ width:40%; }
+  .admin-main-block .create{ height:calc((100vw * 0.7) * 0.1); width:10%; margin:5% 0 0 90%; }
+
+  th.admin-users-table-service{ display:none; }
+  td.admin-users-table-service{ display:none; }
+  th.admin-users-table-activated{ display:none; }
+  td.admin-users-table-activated{ display:none; }
+  th.admin-users-table-suspended{ display:none; }
+  td.admin-users-table-suspended{ display:none; }
+
+  th.admin-users-table-email{ width:35%; }
+  th.admin-users-table-lastname{ width:25%; }
+  th.admin-users-table-firstname{ width:25%; }
+  th.admin-users-table-admin{ width:15%; }
 }
 
-@media all and (min-width: 960px) and (max-width: 1679px)
+@media all and (min-width: 960px) and (max-width: 1279px)
 {
   .admin-main-block{ display:inline-block; width:75%; }
   .admin-main-block .info{ width:30%; }
+  .admin-main-block .create{ height:calc((100vw * 0.75) * 0.075); width:7.5%; margin:5% 0 0 92.5%; }
+
+  th.admin-users-table-activated{ display:none; }
+  td.admin-users-table-activated{ display:none; }
+  th.admin-users-table-suspended{ display:none; }
+  td.admin-users-table-suspended{ display:none; }
+
+  th.admin-users-table-email{ width:30%; }
+  th.admin-users-table-lastname{ width:20%; }
+  th.admin-users-table-firstname{ width:20%; }
+  th.admin-users-table-service{ width:20%; }
+  th.admin-users-table-admin{ width:10%; }
+}
+
+@media all and (min-width: 1280px) and (max-width: 1679px)
+{
+  .admin-main-block{ display:inline-block; width:75%; }
+  .admin-main-block .info{ width:30%; }
+  .admin-main-block .create{ height:calc((100vw * 0.75) * 0.06); width:6%; margin:5% 0 0 94%; }
+
+  th.admin-users-table-email{ width:25%; }
+  th.admin-users-table-lastname{ width:15%; }
+  th.admin-users-table-firstname{ width:15%; }
+  th.admin-users-table-service{ width:15%; }
+  th.admin-users-table-activated{ width:10%; }
+  th.admin-users-table-suspended{ width:10%; }
+  th.admin-users-table-admin{ width:10%; }
 }
 
 @media all and (min-width: 1680px)
 {
   .admin-main-block{ display:inline-block; width:75%; }
   .admin-main-block .info{ width:20%; }
-}
+  .admin-main-block .create{ height:calc((100vw * 0.75) * 0.05); width:5%; margin:5% 0 0 95%; }
 
-/****************************************************************************************************
-USER
-****************************************************************************************************/
-
-.admin-main-block a.return
-{
-  width:15%;
-  padding:1%;
-  display:block;
-  font-size:large;
-  color:#FFFFFF;
-  text-align:center;
-  font-family:barlow;
-  text-decoration:none;
-  margin:2.5% 2.5% 2.5% 2.5%;
-  background-color:#8ED744;
-}
-
-.admin-main-block a.return:hover
-{
-  color:#223344;
-  background-color:#6CB522;
-}
-
-.admin-main-block div.block
-{
-  margin:1% 2.5% 1% 2.5%;
-  border:1px solid #66A4ED;
-}
-
-.admin-main-block div.block div.key
-{
-  width:30%;
-  padding:1%;
-  color:#FFFFFF;
-  font-size:large;
-  display:inline-block;
-  font-family:raleway-italic;
-  background-color:#66A4ED;
-}
-
-.admin-main-block div.block div.value
-{
-  width:50%;
-  padding:1%;
-  text-align:left;
-  font-size:large;
-  display:inline-block;
-  font-family:raleway-regular;
-}
-
-.admin-main-block div.block button.edit
-{
-  width:16%;
-  padding:1%;
-  border:none;
-  cursor:pointer;
-  color:#FFFFFF;
-  font-size:large;
-  font-family:raleway-italic;
-  background-color:#556677;
-}
-
-.admin-main-block div.block button.edit:hover
-{
-  color:#DCDCDC;
-  background-color:#223344;
+  th.admin-users-table-email{ width:25%; }
+  th.admin-users-table-lastname{ width:15%; }
+  th.admin-users-table-firstname{ width:15%; }
+  th.admin-users-table-service{ width:15%; }
+  th.admin-users-table-activated{ width:10%; }
+  th.admin-users-table-suspended{ width:10%; }
+  th.admin-users-table-admin{ width:10%; }
 }

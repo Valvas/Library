@@ -54,10 +54,59 @@
     "rar": "Archive RAR"
   },
 
+  "email":
+  {
+    "host": "mail.groupepei.fr",
+    "port": 25,
+    "secure": false,
+    "auth":
+    {
+      "user": "vincent.valvas@groupepei.fr",
+      "pass": "Kjiuwvoq1"
+    }
+  },
+
   "ext_accepted":
   {
     "info": { "0": "txt" },
     "test": { "0": "txt", "1": "doc", "2": "docx" }
+  },
+
+  "format":
+  {
+    "account":
+    {
+      "lastname":
+      {
+        "min-length": 2,
+        "max-length": 128,
+        "required_digit": false,
+        "authorized-digit": false,
+        "required-spaces": false,
+        "authorized-spaces": false,
+        "required-lowercase": false,
+        "authorized-lowercase": true,
+        "required-uppercase": false,
+        "authorized-uppercase": true,
+        "required-special": false,
+        "authorized-special": false
+      },
+      "firstname":
+      {
+        "min-length": 2,
+        "max-length": 128,
+        "required_digit": false,
+        "authorized-digit": false,
+        "required-spaces": false,
+        "authorized-spaces": false,
+        "required-lowercase": false,
+        "authorized-lowercase": true,
+        "required-uppercase": false,
+        "authorized-uppercase": true,
+        "required-special": false,
+        "authorized-special": false
+      }
+    }
   },
 
   "reports_status":
