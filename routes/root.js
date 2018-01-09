@@ -32,8 +32,7 @@ router.put('/', (req, res) =>
 
     else
     {
-      if(accountOrFalse.activated == 0) res.status(403).send({ result: false, message: `${errors[constants.ACCOUNT_NOT_ACTIVATED].charAt(0).toUpperCase()}${errors[constants.ACCOUNT_NOT_ACTIVATED].slice(1)}` });
-      else if(accountOrFalse.suspended == 1) res.status(403).send({ result: false, message: `${errors[constants.ACCOUNT_SUSPENDED].charAt(0).toUpperCase()}${errors[constants.ACCOUNT_SUSPENDED].slice(1)}` });
+      if(accountOrFalse.suspended == 1) res.status(403).send({ result: false, message: `${errors[constants.ACCOUNT_SUSPENDED].charAt(0).toUpperCase()}${errors[constants.ACCOUNT_SUSPENDED].slice(1)}` });
 
       else
       {

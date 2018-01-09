@@ -1,0 +1,123 @@
+/****************************************************************************************************/
+
+.admin-main-block a.return{ display:block; color:#223344; font-size:large; font-family:barlow; text-decoration:none; text-decoration:underline; margin:2.5% 2.5% 2.5% 2.5%; }
+.admin-main-block a.return:hover{ color:#667788; }
+
+.admin-rights-status .title{ background-color:#90EE90; }
+.admin-rights-detail .title{ background-color:#99D7FF; }
+.admin-rights-status .title, .admin-rights-detail .title{ padding:2.5% 0 2.5% 0; font-family:barlow; font-size:large; text-align:center; }
+
+.admin-rights-detail{ border:1px solid #99D7FF; border-radius:4px; }
+.admin-rights-status{ border:1px solid #90EE90; border-radius:4px; }
+
+.admin-rights-account-block{ margin:0 0 2.5% 0; }
+.admin-rights-account-block .key{ font-family:raleway-italic; }
+.admin-rights-account-block .value{ font-family:raleway-regular; overflow:hidden; text-overflow:ellipsis; vertical-align:top; }
+
+.admin-rights-detail .element{ margin:2.5% 0 2.5% 0; }
+.admin-rights-detail .element .label{ margin:0 0 0 5%; display:inline-block; font-family:raleway-regular; }
+.admin-rights-detail .element .icons{ display:inline-block; vertical-align:bottom; text-align:right; }
+.admin-rights-detail .element .check-active{ font-size:x-large; color:#1FA055; margin:0 15% 0 0; }
+.admin-rights-detail .element .close-active{ font-size:x-large; color:#E84E4F; margin:0 15% 0 0; }
+.admin-rights-detail .element .check-inactive, .admin-rights-detail .element .close-inactive{ cursor:pointer; font-size:x-large; color:#CCCCCC; margin:0 15% 0 0; }
+.admin-rights-detail .element .check-inactive:hover, .admin-rights-detail .element .close-inactive:hover{ color:#77B5FE; }
+
+.admin-rights-status .empty{ margin:2.5% 5% 2.5% 5%; font-family:raleway-italic; text-align:center; }
+.admin-rights-status .plus{ color:#77B5FE; }
+.admin-rights-status .minus{ color:#E84E4F; }
+.admin-rights-status .plus, .admin-rights-status .minus{ font-family:raleway-regular; margin:2.5% 5% 2.5% 5%; }
+.admin-rights-status .save{ border-radius:4px; background-color:#556677; color:#FFFFFF; cursor:pointer; display:none; border:none; padding:2% 0 2% 0; }
+.admin-rights-status .save:hover{ background-color:#223344; color:#CCCCCC; }
+
+/****************************************************************************************************/
+
+@media all and (max-width: 639px)
+{
+  .admin-rights-account-block .value{ text-align:right; }
+
+  .admin-rights-account{ width:100%; margin:2.5% 0 2.5% 0; }
+  .admin-rights-status{ width:100%; margin:2.5% 0 2.5% 0; }
+  .admin-rights-detail{ width:100%; margin:2.5% 0 2.5% 0; }
+
+  .admin-rights-detail .element .label{ width:65%; }
+  .admin-rights-detail .element .icons{ width:30%; }
+
+  .admin-rights-status .save{ width:50%; margin:5% 5% 5% 45%; }
+}
+
+@media all and (min-width: 640px) and (max-width: 767px)
+{
+  .admin-rights-account-block .key{ display:inline-block; width:35%; margin:0 5% 0 0; }
+  .admin-rights-account-block .value{ display:inline-block; width:60%; }
+
+  .admin-rights-account{ width:100%; margin:2.5% 0 2.5% 0; }
+  .admin-rights-status{ width:100%; margin:2.5% 0 2.5% 0; }
+  .admin-rights-detail{ width:100%; margin:2.5% 0 2.5% 0; }
+
+  .admin-rights-detail .element .label{ width:65%; }
+  .admin-rights-detail .element .icons{ width:30%; }
+
+  .admin-rights-status .save{ width:50%; margin:5% 5% 5% 45%; }
+}
+
+@media all and (min-width: 768px) and (max-width: 959px)
+{
+  .admin-rights-account-block .key{ display:inline-block; width:35%; margin:0 5% 0 0; }
+  .admin-rights-account-block .value{ display:inline-block; width:60%; }
+
+  .admin-rights-account{ width:100%; margin:2.5% 0 2.5% 0; }
+  .admin-rights-status{ width:47%; margin:2.5% 2.5% 2.5% 0; display:inline-block; }
+  .admin-rights-detail{ width:47%; margin:2.5% 2.5% 2.5% 0; display:inline-block; vertical-align:top; }
+
+  .admin-rights-detail .element .label{ width:65%; }
+  .admin-rights-detail .element .icons{ width:30%; }
+
+  .admin-rights-status .save{ width:50%; margin:5% 5% 5% 45%; }
+}
+
+@media all and (min-width: 960px) and (max-width: 1279px)
+{
+  .admin-rights-account-block .key{ display:inline-block; width:35%; margin:0 5% 0 0; }
+  .admin-rights-account-block .value{ display:inline-block; width:60%; }
+
+  .admin-rights-account{ width:100%; margin:2.5% 0 2.5% 0; }
+  .admin-rights-status{ width:47%; margin:2.5% 2.5% 2.5% 0; display:inline-block; }
+  .admin-rights-detail{ width:47%; margin:2.5% 2.5% 2.5% 0; display:inline-block; vertical-align:top; }
+
+  .admin-rights-detail .element .label{ width:65%; }
+  .admin-rights-detail .element .icons{ width:30%; }
+
+  .admin-rights-status .save{ width:40%; margin:5% 5% 5% 55%; }
+}
+
+@media all and (min-width: 1280px) and (max-width: 1679px)
+{
+  .admin-rights-account-block .key{ display:inline-block; width:35%; margin:0 5% 0 0; }
+  .admin-rights-account-block .value{ display:inline-block; width:60%; }
+
+  .admin-rights-account{ width:100%; margin:2.5% 0 2.5% 0; }
+  .admin-rights-status{ width:47%; margin:2.5% 2.5% 2.5% 0; display:inline-block; }
+  .admin-rights-detail{ width:47%; margin:2.5% 2.5% 2.5% 0; display:inline-block; vertical-align:top; }
+
+  .admin-rights-detail .element .label{ width:65%; }
+  .admin-rights-detail .element .icons{ width:30%; }
+
+  .admin-rights-status .save{ width:40%; margin:5% 5% 5% 55%; }
+}
+
+@media all and (min-width: 1680px)
+{
+  .admin-rights-account-block .key{ display:inline-block; width:35%; margin:0 5% 0 0; }
+  .admin-rights-account-block .value{ display:inline-block; width:60%; }
+
+  .admin-rights-account{ width:37.5%; margin:2.5% 2.5% 2.5% 0; display:inline-block; }
+  .admin-rights-status{ width:27%; margin:2.5% 2.5% 2.5% 0; display:inline-block; vertical-align:top; }
+  .admin-rights-detail{ width:27%; margin:2.5% 2.5% 2.5% 0; display:inline-block; vertical-align:top; }
+
+  .admin-rights-detail .element .label{ width:65%; }
+  .admin-rights-detail .element .icons{ width:30%; }
+
+  .admin-rights-status .save{ width:35%; margin:5% 5% 5% 60%; }
+}
+
+/****************************************************************************************************/

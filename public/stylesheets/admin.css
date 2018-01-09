@@ -107,8 +107,6 @@ HOME
 
   th.admin-users-table-service{ display:none; }
   td.admin-users-table-service{ display:none; }
-  th.admin-users-table-activated{ display:none; }
-  td.admin-users-table-activated{ display:none; }
   th.admin-users-table-suspended{ display:none; }
   td.admin-users-table-suspended{ display:none; }
   th.admin-users-table-admin{ display:none; }
@@ -127,8 +125,6 @@ HOME
 
   th.admin-users-table-service{ display:none; }
   td.admin-users-table-service{ display:none; }
-  th.admin-users-table-activated{ display:none; }
-  td.admin-users-table-activated{ display:none; }
   th.admin-users-table-suspended{ display:none; }
   td.admin-users-table-suspended{ display:none; }
   th.admin-users-table-admin{ display:none; }
@@ -147,8 +143,6 @@ HOME
 
   th.admin-users-table-service{ display:none; }
   td.admin-users-table-service{ display:none; }
-  th.admin-users-table-activated{ display:none; }
-  td.admin-users-table-activated{ display:none; }
   th.admin-users-table-suspended{ display:none; }
   td.admin-users-table-suspended{ display:none; }
 
@@ -164,8 +158,6 @@ HOME
   .admin-main-block .info{ width:30%; }
   .admin-main-block .create{ height:calc((100vw * 0.75) * 0.075); width:7.5%; margin:5% 0 0 92.5%; }
 
-  th.admin-users-table-activated{ display:none; }
-  td.admin-users-table-activated{ display:none; }
   th.admin-users-table-suspended{ display:none; }
   td.admin-users-table-suspended{ display:none; }
 
@@ -186,7 +178,6 @@ HOME
   th.admin-users-table-lastname{ width:15%; }
   th.admin-users-table-firstname{ width:15%; }
   th.admin-users-table-service{ width:15%; }
-  th.admin-users-table-activated{ width:10%; }
   th.admin-users-table-suspended{ width:10%; }
   th.admin-users-table-admin{ width:10%; }
 }
@@ -201,7 +192,6 @@ HOME
   th.admin-users-table-lastname{ width:15%; }
   th.admin-users-table-firstname{ width:15%; }
   th.admin-users-table-service{ width:15%; }
-  th.admin-users-table-activated{ width:10%; }
   th.admin-users-table-suspended{ width:10%; }
   th.admin-users-table-admin{ width:10%; }
 }

@@ -334,3 +334,53 @@ module.exports.updateAdminStatus = (accountUUID, adminStatus, databaseConnector,
 }
 
 /****************************************************************************************************/
+
+module.exports.updateSuspendedStatus = (accountUUID, suspendStatus, databaseConnector, callback) =>
+{
+  accountUUID         == undefined      ||
+  suspendStatus       == undefined      ||
+  databaseConnector   == undefined      ?
+
+  callback(false, 406, constants.MISSING_DATA_IN_REQUEST) :
+
+  databaseManager.selectQuery(
+  {
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.accounts,
+    'args': { '0': 'id' },
+    'where': { '=': { '0': { 'key': 'uuid', 'value': accountUUID } } }
+        
+  }, databaseConnector, (boolean, accountOrErrorMessage) =>
+  {
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+      
+    else
+    {
+      if(accountOrErrorMessage.length == 0) callback(false, 404, constants.ACCOUNT_NOT_FOUND);
+  
+      else
+      {
+        suspendStatus != 0 && suspendStatus != 1 ? callback(false, 406, constants.INCORRECT_SUSPENSION_STATUS) :
+  
+        databaseManager.updateQuery(
+        {
+          'databaseName': params.database.name,
+          'tableName': params.database.tables.accounts,
+          'args': { 'suspended': suspendStatus },
+          'where': { '=': { '0': { 'key': 'uuid', 'value': accountUUID } } }
+  
+        }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
+        {
+          if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+  
+          else
+          {
+            updatedRowsOrErrorMessage == 0 ? callback(false, 500, constants.ACCOUNT_NOT_UPDATED) : callback(true);
+          }
+        });
+      }
+    }
+  });
+}
+
+/****************************************************************************************************/

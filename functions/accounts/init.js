@@ -125,7 +125,6 @@ function createOrUpdateAccount(boolean, account, password, databaseConnector, ca
       'lastname': account.lastname,
       'firstname': account.firstname,
       'password': password,
-      'activated': account.activated,
       'suspended': account.suspended,
       'service': account.service,
       'is_admin': account.is_admin
@@ -160,7 +159,6 @@ function createOrUpdateAccount(boolean, account, password, databaseConnector, ca
       'lastname': account.lastname,
       'firstname': account.firstname,
       'password': password,
-      'activated': account.activated,
       'suspended': account.suspended,
       'service': account.service,
       'is_admin': account.is_admin

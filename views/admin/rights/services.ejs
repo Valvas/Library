@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <title>Library - Droits</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/rights/services.css' />
+  <body class='private-section-body'>
+    <% include ../../include/menu.ejs %>
+    <% include ../../include/admin_aside.ejs %>
+    <div id='admin-main-block' name='<%= account['uuid'] %>' class='admin-main-block'>
+      <a class='return' href='/admin/rights'>Retour</a>
+      <div class='admin-rights-account-block'>
+        <div>Adresse Email :</div>
+        <div><%= account['email'] %></div>
+      </div>
+      <div class='admin-rights-account-block'>
+        <div>Nom :</div>
+        <div><%= account['lastname'] %></div>
+      </div>
+      <div class='admin-rights-account-block'>
+        <div>Prénom :</div>
+        <div><%= account['firstname'] %></div>
+      </div>
+      <div class='admin-rights-services'>
+        <% for(var key in services){ %><!-- @SuppressWhitespace
+        --><div id='<%= key %>' name='admin-rights-service' class='block'><%= services[key]['name'] %></div><!-- @SuppressWhitespace
+      --><% } %>
+      </div>
+    </div>
+    <% include ../../include/scripts.ejs %>
+    <script src='/js/admin/rights/links.js'></script>
+    <script src='/js/afk.js'></script>
+  </body>
+</html>

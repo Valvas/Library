@@ -32,7 +32,11 @@
         --><div class='value'><% if(account['is_admin'] == 1){ %>Oui<% } else{ %>Non<% } %></div><!-- @SuppressWhitespace
         --><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
       </div>
-      <button>Suspendre</button>
+      <div id='suspended' name='select' class='block'>
+        <div class='key'>Suspendu</div><!-- @SuppressWhitespace
+        --><div class='value'><% if(account['suspended'] == 1){ %>Oui<% } else{ %>Non<% } %></div><!-- @SuppressWhitespace
+        --><button name='admin-users-edit-account-button' class='edit'>Modifier</button>
+      </div>
     </div>
     <% include ../include/scripts.ejs %>
     <script src='/js/afk.js'></script>

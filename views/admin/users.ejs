@@ -13,7 +13,6 @@
           <th class='admin-users-table-lastname'>Nom</th>
           <th class='admin-users-table-firstname'>Prénom</th>
           <th class='admin-users-table-service'>Service</th>
-          <th class='admin-users-table-activated'>Activé</th>
           <th class='admin-users-table-suspended'>Suspendu</th>
           <th class='admin-users-table-admin'>Admin</th>
         </tr>
@@ -23,7 +22,6 @@
             <td class='admin-users-table-lastname'><%= users[i]['lastname'] %></td>
             <td class='admin-users-table-firstname'><%= users[i]['firstname'] %></td>
             <td class='admin-users-table-service'><%= services[users[i]['service']]['name'] %></td>
-            <td class='admin-users-table-activated'><% if(users[i]['activated'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
             <td class='admin-users-table-suspended'><% if(users[i]['suspended'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
             <td class='admin-users-table-admin'><% if(users[i]['is_admin'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
           </tr>

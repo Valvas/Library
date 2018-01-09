@@ -44,6 +44,11 @@ const EMAIL_ALREADY_IN_USE                                                      
 const UNABLE_TO_MODIFY_THIS_VALUE                                                 = 10040;
 const ACCOUNT_NOT_UPDATED                                                         = 10041;
 const INCORRECT_ADMIN_STATUS                                                      = 10042;
+const COMMENT_STATUS_INCORRECT                                                    = 10043;
+const COMMENT_STATUS_NOT_UPDATED                                                  = 10044;
+const REPORT_STATUS_INCORRECT                                                     = 10045;
+const REPORT_STATUS_NOT_UPDATED                                                   = 10046;
+const INCORRECT_SUSPENSION_STATUS                                                 = 10047;
 
 /******************************************************************************************
 SUCCESS
@@ -63,6 +68,8 @@ const COMMENT_ADDED                                                             
 const NEW_PASSWORD_SENT                                                           = 20012;
 const ACCOUNT_SUCCESSFULLY_CREATED                                                = 20013;
 const ACCOUNT_UPDATED_SUCCESSFULLY                                                = 20014;
+const COMMENT_STATUS_UPDATED                                                      = 20015;
+const REPORT_STATUS_UPDATED                                                       = 20016;
 
 /******************************************************************************************
 EXPORTS
@@ -112,6 +119,11 @@ module.exports =
   UNABLE_TO_MODIFY_THIS_VALUE: UNABLE_TO_MODIFY_THIS_VALUE,
   ACCOUNT_NOT_UPDATED: ACCOUNT_NOT_UPDATED,
   INCORRECT_ADMIN_STATUS: INCORRECT_ADMIN_STATUS,
+  COMMENT_STATUS_INCORRECT: COMMENT_STATUS_INCORRECT,
+  COMMENT_STATUS_NOT_UPDATED: COMMENT_STATUS_NOT_UPDATED,
+  REPORT_STATUS_INCORRECT: REPORT_STATUS_INCORRECT,
+  REPORT_STATUS_NOT_UPDATED: REPORT_STATUS_NOT_UPDATED,
+  INCORRECT_SUSPENSION_STATUS: INCORRECT_SUSPENSION_STATUS,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -126,5 +138,7 @@ module.exports =
   COMMENT_ADDED: COMMENT_ADDED,
   NEW_PASSWORD_SENT: NEW_PASSWORD_SENT,
   ACCOUNT_SUCCESSFULLY_CREATED: ACCOUNT_SUCCESSFULLY_CREATED,
-  ACCOUNT_UPDATED_SUCCESSFULLY: ACCOUNT_UPDATED_SUCCESSFULLY
+  ACCOUNT_UPDATED_SUCCESSFULLY: ACCOUNT_UPDATED_SUCCESSFULLY,
+  COMMENT_STATUS_UPDATED: COMMENT_STATUS_UPDATED,
+  REPORT_STATUS_UPDATED: REPORT_STATUS_UPDATED
 }

@@ -6,7 +6,6 @@
     "firstname": "John",
     "service": "info",
     "suspended": 0,
-    "activated": 1,
     "password": "",
     "is_admin": 0
   },
@@ -17,7 +16,6 @@
     "firstname": "John",
     "service": "info",
     "suspended": 0,
-    "activated": 1,
     "password": "",
     "is_admin": 0
   },
@@ -28,7 +26,6 @@
     "firstname": "John",
     "service": "info",
     "suspended": 0,
-    "activated": 1,
     "password": "",
     "is_admin": 0
   },
@@ -39,7 +36,6 @@
     "firstname": "John",
     "service": "info",
     "suspended": 0,
-    "activated": 1,
     "password": "",
     "is_admin": 0
   },
@@ -50,7 +46,6 @@
     "firstname": "John",
     "service": "info",
     "suspended": 0,
-    "activated": 1,
     "password": "",
     "is_admin": 0
   },
@@ -61,7 +56,6 @@
     "firstname": "John",
     "service": "info",
     "suspended": 0,
-    "activated": 1,
     "password": "",
     "is_admin": 1
   }

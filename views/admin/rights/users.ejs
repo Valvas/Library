@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <title>Library - Droits</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/rights/users.css' />
+  <body class='private-section-body'>
+    <% include ../../include/menu.ejs %>
+    <% include ../../include/admin_aside.ejs %>
+    <div class='admin-main-block'>
+      <div class='admin-rights-info'>Cliquez sur un utilisateur pour gérer ses droits</div>
+      <table class='admin-rights-table'>
+        <tr class='labels'>
+          <th>Adresse Email</th>
+          <th>Nom</th>
+          <th>Prénom</th>
+        </tr>
+        <% for(var i = 0; i < Object.keys(users).length; i++){ %>
+          <tr id='<%= users[i]['uuid'] %>' class='values <% if(i % 2 == 0){ %>odd<% } else{ %>even<% } %>'>
+            <td><%= users[i]['email'] %></td>
+            <td><%= users[i]['lastname'] %></td>
+            <td><%= users[i]['firstname'] %></td>
+          </tr>
+        <% } %>
+      </table>
+    </div>
+    <% include ../../include/scripts.ejs %>
+    <script src='/js/admin/rights/links.js'></script>
+    <script src='/js/afk.js'></script>
+  </body>
+</html>

@@ -40,5 +40,10 @@
   "10039": "adresse email déjà utilisée",
   "10040": "impossible de modifier cette donnée",
   "10041": "le compte n'a pas été mis à jour",
-  "10042": "ce statut administrateur n'existe pas"
+  "10042": "ce statut administrateur n'existe pas",
+  "10043": "ce statut de commentaire n'existe pas",
+  "10044": "le statut du commentaire n'a pas été mis à jour",
+  "10045": "ce statut de rapport n'existe pas",
+  "10046": "le statut du rapport n'a pas été mis à jour",
+  "10047": "ce statut de suspension de compte n'existe pas"
 }

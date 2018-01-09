@@ -59,6 +59,19 @@ window.onload = $(() =>
           loop();
         });
       }
+
+      else if($(event.target).parent().attr('id') == 'suspended')
+      {
+        openSelectPopup(
+        {
+          name: $(event.target).parent().attr('id'),
+          values:
+          {
+            0: 'Non',
+            1: 'Oui'
+          }
+        });
+      }
     }
   });
 
@@ -92,7 +105,7 @@ window.onload = $(() =>
       {
         printSuccess(json['message']);
 
-        if($('#user-edit-popup-input').attr('name') == 'is_admin' || $('#user-edit-popup-input').attr('name') == 'service')
+        if($('#user-edit-popup-input').attr('name') == 'is_admin' || $('#user-edit-popup-input').attr('name') == 'service' || $('#user-edit-popup-input').attr('name') == 'suspended')
         {
           var select = document.getElementById('user-edit-popup-input');
           $('#' + $('#user-edit-popup-input').attr('name')).find('div.value').text(select.options[select.selectedIndex].text);

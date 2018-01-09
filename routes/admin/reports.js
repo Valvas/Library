@@ -9,6 +9,8 @@ var logon                 = require(`${__root}/functions/logon`);
 var report                = require(`${__root}/functions/report`);
 var constants             = require(`${__root}/functions/constants`);
 var reportsGet            = require(`${__root}/functions/reports/get`);
+var reportsUpdate         = require(`${__root}/functions/reports/update`);
+var commentsUpdate        = require(`${__root}/functions/comments/update`);
 
 var router = express.Router();
 
@@ -33,6 +35,30 @@ router.get('/:report', (req, res) =>
     reportOrFalse == false ?
     res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
     res.render('admin/report', { navigationLocation: 'admin', asideLocation: 'reports', links: require(`${__root}/json/admin`).aside, report: reportOrFalse, status: params.reports_status, types: params.reports_type });
+  });
+});
+
+/****************************************************************************************************/
+
+router.put('/update-comment-status', (req, res) =>
+{
+  commentsUpdate.updateCommentStatus(req.body.commentID, req.body.commentStatus, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
+  {
+    boolean ?
+    res.status(200).send({ result: true, message: `${success[constants.COMMENT_STATUS_UPDATED].charAt(0).toUpperCase()}${success[constants.COMMENT_STATUS_UPDATED].slice(1)}` }) :
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+  });
+});
+
+/****************************************************************************************************/
+
+router.put('/update-report-status', (req, res) =>
+{
+  reportsUpdate.updateReportStatus(req.body.reportUUID, req.body.reportStatus, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
+  {
+    boolean ?
+    res.status(200).send({ result: true, message: `${success[constants.REPORT_STATUS_UPDATED].charAt(0).toUpperCase()}${success[constants.REPORT_STATUS_UPDATED].slice(1)}` }) :
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
   });
 });
 

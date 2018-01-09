@@ -42,7 +42,6 @@ module.exports.createAccount = (obj, databaseConnector, emailTransporter, callba
                 'lastname': obj.lastname,
                 'firstname': obj.firstname,
                 'password': encryptedPasswordOrErrorStatus,
-                'activated': 1,
                 'suspended': 0,
                 'service': obj.service,
                 'is_admin': obj.admin

@@ -104,6 +104,17 @@ router.put('/update', (req, res) =>
       
         break;
 
+      case 'suspended':
+
+        adminUsers.updateSuspendedStatus(req.body.account, req.body.value, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
+        {
+          boolean ?
+          res.status(200).send({ result: true, message: `${success[constants.ACCOUNT_UPDATED_SUCCESSFULLY].charAt(0).toUpperCase()}${success[constants.ACCOUNT_UPDATED_SUCCESSFULLY].slice(1)}` }) :
+          res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+        });
+      
+        break;
+
       default:
 
         res.status(406).send({ result: false, message: `${errors[10040].charAt(0).toUpperCase()}${errors[10040].slice(1)}` });

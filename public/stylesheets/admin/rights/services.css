@@ -1,0 +1,24 @@
+/****************************************************************************************************/
+
+.admin-rights-account-block{ margin:2.5% 2.5% 2.5% 2.5%; width:95%; }
+
+.admin-rights-services{ margin:2.5% 0 2.5% 0; width:95%; }
+
+.admin-rights-services .block{ cursor:pointer; color:#FFFFFF; font-family:barlow; padding:1% 2.5% 1% 2.5%; margin:2.5% 2.5% 2.5% 2.5%; border-radius:4px; vertical-align:top; background-color:#77B5FE; display:inline-block; }
+.admin-rights-services .block:hover{ color:#223344; background-color:#5593DC; }
+
+.admin-rights-services .block .check-active{ color:#1FA055; }
+.admin-rights-services .block .close-active{ color:#E84E4F; }
+.admin-rights-services .block .check-inactive, .admin-rights-services .block .close-inactive{ cursor:pointer; color:#CCCCCC; }
+.admin-rights-services .block .check-inactive:hover{ color:#77B5FE; }
+.admin-rights-services .block .close-inactive:hover{ color:#77B5FE; }
+
+.admin-rights-services .rights{ display:none; list-style-type:none; padding:0; }
+.admin-rights-services .rights .element{ margin:5%; }
+.admin-rights-services .rights .label{ font-family:raleway-italic; width:80%; display:inline-block; overflow:hidden; text-overflow:ellipsis; }
+.admin-rights-services .rights .icon{ width:10%; display:inline-block; vertical-align:bottom; text-align:right; font-size:x-large; }
+
+.admin-main-block a.return{ display:block; color:#223344; font-size:large; font-family:barlow; text-decoration:none; text-decoration:underline; margin:2.5% 2.5% 2.5% 2.5%; }
+.admin-main-block a.return:hover{ color:#667788; }
+
+/****************************************************************************************************/

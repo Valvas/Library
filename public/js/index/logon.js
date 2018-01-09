@@ -19,7 +19,7 @@ window.onload = $(function()
       $.ajax(
       {
         type: 'PUT', timeout: 2000, dataType: 'JSON', data: { 'emailAddress': email, 'uncryptedPassword': password }, url: '/', success: function(){},
-        error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); } 
+        error: function(xhr, status, error){ printError(JSON.parse(xhr.responseText).message); } 
 
       }).done(function(json)
       {

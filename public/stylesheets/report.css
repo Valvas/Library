@@ -145,6 +145,15 @@ TABLE
   font-family:raleway-light;
 }
 
+.reports-main-block .report-detail .status-selection
+{
+  width:90%;
+  padding:1%;
+  cursor:pointer;
+  font-size:large;
+  margin:0 5% 2.5% 5%;
+}
+
 .reports-main-block .report-detail .comment-button
 {
   padding:2%;
