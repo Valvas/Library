@@ -1,0 +1,21 @@
+/****************************************************************************************************/
+
+.admin-rights-table{ border:1px solid #77B5FE; table-layout:fixed; border-collapse:collapse; width:100%; }
+
+.admin-rights-table .labels{ text-align:left; background-color:#77B5FE; }
+
+.admin-rights-table .labels th, .admin-rights-table td{ font-family:raleway-light; padding:1%; }
+
+.admin-rights-table .values{ cursor:pointer; }
+
+.admin-rights-table .values:hover{ font-weight:bold; background-color:#CCDDFF; }
+
+.admin-rights-table .values td{ overflow:hidden; text-overflow:ellipsis; }
+
+.admin-rights-table tr.odd{ background-color:#FFFFFF; }
+
+.admin-rights-table tr.even{ background-color:#EEEEEE; }
+
+.admin-rights-info{ font-family:raleway-italic; margin:2.5% 0 2.5% 0; }
+
+/****************************************************************************************************/

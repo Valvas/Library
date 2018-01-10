@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <% include include/head.ejs %>
+  <title>Library - Accueil</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
   <body class='private-section-body'>
     <% include include/menu.ejs %>
-    <% include include/aside.ejs %>
-    <div class='home-news-block'>
-      <% for(var key in news){ %>
-        <div class='home-news-block-element'>
-          <p class='home-news-block-element-title'><%= news[key]['title'] %></p>
-          <p class='home-news-block-element-date'><%= news[key]['date'] %></p>
-          <p class='home-news-block-element-content'><%= news[key]['content'] %></p>
-        </div>
-      <% } %>
-    </div>
+    <% include include/aside.ejs %><!-- @SuppressWhitespace
+    --><div class='home-news-block'>
+        <% for(var key in news){ %>
+          <div class='home-news-block-element'>
+            <p class='home-news-block-element-title'><%= news[key]['title'] %></p>
+            <p class='home-news-block-element-date'><%= news[key]['date'] %></p>
+            <p class='home-news-block-element-content'><%= news[key]['content'] %></p>
+          </div>
+        <% } %>
+      </div>
     <% include include/scripts.ejs %>
+    <script src='/js/afk.js'></script>
   </body>
 </html>

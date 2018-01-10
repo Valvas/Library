@@ -1,63 +1,41 @@
-let bcrypt            = require('bcrypt');
-let config            = require('../json/config');
+'use strict';
+
+var bcrypt            = require('bcrypt');
+var params            = require(`${__root}/json/config`);
+var constants         = require(`${__root}/functions/constants`);
 
 /****************************************************************************************************/
 
-module.exports.encryptPassword = function(password, callback)
+module.exports.encryptPassword = (password, callback) =>
 {
-  bcrypt.hash(password, config['salt'], function(err, result)
+  bcrypt.hash(password, params.salt, (err, result) =>
   {
-    err != undefined ? callback(false) : callback(result);
+    err != undefined ? callback(false, 500, constants.ENCRYPTION_FAILED) : callback(result);
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.getRandomPassword = function(callback)
+module.exports.getRandomPassword = (callback) =>
 {
-  let password = '';
-  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var password = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  let i = 0;
+  var x = 0;
 
-  let loop = function()
+  var loop = () =>
   {
-      i++;
+    password += characters.charAt(Math.floor(Math.random() * characters.length));
 
-      password += characters.charAt(Math.floor(Math.random() * characters.length));
-
-      i < 8 ? loop() : 
+    (x += 1) < 8 ? loop() : 
       
-      bcrypt.hash(password, config['salt'], function(err, result)
-      {
-        err != undefined ? callback(false) : callback(password, result);
-      });
+    bcrypt.hash(password, params.salt, (err, result) =>
+    {
+      err != undefined ? callback(false, 500, constants.ENCRYPTION_FAILED) : callback(password, result);
+    });
   }
 
   loop();
 }
 
 /****************************************************************************************************/
-
-module.exports.encryptIdentifier = function(identifier, callback)
-{
-  let encryptedIdentifier = '';
-  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  let i = 0;
-  
-    let loop = function()
-    {
-        i++;
-  
-        encryptedIdentifier += characters.charAt(Math.floor(Math.random() * characters.length));
-  
-        if(i == 31) encryptedIdentifier += identifier.toString();
-
-        i < 64 ? loop() : 
-
-        callback(encryptedIdentifier)
-    }
-  
-    loop();
-}

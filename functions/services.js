@@ -1,51 +1,104 @@
 'use strict';
 
-let encryption          = require('./encryption');
-let config              = require('../json/config');
-
-let services = module.exports = {};
+var params              = require(`${__root}/json/config`);
+var constants           = require(`${__root}/functions/constants`);
+var encryption          = require(`${__root}/functions/encryption`);
+var databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-services.getFilesFromOneService = function(service, mysqlConnector, callback)
+module.exports.getFilesFromOneService = (service, databaseConnector, callback) =>
 {
-  mysqlConnector == undefined ? callback(false) :
+  databaseConnector == undefined || service == undefined ? callback(false, 406, constants.MISSING_DATA_IN_REQUEST) :
 
-  mysqlConnector.query(`SELECT tag, name, type, account FROM ${config['database']['library_database']}.${config['database']['files_table']} WHERE service = "${service}"`, function(err, files)
+  databaseManager.selectQuery(
   {
-    if(err) callback(false);
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.files,
+  
+    'args': 
+    { 
+      '0': '*' 
+    },
+      
+    'where':
+    {
+      '=':
+      {
+        '0':
+        {
+          'key': 'service',
+          'value': service
+        }
+      }
+    }
+  }, databaseConnector, (boolean, rowsOrErrorMessage) =>
+  {
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
     else
     {
-      files.length == 0 ? callback({}) : 
-      
-      getFilesOwners(files, mysqlConnector, function(object)
+      if(rowsOrErrorMessage.length == 0) callback({});
+
+      else
       {
-        object == false ? callback(false) : callback(object);
-      });
+        var x = 0;
+        
+        var fileLoop = () =>
+        {
+          rowsOrErrorMessage[x]['type'] = params['file_ext'][rowsOrErrorMessage[x]['type']];
+
+          rowsOrErrorMessage[x += 1] != undefined ? fileLoop() :
+
+          getFilesOwners(rowsOrErrorMessage, databaseConnector, (filesOrFalse, errorStatus, errorCode) =>
+          {
+            filesOrFalse == false ? callback(false, errorStatus, errorCode) : callback(filesOrFalse);
+          });
+        }
+
+        fileLoop();
+      }
     }
   });
 }
 
 /****************************************************************************************************/
 
-function getFilesOwners(files, mysqlConnector, callback)
+function getFilesOwners(files, databaseConnector, callback)
 {
-  let x = 0;
+  var x = 0;
 
-  let loop = function(file)
+  var loop = (file) =>
   {
-    mysqlConnector.query(`SELECT firstname, lastname FROM ${config['database']['library_database']}.${config['database']['auth_table']} WHERE email = "${file['account']}"`, function(err, account)
+    databaseManager.selectQuery(
     {
-      if(err) callback(false);
+      'databaseName': params.database.name,
+      'tableName': params.database.tables.accounts,
+      
+      'args': { '0': 'firstname', '1': 'lastname' },
+          
+      'where':
+      {
+        '=':
+        {
+          '0':
+          {
+            'key': 'uuid',
+            'value': file.account
+          }
+        }
+      }
+    }, databaseConnector, (boolean, rowsOrErrorCode) =>
+    {
+      if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
       else
       {
-        account.length == 0 ? files[Object.keys(files)[x]]['account'] = '??????' : files[Object.keys(files)[x]]['account'] = `${account[0]['firstname']} ${account[0]['lastname'].toUpperCase()}`;
-
-        x++;
-
-        Object.keys(files)[x] != undefined ? loop(files[Object.keys(files)[x]]) : callback(files);
+        rowsOrErrorCode.length == 0 ? 
+        files[Object.keys(files)[x]]['account'] = '??????' : 
+        files[Object.keys(files)[x]]['account'] = `${rowsOrErrorCode[0]['firstname']} ${rowsOrErrorCode[0]['lastname'].toUpperCase()}`;
+        
+        Object.keys(files)[x += 1] != undefined ? loop(files[Object.keys(files)[x]]) : callback(files);
       }
     });
   }

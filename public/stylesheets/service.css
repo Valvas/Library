@@ -1,3 +1,85 @@
+/****************************************************************************************************/
+
+.service-main-block .title
+{
+  font-size:x-large;
+  font-family:barlow;
+}
+
+.service-main-block .upload-button
+{
+  padding:0;
+  border:none;
+  cursor:pointer;
+  color:#FFFFFF;
+  font-size:large;
+  margin:5% 0 5% 5%;
+  border-radius:50%;
+  display:inline-block;
+  font-family:raleway-light;
+  background-color:#77B5FE;
+}
+
+.service-main-block .upload-button:hover
+{
+  color:#334455;
+  background-color:#5593DC;
+}
+
+/****************************************************************************************************/
+
+@media (max-width: 639px)
+{
+  .service-main-block .service-main-block-table .hide-1x{ display:none; }
+
+  .service-main-block .title{ display:inline-block; width:70%; margin:5% 5% 5% 0; }
+
+  .service-main-block .upload-button{ width:15%; height:calc((100vw * 0.95) * 0.15); }
+}
+
+@media (min-width: 640px) and (max-width: 767px)
+{
+  .service-main-block .service-main-block-table .hide-2x{ display:none; }
+
+  .service-main-block .title{ display:inline-block; width:75%; margin:5% 5% 5% 0; }
+
+  .service-main-block .upload-button{ width:10%; height:calc((100vw * 0.95) * 0.1); }
+}
+
+@media (min-width: 768px) and (max-width: 959px)
+{
+  .service-main-block .service-main-block-table .hide-3x{ display:none; }
+
+  .service-main-block .title{ display:inline-block; width:75%; margin:5% 5% 5% 0; }
+
+  .service-main-block .upload-button{ width:10%; height:calc((100vw * 0.7) * 0.1); }
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+  .service-main-block .service-main-block-table .hide-4x{ display:none; }
+
+  .service-main-block .title{ display:inline-block; width:77.5%; margin:5% 5% 5% 0; }
+
+  .service-main-block .upload-button{ width:7.5%; height:calc((100vw * 0.7) * 0.075); }
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+  .service-main-block .title{ display:inline-block; width:80%; margin:5% 5% 5% 0; }
+
+  .service-main-block .upload-button{ width:5%; height:calc((100vw * 0.70) * 0.05); }
+}
+
+@media (min-width: 1680px)
+{
+  .service-main-block .title{ display:inline-block; width:81%; margin:5% 5% 5% 0; }
+
+  .service-main-block .upload-button{ width:4%; height:calc((100vw * 0.75) * 0.04); }
+}
+
+/****************************************************************************************************/
+
 .service-main-block-title
 {
   width:65%;
@@ -119,46 +201,88 @@ td.service-main-block-file-buttons
   color:#A40A0B;
 }
 
-.service-main-block-file-buttons-upload
+.services-main-block{ width:95%; margin:2.5%; }
+
+.services-main-block-element, .admin-main-block-element{ cursor:pointer; text-decoration:none; font-family:raleway-regular; padding:2% 5% 2% 5%; font-size:large; color:#FFFFFF; background-color:#77B5FE; border-radius:8px; text-align:center; }
+
+.services-main-block-element:hover, .admin-main-block-element:hover{ color:#223344; background-color:#5593DC; }
+
+/****************************************************************************************************/
+
+@media all and (max-width: 639px)
 {
-  width:30%;
-  border:none;
-  cursor:pointer;
-  color:#FFFFFF;
-  font-size:large;
-  margin:2% 0 2% 0;
-  padding:1% 5% 1% 5%;
-  font-family:raleway-light;
-  background-color:#77B5FE;
+  .service-main-block{ width:95%; margin:2.5%; }
+
+  .services-main-block-element, .admin-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
 }
 
-.service-main-block-file-buttons-upload:hover
+/****************************************************************************************************/
+
+@media all and (min-width: 640px) and (max-width: 767px)
 {
-  color:#334455;
-  background-color:#5593DC;
+  .service-main-block{ width:95%; margin:2.5%; }
+
+  .services-main-block-element, .admin-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
 }
 
-.service-main-block-file-buttons-upload-icon
-{
-  padding:1% 5% 1% 0;
-}
-
-@media all and (max-width: 767px)
-{
-  .service-main-block{ width:90%; margin:2.5%; display:inline-block; vertical-align:top; padding:1%; }
-}
+/****************************************************************************************************/
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .service-main-block{ width:90%; margin:2.5%; display:inline-block; vertical-align:top; padding:1%; }
+  .service-main-block{ width:70%; margin:2.5%; display:inline-block; vertical-align:top; }
+  
+  .services-main-block-element, .admin-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
 }
 
-@media all and (min-width: 960px) and (max-width: 1679px)
+/****************************************************************************************************/
+
+@media all and (min-width: 960px) and (max-width: 1279px)
 {
-  .service-main-block{ width:65%; margin:2.5%; display:inline-block; vertical-align:top; padding:1%; }
+  .service-main-block{ width:70%; margin:2.5%; display:inline-block; vertical-align:top; }
+  
+  .services-main-block-element, .admin-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
 }
+
+/****************************************************************************************************/
+
+@media all and (min-width: 1280px) and (max-width: 1679px)
+{
+  .service-main-block{ width:70%; margin:2.5%; display:inline-block; vertical-align:top; }
+  
+  .services-main-block-element, .admin-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
+}
+
+/****************************************************************************************************/
 
 @media all and (min-width: 1680px)
 {
-  .service-main-block{ width:65%; margin:2.5%; display:inline-block; vertical-align:top; padding:1%; }
+  .service-main-block{ width:75%; margin:2.5%; display:inline-block; vertical-align:top; }
+  
+  .services-main-block-element, .admin-main-block-element
+  {
+    margin:2.5%;
+    display:inline-block;
+  }
 }
+
+/****************************************************************************************************/

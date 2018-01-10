@@ -1,124 +1,134 @@
 'use strict';
 
-let express = require('express');
-let multer  = require('multer');
+var express           = require('express');
+var multer            = require('multer');
 
-let services          = require('../functions/services');
-let account           = require('../functions/accounts/functions');
-let files             = require('../functions/files');
-let config            = require('../json/config');
+var services          = require('../functions/services');
+var constants         = require('../functions/constants');
+var filesAdding       = require('../functions/files/adding');
+var filesDeleting     = require('../functions/files/deleting');
+var accountRights     = require('../functions/accounts/rights');
+var filesDownloading  = require('../functions/files/downloading');
 
-let accountRights     = require('../functions/accounts/rights');
+var errors            = require(`${__root}/json/errors`);
+var params            = require(`${__root}/json/config`);
+var success           = require(`${__root}/json/success`);
 
-let storage = multer.diskStorage(
+var storage = multer.diskStorage(
 {
-  destination: function (req, file, callback){ callback(null, config['path_to_temp_storage']); },
-  filename: function (req, file, callback){ callback(null, file.originalname); }
+  destination: (req, file, callback) => { callback(null, params.path_to_temp_storage); },
+  filename: (req, file, callback) => { callback(null, file.originalname); }
 });
  
-let upload = multer({ storage: storage });
+var upload = multer({ storage: storage });
 
-let router = express.Router();
+var router = express.Router();
 
 /****************************************************************************************************/
 
-router.get('/:service', function(req, res)
+router.get('/', (req, res) =>
 {
-  !(req.params.service in require('../json/services')) ? res.render('404') :
+  res.render('services', { navigationLocation: 'services', asideLocation: '', services: require('../json/services') });
+});
 
-  accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), function(success, rights)
+/****************************************************************************************************/
+
+router.post('/post-new-file', upload.single('file'), (req, res) =>
+{
+  req.file == undefined || req.body.service == undefined ? res.status(406).send({ result: false, message: `Erreur [406] - ${errors[constants.MISSING_DATA_IN_REQUEST]} !` }) :
+  
+  filesAdding.addOneFile(req.body.service, req.file, req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
   {
-    if(success == false)
-    {
-      switch(rights)
-      {
-        case 0: res.render('block', { message: `Erreur interne du serveur, veuillez réessayer` });
-        case 1: res.render('block', { message: `La requête ne peut pas être traitée car des données sont manquantes` });
-        case 2: res.render('block', { message: `Compte introuvable, veuillez signaler cette erreur` });
-        case 3: res.render('block', { message: `Le service demandé n'existe pas ou n'existe plus` });
-        case 4: res.render('block', { message: `Vous n'êtes pas autorisé(e) à accéder à cette page` });
-      }
-    }
-
-    else
-    {
-      services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), function(files)
-      {
-        files == false ?
-        res.render('block', { message: `Erreur interne du serveur, veuillez réessayer` }) :
-        res.render('service', { location: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rights, files: files });
-      }); 
-    }
+    boolean ? 
+    res.status(200).send({ result: true, message: `${success[20010].charAt(0).toUpperCase()}${success[20010].slice(1)}` }) :
+    res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
   });
 });
 
 /****************************************************************************************************/
 
-router.delete('/delete-file', function(req, res)
+router.delete('/delete-file', (req, res) =>
 {
   req.body.file == undefined || req.body.service == undefined ? res.status(406).send(false) :
 
-  files.deleteFile(req.body.file, req.body.service, req.session.identifier, req.app.get('mysqlConnector'), function(result)
+  filesDeleting.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
   {
-    res.status(200).send(result);
+    boolean ?
+    res.status(200).send({ result: true, message: `${success[20005].charAt(0).toUpperCase()}${success[20005].slice(1)}` }) :
+    res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
   });
 });
 
 /****************************************************************************************************/
 
-router.put('/get-ext-accepted', function(req, res)
+router.put('/get-ext-accepted', (req, res) =>
 {
   if(req.body.service == undefined) res.status(406).send(false);
 
   else
   {
-    config['ext_accepted'][req.body.service] == undefined ? res.status(200).send({}) : res.status(200).send(config['ext_accepted'][req.body.service]);
+    params['ext_accepted'][req.body.service] == undefined ? 
+    res.status(404).send({ result: false }) : 
+    res.status(200).send({ result: true, ext: params['ext_accepted'][req.body.service] });
   }
 });
 
 /****************************************************************************************************/
 
-router.post('/post-new-file', upload.single('file'), function(req, res)
+router.get('/download-file/:service/:file', (req, res) =>
 {
-  req.file == undefined || req.body.service == undefined ? res.status(406).send('ERROR : No file provided !') :
-  
-  account.getUserRightsTowardsService(req.body.service, req.session.identifier, req.app.get('mysqlConnector'), function(rights)
+  filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), (fileOrFalse, errorStatus, errorCode) =>
   {
-    rights == false ? res.status(500).send('ERROR : Internal server error !') :
+    fileOrFalse == false ? res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
 
-    rights['upload_files'] == 0 ? res.status(403).send('ERROR : cette action requiert des droits !') : 
-    
-    files.uploadFile(req.file, req.body.service, req.session.identifier, req.app.get('mysqlConnector'), function(result, code)
+    res.download(`${params.path_to_root_storage}/${req.params.service}/${fileOrFalse}`);
+  });
+});
+
+/****************************************************************************************************/
+
+router.put('/get-files-list', (req, res) =>
+{
+  req.body.service == undefined ? res.status(406).send({ result: false, message: `Erreur [406] - ${errors[constants.MISSING_DATA_IN_REQUEST]} !` }) :
+
+  accountRights.getUserRightsTowardsService(req.body.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
+  {
+    rightsOrFalse == false ? res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+
+    services.getFilesFromOneService(req.body.service, req.app.get('mysqlConnector'), (filesOrFalse, errorStatus, errorCode) =>
     {
-      if(result == false)
-      {
-        if(code == 0){ res.status(500).send(false); }
-        if(code == 1){ res.status(200).send(false); }
-      }
-
-      else{ res.status(200).send(true); }
+      filesOrFalse == false ? 
+      res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+      res.status(200).send({ result: true, files: filesOrFalse, rights: rightsOrFalse });
     });
   });
 });
 
 /****************************************************************************************************/
 
-router.get('/download-file/:service/:file', function(req, res)
+router.get('/get-list', (req, res) =>
 {
-  req.params.file == undefined || req.params.service == undefined ? res.status(406).send('ERROR [406] - MISSING DATA !') :
+  res.status(200).send({ result: true, services: require(`${__root}/json/services`) });
+});
 
-  files.downloadFile(req.params.file, req.params.service, req.session.identifier, req.app.get('mysqlConnector'), function(result, code)
+/****************************************************************************************************/
+
+router.get('/:service', (req, res) =>
+{
+  !(req.params.service in require('../json/services')) ? res.render('404') :
+
+  accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
   {
-    if(result == false)
-    {
-      if(code == 0){ res.status(500).send('ERROR [500] - INTERNAL SERVER ERROR !'); }
-      if(code == 1){ res.status(404).send('ERROR [404] - FILE NOT FOUND !'); }
-      if(code == 2){ res.status(500).send('ERROR [401] - NOT AUTHORIZED !'); }
-    }
+    if(rightsOrFalse == false) res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
 
     else
     {
-      res.download(`${config['path_to_root_storage']}/${req.params.service}/${result}`);
+      services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), (filesOrFalse, errorStatus, errorCode) =>
+      {
+        filesOrFalse == false ?
+        res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+        res.render('service', { navigationLocation: 'services', asideLocation: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrFalse, files: filesOrFalse });
+      }); 
     }
   });
 });

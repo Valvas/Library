@@ -1,8 +1,10 @@
-window.onload = $(function()
+window.onload = $(() =>
 {
+  var socket = io('/service');
+
   /****************************************************************************************************/
 
-  $('body').on('click', '[name="service-main-block-buttons-delete"]', function(event)
+  $('body').on('click', '[name="service-main-block-buttons-delete"]', (event) =>
   {
     createConfirmationPopup(
     {
@@ -16,7 +18,7 @@ window.onload = $(function()
 
   /****************************************************************************************************/
 
-  $('body').on('click', '#popup-cancel-button', function(event)
+  $('body').on('click', '#popup-cancel-button', (event) =>
   {
     if($(event.target).parent().attr('id') == 'delete-file-popup')
     {
@@ -27,7 +29,7 @@ window.onload = $(function()
 
   /****************************************************************************************************/
 
-  $('body').on('click', '#popup-perform-button', function(event)
+  $('body').on('click', '#popup-perform-button', (event) =>
   {
     if($(event.target).parent().attr('id') == 'delete-file-popup')
     {
@@ -38,28 +40,14 @@ window.onload = $(function()
   
       $.ajax(
       {
-        type: 'DELETE', timeout: 2000, dataType: 'JSON', data: { file: $(event.target).parent().attr('name'), service: $(document.getElementById('service-main-block')).attr('name')}, url: '/service/delete-file', success: function(){},
-        error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); }
+        type: 'DELETE', timeout: 2000, dataType: 'JSON', data: { file: $(event.target).parent().attr('name'), service: $(document.getElementById('service-main-block')).attr('name')}, url: '/service/delete-file', success: () => {},
+        error: (xhr, status, error) => { printError(`ERROR [${xhr['status']}] - ${error} !`); }
                     
-      }).done(function(json)
+      }).done((json) =>
       {
-        if(json['file_deleted_from_database'] == true) 
+        if(json['result'] == true) 
         {
-          printSuccess('Fichier supprimé.');
-  
-          $(document.getElementById($(event.target).parent().attr('name'))).fadeOut(1000, function() 
-          { 
-            $(document.getElementById($(event.target).parent().attr('name'))).remove();
-  
-            var files = document.getElementsByName('service-main-block-file');
-  
-            if(files.length == 0) printMessage('Aucun fichier associé à ce service pour le moment.');
-  
-            for(var i = 0; i < files.length; i++)
-            {
-              i % 2 == 0 ? $(files[i]).attr('class', 'service-main-block-file-even') : $(files[i]).attr('class', 'service-main-block-file-odd');
-            }
-          });
+          socket.emit('delete_file', { room: $(document.getElementById('service-main-block')).attr('name'), fileUUID: $(event.target).parent().attr('name') });
         }
   
         else

@@ -1,43 +1,46 @@
 <!DOCTYPE html>
 <html>
-  <% include include/head.ejs %>
+  <title>Library - <%= service.charAt(0).toUpperCase() + service.slice(1).toLowerCase() %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/service.css" />
   <body class='private-section-body'>
     <% include include/menu.ejs %>
     <% include include/aside.ejs %>
     <div id='service-main-block' class='service-main-block' name='<%= identifier %>'>
-      <p id='service-main-block-title' class='service-main-block-title'><%= service %></p>
-      <% if(rights['upload_files'] == 1) { %>
-        <button id='service-main-block-file-buttons-upload' class='service-main-block-file-buttons-upload'>
-          <i class='fa fa-upload service-main-block-file-buttons-upload-icon' aria-hidden='true'></i>Ajouter
+      <div class='title'><%= service.charAt(0).toUpperCase() + service.slice(1).toLowerCase() %></div><!-- @SuppressWhitespace
+      --><% if(rights['upload_files'] == 1) { %><!-- @SuppressWhitespace
+      --><button id='service-main-block-file-buttons-upload' class='upload-button'>
+          <i class='fa fa-upload fa-fw' aria-hidden='true'></i>
         </button>
       <% } %>
       <table id='service-main-block-table' class='service-main-block-table'>
         <tr class='service-main-block-table-legend'>
           <th class='service-main-block-file-name'>Nom du fichier</th>
           <th class='service-main-block-file-type'>Extension</th>
-          <th class='service-main-block-file-account'>Propriétaire</th>
-          <th class='service-main-block-file-buttons'></th>
+          <th class='service-main-block-file-account hide-1x hide-2x hide-3x'>Propriétaire</th>
+          <th class='service-main-block-file-buttons hide-1x'></th>
         </tr>
         <% for(var i = 0; i < files.length; i++) { %>
-          <tr id='<%= files[i]['tag'] %>' name='service-main-block-file' class='service-main-block-file-even'>
+          <tr id='<%= files[i]['uuid'] %>' name='service-main-block-file' <% if(i % 2 == 0) { %>class='service-main-block-file-odd'<% } else { %>class='service-main-block-file-even'<% } %>>
             <td class='service-main-block-file-name'><%= files[i]['name'] %></td>
             <td class='service-main-block-file-type'><%= files[i]['type'] %></td>
-            <td class='service-main-block-file-account'><%= files[i]['account'] %></td>
-            <td name='service-main-block-buttons' class='service-main-block-file-buttons'>
-              <% if(rights['download_files'] == 1) { %>
-                <i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>
-              <% } %>
-              <% if(rights['remove_files'] == 1) { %>
-                <i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>
-              <% } %>
+            <td class='service-main-block-file-account hide-1x hide-2x hide-3x'><%= files[i]['account'] %></td>
+            <td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'>
+              <% if(rights['download_files'] == 1) { %><i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i><% } if(rights['remove_files'] == 1) { %><i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i><% } %>
             </td>
           </tr>
         <% } %>
       </table>
     </div>
     <% include include/scripts.ejs %>
+    <script src='/js/afk.js'></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='/js/service/socket.js'></script>
     <script src='/js/service/delete.js'></script>
     <script src='/js/service/upload.js'></script>
     <script src='/js/service/download.js'></script>
+    <script src='/js/service/select.js'></script>
   </body>
 </html>

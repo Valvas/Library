@@ -1,18 +1,19 @@
 'use strict';
 
-const express = require('express');
+var express = require('express');
 
-let account = require('./functions/accounts/functions');
+var errors            = require(`${__root}/json/errors`);
+var accountRights     = require(`${__root}/functions/accounts/rights`);
 
-let app = express();
+var app = express();
 
 /*****************************************************************************************************************************/
 
-module.exports = function(req, res, next)
+module.exports = (req, res, next) =>
 {
-  account.checkIfUserIsAdmin(req.session.identifier, req.app.get('mysqlConnector'), function(result)
+  accountRights.checkIfUserIsAdmin(req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
   {
-    result == 3 ? next() : res.redirect('/');
+    boolean ? next() : res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
   });
 };
 

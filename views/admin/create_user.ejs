@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <title>Library - Créer utilisateur</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/admin.css" />
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/user/creation.css' />
+  <body class='private-section-body'>
+    <% include ../include/menu.ejs %>
+    <% include ../include/admin_aside.ejs %><!-- @SuppressWhitespace
+    --><form id='create-user-form' class='create-user-form'>
+        <div class='title'>Création d'un utilisateur</div>
+        <input name='email' type='text' placeholder='Email' />
+        <input name='lastname' type='text' placeholder='Nom' />
+        <input name='firstname' type='text' placeholder='Prénom' />
+        <div class='select'>
+          <label>Service</label>
+          <select name='service'>
+            <option></option>
+            <% for(var key in services){ %>
+              <option value='<%= key %>'><%= services[key]['name'] %></option>
+            <% } %>
+          </select>
+        </div>
+        <div class='select'>
+          <label>Administrateur</label>
+          <select name='administrator'>
+            <option value='0'>Non</option>
+            <option value='1'>Oui</option>
+          </select>
+        </div>
+        <button>Envoyer</button>
+      </form>
+    <% include ../include/scripts.ejs %>
+    <script src='/js/afk.js'></script>
+    <script src='/js/admin/user.js'></script>
+  </body>
+</html>

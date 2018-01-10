@@ -1,0 +1,115 @@
+/****************************************************************************************************/
+
+.file-main-block{ margin:5% 2.5% 5% 2.5%; display:inline-block; vertical-align:top; }
+
+.file-main-block .name{ font-size:large; font-family:barlow; margin:2.5% 5% 2.5% 5%; }
+
+.file-main-block .type{ font-size:large; font-family:barlow; margin:2.5% 5% 2.5% 5%; }
+
+.file-main-block .return{ display:block; cursor:pointer; font-size:large; font-family:raleway-regular; color:#FFFFFF; border:none; background-color:#8ED744; }
+
+.file-main-block .actions .download{ cursor:pointer; font-size:large; font-family:raleway-regular; color:#FFFFFF; border:none; background-color:#77B5FE; }
+
+.file-main-block .actions .delete{ cursor:pointer; font-size:large; font-family:raleway-regular; color:#FFFFFF; border:none; background-color:#FF0921; }
+
+.file-main-block .actions .inactive{ font-size:large; font-family:raleway-regular; color:#FFFFFF; border:none; background-color:#DDDDDD; }
+
+.file-main-block .actions button{ overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+
+.file-main-block .label{ text-align:center; display:inline-block; width:80%; }
+
+.file-main-block .icon{ display:inline-block; width:20%; }
+
+.file-main-block .return:hover{ color:#223344; }
+
+.file-main-block .actions button:hover{ color:#223344; }
+
+.file-main-block .actions .inactive:hover{ color:#FFFFFF; }
+
+/****************************************************************************************************/
+
+@media (max-width: 639px)
+{
+  .file-main-block{ width:95%; }
+
+  .file-main-block .info{ width:100%; }
+
+  .file-main-block .actions{ width:100%; }
+
+  .file-main-block .return{ width:30%; padding:1.5% 2.5% 1.5% 2.5%; margin:2.5% 5% 2.5% 5%; }
+
+  .file-main-block .actions button{ width:50%; margin:2.5% 0 0 50%; padding:1.5% 2.5% 1.5% 2.5%; }
+}
+
+@media (min-width: 640px) and (max-width: 767px)
+{
+  .file-main-block{ width:95%; }
+
+  .file-main-block .info{ width:100%; }
+  
+  .file-main-block .actions{ width:100%; }
+
+  .file-main-block .return{ width:20%; padding:1.5% 2.5% 1.5% 2.5%; margin:2.5% 5% 2.5% 5%; }
+
+  .file-main-block .actions .delete{ width:30%; margin:5% 0 5% 5%; padding:1.5% 2.5% 1.5% 2.5%; }
+  
+  .file-main-block .actions .download{ width:30%; margin:5% 0 5% 35%; padding:1.5% 2.5% 1.5% 2.5%; }
+}
+
+@media (min-width: 768px) and (max-width: 959px)
+{
+  .file-main-block{ width:75%; }
+
+  .file-main-block .info{ width:100%; }
+  
+  .file-main-block .actions{ width:100%; }
+
+  .file-main-block .return{ width:15%; padding:1.5% 2.5% 1.5% 2.5%; margin:2.5% 5% 2.5% 5%; }
+
+  .file-main-block .actions .delete{ width:30%; margin:5% 0 5% 5%; padding:1.5% 2.5% 1.5% 2.5%; }
+  
+  .file-main-block .actions .download{ width:30%; margin:5% 0 5% 35%; padding:1.5% 2.5% 1.5% 2.5%; }
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+  .file-main-block{ width:75%; }
+
+  .file-main-block .info{ width:100%; }
+  
+  .file-main-block .actions{ width:100%; }
+
+  .file-main-block .return{ width:15%; padding:1.5% 2.5% 1.5% 2.5%; margin:2.5% 5% 2.5% 5%; }
+
+  .file-main-block .actions .delete{ width:30%; margin:5% 0 5% 5%; padding:1.5% 2.5% 1.5% 2.5%; }
+
+  .file-main-block .actions .download{ width:30%; margin:5% 0 5% 35%; padding:1.5% 2.5% 1.5% 2.5%; }
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+  .file-main-block{ width:75%; }
+
+  .file-main-block .return{ width:12.5%; padding:1% 2.5% 1% 2.5%; margin:5% 5% 2.5% calc(70% * 0.05); }
+
+  .file-main-block .info{ width:70%; margin:0 5% 0 0; display:inline-block; }
+  
+  .file-main-block .actions{ width:25%; display:inline-block; vertical-align:top; }
+
+  .file-main-block .actions button{ width:70%; margin:0 15% 5% 15%; padding:2.5% 2.5% 2.5% 2.5%; }
+}
+
+@media (min-width: 1680px)
+{
+  .file-main-block{ width:70%; }
+
+  .file-main-block .return{ width:10%; padding:1% 2.5% 1% 2.5%; margin:5% 5% 2.5% calc(70% * 0.05); }
+
+  .file-main-block .info{ width:70%; margin:0 5% 0 0; display:inline-block; }
+  
+  .file-main-block .actions{ width:25%; display:inline-block; vertical-align:top; }
+
+  .file-main-block .actions button{ width:70%; margin:0 15% 5% 15%; padding:2.5% 2.5% 2.5% 2.5%; }
+}
+
+/****************************************************************************************************/

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <% include include/head.ejs %>
+  <title>Library - Connexion</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/logon.css" />
   <body class='logon-body'>
     <% include include/logs.ejs %>
     <div class='logon-form-popup'>
@@ -9,8 +13,7 @@
         <input placeholder='Adresse Email' id='logon-form-email-input' type='text' /></br>
         <input placeholder='Mot De Passe' id='logon-form-password-input' type='password' />
         <button id='logon-form-send-button' class='logon-form-send-button'><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-        <p id='logon-form-first-logon' class='logon-form-question'>Première connexion ?</p>
-        <p id='logon-form-forgotten-password' class='logon-form-question'>Mot de passe oublié ?</p>
+        <a href='/reset-password' id='logon-form-forgotten-password' class='logon-form-question'>Mot de passe oublié ?</a>
       </form>
     </div>
     <% include include/scripts.ejs %>

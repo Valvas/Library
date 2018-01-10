@@ -1,0 +1,19 @@
+{
+  "20001": "fichier supprimé du disque",
+  "20002": "fichier supprimé de la base de données",
+  "20003": "vous êtes autorisé(e) à supprimer ce fichier",
+  "20004": "fichier trouvé dans la base de données",
+  "20005": "fichier supprimé",
+  "20006": "vous possédez les droits d'administration",
+  "20007": "le fichier a bien été enregistré",
+  "20008": "vous êtes autorisé(e) à ajouter des fichiers",
+  "20009": "fichier copié avec succès",
+  "20010": "rapport envoyé avec succès",
+  "20011": "commentaire ajouté",
+  "20012": "nouveau mot de passe envoyé par email",
+  "20013": "compte créé avec succès",
+  "20014": "compte mis à jour avec succès",
+  "20015": "statut du commentaire mis à jour avec succès",
+  "20016": "le statut du rapport a été mis à jour",
+  "20017": "droits du compte mis à jour avec succès"
+}

@@ -1,25 +1,54 @@
 'use strict';
 
-let encryption        = require('./encryption');
-let config            = require('../json/config');
-
-let logon = module.exports = {};
+var params            = require(`${__root}/json/config`);
+var constants         = require(`${__root}/functions/constants`);
+var encryption        = require(`${__root}/functions/encryption`);
+var databaseManager   = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-logon.checkIfAccountExistsUsingCredentialsProvided = function(emailAddress, uncryptedPassword, mysqlConnector, callback)
+module.exports.checkIfAccountExistsUsingCredentialsProvided = (emailAddress, uncryptedPassword, databaseConnector, callback) =>
 {
-  encryption.encryptPassword(uncryptedPassword, function(encryptedPassword)
+  encryption.encryptPassword(uncryptedPassword, (encryptedPassword, errorStatus, errorCode) =>
   {
-    encryptedPassword == false ? callback(false) :
+    encryptedPassword == false ? callback(false, errorStatus, errorCode) :
 
-    mysqlConnector.query(`SELECT * FROM ${config['database']['library_database']}.${config['database']['auth_table']} WHERE email = "${emailAddress}" AND password = "${encryptedPassword}"`, function(err, result)
+    databaseManager.selectQuery(
     {
-      if(err) callback(false);
+      'databaseName': params.database.name,
+      'tableName': params.database.tables.accounts,
+  
+      'args':
+      {
+        '0': '*'
+      },
+  
+      'where':
+      {
+        'AND':
+        {
+          '=':
+          {
+            '0':
+            {
+              'key': 'email',
+              'value': emailAddress
+            },
+            '1':
+            {
+              'key': 'password',
+              'value': encryptedPassword
+            }
+          }
+        }
+      }
+    }, databaseConnector, (boolean, accountOrErrorMessage) =>
+    {
+      if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
       else
       {
-        result.length == 0 ? callback(true, undefined) : callback(true, result[0]);
+        accountOrErrorMessage.length == 0 ? callback(false, 406, constants.ACCOUNT_NOT_FOUND) : callback(accountOrErrorMessage[0]);
       }
     });
   });

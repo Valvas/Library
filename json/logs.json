@@ -1,0 +1,10 @@
+{
+  "report_logs":
+  {
+    "0": "Rapport envoyé par VALUE VALUE",
+    "1": "Commentaire de VALUE VALUE :",
+    "2": "Ce rapport est désormais en statut EN COURS",
+    "3": "Ce rapport est désormais en statut FERMÉ",
+    "4": "Ce rapport est désormais en statut RÉSOLU"
+  }
+}

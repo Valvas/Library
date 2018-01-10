@@ -1,14 +1,14 @@
 'use strict';
 
-let express = require('express');
+var express = require('express');
 
-let router = express.Router();
+var router = express.Router();
 
 /****************************************************************************************************/
 
-router.get('/', function(req, res)
+router.get('/', (req, res) =>
 {
-  req.session.identifier == undefined ? res.redirect('/') : res.render('home', { location: 'home', links: require('../json/services'), news: require('../json/news') });
+  req.session.uuid == undefined ? res.redirect('/') : res.render('home', { navigationLocation: 'home', asideLocation: '', links: require('../json/services'), news: require('../json/news') });
 });
 
 /****************************************************************************************************/

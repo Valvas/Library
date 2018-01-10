@@ -1,39 +1,60 @@
 'use strict';
 
-let path              = require('path');
-let mysql             = require('mysql');
-let logger            = require('morgan');
-let express           = require('express');
-let bodyParser        = require('body-parser');
-let favicon           = require('serve-favicon');
-let cookieParser      = require('cookie-parser');
-let session           = require('express-session');
+global.__root = __dirname;
 
-let auth              = require('./auth');
-let adminAuth         = require('./admin_auth');
-let config            = require('./json/config');
-let accounts          = require('./functions/accounts/init');
-let database          = require('./functions/database/init');
+var path              = require('path');
+var mysql             = require('mysql');
+var logger            = require('morgan');
+var express           = require('express');
+var nodemailer        = require('nodemailer');
+var bodyParser        = require('body-parser');
+var favicon           = require('serve-favicon');
+var cookieParser      = require('cookie-parser');
+var session           = require('express-session');
 
-let root              = require('./routes/root');
-let home              = require('./routes/home');
-let menu              = require('./routes/menu');
-let rights            = require('./routes/rights');
-let service           = require('./routes/service');
+var auth              = require('./auth');
+var adminAuth         = require('./admin_auth');
+var config            = require('./json/config');
+var accounts          = require('./functions/accounts/init');
+var database          = require('./functions/database/init');
 
-let adminRoot         = require('./routes/admin/root');
-let adminUser         = require('./routes/admin/user');
-let adminParams       = require('./routes/admin/params');
-let adminService      = require('./routes/admin/service');
+var root              = require('./routes/root');
+var home              = require('./routes/home');
+var file              = require('./routes/file');
+var reports           = require('./routes/reports');
+var service           = require('./routes/service');
 
-let connection = mysql.createConnection(
+var adminRoot         = require('./routes/admin/root');
+var adminUser         = require('./routes/admin/user');
+var adminRights       = require('./routes/admin/rights');
+var adminParams       = require('./routes/admin/params');
+var adminReports      = require('./routes/admin/reports');
+var adminService      = require('./routes/admin/service');
+
+var connection = mysql.createConnection(
 {
   host     : config['database']['host'],
   user     : config['database']['user'],
   password : config['database']['password']
 });
 
-let app = express();
+var transporter = nodemailer.createTransport(
+{
+  host: config.email.host,
+  port: config.email.port,
+  secure: config.email.secure,
+  auth: 
+  {
+    user: config.email.auth.user,
+    pass: config.email.auth.pass
+  },
+  tls: 
+  {
+    rejectUnauthorized: false
+  }
+});
+
+var app = express();
 
 app.use(session(
 {
@@ -47,6 +68,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.set('mysqlConnector', connection);
+app.set('transporter', transporter);
 
 app.use(logger('dev'));
 app.use(cookieParser());
@@ -55,27 +77,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', root);
-app.use('/menu', menu);
 app.use('/home', home);
-app.use('/rights', rights);
+app.use('/file', auth, file);
+app.use('/reports', auth, reports);
 app.use('/service', auth, service);
 app.use('/admin', auth, adminAuth, adminRoot);
 app.use('/admin/users', auth, adminAuth, adminUser);
+app.use('/admin/rights', auth, adminAuth, adminRights);
 app.use('/admin/params', auth, adminAuth, adminParams);
+app.use('/admin/reports', auth, adminAuth, adminReports);
 app.use('/admin/services', auth, adminAuth, adminService);
 
-app.use(function(req, res, next) 
+app.use((req, res, next) =>
 {
   res.render('block', { message: `404 - La page recherchée n'existe pas` });
 });
 
-database.createDatabases(connection, function(result, message)
+database.createDatabases(connection, () =>
 { 
-  console.log(message);
-
-  accounts.createAccounts(connection, function(message)
+  accounts.createAccounts(connection, () =>
   {
-    console.log(message);
+    accounts.createRights(connection, () =>
+    {
+
+    });
   });
 });
 

@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <% include ../include/head.ejs %>
+  <title>Library - Administration</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/admin.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
   <body class='private-section-body'>
     <% include ../include/menu.ejs %>
     <% include ../include/admin_aside.ejs %>
@@ -14,8 +19,6 @@
       <% } %>
     </div>
     <% include ../include/scripts.ejs %>
-    <script src='/js/navigation/onload.js'></script>
-    <script src='/js/navigation/links.js'></script>
-    <script src='/js/navigation/logout.js'></script>
+    <script src='/js/afk.js'></script>
   </body>
 </html>

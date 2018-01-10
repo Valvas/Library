@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <% include ../include/head.ejs %>
+  <title>Library - Utilisateurs</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/admin.css" />
   <body class='private-section-body'>
     <% include ../include/menu.ejs %>
     <% include ../include/admin_aside.ejs %>
     <div class='admin-main-block'>
+      <button id='create-user-button' class='create'><i class="fa fa-user-plus" aria-hidden="true"></i></button>
       <div class='info'>Cliquez sur un utilisateur</div>
       <table class='admin-users-table'>
         <tr>
@@ -12,31 +17,23 @@
           <th class='admin-users-table-lastname'>Nom</th>
           <th class='admin-users-table-firstname'>Prénom</th>
           <th class='admin-users-table-service'>Service</th>
-          <th class='admin-users-table-activated'>Activé</th>
           <th class='admin-users-table-suspended'>Suspendu</th>
           <th class='admin-users-table-admin'>Admin</th>
         </tr>
-        <% if(users != false) %>
-        <% { %>
-          <% for(var key in users) %>
-          <% { %>
-            <% var c; Object.keys(users).indexOf(key) % 2 == 0 ? c = 'odd' : c = 'even'; %>
-              <tr class='<%= c %>'>
-                <td><%= users[key]['email'] %></td>
-                <td><%= users[key]['lastname'] %></td>
-                <td><%= users[key]['firstname'] %></td>
-                <td><%= services[users[key]['service']]['name'] %></td>
-                <td><% if(users[key]['activated'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
-                <td><% if(users[key]['suspended'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
-                <td><% if(users[key]['is_admin'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
-              </tr>
-          <% } %>
+        <% for(var i = 0; i < users.length; i++){ %>
+          <tr name='admin-users-table-row' id='<%= users[i]['uuid'] %>'<% if(i % 2 == 0){ %>class='odd'<% } else{ %>class='even'<% } %></tr>
+            <td class='admin-users-table-email'><%= users[i]['email'] %></td>
+            <td class='admin-users-table-lastname'><%= users[i]['lastname'] %></td>
+            <td class='admin-users-table-firstname'><%= users[i]['firstname'] %></td>
+            <td class='admin-users-table-service'><%= services[users[i]['service']]['name'] %></td>
+            <td class='admin-users-table-suspended'><% if(users[i]['suspended'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
+            <td class='admin-users-table-admin'><% if(users[i]['is_admin'] == 1) { %><%= 'Oui' %><% } else { %><%= 'Non' %><% } %></td>
+          </tr>
         <% } %>
       </table>
     </div>
     <% include ../include/scripts.ejs %>
-    <script src='/js/navigation/onload.js'></script>
-    <script src='/js/navigation/links.js'></script>
-    <script src='/js/navigation/logout.js'></script>
+    <script src='/js/afk.js'></script>
+    <script src='/js/admin/root.js'></script>
   </body>
 </html>

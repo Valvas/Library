@@ -1,93 +1,100 @@
 'use strict';
 
-let config      = require('../../json/config');
-let SQLSelect   = require('../database/select');
-
-const ERROR = 0;
-const MISSING_DATA = 1;
-const ACCOUNT_NOT_FOUND = 2;
-const SERVICE_NOT_FOUND = 3;
-const UNAUTHORIZED_TO_ACCESS_SERVICE = 4;
+var params                = require(`${__root}/json/config`);
+var services              = require(`${__root}/json/services`);
+var constants             = require(`${__root}/functions/constants`);
+var databaseManager       = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-/**
- * Get a JSON object with the rights toward given service for given account
- * @arg {String} serviceName - the key associated to the service from the JSON file "services.json"
- * @arg {String} accountUUID - the UUID associated to the account
- * @arg {Object} SQLConnector - a SQL connector to perform queries to the database
- * @arg {Function} callback - Success : get a boolean and a JSON object | Error : get a boolean and an integer
- */
-module.exports.getUserRightsTowardsService = function(serviceName, accountUUID, SQLConnector, callback)
+module.exports.getUserRightsTowardsService = (serviceName, accountUUID, databaseConnector, callback) =>
 {
-  serviceName == undefined || accountUUID == undefined || SQLConnector == undefined ? callback(false, MISSING_DATA) :
+  if(serviceName == undefined || accountUUID == undefined || databaseConnector == undefined) callback(false, 406, constants.MISSING_DATA_IN_REQUEST);
 
-  SQLSelect.SQLSelectQuery(
+  else
   {
-    "databaseName": config.database.library_database,
-    "tableName": config.database.auth_table,
-  
-    "args": { "0": "id" },
-  
-    "where":
+    !(serviceName in services) ? callback(false, 404, constants.SERVICE_NOT_FOUND) :
+
+    databaseManager.selectQuery(
     {
-      "=":
+      'databaseName': params.database.name,
+      'tableName': params.database.tables.rights,
+      
+      'args': 
+      { 
+        '0': '*' 
+      },
+      
+      'where':
       {
-        "0":
+        'AND':
         {
-          "key": "uuid",
-          "value": accountUUID
+          '=':
+          {
+            '0':
+            {
+              'key': 'account',
+              'value': accountUUID
+            },
+
+            '1':
+            {
+              'key': 'service',
+              'value': serviceName
+            }
+          }
+        }
+      }
+    }, databaseConnector, (boolean, rightsOrErrorMessage) =>
+    {
+      if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+      
+      else
+      { 
+        rightsOrErrorMessage.length == 0 ? callback(false, 403, constants.UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(rightsOrErrorMessage[0]);
+      }
+    });
+  }
+}
+
+/****************************************************************************************************/
+
+module.exports.checkIfUserIsAdmin = (accountUUID, databaseConnector, callback) =>
+{
+  typeof(accountUUID) != 'string' || databaseConnector == undefined ? callback(false, 406, constants.MISSING_DATA_IN_REQUEST) :
+
+  databaseManager.selectQuery(
+  {
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.accounts,
+  
+    'args': 
+    { 
+      '0': 'is_admin' 
+    },
+  
+    'where':
+    {
+      '=':
+      {
+        '0':
+        {
+          'key': 'uuid',
+          'value': accountUUID
         }
       }
     }
-  }, SQLConnector, function(success, rows)
+  }, databaseConnector, (boolean, adminStatusOrErrorMessage) =>
   {
-    if(success == false) callback(false, ERROR);
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
     else
     {
-      if(rows.length == 0) callback(false, ACCOUNT_NOT_FOUND);
-
+      if(adminStatusOrErrorMessage.length == 0) callback(false, 404, constants.ACCOUNT_NOT_FOUND);
+      
       else
       {
-        !(serviceName in require('../../json/services')) ? callback(false, SERVICE_NOT_FOUND) :
-
-        SQLSelect.SQLSelectQuery(
-        {
-          "databaseName": config.database.library_database,
-          "tableName": config.database.rights_table,
-        
-          "args": { "0": "*" },
-        
-          "where":
-          {
-            "AND":
-            {
-              "=":
-              {
-                "0":
-                {
-                  "key": "account_id",
-                  "value": rows[0].id
-                },
-
-                "1":
-                {
-                  "key": "service",
-                  "value": serviceName
-                }
-              }
-            }
-          }
-        }, SQLConnector, function(success, rows)
-        {
-          if(success == false) callback(false, ERROR);
-          
-          else
-          { 
-            rows.length == 0 ? callback(false, UNAUTHORIZED_TO_ACCESS_SERVICE) : callback(true, rows[0]);
-          }
-        });
+        adminStatusOrErrorMessage[0].is_admin == 0 ? callback(false, 403, constants.USER_IS_NOT_ADMIN) : callback(true);
       }
     }
   });

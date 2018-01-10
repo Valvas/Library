@@ -1,14 +1,14 @@
 'use strict';
 
-let express = require('express');
+var express = require('express');
 
-let router = express.Router();
+var router = express.Router();
 
 /****************************************************************************************************/
 
-router.get('/', function(req, res)
+router.get('/', (req, res) =>
 {
-  res.render('./admin/params', { links: require('../../json/admin').aside, location: 'params' });
+  res.render('./admin/params', { links: require('../../json/admin').aside, navigationLocation: 'admin', asideLocation: 'params' });
 });
 
 /****************************************************************************************************/

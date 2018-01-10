@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <title>Library - Rapport</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/report.css" />
+  <body class='private-section-body'>
+    <% include ../include/menu.ejs %>
+    <% include ../include/admin_aside.ejs %><!-- @SuppressWhitespace
+    --><div class='reports-main-block'>
+        <div id='report-detail' name='<%= report['uuid'] %>' class='report-detail'>
+          <div class='subject'><%= report['report_subject'] %></div><!-- @SuppressWhitespace
+          --><div class='label'>Statut : </div><!-- @SuppressWhitespace
+          --><div id='report-status' style='color:<%= status[report['report_status']]['color'] %>' class='status'><%= status[report['report_status']]['name'] %></div></br>
+          <div class='label'>Date : </div><!-- @SuppressWhitespace
+          --><div class='date'><%= report['report_date'] %></div>
+          <div class='type'>Type : <span style='font-family:barlow'><%= types[report['report_type']] %></span></div>
+          <div class='label'>Description : </div>
+          <div class='description'><%= report['report_content'] %></div>
+          <select id='status-selection' class='status-selection' style='color:<%= status[report['report_status']]['color'] %>'>
+            <option value='0' style='color:<%= status[0]['color'] %>' <% if(report['report_status'] == 0){ %>selected<% } %>>En cours</option>
+            <option value='1' style='color:<%= status[1]['color'] %>' <% if(report['report_status'] == 1){ %>selected<% } %>>Fermé</option>
+            <option value='2' style='color:<%= status[2]['color'] %>' <% if(report['report_status'] == 2){ %>selected<% } %>>Résolu</option>
+          </select>
+          <div class='comments-block'>
+          <div class='title'>Commentaires : </div>
+          <% for(var i = Object.keys(report['comments']).length - 1; i >= 0; i--){ %>
+            <div id='<%= report['comments'][i]['id'] %>' name='<%= report['comments'][i]['seen'] %>' class='comment admin-comment <% if(report['comments'][i]['seen'] == 0){ %>log-3<% } else{ %>log-0<% } %>'>
+              <div class='log-date'><%= report['comments'][i]['date'] %></div>
+              <div class='log-label'><%= report['comments'][i]['account'] %></div>
+              <div class='log-message'><%= report['comments'][i]['content'] %></div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    <% include ../include/scripts.ejs %>
+    <script src='/js/admin/reports/update.js'></script>
+    <script src='/js/afk.js'></script>
+  </body>
+</html>
