@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <% include include/head.ejs %>
+  <title>Library - <%= service.charAt(0).toUpperCase() + service.slice(1).toLowerCase() %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/service.css" />
   <body class='private-section-body'>
     <% include include/menu.ejs %>
     <% include include/aside.ejs %>
     <div id='service-main-block' class='service-main-block' name='<%= identifier %>'>
-      <div class='title'><%= service %></div><!-- @SuppressWhitespace
+      <div class='title'><%= service.charAt(0).toUpperCase() + service.slice(1).toLowerCase() %></div><!-- @SuppressWhitespace
       --><% if(rights['upload_files'] == 1) { %><!-- @SuppressWhitespace
       --><button id='service-main-block-file-buttons-upload' class='upload-button'>
           <i class='fa fa-upload fa-fw' aria-hidden='true'></i>

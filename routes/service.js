@@ -93,12 +93,12 @@ router.put('/get-files-list', (req, res) =>
 
   accountRights.getUserRightsTowardsService(req.body.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
   {
-    rightsOrFalse == false ? res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+    rightsOrFalse == false ? res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
 
     services.getFilesFromOneService(req.body.service, req.app.get('mysqlConnector'), (filesOrFalse, errorStatus, errorCode) =>
     {
       filesOrFalse == false ? 
-      res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+      res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
       res.status(200).send({ result: true, files: filesOrFalse, rights: rightsOrFalse });
     });
   });
@@ -119,14 +119,14 @@ router.get('/:service', (req, res) =>
 
   accountRights.getUserRightsTowardsService(req.params.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
   {
-    if(rightsOrFalse == false) res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
+    if(rightsOrFalse == false) res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
 
     else
     {
       services.getFilesFromOneService(req.params.service, req.app.get('mysqlConnector'), (filesOrFalse, errorStatus, errorCode) =>
       {
         filesOrFalse == false ?
-        res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+        res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
         res.render('service', { navigationLocation: 'services', asideLocation: req.params.service, links: require('../json/services'), service: require('../json/services')[req.params.service].name, identifier: req.params.service, rights: rightsOrFalse, files: filesOrFalse });
       }); 
     }

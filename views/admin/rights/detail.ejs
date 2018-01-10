@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/admin.css" />
   <link rel='stylesheet' type='text/css' href='/stylesheets/admin/rights/detail.css' />
   <body class='private-section-body'>
     <% include ../../include/menu.ejs %>
@@ -23,23 +24,28 @@
           <div class='key'>Prénom :</div><!-- @SuppressWhitespace
           --><div class='value'><%= account['firstname'] %></div>
         </div>
+        <div class='admin-rights-account-block'>
+          <div class='key'>Service :</div><!-- @SuppressWhitespace
+          --><div class='value'><%= service['value'].charAt(0).toUpperCase() + service['value'].slice(1).toLowerCase() %></div>
+        </div>
       </div><!-- @SuppressWhitespace
-      --><div class='admin-rights-detail'>
+      --><div id='admin-rights-detail' name='<%= service['key'] %>' class='admin-rights-detail'>
         <div class='title'>DROITS</div>
-          <div name='access' class='element'><div class='label'>Accès au service</div><div class='icons'><i class='fa fa-check <% if(Object.keys(rights).length == 0){ %>check-inactive<% } else{ %>check-active<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(Object.keys(rights).length == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
-          <div name='comment' class='element'><div class='label'>Poster des commentaires</div><div class='icons'><i class='fa fa-check <% if(rights['comment'] != undefined && rights['comment'] == 1){ %>check-active<% } else{ %>check-inactive<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(rights['comment'] == undefined || rights['comment'] == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
-          <div name='download' class='element'><div class='label'>Télécharger des fichiers</div><div class='icons'><i class='fa fa-check <% if(rights['download'] != undefined && rights['download'] == 1){ %>check-active<% } else{ %>check-inactive<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(rights['download'] == undefined || rights['download'] == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
-          <div name='upload' class='element'><div class='label'>Poster des fichiers</div><div class='icons'><i class='fa fa-check <% if(rights['upload'] != undefined && rights['upload'] == 1){ %>check-active<% } else{ %>check-inactive<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(rights['upload'] == undefined || rights['upload'] == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
-          <div name='remove' class='element'><div class='label'>Supprimer des fichiers</div><div class='icons'><i class='fa fa-check <% if(rights['remove'] != undefined && rights['remove'] == 1){ %>check-active<% } else{ %>check-inactive<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(rights['remove'] == undefined || rights['remove'] == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
+          <div name='access' class='element <% if(Object.keys(rights).length == 0){ %>false<% } else{ %>true<% } %>'><div class='label'>Accès au service</div><div class='icons'><i class='fa fa-check <% if(Object.keys(rights).length == 0){ %>check-inactive<% } else{ %>check-active<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(Object.keys(rights).length == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
+          <div name='comment' class='element <% if(rights['comment'] != undefined && rights['comment'] == 1){ %>true<% } else{ %>false<% } %>'><div class='label'>Poster des commentaires</div><div class='icons'><i class='fa fa-check <% if(rights['comment'] != undefined && rights['comment'] == 1){ %>check-active<% } else{ %>check-inactive<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(rights['comment'] == undefined || rights['comment'] == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
+          <div name='download' class='element <% if(rights['download'] != undefined && rights['download'] == 1){ %>true<% } else{ %>false<% } %>'><div class='label'>Télécharger des fichiers</div><div class='icons'><i class='fa fa-check <% if(rights['download'] != undefined && rights['download'] == 1){ %>check-active<% } else{ %>check-inactive<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(rights['download'] == undefined || rights['download'] == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
+          <div name='upload' class='element <% if(rights['upload'] != undefined && rights['upload'] == 1){ %>true<% } else{ %>false<% } %>'><div class='label'>Poster des fichiers</div><div class='icons'><i class='fa fa-check <% if(rights['upload'] != undefined && rights['upload'] == 1){ %>check-active<% } else{ %>check-inactive<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(rights['upload'] == undefined || rights['upload'] == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
+          <div name='remove' class='element <% if(rights['remove'] != undefined && rights['remove'] == 1){ %>true<% } else{ %>false<% } %>'><div class='label'>Supprimer des fichiers</div><div class='icons'><i class='fa fa-check <% if(rights['remove'] != undefined && rights['remove'] == 1){ %>check-active<% } else{ %>check-inactive<% } %>' aria-hidden='true'></i><i class='fa fa-close <% if(rights['remove'] == undefined || rights['remove'] == 0){ %>close-active<% } else{ %>close-inactive<% } %>' aria-hidden='true'></i></div></div>
         </div><!-- @SuppressWhitespace
-      --><div class='admin-rights-status'>
+      --><div id='admin-rights-status' class='admin-rights-status'>
         <div class='title'>MODIFICATIONS</div>
         <div class='empty'>Rien à afficher</div>
-        <button class='save'>Enregistrer</button>
+        <button id='save-button' name='ready' class='save'>Enregistrer</button>
       </div>
     </div>
     <% include ../../include/scripts.ejs %>
     <script src='/js/admin/rights/status.js'></script>
+    <script src='/js/admin/rights/save.js'></script>
     <script src='/js/afk.js'></script>
   </body>
 </html>

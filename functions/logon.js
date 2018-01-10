@@ -48,7 +48,7 @@ module.exports.checkIfAccountExistsUsingCredentialsProvided = (emailAddress, unc
 
       else
       {
-        accountOrErrorMessage.length == 0 ? callback(false, 401, constants.ACCOUNT_NOT_FOUND) : callback(accountOrErrorMessage[0]);
+        accountOrErrorMessage.length == 0 ? callback(false, 406, constants.ACCOUNT_NOT_FOUND) : callback(accountOrErrorMessage[0]);
       }
     });
   });

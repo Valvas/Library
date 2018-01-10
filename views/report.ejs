@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <% include include/head.ejs %>
+  <title>Library - Rapport</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/report.css" />
   <body class='private-section-body'>
     <% include include/menu.ejs %>
     <% include include/aside.ejs %><!-- @SuppressWhitespace
@@ -20,7 +24,7 @@
           <% if(typeof(report['logs']) !== 'object' || Object.keys(report['logs']).length == 0){ %>
           <div class='no-comment'>Aucune mise à jour</div>
           <% } else{ %>
-          <% for(var i = 0; i < Object.keys(report['logs']).length; i++){ %>
+          <% for(var i = Object.keys(report['logs']).length - 1; i >= 0; i--){ %>
             <div class='comment log-<%= report['logs'][i]['type'] %>'>
               <div class='log-date'><%= report['logs'][i]['date'] %></div>
               <div class='log-label'><%= report['logs'][i]['label'] %></div>

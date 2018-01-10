@@ -13,7 +13,7 @@ module.exports = (req, res, next) =>
 {
   accountRights.checkIfUserIsAdmin(req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
   {
-    boolean ? next() : res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
+    boolean ? next() : res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
   });
 };
 

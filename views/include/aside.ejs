@@ -1,9 +1,9 @@
 <div id='aside-navigation-block' class='aside-navigation-block'>
   <% for(var key in links){ %>
     <% if(typeof(asideLocation) !== 'undefined' && asideLocation == key){ %>
-      <a id='<%= key %>' href='/service/<%= key %>' class='aside-navigation-block-element-selected'><%= links[key].name %></a>
+      <a id='<%= key %>' href='/service/<%= key %>' class='aside-navigation-block-element-selected'><%= links[key].name.charAt(0).toUpperCase() + links[key].name.slice(1).toLowerCase() %></a>
     <% } else{ %>
-      <a id='<%= key %>' href='/service/<%= key %>' class='aside-navigation-block-element'><%= links[key].name %></a>
+      <a id='<%= key %>' href='/service/<%= key %>' class='aside-navigation-block-element'><%= links[key].name.charAt(0).toUpperCase() + links[key].name.slice(1).toLowerCase() %></a>
     <% } %>
   <% } %>
 </div>

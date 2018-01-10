@@ -70,6 +70,7 @@ const ACCOUNT_SUCCESSFULLY_CREATED                                              
 const ACCOUNT_UPDATED_SUCCESSFULLY                                                = 20014;
 const COMMENT_STATUS_UPDATED                                                      = 20015;
 const REPORT_STATUS_UPDATED                                                       = 20016;
+const ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED                                         = 20017;
 
 /******************************************************************************************
 EXPORTS
@@ -140,5 +141,6 @@ module.exports =
   ACCOUNT_SUCCESSFULLY_CREATED: ACCOUNT_SUCCESSFULLY_CREATED,
   ACCOUNT_UPDATED_SUCCESSFULLY: ACCOUNT_UPDATED_SUCCESSFULLY,
   COMMENT_STATUS_UPDATED: COMMENT_STATUS_UPDATED,
-  REPORT_STATUS_UPDATED: REPORT_STATUS_UPDATED
+  REPORT_STATUS_UPDATED: REPORT_STATUS_UPDATED,
+  ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED: ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED
 }

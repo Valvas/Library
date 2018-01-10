@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/admin.css" />
   <link rel='stylesheet' type='text/css' href='/stylesheets/admin/rights/services.css' />
   <body class='private-section-body'>
     <% include ../../include/menu.ejs %>
@@ -11,16 +12,16 @@
     <div id='admin-main-block' name='<%= account['uuid'] %>' class='admin-main-block'>
       <a class='return' href='/admin/rights'>Retour</a>
       <div class='admin-rights-account-block'>
-        <div>Adresse Email :</div>
-        <div><%= account['email'] %></div>
+        <div class='key'>Adresse Email :</div><!-- @SuppressWhitespace
+        --><div class='value'><%= account['email'] %></div>
       </div>
       <div class='admin-rights-account-block'>
-        <div>Nom :</div>
-        <div><%= account['lastname'] %></div>
+        <div class='key'>Nom :</div><!-- @SuppressWhitespace
+        --><div class='value'><%= account['lastname'] %></div>
       </div>
       <div class='admin-rights-account-block'>
-        <div>Prénom :</div>
-        <div><%= account['firstname'] %></div>
+        <div class='key'>Prénom :</div><!-- @SuppressWhitespace
+        --><div class='value'><%= account['firstname'] %></div>
       </div>
       <div class='admin-rights-services'>
         <% for(var key in services){ %><!-- @SuppressWhitespace

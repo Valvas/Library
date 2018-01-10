@@ -76,7 +76,27 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
                   addNewFileOnDiskAndInDatabase(service, file, accountUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
                   {
-                    boolean ? callback(true) : callback(false, errorStatus, errorCode);
+                    if(boolean == false) callback(false, errorStatus, errorCode);
+
+                    else
+                    {
+                      var logObj =
+                      {
+                        'service': service,
+                        'fileName': file.originalname.split('.')[0],
+                        'fileExt': file.originalname.split('.')[1],
+                        'content':
+                        {
+                          'account': accountUUID,
+                          'action': 'upload'
+                        }
+                      }
+
+                      fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
+                      {
+                        boolean ? callback(true) : callback(false, errorStatus, errorCode);
+                      });
+                    }
                   });
                 });
               }

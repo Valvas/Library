@@ -18,13 +18,13 @@ router.get('/:file', (req, res) =>
   {
     fileOrFalse == false ?
 
-    res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+    res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
 
     accountsRights.getUserRightsTowardsService(fileOrFalse.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
     {
       rightsOrFalse == false ?
       
-      res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+      res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
 
       res.render('file', { navigationLocation: 'services', asideLocation: fileOrFalse.service, file: fileOrFalse, links: require(`${__root}/json/services`), ext: config['file_ext'], rights: rightsOrFalse });
     });

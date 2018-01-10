@@ -6,7 +6,7 @@ TABLE
 {
   vertical-align:top;
   display:inline-block;
-  margin:5% 2.5% 5% 2.5%;
+  margin:2.5% 2.5% 2.5% 2.5%;
 }
 
 .reports-main-block .counter
@@ -222,9 +222,14 @@ TABLE
   cursor:pointer;
 }
 
-.reports-main-block .report-detail .comments-block .admin-comment:hover
+.reports-main-block .report-detail .comments-block .admin-comment.log-0:hover
 {
-  opacity:0.8;
+  background-color:#5593DC;
+}
+
+.reports-main-block .report-detail .comments-block .admin-comment.log-3:hover
+{
+  background-color:#C62C2D;
 }
 
 .reports-main-block .report-detail .comments-block .log-0{ background-color:#77B5FE; }

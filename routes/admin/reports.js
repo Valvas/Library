@@ -21,7 +21,7 @@ router.get('/', (req, res) =>
   report.getReports(req.app.get('mysqlConnector'), (reportsOrFalse, errorStatus, errorCode) =>
   {
     reportsOrFalse == false ?
-    res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+    res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
     res.render('admin/reports', { navigationLocation: 'admin', asideLocation: 'reports', links: require(`${__root}/json/admin`).aside, reports: reportsOrFalse, status: params.reports_status, types: params.reports_type });
   });
 });
@@ -33,7 +33,7 @@ router.get('/:report', (req, res) =>
   reportsGet.getReportForAdminUsingUUID(req.params.report, req.app.get('mysqlConnector'), (reportOrFalse, errorStatus, errorCode) =>
   {
     reportOrFalse == false ?
-    res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+    res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
     res.render('admin/report', { navigationLocation: 'admin', asideLocation: 'reports', links: require(`${__root}/json/admin`).aside, report: reportOrFalse, status: params.reports_status, types: params.reports_type });
   });
 });

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <% include ../include/head.ejs %>
+  <title>Library - Rapport</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/report.css" />
   <body class='private-section-body'>
     <% include ../include/menu.ejs %>
     <% include ../include/admin_aside.ejs %><!-- @SuppressWhitespace
@@ -21,7 +25,7 @@
           </select>
           <div class='comments-block'>
           <div class='title'>Commentaires : </div>
-          <% for(var i = 0; i < Object.keys(report['comments']).length; i++){ %>
+          <% for(var i = Object.keys(report['comments']).length - 1; i >= 0; i--){ %>
             <div id='<%= report['comments'][i]['id'] %>' name='<%= report['comments'][i]['seen'] %>' class='comment admin-comment <% if(report['comments'][i]['seen'] == 0){ %>log-3<% } else{ %>log-0<% } %>'>
               <div class='log-date'><%= report['comments'][i]['date'] %></div>
               <div class='log-label'><%= report['comments'][i]['account'] %></div>

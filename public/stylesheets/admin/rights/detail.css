@@ -29,12 +29,12 @@
 .admin-rights-status .save{ border-radius:4px; background-color:#556677; color:#FFFFFF; cursor:pointer; display:none; border:none; padding:2% 0 2% 0; }
 .admin-rights-status .save:hover{ background-color:#223344; color:#CCCCCC; }
 
+.admin-rights-status .loading{ margin:5% 5% 5% calc(95% - 50px); border-radius:4px; background-color:#556677; color:#FFFFFF; border:none; width:50px; padding:10px 0 10px 0; text-align:center; }
+
 /****************************************************************************************************/
 
 @media all and (max-width: 639px)
 {
-  .admin-rights-account-block .value{ text-align:right; }
-
   .admin-rights-account{ width:100%; margin:2.5% 0 2.5% 0; }
   .admin-rights-status{ width:100%; margin:2.5% 0 2.5% 0; }
   .admin-rights-detail{ width:100%; margin:2.5% 0 2.5% 0; }

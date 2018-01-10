@@ -23,7 +23,7 @@
   "10022": "le chemin ne mène pas à un dossier",
   "10023": "vous n'êtes pas autorisé(e) à lire ou écrire dans ce fichier/dossier",
   "10024": "le dossier existe déjà",
-  "10025": "cette action requiert d'être authentifié",
+  "10025": "l'accès à cette ressource demande une authentification",
   "10026": "rapport non trouvé",
   "10027": "vous n'êtes pas autorisé(e) à accéder à ce fichier",
   "10028": "échec de la création d'un dossier",
