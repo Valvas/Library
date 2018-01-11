@@ -101,8 +101,6 @@ module.exports.getReport = (reportUUID, databaseConnector, callback) =>
                     obj.logs[x]['date'] = dateOrFalse;
 
                     var label = logs.report_logs[obj.logs[x]['type']];
-
-                    var label = logs.report_logs[obj.logs[x]['type']];
                     
                     var y = -1;
     

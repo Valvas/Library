@@ -39,11 +39,14 @@ window.onload = $(() =>
       $.ajax(
       {
         type: 'DELETE', timeout: 2000, dataType: 'JSON', data: { file: $('.file-main-block').attr('id'), service: $('.file-main-block').attr('name') }, url: '/service/delete-file', success: () => {},
-        error: (xhr, status, error) => { printError(`ERROR [${xhr['status']}] - ${error} !`); }
+        error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); }
                     
       }).done((json) =>
       {
-        location = `/service/${$('.file-main-block').attr('name')}`;
+        $('#delete-file-popup').remove();
+        $('#veil').remove();
+
+        $('.actions').html(`<div class='deleted'>Supprimé</div>`);
       });
     }
   });

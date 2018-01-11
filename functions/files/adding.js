@@ -27,40 +27,16 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
       {
         'databaseName': params.database.name,
         'tableName': params.database.tables.files,
+        'args': { '0': '*' },
+        'where': { 'AND': { '=': { '0': { 'key': 'name', 'value': file.originalname.split('.')[0] }, '1': { 'key': 'type', 'value': file.originalname.split('.')[1] }, '2': { 'key': 'service', 'value': service } } } }
 
-        'args': { '0': 'id' },
-
-        'where':
-        {
-          'AND':
-          {
-            '=':
-            {
-              '0':
-              {
-                'key': 'name',
-                'value': file.originalname.split('.')[0]
-              },
-              '1':
-              {
-                'key': 'type',
-                'value': file.originalname.split('.')[1]
-              },
-              '2':
-              {
-                'key': 'service',
-                'value': service
-              }
-            }
-          }
-        }
       }, databaseConnector, (boolean, fileOrErrorMessage) =>
       {
         if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
         else
         {
-          fileOrErrorMessage.length > 0 ? callback(false, 406, constants.FILE_ALREADY_EXISTS) :
+          fileOrErrorMessage.length > 0 && fileOrErrorMessage[0].deleted == 0 ? callback(false, 406, constants.FILE_ALREADY_EXISTS) :
 
           fs.stat(`${params.path_to_root_storage}/${service}/${file.originalname}`, (err, stats) =>
           {
@@ -68,13 +44,15 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
             else
             {
+              var fileUUID = fileOrErrorMessage.length > 0 ? fileOrErrorMessage[0].uuid : false;
+
               if(stats != undefined)
               {
                 fileDeleting.moveFileToBin(service, file.originalname, (boolean, errorStatus, errorCode) =>
                 {
                   boolean == false ? callback(false, errorStatus, errorCode) :
 
-                  addNewFileOnDiskAndInDatabase(service, file, accountUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
+                  addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
                   {
                     if(boolean == false) callback(false, errorStatus, errorCode);
 
@@ -103,7 +81,7 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
               else
               {
-                addNewFileOnDiskAndInDatabase(service, file, accountUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
+                addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
                 {
                   if(boolean == false) callback(false, errorStatus, errorCode);
 
@@ -138,38 +116,88 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
 /****************************************************************************************************/
 
-function addNewFileOnDiskAndInDatabase(service, file, accountUUID, databaseConnector, callback)
+function addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, callback)
 {
+  fileUUID == false ?
+
   databaseManager.insertQuery(
   {
     'databaseName': params.database.name,
     'tableName': params.database.tables.files,
-
     'uuid': true,
-      
-    'args':
-    {
-      'name': file.originalname.split('.')[0],
-      'type': file.originalname.split('.')[1],
-      'account': accountUUID,
-      'service': service
-    }
-  }, databaseConnector, (boolean, uuidOrErrorMessage) =>
+    'args': { 'name': file.originalname.split('.')[0], 'type': file.originalname.split('.')[1], 'account': accountUUID, 'service': service, 'deleted': 0 }
+
+  }, databaseConnector, (boolean, fileIdOrErrorMessage) =>
   {
     if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
 
     else
     {
-      fs.copyFile(`${params.path_to_temp_storage}/${file.originalname}`, `${params.path_to_root_storage}/${service}/${file.originalname}`, (err) =>
+      databaseManager.selectQuery(
       {
-        err ? callback(false, 500, constants.FAILED_TO_MOVE_FILE_FROM_TMP) : 
-  
-        fs.unlink(`${params.path_to_temp_storage}/${file.originalname}`, (err) =>
+        'databaseName': params.database.name,
+        'tableName': params.database.tables.files,
+        'args': { '0': 'uuid' },
+        'where': { '=': { '0': { 'key': 'id', 'value': fileIdOrErrorMessage } } }
+        
+      }, databaseConnector, (boolean, fileOrErrorMessage) =>
+      {
+        if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+
+        else
         {
-          err ? callback(false, 500, constants.FAILED_TO_DELETE_FILE_FROM_TMP) : callback(true);
+          fileLogs.addLogInDatabase(params.file_logs.upload, accountUUID, undefined, fileOrErrorMessage[0].uuid, databaseConnector, (boolean, errorStatus, errorCode) =>
+          {
+            boolean == false ? callback(false, errorStatus, errorCode) :
+
+            copyFile(file, service, (boolean, errorStatus, errorCode) =>
+            {
+              boolean ? callback(true) : callback(false, errorStatus, errorCode);
+            });
+          });
+        }
+      });
+    }
+  }) :
+
+  databaseManager.updateQuery(
+  {
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.files,
+    'args': { 'account': accountUUID, 'deleted': 0 },
+    'where': { '=': { '0': { 'key': 'uuid', 'value': fileUUID } } }
+
+  }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
+  {
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+  
+    else
+    {
+      fileLogs.addLogInDatabase(params.file_logs.upload, accountUUID, undefined, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
+      {
+        boolean == false ? callback(false, errorStatus, errorCode) :
+
+        copyFile(file, service, (boolean, errorStatus, errorCode) =>
+        {
+          boolean ? callback(true) : callback(false, errorStatus, errorCode);
         });
       });
     }
+  });
+}
+
+/****************************************************************************************************/
+
+function copyFile(file, service, callback)
+{
+  fs.copyFile(`${params.path_to_root_storage}/${params.path_to_temp_storage}/${file.originalname}`, `${params.path_to_root_storage}/${service}/${file.originalname}`, (err) =>
+  {
+    err ? callback(false, 500, constants.FAILED_TO_MOVE_FILE_FROM_TMP) : 
+          
+    fs.unlink(`${params.path_to_root_storage}/${params.path_to_temp_storage}/${file.originalname}`, (err) =>
+    {
+      err ? callback(false, 500, constants.FAILED_TO_DELETE_FILE_FROM_TMP) : callback(true);
+    });
   });
 }
 

@@ -16,7 +16,7 @@ var success           = require(`${__root}/json/success`);
 
 var storage = multer.diskStorage(
 {
-  destination: (req, file, callback) => { callback(null, params.path_to_temp_storage); },
+  destination: (req, file, callback) => { callback(null, `${params.path_to_root_storage}/${params.path_to_temp_storage}`); },
   filename: (req, file, callback) => { callback(null, file.originalname); }
 });
  
@@ -79,7 +79,7 @@ router.get('/download-file/:service/:file', (req, res) =>
 {
   filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), (fileOrFalse, errorStatus, errorCode) =>
   {
-    fileOrFalse == false ? res.render('block', { message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` }) :
+    fileOrFalse == false ? res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
 
     res.download(`${params.path_to_root_storage}/${req.params.service}/${fileOrFalse}`);
   });

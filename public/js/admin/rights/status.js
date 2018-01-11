@@ -93,7 +93,19 @@ window.onload = $(() =>
         {
           $(elements[x]).find('.check-active').attr('class', 'fa fa-check check-inactive');
           $(elements[x]).find('.close-inactive').attr('class', 'fa fa-close close-active');
-          $(`#admin-rights-status [name="${$(elements[x]).attr('name')}"]`).remove();
+
+          if($(`#admin-rights-status [name="${$(elements[x]).attr('name')}"]`).length > 0)
+          {
+            $(`#admin-rights-status [name="${$(elements[x]).attr('name')}"]`).remove();
+          }
+
+          else
+          {
+            var element = document.createElement('div');
+            $(element).attr({ name: $(elements[x]).attr('name'), class: 'history-element minus' });
+            $(element).text(`- ${$(elements[x]).find('.label').text()}`);
+            $(element).appendTo('.admin-rights-status').insertBefore('.admin-rights-status .save');
+          }
 
           if(elements[x += 1] != undefined) loop();
         }

@@ -33,17 +33,24 @@
       "type": "VARCHAR(255) NOT NULL",
       "account": "VARCHAR(255) NOT NULL",
       "service": "VARCHAR(255) NOT NULL",
-      "uuid": "VARCHAR(255) NOT NULL"
+      "uuid": "VARCHAR(255) NOT NULL",
+      "deleted": "BOOLEAN NOT NULL"
     },
 
     "file_logs":
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "content": "TEXT(512) NOT NULL",
+      "type": "INT NOT NULL",
       "account": "VARCHAR(255) NOT NULL",
       "file": "VARCHAR(255) NOT NULL",
-      "uuid": "VARCHAR(255) NOT NULL",
       "date": "BIGINT UNSIGNED NOT NULL"
+    },
+
+    "file_comments":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "log": "BIGINT UNSIGNED NOT NULL",
+      "content": "TEXT(1024) NOT NULL"
     },
 
     "reports":

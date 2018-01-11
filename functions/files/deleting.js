@@ -27,20 +27,9 @@ fileDeleting.deleteOneFile = (service, fileUUID, accountUUID, databaseConnector,
       {
         'databaseName': params.database.name,
         'tableName': params.database.tables.files,
-
         'args': { '0': '*' },
-  
-        'where':
-        {
-          '=':
-          {
-            '0':
-            {
-              'key': 'uuid',
-              'value': fileUUID
-            }
-          }
-        }
+        'where': { 'AND': { '=': { '0': { 'key': 'deleted', 'value': '0' }, '1': { 'key': 'uuid', 'value': fileUUID } } } }
+
       }, databaseConnector, (boolean, fileOrErrorMessage) =>
       {
         if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
@@ -49,61 +38,57 @@ fileDeleting.deleteOneFile = (service, fileUUID, accountUUID, databaseConnector,
         {
           fileOrErrorMessage.length == 0 ? callback(false, 404, constants.FILE_NOT_FOUND_IN_DATABASE) :
 
-          databaseManager.deleteQuery(
+          databaseManager.updateQuery(
           {
             'databaseName': params.database.name,
             'tableName': params.database.tables.files,
-      
-            'where':
-            {
-              '=':
-              {
-                '0':
-                {
-                  'key': 'uuid',
-                  'value': fileUUID
-                }
-              }
-            }
-          }, databaseConnector, (boolean, deletedRowsOrErrorMessage) =>
+            'args': { 'deleted': '1' },
+            'where': { '=': { '0': { 'key': 'uuid', 'value': fileUUID } } }
+
+          }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
           {
             if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
       
             else
             {
-              deletedRowsOrErrorMessage.length == 0 ? callback(false, 500, constants.FILE_NOT_DELETED_FROM_DATABASE) :
-      
-              fs.stat(`${params.path_to_root_storage}/${service}/${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (err, stats) =>
+              updatedRowsOrErrorMessage.length == 0 ? callback(false, 500, constants.FILE_NOT_DELETED_FROM_DATABASE) :
+
+              fileLogs.addLogInDatabase(params.file_logs.remove, accountUUID, undefined, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
               {
-                err ? callback(false, 404, constants.FILE_NOT_FOUND_ON_DISK) :
-
-                fileDeleting.moveFileToBin(service, `${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (boolean, errorStatus, errorCode) =>
+                boolean == false ? callback(false, errorStatus, errorCode) :
+                
+                fs.stat(`${params.path_to_root_storage}/${service}/${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (err, stats) =>
                 {
-                  boolean == false ? callback(false, errorStatus, errorCode) :
+                  err ? callback(false, 404, constants.FILE_NOT_FOUND_ON_DISK) :
 
-                  fs.unlink(`${params.path_to_root_storage}/${service}/${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (err) =>
+                  fileDeleting.moveFileToBin(service, `${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (boolean, errorStatus, errorCode) =>
                   {
-                    if(err) callback(false, 500, constants.FILE_NOT_DELETED_FROM_DISK);
-                    
-                    else
+                    boolean == false ? callback(false, errorStatus, errorCode) :
+
+                    fs.unlink(`${params.path_to_root_storage}/${service}/${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (err) =>
                     {
-                      var logObj =
+                      if(err) callback(false, 500, constants.FILE_NOT_DELETED_FROM_DISK);
+                      
+                      else
                       {
-                        'service': service,
-                        'fileName': fileOrErrorMessage[0].name,
-                        'fileExt': fileOrErrorMessage[0].type,
-                        'content':
+                        var logObj =
                         {
-                          'account': accountUUID,
-                          'action': 'delete'
+                          'service': service,
+                          'fileName': fileOrErrorMessage[0].name,
+                          'fileExt': fileOrErrorMessage[0].type,
+                          'content':
+                          {
+                            'account': accountUUID,
+                            'action': 'delete'
+                          }
                         }
+    
+                        fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
+                        {
+                          boolean ? callback(true) : callback(false, errorStatus, errorCode);
+                        });
                       }
-  
-                      fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
-                      {
-                        boolean ? callback(true) : callback(false, errorStatus, errorCode);
-                      });
-                    }
+                    });
                   });
                 });
               });
@@ -123,7 +108,7 @@ fileDeleting.moveFileToBin = (service, file, callback) =>
   
   var deletedFileName = `${file.split('.')[0]}_${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()} ${date.getHours()}h${date.getMinutes()}m${date.getSeconds()}s.${file.split('.')[1]}`;
 
-  fileCommon.createFolder(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`, params.path_to_bin_storage, (pathOrFalse, errorStatus, errorCode) =>
+  fileCommon.createFolder(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`, `${params.path_to_root_storage}/${params.path_to_bin_storage}`, (pathOrFalse, errorStatus, errorCode) =>
   {
     if(pathOrFalse == false) callback(false, errorStatus, errorCode);
 

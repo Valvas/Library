@@ -5,6 +5,7 @@ var fs                    = require('fs');
 var params                = require(`${__root}/json/config`);
 var constants             = require(`${__root}/functions/constants`);
 var fileLogs              = require(`${__root}/functions/files/logs`);
+var accountGet            = require(`${__root}/functions/accounts/get`);
 var accountRights         = require(`${__root}/functions/accounts/rights`);
 var databaseManager       = require(`${__root}/functions/database/${params.database.dbms}`);
 
@@ -60,21 +61,29 @@ module.exports.downloadFile = (service, fileUUID, accountUUID, databaseConnector
 
             else
             {
-              var logObj =
+              fileLogs.addLogInDatabase(params.file_logs.download, accountUUID, undefined, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
               {
-                'service': service,
-                'fileName': fileOrErrorMessage[0].name,
-                'fileExt': fileOrErrorMessage[0].type,
-                'content':
-                {
-                  'account': accountUUID,
-                  'action': 'download'
-                }
-              }
+                if(boolean == false) callback(false, errorStatus, errorCode);
 
-              fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
-              {
-                boolean ? callback(`${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`) : callback(false, errorStatus, errorCode);
+                else
+                {
+                  var logObj =
+                  {
+                    'service': service,
+                    'fileName': fileOrErrorMessage[0].name,
+                    'fileExt': fileOrErrorMessage[0].type,
+                    'content':
+                    {
+                      'account': accountUUID,
+                      'action': 'download'
+                    }
+                  }
+
+                  fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
+                  {
+                    boolean ? callback(`${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`) : callback(false, errorStatus, errorCode);
+                  });
+                }
               });
             }
           });

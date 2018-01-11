@@ -148,6 +148,7 @@ function openReportPopup(obj)
 
 function openReportCommentPopup(titleContent)
 {
+  $('#veil').remove();
   $('#report-comment-popup').remove();
 
   var veil              = document.createElement('div');
@@ -178,6 +179,52 @@ function openReportCommentPopup(titleContent)
   $(description)        .appendTo(popup);
   $(sendButton)         .appendTo(popup);
   $(cancelButton)       .appendTo(popup);
+}
+
+/****************************************************************************************************/
+
+function openFileCommentPopup()
+{
+  $('#veil').remove();
+  $('#report-comment-popup').remove();
+
+  var veil              = document.createElement('div');
+  var popup             = document.createElement('div');
+  var title             = document.createElement('div');
+  var error             = document.createElement('div');
+
+  var spinner           = document.createElement('i');
+
+  var description       = document.createElement('textarea');
+
+  var cancelButton      = document.createElement('button');
+  var sendButton        = document.createElement('button');
+
+  $(veil)               .attr({ id: 'veil',                               class: 'veil'});
+  $(popup)              .attr({ id: 'file-comment-popup',                 class: 'file-popup'});
+  $(sendButton)         .attr({ id: 'file-comment-popup-send',            class: 'file-popup-send'});
+  $(error)              .attr({ id: 'file-comment-popup-error',           class: 'file-popup-error'});
+  $(title)              .attr({ id: 'file-comment-popup-title',           class: 'file-popup-title'});
+  $(cancelButton)       .attr({ id: 'file-comment-popup-cancel',          class: 'file-popup-cancel'});
+  $(description)        .attr({ id: 'file-comment-popup-description',     class: 'file-popup-description',        rows: 6,        maxlength: '1024'});
+
+  $(spinner)            .attr({ id: 'file-comment-popup-spinner',         class: 'file-popup-spinner fa fa-circle-o-notch fa-spin fa-fw' });
+
+  $(title)              .text('Poster un commentaire');
+
+  $(cancelButton)       .html(`<i class="fa fa-times fa-fw" aria-hidden="true"></i>`);
+  $(sendButton)         .html(`<i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i>`);
+
+  $(veil)               .appendTo('body');
+  $(popup)              .appendTo('body');
+
+  $(title)              .appendTo(popup);
+  $(description)        .appendTo(popup);
+  $(error)              .appendTo(popup);
+  $(sendButton)         .appendTo(popup);
+  $(cancelButton)       .appendTo(popup);
+
+  $(spinner)            .hide().appendTo(popup);
 }
 
 /****************************************************************************************************/
@@ -278,7 +325,7 @@ function openUploadFilePopup(object, ext)
 
   ext.length == 0 ?
   $(info)       .text('(Extensions acceptées: aucunes)') :
-  $(info)       .text(`(Extensions acceptées: ${ext.join()})`);
+  $(info)       .text(`(Extensions acceptées: ${ext.join(', ')})`);
 
   $(title)      .text(object['title']                           || 'ENVOYER UN FICHIER');
   $(message)    .text(object['message']                         || 'Cliquez sur le button ci-dessous pour choisir un fichier sur votre appareil.');
@@ -310,14 +357,34 @@ function updateFilesList(service, callback)
 
     var loop = (file) =>
     {
+      if($(`#${file['uuid']} [name="service-main-block-buttons"] [name="deleted"]`).length > 0 && file['deleted'] == 0)
+      {
+        $(`#${file['uuid']} [name="service-main-block-buttons"] [name="deleted"]`).remove();
+        if(json['rights']['download_files'] == 1) $('<i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
+        if(json['rights']['remove_files'] == 1) $('<i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
+      }
+
+      else if($(`#${file['uuid']} [name="service-main-block-buttons"] [name="deleted"]`).length == 0 && file['deleted'] == 1)
+      {
+        $(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]').html(`<div name='deleted' class='service-main-block-file-deleted'>Supprimé</div>`);
+      }
+
       if(!document.getElementById(file['uuid']))
       {
         x  % 2 == 0 ?
         $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-odd'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account hide-1x hide-2x hide-3x'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'></td></tr>`).appendTo(document.getElementById('service-main-block-table')):
         $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-even'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account hide-1x hide-2x hide-3x'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
   
-        if(json['rights']['download_files'] == 1) $('<i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
-        if(json['rights']['remove_files'] == 1) $('<i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
+        if(file['deleted'] == 0)
+        {
+          if(json['rights']['download_files'] == 1) $('<i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
+          if(json['rights']['remove_files'] == 1) $('<i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i>').appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
+        }
+
+        else
+        {
+          $(`<div name='deleted' class='service-main-block-file-deleted'>Supprimé</div>`).appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
+        }
       }
 
       Object.keys(json['files'])[x += 1] != undefined ? loop(json['files'][Object.keys(json['files'])[x]]) : callback();

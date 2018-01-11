@@ -6,9 +6,36 @@ var errors            = require(`${__root}/json/errors`);
 var success           = require(`${__root}/json/success`);
 var filesGet          = require(`${__root}/functions/files/get`);
 var constants         = require(`${__root}/functions/constants`);
+var formatDate        = require(`${__root}/functions/format/date`);
+var filesComment      = require(`${__root}/functions/files/comment`);
 var accountsRights    = require(`${__root}/functions/accounts/rights`);
 
 var router = express.Router();
+
+/****************************************************************************************************/
+
+router.post('/post-comment', (req, res) =>
+{
+  accountsRights.getUserRightsTowardsService(req.body.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
+  {
+    if(rightsOrFalse == false) res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+
+    else
+    {
+      if(rightsOrFalse.post_comments == 0) res.status(403).send({ result: false, message: `${errors[constants.UNAUTHORIZED_TO_POST_COMMENTS].charAt(0).toUpperCase()}${errors[constants.UNAUTHORIZED_TO_POST_COMMENTS].slice(1)}` });
+
+      else
+      {
+        filesComment.addComment(req.body.file, req.session.uuid, req.body.comment, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
+        {
+          boolean ?
+          res.status(201).send({ result: true, message: `${success[constants.FILE_COMMENT_SUCCESSFULLY_ADDED].charAt(0).toUpperCase()}${success[constants.FILE_COMMENT_SUCCESSFULLY_ADDED].slice(1)}` }) :
+          res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+        });
+      }
+    }
+  });
+});
 
 /****************************************************************************************************/
 

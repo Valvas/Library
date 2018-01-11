@@ -20,15 +20,17 @@
       "accounts": "account",
       "reports": "reports",
       "report_logs": "report_logs",
-      "report_comments": "report_comments"
+      "report_comments": "report_comments",
+      "file_logs": "file_logs",
+      "file_comments": "file_comments"
     }
   },
 
   "salt": "$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
   "path_to_root_storage": "C:/Users/dev/Desktop/removal",
-  "path_to_temp_storage": "C:/Users/dev/Desktop/removal/STATIC_tmp",
-  "path_to_bin_storage": "C:/Users/dev/Desktop/removal/STATIC_bin",
-  "path_to_logs_storage": "C:/Users/dev/Desktop/removal/STATIC_logs",
+  "path_to_temp_storage": "STATIC_tmp",
+  "path_to_bin_storage": "STATIC_bin",
+  "path_to_logs_storage": "STATIC_logs",
   "path_to_file_logs_storage": "STATIC_file",
   "path_to_logon_logs_storage": "STATIC_logon",
   "path_to_admin_logs_storage": "STATIC_admin",
@@ -48,6 +50,7 @@
     "pptx": "Power Point",
     "mp3": "Audio",
     "mp4": "Vidéo",
+    "avi": "Vidéo",
     "png": "Image",
     "jpg": "Image",
     "zip": "Archive ZIP",
@@ -68,8 +71,8 @@
 
   "ext_accepted":
   {
-    "info": { "0": "txt" },
-    "test": { "0": "txt", "1": "doc", "2": "docx" }
+    "info": { "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf" },
+    "test": { "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf" }
   },
 
   "format":
@@ -132,5 +135,13 @@
   {
     "bug": "Bug",
     "upgrade": "Fonctionnalité"
+  },
+
+  "file_logs":
+  {
+    "upload": 0,
+    "download": 1,
+    "remove": 2,
+    "comment": 3
   }
 }

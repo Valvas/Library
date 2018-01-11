@@ -15,23 +15,9 @@ module.exports.getFilesFromOneService = (service, databaseConnector, callback) =
   {
     'databaseName': params.database.name,
     'tableName': params.database.tables.files,
-  
-    'args': 
-    { 
-      '0': '*' 
-    },
-      
-    'where':
-    {
-      '=':
-      {
-        '0':
-        {
-          'key': 'service',
-          'value': service
-        }
-      }
-    }
+    'args': { '0': '*' },  
+    'where': { '=': { '0': { 'key': 'service', 'value': service } } }
+
   }, databaseConnector, (boolean, rowsOrErrorMessage) =>
   {
     if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);

@@ -6,5 +6,13 @@
     "2": "Ce rapport est désormais en statut EN COURS",
     "3": "Ce rapport est désormais en statut FERMÉ",
     "4": "Ce rapport est désormais en statut RÉSOLU"
+  },
+
+  "file_logs":
+  {
+    "0": "Fichier posté par",
+    "1": "Fichier téléchargé par",
+    "2": "Fichier supprimé par",
+    "3": "Commentaire posté par"
   }
 }

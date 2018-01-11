@@ -9,7 +9,7 @@ var filesCommon         = require(`${__root}/functions/files/common`);
 
 module.exports.addLog = (obj, callback) =>
 {
-  filesCommon.createFolder(params.path_to_account_logs_storage, params.path_to_logs_storage, (pathOrFalse, errorStatus, errorCode) =>
+  filesCommon.createFolder(params.path_to_account_logs_storage, `${params.path_to_root_storage}/${params.path_to_logs_storage}`, (pathOrFalse, errorStatus, errorCode) =>
   {
     pathOrFalse == false ? callback(false, errorStatus, errorCode) :
 

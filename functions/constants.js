@@ -49,6 +49,7 @@ const COMMENT_STATUS_NOT_UPDATED                                                
 const REPORT_STATUS_INCORRECT                                                     = 10045;
 const REPORT_STATUS_NOT_UPDATED                                                   = 10046;
 const INCORRECT_SUSPENSION_STATUS                                                 = 10047;
+const UNAUTHORIZED_TO_POST_COMMENTS                                               = 10048;
 
 /******************************************************************************************
 SUCCESS
@@ -71,6 +72,7 @@ const ACCOUNT_UPDATED_SUCCESSFULLY                                              
 const COMMENT_STATUS_UPDATED                                                      = 20015;
 const REPORT_STATUS_UPDATED                                                       = 20016;
 const ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED                                         = 20017;
+const FILE_COMMENT_SUCCESSFULLY_ADDED                                             = 20018;
 
 /******************************************************************************************
 EXPORTS
@@ -125,6 +127,7 @@ module.exports =
   REPORT_STATUS_INCORRECT: REPORT_STATUS_INCORRECT,
   REPORT_STATUS_NOT_UPDATED: REPORT_STATUS_NOT_UPDATED,
   INCORRECT_SUSPENSION_STATUS: INCORRECT_SUSPENSION_STATUS,
+  UNAUTHORIZED_TO_POST_COMMENTS: UNAUTHORIZED_TO_POST_COMMENTS,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -142,5 +145,6 @@ module.exports =
   ACCOUNT_UPDATED_SUCCESSFULLY: ACCOUNT_UPDATED_SUCCESSFULLY,
   COMMENT_STATUS_UPDATED: COMMENT_STATUS_UPDATED,
   REPORT_STATUS_UPDATED: REPORT_STATUS_UPDATED,
-  ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED: ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED
+  ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED: ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED,
+  FILE_COMMENT_SUCCESSFULLY_ADDED: FILE_COMMENT_SUCCESSFULLY_ADDED
 }
