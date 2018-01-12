@@ -1,5 +1,7 @@
 window.onload = $(() =>
 {
+  var socket = io('/file');
+
   /****************************************************************************************************/
 
   $('body').on('click', '.actions .comment', (event) =>
@@ -36,6 +38,8 @@ window.onload = $(() =>
         $('#file-comment-popup').remove();
         $('body').css('overflow', '');
         printSuccess(json.message);
+
+        socket.emit('post_comment', { room: $('.file-main-block').attr('id'), logID: json.log });
       });
     }
   });

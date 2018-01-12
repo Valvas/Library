@@ -1,5 +1,8 @@
 window.onload = $(() =>
 {
+  var global = io();
+  var socket = io('/file');
+
   /****************************************************************************************************/
 
   $('body').on('click', '.file-main-block .actions button.delete', (event) =>
@@ -47,6 +50,9 @@ window.onload = $(() =>
         $('#veil').remove();
 
         $('.actions').html(`<div class='deleted'>Supprimé</div>`);
+
+        global.emit('delete_file', { room: $('.file-main-block').attr('name'), fileUUID: $('.file-main-block').attr('id') });
+        socket.emit('delete_file', { room: $('.file-main-block').attr('id'), logID: json.log });
       });
     }
   });

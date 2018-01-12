@@ -41,7 +41,7 @@ router.post('/post-new-file', upload.single('file'), (req, res) =>
   {
     boolean ? 
     res.status(200).send({ result: true, message: `${success[20010].charAt(0).toUpperCase()}${success[20010].slice(1)}` }) :
-    res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
   });
 });
 
@@ -51,11 +51,11 @@ router.delete('/delete-file', (req, res) =>
 {
   req.body.file == undefined || req.body.service == undefined ? res.status(406).send(false) :
 
-  filesDeleting.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
+  filesDeleting.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), (deleteLogIdOrErrorMessage, errorStatus, errorCode) =>
   {
-    boolean ?
-    res.status(200).send({ result: true, message: `${success[20005].charAt(0).toUpperCase()}${success[20005].slice(1)}` }) :
-    res.status(errorStatus).send({ result: false, message: `Erreur [${errorStatus}] - ${errors[errorCode]} !` });
+    deleteLogIdOrErrorMessage == false ?
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+    res.status(200).send({ result: true, message: `${success[20005].charAt(0).toUpperCase()}${success[20005].slice(1)}`, log: deleteLogIdOrErrorMessage });
   });
 });
 

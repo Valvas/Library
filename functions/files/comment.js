@@ -51,7 +51,7 @@ module.exports.addComment = (fileUUID, accountUUID, commentContent, databaseConn
       
         }, databaseConnector, (boolean, commentIdOrErrorMessage) =>
         {
-          boolean == false ? callback(false, 500, constants.SQL_SERVER_ERROR) : callback(true);
+          boolean == false ? callback(false, 500, constants.SQL_SERVER_ERROR) : callback(logIdOrErrorMessage);
         });
       });
     }

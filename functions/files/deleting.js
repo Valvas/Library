@@ -53,9 +53,9 @@ fileDeleting.deleteOneFile = (service, fileUUID, accountUUID, databaseConnector,
             {
               updatedRowsOrErrorMessage.length == 0 ? callback(false, 500, constants.FILE_NOT_DELETED_FROM_DATABASE) :
 
-              fileLogs.addLogInDatabase(params.file_logs.remove, accountUUID, undefined, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
+              fileLogs.addLogInDatabase(params.file_logs.remove, accountUUID, undefined, fileUUID, databaseConnector, (logIdOrFalse, errorStatus, errorCode) =>
               {
-                boolean == false ? callback(false, errorStatus, errorCode) :
+                logIdOrFalse == false ? callback(false, errorStatus, errorCode) :
                 
                 fs.stat(`${params.path_to_root_storage}/${service}/${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (err, stats) =>
                 {
@@ -85,7 +85,7 @@ fileDeleting.deleteOneFile = (service, fileUUID, accountUUID, databaseConnector,
     
                         fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
                         {
-                          boolean ? callback(true) : callback(false, errorStatus, errorCode);
+                          boolean ? callback(logIdOrFalse) : callback(false, errorStatus, errorCode);
                         });
                       }
                     });

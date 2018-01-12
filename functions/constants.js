@@ -50,6 +50,7 @@ const REPORT_STATUS_INCORRECT                                                   
 const REPORT_STATUS_NOT_UPDATED                                                   = 10046;
 const INCORRECT_SUSPENSION_STATUS                                                 = 10047;
 const UNAUTHORIZED_TO_POST_COMMENTS                                               = 10048;
+const LOG_NOT_FOUND                                                               = 10049;
 
 /******************************************************************************************
 SUCCESS
@@ -128,6 +129,7 @@ module.exports =
   REPORT_STATUS_NOT_UPDATED: REPORT_STATUS_NOT_UPDATED,
   INCORRECT_SUSPENSION_STATUS: INCORRECT_SUSPENSION_STATUS,
   UNAUTHORIZED_TO_POST_COMMENTS: UNAUTHORIZED_TO_POST_COMMENTS,
+  LOG_NOT_FOUND: LOG_NOT_FOUND,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

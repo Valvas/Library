@@ -13,23 +13,41 @@ var server = http.createServer(app);
 
 var io = require('socket.io')(server);
 
-var serviceIO = io.of('/service');
+var fileIO    = io.of('/file');
 
-serviceIO.on('connection', function(socket)
+io.on('connection', (socket) =>
 {
-  socket.on('join_service', function(name)
+  socket.on('join_service', (name) =>
+  {console.log(name)
+    socket.join(name);
+  });
+
+  socket.on('delete_file', (object) =>
+  {console.log(object)
+    socket.to(object.room).emit('delete_file', object.fileUUID);
+  });
+});
+
+fileIO.on('connection', (socket) =>
+{
+  socket.on('join_file', (name) =>
   {
     socket.join(name);
   });
 
-  socket.on('new_file', function(object)
+  socket.on('post_comment', (object) =>
   {
-    socket.to(object.room).emit('new_file');
+    socket.to(object.room).emit('post_comment', object.logID);
   });
 
-  socket.on('delete_file', function(object)
+  socket.on('delete_file', (object) =>
   {
-    socket.to(object.room).emit('delete_file', object.fileUUID);
+    socket.to(object.room).emit('delete_file', object.logID);
+  });
+
+  socket.on('download_file', (object) =>
+  {
+    socket.to(object.room).emit('download_file');
   });
 });
 

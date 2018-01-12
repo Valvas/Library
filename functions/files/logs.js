@@ -8,9 +8,11 @@ var formatDate          = require(`${__root}/functions/format/date`);
 var filesCommon         = require(`${__root}/functions/files/common`);
 var databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
+var filesLogs = module.exports = {};
+
 /****************************************************************************************************/
 
-module.exports.addLog = (obj, callback) =>
+filesLogs.addLog = (obj, callback) =>
 {
   filesCommon.createFolder(params.path_to_file_logs_storage, `${params.path_to_root_storage}/${params.path_to_logs_storage}`, (pathOrFalse, errorStatus, errorCode) =>
   {
@@ -83,7 +85,7 @@ function addLogInFile(file, path, obj, callback)
 
 /****************************************************************************************************/
 
-module.exports.addLogInDatabase = (logType, accountUUID, commentContent, fileUUID, databaseConnector, callback) =>
+filesLogs.addLogInDatabase = (logType, accountUUID, commentContent, fileUUID, databaseConnector, callback) =>
 {
   logType               == undefined ||
   accountUUID           == undefined ||
@@ -110,11 +112,11 @@ module.exports.addLogInDatabase = (logType, accountUUID, commentContent, fileUUI
 
     else
     {
-      logType != params.file_logs.comment ? callback(true) :
+      logType != params.file_logs.comment ? callback(insertedIdOrErrorMessage) :
 
       addCommentInDatabase(insertedIdOrErrorMessage, commentContent, databaseConnector, (boolean, errorStatus, errorCode) =>
       {
-        boolean ? callback(true) : callback(false, errorStatus, errorCode);
+        boolean ? callback(insertedIdOrErrorMessage) : callback(false, errorStatus, errorCode);
       });
     }
   });
@@ -148,7 +150,7 @@ function addCommentInDatabase(logId, commentContent, databaseConnector, callback
 
 /****************************************************************************************************/
 
-module.exports.getPreparedLog = (log, databaseConnector, callback) =>
+filesLogs.getPreparedLog = (log, databaseConnector, callback) =>
 {
   databaseManager.selectQuery(
   {
@@ -179,6 +181,8 @@ module.exports.getPreparedLog = (log, databaseConnector, callback) =>
           preparedLog.message = `${logs['file_logs'][log.type]} ${accountOrErrorMessage[0].firstname.charAt(0).toUpperCase()}${accountOrErrorMessage[0].firstname.slice(1).toLowerCase()} ${accountOrErrorMessage[0].lastname.toUpperCase()}`;
         
           preparedLog.type = log.type;
+
+          preparedLog.id = log.id;
           
           log.type == params.file_logs.comment ?
 
@@ -206,6 +210,38 @@ module.exports.getPreparedLog = (log, databaseConnector, callback) =>
 
           callback(preparedLog);          
         }
+      });
+    }
+  });
+}
+
+/****************************************************************************************************/
+
+filesLogs.getFileLog = (logID, databaseConnector, callback) =>
+{
+  logID == undefined ||
+  databaseConnector == undefined ?
+
+  callback(false, 406, constants.MISSING_DATA_IN_REQUEST) :
+
+  databaseManager.selectQuery(
+  {
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.file_logs,
+    'args': { '0': '*' },
+    'where': { '=': { '0': { 'key': 'id', 'value': logID } } }
+
+  }, databaseConnector, (boolean, logOrErrorMessage) =>
+  {
+    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+
+    else
+    {
+      logOrErrorMessage.length == 0 ? callback(false, 404, constants.LOG_NOT_FOUND) :
+
+      filesLogs.getPreparedLog(logOrErrorMessage[0], databaseConnector, (preparedLogOrFalse, errorStatus, errorCode) =>
+      {
+        preparedLogOrFalse == false ? callback(false, errorStatus, errorCode) : callback(preparedLogOrFalse);
       });
     }
   });

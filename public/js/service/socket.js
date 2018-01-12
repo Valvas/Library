@@ -1,7 +1,7 @@
 window.onload = $(() =>
 {
-  var socket = io('/service');
-  
+  var socket = io();
+
   socket.on('connect', () =>
   {
     socket.emit('join_service', $(document.getElementById('service-main-block')).attr('name'));
@@ -9,13 +9,12 @@ window.onload = $(() =>
   
   socket.on('new_file', () =>
   {
-    printMessage('Un fichier a été ajouté.');
     updateFilesList($(document.getElementById('service-main-block')).attr('name'), () => {});
   });
 
   socket.on('delete_file', (fileUUID) =>
   {
-    printSuccess('Un fichier a été supprimé.');
+    printError('Un fichier a été supprimé.');
 
     var files = document.getElementsByName('service-main-block-file');
   

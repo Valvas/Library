@@ -539,3 +539,51 @@ function openSelectPopup(obj)
 }
 
 /****************************************************************************************************/
+
+function uploadFileLogs(logID)
+{
+  $.ajax(
+  {
+    type: 'PUT', timeout: 5000, dataType: 'JSON', data: { log: logID }, url: '/file/get-log', success: () => {},
+    error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); }
+                  
+  }).done((json) =>
+  {
+    var log       = document.createElement('div');
+    var date      = document.createElement('div');
+    var content   = document.createElement('div');
+
+    switch(json.log.type)
+    {
+      case 0: $(log).attr({ id: json.log.id, name: json.log.type, class: 'upload-log' }); break;
+      case 1: $(log).attr({ id: json.log.id, name: json.log.type, class: 'download-log' }); break;
+      case 2: $(log).attr({ id: json.log.id, name: json.log.type, class: 'remove-log' }); break;
+      case 3: $(log).attr({ id: json.log.id, name: json.log.type, class: 'comment-log' }); break;
+    }
+
+    $(date)     .attr('class', 'date');
+    $(content)  .attr('class', 'content');
+
+    $(date)     .text(json.log.date);
+    $(content)  .text(json.log.message);
+
+    $(log)      .hide().prependTo('.comments');
+
+    $(date)     .appendTo(log);
+    $(content)  .appendTo(log);
+
+    if(json.log.comment != undefined)
+    {
+      var comment = document.createElement('div');
+
+      $(comment).attr('class', 'comment');
+      $(comment).text(json.log.comment);
+
+      $(comment).appendTo(log);
+    }
+
+    $(log)      .fadeIn(500);
+  });
+}
+
+/****************************************************************************************************/

@@ -26,7 +26,7 @@
         </div>
         <div class='comments'>
           <% for(var i = Object.keys(file.logs).length - 1; i >= 0; i--){ %>
-            <div name='<%= file.logs[i].type %>' class='<% if(file.logs[i].type == 0){ %>upload-log<% } else if(file.logs[i].type == 1){ %>download-log<% } else if(file.logs[i].type == 2){ %>remove-log<% } else{ %>comment-log<% } %>'>
+            <div id='<%= file.logs[i].id %>' name='<%= file.logs[i].type %>' class='<% if(file.logs[i].type == 0){ %>upload-log<% } else if(file.logs[i].type == 1){ %>download-log<% } else if(file.logs[i].type == 2){ %>remove-log<% } else{ %>comment-log<% } %>'>
               <div class='date'><%= file.logs[i].date %></div><!-- @SuppressWhitespace
               --><div class='content'><%= file.logs[i].message %></div>
               <% if(file.logs[i].comment != undefined){ %><div class='comment'><%= file.logs[i].comment %></div><% } %>
@@ -36,6 +36,8 @@
     </div>
     <% include include/scripts.ejs %>
     <script src='/js/afk.js'></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='/js/file/socket.js'></script>
     <script src='/js/file/comment.js'></script>
     <script src='/js/file/download.js'></script>
     <script src='/js/file/delete.js'></script>
