@@ -7,7 +7,7 @@ window.onload = $(() =>
     socket.emit('join_service', $(document.getElementById('service-main-block')).attr('name'));
   });
   
-  socket.on('new_file', () =>
+  socket.on('upload_file', () =>
   {
     updateFilesList($(document.getElementById('service-main-block')).attr('name'), () => {});
   });
@@ -15,6 +15,8 @@ window.onload = $(() =>
   socket.on('delete_file', (fileUUID) =>
   {
     printError('Un fichier a été supprimé.');
+
+    $(`#${fileUUID}`).find('.service-main-block-buttons').html(`<div name='selected' class='service-main-block-file-deleted'>Supprimé</div>`);
 
     var files = document.getElementsByName('service-main-block-file');
   

@@ -2,7 +2,7 @@ window.onload = $(() =>
 {
   /****************************************************************************************************/
 
-  $('body').on('click', '.admin-comment', (event) =>
+  $('body').on('click', '.log-button', (event) =>
   {
     if($(event.target).parent().attr('name') == 0)
     {
@@ -14,8 +14,10 @@ window.onload = $(() =>
       }).done((json) =>
       {
         printSuccess(json.message);
-        $(event.target).parent().attr('class', 'comment admin-comment log-0');
+        $(event.target).parent().attr('class', 'comment admin-comment read-comment');
         $(event.target).parent().attr('name', '1');
+        $(event.target).attr('class', 'log-button log-button-not-read');
+        $(event.target).text('Marquer comme non-lu');
       });
     }
 
@@ -29,8 +31,10 @@ window.onload = $(() =>
       }).done((json) =>
       {
         printSuccess(json.message);
-        $(event.target).parent().attr('class', 'comment admin-comment log-3');
+        $(event.target).parent().attr('class', 'comment admin-comment not-read-comment');
         $(event.target).parent().attr('name', '0');
+        $(event.target).attr('class', 'log-button log-button-read');
+        $(event.target).text('Marquer comme lu');
       });
     }
   });

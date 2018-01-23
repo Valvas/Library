@@ -47,7 +47,8 @@ window.onload = $(() =>
       {
         if(json['result'] == true) 
         {
-          socket.emit('delete_file', { room: $(document.getElementById('service-main-block')).attr('name'), fileUUID: $(event.target).parent().attr('name') });
+          socket.emit('from_file_delete', { room: $(event.target).parent().attr('name'), logID: json.log });
+          socket.emit('from_service_delete', { room: $(document.getElementById('service-main-block')).attr('name'), fileUUID: $(event.target).parent().attr('name') });
         }
   
         else

@@ -36,25 +36,60 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
         else
         {
-          fileOrErrorMessage.length > 0 && fileOrErrorMessage[0].deleted == 0 ? callback(false, 406, constants.FILE_ALREADY_EXISTS) :
+          if(fileOrErrorMessage.length > 0 && fileOrErrorMessage[0].deleted == 0) callback(false, 406, constants.FILE_ALREADY_EXISTS);
 
-          fs.stat(`${params.path_to_root_storage}/${service}/${file.originalname}`, (err, stats) =>
+          else
           {
-            if(err  && err.code != 'ENOENT') callback(false, 500, constants.FILE_SYSTEM_ERROR);
+            var fileUUID = undefined;
 
-            else
+            if(fileOrErrorMessage.length > 0) fileUUID = fileOrErrorMessage[0].uuid;
+
+            fs.stat(`${params.path_to_root_storage}/${service}/${file.originalname}`, (err, stats) =>
             {
-              var fileUUID = fileOrErrorMessage.length > 0 ? fileOrErrorMessage[0].uuid : false;
+              if(err  && err.code != 'ENOENT') callback(false, 500, constants.FILE_SYSTEM_ERROR);
 
-              if(stats != undefined)
+              else
               {
-                fileDeleting.moveFileToBin(service, file.originalname, (boolean, errorStatus, errorCode) =>
-                {
-                  boolean == false ? callback(false, errorStatus, errorCode) :
+                var fileUUID = fileOrErrorMessage.length > 0 ? fileOrErrorMessage[0].uuid : false;
 
-                  addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
+                if(stats != undefined)
+                {
+                  fileDeleting.moveFileToBin(service, file.originalname, (boolean, errorStatus, errorCode) =>
                   {
-                    if(boolean == false) callback(false, errorStatus, errorCode);
+                    boolean == false ? callback(false, errorStatus, errorCode) :
+
+                    addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
+                    {
+                      if(logIDOrFalse == false) callback(false, errorStatus, errorCode);
+
+                      else
+                      {
+                        var logObj =
+                        {
+                          'service': service,
+                          'fileName': file.originalname.split('.')[0],
+                          'fileExt': file.originalname.split('.')[1],
+                          'content':
+                          {
+                            'account': accountUUID,
+                            'action': 'upload'
+                          }
+                        }
+
+                        fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
+                        {
+                          boolean ? callback(fileUUID, logIDOrFalse) : callback(false, errorStatus, errorCode);
+                        });
+                      }
+                    });
+                  });
+                }
+
+                else
+                {
+                  addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
+                  {
+                    if(logIDOrFalse == false) callback(false, errorStatus, errorCode);
 
                     else
                     {
@@ -72,42 +107,14 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
                       fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
                       {
-                        boolean ? callback(true) : callback(false, errorStatus, errorCode);
+                        boolean ? callback(fileUUID, logIDOrFalse) : callback(false, errorStatus, errorCode);
                       });
                     }
                   });
-                });
+                }
               }
-
-              else
-              {
-                addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
-                {
-                  if(boolean == false) callback(false, errorStatus, errorCode);
-
-                  else
-                  {
-                    var logObj =
-                    {
-                      'service': service,
-                      'fileName': file.originalname.split('.')[0],
-                      'fileExt': file.originalname.split('.')[1],
-                      'content':
-                      {
-                        'account': accountUUID,
-                        'action': 'upload'
-                      }
-                    }
-
-                    fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
-                    {
-                      boolean ? callback(true) : callback(false, errorStatus, errorCode);
-                    });
-                  }
-                });
-              }
-            }
-          });
+            });
+          }
         }
       });
     }
@@ -146,13 +153,13 @@ function addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, dat
 
         else
         {
-          fileLogs.addLogInDatabase(params.file_logs.upload, accountUUID, undefined, fileOrErrorMessage[0].uuid, databaseConnector, (boolean, errorStatus, errorCode) =>
+          fileLogs.addLogInDatabase(params.file_logs.upload, accountUUID, undefined, fileOrErrorMessage[0].uuid, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
           {
-            boolean == false ? callback(false, errorStatus, errorCode) :
+            logIDOrFalse == false ? callback(false, errorStatus, errorCode) :
 
             copyFile(file, service, (boolean, errorStatus, errorCode) =>
             {
-              boolean ? callback(true) : callback(false, errorStatus, errorCode);
+              boolean ? callback(logIDOrFalse) : callback(false, errorStatus, errorCode);
             });
           });
         }
@@ -173,13 +180,13 @@ function addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, dat
   
     else
     {
-      fileLogs.addLogInDatabase(params.file_logs.upload, accountUUID, undefined, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
+      fileLogs.addLogInDatabase(params.file_logs.upload, accountUUID, undefined, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
       {
-        boolean == false ? callback(false, errorStatus, errorCode) :
+        logIDOrFalse == false ? callback(false, errorStatus, errorCode) :
 
         copyFile(file, service, (boolean, errorStatus, errorCode) =>
         {
-          boolean ? callback(true) : callback(false, errorStatus, errorCode);
+          boolean ? callback(logIDOrFalse) : callback(false, errorStatus, errorCode);
         });
       });
     }

@@ -119,8 +119,8 @@ function openReportPopup(obj)
   $(subjectLabel)       .text(obj.subjectLabel);
   $(descriptionLabel)   .text(obj.descriptionLabel);
 
-  $(cancelButton)       .html(`<i class="fa fa-times fa-fw" aria-hidden="true"></i>`);
-  $(sendButton)         .html(`<i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i>`);
+  $(cancelButton)       .text(`Annuler`);
+  $(sendButton)         .text(`Envoyer`);
   
   $(`<option value=''></option>`).appendTo(list);
 
@@ -139,9 +139,9 @@ function openReportPopup(obj)
   $(subject)            .appendTo(popup);
   $(descriptionLabel)   .appendTo(popup);
   $(description)        .appendTo(popup);
-  $(infoMessage)        .appendTo(popup);
   $(sendButton)         .appendTo(popup);
   $(cancelButton)       .appendTo(popup);
+  $(infoMessage)        .appendTo(popup);
 }
 
 /****************************************************************************************************/
@@ -353,10 +353,12 @@ function updateFilesList(service, callback)
                 
   }).done((json) =>
   {   
-    var x = 0;
+    var x = 0, y = 0;
 
     var loop = (file) =>
     {
+      if(file['deleted'] == 0) y += 1;
+
       if($(`#${file['uuid']} [name="service-main-block-buttons"] [name="deleted"]`).length > 0 && file['deleted'] == 0)
       {
         $(`#${file['uuid']} [name="service-main-block-buttons"] [name="deleted"]`).remove();
@@ -391,6 +393,8 @@ function updateFilesList(service, callback)
     }
 
     json['files'].length > 0 ? loop(json['files'][Object.keys(json['files'])[x]]) : printMessage('Aucun fichier associé à ce service pour le moment.');
+
+    $('#service-main-block .info').text('Fichiers: ' + y);
   });
 }
 

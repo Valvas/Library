@@ -32,6 +32,7 @@ module.exports.getFilesFromOneService = (service, databaseConnector, callback) =
         
         var fileLoop = () =>
         {
+          rowsOrErrorMessage[x]['ext'] = rowsOrErrorMessage[x]['type'];
           rowsOrErrorMessage[x]['type'] = params['file_ext'][rowsOrErrorMessage[x]['type']];
 
           rowsOrErrorMessage[x += 1] != undefined ? fileLoop() :

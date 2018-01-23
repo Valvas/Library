@@ -61,9 +61,9 @@ module.exports.downloadFile = (service, fileUUID, accountUUID, databaseConnector
 
             else
             {
-              fileLogs.addLogInDatabase(params.file_logs.download, accountUUID, undefined, fileUUID, databaseConnector, (boolean, errorStatus, errorCode) =>
+              fileLogs.addLogInDatabase(params.file_logs.download, accountUUID, undefined, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
               {
-                if(boolean == false) callback(false, errorStatus, errorCode);
+                if(logIDOrFalse == false) callback(false, errorStatus, errorCode);
 
                 else
                 {
@@ -81,7 +81,7 @@ module.exports.downloadFile = (service, fileUUID, accountUUID, databaseConnector
 
                   fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
                   {
-                    boolean ? callback(`${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`) : callback(false, errorStatus, errorCode);
+                    boolean ? callback(`${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, logIDOrFalse) : callback(false, errorStatus, errorCode);
                   });
                 }
               });

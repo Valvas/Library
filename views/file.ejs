@@ -11,7 +11,7 @@
     --><div id='<%= file['uuid'] %>' name='<%= file['service'] %>' class='file-main-block'>
         <a href='/service/<%= file['service'] %>' class='return'><i class="fa fa-angle-left icon" aria-hidden="true"></i><div class='label'>Retour</div></a>
         <div class='info'>
-          <div class='name'>Nom : <%= file['name'] %>.<%= file['type'] %></div>
+          <div class='name' id='file-name' name='<%= file['name'] %>.<%= file['type'] %>'>Nom : <%= file['name'] %>.<%= file['type'] %></div>
           <div class='type'>Type : <%= ext[file['type']] %></div>
           <div class='type'>Propriétaire : <%= file['account'] %></div>
         </div><!-- @SuppressWhitespace

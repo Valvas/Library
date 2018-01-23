@@ -2,269 +2,35 @@
 TABLE
 ****************************************************************************************************/
 
-.reports-main-block
-{
-  vertical-align:top;
-  display:inline-block;
-  margin:2.5% 2.5% 2.5% 2.5%;
-}
+.reports-main-block{ vertical-align:top; display:inline-block; margin:2.5% 2.5% 2.5% 2.5%; }
 
-.reports-main-block .counter
-{
-  color:#334455;
-  font-size:large;
-  font-weight:bold;
-  text-align:right;
-  font-family:barlow;
-  margin:2.5% 2.5% 2.5% 2.5%;
-}
+.reports-main-block .counter{ color:#334455; font-size:large; font-weight:bold; text-align:right; font-family:barlow; margin:2.5% 2.5% 2.5% 2.5%; }
 
-.reports-main-block .filters
-{
-  margin:2.5% 2.5% 2.5% 2.5%;
-}
+.reports-main-block .filters{ margin:2.5% 2.5% 2.5% 2.5%; }
 
-.reports-main-block .filters .filter
-{
-  display:inline-block;
-}
+.reports-main-block .filters .filter{ display:inline-block; }
 
-.reports-main-block .filters .filter input, .reports-main-block .filters .filter select
-{
-  width:auto;
-  cursor:pointer;
-  margin:0 2% 0 2%;
-  display:inline-block;
-}
+.reports-main-block .filters .filter input, .reports-main-block .filters .filter select{ width:auto; cursor:pointer; margin:0 2% 0 2%; display:inline-block; }
 
-.reports-main-block .filters .filter .label
-{
-  font-family:barlow;
-  display:inline-block;
-}
+.reports-main-block .filters .filter .label{ font-family:barlow; display:inline-block; }
 
-.reports-main-block .reports-table
-{
-  width:100%;
-  table-layout:fixed;
-  border-collapse:collapse;
-}
+.reports-main-block .reports-table{ width:100%; table-layout:fixed; border-collapse:collapse; }
 
-.reports-main-block .reports-table .reports-table-legend-row
-{
-  color:#FFFFFF;
-  font-size:large;
-  text-align:left;
-  background-color:#77B5FE;
-  font-family:raleway-italic;
-}
+.reports-main-block .reports-table .reports-table-legend-row{ color:#FFFFFF; font-size:large; text-align:left; background-color:#77B5FE; font-family:raleway-italic; }
 
-.reports-main-block .reports-table .reports-table-legend-row.admin
-{
-  background-color:#E84E4F;
-}
+.reports-main-block .reports-table .reports-table-legend-row.admin{ background-color:#E84E4F; }
 
-.reports-main-block .admin-warning
-{
-  padding:1%;
-  color:#FFFFFF;
-  text-align:center;
-  border-radius:8px;
-  font-family:barlow;
-  margin:2.5% 0 2.5% 0;
-  background-color:#E84E4F;
-}
+.reports-main-block .admin-warning{ padding:1%; color:#FFFFFF; text-align:center; border-radius:8px; font-family:barlow; margin:2.5% 0 2.5% 0; background-color:#E84E4F; }
 
-.reports-main-block .reports-table td
-{
-  font-family:barlow;
-  word-wrap:break-word;
-  overflow-wrap:break-word;
-}
+.reports-main-block .reports-table td{ font-family:barlow; word-wrap:break-word; overflow-wrap:break-word; }
 
-.reports-main-block .reports-table tr.report
-{
-  cursor:pointer;
-}
+.reports-main-block .reports-table tr.report{ cursor:pointer; }
 
-.reports-main-block .reports-table tr.report.even
-{
-  background-color:#EEEEEE;
-}
+.reports-main-block .reports-table tr.report.even{ background-color:#EEEEEE; }
 
-.reports-main-block .reports-table tr.report.odd
-{
-  background-color:#FFFFFF;
-}
+.reports-main-block .reports-table tr.report.odd{ background-color:#FFFFFF; }
 
-.reports-main-block .reports-table tr.report:hover
-{
-  font-weight:bold;
-  background-color:#CCDDFF;
-}
-
-.reports-main-block .report-detail .subject
-{
-  font-size:x-large;
-  word-wrap:break-word;
-  font-family:raleway-regular;
-}
-
-.reports-main-block .report-detail .label
-{
-  font-size:large;
-  font-family:raleway-light;
-}
-
-.reports-main-block .report-detail .status
-{
-  font-size:large;
-  font-family:raleway-italic;
-}
-
-.reports-main-block .report-detail .date
-{
-  font-size:large;
-  color:#334455;
-  font-family:barlow;
-}
-
-.reports-main-block .report-detail .type
-{
-  width:90%;
-  font-size:large;
-  margin:2.5% 5% 2.5% 5%;
-  font-family:raleway-light;
-}
-
-.reports-main-block .report-detail .description
-{
-  width:90%;
-  text-align:justify;
-  margin:2.5% 5% 5% 5%;
-  font-family:raleway-light;
-}
-
-.reports-main-block .report-detail .status-selection
-{
-  width:90%;
-  padding:1%;
-  cursor:pointer;
-  font-size:large;
-  margin:0 5% 2.5% 5%;
-}
-
-.reports-main-block .report-detail .comment-button
-{
-  padding:2%;
-  border:none;
-  cursor:pointer;
-  color:#FFFFFF;
-  font-family:barlow;
-  background-color:#77B5FE;
-}
-
-.reports-main-block .report-detail .comment-button:hover
-{
-  color:#000000;
-}
-
-.reports-main-block .report-detail .comments-block
-{
-  width:90%;
-  margin:2.5% 5% 5% 5%;
-}
-
-.reports-main-block .report-detail .comments-block .title
-{
-  font-size:large;
-  margin:2.5% 0 2.5% 0;
-  font-family:raleway-light;
-}
-
-.reports-main-block .report-detail .comments-block .no-comment
-{
-  margin:5% 0 5% 0;
-  text-align:center;
-  font-family:raleway-italic;
-}
-
-.reports-main-block .report-detail .comments-block .comment
-{
-  color:#FFFFFF;
-  border-radius:5px;
-  margin:2.5% 0 2.5% 0;
-  background-color:#778899;
-}
-
-.reports-main-block .report-detail .comments-block .comment .read
-{
-  width:98%;
-  color:#1FA055;
-  font-size:large;
-  text-align:right;
-  padding:1% 1% 1% 1%;
-  font-family:raleway-regular;
-}
-
-.reports-main-block .report-detail .comments-block .comment .not-read
-{
-  width:98%;
-  color:#E84E4F;
-  font-size:large;
-  text-align:right;
-  padding:1% 1% 1% 1%;
-  font-family:raleway-regular;
-}
-
-.reports-main-block .report-detail .comments-block .admin-comment
-{
-  cursor:pointer;
-}
-
-.reports-main-block .report-detail .comments-block .admin-comment.log-0:hover
-{
-  background-color:#5593DC;
-}
-
-.reports-main-block .report-detail .comments-block .admin-comment.log-3:hover
-{
-  background-color:#C62C2D;
-}
-
-.reports-main-block .report-detail .comments-block .log-0{ background-color:#77B5FE; }
-.reports-main-block .report-detail .comments-block .log-1{ background-color:#CCC79A; }
-.reports-main-block .report-detail .comments-block .log-2{ background-color:#77B5FE; }
-.reports-main-block .report-detail .comments-block .log-3{ background-color:#E84E4F; }
-.reports-main-block .report-detail .comments-block .log-4{ background-color:#7FDD4C; }
-
-.reports-main-block .report-detail .comments-block .comment .log-date
-{
-  margin:0;
-  color:#223344;
-  font-size:large;
-  font-family:barlow;
-  padding:1% 2.5% 1% 2.5%;
-}
-
-.reports-main-block .report-detail .comments-block .comment .log-label
-{
-  margin:0;
-  color:#223344;
-  font-size:large;
-  text-align:justify;
-  padding:1% 2.5% 1% 2.5%;
-  font-family:raleway-light;
-}
-
-.reports-main-block .report-detail .comments-block .comment .log-message
-{
-  margin:0 0 0 5%;
-  color:#334455;
-  text-align:justify;
-  padding:1% 2.5% 2.5% 2.5%;
-  font-family:raleway-italic;
-}
+.reports-main-block .reports-table tr.report:hover{ font-weight:bold; background-color:#CCDDFF; }
 
 /****************************************************************************************************/
 
@@ -278,13 +44,6 @@ TABLE
   .reports-main-block .reports-table th.type{ width:19%; }
   .reports-main-block .reports-table th.status{ width:19%; }
   .reports-main-block .reports-table th.subject{ width:44%; }
-
-  .reports-main-block .report-detail .subject{ width:90%; margin:5% 5% 5% 5%; }
-  .reports-main-block .report-detail .label{ margin:2.5% 2.5% 2.5% 5%; display:inline-block; }
-  .reports-main-block .report-detail .date{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
-  .reports-main-block .report-detail .status{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
-
-  .reports-main-block .report-detail .comment-button{ width:56%; margin:2.5% 0 2.5% 40%; }
 }
 
 /****************************************************************************************************/
@@ -299,13 +58,6 @@ TABLE
   .reports-main-block .reports-table th.type{ width:20%; }
   .reports-main-block .reports-table th.status{ width:20%; }
   .reports-main-block .reports-table th.subject{ width:45%; }
-
-  .reports-main-block .report-detail .subject{ width:90%; margin:5% 5% 5% 5%; }
-  .reports-main-block .report-detail .label{ margin:2.5% 2.5% 2.5% 5%; display:inline-block; }
-  .reports-main-block .report-detail .date{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
-  .reports-main-block .report-detail .status{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
-
-  .reports-main-block .report-detail .comment-button{ width:40%; margin:2.5% 0 2.5% 60%; }
 }
 
 /****************************************************************************************************/
@@ -320,13 +72,6 @@ TABLE
   .reports-main-block .reports-table th.type{ width:20%; }
   .reports-main-block .reports-table th.status{ width:20%; }
   .reports-main-block .reports-table th.subject{ width:45%; }
-
-  .reports-main-block .report-detail .subject{ width:90%; margin:5% 5% 5% 5%; }
-  .reports-main-block .report-detail .label{ margin:2.5% 2.5% 2.5% 5%; display:inline-block; }
-  .reports-main-block .report-detail .date{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
-  .reports-main-block .report-detail .status{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
-
-  .reports-main-block .report-detail .comment-button{ width:40%; margin:2.5% 0 2.5% 60%; }
 }
 
 /****************************************************************************************************/
@@ -341,14 +86,6 @@ TABLE
   .reports-main-block .reports-table th.date{ width:21%; }
   .reports-main-block .reports-table th.status{ width:11%; }
   .reports-main-block .reports-table th.subject{ width:41%; }
-
-  .reports-main-block .report-detail .label{ display:none; }
-  .reports-main-block .report-detail .type{ margin:7.5% 5% 5% 5%; }
-  .reports-main-block .report-detail .date{ width:80%; margin:2.5% 5% 2.5% 10%; }
-  .reports-main-block .report-detail .subject{ width:60%; margin:5% 2.5% 5% 5%; display:inline-block; }
-  .reports-main-block .report-detail .status{ width:25%; margin:5% 5% 2.5% 2.5%; text-align:right; display:inline-block; vertical-align:top; }
-
-  .reports-main-block .report-detail .comment-button{ width:30%; margin:2.5% 0 2.5% 70%; padding:1%; }
 }
 
 /****************************************************************************************************/
@@ -363,21 +100,13 @@ TABLE
   .reports-main-block .reports-table th.date{ width:22%; }
   .reports-main-block .reports-table th.status{ width:12%; }
   .reports-main-block .reports-table th.subject{ width:42%; }
-
-  .reports-main-block .report-detail .label{ display:none; }
-  .reports-main-block .report-detail .type{ margin:7.5% 5% 5% 5%; }
-  .reports-main-block .report-detail .date{ width:80%; margin:2.5% 5% 2.5% 10%; }
-  .reports-main-block .report-detail .subject{ width:60%; margin:5% 2.5% 5% 5%; display:inline-block; }
-  .reports-main-block .report-detail .status{ width:25%; margin:5% 5% 2.5% 2.5%; text-align:right; display:inline-block; vertical-align:top; }
-
-  .reports-main-block .report-detail .comment-button{ width:30%; margin:2.5% 0 2.5% 70%; padding:1%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 1680px)
 {
-  .reports-main-block{ width:80%; }
+  .reports-main-block{ width:55%; }
   .reports-main-block .filters .filter{ width:15%; }
   .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:1%; }
 
@@ -385,14 +114,205 @@ TABLE
   .reports-main-block .reports-table th.date{ width:23%; }
   .reports-main-block .reports-table th.status{ width:13%; }
   .reports-main-block .reports-table th.subject{ width:43%; }
+}
 
-  .reports-main-block .report-detail .label{ display:none; }
-  .reports-main-block .report-detail .type{ margin:7.5% 5% 5% 5%; }
-  .reports-main-block .report-detail .date{ width:80%; margin:2.5% 5% 2.5% 10%; }
-  .reports-main-block .report-detail .subject{ width:60%; margin:5% 2.5% 5% 5%; display:inline-block; }
-  .reports-main-block .report-detail .status{ width:25%; margin:5% 5% 2.5% 2.5%; text-align:right; display:inline-block; vertical-align:top; }
+/*****************************************************************************************************
+DETAIL
+*****************************************************************************************************/
 
-  .reports-main-block .report-detail .comment-button{ width:25%; margin:2.5% 0 2.5% 75%; padding:1%; }
+.reports-main-block .report-detail .subject{ font-size:x-large; word-wrap:break-word; font-family:raleway-regular; }
+
+.reports-main-block .report-detail .label{ display:inline-block; vertical-align:top; font-size:large; font-family:raleway-light; }
+
+.reports-main-block .report-detail .status{ font-size:large; font-family:raleway-italic; }
+
+.reports-main-block .report-detail .date{ font-size:large; color:#334455; font-family:barlow; }
+
+.reports-main-block .report-detail .type{ font-size:large; font-family:raleway-light; }
+
+.reports-main-block .report-detail .description{ border:1px solid #D8D8D8; background-color:#F9F9F9; padding:1%; width:90%; text-align:justify; margin:2.5% 5% 2.5% 5%; font-family:raleway-regular; }
+
+.reports-main-block .report-detail .status-selection{ cursor:pointer; font-size:large; }
+
+.reports-main-block .report-detail .comment-button{ padding:2% 0 2% 0; border:none; cursor:pointer; color:#FFFFFF; border-radius:4px; font-family:barlow; background-color:#77B5FE; }
+
+.reports-main-block .report-detail .comment-button:hover{ color:#000000; }
+
+.reports-main-block .report-detail .title{ font-size:large; margin:2.5% 5% 2.5% 5%; font-family:raleway-light; }
+
+.reports-main-block .report-detail .comments-block{ padding:1%; width:90%; margin:2.5% 2.5% 2.5% 5%; border:1px solid #D8D8D8; background-color:#F9F9F9; }
+
+.reports-main-block .report-detail .comments-block .comment .read{ color:#1FA055; font-size:large; text-align:right; font-family:raleway-regular; }
+
+.reports-main-block .report-detail .comments-block .comment .not-read{ color:#E84E4F; font-size:large; text-align:right; font-family:raleway-regular; }
+
+.reports-main-block .report-detail .comments-block .log-0{ margin:1% 0 1% 0; padding:1% 0 1% 0; background-color:#E6E6FA; border-radius:4px; border:1px solid #C4C4D8; }
+.reports-main-block .report-detail .comments-block .log-1{ margin:1% 0 1% 5%; padding:1% 0 1% 0; background-color:#FEFDF0; border-radius:4px; border:1px solid #DCDBD0; }
+.reports-main-block .report-detail .comments-block .log-2{ margin:1% 0 1% 0; padding:1% 0 1% 0; background-color:#E6E6FA; border-radius:4px; border:1px solid #C4C4D8; }
+.reports-main-block .report-detail .comments-block .log-3{ margin:1% 0 1% 0; padding:1% 0 1% 0; background-color:#F08080; border-radius:4px; border:1px solid #D06060; }
+.reports-main-block .report-detail .comments-block .log-4{ margin:1% 0 1% 0; padding:1% 0 1% 0; background-color:#B0F2B6; border-radius:4px; border:1px solid #90D094; }
+
+.reports-main-block .report-detail .comments-block .read-comment{ margin:1% 0 1% 0; padding:1% 0 1% 0; background-color:#E6E6FA; border-radius:4px; border:1px solid #C4C4D8; }
+.reports-main-block .report-detail .comments-block .not-read-comment{ margin:1% 0 1% 0; padding:1% 0 1% 0; background-color:#FEFDF0; border-radius:4px; border:1px solid #DCDBD0; }
+.reports-main-block .report-detail .comments-block .log-head{ margin:0 2.5% 0 0; display:inline-block; }
+.reports-main-block .report-detail .comments-block .log-button{ text-align:center; margin:0 2.5% 0 0; border:none; cursor:pointer; color:#FFFFFF; border-radius:4px; }
+.reports-main-block .report-detail .comments-block .log-button:hover{ color:#000000; }
+.reports-main-block .report-detail .comments-block .log-date{ font-family:barlow; }
+.reports-main-block .report-detail .comments-block .log-label{ font-family:barlow; }
+.reports-main-block .report-detail .comments-block .log-message{ font-family:barlow-italic; background-color:#FFFFFF; border-radius:4px; border:1px solid #DDDDDD; margin:1% 1% 1% 5%; padding:1%; }
+
+.reports-main-block .report-detail .comments-block .log-button-read{ background-color:#A1E1A5; }
+.reports-main-block .report-detail .comments-block .log-button-not-read{ background-color:#F08080; }
+
+.reports-main-block .report-detail .comments-block .log-button-read:hover{ background-color:#90D094; }
+.reports-main-block .report-detail .comments-block .log-button-not-read:hover{ background-color:#D06060; }
+
+/****************************************************************************************************/
+
+@media all and (max-width: 639px)
+{
+  .reports-main-block .report-detail .subject{ width:90%; margin:2.5% 5% 2.5% 5%; }
+  .reports-main-block .report-detail .date{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .status{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .type{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .label{ margin:2.5% 2.5% 2.5% 5%; }
+
+  .reports-main-block .report-detail .status-selection{ margin:2.5% 2.5% 2.5% 5%; }
+
+  .reports-main-block .report-detail .comment-button{ width:56%; margin:2.5% 5% 2.5% 35%; }
+
+  .reports-main-block .report-detail .comments-block .comment .log-date{ margin:0 2.5% 0 2.5%; }
+  .reports-main-block .report-detail .comments-block .comment .log-label{ margin:1% 2.5% 0 2.5%; }
+
+  .reports-main-block .report-detail .comments-block .comment .read{ width:95%; margin:1% 5% 1% 0; display:inline-block; vertical-align:bottom; }
+  .reports-main-block .report-detail .comments-block .comment .not-read{ width:95%; margin:1% 5% 1% 0; display:inline-block; vertical-align:bottom; }
+
+  .reports-main-block .report-detail .comments-block .log-head{ width:97.5%; }
+  .reports-main-block .report-detail .comments-block .log-button{ margin:2.5% 2.5% 2.5% 27.5%; width:70%; padding:2% 0 2% 0; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 640px) and (max-width: 767px)
+{
+  .reports-main-block .report-detail .subject{ width:90%; margin:2.5% 5% 2.5% 5%; }
+  .reports-main-block .report-detail .date{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .status{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .type{ width:60%; margin:2.5% 5% 2.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .label{ margin:2.5% 2.5% 2.5% 5%; }
+
+  .reports-main-block .report-detail .status-selection{ margin:2.5% 2.5% 2.5% 5%; }
+
+  .reports-main-block .report-detail .comment-button{ width:40%; margin:2.5% 5% 2.5% 55%; }
+
+  .reports-main-block .report-detail .comments-block .comment .log-date{ margin:0 2.5% 0 2.5%; display:inline-block; }
+  .reports-main-block .report-detail .comments-block .comment .log-label{ margin:0 2.5% 0 0; display:inline-block; vertical-align:bottom; }
+
+  .reports-main-block .report-detail .comments-block .comment .read{ width:95%; margin:1% 5% 1% 0; display:inline-block; vertical-align:bottom; }
+  .reports-main-block .report-detail .comments-block .comment .not-read{ width:95%; margin:1% 5% 1% 0; display:inline-block; vertical-align:bottom; }
+
+  .reports-main-block .report-detail .comments-block .log-head{ width:97.5%; }
+  .reports-main-block .report-detail .comments-block .log-button{ margin:2.5% 2.5% 2.5% 37.5%; width:60%; padding:2% 0 2% 0; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 768px) and (max-width: 959px)
+{
+  .reports-main-block .report-detail .subject{ width:90%; margin:2% 5% 2% 5%; }
+  .reports-main-block .report-detail .date{ width:60%; margin:2% 5% 2% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .status{ width:60%; margin:2% 5% 2% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .type{ width:60%; margin:2% 5% 2% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .label{ margin:2% 2.5% 2% 5%; }
+
+  .reports-main-block .report-detail .status-selection{ margin:2% 2.5% 2% 5%; }
+
+  .reports-main-block .report-detail .comment-button{ width:40%; margin:2.5% 5% 2.5% 55%; }
+
+  .reports-main-block .report-detail .comments-block .comment .log-date{ margin:0 2.5% 0 2.5%; display:inline-block; }
+  .reports-main-block .report-detail .comments-block .comment .log-label{ margin:0 2.5% 0 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .comments-block .comment .log-message{ width:70%; display:inline-block; }
+
+  .reports-main-block .report-detail .comments-block .comment .read{ width:20%; margin:1% 1% 1% 0; display:inline-block; vertical-align:bottom; }
+  .reports-main-block .report-detail .comments-block .comment .not-read{ width:20%; margin:1% 1% 1% 0; display:inline-block; vertical-align:bottom; }
+
+  .reports-main-block .report-detail .comments-block .log-head{ width:60%; }
+  .reports-main-block .report-detail .comments-block .log-button{ width:35%; padding:1% 0 1% 0; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 960px) and (max-width: 1279px)
+{
+  .reports-main-block .report-detail .subject{ width:90%; margin:2% 5% 2% 5%; }
+  .reports-main-block .report-detail .date{ width:60%; margin:2% 5% 2% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .status{ width:60%; margin:2% 5% 2% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .type{ width:60%; margin:2% 5% 2% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .label{ margin:2% 2.5% 2% 5%; }
+
+  .reports-main-block .report-detail .status-selection{ margin:2% 2.5% 2% 5%; }
+
+  .reports-main-block .report-detail .comment-button{ width:30%; margin:2.5% 5% 2.5% 65%; padding:1% 0 1% 0; }
+
+  .reports-main-block .report-detail .comments-block .comment .log-date{ margin:0 2.5% 0 2.5%; display:inline-block; }
+  .reports-main-block .report-detail .comments-block .comment .log-label{ margin:0 2.5% 0 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .comments-block .comment .log-message{ width:70%; display:inline-block; }
+
+  .reports-main-block .report-detail .comments-block .comment .read{ width:20%; margin:1% 1% 1% 0; display:inline-block; vertical-align:bottom; }
+  .reports-main-block .report-detail .comments-block .comment .not-read{ width:20%; margin:1% 1% 1% 0; display:inline-block; vertical-align:bottom; }
+
+  .reports-main-block .report-detail .comments-block .log-head{ width:65%; }
+  .reports-main-block .report-detail .comments-block .log-button{ width:30%; padding:1% 0 1% 0; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 1280px) and (max-width: 1679px)
+{
+  .reports-main-block .report-detail .subject{ width:90%; margin:1.5% 5% 1.5% 5%; }
+  .reports-main-block .report-detail .date{ width:60%; margin:1.5% 5% 1.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .status{ width:60%; margin:1.5% 5% 1.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .type{ width:60%; margin:1.5% 5% 1.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .label{ margin:1.5% 2.5% 1.5% 5%; }
+
+  .reports-main-block .report-detail .status-selection{ margin:1.5% 2.5% 1.5% 5%; }
+
+  .reports-main-block .report-detail .comment-button{ width:30%; margin:2.5% 5% 2.5% 65%; padding:1% 0 1% 0; }
+
+  .reports-main-block .report-detail .comments-block .comment .log-date{ margin:0 2.5% 0 2.5%; display:inline-block; }
+  .reports-main-block .report-detail .comments-block .comment .log-label{ margin:0 2.5% 0 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .comments-block .comment .log-message{ width:80%; display:inline-block; }
+
+  .reports-main-block .report-detail .comments-block .comment .read{ width:10%; margin:1% 1% 1% 0; display:inline-block; vertical-align:bottom; }
+  .reports-main-block .report-detail .comments-block .comment .not-read{ width:10%; margin:1% 1% 1% 0; display:inline-block; vertical-align:bottom; }
+
+  .reports-main-block .report-detail .comments-block .log-head{ width:70%; }
+  .reports-main-block .report-detail .comments-block .log-button{ width:25%; padding:1% 0 1% 0; }
+}
+
+/****************************************************************************************************/
+
+@media all and (min-width: 1680px)
+{
+  .reports-main-block .report-detail .subject{ width:90%; margin:1.5% 5% 1.5% 5%; }
+  .reports-main-block .report-detail .date{ width:60%; margin:1.5% 5% 1.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .status{ width:60%; margin:1.5% 5% 1.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .type{ width:60%; margin:1.5% 5% 1.5% 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .label{ margin:1.5% 2.5% 1.5% 5%; }
+
+  .reports-main-block .report-detail .status-selection{ margin:1.5% 2.5% 1.5% 5%; }
+
+  .reports-main-block .report-detail .comment-button{ width:25%; margin:2.5% 5% 2.5% 70%; padding:1% 0 1% 0; }
+
+  .reports-main-block .report-detail .comments-block .comment .log-date{ margin:0 2.5% 0 2.5%; display:inline-block; }
+  .reports-main-block .report-detail .comments-block .comment .log-label{ margin:0 2.5% 0 0; display:inline-block; vertical-align:top; }
+  .reports-main-block .report-detail .comments-block .comment .log-message{ width:80%; display:inline-block; }
+
+  .reports-main-block .report-detail .comments-block .comment .read{ width:10%; margin:1% 1% 1% 0; display:inline-block; vertical-align:bottom; }
+  .reports-main-block .report-detail .comments-block .comment .not-read{ width:10%; margin:1% 1% 1% 0; display:inline-block; vertical-align:bottom; }
+
+  .reports-main-block .report-detail .comments-block .log-head{ width:70%; }
+  .reports-main-block .report-detail .comments-block .log-button{ width:25%; padding:1% 0 1% 0; }
 }
 
 /****************************************************************************************************
@@ -405,13 +325,11 @@ POPUP
   padding:0;
   overflow:auto;
   position:fixed; 
-  background-color:#334455;
 }
 
 .report-popup-title
 {
   width:92%;
-  color:#FFFFFF;
   text-align:center;
   font-size:x-large;
   margin:4% 4% 8% 4%;
@@ -421,7 +339,6 @@ POPUP
 .report-popup-label
 {
   width:92%;
-  color:#FFFFFF;
   font-size:large;
   margin:3% 4% 1% 4%;
   font-family:raleway-italic;
@@ -449,9 +366,8 @@ POPUP
   padding:0;
   height:30vh;
   resize:none;
-  border:none;
   font-size:large;
-  margin:1% 4% 1% 4%;
+  margin:1% 1% 1% 4%;
   padding:1% 1% 1% 1%;
   font-family:raleway-light;
 }
@@ -463,32 +379,27 @@ POPUP
 
 .report-popup-cancel
 {
-  margin:4% 0 4% 4%;
   background-color:#FF0921;
 }
 
 .report-popup-send, .report-popup-cancel
 {
-  width:15%;
-  padding:1%;
   border:none;
   cursor:pointer;
-  font-size:large;
   color:#FFFFFF;
-  text-align:center;
-  border-radius:50%;
+  padding:2.5% 0 2.5% 0;
+  border-radius:4px;
 }
 
 .report-popup-info
 {
   width:90%;
   padding:0;
-  color:#DCDCDC;
   margin:2% 5% 2% 5%;
   font-family:raleway-light;
 }
 
-.report-popup-send:hover, .report-popup-cancel:hover{ color:#445566; }
+.report-popup-send:hover, .report-popup-cancel:hover{ color:#000000; }
 .report-popup-send:hover{ background-color:#5593DC; }
 .report-popup-cancel:hover{ background-color:#DD0700; }
 
@@ -496,55 +407,85 @@ POPUP
 
 @media all and (max-width: 639px)
 {
-  .report-popup{ top:0; left:0; width:100%; height:100%; }
+  .report-popup{ top:0; left:0; width:100%; height:100%; background-color:#334455; }
 
-  .report-popup-send, .report-popup-cancel{ height:calc(100vw * 0.15); }
+  .report-popup-title{ color:#FFFFFF; }
 
-  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-label{ color:#FFFFFF; }
+
+  .report-popup-info{ color:#DCDCDC; }
+
+  .report-popup-send{ margin:5% 2.5% 2.5% 30%; width:30%; }
+
+  .report-popup-cancel{ margin:5% 5% 2.5% 2.5%; width:30%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 640px) and (max-width: 767px)
 {
-  .report-popup{ top:0; left:0; width:100%; height:100%; }
+  .report-popup{ top:0; left:0; width:100%; height:100%; background-color:#334455; }
 
-  .report-popup-send, .report-popup-cancel{ height:calc(100vw * 0.15); }
+  .report-popup-title{ color:#FFFFFF; }
 
-  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-label{ color:#FFFFFF; }
+
+  .report-popup-info{ color:#DCDCDC; }
+
+  .report-popup-send{ margin:5% 2.5% 2.5% 30%; width:30%; }
+
+  .report-popup-cancel{ margin:5% 5% 2.5% 2.5%; width:30%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .report-popup{ top:10%; left:30%; width:40%; }
+  .report-popup{ top:10%; left:30%; width:40%; background-color:#FFFFFF; border-radius:4px; }
 
-  .report-popup-send, .report-popup-cancel{ height:calc((100vw * 0.4) * 0.15); }
+  .report-popup-title{ color:#000000; }
 
-  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-label{ color:#000000; }
+
+  .report-popup-info{ color:#445566; }
+
+  .report-popup-send{ margin:5% 2.5% 2.5% 30%; width:30%; }
+
+  .report-popup-cancel{ margin:5% 5% 2.5% 2.5%; width:30%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 960px) and (max-width: 1679px)
 {
-  .report-popup{ top:10%; left:35%; width:30%; }
+  .report-popup{ top:10%; left:35%; width:30%; background-color:#FFFFFF; border-radius:4px; }
 
-  .report-popup-send, .report-popup-cancel{ height:calc((100vw * 0.3) * 0.15); }
+  .report-popup-title{ color:#000000; }
 
-  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-label{ color:#000000; }
+
+  .report-popup-info{ color:#445566; }
+
+  .report-popup-send{ margin:5% 2.5% 2.5% 30%; width:30%; }
+
+  .report-popup-cancel{ margin:5% 5% 2.5% 2.5%; width:30%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 1680px)
 {
-  .report-popup{ top:10%; left:40%; width:20%; }
+  .report-popup{ top:10%; left:40%; width:20%; background-color:#FFFFFF; border-radius:4px; }
 
-  .report-popup-send, .report-popup-cancel{ height:calc((100vw * 0.2) * 0.15); }
+  .report-popup-title{ color:#000000; }
 
-  .report-popup-send{ margin:4% 0 4% 62%; }
+  .report-popup-label{ color:#000000; }
+
+  .report-popup-info{ color:#445566; }
+
+  .report-popup-send{ margin:5% 2.5% 2.5% 30%; width:30%; }
+
+  .report-popup-cancel{ margin:5% 5% 2.5% 2.5%; width:30%; }
 }
 
 /****************************************************************************************************/

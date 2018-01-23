@@ -2,7 +2,7 @@ window.onload = $(() =>
 {
   /******************************************************************************************/
 
-  $('body').on('click', '.reports-main-block .comments-block .comment-button', (event) =>
+  $('body').on('click', '.reports-main-block .comment-button', (event) =>
   {
     $('body').css('overflow', 'hidden');
     openReportCommentPopup('Ajouter Un Commentaire');

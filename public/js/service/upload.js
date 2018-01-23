@@ -1,6 +1,6 @@
 window.onload = $(() =>
 {
-  var socket = io('/service');
+  var socket = io();
   
   $('body').on('click', '#service-main-block-file-buttons-upload', () =>
   {
@@ -75,7 +75,8 @@ window.onload = $(() =>
                                 
             }).done((json) =>
             {
-              socket.emit('new_file', { 'room': $(document.getElementById('service-main-block')).attr('name'), 'uuid': json.uuid });
+              socket.emit('from_service_upload', { 'room': $(document.getElementById('service-main-block')).attr('name') });
+              socket.emit('from_file_upload', { 'room': json.fileUUID, logID: json.log });
             
               $('#upload-popup').remove();
               $('#veil').remove();

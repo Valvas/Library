@@ -33,15 +33,27 @@ router.get('/', (req, res) =>
 
 /****************************************************************************************************/
 
+router.put('/get-user-rights', (req, res) =>
+{
+  accountRights.getUserRightsTowardsService(req.body.service, req.session.uuid, req.app.get('mysqlConnector'), (rightsOrFalse, errorStatus, errorCode) =>
+  {
+    rightsOrFalse == false ?
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+    res.status(200).send({ result: true, rights: rightsOrFalse });
+  });
+});
+
+/****************************************************************************************************/
+
 router.post('/post-new-file', upload.single('file'), (req, res) =>
 {
   req.file == undefined || req.body.service == undefined ? res.status(406).send({ result: false, message: `Erreur [406] - ${errors[constants.MISSING_DATA_IN_REQUEST]} !` }) :
   
-  filesAdding.addOneFile(req.body.service, req.file, req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
+  filesAdding.addOneFile(req.body.service, req.file, req.session.uuid, req.app.get('mysqlConnector'), (fileUUIDOrFalse, logIDOrErrorStatus, errorCode) =>
   {
-    boolean ? 
-    res.status(200).send({ result: true, message: `${success[20010].charAt(0).toUpperCase()}${success[20010].slice(1)}` }) :
-    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+    fileUUIDOrFalse == false ? 
+    res.status(logIDOrErrorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+    res.status(200).send({ result: true, message: `${success[20007].charAt(0).toUpperCase()}${success[20007].slice(1)}`, fileUUID: fileUUIDOrFalse, log: logIDOrErrorStatus });
   });
 });
 
@@ -77,9 +89,13 @@ router.put('/get-ext-accepted', (req, res) =>
 
 router.get('/download-file/:service/:file', (req, res) =>
 {
-  filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), (fileOrFalse, errorStatus, errorCode) =>
+  filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), (fileOrFalse, errorStatusOrLogID, errorCode) =>
   {
-    fileOrFalse == false ? res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+    res.setHeader('logID', errorStatusOrLogID);
+
+    fileOrFalse == false ? 
+    
+    res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
 
     res.download(`${params.path_to_root_storage}/${req.params.service}/${fileOrFalse}`);
   });

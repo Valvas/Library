@@ -10,7 +10,8 @@
     <% include include/aside.ejs %>
     <div id='service-main-block' class='service-main-block' name='<%= identifier %>'>
       <div class='title'><%= service.toUpperCase() %></div>
-      <div class='info'>Fichiers: <%= Object.keys(files).length %></div>
+      <% var count = 0; for(var key in files){ if(files[key]['deleted'] == 0){ count += 1; } } %>
+      <div class='info'>Fichiers: <%= count %></div>
       <% if(rights['upload_files'] == 1) { %>
         <button id='service-main-block-file-buttons-upload' class='upload-button'>Envoyer</button>
       <% } %>
@@ -22,7 +23,7 @@
           <th class='service-main-block-file-buttons'></th>
         </tr>
         <% for(var i = 0; i < files.length; i++) { %>
-          <tr id='<%= files[i]['uuid'] %>' name='service-main-block-file' <% if(i % 2 == 0) { %>class='service-main-block-file-odd'<% } else { %>class='service-main-block-file-even'<% } %>>
+          <tr id='<%= files[i]['uuid'] %>' tag='<%= files[i]['name'] %>.<%= files[i]['ext'] %>' name='service-main-block-file' <% if(i % 2 == 0) { %>class='service-main-block-file-odd'<% } else { %>class='service-main-block-file-even'<% } %>>
             <td class='service-main-block-file-name'><%= files[i]['name'] %></td>
             <td class='service-main-block-file-type'><%= files[i]['type'] %></td>
             <td class='service-main-block-file-account hide-1x hide-2x hide-3x'><%= files[i]['account'] %></td>

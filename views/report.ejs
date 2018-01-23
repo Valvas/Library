@@ -14,26 +14,27 @@
           --><div class='label'>Statut : </div><!-- @SuppressWhitespace
           --><div style='color:<%= status[report['report_status']]['color'] %>' class='status'><%= status[report['report_status']]['name'] %></div></br>
           <div class='label'>Date : </div><!-- @SuppressWhitespace
-          --><div class='date'><%= report['report_date'] %></div>
-          <div class='type'>Type : <span style='font-family:barlow'><%= types[report['report_type']] %></span></div>
+          --><div class='date'><%= report['report_date'] %></div><br>
+          <div class='label'>Type : </div><!-- @SuppressWhitespace
+          --><div class='type'><%= types[report['report_type']] %></div><br>
           <div class='label'>Description : </div>
           <div class='description'><%= report['report_content'] %></div>
-          <div class='comments-block'>
           <button class='comment-button'>Ajouter un commentaire</button>
           <div class='title'>Avancement : </div>
+          <div class='comments-block'>
           <% if(typeof(report['logs']) !== 'object' || Object.keys(report['logs']).length == 0){ %>
           <div class='no-comment'>Aucune mise à jour</div>
           <% } else{ %>
           <% for(var i = Object.keys(report['logs']).length - 1; i >= 0; i--){ %>
             <div class='comment log-<%= report['logs'][i]['type'] %>'>
-              <div class='log-date'><%= report['logs'][i]['date'] %></div>
-              <div class='log-label'><%= report['logs'][i]['label'] %></div>
+              <div class='log-date'><%= report['logs'][i]['date'] %></div><!-- @SuppressWhitespace
+              --><div class='log-label'><%= report['logs'][i]['label'] %></div>
               <% if(typeof(report['logs'][i]['comment']) !== 'undefined'){ %>
-                <div class='log-message'><%= report['logs'][i]['comment']['message'] %></div>
-                <% if(report['logs'][i]['comment']['read'] == 0){ %>
-                  <div class='not-read'><i class="fa fa-close"></i>Non-lu</div>
-                <% } else{ %>
-                  <div class='read'><i class="fa fa-check" aria-hidden="true"></i>Lu</div>
+                <div class='log-message'><%= report['logs'][i]['comment']['message'] %></div><!-- @SuppressWhitespace
+                --><% if(report['logs'][i]['comment']['read'] == 0){ %><!-- @SuppressWhitespace
+                  --><div class='not-read'><i class="fa fa-close"></i>Non-lu</div><!-- @SuppressWhitespace
+                --><% } else{ %><!-- @SuppressWhitespace
+                  --><div class='read'><i class="fa fa-check" aria-hidden="true"></i>Lu</div>
                 <% } %>
               <% } %>
             </div>
