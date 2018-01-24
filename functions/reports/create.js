@@ -28,7 +28,7 @@ module.exports.createNewReport = (reportType, reportSubject, reportContent, acco
       'report_content': reportContent,
       'report_account': accountUUID,
       'report_date': Date.now(),
-      'report_status': 0
+      'report_status': 2
     }
   }, databaseConnector, (boolean, reportIdOrErrorMessage) =>
   {

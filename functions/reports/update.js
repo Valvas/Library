@@ -2,17 +2,18 @@
 
 var params                    = require(`${__root}/json/config`);
 var constants                 = require(`${__root}/functions/constants`);
+var reportsLogs               = require(`${__root}/functions/reports/logs`);
 var databaseManager           = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-module.exports.updateReportStatus = (reportUUID, reportStatus, databaseConnector, callback) =>
+module.exports.updateReportStatus = (reportUUID, reportStatus, accountID, databaseConnector, callback) =>
 {
   if(reportUUID == undefined || reportStatus == undefined) callback(false, 406, constants.MISSING_DATA_IN_REQUEST);
 
   else
   {
-    reportStatus != 0 && reportStatus != 1 && reportStatus != 2 ? callback(false, 406, constants.REPORT_STATUS_INCORRECT) :
+    reportStatus != 2 && reportStatus != 3 && reportStatus != 4 ? callback(false, 406, constants.REPORT_STATUS_INCORRECT) :
 
     databaseManager.selectQuery(
     {
@@ -42,7 +43,12 @@ module.exports.updateReportStatus = (reportUUID, reportStatus, databaseConnector
 
           else
           {
-            updatedRowsOrErrorMessage == 0 ? callback(false, 500, constants.REPORT_STATUS_NOT_UPDATED) : callback(true);
+            updatedRowsOrErrorMessage == 0 ? callback(false, 500, constants.REPORT_STATUS_NOT_UPDATED) :
+
+            reportsLogs.createNewLog(accountID, reportStatus, reportOrErrorMessage[0].id, databaseConnector, (boolean, errorStatus, errorCode) =>
+            {
+              boolean ? callback(true) : callback(false, errorStatus, errorCode);
+            });
           }
         });
       }

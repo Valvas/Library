@@ -114,17 +114,17 @@
 
   "reports_status":
   {
-    "0":
+    "2":
     {
       "name": "En cours",
       "color": "#77B5FE"
     },
-    "1":
+    "3":
     {
       "name": "Fermé",
       "color": "#FF6347"
     },
-    "2":
+    "4":
     {
       "name": "Résolu",
       "color": "#6ECC3B"

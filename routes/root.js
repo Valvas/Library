@@ -37,6 +37,7 @@ router.put('/', (req, res) =>
       else
       {
         req.session.uuid = accountOrFalse.uuid;
+        req.session.account = accountOrFalse;
 
         res.status(200).send({ result: true });
       }

@@ -20,8 +20,6 @@ TABLE
 
 .reports-main-block .reports-table .reports-table-legend-row.admin{ background-color:#E84E4F; }
 
-.reports-main-block .admin-warning{ padding:1%; color:#FFFFFF; text-align:center; border-radius:8px; font-family:barlow; margin:2.5% 0 2.5% 0; background-color:#E84E4F; }
-
 .reports-main-block .reports-table td{ font-family:barlow; word-wrap:break-word; overflow-wrap:break-word; }
 
 .reports-main-block .reports-table tr.report{ cursor:pointer; }
@@ -140,7 +138,7 @@ DETAIL
 
 .reports-main-block .report-detail .title{ font-size:large; margin:2.5% 5% 2.5% 5%; font-family:raleway-light; }
 
-.reports-main-block .report-detail .comments-block{ padding:1%; width:90%; margin:2.5% 2.5% 2.5% 5%; border:1px solid #D8D8D8; background-color:#F9F9F9; }
+.reports-main-block .report-detail .comments-block{ padding:1%; width:90%; margin:2.5% 2.5% 5% 5%; border:1px solid #D8D8D8; background-color:#F9F9F9; }
 
 .reports-main-block .report-detail .comments-block .comment .read{ color:#1FA055; font-size:large; text-align:right; font-family:raleway-regular; }
 

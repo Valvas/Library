@@ -54,11 +54,23 @@ router.put('/update-comment-status', (req, res) =>
 
 router.put('/update-report-status', (req, res) =>
 {
-  reportsUpdate.updateReportStatus(req.body.reportUUID, req.body.reportStatus, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
+  reportsUpdate.updateReportStatus(req.body.reportUUID, req.body.reportStatus, req.session.account.id, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>
   {
     boolean ?
     res.status(200).send({ result: true, message: `${success[constants.REPORT_STATUS_UPDATED].charAt(0).toUpperCase()}${success[constants.REPORT_STATUS_UPDATED].slice(1)}` }) :
     res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+  });
+});
+
+/****************************************************************************************************/
+
+router.put('/get-comments', (req, res) =>
+{
+  reportsGet.getReportForAdminUsingUUID(req.body.report, req.app.get('mysqlConnector'), (reportOrFalse, errorStatus, errorCode) =>
+  {
+    reportOrFalse == false ?
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+    res.status(200).send({ result: true, report: reportOrFalse });
   });
 });
 

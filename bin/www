@@ -22,6 +22,10 @@ require('../app')((app) =>
 
     socket.on('join_service', (name) => { socket.join(name); });
 
+    socket.on('join_report', (name) => { socket.join(name); });
+
+    socket.on('admin_update_comment', (object) => { socket.to(object.room).emit('update_comment', object.room); })
+
     socket.on('from_file_delete', (object) => { socket.to(object.room).emit('delete_file', object.logID); });
 
     socket.on('from_service_delete', (object) => { socket.to(object.room).emit('delete_file', object.fileUUID); });

@@ -9,7 +9,6 @@
     <% include ../include/menu.ejs %>
     <% include ../include/admin_aside.ejs %><!-- @SuppressWhitespace
     --><div class='reports-main-block'>
-        <div class='admin-warning'>ATTENTION: vous êtes dans la section admin !</div>
         <div class='counter'>Rapports: <%= Object.keys(reports).length %></div>
         <div class='filters'>
           <% for(var i = 0; i < Object.keys(types).length; i++) { %><!-- @SuppressWhitespace

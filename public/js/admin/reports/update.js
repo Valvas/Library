@@ -1,5 +1,7 @@
 window.onload = $(() =>
 {
+  var socket = io();
+
   /****************************************************************************************************/
 
   $('body').on('click', '.log-button', (event) =>
@@ -14,10 +16,8 @@ window.onload = $(() =>
       }).done((json) =>
       {
         printSuccess(json.message);
-        $(event.target).parent().attr('class', 'comment admin-comment read-comment');
-        $(event.target).parent().attr('name', '1');
-        $(event.target).attr('class', 'log-button log-button-not-read');
-        $(event.target).text('Marquer comme non-lu');
+
+        socket.emit('admin_update_comment', { room: document.getElementById('report-detail').getAttribute('name') });
       });
     }
 
@@ -31,10 +31,8 @@ window.onload = $(() =>
       }).done((json) =>
       {
         printSuccess(json.message);
-        $(event.target).parent().attr('class', 'comment admin-comment not-read-comment');
-        $(event.target).parent().attr('name', '0');
-        $(event.target).attr('class', 'log-button log-button-read');
-        $(event.target).text('Marquer comme lu');
+
+        socket.emit('admin_update_comment', { room: document.getElementById('report-detail').getAttribute('name') });
       });
     }
   });

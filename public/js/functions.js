@@ -591,3 +591,21 @@ function uploadFileLogs(logID)
 }
 
 /****************************************************************************************************/
+
+function updateAdminReportCommentList(reportUUID)
+{
+  $.ajax(
+  {
+    type: 'PUT', timeout: 5000, dataType: 'JSON', data: { report: reportUUID }, url: '/admin/reports/get-comments', success: () => {},
+    error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); }
+                    
+  }).done((json) =>
+  {
+    for(var i = Object.keys(json.report.comments).length -1; i >= 0; i--)
+    {
+      console.log(json.report.comments[i]);
+    }
+  });
+}
+
+/****************************************************************************************************/

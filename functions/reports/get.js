@@ -56,23 +56,9 @@ module.exports.getReportForAdminUsingUUID = (reportUUID, databaseConnector, call
   {
     'databaseName': params.database.name,
     'tableName': params.database.tables.reports,
-  
-    'args':
-    {
-      '0': '*'
-    },
-  
-    'where':
-    {
-      '=':
-      {
-        '0':
-        {
-          'key': 'uuid',
-          'value': reportUUID
-        }
-      }
-    }
+    'args': { '0': '*' }, 
+    'where': { '=': { '0': { 'key': 'uuid', 'value': reportUUID } } }
+    
   }, databaseConnector, (boolean, reportOrErrorMessage) =>
   {
     if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
