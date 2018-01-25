@@ -97,6 +97,7 @@ module.exports.getReport = (reportUUID, databaseConnector, callback) =>
 
                   else
                   {
+                    obj.logs[x]['id'] = logsOrFalse[x]['id'];
                     obj.logs[x]['type'] = logsOrFalse[x]['type'];
                     obj.logs[x]['date'] = dateOrFalse;
 
@@ -116,17 +117,10 @@ module.exports.getReport = (reportUUID, databaseConnector, callback) =>
                       {
                         obj.logs[x]['comment'] = {};
 
-                        if(commentOrFalse == false)
-                        {
-                          obj.logs[x]['comment']['message'] = errors[errorCode];
-                        }
-
-                        else
-                        {
-                          obj.logs[x]['comment']['message'] = commentOrFalse.content;
-                        }
-
+                        obj.logs[x]['comment']['id'] = commentOrFalse.id;
+                        obj.logs[x]['comment']['message'] = commentOrFalse.content;
                         obj.logs[x]['comment']['read'] = commentOrFalse.seen;
+                        obj.logs[x]['comment']['admin'] = commentOrFalse.admin;
 
                         logsOrFalse[x += 1] == undefined ? callback(obj) : logsLoop();
                       });
@@ -196,7 +190,8 @@ module.exports.addComment = (reportUUID, comment, accountUUID, databaseConnector
             'account': accountOrFalse.id,
             'log': insertedIdOrErrorMessage,
             'content': comment,
-            'seen': 0
+            'seen': 0,
+            'admin': accountOrFalse.is_admin == 0 ? 0 : 1
           }
         }, databaseConnector, (boolean, insertedIdOrErrorMessage) =>
         {

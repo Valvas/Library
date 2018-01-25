@@ -26,7 +26,8 @@ window.onload = $(() =>
 
   $('#status').on('change', (event) =>
   {
-    $('#status').css('color', $('#status').find(':selected').css('color'));
+    var select = document.getElementById('status');
+    $(select).css('color', select.options[select.selectedIndex].style.getPropertyValue('color'));
 
     if($('#status').val() == 'all') $(`.reports-main-block .reports-table tr.report`).show();
 

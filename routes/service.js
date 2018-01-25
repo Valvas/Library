@@ -13,6 +13,7 @@ var filesDownloading  = require('../functions/files/downloading');
 var errors            = require(`${__root}/json/errors`);
 var params            = require(`${__root}/json/config`);
 var success           = require(`${__root}/json/success`);
+var servicesList      = require(`${__root}/json/services`);
 
 var storage = multer.diskStorage(
 {
@@ -79,9 +80,9 @@ router.put('/get-ext-accepted', (req, res) =>
 
   else
   {
-    params['ext_accepted'][req.body.service] == undefined ? 
+    servicesList[req.body.service]['ext_accepted'] == undefined ? 
     res.status(404).send({ result: false }) : 
-    res.status(200).send({ result: true, ext: params['ext_accepted'][req.body.service] });
+    res.status(200).send({ result: true, ext: servicesList[req.body.service]['ext_accepted'] });
   }
 });
 

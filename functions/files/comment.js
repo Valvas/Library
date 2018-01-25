@@ -3,6 +3,7 @@
 var params                  = require(`${__root}/json/config`);
 var constants               = require(`${__root}/functions/constants`);
 var fileLogs                = require(`${__root}/functions/files/logs`);
+var accountsGet             = require(`${__root}/functions/accounts/get`);
 var databaseManager         = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/

@@ -592,8 +592,153 @@ function uploadFileLogs(logID)
 
 /****************************************************************************************************/
 
+function updateReportCommentList(reportUUID)
+{
+  document.getElementById('update-message').setAttribute('class', 'update-pending');
+  document.getElementById('update-message').innerHTML = `<i class='update-icon fa fa-refresh fa-spin fa-fw'></i><div class='update-message'>Mise à jour des logs...</div>`;
+
+  $.ajax(
+  {
+    type: 'PUT', timeout: 5000, dataType: 'JSON', data: { report: reportUUID }, url: '/reports/get-logs', success: () => {},
+    error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); }
+                      
+  }).done((json) =>
+  {
+    var x = 0, y = 0, currentLogsArray = [], updatedLogsArray = [];
+    var logs = document.getElementsByClassName('comment');
+
+    var getCurrentLogsInAnArrayLoop = () =>
+    {
+      if(logs[x] != undefined) currentLogsArray.push(logs[x].getAttribute('id'));
+
+      logs[x += 1] != undefined ? getCurrentLogsInAnArrayLoop() : getUpdatedLogsInAnArrayLoop();
+    }
+
+    var getUpdatedLogsInAnArrayLoop = () =>
+    {
+      if(json.report.logs[y] != undefined) updatedLogsArray.push(String(json.report.logs[y].id));
+
+      json.report.logs[y += 1] != undefined ? getUpdatedLogsInAnArrayLoop() : updateReportsLogsLoop();
+    }
+
+    var updateReportsLogsLoop = () =>
+    {
+      var z = 0, a = 0;
+
+      var removeLogsLoop = () =>
+      {
+        if(currentLogsArray[z] != undefined && updatedLogsArray.includes(currentLogsArray[z]) == false) document.getElementById(currentLogsArray[z]).remove();
+
+        currentLogsArray[z += 1] != undefined ? removeLogsLoop() : addLogsLoop();
+      }
+
+      var addLogsLoop = () =>
+      {
+        if(updatedLogsArray[a] != undefined)
+        {
+          if(currentLogsArray.includes(updatedLogsArray[a]) == false)
+          {
+            var block = document.createElement('div');
+            block.setAttribute('id', updatedLogsArray[a]);
+            block.setAttribute('class', `comment log-${json.report.logs[a].type}`);
+
+            var date = document.createElement('div');
+            date.setAttribute('class', 'log-date');
+            date.innerText = json.report.logs[a].date;
+
+            var label = document.createElement('div');
+            label.setAttribute('class', 'log-label');
+            label.innerText = json.report.logs[a].label;
+
+            if(json.report.logs[a].type == 1 && json.report.logs[a].comment.admin == 1)
+            {
+              var star = document.createElement('i');
+              star.setAttribute('class', 'fa fa-star admin-star');
+              star.setAttribute('aria-hidden', 'true');
+              block.appendChild(star);
+            }
+
+            block.appendChild(date);
+            block.appendChild(label);
+
+            if(json.report.logs[a].type == 1)
+            {
+              var comment = document.createElement('div');
+              comment.setAttribute('name', json.report.logs[a].comment.id);
+              comment.setAttribute('class', 'log-message');
+              comment.innerText = json.report.logs[a].comment.message;
+
+              block.appendChild(comment);
+
+              var status = document.createElement('div');
+
+              json.report.logs[a].comment.read == 0 ?
+              status.setAttribute('name', 'false') : status.setAttribute('name', 'true');
+
+              json.report.logs[a].comment.read == 0 ?
+              status.setAttribute('class', 'not-read') : status.setAttribute('class', 'read');
+
+              json.report.logs[a].comment.read == 0 ?
+              status.innerHTML = `<i class='fa fa-close' aria-hidden='true'></i>Non-lu` : status.innerHTML = `<i class='fa fa-check' aria-hidden='true'></i>Lu`;
+
+              if(json.report.logs[a].comment.admin == 0) block.appendChild(status);
+            }
+
+            document.getElementById('comments-block').insertBefore(block, document.getElementById('comments-block').children[1]);
+          }
+
+          else
+          {
+            if(json.report.logs[a].type == 1 && json.report.logs[a].comment.admin == 0 && json.report.logs[a].comment.read == 1)
+            {
+              if(document.getElementById(updatedLogsArray[a]).children[3].getAttribute('name') == 'false')
+              {
+                document.getElementById(updatedLogsArray[a]).children[3].setAttribute('name', 'true');
+                document.getElementById(updatedLogsArray[a]).children[3].setAttribute('class', 'read');
+                document.getElementById(updatedLogsArray[a]).children[3].innerHTML = `<i class='fa fa-check' aria-hidden='true'></i>Lu`;
+              }
+            }
+
+            else if(json.report.logs[a].type == 1 && json.report.logs[a].comment.admin == 0 && json.report.logs[a].comment.read == 0)
+            {
+              if(document.getElementById(updatedLogsArray[a]).children[3].getAttribute('name') == 'true')
+              {
+                document.getElementById(updatedLogsArray[a]).children[3].setAttribute('name', 'false');
+                document.getElementById(updatedLogsArray[a]).children[3].setAttribute('class', 'not-read');
+                document.getElementById(updatedLogsArray[a]).children[3].innerHTML = `<i class='fa fa-close' aria-hidden='true'></i>Non-lu`;
+              }
+            }
+          }
+
+          a += 1;
+
+          addLogsLoop();
+        }
+
+        else
+        {
+          setTimeout(() =>
+          {
+            document.getElementById('update-message').setAttribute('class', 'update-done');
+            document.getElementById('update-message').innerHTML = `<i class='update-icon fa fa-check' aria-hidden='true'></i><div class='update-message'>Logs à jour</div>`;
+          }, 500);
+        }
+      }
+
+      removeLogsLoop();
+    }
+
+    getCurrentLogsInAnArrayLoop();
+  });
+}
+
+/****************************************************************************************************/
+
 function updateAdminReportCommentList(reportUUID)
 {
+  document.getElementById('update-message').setAttribute('class', 'update-pending');
+  document.getElementById('update-message').innerHTML = `<i class='update-icon fa fa-refresh fa-spin fa-fw'></i><div class='update-message'>Mise à jour des commentaires...</div>`;
+
   $.ajax(
   {
     type: 'PUT', timeout: 5000, dataType: 'JSON', data: { report: reportUUID }, url: '/admin/reports/get-comments', success: () => {},
@@ -601,9 +746,181 @@ function updateAdminReportCommentList(reportUUID)
                     
   }).done((json) =>
   {
-    for(var i = Object.keys(json.report.comments).length -1; i >= 0; i--)
+    var x = 0, y = 0, currentCommentsArray = [], updatedCommentsArray = [];
+    var comments = document.getElementsByClassName('comment');
+
+    var getCurrentCommentsInAnArrayLoop = () =>
     {
-      console.log(json.report.comments[i]);
+      if(comments[x] != undefined) currentCommentsArray.push(comments[x].getAttribute('id'));
+
+      comments[x += 1] != undefined ? getCurrentCommentsInAnArrayLoop() : getUpdatedcommentsInAnArrayLoop();
+    }
+
+    var getUpdatedcommentsInAnArrayLoop = () =>
+    {
+      if(json.report.comments[y] != undefined) updatedCommentsArray.push(String(json.report.comments[y].id));
+
+      json.report.comments[y += 1] != undefined ? getUpdatedcommentsInAnArrayLoop() : updateReportsCommentsLoop();
+    }
+
+    var updateReportsCommentsLoop = () =>
+    {
+      var z = 0, a = 0;
+
+      var removeCommentsLoop = () =>
+      {
+        if(currentCommentsArray[z] != undefined && updatedCommentsArray.includes(currentCommentsArray[z]) == false) document.getElementById(currentCommentsArray[z]).remove();
+
+        currentCommentsArray[z += 1] != undefined ? removeCommentsLoop() : addCommentsLoop();
+      }
+
+      var addCommentsLoop = () =>
+      {
+        if(updatedCommentsArray[a] != undefined)
+        {
+          if(currentCommentsArray.includes(updatedCommentsArray[a]) == false)
+          {
+            var block = document.createElement('div');
+            block.setAttribute('id', updatedCommentsArray[a]);
+
+            if(json.report.comments[a].admin == 1)
+            {
+              block.setAttribute('class', `comment admin-comment`);
+
+              var star = document.createElement('i');
+              star.setAttribute('class', 'fa fa-star admin-star');
+              star.setAttribute('aria-hidden', 'true');
+              block.appendChild(star);
+            }
+
+            else
+            {
+              json.report.comments[a].seen == 0 ?
+              block.setAttribute('class', `comment not-read-comment`) :
+              block.setAttribute('class', `comment read-comment`);
+
+              json.report.comments[a].seen == 0 ?
+              block.setAttribute('name', `0`) :
+              block.setAttribute('name', `1`);
+            }
+
+            var head = document.createElement('div');
+            head.setAttribute('class', 'log-head');
+
+            var date = document.createElement('div');
+            date.setAttribute('class', 'log-date');
+            date.innerText = json.report.comments[a].date;
+
+            var label = document.createElement('div');
+            label.setAttribute('class', 'log-label');
+            label.innerText = json.report.comments[a].account;
+
+            var button = document.createElement('button');
+
+            json.report.comments[a].seen == 0 ?
+            button.setAttribute('class', `log-button log-button-read`) :
+            button.setAttribute('class', `log-button log-button-not-read`);
+
+            json.report.comments[a].seen == 0 ?
+            button.innerText = 'Marquer comme lu' :
+            button.innerText = 'Marquer comme non-lu';
+
+            var message = document.createElement('div');
+
+            json.report.comments[a].admin == 1 ?
+            message.setAttribute('class', 'log-message-admin') :
+            message.setAttribute('class', 'log-message');
+
+            message.innerText = json.report.comments[a].content;
+
+            head.appendChild(date);
+            head.appendChild(label);
+
+            block.appendChild(head);
+
+            if(json.report.comments[a].admin == 0) block.appendChild(button);
+
+            block.appendChild(message);
+
+            document.getElementById('comments-block').insertBefore(block, document.getElementById('comments-block').children[1]);
+          }
+
+          else
+          {
+            if(json.report.comments[a].seen == 1)
+            {
+              if(document.getElementById(updatedCommentsArray[a]).getAttribute('name') == '0')
+              {
+                document.getElementById(updatedCommentsArray[a]).setAttribute('name', '1');
+                document.getElementById(updatedCommentsArray[a]).setAttribute('class', 'comment admin-comment read-comment');
+                document.getElementById(updatedCommentsArray[a]).children[1].setAttribute('class', 'log-button log-button-not-read');
+                document.getElementById(updatedCommentsArray[a]).children[1].innerText = 'Marquer comme non-lu';
+              }
+            }
+
+            else if(json.report.comments[a].seen == 0)
+            {
+              if(document.getElementById(updatedCommentsArray[a]).getAttribute('name') == '1')
+              {
+                document.getElementById(updatedCommentsArray[a]).setAttribute('name', '0');
+                document.getElementById(updatedCommentsArray[a]).setAttribute('class', 'comment admin-comment not-read-comment');
+                document.getElementById(updatedCommentsArray[a]).children[1].setAttribute('class', 'log-button log-button-read');
+                document.getElementById(updatedCommentsArray[a]).children[1].innerText = 'Marquer comme lu';
+              }
+            }
+          }
+
+          a += 1;
+
+          addCommentsLoop();
+        }
+
+        else
+        {
+          setTimeout(() =>
+          {
+            document.getElementById('update-message').setAttribute('class', 'update-done');
+            document.getElementById('update-message').innerHTML = `<i class='update-icon fa fa-check' aria-hidden='true'></i><div class='update-message'>Commentaires à jour</div>`;
+          }, 500);
+        }
+      }
+
+      removeCommentsLoop();
+    }
+
+    getCurrentCommentsInAnArrayLoop();
+
+    var fourthLoop = () =>
+    {
+      if(json.report.comments[a] != undefined)
+      {
+        document.getElementById(json.report.comments[a]['id']).setAttribute('name', json.report.comments[a]['seen']);
+
+        if(json.report.comments[a]['seen'] == 1)
+        {
+          document.getElementById(json.report.comments[a]['id']).setAttribute('class', 'comment admin-comment read-comment');
+          document.getElementById(json.report.comments[a]['id']).children[1].innerHTML = 'Marquer comme non-lu';
+          document.getElementById(json.report.comments[a]['id']).children[1].setAttribute('class', 'log-button log-button-not-read');
+        }
+        
+        else
+        {
+          document.getElementById(json.report.comments[a]['id']).setAttribute('class', 'comment admin-comment not-read-comment');
+          document.getElementById(json.report.comments[a]['id']).children[1].innerHTML = 'Marquer comme lu';
+          document.getElementById(json.report.comments[a]['id']).children[1].setAttribute('class', 'log-button log-button-read');
+        }
+      }
+
+      if(json.report.comments[a += 1] != undefined) fourthLoop();
+      
+      else
+      {
+        setTimeout(() =>
+        {
+          document.getElementById('update-message').setAttribute('class', 'update-done');
+          document.getElementById('update-message').innerHTML = `<i class='update-icon fa fa-check' aria-hidden='true'></i><div class='update-message'>Commentaires à jour</div>`;
+        }, 500);
+      }
     }
   });
 }

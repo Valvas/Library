@@ -8,8 +8,8 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
   <body class='private-section-body'>
     <% include ../include/menu.ejs %>
-    <% include ../include/admin_aside.ejs %>
-    <div class='home-news-block'>
+    <% include ../include/admin_aside.ejs %><!-- @SuppressWhitespace
+    --><div class='home-news-block'>
       <% for(var key in news){ %>
         <div class='home-news-block-element'>
           <p class='home-news-block-element-title'><%= news[key]['title'] %></p>

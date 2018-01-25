@@ -81,7 +81,8 @@
       "account": "BIGINT UNSIGNED NOT NULL",
       "log": "BIGINT UNSIGNED NOT NULL",
       "content": "TEXT(1024) NOT NULL",
-      "seen": "BOOLEAN NOT NULL"
+      "seen": "BOOLEAN NOT NULL",
+      "admin": "BOOLEAN NOT NULL"
     }
   }
 }

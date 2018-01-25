@@ -12,7 +12,7 @@
         <div id='report-detail' name='<%= report['uuid'] %>' class='report-detail'>
           <div class='subject'><%= report['report_subject'] %></div><!-- @SuppressWhitespace
           --><div class='label'>Statut : </div><!-- @SuppressWhitespace
-          --><div style='color:<%= status[report['report_status']]['color'] %>' class='status'><%= status[report['report_status']]['name'] %></div></br>
+          --><div id='report-status' style='color:<%= status[report['report_status']]['color'] %>' class='status'><%= status[report['report_status']]['name'] %></div></br>
           <div class='label'>Date : </div><!-- @SuppressWhitespace
           --><div class='date'><%= report['report_date'] %></div><br>
           <div class='label'>Type : </div><!-- @SuppressWhitespace
@@ -21,20 +21,29 @@
           <div class='description'><%= report['report_content'] %></div>
           <button class='comment-button'>Ajouter un commentaire</button>
           <div class='title'>Avancement : </div>
-          <div class='comments-block'>
+          <div id='comments-block' class='comments-block'>
           <% if(typeof(report['logs']) !== 'object' || Object.keys(report['logs']).length == 0){ %>
           <div class='no-comment'>Aucune mise à jour</div>
           <% } else{ %>
+          <div id='update-message' class='update-done'>
+            <i class='fa fa-check update-icon' aria-hidden='true'></i><!-- @SuppressWhitespace
+            --><div class='update-message'>Logs à jour</div>
+          </div>
           <% for(var i = Object.keys(report['logs']).length - 1; i >= 0; i--){ %>
-            <div class='comment log-<%= report['logs'][i]['type'] %>'>
+            <div id='<%= report['logs'][i]['id'] %>' class='comment log-<%= report['logs'][i]['type'] %>'>
+              <% if(typeof(report['logs'][i]['comment']) !== 'undefined' && report['logs'][i]['comment']['admin'] == 1){ %><i class='fa fa-star admin-star' aria-hidden='true'></i><% } %>
               <div class='log-date'><%= report['logs'][i]['date'] %></div><!-- @SuppressWhitespace
               --><div class='log-label'><%= report['logs'][i]['label'] %></div>
               <% if(typeof(report['logs'][i]['comment']) !== 'undefined'){ %>
-                <div class='log-message'><%= report['logs'][i]['comment']['message'] %></div><!-- @SuppressWhitespace
-                --><% if(report['logs'][i]['comment']['read'] == 0){ %><!-- @SuppressWhitespace
-                  --><div class='not-read'><i class="fa fa-close"></i>Non-lu</div><!-- @SuppressWhitespace
-                --><% } else{ %><!-- @SuppressWhitespace
-                  --><div class='read'><i class="fa fa-check" aria-hidden="true"></i>Lu</div>
+                <% if(report['logs'][i]['comment']['admin'] == 0){ %>
+                  <div name='<%= report['logs'][i]['comment']['id'] %>' class='log-message'><%= report['logs'][i]['comment']['message'] %></div><!-- @SuppressWhitespace
+                  --><% if(report['logs'][i]['comment']['read'] == 0){ %><!-- @SuppressWhitespace
+                    --><div name='false' class='not-read'><i class="fa fa-close"></i>Non-lu</div>
+                  <% } else{ %>
+                    <div name='true' class='read'><i class="fa fa-check" aria-hidden="true"></i>Lu</div>
+                  <% } %>
+                <% } else{ %>
+                  <div name='<%= report['logs'][i]['comment']['id'] %>' class='log-message'><%= report['logs'][i]['comment']['message'] %></div>
                 <% } %>
               <% } %>
             </div>
@@ -43,7 +52,9 @@
         </div>
       </div>
     <% include include/scripts.ejs %>
+    <script src='/socket.io/socket.io.js'></script>
     <script src='/js/afk.js'></script>
+    <script src='/js/report/socket.js'></script>
     <script src='/js/report/comment.js'></script>
   </body>
 </html>

@@ -15,9 +15,7 @@ window.onload = $(() =>
         
       }).done((json) =>
       {
-        printSuccess(json.message);
-
-        socket.emit('admin_update_comment', { room: document.getElementById('report-detail').getAttribute('name') });
+        socket.emit('update_report_comments', { room: document.getElementById('report-detail').getAttribute('name') });
       });
     }
 
@@ -30,9 +28,7 @@ window.onload = $(() =>
           
       }).done((json) =>
       {
-        printSuccess(json.message);
-
-        socket.emit('admin_update_comment', { room: document.getElementById('report-detail').getAttribute('name') });
+        socket.emit('update_report_comments', { room: document.getElementById('report-detail').getAttribute('name') });
       });
     }
   });
@@ -42,19 +38,27 @@ window.onload = $(() =>
   $('#status-selection').on('change', (event) =>
   {
     var select = document.getElementById('status-selection');
-    $(select).css('color', $(select.options[select.selectedIndex]).css('color'));
+    $(select).css('color', select.options[select.selectedIndex].style.getPropertyValue('color'));
+  });
 
-    $.ajax(
+  /****************************************************************************************************/
+
+  $('body').on('click', '#status-selection-change-button', (event) =>
+  {
+    var select = document.getElementById('status-selection');
+
+    if($(select.options[select.selectedIndex]).text() != $('#report-status').text())
     {
-      type: 'PUT', timeout: 2000, dataType: 'JSON', data: { reportUUID: $('#report-detail').attr('name'), reportStatus: $(select.options[select.selectedIndex]).val() }, url: '/admin/reports/update-report-status', success: () => {},
-      error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); } 
-          
-    }).done((json) =>
-    {
-      printSuccess(json.message);
-      $('#report-status').text($(select.options[select.selectedIndex]).text());
-      $('#report-status').css('color', $(select.options[select.selectedIndex]).css('color'));
-    });
+      $.ajax(
+      {
+        type: 'PUT', timeout: 2000, dataType: 'JSON', data: { reportUUID: $('#report-detail').attr('name'), reportStatus: $(select.options[select.selectedIndex]).val() }, url: '/admin/reports/update-report-status', success: () => {},
+        error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); } 
+            
+      }).done((json) =>
+      {
+        socket.emit('update_report_status', { room: document.getElementById('report-detail').getAttribute('name'), status: $(select.options[select.selectedIndex]).text(), color: select.options[select.selectedIndex].style.getPropertyValue('color') });
+      });
+    }
   });
 
   /****************************************************************************************************/

@@ -49,6 +49,20 @@ router.get('/:report', (req, res) =>
 
 /****************************************************************************************************/
 
+router.put('/get-logs', (req, res) =>
+{
+  req.body.report == undefined ? res.status(406).send({ result: false, message: `${errors[10009].charAt(0).toUpperCase()}${errors[10009].slice(1)}` }) :
+
+  report.getReport(req.body.report, req.app.get('mysqlConnector'), (reportOrFalse, errorStatus, errorCode) =>
+  {
+    reportOrFalse == false ?
+    res.status(406).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+    res.status(200).send({ result: true, report: reportOrFalse });
+  });
+});
+
+/****************************************************************************************************/
+
 router.post('/add-comment', (req, res) =>
 {
   report.addComment(req.body.report, req.body.comment, req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>

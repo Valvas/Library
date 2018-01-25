@@ -1,5 +1,7 @@
 window.onload = $(() =>
 {
+  var socket = io();
+
   /******************************************************************************************/
 
   $('body').on('click', '.reports-main-block .comment-button', (event) =>
@@ -32,6 +34,8 @@ window.onload = $(() =>
                       
     }).done((json) =>
     {
+      socket.emit('update_report_comments', { room: $('#report-detail').attr('name') });
+
       printSuccess(json.message);
 
       $('body').css('overflow', 'auto');

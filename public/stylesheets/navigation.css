@@ -5,6 +5,8 @@
   margin:0;
   width:100%;
   font-family:raleway-regular;
+  background-color:#6985BF;
+  box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
 }
 
 .nav-menu-title
@@ -19,20 +21,15 @@
   vertical-align:top;
 }
 
-.nav-menu-separation-bar
-{
-  width:80%;
-  margin-left:10%;
-  border:0.5px solid black;
-}
-
 .nav-menu-element-bug-report
 {
   top:10px;
-  left:95%;
+  width:10px;
   cursor:pointer;
+  color:#FFFFFF;
   position:absolute;
   font-size:x-large;
+  left:calc(100% - 30px);
 }
 
 .nav-menu-element-bug-report:hover
