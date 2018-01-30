@@ -11,9 +11,9 @@
     --><div class='home-news-block'>
         <% for(var key in news){ %>
           <div class='home-news-block-element'>
-            <p class='home-news-block-element-title'><%= news[key]['title'] %></p>
-            <p class='home-news-block-element-date'><%= news[key]['date'] %></p>
-            <p class='home-news-block-element-content'><%= news[key]['content'] %></p>
+            <div class='home-news-block-element-title'><%= news[key]['title'] %></div>
+            <div class='home-news-block-element-date'><%= news[key]['date'] %></div>
+            <div class='home-news-block-element-content'><%= news[key]['content'] %></div>
           </div>
         <% } %>
       </div>

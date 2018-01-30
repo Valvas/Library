@@ -24,11 +24,13 @@ require('../app')((app) =>
 
     socket.on('join_report', (name) => { socket.join(name); });
 
+    socket.on('join_reports_list', () => { socket.join('reports'); });
+
     socket.on('admin_update_comment', (object) => { socket.to(object.room).emit('update_comment', object.room); });
 
     socket.on('update_report_comments', (object) => { socket.to(object.room).emit('update_report_comments', object.room); });
 
-    socket.on('update_report_status', (object) => { socket.to(object.room).emit('update_report_status', object.status, object.color, object.room); });
+    socket.on('update_report_status', (object) => { socket.to(object.room).emit('update_report_status', object.status, object.color, object.report); });
 
     socket.on('from_file_delete', (object) => { socket.to(object.room).emit('delete_file', object.logID); });
 

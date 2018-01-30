@@ -21,6 +21,7 @@ module.exports.getReports = (databaseConnector, callback) =>
     'tableName': params.database.tables.reports,
     'args': { '0': '*' },
     'where': { }
+
   }, databaseConnector, (boolean, reportsOrErrorMessage) =>
   {
     if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
@@ -46,9 +47,63 @@ module.exports.getReports = (databaseConnector, callback) =>
 
           else
           {
+            var y = 0;
+
             obj[x]['report_date'] = dateOrFalse;
 
-            reportsOrErrorMessage[x += 1] == undefined ? callback(obj) : reportLoop();
+            obj[x]['unread_comments'] = 0;
+
+            databaseManager.selectQuery(
+            {
+              'databaseName': params.database.name,
+              'tableName': params.database.tables.report_logs,
+              'args': { '0': '*' },
+              'where': { '=': { '0': { 'key': 'report', 'value': reportsOrErrorMessage[x]['id'] } } }
+              
+            }, databaseConnector, (boolean, logsOrErrorMessage) =>
+            {
+              var logsLoop = () =>
+              {
+                if(logsOrErrorMessage[y].type == 1)
+                {
+                  databaseManager.selectQuery(
+                  {
+                    'databaseName': params.database.name,
+                    'tableName': params.database.tables.report_comments,
+                    'args': { '0': 'seen' },
+                    'where': { '=': { '0': { 'key': 'log', 'value': logsOrErrorMessage[y]['id'] } } }
+                      
+                  }, databaseConnector, (boolean, commentOrErrorMessage) =>
+                  {
+                    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+
+                    else
+                    {
+                      if(commentOrErrorMessage[0].seen == 0) obj[x]['unread_comments'] += 1;
+
+                      if(logsOrErrorMessage[y += 1] != undefined) logsLoop();
+
+                      else
+                      {
+                        reportsOrErrorMessage[x += 1] == undefined ? callback(obj) : reportLoop();
+                      }
+                    }
+                  });
+                }
+
+                else
+                {
+                  if(logsOrErrorMessage[y += 1] != undefined) logsLoop();
+
+                  else
+                  {
+                    reportsOrErrorMessage[x += 1] == undefined ? callback(obj) : reportLoop();
+                  }
+                }
+              }
+
+              boolean == false ? callback(false, 500, constants.SQL_SERVER_ERROR) : logsLoop();
+            });
           }
         });
       }
@@ -190,7 +245,7 @@ module.exports.addComment = (reportUUID, comment, accountUUID, databaseConnector
             'account': accountOrFalse.id,
             'log': insertedIdOrErrorMessage,
             'content': comment,
-            'seen': 0,
+            'seen': accountOrFalse.is_admin == 0 ? 0 : 1,
             'admin': accountOrFalse.is_admin == 0 ? 0 : 1
           }
         }, databaseConnector, (boolean, insertedIdOrErrorMessage) =>

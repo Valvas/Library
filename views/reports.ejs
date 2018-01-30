@@ -9,7 +9,7 @@
     <% include include/menu.ejs %>
     <% include include/aside.ejs %><!-- @SuppressWhitespace
     --><div class='reports-main-block'>
-        <div class='counter'>Rapports: <%= Object.keys(reports).length %></div>
+        <div id='counter' class='counter'>Rapports: <%= Object.keys(reports).length %></div>
         <div class='filters'>
           <% for(var i = 0; i < Object.keys(types).length; i++) { %><!-- @SuppressWhitespace
             --><div class='filter'>
@@ -27,26 +27,24 @@
             </select>
           </div>
         </div>
-        <table class='reports-table'>
-          <tr class='reports-table-legend-row'>
-            <th class='type'>Type</th>
-            <th class='date hide'>Date</th>
-            <th class='subject'>Sujet</th>
-            <th class='status'>Statut</th>
-          </tr>
-          <% for(var i = 0; i < Object.keys(reports).length; i++) { %>
-            <tr id='<%= reports[i]['report_uuid'] %>' class='report <%= reports[i]['report_type'] %> <%= reports[i]['report_status'] %> <% if(i % 2 == 0){ %>odd<% } else{ %>even<% } %>'>
-              <td><%= types[reports[i]['report_type']] %></td>
-              <td class='hide'><%= reports[i]['report_date'] %></td>
-              <td><%= reports[i]['report_subject'] %></td>
-              <td style='color:<%= status[reports[i]['report_status']]['color'] %>'><%= status[reports[i]['report_status']]['name'] %></td>
+        <div class='table-container'>
+          <table id='reports-table' class='reports-table'>
+            <tr class='reports-table-legend-row'>
+              <th class='messages'></th>
+              <th class='type'>Type</th>
+              <th class='date hide'>Date</th>
+              <th class='subject'>Sujet</th>
+              <th class='status'>Statut</th>
             </tr>
-          <% } %>
-        </table>
+          </table>
+        </div>
+        <div id='pages-container' class='pages-container'></div>
       </div>
     <% include include/scripts.ejs %>
     <script src='/js/afk.js'></script>
     <script src='/js/report/filters.js'></script>
     <script src='/js/report/links.js'></script>
+    <script src='/js/report/listSocket.js'></script>
+    <script src='/js/report/onload.js'></script>
   </body>
 </html>

@@ -4,26 +4,26 @@ window.onload = $(() =>
 
   $('body').on('click', '[name="admin-users-edit-account-button"]', (event) =>
   {
-    if($(event.target).parent().attr('name') == 'text')
+    if($(event.target).parent().parent().attr('name') == 'text')
     {
       $('body').css('overflow', 'hidden');
 
       openInputPopup(
       {
-        name: $(event.target).parent().attr('id'),
-        type: $(event.target).parent().attr('name'),
-        value: $(event.target).parent().find('div.value').text(),
-        placeholder: $(event.target).parent().find('div.key').text()
+        name: $(event.target).parent().parent().attr('id'),
+        type: $(event.target).parent().parent().attr('name'),
+        value: $(event.target).parent().parent().find('div.value').text(),
+        placeholder: $(event.target).parent().parent().find('div.key').text()
       });
     }
 
-    if($(event.target).parent().attr('name') == 'select')
+    if($(event.target).parent().parent().attr('name') == 'select')
     {
-      if($(event.target).parent().attr('id') == 'is_admin')
+      if($(event.target).parent().parent().attr('id') == 'is_admin')
       {
         openSelectPopup(
         {
-          name: $(event.target).parent().attr('id'),
+          name: $(event.target).parent().parent().attr('id'),
           values:
           {
             0: 'Non',
@@ -32,7 +32,7 @@ window.onload = $(() =>
         });
       }
 
-      else if($(event.target).parent().attr('id') == 'service')
+      else if($(event.target).parent().parent().attr('id') == 'service')
       {
         $.ajax(
         {
@@ -51,7 +51,7 @@ window.onload = $(() =>
 
             openSelectPopup(
             {
-              name: $(event.target).parent().attr('id'),
+              name: $(event.target).parent().parent().attr('id'),
               values: obj
             });
           }
@@ -60,11 +60,11 @@ window.onload = $(() =>
         });
       }
 
-      else if($(event.target).parent().attr('id') == 'suspended')
+      else if($(event.target).parent().parent().attr('id') == 'suspended')
       {
         openSelectPopup(
         {
-          name: $(event.target).parent().attr('id'),
+          name: $(event.target).parent().parent().attr('id'),
           values:
           {
             0: 'Non',

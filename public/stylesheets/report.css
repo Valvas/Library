@@ -2,7 +2,7 @@
 TABLE
 ****************************************************************************************************/
 
-.reports-main-block{ vertical-align:top; display:inline-block; margin:2.5% 2.5% 2.5% 2.5%; }
+.reports-main-block{ vertical-align:top; display:inline-block; margin:40px 2.5% 40px 2.5%; }
 
 .reports-main-block .counter{ color:#334455; font-size:large; font-weight:bold; text-align:right; font-family:barlow; margin:2.5% 2.5% 2.5% 2.5%; }
 
@@ -14,21 +14,28 @@ TABLE
 
 .reports-main-block .filters .filter .label{ font-family:barlow; display:inline-block; }
 
-.reports-main-block .reports-table{ width:100%; table-layout:fixed; border-collapse:collapse; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
+.reports-main-block .table-container{ width:100%; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
 
-.reports-main-block .reports-table .reports-table-legend-row{ color:#FFFFFF; font-size:large; text-align:left; background-color:#77B5FE; font-family:raleway-italic; }
+.reports-main-block .reports-table{ width:100%; table-layout:fixed; border-collapse:collapse; }
+
+.reports-main-block .reports-table .reports-table-legend-row{ min-width:100%; color:#FFFFFF; font-size:16px; text-align:left; background-color:#77B5FE; font-family:raleway-italic; }
 
 .reports-main-block .reports-table .reports-table-legend-row.admin{ background-color:#E84E4F; }
 
-.reports-main-block .reports-table td{ font-family:barlow; word-wrap:break-word; overflow-wrap:break-word; }
+.reports-main-block .reports-table td{ font-size:16px; font-family:barlow; word-wrap:break-word; overflow-wrap:break-word; }
 
-.reports-main-block .reports-table tr.report{ cursor:pointer; }
-
-.reports-main-block .reports-table tr.report.even{ background-color:#EEEEEE; }
-
-.reports-main-block .reports-table tr.report.odd{ background-color:#FFFFFF; }
+.reports-main-block .reports-table tr.report{ min-width:100%; cursor:pointer; border-bottom:1px solid #F0F0F0; }
 
 .reports-main-block .reports-table tr.report:hover{ font-weight:bold; background-color:#CCDDFF; }
+
+.reports-main-block .reports-table tr.report .envelope{ position:relative; font-size:24px; }
+.reports-main-block .reports-table tr.report .envelope[notifications]:after{ content:attr(notifications); position:absolute; top:-6px; right:-6px; font-size:.6em; background:#1FA055; color:white; width:18px; height:18px; text-align:center; line-height:18px; border-radius:50%; box-shadow:0 0 1px #333; }
+
+.reports-main-block .pages-container{ width:100%; padding:20px 0 20px 0; }
+
+.reports-main-block .pages-container .page{ border-radius:2px; text-align:center; font-size:16px; line-height:24px; padding:4px; width:24px; margin-right:2px; display:inline-block; cursor:pointer; background-color:#D6DBDF; color:#FFFFFF; }
+.reports-main-block .pages-container .page-selected{ border-radius:2px; text-align:center; font-size:16px; line-height:24px; padding:4px; width:24px; margin-right:2px; display:inline-block; cursor:pointer; background-color:#3498DB; color:#FFFFFF; }
+.reports-main-block .pages-container .page:hover{ background-color:#3498DB; }
 
 /****************************************************************************************************/
 
@@ -37,7 +44,7 @@ TABLE
   .reports-main-block{ width:95%; }
   .reports-main-block .filters .filter{ width:50%; }
   .reports-main-block .reports-table .hide{ display:none; }
-  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:3%; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
 
   .reports-main-block .reports-table th.type{ width:19%; }
   .reports-main-block .reports-table th.status{ width:19%; }
@@ -51,9 +58,10 @@ TABLE
   .reports-main-block{ width:95%; }
   .reports-main-block .filters .filter{ width:33%; }
   .reports-main-block .reports-table .hide{ display:none; }
-  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:2.5%; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
 
-  .reports-main-block .reports-table th.type{ width:20%; }
+  .reports-main-block .reports-table th.messages{ width:10% }
+  .reports-main-block .reports-table th.type{ width:25%; }
   .reports-main-block .reports-table th.status{ width:20%; }
   .reports-main-block .reports-table th.subject{ width:45%; }
 }
@@ -65,9 +73,10 @@ TABLE
   .reports-main-block{ width:75%; }
   .reports-main-block .filters .filter{ width:30%; }
   .reports-main-block .reports-table .hide{ display:none; }
-  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:2.5%; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
 
-  .reports-main-block .reports-table th.type{ width:20%; }
+  .reports-main-block .reports-table th.messages{ width:10% }
+  .reports-main-block .reports-table th.type{ width:25%; }
   .reports-main-block .reports-table th.status{ width:20%; }
   .reports-main-block .reports-table th.subject{ width:45%; }
 }
@@ -78,12 +87,13 @@ TABLE
 {
   .reports-main-block{ width:75%; }
   .reports-main-block .filters .filter{ width:25%; }
-  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:2%; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
 
-  .reports-main-block .reports-table th.type{ width:11%; }
-  .reports-main-block .reports-table th.date{ width:21%; }
-  .reports-main-block .reports-table th.status{ width:11%; }
-  .reports-main-block .reports-table th.subject{ width:41%; }
+  .reports-main-block .reports-table th.messages{ width:5% }
+  .reports-main-block .reports-table th.type{ width:20%; }
+  .reports-main-block .reports-table th.date{ width:20%; }
+  .reports-main-block .reports-table th.status{ width:15%; }
+  .reports-main-block .reports-table th.subject{ width:40%; }
 }
 
 /****************************************************************************************************/
@@ -92,12 +102,13 @@ TABLE
 {
   .reports-main-block{ width:75%; }
   .reports-main-block .filters .filter{ width:20%; }
-  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:1.5%; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
 
-  .reports-main-block .reports-table th.type{ width:12%; }
-  .reports-main-block .reports-table th.date{ width:22%; }
-  .reports-main-block .reports-table th.status{ width:12%; }
-  .reports-main-block .reports-table th.subject{ width:42%; }
+  .reports-main-block .reports-table th.messages{ width:5% }
+  .reports-main-block .reports-table th.type{ width:15%; }
+  .reports-main-block .reports-table th.date{ width:20%; }
+  .reports-main-block .reports-table th.status{ width:15%; }
+  .reports-main-block .reports-table th.subject{ width:45%; }
 }
 
 /****************************************************************************************************/
@@ -106,12 +117,13 @@ TABLE
 {
   .reports-main-block{ width:55%; }
   .reports-main-block .filters .filter{ width:15%; }
-  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:1%; }
+  .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
 
-  .reports-main-block .reports-table th.type{ width:13%; }
-  .reports-main-block .reports-table th.date{ width:23%; }
-  .reports-main-block .reports-table th.status{ width:13%; }
-  .reports-main-block .reports-table th.subject{ width:43%; }
+  .reports-main-block .reports-table th.messages{ width:5%; }
+  .reports-main-block .reports-table th.type{ width:15%; }
+  .reports-main-block .reports-table th.date{ width:20%; }
+  .reports-main-block .reports-table th.status{ width:15%; }
+  .reports-main-block .reports-table th.subject{ width:45%; }
 }
 
 /*****************************************************************************************************

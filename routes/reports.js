@@ -25,6 +25,18 @@ router.get('/', (req, res) =>
 
 /****************************************************************************************************/
 
+router.get('/get-reports-list', (req, res) =>
+{
+  report.getReports(req.app.get('mysqlConnector'), (reportsOrFalse, errorStatus, errorCode) =>
+  {
+    reportsOrFalse == false ?
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+    res.status(200).send({ result: true, reports: reportsOrFalse, status: params.reports_status, types: params.reports_type });
+  });
+});
+
+/****************************************************************************************************/
+
 router.post('/', (req, res) =>
 {
   reportsCreate.createNewReport(req.body.reportType, req.body.reportSubject, req.body.reportContent, req.session.uuid, req.app.get('mysqlConnector'), (boolean, errorStatus, errorCode) =>

@@ -476,15 +476,18 @@ function openInputPopup(obj)
   $(confirm)    .attr({ id: 'user-edit-popup-confirm',  class: 'user-edit-popup-confirm '});
   $(cancel)     .attr({ id: 'user-edit-popup-cancel',  class: 'user-edit-popup-cancel '});
 
-  $(confirm)    .html('<i class="fa fa-send" aria-hidden="true"></i>');
-  $(cancel)     .html('<i class="fa fa-close" aria-hidden="true"></i>');
+  $(confirm)    .html('Envoyer');
+  $(cancel)     .html('Annuler');
 
   $(veil)       .appendTo('body');
   $(popup)      .appendTo('body');
 
   $(input)      .appendTo(popup);
+  $(`</br>`)    .appendTo(popup);
   $(confirm)    .appendTo(popup);
   $(cancel)     .appendTo(popup);
+
+  confirm.focus();
 }
 
 /****************************************************************************************************/
@@ -507,8 +510,8 @@ function openSelectPopup(obj)
   $(confirm)    .attr({ id: 'user-edit-popup-confirm',  class: 'user-edit-popup-confirm '});
   $(cancel)     .attr({ id: 'user-edit-popup-cancel',  class: 'user-edit-popup-cancel '});
 
-  $(confirm)    .html('<i class="fa fa-send" aria-hidden="true"></i>');
-  $(cancel)     .html('<i class="fa fa-close" aria-hidden="true"></i>');
+  $(confirm)    .html('Envoyer');
+  $(cancel)     .html('Annuler');
 
   var option  = document.createElement('option');
   
@@ -536,6 +539,8 @@ function openSelectPopup(obj)
       $(select)     .appendTo(popup);
       $(confirm)    .appendTo(popup);
       $(cancel)     .appendTo(popup);
+
+      confirm.focus();
     }
   }
 
@@ -923,6 +928,196 @@ function updateAdminReportCommentList(reportUUID)
       }
     }
   });
+}
+
+/****************************************************************************************************/
+
+function updateReportsList()
+{
+  $.ajax(
+  {
+    type: 'GET', timeout: 5000, dataType: 'JSON', url: '/reports/get-reports-list', success: () => {},
+    error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); }
+                      
+  }).done((json) =>
+  {
+    document.getElementById('counter').innerText = `Rapports : ${Object.keys(json.reports).length}`;
+    var x = 0, y = 0, z = 0, a = 0, b = 0;
+    var uploadedReportsArray = [], currentReportsArray = [];
+    var currentReports = document.getElementsByName('report');
+
+    var reportsAmount = Object.keys(json.reports).length;
+    var pages = 0;
+
+    if(reportsAmount > 0)
+    {
+      pages = parseInt(Object.keys(json.reports).length / 10);
+      reportsAmount = Object.keys(json.reports).length % 10;
+      if(reportsAmount > 0) pages += 1;
+    }
+
+    var putUploadedReportsInAnArrayLoop = () =>
+    {
+      if(json.reports[x] != undefined) uploadedReportsArray.push(json.reports[x]['report_uuid']);
+
+      json.reports[x += 1] != undefined ? putUploadedReportsInAnArrayLoop() : putCurrentReportsInAnArrayLoop();
+    }
+
+    var putCurrentReportsInAnArrayLoop = () =>
+    {
+      if(currentReports[y] != undefined) currentReportsArray.push(currentReports[y].getAttribute('id'));
+
+      currentReports[y += 1] != undefined ? putCurrentReportsInAnArrayLoop() : removeDeletedReportsLoop();
+    }
+
+    var removeDeletedReportsLoop = () =>
+    {
+      if(uploadedReportsArray.includes(currentReportsArray[z]) == false && currentReportsArray[z] != undefined) document.getElementById(currentReportsArray[z]).remove();
+
+      currentReportsArray[z += 1] != undefined ? removeDeletedReportsLoop() : updateReportsLoop();
+    }
+
+    var updateReportsLoop = () =>
+    {
+      if(json.reports[a] != undefined)
+      {        
+        if(currentReportsArray.includes(json.reports[a]['report_uuid']))
+        {
+          document.getElementById(json.reports[a]['report_uuid']).setAttribute('tag', parseInt((Object.keys(json.reports).length - 1 - a) / 10) + 1);
+          document.getElementById(json.reports[a]['report_uuid']).children[0].innerHTML = `<div class='fa fa-envelope-o envelope' notifications='${json.reports[a]['unread_comments'] > 99 ? 99 : json.reports[a]['unread_comments']}'></div>`;
+          document.getElementById(json.reports[a]['report_uuid']).children[1].innerText = json.types[json.reports[a]['report_type']];
+          document.getElementById(json.reports[a]['report_uuid']).children[2].innerText = json.reports[a]['report_date'];
+          document.getElementById(json.reports[a]['report_uuid']).children[3].innerText = json.reports[a]['report_subject'];
+          document.getElementById(json.reports[a]['report_uuid']).children[4].innerText = json.status[json.reports[a]['report_status']]['name'];
+          document.getElementById(json.reports[a]['report_uuid']).children[4].style.color = json.status[json.reports[a]['report_status']]['color'];
+
+          if(parseInt((Object.keys(json.reports).length - 1 - a) / 10) + 1 > 1) document.getElementById(json.reports[a]['report_uuid']).style.display = 'none';
+        }
+
+        else
+        {
+          var row = document.createElement('tr');
+
+          row.setAttribute('id', json.reports[a]['report_uuid']);
+          row.setAttribute('name', 'report');
+          row.setAttribute('class', `report ${json.reports[a]['report_type']} ${json.reports[a]['report_status']}`);
+          row.setAttribute('tag', parseInt((Object.keys(json.reports).length - 1 - a) / 10) + 1);
+
+          var messages = document.createElement('td');
+          messages.innerHTML = `<div class='fa fa-envelope-o envelope' notifications='${json.reports[a]['unread_comments'] > 99 ? 99 : json.reports[a]['unread_comments']}'></div>`;
+
+          var type = document.createElement('td');
+          type.innerText = json.types[json.reports[a]['report_type']];
+
+          var date = document.createElement('td');
+          date.setAttribute('class', 'hide');
+          date.innerText = json.reports[a]['report_date'];
+
+          var subject = document.createElement('td');
+          subject.innerText = json.reports[a]['report_subject'];
+
+          var status = document.createElement('td');
+          status.style.color = json.status[json.reports[a]['report_status']]['color'];
+          status.innerText = json.status[json.reports[a]['report_status']]['name'];
+
+          row.appendChild(messages);
+          row.appendChild(type);
+          row.appendChild(date);
+          row.appendChild(subject);
+          row.appendChild(status);
+
+          if(parseInt((Object.keys(json.reports).length - 1 - a) / 10) + 1 > 1) row.style.display = 'none';
+
+          document.getElementById('reports-table').children[0].insertBefore(row, document.getElementById('reports-table').children[0].children[1]);
+        }
+
+        a += 1;
+
+        updateReportsLoop();
+      }
+
+      else
+      {
+        pagesLoop();
+      }
+    }
+
+    var pagesLoop = () =>
+    {
+      if(b < pages)
+      {
+        if(document.getElementById('pages-container').children[b] == undefined)
+        {
+          var page = document.createElement('div');
+          page.innerText = `${b + 1}`;
+
+          b == 0 ?
+          page.setAttribute('class', 'page-selected') : page.setAttribute('class', 'page');
+          
+          page.addEventListener('click', changeReportPage);
+
+          page.setAttribute('tag', `${b + 1}`);
+
+          document.getElementById('pages-container').appendChild(page);
+        }
+
+        b += 1;
+
+        pagesLoop();
+      }
+
+      else
+      {
+        //UPDATE OVER MESSAGE
+      }
+    }
+
+    putUploadedReportsInAnArrayLoop();
+  });
+}
+
+/****************************************************************************************************/
+
+function changeReportPage(event)
+{
+  if(event.target.getAttribute('class') == 'page')
+  {
+    var x  = 0, y = 0, z = 0;
+    var reportsToDisplay = [];
+    var reports = document.getElementsByName('report');
+    var pageSelectors = document.getElementById('pages-container').children;
+
+    var selectorLoop = () =>
+    {
+      pageSelectors[z].setAttribute('class', 'page');
+
+      if(pageSelectors[z += 1] != undefined) selectorLoop();
+    }
+
+    if(pageSelectors[z] != undefined) selectorLoop();
+
+    event.target.setAttribute('class', 'page-selected');
+
+    var getReportsToShow = () =>
+    {
+      if(reports[x].getAttribute('tag') == event.target.getAttribute('tag')) reportsToDisplay.push(reports[x]);
+
+      reports[x].style.display = 'none';
+
+      if(reports[x += 1] != undefined) getReportsToShow();
+    }
+
+    if(reports[x] != undefined) getReportsToShow();
+
+    var displayLoop = () =>
+    {
+      reportsToDisplay[y].removeAttribute('style');
+
+      if(reportsToDisplay[y += 1] != undefined) displayLoop();
+    }
+
+    if(reportsToDisplay[y] != undefined) displayLoop();
+  }
 }
 
 /****************************************************************************************************/

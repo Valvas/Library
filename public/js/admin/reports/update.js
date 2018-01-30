@@ -16,6 +16,7 @@ window.onload = $(() =>
       }).done((json) =>
       {
         socket.emit('update_report_comments', { room: document.getElementById('report-detail').getAttribute('name') });
+        socket.emit('update_report_comments', { room: 'reports' });
       });
     }
 
@@ -29,6 +30,7 @@ window.onload = $(() =>
       }).done((json) =>
       {
         socket.emit('update_report_comments', { room: document.getElementById('report-detail').getAttribute('name') });
+        socket.emit('update_report_comments', { room: 'reports' });
       });
     }
   });
@@ -56,7 +58,8 @@ window.onload = $(() =>
             
       }).done((json) =>
       {
-        socket.emit('update_report_status', { room: document.getElementById('report-detail').getAttribute('name'), status: $(select.options[select.selectedIndex]).text(), color: select.options[select.selectedIndex].style.getPropertyValue('color') });
+        socket.emit('update_report_status', { room: document.getElementById('report-detail').getAttribute('name'), status: $(select.options[select.selectedIndex]).text(), color: select.options[select.selectedIndex].style.getPropertyValue('color'), report: document.getElementById('report-detail').getAttribute('name') });
+        socket.emit('update_report_status', { room: 'reports' });
       });
     }
   });

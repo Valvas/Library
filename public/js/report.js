@@ -1,5 +1,7 @@
-window.onload = $(function()
+window.onload = $(() =>
 {
+  var socket = io();
+
   /****************************************************************************************************/
 
   $('body').on('click', '#report-button', (event) =>
@@ -63,6 +65,8 @@ window.onload = $(function()
                       
       }).done((json) =>
       {
+        socket.emit('update_report_status', { room: 'reports' });
+        
         printSuccess(json.message);
 
         $('body').css('overflow', 'auto');
