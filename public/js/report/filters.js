@@ -2,47 +2,38 @@ window.onload = $(() =>
 {
   /****************************************************************************************************/
 
-  /*$('body').on('click', '.reports-main-block .filters .filter input', (event) =>
+  $('body').on('click', '.reports-main-block .filters .filter input', (event) =>
   {
-    if(event.target.checked)
-    {
-      if($('#status').val() == 'all') $(`.reports-main-block .reports-table tr.report.${$(event.target).attr('name')}`).show();
+    var select = document.getElementById('status');
 
-      else
-      {
-        $(`.reports-main-block .reports-table`).find(`tr.report.${$(event.target).attr('name')}.${$('#status').val()}`).show();
-      }
+    if(select.options[select.selectedIndex].value == 'all')
+    {
+      displayReportsInAllStatus(document.getElementById('filters').getElementsByTagName('input')[0].checked, document.getElementById('filters').getElementsByTagName('input')[1].checked);
     }
 
     else
     {
-      $(`.reports-main-block .reports-table tr.report.${$(event.target).attr('name')}`).hide();
+      applyFilterOnReports(select.options[select.selectedIndex].value, document.getElementById('filters').getElementsByTagName('input')[0].checked, document.getElementById('filters').getElementsByTagName('input')[1].checked);
     }
-  });*/
+  });
 
   /****************************************************************************************************/
 
-  /*$('#status').on('change', (event) =>
+  $('#status').on('change', (event) =>
   {
     var select = document.getElementById('status');
-    $(select).css('color', select.options[select.selectedIndex].style.getPropertyValue('color'));
+    select.style.color = select.options[select.selectedIndex].style.getPropertyValue('color');
 
-    if($('#status').val() == 'all') $(`.reports-main-block .reports-table tr.report`).show();
+    if(select.options[select.selectedIndex].value == 'all')
+    {
+      displayReportsInAllStatus(document.getElementById('filters').getElementsByTagName('input')[0].checked, document.getElementById('filters').getElementsByTagName('input')[1].checked);
+    }
 
     else
     {
-      $(`.reports-main-block .reports-table tr.report`).hide();
-      $(`.reports-main-block .reports-table tr.report.${$('#status').val()}`).show();
+      applyFilterOnReports(select.options[select.selectedIndex].value, document.getElementById('filters').getElementsByTagName('input')[0].checked, document.getElementById('filters').getElementsByTagName('input')[1].checked);
     }
-
-    for(var i = 0; i < $(document.querySelectorAll('.reports-main-block .filters .filter input')).length; i++)
-    {
-      if($(document.querySelectorAll('.reports-main-block .filters .filter input'))[i].checked == false) 
-      {
-        $(`.reports-main-block .reports-table tr.report.${$(document.querySelectorAll('.reports-main-block .filters .filter input')[i]).attr('name')}`).hide();
-      }
-    }
-  });*/
+  });
 
   /****************************************************************************************************/
 });

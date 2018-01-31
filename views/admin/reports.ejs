@@ -10,7 +10,7 @@
     <% include ../include/admin_aside.ejs %><!-- @SuppressWhitespace
     --><div class='reports-main-block'>
         <div id='counter' class='counter'>Rapports: <%= Object.keys(reports).length %></div>
-        <div class='filters'>
+        <div id='filters' class='filters'>
           <% for(var i = 0; i < Object.keys(types).length; i++) { %><!-- @SuppressWhitespace
             --><div class='filter'>
               <input type='checkbox' name='<%= Object.keys(types)[i] %>' checked><!-- @SuppressWhitespace

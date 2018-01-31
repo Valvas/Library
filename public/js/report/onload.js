@@ -1,1 +1,1 @@
-updateReportsList();
+updateReportsList(1);

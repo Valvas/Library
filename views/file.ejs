@@ -11,11 +11,13 @@
     --><div id='<%= file['uuid'] %>' name='<%= file['service'] %>' class='file-main-block'>
         <a href='/service/<%= file['service'] %>' class='return'><i class="fa fa-angle-left icon" aria-hidden="true"></i><div class='label'>Retour</div></a>
         <div class='info'>
+          <div class='legend'>Détail</div>
           <div class='name' id='file-name' name='<%= file['name'] %>.<%= file['type'] %>'>Nom : <%= file['name'] %>.<%= file['type'] %></div>
           <div class='type'>Type : <%= ext[file['type']] %></div>
-          <div class='type'>Propriétaire : <%= file['account'] %></div>
+          <div class='owner'>Propriétaire : <%= file['account'] %></div>
         </div><!-- @SuppressWhitespace
         --><div class='actions'>
+          <div class='legend'>Actions</div>
           <% if(file['deleted'] == 0){ %>
             <button <% if(rights['download_files'] == 1){ %> class='download' <% } else{ %> class='download-inactive' <% } %>><i class="fa fa-download icon" aria-hidden="true"></i><div class='label'>Télécharger</div></button><!-- @SuppressWhitespace
             --><button <% if(rights['remove_files'] == 1){ %> class='delete' <% } else{ %> class='delete-inactive' <% } %>><i class="fa fa-trash icon" aria-hidden="true"></i><div class='label'>Supprimer</div></button><!-- @SuppressWhitespace
@@ -24,15 +26,9 @@
             <div class='deleted'>Supprimé</div>
           <% } %>
         </div>
-        <div class='comments'>
-          <% for(var i = Object.keys(file.logs).length - 1; i >= 0; i--){ %>
-            <div id='<%= file.logs[i].id %>' name='<%= file.logs[i].type %>' class='<% if(file.logs[i].type == 0){ %>upload-log<% } else if(file.logs[i].type == 1){ %>download-log<% } else if(file.logs[i].type == 2){ %>remove-log<% } else{ %>comment-log<% } %>'>
-              <div class='date'><%= file.logs[i].date %></div><!-- @SuppressWhitespace
-              --><div class='content'><%= file.logs[i].message %></div>
-              <% if(file.logs[i].comment != undefined){ %><div class='comment'><%= file.logs[i].comment %></div><% } %>
-            </div>
-          <% } %>
+        <div id='comments' class='comments'>
         </div>
+        <div class='pages-container' id='pages-container'></div>
     </div>
     <% include include/scripts.ejs %>
     <script src='/js/afk.js'></script>

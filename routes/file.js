@@ -75,4 +75,16 @@ router.get('/:file', (req, res) =>
 
 /****************************************************************************************************/
 
+router.put('/get-file', (req, res) =>
+{
+  filesGet.getFile(req.body.file, req.session.uuid, req.app.get('mysqlConnector'), (fileOrFalse, errorStatus, errorCode) =>
+  {
+    fileOrFalse == false ?
+    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+    res.status(200).send({ result: true, file: fileOrFalse });
+  });
+});
+
+/****************************************************************************************************/
+
 module.exports = router;

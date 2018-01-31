@@ -5,6 +5,7 @@ window.onload = $(() =>
   socket.on('connect', () =>
   {
     socket.emit('join_file', $('.file-main-block').attr('id'));
+    updateFileLogs($('.file-main-block').attr('id'));
   });
 
   socket.on('upload_file', (logID) =>
@@ -44,24 +45,96 @@ window.onload = $(() =>
       $(remove)       .appendTo('.actions');
       $(comment)      .appendTo('.actions');
 
-      uploadFileLogs(logID);
+      var x = 0;
+      var pageSelectors = document.getElementById('pages-container').children;
+
+      var getPageSelectorLoop = () =>
+      {
+        if(pageSelectors.length == 0) uploadFileLogs(logID, 1);
+
+        else
+        {
+          if(pageSelectors[x].getAttribute('class') == 'page-selected') uploadFileLogs(logID, parseInt(pageSelectors[x].getAttribute('tag')));
+
+          else
+          {
+            if(pageSelectors[x += 1] != undefined) getPageSelectorLoop();
+          }
+        }
+      }
+
+      getPageSelectorLoop();
     });
   });
   
   socket.on('post_comment', (logID) =>
   {
-    uploadFileLogs(logID);
+    var x = 0;
+    var pageSelectors = document.getElementById('pages-container').children;
+
+    var getPageSelectorLoop = () =>
+    {
+      if(pageSelectors.length == 0) uploadFileLogs(logID, 1);
+
+      else
+      {
+        if(pageSelectors[x].getAttribute('class') == 'page-selected') uploadFileLogs(logID, parseInt(pageSelectors[x].getAttribute('tag')));
+
+        else
+        {
+          if(pageSelectors[x += 1] != undefined) getPageSelectorLoop();
+        }
+      }
+    }
+
+    getPageSelectorLoop();
   });
 
   socket.on('delete_file', (logID) =>
   {
     $('.actions').html(`<div class='deleted'>Supprimé</div>`);
     
-    uploadFileLogs(logID);
+    var x = 0;
+    var pageSelectors = document.getElementById('pages-container').children;
+
+    var getPageSelectorLoop = () =>
+    {
+      if(pageSelectors.length == 0) uploadFileLogs(logID, 1);
+
+      else
+      {
+        if(pageSelectors[x].getAttribute('class') == 'page-selected') uploadFileLogs(logID, parseInt(pageSelectors[x].getAttribute('tag')));
+
+        else
+        {
+          if(pageSelectors[x += 1] != undefined) getPageSelectorLoop();
+        }
+      }
+    }
+
+    getPageSelectorLoop();
   });
 
   socket.on('download_file', (logID) =>
   {
-    uploadFileLogs(logID);
+    var x = 0;
+    var pageSelectors = document.getElementById('pages-container').children;
+
+    var getPageSelectorLoop = () =>
+    {
+      if(pageSelectors.length == 0) uploadFileLogs(logID, 1);
+
+      else
+      {
+        if(pageSelectors[x].getAttribute('class') == 'page-selected') uploadFileLogs(logID, parseInt(pageSelectors[x].getAttribute('tag')));
+
+        else
+        {
+          if(pageSelectors[x += 1] != undefined) getPageSelectorLoop();
+        }
+      }
+    }
+
+    getPageSelectorLoop();
   });
 });

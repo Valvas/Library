@@ -7,36 +7,46 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/service.css" />
   <body class='private-section-body'>
     <% include include/menu.ejs %>
-    <% include include/aside.ejs %>
-    <div id='service-main-block' class='service-main-block' name='<%= identifier %>'>
-      <div class='title'><%= service.toUpperCase() %></div>
-      <% var count = 0; for(var key in files){ if(files[key]['deleted'] == 0){ count += 1; } } %>
-      <div class='info'>Fichiers: <%= count %></div>
-      <% if(rights['upload_files'] == 1) { %>
-        <button id='service-main-block-file-buttons-upload' class='upload-button'>Envoyer</button>
-      <% } %>
-      <table id='service-main-block-table' class='service-main-block-table'>
-        <tr class='service-main-block-table-legend'>
-          <th class='service-main-block-file-name'>Nom du fichier</th>
-          <th class='service-main-block-file-type'>Extension</th>
-          <th class='service-main-block-file-account hide-1x hide-2x hide-3x'>Propriétaire</th>
-          <th class='service-main-block-file-buttons'></th>
-        </tr>
-        <% for(var i = 0; i < files.length; i++) { %>
-          <tr id='<%= files[i]['uuid'] %>' tag='<%= files[i]['name'] %>.<%= files[i]['ext'] %>' name='service-main-block-file' <% if(i % 2 == 0) { %>class='service-main-block-file-odd'<% } else { %>class='service-main-block-file-even'<% } %>>
-            <td class='service-main-block-file-name'><%= files[i]['name'] %></td>
-            <td class='service-main-block-file-type'><%= files[i]['type'] %></td>
-            <td class='service-main-block-file-account hide-1x hide-2x hide-3x'><%= files[i]['account'] %></td>
-            <td name='service-main-block-buttons' class='service-main-block-file-buttons'>
-              <% if(files[i]['deleted'] == 1){ %>
-                <div name='deleted' class='service-main-block-file-deleted'>Supprimé</div>
-              <% } else{ %>
-                <% if(rights['download_files'] == 1) { %><i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i><% } if(rights['remove_files'] == 1) { %><i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i><% } %>
-              <% } %>
-            </td>
-          </tr>
+    <% include include/aside.ejs %><!-- @SuppressWhitespace
+    --><div id='service-main-block' class='service-main-block' name='<%= identifier %>'>
+      <div class='info'>
+        <div class='title'><%= service.toUpperCase() %></div>
+        <% var count = 0; for(var key in files){ if(files[key]['deleted'] == 0){ count += 1; } } %>
+        <div id='files-counter' class='counter'>Fichiers : <%= count %></div>
+      </div><!-- @SuppressWhitespace
+      --><div class='upload'>
+        <% if(rights['upload_files'] == 1) { %>
+          <div class='true'>Vous avez le droit de poster des fichiers</div>
+          <button id='service-main-block-file-buttons-upload' class='on'>Envoyer</button>
+        <% } else{ %>
+          <div class='false'>Vous n'avez pas le droit de poster des fichiers</div>
+          <button class='off'>Envoyer</button>
         <% } %>
-      </table>
+      </div>
+      <div class='table-container'>
+        <table id='service-main-block-table' class='table'>
+          <tr class='legend'>
+            <th class='name'>Nom du fichier</th>
+            <th class='type'>Extension</th>
+            <th class='account'>Propriétaire</th>
+            <th class='buttons'></th>
+          </tr>
+          <% for(var i = 0; i < files.length; i++) { %>
+            <tr id='<%= files[i]['uuid'] %>' tag='<%= files[i]['name'] %>.<%= files[i]['ext'] %>' name='service-main-block-file' class='file'>
+              <td class='name'><%= files[i]['name'] %></td>
+              <td class='type'><%= files[i]['type'] %></td>
+              <td class='account'><%= files[i]['account'] %></td>
+              <td name='service-main-block-buttons' class='buttons'>
+                <% if(files[i]['deleted'] == 1){ %>
+                  <div name='deleted' class='service-main-block-file-deleted'>Supprimé</div>
+                <% } else{ %>
+                  <% if(rights['download_files'] == 1) { %><i name="service-main-block-buttons-download" class="fa fa-download service-main-block-file-buttons-download" aria-hidden="true"></i><% } if(rights['remove_files'] == 1) { %><i name="service-main-block-buttons-delete" class="fa fa-trash service-main-block-file-buttons-delete" aria-hidden="true"></i><% } %>
+                <% } %>
+              </td>
+            </tr>
+          <% } %>
+        </table>
+      </div>
     </div>
     <% include include/scripts.ejs %>
     <script src='/js/afk.js'></script>

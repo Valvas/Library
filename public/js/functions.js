@@ -373,9 +373,7 @@ function updateFilesList(service, callback)
 
       if(!document.getElementById(file['uuid']))
       {
-        x  % 2 == 0 ?
-        $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-odd'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account hide-1x hide-2x hide-3x'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'></td></tr>`).appendTo(document.getElementById('service-main-block-table')):
-        $(`<tr id='${file['uuid']}' name='service-main-block-file' class='service-main-block-file-even'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account hide-1x hide-2x hide-3x'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
+        $(`<tr id='${file['uuid']}' name='service-main-block-file' class='file'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account hide-1x hide-2x hide-3x'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
   
         if(file['deleted'] == 0)
         {
@@ -394,7 +392,7 @@ function updateFilesList(service, callback)
 
     json['files'].length > 0 ? loop(json['files'][Object.keys(json['files'])[x]]) : printMessage('Aucun fichier associé à ce service pour le moment.');
 
-    $('#service-main-block .info').text('Fichiers: ' + y);
+    document.getElementById('files-counter').innerText = `Fichiers : ${y}`;
   });
 }
 
@@ -549,7 +547,151 @@ function openSelectPopup(obj)
 
 /****************************************************************************************************/
 
-function uploadFileLogs(logID)
+function updateFileLogs(fileUUID)
+{
+  $.ajax(
+  {
+    type: 'PUT', timeout: 5000, dataType: 'JSON', data: { file: fileUUID }, url: '/file/get-file', success: () => {},
+    error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); }
+                    
+  }).done((json) =>
+  {
+    var updatedLogs = [];
+    var x = 0, y = 0, z = 0, a = 0, b = 0;
+    var currentLogs = document.getElementsByName('log');
+
+    var putUpdatedLogsInArrayLoop = () =>
+    {
+      updatedLogs.push(String(json.file.logs[x]['id']));
+
+      if(json.file.logs[x += 1] != undefined) putUpdatedLogsInArrayLoop();
+    }
+
+    if(json.file.logs[x] != undefined) putUpdatedLogsInArrayLoop();
+
+    var removeLogsLoop = () =>
+    {
+      updatedLogs.includes(currentLogs[y].getAttribute('id')) == false ? currentLogs[y].remove() : y += 1;
+
+      if(currentLogs[y] != undefined) removeLogsLoop();
+    }
+
+    if(currentLogs[y] != undefined) removeLogsLoop();
+
+    var pages = parseInt(updatedLogs.length / 10);
+    if(updatedLogs.length % 10 > 0) pages += 1;
+    var currentPage = pages;
+
+    var pageSelectors = document.getElementById('pages-container').children;
+
+    var removePageSelectorsLoop = () =>
+    {
+      pageSelectors[a].remove();
+
+      if(pageSelectors[a += 1] != undefined) removePageSelectorsLoop();
+    }
+
+    if(pageSelectors[a] != undefined) removePageSelectorsLoop();
+
+    var addPageSelectorsInContainerLoop = () =>
+    {
+      if(z > 0)
+      {
+        if(z < pages)
+        {
+          var page = document.createElement('div');
+          page.setAttribute('tag', z + 1);
+          page.innerText = `${z + 1}`;
+          page.addEventListener('click', changeFilePage);
+
+          if((z + 1) == 1) page.setAttribute('class', 'page-selected');
+          else{ page.setAttribute('class', 'page'); }
+          
+          document.getElementById('pages-container').appendChild(page);
+        }
+      }
+
+      else
+      {
+        var page = document.createElement('div');
+        page.setAttribute('tag', z + 1);
+        page.innerText = `${z + 1}`;
+        page.setAttribute('class', 'page-selected');
+        page.addEventListener('click', changeFilePage);
+        document.getElementById('pages-container').appendChild(page);
+      }
+
+      if((z += 1) < pages) addPageSelectorsInContainerLoop();
+    }
+
+    addPageSelectorsInContainerLoop();
+
+    var updateLogsLoop = () =>
+    {
+      if(document.getElementById(updatedLogs[b]))
+      {
+        document.getElementById(updatedLogs[b]).setAttribute('tag', currentPage);
+        document.getElementById(updatedLogs[b]).children[0].innerText = json.file.logs[b].date;
+        document.getElementById(updatedLogs[b]).children[1].innerText = json.file.logs[b].message;
+        if(document.getElementById(updatedLogs[b]).children[2]) document.getElementById(updatedLogs[b]).children[2].innerText = json.file.logs[b].comment;
+
+        if(currentPage != 1) document.getElementById(updatedLogs[b]).style.display = 'none';
+
+        if(((updatedLogs.length - 1) - b) % 10 == 0) currentPage -= 1;
+      }
+
+      else
+      {
+        var log = document.createElement('div');
+
+        log.setAttribute('name', 'log');
+        log.setAttribute('tag', currentPage);
+        
+        switch(json.file.logs[b].type)
+        {
+          case 0: log.setAttribute('class', 'upload-log'); break;
+          case 1: log.setAttribute('class', 'download-log'); break;
+          case 2: log.setAttribute('class', 'remove-log'); break;
+          case 3: log.setAttribute('class', 'comment-log'); break;
+        }
+
+        log.setAttribute('id', json.file.logs[b].id);
+
+        var date = document.createElement('div');
+        date.setAttribute('class', 'date');
+        date.innerText = json.file.logs[b].date;
+        log.appendChild(date);
+
+        var content = document.createElement('div');
+        content.setAttribute('class', 'content');
+        content.innerText = json.file.logs[b].message;
+        log.appendChild(content);
+
+        if(json.file.logs[b].type == 3)
+        {
+          var comment = document.createElement('div');
+          comment.setAttribute('class', 'comment');
+          comment.innerText = json.file.logs[b].comment;
+          log.appendChild(comment);
+        }
+
+        if(currentPage != 1) log.style.display = 'none';
+
+        document.getElementById('comments').insertBefore(log, document.getElementById('comments').children[0]);
+
+        if(((updatedLogs.length - 1) - b) % 10 == 0) currentPage -= 1;
+      }
+
+      if(updatedLogs[b += 1] != undefined) updateLogsLoop();
+    }
+
+    if(updatedLogs[b] != undefined) updateLogsLoop();
+  });
+}
+
+/****************************************************************************************************/
+
+function uploadFileLogs(logID, pageIndex)
 {
   $.ajax(
   {
@@ -564,10 +706,10 @@ function uploadFileLogs(logID)
 
     switch(json.log.type)
     {
-      case 0: $(log).attr({ id: json.log.id, name: json.log.type, class: 'upload-log' }); break;
-      case 1: $(log).attr({ id: json.log.id, name: json.log.type, class: 'download-log' }); break;
-      case 2: $(log).attr({ id: json.log.id, name: json.log.type, class: 'remove-log' }); break;
-      case 3: $(log).attr({ id: json.log.id, name: json.log.type, class: 'comment-log' }); break;
+      case 0: $(log).attr({ id: json.log.id, tag: '1', name: 'log', class: 'upload-log' }); break;
+      case 1: $(log).attr({ id: json.log.id, tag: '1', name: 'log', class: 'download-log' }); break;
+      case 2: $(log).attr({ id: json.log.id, tag: '1', name: 'log', class: 'remove-log' }); break;
+      case 3: $(log).attr({ id: json.log.id, tag: '1', name: 'log', class: 'comment-log' }); break;
     }
 
     $(date)     .attr('class', 'date');
@@ -591,8 +733,85 @@ function uploadFileLogs(logID)
       $(comment).appendTo(log);
     }
 
-    $(log)      .fadeIn(500);
+    var pages = parseInt(document.getElementsByName('log').length / 10);
+    if(document.getElementsByName('log').length % 10 > 0) pages += 1;
+
+    if(pages > document.getElementById('pages-container').children.length)
+    {
+      var page = document.createElement('div');
+      page.setAttribute('class', 'page');
+      page.setAttribute('tag', pages);
+      page.addEventListener('click', changeFilePage);
+      page.innerText = pages;
+      document.getElementById('pages-container').appendChild(page);
+    }
+
+    var x = 0, logsForCurrentPage = 0, currentPage = 1;
+    var logs = document.getElementsByName('log');
+
+    var updatePageTagLoop = () =>
+    {
+      if(logsForCurrentPage == 10)
+      {
+        logsForCurrentPage = 0;
+        currentPage += 1;
+      }
+
+      logsForCurrentPage += 1;
+
+      logs[x].setAttribute('tag', currentPage);
+
+      if(pageIndex == 1 && x == 0)
+      {
+        $(log).fadeIn(500);
+      }
+
+      else
+      {
+        currentPage == pageIndex ? logs[x].removeAttribute('style') : logs[x].style.display = 'none';
+      }
+
+      if(logs[x += 1] != undefined) updatePageTagLoop();
+    }
+
+    if(logs[x] != undefined) updatePageTagLoop();
   });
+}
+
+/****************************************************************************************************/
+
+function changeFilePage(event)
+{
+  if(event.target.getAttribute('class') == 'page')
+  {
+    var x  = 0, y = 0, z = 0;
+    var logs = document.getElementsByName('log');
+    var pageSelectors = document.getElementById('pages-container').children;
+
+    var selectorLoop = () =>
+    {
+      pageSelectors[z].setAttribute('class', 'page');
+
+      if(pageSelectors[z += 1] != undefined) selectorLoop();
+    }
+
+    if(pageSelectors[z] != undefined) selectorLoop();
+
+    event.target.setAttribute('class', 'page-selected');
+
+    var displayLogs = () =>
+    {
+      logs[x].getAttribute('tag') == event.target.getAttribute('tag') ?
+      
+      logs[x].removeAttribute('style') :
+
+      logs[x].style.display = 'none';
+
+      if(logs[x += 1] != undefined) displayLogs();
+    }
+
+    if(logs[x] != undefined) displayLogs();
+  }
 }
 
 /****************************************************************************************************/
@@ -932,7 +1151,7 @@ function updateAdminReportCommentList(reportUUID)
 
 /****************************************************************************************************/
 
-function updateReportsList()
+function updateReportsList(pageSelector)
 {
   $.ajax(
   {
@@ -955,6 +1174,10 @@ function updateReportsList()
       reportsAmount = Object.keys(json.reports).length % 10;
       if(reportsAmount > 0) pages += 1;
     }
+
+    var pageIndex = pages;
+
+    if(pageSelector > pages) pageSelector = pages;
 
     var putUploadedReportsInAnArrayLoop = () =>
     {
@@ -983,7 +1206,7 @@ function updateReportsList()
       {        
         if(currentReportsArray.includes(json.reports[a]['report_uuid']))
         {
-          document.getElementById(json.reports[a]['report_uuid']).setAttribute('tag', parseInt((Object.keys(json.reports).length - 1 - a) / 10) + 1);
+          document.getElementById(json.reports[a]['report_uuid']).setAttribute('tag', pageIndex);
           document.getElementById(json.reports[a]['report_uuid']).children[0].innerHTML = `<div class='fa fa-envelope-o envelope' notifications='${json.reports[a]['unread_comments'] > 99 ? 99 : json.reports[a]['unread_comments']}'></div>`;
           document.getElementById(json.reports[a]['report_uuid']).children[1].innerText = json.types[json.reports[a]['report_type']];
           document.getElementById(json.reports[a]['report_uuid']).children[2].innerText = json.reports[a]['report_date'];
@@ -991,7 +1214,11 @@ function updateReportsList()
           document.getElementById(json.reports[a]['report_uuid']).children[4].innerText = json.status[json.reports[a]['report_status']]['name'];
           document.getElementById(json.reports[a]['report_uuid']).children[4].style.color = json.status[json.reports[a]['report_status']]['color'];
 
-          if(parseInt((Object.keys(json.reports).length - 1 - a) / 10) + 1 > 1) document.getElementById(json.reports[a]['report_uuid']).style.display = 'none';
+          pageIndex != pageSelector ? 
+          document.getElementById(json.reports[a]['report_uuid']).style.display = 'none' :
+          document.getElementById(json.reports[a]['report_uuid']).removeAttribute('style');
+
+          if((uploadedReportsArray.length - (a + 1)) % 10 == 0) pageIndex -= 1;
         }
 
         else
@@ -1001,7 +1228,7 @@ function updateReportsList()
           row.setAttribute('id', json.reports[a]['report_uuid']);
           row.setAttribute('name', 'report');
           row.setAttribute('class', `report ${json.reports[a]['report_type']} ${json.reports[a]['report_status']}`);
-          row.setAttribute('tag', parseInt((Object.keys(json.reports).length - 1 - a) / 10) + 1);
+          row.setAttribute('tag', pageIndex);
 
           var messages = document.createElement('td');
           messages.innerHTML = `<div class='fa fa-envelope-o envelope' notifications='${json.reports[a]['unread_comments'] > 99 ? 99 : json.reports[a]['unread_comments']}'></div>`;
@@ -1026,9 +1253,11 @@ function updateReportsList()
           row.appendChild(subject);
           row.appendChild(status);
 
-          if(parseInt((Object.keys(json.reports).length - 1 - a) / 10) + 1 > 1) row.style.display = 'none';
+          if(pageIndex != pageSelector) row.style.display = 'none';
 
-          document.getElementById('reports-table').children[0].insertBefore(row, document.getElementById('reports-table').children[0].children[1]);
+          document.getElementById('reports-table').insertBefore(row, document.getElementById('reports-table').children[1]);
+
+          if((uploadedReportsArray.length - (a + 1)) % 10 == 0) pageIndex -= 1;
         }
 
         a += 1;
@@ -1051,8 +1280,9 @@ function updateReportsList()
           var page = document.createElement('div');
           page.innerText = `${b + 1}`;
 
-          b == 0 ?
-          page.setAttribute('class', 'page-selected') : page.setAttribute('class', 'page');
+          if(pageSelector > pages && (b + 1) == pages) page.setAttribute('class', 'page-selected');
+          else if((b + 1) == pageSelector) page.setAttribute('class', 'page-selected');
+          else{ page.setAttribute('class', 'page'); }
           
           page.addEventListener('click', changeReportPage);
 
@@ -1118,6 +1348,189 @@ function changeReportPage(event)
 
     if(reportsToDisplay[y] != undefined) displayLoop();
   }
+}
+
+/****************************************************************************************************/
+
+function applyFilterOnReports(filterValue, displayBugs, displayUpgrades)
+{
+  var x = 0, y = 0, z = 0, a = 0, b = 0;
+  var reportsToDisplay = [];
+  var reports = document.getElementsByName('report');
+
+  var sortLoop = () =>
+  {
+    if(reports[x].className.indexOf(filterValue) > -1)
+    {
+      if(displayBugs == true && reports[x].className.indexOf('bug') > -1)
+      {
+        reportsToDisplay.push(reports[x]);
+      }
+
+      else if(displayUpgrades == true && reports[x].className.indexOf('upgrade') > -1)
+      {
+        reportsToDisplay.push(reports[x]);
+      }
+    }
+
+    if(reports[x += 1] != undefined) sortLoop();
+  }
+
+  if(reports[x] != undefined) sortLoop();
+
+  var pages = 0;
+  var reportsAmount = reportsToDisplay.length;
+
+  pages += parseInt(reportsToDisplay.length / 10);
+  reportsAmount = reportsAmount % 10;
+
+  if(reportsAmount > 0) pages += 1;
+
+  var removePageTagForAllReports = () =>
+  {
+    reports[y].removeAttribute('tag');
+
+    if(reports[y += 1] != undefined) removePageTagForAllReports();
+  }
+
+  if(reports[y] != undefined) removePageTagForAllReports();
+
+  var assignPageTagLoop = () =>
+  {
+    reportsToDisplay[z].setAttribute('tag', String(parseInt(z / 10) + 1));
+
+    if(reportsToDisplay[z += 1] != undefined) assignPageTagLoop();
+  }
+
+  if(reportsToDisplay[z] != undefined) assignPageTagLoop();
+
+  var pageSelectorsRemovalLoop = () =>
+  {
+    document.getElementById('pages-container').children[0].remove();
+
+    if(document.getElementById('pages-container').children[0] != undefined) pageSelectorsRemovalLoop();
+  }
+
+  if(document.getElementById('pages-container').children[0] != undefined) pageSelectorsRemovalLoop();
+
+  var pageSelectorsCreationLoop = () =>
+  {
+    var page = document.createElement('div');
+
+    page.innerText = `${a + 1}`;
+
+    a == 0 ?
+    page.setAttribute('class', 'page-selected') : page.setAttribute('class', 'page');
+          
+    page.addEventListener('click', changeReportPage);
+
+    page.setAttribute('tag', `${a + 1}`);
+
+    document.getElementById('pages-container').appendChild(page);
+
+    if((a += 1) < pages) pageSelectorsCreationLoop();
+  }
+
+  if(pages > 0) pageSelectorsCreationLoop();
+
+  var hideReportsOverFirstPageLoop = () =>
+  {
+    reports[b].hasAttribute('tag') && reports[b].getAttribute('tag') == '1' ? reports[b].removeAttribute('style') : reports[b].style.display = 'none';
+
+    if(reports[b += 1] != undefined) hideReportsOverFirstPageLoop();
+  }
+
+  if(reports[b] != undefined) hideReportsOverFirstPageLoop();
+}
+
+/****************************************************************************************************/
+
+function displayReportsInAllStatus(displayBugs, displayUpgrades)
+{
+  var x = 0, y = 0, z = 0, a = 0, b = 0;
+  var reportsToDisplay = [];
+  var reports = document.getElementsByName('report');
+
+  var sortLoop = () =>
+  {
+    if(displayBugs == true && reports[x].className.indexOf('bug') > -1)
+    {
+      reportsToDisplay.push(reports[x]);
+    }
+
+    else if(displayUpgrades == true && reports[x].className.indexOf('upgrade') > -1)
+    {
+      reportsToDisplay.push(reports[x]);
+    }
+
+    if(reports[x += 1] != undefined) sortLoop();
+  }
+
+  if(reports[x] != undefined) sortLoop();
+
+  var pages = 0;
+  var reportsAmount = reportsToDisplay.length;
+
+  pages += parseInt(reportsToDisplay.length / 10);
+  reportsAmount = reportsAmount % 10;
+
+  if(reportsAmount > 0) pages += 1;
+
+  var removePageTagForAllReports = () =>
+  {
+    reports[y].removeAttribute('tag');
+
+    if(reports[y += 1] != undefined) removePageTagForAllReports();
+  }
+
+  if(reports[y] != undefined) removePageTagForAllReports();
+
+  var assignPageTagLoop = () =>
+  {
+    reportsToDisplay[z].setAttribute('tag', String(parseInt(z / 10) + 1));
+
+    if(reportsToDisplay[z += 1] != undefined) assignPageTagLoop();
+  }
+
+  if(reportsToDisplay[z] != undefined) assignPageTagLoop();
+
+  var pageSelectorsRemovalLoop = () =>
+  {
+    document.getElementById('pages-container').children[0].remove();
+
+    if(document.getElementById('pages-container').children[0] != undefined) pageSelectorsRemovalLoop();
+  }
+
+  if(document.getElementById('pages-container').children[0] != undefined) pageSelectorsRemovalLoop();
+
+  var pageSelectorsCreationLoop = () =>
+  {
+    var page = document.createElement('div');
+
+    page.innerText = `${a + 1}`;
+
+    a == 0 ?
+    page.setAttribute('class', 'page-selected') : page.setAttribute('class', 'page');
+          
+    page.addEventListener('click', changeReportPage);
+
+    page.setAttribute('tag', `${a + 1}`);
+
+    document.getElementById('pages-container').appendChild(page);
+
+    if((a += 1) < pages) pageSelectorsCreationLoop();
+  }
+
+  if(pages > 0) pageSelectorsCreationLoop();
+
+  var hideReportsOverFirstPageLoop = () =>
+  {
+    reports[b].hasAttribute('tag') && reports[b].getAttribute('tag') == '1' ? reports[b].removeAttribute('style') : reports[b].style.display = 'none';
+
+    if(reports[b += 1] != undefined) hideReportsOverFirstPageLoop();
+  }
+
+  if(reports[b] != undefined) hideReportsOverFirstPageLoop();
 }
 
 /****************************************************************************************************/

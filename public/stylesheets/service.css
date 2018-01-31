@@ -1,270 +1,166 @@
 /****************************************************************************************************/
 
-.service-main-block .title
-{
-  margin:2.5% 0 2.5% 0;
-  font-size:x-large;
-  font-family:barlow;
-}
+.service-main-block .info{ background-color:#FFFFFF; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
 
-.service-main-block .upload-button
-{
-  border:none;
-  cursor:pointer;
-  color:#FFFFFF;
-  border-radius:4px;
-  margin-bottom:2.5%;
-  padding:1% 2% 1% 2%;
-  background-color:#77B5FE;
-  font-family:raleway-regular;
-}
+.service-main-block .info .title{ overflow:hidden; text-overflow:ellipsis; line-height:32px; font-size:24px; font-family:barlow; padding:10px 20px 10px 20px; border:1px solid #FFFFFF; border-bottom:1px solid #F0F0F0; }
 
-.service-main-block .upload-button:hover
-{
-  color:#334455;
-  background-color:#5593DC;
-}
+.service-main-block .info .counter{ overflow:hidden; text-overflow:ellipsis; line-height:32px; font-size:16px; font-family:raleway-italic; padding:10px 20px 10px 20px; }
+
+.service-main-block .upload{ background-color:#FFFFFF; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
+
+.service-main-block .upload .true{ color:#1FA055; font-family:barlow; font-size:18px; line-height:32px; border:1px solid #FFFFFF; border-bottom:1px solid #F0F0F0; padding:10px 20px 10px 20px; }
+
+.service-main-block .upload .false{ color:#E84E4F; font-family:barlow; font-size:18px; line-height:32px; border:1px solid #FFFFFF; border-bottom:1px solid #F0F0F0; padding:10px 20px 10px 20px; }
+
+.service-main-block .upload .on{ border:none; cursor:pointer; color:#FFFFFF; background-color:#77B5FE; border-radius:4px; font-size:16px; font-family:raleway-regular; line-height:24px; padding:4px 16px 4px 16px; margin:10px 0 10px 20px; }
+
+.service-main-block .upload .off{ border:none; color:#FFFFFF; background-color:#D6DBDF; border-radius:4px; font-size:16px; font-family:raleway-regular; line-height:24px; padding:4px 16px 4px 16px; margin:10px 0 10px 20px; }
+
+.service-main-block .upload .on:hover{ color:#334455; background-color:#5593DC; }
 
 /****************************************************************************************************/
 
 @media (max-width: 639px)
 {
+  .service-main-block .info{ width:100%; margin:0 0 20px 0; }
+  .service-main-block .upload{ width:100%; margin:0 0 20px 0; }
   .service-main-block .service-main-block-table .hide-1x{ display:none; }
 }
 
 @media (min-width: 640px) and (max-width: 767px)
 {
+  .service-main-block .info{ width:100%; margin:0 0 20px 0; }
+  .service-main-block .upload{ width:100%; margin:0 0 20px 0; }
   .service-main-block .service-main-block-table .hide-2x{ display:none; }
 }
 
 @media (min-width: 768px) and (max-width: 959px)
 {
+  .service-main-block .info{ width:100%; margin:0 0 20px 0; display:inline-block; }
+  .service-main-block .upload{ width:100%; margin:0 0 20px 0; }
   .service-main-block .service-main-block-table .hide-3x{ display:none; }
 }
 
 @media (min-width: 960px) and (max-width: 1279px)
 {
+  .service-main-block .info{ width:30%; margin:0 0 20px 0; display:inline-block; }
+  .service-main-block .upload{ width:calc(70% - 20px); margin:0 0 20px 20px; display:inline-block; vertical-align:top; }
   .service-main-block .service-main-block-table .hide-4x{ display:none; }
 }
 
 @media (min-width: 1280px) and (max-width: 1679px)
 {
-
+  .service-main-block .info{ width:30%; margin:0 0 20px 0; display:inline-block; }
+  .service-main-block .upload{ width:calc(70% - 20px); margin:0 0 20px 20px; display:inline-block; vertical-align:top; }
 }
 
 @media (min-width: 1680px)
 {
-
+  .service-main-block .info{ width:30%; margin:0 0 20px 0; display:inline-block; }
+  .service-main-block .upload{ width:calc(70% - 20px); margin:0 0 20px 20px; display:inline-block; vertical-align:top; }
 }
 
 /****************************************************************************************************/
 
-.service-main-block-title
-{
-  width:65%;
-  font-size:xx-large;
-  font-family:barlow;
-  display:inline-block;
-}
+.service-main-block .table-container{ width:100%; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
+.service-main-block .table-container .table{ width:100%; border-collapse:collapse; table-layout:fixed; }
+.service-main-block .table-container .table .legend{ line-height:32px; font-size:16px; color:#FFFFFF; text-align:left; background-color:#77B5FE; font-family:raleway-light; }
+.service-main-block .table-container .table .legend th{ padding:4px 8px 4px 8px; overflow:hidden; text-overflow:ellipsis; }
 
-.service-main-block .info{ font-family:barlow; margin:2.5% 0 2.5% 0; }
+.service-main-block .table-container .table .file{ font-family:barlow; background-color:#FFFFFF; cursor:pointer; border-bottom:1px solid #F0F0F0; line-height:32px; font-size:16px; }
+.service-main-block .table-container .table .file:hover{ font-weight:bold; background-color:#CCDDFF; }
 
-.service-main-block-table
-{
-  width:100%;
-  border-collapse:collapse;
-  box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-}
+.service-main-block .table-container .table .file td{ padding:4px 8px 4px 8px; overflow:hidden; text-overflow:ellipsis; }
 
-.service-main-block-table-legend
-{
-  color:white;
-  text-align:left;
-  background-color:#77B5FE;
-  font-family:raleway-light-italic;
-}
+.service-main-block .table-container .table .file .buttons{ text-align:right; }
 
-.service-main-block-file-odd
-{
-  cursor:pointer;
-  background-color:#FFFFFF;
-}
+.service-main-block-file-deleted{ color:#FF0000; text-align:right; padding:0 16px 0 0; }
 
-.service-main-block-file-even
-{
-  cursor:pointer;
-  background-color:#EEEEEE;
-}
+.service-main-block-file-buttons-download{ cursor:pointer; color:#667788; line-height:32px; font-size:24px; padding:0 16px 0 0; }
 
-.service-main-block-file-deleted
-{
-  color:#FF0000;
-  text-align:right;
-  font-family:barlow;
-  margin:1% 15% 1% 1%;
-}
+.service-main-block-file-buttons-download:hover{ color:#334455; }
 
-.service-main-block-table td{ overflow:hidden; text-overflow:ellipsis; }
+.service-main-block-file-buttons-delete{ cursor:pointer; color:#E84E4F; line-height:32px; font-size:24px; padding:0 16px 0 0; }
 
-.service-main-block-file-odd:hover, .service-main-block-file-even:hover{ font-weight:bold; background-color:#CCDDFF; }
-
-th.service-main-block-file-name
-{
-  width:40%;
-  padding:1%;
-}
-
-th.service-main-block-file-type
-{
-  width:10%;
-  padding:1%;
-}
-
-th.service-main-block-file-account
-{
-  width:25%;
-  padding:1%;
-}
-
-th.service-main-block-file-buttons
-{
-  width:15%;
-  padding:1%;
-}
-
-td.service-main-block-file-name
-{
-  padding:1%;
-  font-family:raleway-light;
-}
-
-td.service-main-block-file-type
-{
-  padding:1%;
-  font-family:raleway-light;
-}
-
-td.service-main-block-file-account
-{
-  padding:1%;
-  font-family:raleway-light;
-}
-
-td.service-main-block-file-buttons
-{
-  padding:1%;
-  text-align:right;
-  font-family:raleway-light;
-}
-
-.service-main-block-file-buttons-download
-{
-  cursor:pointer;
-  color:#667788;
-  font-size:x-large;
-  margin:1% 15% 1% 0;
-}
-
-.service-main-block-file-buttons-download:hover
-{
-  color:#334455;
-}
-
-.service-main-block-file-buttons-delete
-{
-  cursor:pointer;
-  color:#E84E4F;
-  font-size:x-large;
-  margin:1% 15% 1% 0;
-}
-
-.service-main-block-file-buttons-delete:hover
-{
-  color:#A40A0B;
-}
-
-.services-main-block{ width:95%; margin:2.5%; }
-
-.services-main-block-element, .admin-main-block-element{ cursor:pointer; text-decoration:none; font-family:raleway-regular; padding:2% 5% 2% 5%; font-size:large; color:#FFFFFF; background-color:#77B5FE; border-radius:8px; text-align:center; }
-
-.services-main-block-element:hover, .admin-main-block-element:hover{ color:#223344; background-color:#5593DC; }
+.service-main-block-file-buttons-delete:hover{ color:#A40A0B; }
 
 /****************************************************************************************************/
 
 @media all and (max-width: 639px)
 {
-  .service-main-block{ width:95%; margin:40px 2.5% 40px 2.5%; }
+  .service-main-block{ margin:20px 10px 20px 10px; }
 
-  .services-main-block-element, .admin-main-block-element
-  {
-    margin:2.5%;
-    display:inline-block;
-  }
+  .service-main-block .table-container .table .legend .name{ width:60%; }
+  .service-main-block .table-container .table .legend .type{ width:40%; }
+  .service-main-block .table-container .table .legend .account{ display:none; }
+  .service-main-block .table-container .table .legend .buttons{ display:none; }
+
+  .service-main-block .table-container .table .file .account{ display:none; }
+  .service-main-block .table-container .table .file .buttons{ display:none; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 640px) and (max-width: 767px)
 {
-  .service-main-block{ width:95%; margin:40px 2.5% 40px 2.5%; }
+  .service-main-block{ margin:20px 10px 20px 10px; }
 
-  .services-main-block-element, .admin-main-block-element
-  {
-    margin:2.5%;
-    display:inline-block;
-  }
+  .service-main-block .table-container .table .legend .name{ width:50%; }
+  .service-main-block .table-container .table .legend .type{ width:25%; }
+  .service-main-block .table-container .table .legend .account{ display:none; }
+  .service-main-block .table-container .table .legend .buttons{ width:25%; }
+
+  .service-main-block .table-container .table .file .account{ display:none; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .service-main-block{ width:70%; margin:40px 2.5% 40px 2.5%; display:inline-block; vertical-align:top; }
-  
-  .services-main-block-element, .admin-main-block-element
-  {
-    margin:2.5%;
-    display:inline-block;
-  }
+  .service-main-block{ width:calc(80% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .service-main-block .table-container .table .legend .name{ width:50%; }
+  .service-main-block .table-container .table .legend .type{ width:25%; }
+  .service-main-block .table-container .table .legend .account{ display:none; }
+  .service-main-block .table-container .table .legend .buttons{ width:25%; }
+
+  .service-main-block .table-container .table .file .account{ display:none; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 960px) and (max-width: 1279px)
 {
-  .service-main-block{ width:70%; margin:40px 2.5% 40px 2.5%; display:inline-block; vertical-align:top; }
-  
-  .services-main-block-element, .admin-main-block-element
-  {
-    margin:2.5%;
-    display:inline-block;
-  }
+  .service-main-block{ width:calc(80% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .service-main-block .table-container .table .legend .name{ width:45%; }
+  .service-main-block .table-container .table .legend .type{ width:25%; }
+  .service-main-block .table-container .table .legend .account{ width:35%; }
+  .service-main-block .table-container .table .legend .buttons{ width:20%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 1280px) and (max-width: 1679px)
 {
-  .service-main-block{ width:70%; margin:40px 2.5% 40px 2.5%; display:inline-block; vertical-align:top; }
-  
-  .services-main-block-element, .admin-main-block-element
-  {
-    margin:2.5%;
-    display:inline-block;
-  }
+  .service-main-block{ width:calc(80% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .service-main-block .table-container .table .legend .name{ width:45%; }
+  .service-main-block .table-container .table .legend .type{ width:25%; }
+  .service-main-block .table-container .table .legend .account{ width:35%; }
+  .service-main-block .table-container .table .legend .buttons{ width:20%; }
 }
 
 /****************************************************************************************************/
 
 @media all and (min-width: 1680px)
 {
-  .service-main-block{ width:50%; margin:40px 2.5% 40px 2.5%; display:inline-block; vertical-align:top; }
-  
-  .services-main-block-element, .admin-main-block-element
-  {
-    margin:2.5%;
-    display:inline-block;
-  }
+  .service-main-block{ width:calc(60% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .service-main-block .table-container .table .legend .name{ width:45%; }
+  .service-main-block .table-container .table .legend .type{ width:25%; }
+  .service-main-block .table-container .table .legend .account{ width:35%; }
+  .service-main-block .table-container .table .legend .buttons{ width:20%; }
 }
 
 /****************************************************************************************************/

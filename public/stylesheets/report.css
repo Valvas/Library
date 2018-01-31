@@ -18,13 +18,13 @@ TABLE
 
 .reports-main-block .reports-table{ width:100%; table-layout:fixed; border-collapse:collapse; }
 
-.reports-main-block .reports-table .reports-table-legend-row{ min-width:100%; color:#FFFFFF; font-size:16px; text-align:left; background-color:#77B5FE; font-family:raleway-italic; }
+.reports-main-block .reports-table .reports-table-legend-row{ color:#FFFFFF; font-size:16px; text-align:left; background-color:#77B5FE; font-family:raleway-italic; }
 
 .reports-main-block .reports-table .reports-table-legend-row.admin{ background-color:#E84E4F; }
 
 .reports-main-block .reports-table td{ font-size:16px; font-family:barlow; word-wrap:break-word; overflow-wrap:break-word; }
 
-.reports-main-block .reports-table tr.report{ min-width:100%; cursor:pointer; border-bottom:1px solid #F0F0F0; }
+.reports-main-block .reports-table tr.report{ cursor:pointer; border-bottom:1px solid #F0F0F0; }
 
 .reports-main-block .reports-table tr.report:hover{ font-weight:bold; background-color:#CCDDFF; }
 
