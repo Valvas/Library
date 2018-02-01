@@ -39,3 +39,22 @@ module.exports.getRandomPassword = (callback) =>
 }
 
 /****************************************************************************************************/
+
+module.exports.getInitPassword = (callback) =>
+{
+  var password = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  var x = 0;
+
+  var loop = () =>
+  {
+    password += characters.charAt(Math.floor(Math.random() * characters.length));
+
+    (x += 1) < 32 ? loop() : callback(password);
+  }
+
+  loop();
+}
+
+/****************************************************************************************************/

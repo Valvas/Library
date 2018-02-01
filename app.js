@@ -2,7 +2,6 @@
 
 global.__root = __dirname;
 
-var opn               = require('opn');
 var path              = require('path');
 var mysql             = require('mysql');
 var logger            = require('morgan');
@@ -16,6 +15,8 @@ var session           = require('express-session');
 var auth              = require('./auth');
 var adminAuth         = require('./admin_auth');
 var config            = require('./json/config');
+var init              = require('./functions/init/start');
+var encryption        = require('./functions/encryption');
 var accounts          = require('./functions/accounts/init');
 var database          = require('./functions/database/init');
 
@@ -33,6 +34,8 @@ var adminReports      = require('./routes/admin/reports');
 var adminService      = require('./routes/admin/service');
 
 var app = express();
+
+app.set('port', config.port);
     
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -45,18 +48,31 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session(
+{
+  secret: 'sdgdsfgd7ugdq87dfsd8glqgOkoh56hhqshoOHU9870jfoqo7y',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {  }
+}));
+
 if(config.configured == false)
 {
   module.exports = (callback) =>
   {
-    var configurationRoute = require('./routes/config');
-  
-    app.use('/config', configurationRoute);
-    app.use((req, res, next) => { res.redirect('/config'); });
-    
-    callback(app);
+    init.startInit(app, (errorObject) =>
+    {
+      if(errorObject != null)
+      {
+        console.log(errorObject.message);
+        process.exit(1);
+      }
 
-    opn('http://localhost:3000/');
+      else
+      {
+        callback(app);
+      }
+    });
   }
 }
 
@@ -79,14 +95,6 @@ else
       rejectUnauthorized: false
     }
   });
-
-  app.use(session(
-  {
-    secret: 'sdgdsfgd7ugdq87dfsd8glqgOkoh56hhqshoOHU9870jfoqo7y',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {  }
-  }));
 
   app.use('/', root);
   app.use('/home', home);

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <title>Library - Configuration</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/init.css" />
+  <body>
+    <div class='logs' id='logs'>Le formulaire comporte des erreurs</div>
+    <div class='welcome'>
+      <div class='head'>BIENVENUE !</div>
+      <div class='message'>C'est la première fois que le serveur est lancé, vous voici donc sur la page de configuration de l'application. Veuillez suivre les étapes ci-dessous avant de pouvoir commencer.</div>
+      <div class='block'>
+        <div class='title'>Base De Données</div>
+        <div class='description'>Veuillez entrer ici les informations concernant la base de données à utiliser.</div>
+        <div class='field'>
+          <div class='label'>Adresse :</div>
+          <div class='error' id='database-address-error'></div>
+          <input type='text' class='value' placeholder='Adresse' id='database-address' />
+          <div class='info'>Entrez ici une adresse IP ou un nom DNS correspondant à l'adresse de votre serveur de bases de données (exemple: 192.168.1.10).</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Port de la base de données :</div>
+          <div class='error' id='database-port-error'></div>
+          <input type='text' class='value' placeholder='Port de la base de données' id='database-port' />
+          <div class='info'>Entrez ici le port sur lequel effectuer la connexion à la base de données.</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Utilisateur :</div>
+          <div class='error' id='database-user-error'></div>
+          <input type='text' class='value' placeholder='Utilisateur' id='database-user' />
+          <div class='info'>Entrez ici un nom d'utilisateur de la base de données.</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Mot de passe :</div>
+          <div class='error' id='database-password-error'></div>
+          <input type='password' class='value' placeholder='Mot de passe' id='database-password' />
+          <div class='info'>Entrez ici le mot de passe correspondant au compte entré juste au-dessus.</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Nom de la base de données :</div>
+          <div class='error' id='database-name-error'></div>
+          <input type='text' class='value' placeholder='Nom de la base de données' id='database-name' />
+          <div class='info'>Entrez ici le nom de la base de données à utiliser (elle sera créée si elle n'existe pas).</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Gestionnaire de base de données :</div>
+          <div class='error' id='database-manager-error'></div>
+          <select class='value' id='database-manager'>
+            <option value='MySQL'>MySQL</option>
+          </select>
+          <div class='info'>Les technologies gérées par l'application sont listées ci-dessus, choissisez celle de votre serveur de bases de données.</div>
+        </div>
+      </div>
+      <div class='block'>
+        <div class='title'>Stockage</div>
+        <div class='description'>Veuillez entrer ici les informations concernant le stockage des fichiers.</div>
+        <div class='field'>
+          <div class='label'>Dossier racine :</div>
+          <div class='error' id='storage-root-error'></div>
+          <input type='text' class='value' placeholder='Dossier racine' id='storage-root' />
+          <div class='info'>Le chemin d'accès au dossier racine du stockage.</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Taille maximale des fichiers :</div>
+          <div class='error' id='storage-size-error'></div>
+          <input type='text' class='value' placeholder='Taille maximale' id='storage-size' />
+          <div class='info'>La taille est exprimée en Ko.</div>
+        </div>
+      </div>
+      <div class='block'>
+        <div class='title'>Transporteur E-mail :</div>
+        <div class='description'>Veuillez entrer ici les informations concernant le compte de messagerie chargé d'envoyer les e-mails système.</div>
+        <div class='field'>
+          <div class='label'>Serveur de messagerie :</div>
+          <div class='error' id='transporter-address-error'></div>
+          <input type='text' class='value' placeholder='Serveur de messagerie' id='transporter-address' />
+          <div class='info'>Entrez le nom DNS ou l'adresse IP du serveur de messagerie propriétaire du compte transporteur.</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Port :</div>
+          <div class='error' id='transporter-port-error'></div>
+          <input type='text' class='value' placeholder='Port' id='transporter-port' />
+          <div class='info'>Entrez le port utilisé par le serveur pour les messages sortants.</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Adresse de messagerie :</div>
+          <div class='error' id='transporter-user-error'></div>
+          <input type='text' class='value' placeholder='Adresse' id='transporter-user' />
+          <div class='info'>Entrez l'adresse de messagerie du compte.</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Mot de passe :</div>
+          <div class='error' id='transporter-password-error'></div>
+          <input type='password' class='value' placeholder='Mot de passe' id='transporter-password' />
+          <div class='info'>Entrez le mot de passe associé à l'adresse de messagerie.</div>
+        </div>
+      </div>
+      <div class='block'>
+        <div class='title'>Divers</div>
+        <div class='description'>Retrouvez ici des configurations diverses.</div>
+        <div class='field'>
+          <div class='label'>Déconnexion automatique :</div>
+          <div class='error' id='other-timeout-error'></div>
+          <input type='text' class='value' placeholder='Minutes' id='other-timeout' />
+          <div class='info'>Entrez une valeur en minutes. En cas d'inactivité les utilisateurs seront automatiquement déconnectés.</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Sel de cryptage :</div>
+          <div class='error' id='other-salt-error'></div>
+          <select class='value' id='other-salt'>
+            <option value='false'>Conserver le sel précédent</option>
+            <option value='true'>Générer un nouveau sel</option>
+          </select>
+          <div class='info'>Le sel de cryptage est utilisé pour le cryptage de certaines données telles que les mots de passe. Attention : en cas de génération d'un nouveau sel, les données cryptées avec le précédent ne seraient plus utilisables (si aucun précédent sel n'existe un nouveau sera généré par défaut).</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Port de l'application :</div>
+          <div class='error' id='other-port-error'></div>
+          <input type='text' class='value' placeholder='Port' id='other-port' />
+          <div class='info'>Entrez le port sur lequel l'application doit fonctionner. Le port par défaut est 3000, laissez vide pour conserver ce port par défaut.</div>
+        </div>
+      </div>
+      <button id='submit' class='send'>Envoyer</button>
+    </div>
+    <script src='/js/jQuery.js'></script>
+    <script src='/js/init/send.js'></script>
+    <script src='/js/init/check.js'></script>
+    <script src='/js/init/onload.js'></script>
+  </body>
+</html>

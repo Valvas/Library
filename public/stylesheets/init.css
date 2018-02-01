@@ -1,0 +1,83 @@
+/****************************************************************************************************/
+
+@import url('fonts.css');
+
+body{ background-color:#FAFAFA; }
+
+.logs{ z-index:99; position:fixed; padding:10px; color:#FFFFFF; text-align:center; border-radius:4px; font-family:barlow; border:1px solid #E84E4F; background-color:#9C2B2E; }
+
+.welcome{ box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); background-color:#FFFFFF; padding:0 0 10px 0; }
+
+.welcome .head{ line-height:32px; font-size:24px; padding:20px; background-color:#77B5FE; color:#FFFFFF; font-family:raleway-regular; }
+
+.welcome .fail{ font-family:barlow; line-height:24px; font-size:16px; padding:0 20px 0 20px; color:#FF0F0F; }
+
+.welcome .message{ text-align:justify; line-height:24px; font-size:16px; padding:20px; font-family:raleway-light; }
+
+.welcome .input{ width:calc(100% - 60px); margin:10px 20px 10px 20px; padding:4px 8px 4px 8px; }
+
+.welcome .block{ background-color:#FFFFFF; width:calc(100% - 40px); margin:20px; padding:0 0 20px 0; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
+
+.welcome .block .title{ background-color:#667788; padding:15px; line-height:32px; font-size:20px; font-family:raleway-regular; color:#FFFFFF; }
+
+.welcome .block .description{ line-height:24px; font-size:16px; padding:10px 20px 0 20px; font-family:raleway-light; }
+
+.welcome .block .field{ width:calc(100% - 40px); margin:20px 20px 0 20px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
+
+.welcome .block .field .label{ font-family:barlow; line-height:24px; font-size:16px; padding:10px; border-bottom:1px solid #F0F0F0; margin:0 0 10px 0; }
+
+.welcome .block .field .error{ font-family:barlow; line-height:24px; font-size:16px; padding:0 10px 0 10px; color:#FF0F0F; }
+
+.welcome .block .field .value{ width:calc(100% - 40px); margin:10px 10px 10px 10px; padding:4px 8px 4px 8px; }
+
+.welcome .block .field .info{ text-align:justify; padding:0 10px 10px 10px; font-family:raleway-italic; font-size:14px; line-height:20px; }
+
+.welcome .send{ border:none; background-color:#77B5FE; font-family:barlow; color:#FFFFFF; cursor:pointer; padding:8px; border-radius:4px; width:40%; margin:10px 20px 10px calc(60% - 20px); }
+
+.welcome .send:hover{ color:#000000; background-color:#5593DC; }
+
+/****************************************************************************************************/
+
+@media (max-width: 639px)
+{
+  .welcome{ width:calc(100% - 40px); margin:20px; }
+
+  .logs{ width:calc(100% - 42px); }
+}
+
+@media (min-width: 640px) and (max-width: 767px)
+{
+  .welcome{ width:calc(100% - 40px); margin:20px; }
+
+  .logs{ width:calc(100% - 42px); }
+}
+
+@media (min-width: 768px) and (max-width: 959px)
+{
+  .welcome{ width:calc(80% - 40px); margin:20px 10% 20px 10%; }
+
+  .logs{ width:calc(80% - 42px); }
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+  .welcome{ width:calc(60% - 40px); margin:20px 20% 20px 20%; }
+
+  .logs{ width:calc(60% - 42px); }
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+  .welcome{ width:calc(50% - 40px); margin:20px 25% 20px 25%; }
+
+  .logs{ width:calc(40% - 42px); }
+}
+
+@media (min-width: 1680px)
+{
+  .welcome{ width:calc(40% - 40px); margin:20px 30% 20px 30%; }
+
+  .logs{ width:calc(30% - 42px); }
+}
+
+/****************************************************************************************************/
