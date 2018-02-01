@@ -2,6 +2,7 @@
 
 global.__root = __dirname;
 
+var opn               = require('opn');
 var path              = require('path');
 var mysql             = require('mysql');
 var logger            = require('morgan');
@@ -31,33 +32,7 @@ var adminParams       = require('./routes/admin/params');
 var adminReports      = require('./routes/admin/reports');
 var adminService      = require('./routes/admin/service');
 
-var connection = undefined;
-
-var transporter = nodemailer.createTransport(
-{
-  host: config.email.host,
-  port: config.email.port,
-  secure: config.email.secure,
-  auth: 
-  {
-    user: config.email.auth.user,
-    pass: config.email.auth.pass
-  },
-  tls: 
-  {
-    rejectUnauthorized: false
-  }
-});
-
 var app = express();
-
-app.use(session(
-{
-  secret: 'sdgdsfgd7ugdq87dfsd8glqgOkoh56hhqshoOHU9870jfoqo7y',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {  }
-}));
     
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -69,65 +44,109 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-    
-app.use('/', root);
-app.use('/home', home);
-app.use('/file', auth, file);
-app.use('/reports', auth, reports);
-app.use('/service', auth, service);
-app.use('/admin', auth, adminAuth, adminRoot);
-app.use('/admin/users', auth, adminAuth, adminUser);
-app.use('/admin/rights', auth, adminAuth, adminRights);
-app.use('/admin/params', auth, adminAuth, adminParams);
-app.use('/admin/reports', auth, adminAuth, adminReports);
-app.use('/admin/services', auth, adminAuth, adminService);
-    
-app.use((req, res, next) =>
+
+if(config.configured == false)
 {
-  res.render('block', { message: `404 - La page recherchée n'existe pas` });
-});
-
-module.exports = (callback) =>
-{    
-  var databaseCounterRetries = 0;
-    
-  var databaseConnectionLoop = () =>
+  module.exports = (callback) =>
   {
-    connection = mysql.createConnection(
-    {
-      host     : config['database']['host'],
-      user     : config['database']['user'],
-      password : config['database']['password']
-    });
-
-    connection.connect((err) =>
-    {
-      databaseCounterRetries += 1;
+    var configurationRoute = require('./routes/config');
+  
+    app.use('/config', configurationRoute);
+    app.use((req, res, next) => { res.redirect('/config'); });
     
-      if(databaseCounterRetries < 10 && err)
-      {
-        console.log(err.message);
-        setTimeout(() =>{ databaseConnectionLoop(); }, 1000);
-      }
-    
-      else if(databaseCounterRetries == 10) process.exit(1);
+    callback(app);
 
-      else
+    opn('http://localhost:3000/');
+  }
+}
+
+else
+{
+  var connection = undefined;
+
+  var transporter = nodemailer.createTransport(
+  {
+    host: config.email.host,
+    port: config.email.port,
+    secure: config.email.secure,
+    auth: 
+    {
+      user: config.email.auth.user,
+      pass: config.email.auth.pass
+    },
+    tls: 
+    {
+      rejectUnauthorized: false
+    }
+  });
+
+  app.use(session(
+  {
+    secret: 'sdgdsfgd7ugdq87dfsd8glqgOkoh56hhqshoOHU9870jfoqo7y',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {  }
+  }));
+
+  app.use('/', root);
+  app.use('/home', home);
+  app.use('/file', auth, file);
+  app.use('/reports', auth, reports);
+  app.use('/service', auth, service);
+  app.use('/admin', auth, adminAuth, adminRoot);
+  app.use('/admin/users', auth, adminAuth, adminUser);
+  app.use('/admin/rights', auth, adminAuth, adminRights);
+  app.use('/admin/params', auth, adminAuth, adminParams);
+  app.use('/admin/reports', auth, adminAuth, adminReports);
+  app.use('/admin/services', auth, adminAuth, adminService);
+      
+  app.use((req, res, next) =>
+  {
+    res.render('block', { message: `404 - La page recherchée n'existe pas` });
+  });
+
+  module.exports = (callback) =>
+  {    
+    var databaseCounterRetries = 0;
+      
+    var databaseConnectionLoop = () =>
+    {
+      connection = mysql.createConnection(
       {
-        database.createDatabases(connection, () =>
-        { 
-          accounts.createAccounts(connection, () =>
-          {
-            accounts.createRights(connection, () =>
+        host     : config['database']['host'],
+        user     : config['database']['user'],
+        password : config['database']['password']
+      });
+
+      connection.connect((err) =>
+      {
+        databaseCounterRetries += 1;
+      
+        if(databaseCounterRetries < 10 && err)
+        {
+          console.log(err.message);
+          setTimeout(() =>{ databaseConnectionLoop(); }, 1000);
+        }
+      
+        else if(databaseCounterRetries == 10) process.exit(1);
+
+        else
+        {
+          database.createDatabases(connection, () =>
+          { 
+            accounts.createAccounts(connection, () =>
             {
-              app.set('mysqlConnector', connection);
-              callback(app);
+              accounts.createRights(connection, () =>
+              {
+                app.set('mysqlConnector', connection);
+                callback(app);
+              });
             });
           });
-        });
-      }
-    });
+        }
+      });
+    }
+      
+    databaseConnectionLoop();
   }
-    
-  databaseConnectionLoop();
 }
