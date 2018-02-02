@@ -47,5 +47,7 @@
   "10046": "le statut du rapport n'a pas été mis à jour",
   "10047": "ce statut de suspension de compte n'existe pas",
   "10048": "vous n'êtes pas autorisé(e) à poster des commentaires",
-  "10049": "log non trouvé"
+  "10049": "log non trouvé",
+  "10050": "Le port renseigné pour l'application est hors des limites autorisées (0 à 65535)",
+  "10051": "La connexion à la base de données à échoué, veuillez vérifier les paramètres"
 }

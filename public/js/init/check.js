@@ -6,19 +6,19 @@ function checkDataForm()
   DATABASE
   *****************************************************************************************************/
 
-  if(document.getElementById('database-address').value.length == 0)
+  if(document.getElementById('database-host').value.length == 0)
   {
     checkFilledFields = false;
-    document.getElementById('database-address-error').innerText = 'Veuillez renseigner ce champ';
+    document.getElementById('database-host-error').innerText = 'Veuillez renseigner ce champ';
   }
 
-  else if(document.getElementById('database-address').value.match(/\s/) != null)
+  else if(document.getElementById('database-host').value.match(/\s/) != null)
   {
     checkFilledFields = false;
-    document.getElementById('database-address-error').innerText = 'Espaces non-autorisés';
+    document.getElementById('database-host-error').innerText = 'Espaces non-autorisés';
   }
 
-  else{ document.getElementById('database-address-error').innerText = ''; }
+  else{ document.getElementById('database-host-error').innerText = ''; }
 
   /****************************************************************************************************/
 
@@ -227,6 +227,16 @@ function checkDataForm()
   else{ document.getElementById('other-port-error').innerText = ''; }
 
   /****************************************************************************************************/
+
+  if(document.getElementById('other-environment').value.length == 0)
+  {
+    checkFilledFields = false;
+    document.getElementById('other-environment-error').innerText = 'Veuillez renseigner ce champ';
+  }
+
+  else{ document.getElementById('other-environment-error').innerText = ''; }
+
+  /****************************************************************************************************/
   /****************************************************************************************************/
 
   if(checkFilledFields == false)
@@ -248,7 +258,7 @@ function checkDataForm()
     dataObject.database.port        = document.getElementById('database-port').value;
     dataObject.database.user        = document.getElementById('database-user').value;
     dataObject.database.name        = document.getElementById('database-name').value;
-    dataObject.database.address     = document.getElementById('database-address').value;
+    dataObject.database.host        = document.getElementById('database-host').value;
     dataObject.database.manager     = document.getElementById('database-manager').value;
     dataObject.database.password    = document.getElementById('database-password').value;
 
@@ -263,15 +273,26 @@ function checkDataForm()
     dataObject.other.port           = document.getElementById('other-port').value;
     dataObject.other.salt           = document.getElementById('other-salt').value;
     dataObject.other.timeout        = document.getElementById('other-timeout').value;
+    dataObject.other.environment    = document.getElementById('other-environment').value;
 
     $.ajax(
     {
       type: 'POST', timeout: 2000, dataType: 'JSON', data: { dataObject: dataObject }, url: '/init/form', success: () => {},
-      error: (xhr, status, error) => { console.log(xhr.responseJSON.message); }
+      error: (xhr, status, error) =>
+      { 
+        document.getElementById('logs').innerText = xhr.responseJSON.message;
+        document.getElementById('logs').removeAttribute('style');
+
+        setTimeout(() => 
+        { 
+          document.getElementById('logs').style.display = 'none';
+          document.getElementById('logs').innerText = 'Le formulaire comporte des erreurs';
+        }, 3000);
+      }
                       
     }).done((json) => 
     {
-      location = '/';
+      location = '/init/test';
     });
   }
 

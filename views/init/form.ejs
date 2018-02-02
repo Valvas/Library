@@ -14,8 +14,8 @@
         <div class='description'>Veuillez entrer ici les informations concernant la base de données à utiliser.</div>
         <div class='field'>
           <div class='label'>Adresse :</div>
-          <div class='error' id='database-address-error'></div>
-          <input type='text' class='value' placeholder='Adresse' id='database-address' />
+          <div class='error' id='database-host-error'></div>
+          <input type='text' class='value' placeholder='Adresse' id='database-host' />
           <div class='info'>Entrez ici une adresse IP ou un nom DNS correspondant à l'adresse de votre serveur de bases de données (exemple: 192.168.1.10).</div>
         </div>
         <div class='field'>
@@ -119,11 +119,20 @@
           <input type='text' class='value' placeholder='Port' id='other-port' />
           <div class='info'>Entrez le port sur lequel l'application doit fonctionner. Le port par défaut est 3000, laissez vide pour conserver ce port par défaut.</div>
         </div>
+        <div class='field'>
+          <div class='label'>Environnement :</div>
+          <div class='error' id='other-environment-error'></div>
+          <select class='value' id='other-environment'>
+            <option value='dev'>Développement</option>
+            <option value='test'>Test</option>
+            <option value='prod'>Production</option>
+          </select>
+          <div class='info'>L'environnement permet de définir quels modules seront chargés en fonction de leur utilité.</div>
+        </div>
       </div>
       <button id='submit' class='send'>Envoyer</button>
     </div>
     <script src='/js/jQuery.js'></script>
-    <script src='/js/init/send.js'></script>
     <script src='/js/init/check.js'></script>
     <script src='/js/init/onload.js'></script>
   </body>

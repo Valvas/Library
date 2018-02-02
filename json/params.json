@@ -1,0 +1,25 @@
+{
+  "database":
+  {
+    "host": "localhost",
+    "port": "3306",
+    "user": "root",
+    "password": "test",
+    "dbms": "MySQL"
+  },
+
+  "init":
+  {
+    "minFileSize": 1024,
+    "maxFileSize": 104857600,
+
+    "minTimeout": 60000,
+    "maxTimeout": 86400000,
+
+    "defaultPort": 3000,
+
+    "defaultEnvironment": "dev"
+  },
+
+  "ready": false
+}

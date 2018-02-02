@@ -1,6 +1,4 @@
 {
-  "configured": false,
-
   "port": 3000,
   
   "database":

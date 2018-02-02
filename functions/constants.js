@@ -51,6 +51,8 @@ const REPORT_STATUS_NOT_UPDATED                                                 
 const INCORRECT_SUSPENSION_STATUS                                                 = 10047;
 const UNAUTHORIZED_TO_POST_COMMENTS                                               = 10048;
 const LOG_NOT_FOUND                                                               = 10049;
+const PORT_OUT_OF_RANGE                                                           = 10050;
+const UNABLE_TO_CONNECT_TO_DATABASE                                               = 10051;
 
 /******************************************************************************************
 SUCCESS
@@ -130,6 +132,8 @@ module.exports =
   INCORRECT_SUSPENSION_STATUS: INCORRECT_SUSPENSION_STATUS,
   UNAUTHORIZED_TO_POST_COMMENTS: UNAUTHORIZED_TO_POST_COMMENTS,
   LOG_NOT_FOUND: LOG_NOT_FOUND,
+  PORT_OUT_OF_RANGE: PORT_OUT_OF_RANGE,
+  UNABLE_TO_CONNECT_TO_DATABASE: UNABLE_TO_CONNECT_TO_DATABASE,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
