@@ -1,8 +1,13 @@
 'use strict'
 
 const fs                = require('fs');
+const mysql             = require('mysql');
 const express           = require('express');
+const auth              = require(`${__root}/auth`);
+const adminAuth         = require(`${__root}/admin_auth`);
 const encryption        = require(`${__root}/functions/encryption`);
+const accounts          = require(`${__root}/functions/accounts/init`);
+const database          = require(`${__root}/functions/database/init`);
 
 const root              = require(`${__root}/routes/root`);
 const home              = require(`${__root}/routes/home`);
@@ -52,6 +57,8 @@ module.exports.startInit = (app, callback) =>
 
 module.exports.startApp = (app, callback) =>
 {
+  const params = require(`${__root}/json/params`);
+
   app.use('/', root);
   app.use('/home', home);
   app.use('/file', auth, file);
@@ -64,9 +71,35 @@ module.exports.startApp = (app, callback) =>
   app.use('/admin/reports', auth, adminAuth, adminReports);
   app.use('/admin/services', auth, adminAuth, adminService);
 
+  app.use('/init/logon', (req, res, next) =>
+  {
+    res.redirect('/');
+  });
+
   app.use((req, res, next) =>
   {
     res.render('block', { message: `404 - La page recherchée n'existe pas` });
+  });
+
+  var databaseConnector = mysql.createConnection(
+  {
+    host     : params.database.host,
+    user     : params.database.user,
+    port     : params.database.port,
+    password : params.database.password
+  });
+
+  database.createDatabases(databaseConnector, () =>
+  { 
+    accounts.createAccounts(databaseConnector, () =>
+    {
+      accounts.createRights(databaseConnector, () =>
+      {
+        app.set('mysqlConnector', databaseConnector);
+
+        callback();
+      });
+    });
   });
 }
 

@@ -3,17 +3,43 @@
 @import url('fonts.css');
 @import url('awesome.css');
 
-body{ background-color:#FAFAFA; }
+body{ background-color:#FAFAFA; margin:0; }
 
 .body{ background-color:#445566; }
 
-.pending{ background-color:#E6E6FA; border-radius:4px; border:1px solid #C4C4D8; color:#FFFFFF; font-size:16px; line-height:24px; padding:20px; font-family:barlow; }
+.background{ position:fixed; z-index:10; top:0; left:0; bottom:0; right:0; }
 
-.failed{ background-color:#F08080; border-radius:4px; border:1px solid #D06060; color:#FFFFFF; font-size:16px; line-height:24px; padding:20px; font-family:barlow; }
+.loader{ position:fixed; z-index:20; background-color:#384046; border-radius:4px; width:250px; top:100px; left:calc(50% - 125px); }
 
-.succedeed{ background-color:#B0F2B6; border-radius:4px; border:1px solid #90D094; color:#FFFFFF; font-size:16px; line-height:24px; padding:20px; font-family:barlow; }
+.loader .content{ color:#FFFFFF; font-family:barlow; font-size:20px; line-height:24px; padding:10px 20px 20px 20px; text-align:center; }
 
-.logs{ z-index:99; position:fixed; padding:10px; color:#FFFFFF; text-align:center; border-radius:4px; font-family:barlow; border:1px solid #E84E4F; background-color:#9C2B2E; }
+.loader .icon{ color:#5CB85C; font-size:24px; line-height:32px; padding:20px 20px 10px 20px; text-align:center; }
+
+.warnings{ text-align:justify; }
+
+.warnings .warn{ color:#FDF498; margin:5px 0 5px 0; font-family:barlow; font-size:16px; line-height:24px; }
+
+.warnings .error{ color:#FF0F0F; margin:5px 0 5px 0; font-family:barlow; font-size:16px; line-height:24px; }
+
+.warnings .success{ color:#5CB85C; margin:5px 0 5px 0; font-family:barlow; font-size:16px; line-height:24px; }
+
+.pending{ background-color:#428BCA; border-radius:4px; padding:20px; box-sizing:border-box; }
+
+.waiting{ background-color:#D0D0D0; border-radius:4px; padding:20px; box-sizing:border-box; }
+
+.warning{ background-color:#DBD276; border-radius:4px; padding:20px; box-sizing:border-box; }
+
+.failed{ background-color:#D9534F; border-radius:4px; padding:20px; box-sizing:border-box; }
+
+.succedeed{ background-color:#5CB85C; border-radius:4px; padding:20px; box-sizing:border-box;  }
+
+.pending .title, .warning .title, .waiting .title, .failed .title, .succedeed .title{ font-size:20px; line-height:24px; margin:0; font-family:barlow; color:#FFFFFF; }
+
+.pending .process, .warning .process, .waiting .process, .failed .process, .succedeed .process{ display:inline-block; width:40px; font-size:24px; line-height:32px; margin:10px 0 0 0; font-family:barlow; color:#FFFFFF; }
+
+.pending .status, .warning .status, .waiting .status, .failed .status, .succedeed .status{ display:inline-block; vertical-align:top; width:calc(100% - 40px); font-size:16px; line-height:32px; margin:10px 0 0 0; font-family:barlow; color:#FFFFFF; }
+
+.logs{ z-index:99; position:fixed; padding:10px; color:#FFFFFF; text-align:center; box-sizing:border-box; border-radius:4px; font-family:barlow; border:1px solid #E84E4F; background-color:#9C2B2E; }
 
 .welcome{ box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); background-color:#FFFFFF; padding:0 0 10px 0; }
 
@@ -45,60 +71,120 @@ body{ background-color:#FAFAFA; }
 
 .welcome .send:hover{ color:#000000; background-color:#5593DC; }
 
+.end{ border:none; font-family:barlow; color:#FFFFFF; padding:8px; border-radius:4px; width:200px; font-family:barlow; font-size:16px; line-height:24px; }
+
+.back{ cursor:pointer; background-color:#DBD276; border:none; font-family:barlow; color:#FFFFFF; padding:8px; border-radius:4px; width:200px; font-family:barlow; font-size:16px; line-height:24px; }
+
+.back:hover{ color:#384046; background-color:#B9B054; }
+
+.end.inactive{ background-color:#D0D0D0; }
+
+.end.active{ background-color:#77B5FE; cursor:pointer; }
+
+.end.active:hover{ color:#384046; background-color:#5593DC; }
+
 /****************************************************************************************************/
 
 @media (max-width: 639px)
 {
   .welcome{ width:calc(100% - 40px); margin:20px; }
 
-  .logs{ width:calc(100% - 42px); }
+  .logs{ width:calc(100% - 20px); }
 
-  .pending, .failed, .succedeed{ width:calc(100% - 40px); margin:20px; }
+  .warnings{ width:calc(100% - 20px); margin:20px; }
+
+  .pending, .failed, .succedeed, .waiting, .warning{ width:calc(100% - 20px); margin:20px; }
+
+  .end{ margin:20px 20px 20px calc(100% - 200px) }
+
+  .back{ margin:20px 20px 20px calc(100% - 200px) }
+
+  .warnings .warn, .warnings .error, .warnings .success{ margin:5px 0 5px 0; }
 }
 
 @media (min-width: 640px) and (max-width: 767px)
 {
   .welcome{ width:calc(100% - 40px); margin:20px; }
 
-  .logs{ width:calc(100% - 42px); }
+  .logs{ width:calc(100% - 20px); }
 
-  .pending, .failed, .succedeed{ width:calc(100% - 40px); margin:20px; }
+  .warnings{ width:calc(100% - 20px); margin:20px; }
+
+  .pending, .failed, .succedeed, .waiting, .warning{ width:calc(100% - 20px); margin:20px; }
+
+  .end{ margin:20px 20px 20px calc(100% - 200px); }
+
+  .back{ margin:20px 20px 20px calc(100% - 200px); }
+
+  .warnings .warn, .warnings .error, .warnings .success{ margin:5px 0 5px 0; }
 }
 
 @media (min-width: 768px) and (max-width: 959px)
 {
-  .welcome{ width:calc(80% - 40px); margin:20px 10% 20px 10%; }
+  .welcome{ width:calc(80% - 20px); margin:20px 10% 20px 10%; }
 
-  .logs{ width:calc(80% - 42px); }
+  .logs{ width:calc(80% - 20px); }
 
-  .pending, .failed, .succedeed{ width:calc(80% - 40px); margin:20px 10% 20px 10%; }
+  .warnings{ width:80%; margin:20px 10% 20px 10%; }
+
+  .pending, .failed, .succedeed, .waiting, .warning{ width:80%; margin:20px 10% 20px 10%; }
+
+  .end{ margin:20px 20px 20px calc(90% - 200px); }
+
+  .back{ margin:20px 20px 20px calc(90% - 200px); }
+
+  .warnings .warn, .warnings .error, .warnings .success{ margin:5px 0 5px 0; }
 }
 
 @media (min-width: 960px) and (max-width: 1279px)
 {
   .welcome{ width:calc(60% - 40px); margin:20px 20% 20px 20%; }
 
-  .logs{ width:calc(60% - 42px); }
+  .logs{ width:calc(60% - 20px); }
 
-  .pending, .failed, .succedeed{ width:calc(60% - 40px); margin:20px 20% 20px 20%; }
+  .warnings{ width:60%; margin:20px 20% 20px 20%; }
+
+  .pending, .failed, .succedeed, .waiting, .warning{ width:60%; margin:20px 20% 20px 20%; }
+
+  .end{ margin:20px 20px 20px calc(80% - 200px); }
+
+  .back{ margin:20px 20px 20px calc(80% - 200px); }
+
+  .warnings .warn, .warnings .error, .warnings .success{ margin:5px 0 5px 0; }
 }
 
 @media (min-width: 1280px) and (max-width: 1679px)
 {
   .welcome{ width:calc(50% - 40px); margin:20px 25% 20px 25%; }
 
-  .logs{ width:calc(40% - 42px); }
+  .logs{ width:calc(40% - 20px); }
 
-  .pending, .failed, .succedeed{ width:calc(50% - 40px); margin:20px 25% 20px 25%; }
+  .warnings{ width:50%; margin:20px 25% 20px 25%; }
+
+  .end{ margin:20px 20px 20px calc(75% - 200px); }
+
+  .back{ margin:20px 20px 20px calc(75% - 200px); }
+
+  .pending, .failed, .succedeed, .waiting, .warning{ width:50%; margin:20px 25% 20px 25%; }
+
+  .warnings .warn, .warnings .error, .warnings .success{ margin:5px 0 5px 0; }
 }
 
 @media (min-width: 1680px)
 {
   .welcome{ width:calc(40% - 40px); margin:20px 30% 20px 30%; }
 
-  .logs{ width:calc(30% - 42px); }
+  .logs{ width:calc(30% - 20px); }
 
-  .pending, .failed, .succedeed{ width:calc(40% - 40px); margin:20px 30% 20px 30%; }
+  .warnings{ width:40%; margin:20px 30% 20px 30%; }
+  
+  .end{ margin:20px 20px 20px calc(70% - 200px); }
+
+  .back{ margin:20px 20px 20px calc(70% - 200px); }
+
+  .pending, .failed, .succedeed, .waiting, .warning{ width:40%; margin:20px 30% 20px 30%; }
+
+  .warnings .warn, .warnings .error, .warnings .success{ margin:5px 0 5px 0; }
 }
 
 /****************************************************************************************************/

@@ -5,10 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/init.css" />
   <body class='body'>
-    <div id='database' class='pending'>
-      <div class='process' id='database-process'><i class='fas fa-spinner fa-pulse'></i>Connexion à la base de données...</div>
+    <div id='container'>
+      <button id='back' class='back'>Retour</button>
+      <div class='warnings' id='warnings'></div>
+      <div id='database' class='waiting'>
+        <div class='title'>Vérification de l'accès à la base de données</div>
+        <div class='process' id='database-process'><i class='far fa-clock'></i></div><div class='status'>En attente...</div>
+      </div>
+      <div id='storage' class='waiting'>
+        <div class='title'>Vérification de l'accès au dossier de stockage</div>
+        <div class='process' id='storage-process'><i class='far fa-clock'></i></div><div class='status'>En attente...</div>
+      </div>
+      <div id='transporter' class='waiting'>
+        <div class='title'>Test de l'envoi des e-mails</div>
+        <div class='process' id='transporter-process'><i class='far fa-clock'></i></div><div class='status'>En attente...</div>
+      </div>
+      <button id='end' name='false' class='end inactive'>Terminer</button>
     </div>
     <script src='/js/jQuery.js'></script>
-    <script src='/js/fontawesome-all.js'></script>
+    <script src='/js/fontawesome.js'></script>
+    <script src='/js/init/test.js'></script>
   </body>
 </html>

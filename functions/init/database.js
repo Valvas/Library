@@ -25,7 +25,7 @@ function mysqlDatabase(databaseObject, callback)
       
   var databaseConnectionLoop = () =>
   {
-    databaseConnector = mysql.createConnection(
+    var databaseConnector = mysql.createConnection(
     {
       host     : databaseObject.host,
       user     : databaseObject.user,

@@ -248,36 +248,36 @@ function checkDataForm()
 
   else
   {
-    var dataObject = {};
+    var formData = {};
 
-    dataObject.other = {};
-    dataObject.storage = {};
-    dataObject.database = {};
-    dataObject.transporter = {};
+    formData.other = {};
+    formData.storage = {};
+    formData.database = {};
+    formData.transporter = {};
 
-    dataObject.database.port        = document.getElementById('database-port').value;
-    dataObject.database.user        = document.getElementById('database-user').value;
-    dataObject.database.name        = document.getElementById('database-name').value;
-    dataObject.database.host        = document.getElementById('database-host').value;
-    dataObject.database.manager     = document.getElementById('database-manager').value;
-    dataObject.database.password    = document.getElementById('database-password').value;
+    formData.database.port        = document.getElementById('database-port').value;
+    formData.database.user        = document.getElementById('database-user').value;
+    formData.database.name        = document.getElementById('database-name').value;
+    formData.database.host        = document.getElementById('database-host').value;
+    formData.database.manager     = document.getElementById('database-manager').value;
+    formData.database.password    = document.getElementById('database-password').value;
 
-    dataObject.storage.root         = document.getElementById('storage-root').value;
-    dataObject.storage.size         = document.getElementById('storage-size').value;
+    formData.storage.root         = document.getElementById('storage-root').value;
+    formData.storage.size         = document.getElementById('storage-size').value;
 
-    dataObject.transporter.port     = document.getElementById('transporter-port').value;
-    dataObject.transporter.user     = document.getElementById('transporter-user').value;
-    dataObject.transporter.address  = document.getElementById('transporter-address').value;
-    dataObject.transporter.password = document.getElementById('transporter-password').value;
+    formData.transporter.port     = document.getElementById('transporter-port').value;
+    formData.transporter.user     = document.getElementById('transporter-user').value;
+    formData.transporter.address  = document.getElementById('transporter-address').value;
+    formData.transporter.password = document.getElementById('transporter-password').value;
 
-    dataObject.other.port           = document.getElementById('other-port').value;
-    dataObject.other.salt           = document.getElementById('other-salt').value;
-    dataObject.other.timeout        = document.getElementById('other-timeout').value;
-    dataObject.other.environment    = document.getElementById('other-environment').value;
+    formData.other.port           = document.getElementById('other-port').value;
+    formData.other.salt           = document.getElementById('other-salt').value;
+    formData.other.timeout        = document.getElementById('other-timeout').value;
+    formData.other.environment    = document.getElementById('other-environment').value;
 
     $.ajax(
     {
-      type: 'POST', timeout: 2000, dataType: 'JSON', data: { dataObject: dataObject }, url: '/init/form', success: () => {},
+      type: 'POST', timeout: 2000, processData: false, data: JSON.stringify(formData), contentType: 'application/json; charset=utf-8', dataType: 'JSON', url: '/init/form', success: () => {},
       error: (xhr, status, error) =>
       { 
         document.getElementById('logs').innerText = xhr.responseJSON.message;

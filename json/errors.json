@@ -19,8 +19,8 @@
   "10018": "la précédente version du fichier n'a pas pu être supprimée du disque",
   "10019": "la précédente version du fichier n'a pas pu être supprimée de la base de données",
   "10020": "vous n'êtes pas autorisé(e) à télécharger des fichiers",
-  "10021": "le dossier n'a pas été trouvé sur le disque",
-  "10022": "le chemin ne mène pas à un dossier",
+  "10021": "Le dossier n'a pas été trouvé sur le disque",
+  "10022": "Le chemin ne mène pas à un dossier",
   "10023": "vous n'êtes pas autorisé(e) à lire ou écrire dans ce fichier/dossier",
   "10024": "le dossier existe déjà",
   "10025": "l'accès à cette ressource demande une authentification",
@@ -49,5 +49,7 @@
   "10048": "vous n'êtes pas autorisé(e) à poster des commentaires",
   "10049": "log non trouvé",
   "10050": "Le port renseigné pour l'application est hors des limites autorisées (0 à 65535)",
-  "10051": "La connexion à la base de données à échoué, veuillez vérifier les paramètres"
+  "10051": "La connexion à la base de données à échoué, veuillez vérifier les paramètres",
+  "10052": "Echec de l'envoi de l'e-mail test",
+  "10053": "Le fichier de configuration n'a pas pu être lu"
 }

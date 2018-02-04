@@ -53,6 +53,8 @@ const UNAUTHORIZED_TO_POST_COMMENTS                                             
 const LOG_NOT_FOUND                                                               = 10049;
 const PORT_OUT_OF_RANGE                                                           = 10050;
 const UNABLE_TO_CONNECT_TO_DATABASE                                               = 10051;
+const TEST_EMAIL_FAILED                                                           = 10052;
+const COULD_NOT_READ_CONFIG_FILE                                                  = 10053;
 
 /******************************************************************************************
 SUCCESS
@@ -134,6 +136,8 @@ module.exports =
   LOG_NOT_FOUND: LOG_NOT_FOUND,
   PORT_OUT_OF_RANGE: PORT_OUT_OF_RANGE,
   UNABLE_TO_CONNECT_TO_DATABASE: UNABLE_TO_CONNECT_TO_DATABASE,
+  TEST_EMAIL_FAILED: TEST_EMAIL_FAILED,
+  COULD_NOT_READ_CONFIG_FILE: COULD_NOT_READ_CONFIG_FILE,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
