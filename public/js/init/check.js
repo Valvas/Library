@@ -158,6 +158,16 @@ function checkDataForm()
 
   /****************************************************************************************************/
 
+  if(document.getElementById('transporter-secure').value.length == 0)
+  {
+    checkFilledFields = false;
+    document.getElementById('transporter-secure-error').innerText = 'Veuillez renseigner ce champ';
+  }
+
+  else{ document.getElementById('transporter-secure-error').innerText = ''; }
+
+  /****************************************************************************************************/
+
   if(document.getElementById('transporter-user').value.length == 0)
   {
     checkFilledFields = false;
@@ -267,6 +277,7 @@ function checkDataForm()
 
     formData.transporter.port     = document.getElementById('transporter-port').value;
     formData.transporter.user     = document.getElementById('transporter-user').value;
+    formData.transporter.secure   = document.getElementById('transporter-secure').value;
     formData.transporter.address  = document.getElementById('transporter-address').value;
     formData.transporter.password = document.getElementById('transporter-password').value;
 

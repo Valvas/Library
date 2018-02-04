@@ -4,6 +4,7 @@ const fs                = require('fs');
 const express           = require('express');
 const errors            = require(`${__root}/json/errors`);
 const constants         = require(`${__root}/functions/constants`);
+const initStart         = require(`${__root}/functions/init/start`);
 const initFormat        = require(`${__root}/functions/init/format`);
 const initStorage       = require(`${__root}/functions/init/storage`);
 const initDatabase      = require(`${__root}/functions/init/database`);
@@ -58,7 +59,7 @@ router.get('/form', (req, res) =>
 {
   if(req.app.get('params').ready == false)
   {
-    req.session.identified == true ? res.render('init/form') : res.redirect('/init/logon');
+    req.session.identified == true ? res.render('init/form', { data: req.app.get('params') }) : res.redirect('/init/logon');
   }
 
   else
@@ -75,7 +76,7 @@ router.post('/form', (req, res) =>
   {
     req.session.identified != true ? res.redirect('/init/logon') :
 
-    initFormat.checkConfigDataFormat(req.body, (error) =>
+    initFormat.checkConfigDataFormat(req.body, req.app.get('params'), (error) =>
     {
       error == null ? res.status(200).send({ result: true }) : res.status(error.status).send({ result: false, message: error.message });
     });
@@ -140,7 +141,7 @@ router.get('/test/storage', (req, res) =>
   {
     req.session.identified != true ? res.redirect('/init/logon') :
 
-    initStorage.checkAccessToRootStorage((error) =>
+    initStorage.checkAccessToRootStorage(req.app.get('params'), (error) =>
     {
       if(error == null)
       {
@@ -170,7 +171,7 @@ router.get('/test/transporter', (req, res) =>
   {
     req.session.identified != true ? res.redirect('/init/logon') :
 
-    initTransporter.checkEmailSending((error) =>
+    initTransporter.checkEmailSending(req.app.get('params'), (error) =>
     {
       if(error == null)
       {
@@ -210,7 +211,15 @@ router.get('/end', (req, res) =>
       
       fs.writeFile(`${__root}/json/params.json`, JSON.stringify(req.app.get('params')), (err) =>
       {
-        err ? res.status(500).send({ result: false, message: 'Could not write new configuration in file' }) : res.status(200).send({ result: true });
+        if(err) res.status(500).send({ result: false, message: 'Could not write new configuration in file' }); 
+
+        else
+        {
+          initStart.startApp(req.app, () =>
+          {
+            res.status(200).send({ result: true });
+          });
+        }
       });  
     }, 3000);
   }

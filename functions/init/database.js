@@ -30,7 +30,8 @@ function mysqlDatabase(databaseObject, callback)
       host     : databaseObject.host,
       user     : databaseObject.user,
       port     : databaseObject.port,
-      password : databaseObject.password
+      password : databaseObject.password,
+      connectTimeout: 2000
     });
 
     databaseConnector.connect((err) =>

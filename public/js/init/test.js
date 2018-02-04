@@ -136,7 +136,11 @@ function testDatabaseConnection(callback)
       {
         document.getElementById('database').setAttribute('class', 'failed');
         document.getElementById('database').children[1].innerHTML = `<i class='far fa-times-circle'></i>`;
+
+        status == 'timeout' ? 
+        document.getElementById('database').children[2].innerText = `La requête a pris trop de temps à s'exécuter` :
         document.getElementById('database').children[2].innerText = xhr.responseJSON.message;
+
         callback(false);
       }, 1000);
     }
@@ -170,7 +174,11 @@ function testStorageAccess(callback)
       {
         document.getElementById('storage').setAttribute('class', 'failed');
         document.getElementById('storage').children[1].innerHTML = `<i class='far fa-times-circle'></i>`;
+
+        status == 'timeout' ? 
+        document.getElementById('storage').children[2].innerText = `La requête a pris trop de temps à s'exécuter` :
         document.getElementById('storage').children[2].innerText = xhr.responseJSON.message;
+        
         callback(false);
       }, 1000);
     }
@@ -204,7 +212,11 @@ function testEmailTransporter(callback)
       {
         document.getElementById('transporter').setAttribute('class', 'warning');
         document.getElementById('transporter').children[1].innerHTML = `<i class='fas fa-exclamation-triangle'></i>`;
+        
+        status == 'timeout' ? 
+        document.getElementById('transporter').children[2].innerText = `La requête a pris trop de temps à s'exécuter` :
         document.getElementById('transporter').children[2].innerText = xhr.responseJSON.message;
+
         callback(false);
       }, 1000);
     }

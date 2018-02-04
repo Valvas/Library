@@ -2,12 +2,11 @@
 
 const fs                = require('fs');
 const errors            = require(`${__root}/json/errors`);
-const params            = require(`${__root}/json/params`);
 const constants         = require(`${__root}/functions/constants`);
 
 /****************************************************************************************************/
 
-module.exports.checkConfigDataFormat = (object, callback) =>
+module.exports.checkConfigDataFormat = (object, params, callback) =>
 {
   object                      == undefined ||
 
@@ -38,21 +37,41 @@ module.exports.checkConfigDataFormat = (object, callback) =>
 
   callback({ status: 406, message: `${errors[constants.MISSING_DATA_IN_REQUEST].charAt(0).toUpperCase()}${errors[constants.MISSING_DATA_IN_REQUEST].slice(1)}` }) :
 
-  checkStorageFileMaxSize(object.storage.size, (newSize) =>
+  checkStorageFileMaxSize(object.storage.size, params, (newSize) =>
   {
     object.storage.size = newSize;
 
-    checkAppTimeout(object.other.timeout, (newTimeout) =>
+    checkAppTimeout(object.other.timeout, params, (newTimeout) =>
     {
       object.other.timeout = newTimeout;
 
-      checkAppPort(object.other.port, (newPort) =>
+      checkAppPort(object.other.port, params, (newPort) =>
       {
         object.other.port = newPort;
 
-        checkEnvironment(object.other.environment, (newEnvironment) =>
+        checkEnvironment(object.other.environment, params, (newEnvironment) =>
         {
           object.other.environment = newEnvironment;
+
+          params.database.host        = object.database.host;
+          params.database.port        = object.database.port;
+          params.database.user        = object.database.user;
+          params.database.name        = object.database.name;
+          params.database.dbms        = object.database.manager;
+          params.database.password    = object.database.password;
+
+          params.storage.root         = object.storage.root;
+          params.storage.maxFileSize  = parseInt(object.storage.size * 1024);
+
+          params.transporter.user     = object.transporter.user;
+          params.transporter.port     = object.transporter.port;
+          params.transporter.secure   = object.transporter.secure == 'true' ? true : false;
+          params.transporter.address  = object.transporter.address;
+          params.transporter.password = object.transporter.password;
+
+          params.timeout              = object.other.timeout;
+          params.port                 = object.other.port;
+          params.init.keepSalt        = object.other.salt == 'true' ? true : false;
 
           callback(null);
         });
@@ -63,7 +82,7 @@ module.exports.checkConfigDataFormat = (object, callback) =>
 
 /****************************************************************************************************/
 
-function checkStorageFileMaxSize(fileSize, callback)
+function checkStorageFileMaxSize(fileSize, params, callback)
 {
   if(parseInt(fileSize) * 1024 < params.init.minFileSize) callback(params.init.minFileSize);
   else if(parseInt(fileSize) * 1024 > params.init.maxFileSize) callback(params.init.maxFileSize);
@@ -72,7 +91,7 @@ function checkStorageFileMaxSize(fileSize, callback)
 
 /****************************************************************************************************/
 
-function checkAppTimeout(timeout, callback)
+function checkAppTimeout(timeout, params, callback)
 {
   if(parseInt(timeout) * 60000 < params.init.minTimeout) callback(params.init.minTimeout);
   else if(parseInt(timeout) * 60000 > params.init.maxTimeout) callback(params.init.maxTimeout);
@@ -81,7 +100,7 @@ function checkAppTimeout(timeout, callback)
 
 /****************************************************************************************************/
 
-function checkAppPort(port, callback)
+function checkAppPort(port, params, callback)
 {
   if(parseInt(port) < 0) callback(params.init.defaultPort);
   else if(parseInt(port) > 65535) callback(params.init.defaultPort);
@@ -90,7 +109,7 @@ function checkAppPort(port, callback)
 
 /****************************************************************************************************/
 
-function checkEnvironment(environment, callback)
+function checkEnvironment(environment, params, callback)
 {
   environment == 'dev' || environment == 'test' || environment == 'prod' ? callback(environment) : callback(params.init.defaultEnvironment);
 }

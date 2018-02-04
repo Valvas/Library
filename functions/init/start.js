@@ -43,7 +43,10 @@ module.exports.startInit = (app, callback) =>
           else
           {
             app.use('/init', init);
-            app.use((req, res, next) => { res.redirect('/init/logon'); });
+            app.use((req, res, next) => 
+            { 
+              app.get('params').ready == false ? res.redirect('/init/logon') : next();
+            });
 
             callback();
           }
@@ -70,11 +73,6 @@ module.exports.startApp = (app, callback) =>
   app.use('/admin/params', auth, adminAuth, adminParams);
   app.use('/admin/reports', auth, adminAuth, adminReports);
   app.use('/admin/services', auth, adminAuth, adminService);
-
-  app.use('/init/logon', (req, res, next) =>
-  {
-    res.redirect('/');
-  });
 
   app.use((req, res, next) =>
   {

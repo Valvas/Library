@@ -15,38 +15,38 @@
         <div class='field'>
           <div class='label'>Adresse :</div>
           <div class='error' id='database-host-error'></div>
-          <input type='text' class='value' placeholder='Adresse' id='database-host' />
+          <input type='text' class='value' placeholder='Adresse' id='database-host' value='<%= data.database.host %>' />
           <div class='info'>Entrez ici une adresse IP ou un nom DNS correspondant à l'adresse de votre serveur de bases de données (exemple: 192.168.1.10).</div>
         </div>
         <div class='field'>
           <div class='label'>Port de la base de données :</div>
           <div class='error' id='database-port-error'></div>
-          <input type='text' class='value' placeholder='Port de la base de données' id='database-port' />
+          <input type='text' class='value' placeholder='Port de la base de données' id='database-port' value='<%= data.database.port %>' />
           <div class='info'>Entrez ici le port sur lequel effectuer la connexion à la base de données.</div>
         </div>
         <div class='field'>
           <div class='label'>Utilisateur :</div>
           <div class='error' id='database-user-error'></div>
-          <input type='text' class='value' placeholder='Utilisateur' id='database-user' />
+          <input type='text' class='value' placeholder='Utilisateur' id='database-user' value='<%= data.database.user %>' />
           <div class='info'>Entrez ici un nom d'utilisateur de la base de données.</div>
         </div>
         <div class='field'>
           <div class='label'>Mot de passe :</div>
           <div class='error' id='database-password-error'></div>
-          <input type='password' class='value' placeholder='Mot de passe' id='database-password' />
+          <input type='password' class='value' placeholder='Mot de passe' id='database-password' value='<%= data.database.password %>' />
           <div class='info'>Entrez ici le mot de passe correspondant au compte entré juste au-dessus.</div>
         </div>
         <div class='field'>
           <div class='label'>Nom de la base de données :</div>
           <div class='error' id='database-name-error'></div>
-          <input type='text' class='value' placeholder='Nom de la base de données' id='database-name' />
+          <input type='text' class='value' placeholder='Nom de la base de données' id='database-name' value='<%= data.database.name %>' />
           <div class='info'>Entrez ici le nom de la base de données à utiliser (elle sera créée si elle n'existe pas).</div>
         </div>
         <div class='field'>
           <div class='label'>Gestionnaire de base de données :</div>
           <div class='error' id='database-manager-error'></div>
           <select class='value' id='database-manager'>
-            <option value='MySQL'>MySQL</option>
+            <option value='MySQL' <% if(data.database.dbms == 'MySQL'){ %>selected<% } %>>MySQL</option>
           </select>
           <div class='info'>Les technologies gérées par l'application sont listées ci-dessus, choissisez celle de votre serveur de bases de données.</div>
         </div>
@@ -57,14 +57,14 @@
         <div class='field'>
           <div class='label'>Dossier racine :</div>
           <div class='error' id='storage-root-error'></div>
-          <input type='text' class='value' placeholder='Dossier racine' id='storage-root' />
+          <input type='text' class='value' placeholder='Dossier racine' id='storage-root' value='<%= data.storage.root %>' />
           <div class='info'>Le chemin d'accès au dossier racine du stockage.</div>
         </div>
         <div class='field'>
           <div class='label'>Taille maximale des fichiers :</div>
           <div class='error' id='storage-size-error'></div>
-          <input type='text' class='value' placeholder='Taille maximale' id='storage-size' />
-          <div class='info'>La taille est exprimée en Ko.</div>
+          <input type='text' class='value' placeholder='Taille maximale' id='storage-size' value='<%= parseInt(data.storage.maxFileSize / 1024) %>' />
+          <div class='info'>La taille est exprimée en Ko (1024 Ko valent 1 Mo).</div>
         </div>
       </div>
       <div class='block'>
@@ -73,25 +73,34 @@
         <div class='field'>
           <div class='label'>Serveur de messagerie :</div>
           <div class='error' id='transporter-address-error'></div>
-          <input type='text' class='value' placeholder='Serveur de messagerie' id='transporter-address' />
+          <input type='text' class='value' placeholder='Serveur de messagerie' id='transporter-address' value='<%= data.transporter.address %>' />
           <div class='info'>Entrez le nom DNS ou l'adresse IP du serveur de messagerie propriétaire du compte transporteur.</div>
         </div>
         <div class='field'>
           <div class='label'>Port :</div>
           <div class='error' id='transporter-port-error'></div>
-          <input type='text' class='value' placeholder='Port' id='transporter-port' />
+          <input type='text' class='value' placeholder='Port' id='transporter-port' value='<%= data.transporter.port %>' />
+          <div class='info'>Entrez le port utilisé par le serveur pour les messages sortants.</div>
+        </div>
+        <div class='field'>
+          <div class='label'>Sécurisé :</div>
+          <div class='error' id='transporter-secure-error'></div>
+          <select class='value' id='transporter-secure'>
+            <option value='true' <% if(data.transporter.secure == true){ %>selected<% } %>>Oui</option>
+            <option value='false' <% if(data.transporter.secure == false){ %>selected<% } %>>Non</option>
+          </select>
           <div class='info'>Entrez le port utilisé par le serveur pour les messages sortants.</div>
         </div>
         <div class='field'>
           <div class='label'>Adresse de messagerie :</div>
           <div class='error' id='transporter-user-error'></div>
-          <input type='text' class='value' placeholder='Adresse' id='transporter-user' />
+          <input type='text' class='value' placeholder='Adresse' id='transporter-user' value='<%= data.transporter.user %>' />
           <div class='info'>Entrez l'adresse de messagerie du compte.</div>
         </div>
         <div class='field'>
           <div class='label'>Mot de passe :</div>
           <div class='error' id='transporter-password-error'></div>
-          <input type='password' class='value' placeholder='Mot de passe' id='transporter-password' />
+          <input type='password' class='value' placeholder='Mot de passe' id='transporter-password' value='<%= data.transporter.password %>' />
           <div class='info'>Entrez le mot de passe associé à l'adresse de messagerie.</div>
         </div>
       </div>
@@ -101,23 +110,23 @@
         <div class='field'>
           <div class='label'>Déconnexion automatique :</div>
           <div class='error' id='other-timeout-error'></div>
-          <input type='text' class='value' placeholder='Minutes' id='other-timeout' />
+          <input type='text' class='value' placeholder='Minutes' id='other-timeout' value='<%= parseInt(data.timeout / 60000) %>' />
           <div class='info'>Entrez une valeur en minutes. En cas d'inactivité les utilisateurs seront automatiquement déconnectés.</div>
         </div>
         <div class='field'>
           <div class='label'>Sel de cryptage :</div>
           <div class='error' id='other-salt-error'></div>
           <select class='value' id='other-salt'>
-            <option value='false'>Conserver le sel précédent</option>
-            <option value='true'>Générer un nouveau sel</option>
+            <option value='true' <% if(data.init.keepSalt == true){ %>selected<% } %>>Conserver le sel précédent</option>
+            <option value='false' <% if(data.init.keepSalt == false){ %>selected<% } %>>Générer un nouveau sel</option>
           </select>
           <div class='info'>Le sel de cryptage est utilisé pour le cryptage de certaines données telles que les mots de passe. Attention : en cas de génération d'un nouveau sel, les données cryptées avec le précédent ne seraient plus utilisables (si aucun précédent sel n'existe un nouveau sera généré par défaut).</div>
         </div>
         <div class='field'>
           <div class='label'>Port de l'application :</div>
           <div class='error' id='other-port-error'></div>
-          <input type='text' class='value' placeholder='Port' id='other-port' />
-          <div class='info'>Entrez le port sur lequel l'application doit fonctionner. Le port par défaut est 3000, laissez vide pour conserver ce port par défaut.</div>
+          <input type='text' class='value' placeholder='Port' id='other-port' value='<%= data.port %>' />
+          <div class='info'>Entrez le port sur lequel l'application doit fonctionner. Le port par défaut est 3000, laissez vide pour l'utiliser.</div>
         </div>
         <div class='field'>
           <div class='label'>Environnement :</div>

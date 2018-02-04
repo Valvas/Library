@@ -32,7 +32,7 @@ module.exports = (callback) =>
       app.set('views', `${__root}/views`);
       app.set('port', params.init.defaultPort);
       
-      app.use(morgan('dev')); //tiny | common | dev
+      app.use(morgan('dev'));
       app.use(cookieParser());
       app.use(bodyParser.json());
       app.use(express.static(`${__root}/public`));
