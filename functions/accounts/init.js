@@ -26,7 +26,7 @@ module.exports.createAccounts = (databaseConnector, callback) =>
       else
       {
         encrypter.encryptPassword(clearPassword, (encryptedPassword) =>
-        {
+        {console.log(true);
           if(encryptedPassword == false)
           {
             console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (encryption error) !`);
