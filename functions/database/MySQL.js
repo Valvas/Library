@@ -4,7 +4,7 @@ const UUIDModule = require('uuid');
 
 /****************************************************************************************************/
 
-module.exports.insertQuery = function(queryObject, SQLConnector, callback)
+module.exports.insertQuery = function(queryObject, SQLPool, callback)
 {
   var database = queryObject.databaseName;
   var table = queryObject.tableName;
@@ -20,132 +20,172 @@ module.exports.insertQuery = function(queryObject, SQLConnector, callback)
     values += `,"${uuid}"`;
   }
 
-  SQLConnector.query(`INSERT INTO ${database}.${table} (${keys}) VALUES (${values})`, (err, result) =>
+  SQLPool.getConnection((err, SQLConnection) =>
   {
     if(err) callback(false, err.message);
 
     else
     {
-      callback(true, result.insertId);
+      SQLConnection.query(`INSERT INTO ${database}.${table} (${keys}) VALUES (${values})`, (err, result) =>
+      {
+        SQLConnection.release();
+        
+        if(err) callback(false, err.message);
+
+        else
+        {
+          callback(true, result.insertId);
+        }
+      });
     }
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.selectQuery = function(query, SQLConnector, callback)
+module.exports.selectQuery = function(query, SQLPool, callback)
 {
-  var sql = `SELECT ${Object.values(query.args).join()} FROM ${query.databaseName}.${query.tableName}`;
-  
-  var x = 0;
-  
-  var loop = function()
+  SQLPool.getConnection((err, SQLConnection) =>
   {
-    returnStatement(query['where'][Object.keys(query.where)[x]], [Object.keys(query.where)[x]], function(statement)
-    {
-      sql += statement;
-  
-      x += 1;
-        
-      Object.keys(query.where)[x] != undefined ? loop() :
-      
-      SQLConnector.query(sql, function(err, result)
-      {
-        err ? callback(false, err.message) : callback(true, result);
-      });
-    });
-  }
-  
-  if(Object.keys(query.where)[x] != undefined) sql += ' WHERE ';
-  
-  Object.keys(query.where)[x] != undefined ? loop() :
-
-  SQLConnector.query(sql, function(err, result)
-  {
-    err ? callback(false, err.message) : callback(true, result);
-  });
-}
-
-/****************************************************************************************************/
-
-module.exports.updateQuery = function(query, SQLConnector, callback)
-{
-  var sql = `UPDATE ${query.databaseName}.${query.tableName} SET `;
-
-  var array = [];
-  var x = 0, y = 0;
-
-  var first = function()
-  {
-    array.push(`${Object.keys(query.args)[y]} = "${query['args'][Object.keys(query.args)[y]]}"`);
-
-    if(Object.keys(query.args)[y += 1] != undefined) first();
+    if(err) callback(false, err.message);
 
     else
     {
-      sql += array.join();
-
+      var sql = `SELECT ${Object.values(query.args).join()} FROM ${query.databaseName}.${query.tableName}`;
+  
+      var x = 0;
+      
+      var loop = function()
+      {
+        returnStatement(query['where'][Object.keys(query.where)[x]], [Object.keys(query.where)[x]], function(statement)
+        {
+          sql += statement;
+      
+          x += 1;
+            
+          Object.keys(query.where)[x] != undefined ? loop() :
+          
+          SQLConnection.query(sql, function(err, result)
+          {
+            SQLConnection.release();
+            err ? callback(false, err.message) : callback(true, result);
+          });
+        });
+      }
+      
       if(Object.keys(query.where)[x] != undefined) sql += ' WHERE ';
       
-      Object.keys(query.where)[x] != undefined ? second() :
-    
-      SQLConnector.query(sql, function(err, result)
+      Object.keys(query.where)[x] != undefined ? loop() :
+
+      SQLConnection.query(sql, function(err, result)
       {
-        err ? callback(false, err.message) : callback(true, result.affectedRows);
+        SQLConnection.release();
+        err ? callback(false, err.message) : callback(true, result);
       });
     }
-  }
-
-  var second = function()
-  {
-    returnStatement(query['where'][Object.keys(query.where)[x]], [Object.keys(query.where)[x]], function(statement)
-    {
-      sql += statement;
-        
-      Object.keys(query.where)[x += 1] != undefined ? second() :
-      
-      SQLConnector.query(sql, function(err, result)
-      {
-        err ? callback(false, err.message) : callback(true, result.affectedRows);
-      });
-    });
-  }
-
-  first();
+  });
 }
 
 /****************************************************************************************************/
 
-module.exports.deleteQuery = function(query, SQLConnector, callback)
+module.exports.updateQuery = function(query, SQLPool, callback)
 {
-  var sql = `DELETE FROM ${query.databaseName}.${query.tableName}`;
-  
-  var x = 0;
-  
-  var loop = function()
+  SQLPool.getConnection((err, SQLConnection) =>
   {
-    returnStatement(query['where'][Object.keys(query.where)[x]], [Object.keys(query.where)[x]], function(statement)
+    if(err) callback(false, err.message);
+
+    else
     {
-      sql += statement;
-  
-      x += 1;
-        
-      Object.keys(query.where)[x] != undefined ? loop() :
-      
-      SQLConnector.query(sql, function(err, result)
+      var sql = `UPDATE ${query.databaseName}.${query.tableName} SET `;
+
+      var array = [];
+      var x = 0, y = 0;
+
+      var first = function()
       {
+        array.push(`${Object.keys(query.args)[y]} = "${query['args'][Object.keys(query.args)[y]]}"`);
+
+        if(Object.keys(query.args)[y += 1] != undefined) first();
+
+        else
+        {
+          sql += array.join();
+
+          if(Object.keys(query.where)[x] != undefined) sql += ' WHERE ';
+          
+          Object.keys(query.where)[x] != undefined ? second() :
+        
+          SQLConnection.query(sql, function(err, result)
+          {
+            SQLConnection.release();
+            err ? callback(false, err.message) : callback(true, result.affectedRows);
+          });
+        }
+      }
+
+      var second = function()
+      {
+        returnStatement(query['where'][Object.keys(query.where)[x]], [Object.keys(query.where)[x]], function(statement)
+        {
+          sql += statement;
+            
+          Object.keys(query.where)[x += 1] != undefined ? second() :
+          
+          SQLConnection.query(sql, function(err, result)
+          {
+            SQLConnection.release();
+            err ? callback(false, err.message) : callback(true, result.affectedRows);
+          });
+        });
+      }
+
+      first();
+    }
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.deleteQuery = function(query, SQLPool, callback)
+{
+  SQLPool.getConnection((err, SQLConnection) =>
+  {
+    if(err) callback(false, err.message);
+
+    else
+    {
+      var sql = `DELETE FROM ${query.databaseName}.${query.tableName}`;
+  
+      var x = 0;
+      
+      var loop = function()
+      {
+        returnStatement(query['where'][Object.keys(query.where)[x]], [Object.keys(query.where)[x]], function(statement)
+        {
+          sql += statement;
+      
+          x += 1;
+            
+          Object.keys(query.where)[x] != undefined ? loop() :
+          
+          SQLConnection.query(sql, function(err, result)
+          {
+            SQLConnection.release();
+            err ? callback(false, err.message) : callback(true, result.affectedRows);
+          });
+        });
+      }
+      
+      if(Object.keys(query.where)[x] != undefined) sql += ' WHERE ';
+      
+      Object.keys(query.where)[x] != undefined ? loop() :
+
+      SQLConnection.query(sql, function(err, result)
+      {
+        SQLConnection.release();
         err ? callback(false, err.message) : callback(true, result.affectedRows);
       });
-    });
-  }
-  
-  if(Object.keys(query.where)[x] != undefined) sql += ' WHERE ';
-  
-  Object.keys(query.where)[x] != undefined ? loop() :
-
-  SQLConnector.query(sql, function(err, result)
-  {
-    err ? callback(false, err.message) : callback(true, result.affectedRows);
+    }
   });
 }
 
