@@ -78,19 +78,3 @@ module.exports = (callback) =>
     }
   });
 }
-
-  /*var transporter = nodemailer.createTransport(
-  {
-    host: config.email.host,
-    port: config.email.port,
-    secure: config.email.secure,
-    auth: 
-    {
-      user: config.email.auth.user,
-      pass: config.email.auth.pass
-    },
-    tls: 
-    {
-      rejectUnauthorized: false
-    }
-  });*/
