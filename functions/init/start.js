@@ -98,6 +98,7 @@ module.exports.startApp = (app, callback) =>
         console.log(true);
         setTimeout(() =>
         {
+          
           callback();
         }, 5000);
       });
