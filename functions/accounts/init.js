@@ -9,7 +9,7 @@ var databaseManager     = require(`${__root}/functions/database/${params.databas
 /****************************************************************************************************/
 
 module.exports.createAccounts = (databaseConnector, callback) =>
-{console.log(true);
+{
   var x = 0;
 
   var accountCreationLoop = () =>
@@ -35,7 +35,7 @@ module.exports.createAccounts = (databaseConnector, callback) =>
           }
 
           else
-          {
+          {console.log(true);
             databaseManager.selectQuery(
             {
               'databaseName': params.database.name,
@@ -58,7 +58,7 @@ module.exports.createAccounts = (databaseConnector, callback) =>
                 }
               }
             }, databaseConnector, (boolean, passwordOrErrorCode) =>
-            {console.log(passwordOrErrorCode);
+            {
               if(boolean == false)
               {
                 console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (SQL error) !`);

@@ -29,7 +29,7 @@ module.exports.insertQuery = function(queryObject, SQLPool, callback)
       SQLConnection.query(`INSERT INTO ${database}.${table} (${keys}) VALUES (${values})`, (err, result) =>
       {
         SQLConnection.release();
-        
+
         if(err) callback(false, err.message);
 
         else
@@ -44,13 +44,13 @@ module.exports.insertQuery = function(queryObject, SQLPool, callback)
 /****************************************************************************************************/
 
 module.exports.selectQuery = function(query, SQLPool, callback)
-{
+{console.log(true);
   SQLPool.getConnection((err, SQLConnection) =>
   {
     if(err) callback(false, err.message);
 
     else
-    {
+    {console.log(true);
       var sql = `SELECT ${Object.values(query.args).join()} FROM ${query.databaseName}.${query.tableName}`;
   
       var x = 0;
@@ -66,7 +66,7 @@ module.exports.selectQuery = function(query, SQLPool, callback)
           Object.keys(query.where)[x] != undefined ? loop() :
           
           SQLConnection.query(sql, function(err, result)
-          {
+          {console.log(true);
             SQLConnection.release();
             err ? callback(false, err.message) : callback(true, result);
           });
