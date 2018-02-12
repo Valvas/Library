@@ -58,7 +58,7 @@ module.exports.createAccounts = (databaseConnector, callback) =>
                 }
               }
             }, databaseConnector, (boolean, passwordOrErrorCode) =>
-            {
+            {console.log(passwordOrErrorCode);
               if(boolean == false)
               {
                 console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (SQL error) !`);
