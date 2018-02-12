@@ -79,21 +79,22 @@ module.exports.startApp = (app, callback) =>
     res.render('block', { message: `404 - La page recherchée n'existe pas` });
   });
 
-  var databaseConnector = mysql.createConnection(
+  var pool = mysql.createPool(
   {
-    host     : params.database.host,
-    user     : params.database.user,
-    port     : params.database.port,
-    password : params.database.password
+    connectionLimit   : 10,
+    host              : params.database.host,
+    user              : params.database.user,
+    port              : params.database.port,
+    password          : params.database.password
   });
 
-  database.createDatabases(databaseConnector, () =>
+  database.createDatabases(pool, () =>
   { 
-    accounts.createAccounts(databaseConnector, () =>
+    accounts.createAccounts(pool, () =>
     {
-      accounts.createRights(databaseConnector, () =>
+      accounts.createRights(pool, () =>
       {
-        app.set('mysqlConnector', databaseConnector);
+        app.set('mysqlConnector', pool);
 
         callback();
       });

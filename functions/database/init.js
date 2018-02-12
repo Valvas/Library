@@ -4,13 +4,13 @@ let databases = require(`../../json/database`);
 
 /****************************************************************************************************/
 
-module.exports.createDatabases = (connector, callback) =>
+module.exports.createDatabases = (pool, callback) =>
 {
   let x = 0;
 
   let loop = (databaseName, databaseContent) =>
   {
-    connector.query(`CREATE DATABASE IF NOT EXISTS ${databaseName}`, (err, result) =>
+    pool.getConnection((err, connection) =>
     {
       if(err)
       {
@@ -20,11 +20,25 @@ module.exports.createDatabases = (connector, callback) =>
 
       else
       {
-        console.log(`INFO : database "${databaseName}" created !`);
+        connection.query(`CREATE DATABASE IF NOT EXISTS ${databaseName}`, (err, result) =>
+        {
+          if(err)
+          {
+            console.log(err.message);
+            callback();
+          }
 
-        createAllTables(databaseContent, databaseName, connector, () =>
-        {      
-          Object.keys(databases)[x += 1] == undefined ? callback() : loop(Object.keys(databases)[x], databases[Object.keys(databases)[x]]);
+          else
+          {
+            console.log(`INFO : database "${databaseName}" created !`);
+
+            connection.release();
+
+            createAllTables(databaseContent, databaseName, pool, () =>
+            {      
+              Object.keys(databases)[x += 1] == undefined ? callback() : loop(Object.keys(databases)[x], databases[Object.keys(databases)[x]]);
+            });
+          }
         });
       }
     });
@@ -44,7 +58,7 @@ module.exports.createDatabases = (connector, callback) =>
 
 /****************************************************************************************************/
 
-function createAllTables(database, databaseName, connector, callback)
+function createAllTables(database, databaseName, pool, callback)
 {
   let x = 0;
 
@@ -60,11 +74,25 @@ function createAllTables(database, databaseName, connector, callback)
 
       else
       {
-        connector.query(`CREATE TABLE IF NOT EXISTS ${databaseName}.${tableName} (${result})`, function(err, data)
+        pool.getConnection((err, connection) =>
         {
-          err ? console.log(`[${databaseName}] : ${err.message} `) : console.log(`[${databaseName}] : table "${tableName}" created !`);;
-            
-          Object.keys(database)[x += 1] == undefined ? callback() : loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
+          if(err)
+          {
+            console.log(`[${databaseName}] : ${err.message} `);
+            callback();
+          }
+
+          else
+          {
+            connection.query(`CREATE TABLE IF NOT EXISTS ${databaseName}.${tableName} (${result})`, function(err, data)
+            {
+              err ? console.log(`[${databaseName}] : ${err.message} `) : console.log(`[${databaseName}] : table "${tableName}" created !`);
+              
+              connection.release();
+              
+              Object.keys(database)[x += 1] == undefined ? callback() : loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
+            });
+          }
         });
       }
     });
