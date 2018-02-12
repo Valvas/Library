@@ -95,12 +95,7 @@ module.exports.startApp = (app, callback) =>
       accounts.createRights(pool, () =>
       {
         app.set('mysqlConnector', pool);
-        console.log(true);
-        setTimeout(() =>
-        {
-          
-          callback();
-        }, 5000);
+        callback();
       });
     });
   });

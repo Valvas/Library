@@ -9,7 +9,7 @@ var databaseManager     = require(`${__root}/functions/database/${params.databas
 /****************************************************************************************************/
 
 module.exports.createAccounts = (databaseConnector, callback) =>
-{
+{console.log(true);
   var x = 0;
 
   var accountCreationLoop = () =>
