@@ -36,13 +36,18 @@ function mysqlDatabase(databaseObject, callback)
 
     databaseConnector.connect((err) =>
     {
+      databaseConnector.destroy();
+      
       databaseCounterRetries += 1;
       
       if(databaseCounterRetries < 10 && err) setTimeout(() =>{ databaseConnectionLoop(); }, 1000);
       
       else if(databaseCounterRetries == 10 && err) callback({ status: 500, message: errors[constants.UNABLE_TO_CONNECT_TO_DATABASE] });
 
-      else{ callback(null); }
+      else
+      { 
+        callback(null); 
+      }
     });
   }
       
