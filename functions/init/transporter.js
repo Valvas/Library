@@ -18,6 +18,10 @@ module.exports.checkEmailSending = (params, callback) =>
     {
       user: params.transporter.user,
       pass: params.transporter.password
+    },
+    tls: 
+    {
+      rejectUnauthorized: false
     }
   });
 
