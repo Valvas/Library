@@ -157,7 +157,7 @@ function addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID,
           {
             logIDOrFalse == false ? callback(false, errorStatus, errorCode) :
 
-            copyFile(file, service, params, (boolean, errorStatus, errorCode) =>
+            copyFile(fileName, service, params, (boolean, errorStatus, errorCode) =>
             {
               boolean ? callback(logIDOrFalse) : callback(false, errorStatus, errorCode);
             });
