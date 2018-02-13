@@ -13,6 +13,8 @@ var databaseManager         = require(`${__root}/functions/database/${params.dat
 
 module.exports.addOneFile = (service, file, accountUUID, databaseConnector, callback) =>
 {
+  var params = require(`${__root}/json/config`);
+  
   file.originalname.split('.').length < 2 ? callback(false, 406, constants.UNAUTHORIZED_FILE) :
 
   accountRights.getUserRightsTowardsService(service, accountUUID, databaseConnector, (rightsOrFalse, errorStatus, errorCode) =>
