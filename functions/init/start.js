@@ -6,6 +6,7 @@ const express           = require('express');
 const auth              = require(`${__root}/auth`);
 const adminAuth         = require(`${__root}/admin_auth`);
 const encryption        = require(`${__root}/functions/encryption`);
+const initFolder        = require(`${__root}/functions/init/folders`);
 const accounts          = require(`${__root}/functions/accounts/init`);
 const database          = require(`${__root}/functions/database/init`);
 
@@ -95,7 +96,11 @@ module.exports.startApp = (app, callback) =>
       accounts.createRights(pool, () =>
       {
         app.set('mysqlConnector', pool);
-        callback();
+
+        initFolder.createAppFolders(params, (error) =>
+        {
+          error == null ? callback() : process.exit(0);
+        });
       });
     });
   });
