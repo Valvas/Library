@@ -44,16 +44,15 @@ router.post('/post-new-file', (req, res) =>
   const params = require(`${__root}/json/config`);
 
   var form = new formidable.IncomingForm();
-  form.uploadDir = `${params.path_to_root_storage}/${params.path_to_temp_storage}`;
-  //form.keepExtensions = true;
+  form.uploadDir = `${req.app.get('params').storage.root}/${params.path_to_temp_storage}`;
 
   form.parse(req, (err, fields, files) =>
   {
     Object.keys(files)[0] == undefined || fields.service == undefined ? res.status(406).send({ result: false, message: `Erreur [406] - ${errors[constants.MISSING_DATA_IN_REQUEST]} !` }) :
 
-    fs.rename(files[Object.keys(files)[0]].path, `${params.path_to_root_storage}/${params.path_to_temp_storage}/${files[Object.keys(files)[0]].name}`, (err) =>
+    fs.rename(files[Object.keys(files)[0]].path, `${req.app.get('params').storage.root}/${params.path_to_temp_storage}/${files[Object.keys(files)[0]].name}`, (err) =>
     {
-      filesAdding.addOneFile(fields.service, files[Object.keys(files)[0]].name, req.session.uuid, req.app.get('mysqlConnector'), (fileUUIDOrFalse, logIDOrErrorStatus, errorCode) =>
+      filesAdding.addOneFile(fields.service, files[Object.keys(files)[0]].name, req.session.uuid, req.app.get('mysqlConnector'), req.app.get('params'), (fileUUIDOrFalse, logIDOrErrorStatus, errorCode) =>
       {
         fileUUIDOrFalse == false ? 
         res.status(logIDOrErrorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
@@ -69,7 +68,7 @@ router.delete('/delete-file', (req, res) =>
 {
   req.body.file == undefined || req.body.service == undefined ? res.status(406).send(false) :
 
-  filesDeleting.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), (deleteLogIdOrErrorMessage, errorStatus, errorCode) =>
+  filesDeleting.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), req.app.get('params'), (deleteLogIdOrErrorMessage, errorStatus, errorCode) =>
   {
     deleteLogIdOrErrorMessage == false ?
     res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
@@ -95,7 +94,7 @@ router.put('/get-ext-accepted', (req, res) =>
 
 router.get('/download-file/:service/:file', (req, res) =>
 {
-  filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), (fileOrFalse, errorStatusOrLogID, errorCode) =>
+  filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), req.app.get('params'), (fileOrFalse, errorStatusOrLogID, errorCode) =>
   {
     res.setHeader('logID', errorStatusOrLogID);
 
@@ -103,7 +102,7 @@ router.get('/download-file/:service/:file', (req, res) =>
     
     res.render('block', { message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
 
-    res.download(`${params.path_to_root_storage}/${req.params.service}/${fileOrFalse}`);
+    res.download(`${req.app.get('params').storage.root}/${req.params.service}/${fileOrFalse}`);
   });
 });
 

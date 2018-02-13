@@ -2,16 +2,16 @@
 
 var fs                    = require('fs');
 
-var params                = require(`${__root}/json/config`);
+var config                = require(`${__root}/json/config`);
 var constants             = require(`${__root}/functions/constants`);
 var fileLogs              = require(`${__root}/functions/files/logs`);
 var accountGet            = require(`${__root}/functions/accounts/get`);
 var accountRights         = require(`${__root}/functions/accounts/rights`);
-var databaseManager       = require(`${__root}/functions/database/${params.database.dbms}`);
+var databaseManager       = require(`${__root}/functions/database/${config.database.dbms}`);
 
 /****************************************************************************************************/
 
-module.exports.downloadFile = (service, fileUUID, accountUUID, databaseConnector, callback) =>
+module.exports.downloadFile = (service, fileUUID, accountUUID, databaseConnector, params, callback) =>
 {
   service == undefined || fileUUID == undefined || accountUUID == undefined || databaseConnector == undefined ?
   
@@ -27,8 +27,8 @@ module.exports.downloadFile = (service, fileUUID, accountUUID, databaseConnector
 
       databaseManager.selectQuery(
       {
-        'databaseName': params.database.name,
-        'tableName': params.database.tables.files,
+        'databaseName': config.database.name,
+        'tableName': config.database.tables.files,
 
         'args':
         {
@@ -55,13 +55,13 @@ module.exports.downloadFile = (service, fileUUID, accountUUID, databaseConnector
         {
           fileOrErrorMessage.length == 0 ? callback(false, 404, constants.FILE_NOT_FOUND_IN_DATABASE) :
           
-          fs.stat(`${params.path_to_root_storage}/${service}/${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (err, stats) =>
+          fs.stat(`${params.storage.root}/${service}/${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, (err, stats) =>
           {
             if(err) callback(false, 404, constants.FILE_NOT_FOUND_ON_DISK);
 
             else
             {
-              fileLogs.addLogInDatabase(params.file_logs.download, accountUUID, undefined, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
+              fileLogs.addLogInDatabase(config.file_logs.download, accountUUID, undefined, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
               {
                 if(logIDOrFalse == false) callback(false, errorStatus, errorCode);
 
@@ -79,7 +79,7 @@ module.exports.downloadFile = (service, fileUUID, accountUUID, databaseConnector
                     }
                   }
 
-                  fileLogs.addLog(logObj, (boolean, errorStatus, errorCode) =>
+                  fileLogs.addLog(logObj, params, (boolean, errorStatus, errorCode) =>
                   {
                     boolean ? callback(`${fileOrErrorMessage[0].name}.${fileOrErrorMessage[0].type}`, logIDOrFalse) : callback(false, errorStatus, errorCode);
                   });

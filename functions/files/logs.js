@@ -2,19 +2,19 @@
 
 var fs                  = require('fs');
 var logs                = require(`${__root}/json/logs`);
-var params              = require(`${__root}/json/config`);
+var config              = require(`${__root}/json/config`);
 var constants           = require(`${__root}/functions/constants`);
 var formatDate          = require(`${__root}/functions/format/date`);
 var filesCommon         = require(`${__root}/functions/files/common`);
-var databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
+var databaseManager     = require(`${__root}/functions/database/${config.database.dbms}`);
 
 var filesLogs = module.exports = {};
 
 /****************************************************************************************************/
 
-filesLogs.addLog = (obj, callback) =>
+filesLogs.addLog = (obj, params, callback) =>
 {
-  filesCommon.createFolder(params.path_to_file_logs_storage, `${params.path_to_root_storage}/${params.path_to_logs_storage}`, (pathOrFalse, errorStatus, errorCode) =>
+  filesCommon.createFolder(config.path_to_file_logs_storage, `${params.storage.root}/${config.path_to_logs_storage}`, (pathOrFalse, errorStatus, errorCode) =>
   {
     pathOrFalse == false ? callback(false, errorStatus, errorCode) :
 
@@ -96,8 +96,8 @@ filesLogs.addLogInDatabase = (logType, accountUUID, commentContent, fileUUID, da
 
   databaseManager.insertQuery(
   {
-    'databaseName': params.database.name,
-    'tableName': params.database.tables.file_logs,
+    'databaseName': config.database.name,
+    'tableName': config.database.tables.file_logs,
     'uuid': false,
     'args':
     {
@@ -112,7 +112,7 @@ filesLogs.addLogInDatabase = (logType, accountUUID, commentContent, fileUUID, da
 
     else
     {
-      logType != params.file_logs.comment ? callback(insertedIdOrErrorMessage) :
+      logType != config.file_logs.comment ? callback(insertedIdOrErrorMessage) :
 
       addCommentInDatabase(insertedIdOrErrorMessage, commentContent, databaseConnector, (boolean, errorStatus, errorCode) =>
       {
@@ -134,8 +134,8 @@ function addCommentInDatabase(logId, commentContent, databaseConnector, callback
 
   databaseManager.insertQuery(
   {
-    'databaseName': params.database.name,
-    'tableName': params.database.tables.file_comments,
+    'databaseName': config.database.name,
+    'tableName': config.database.tables.file_comments,
     'uuid': false,
     'args':
     {
@@ -154,8 +154,8 @@ filesLogs.getPreparedLog = (log, databaseConnector, callback) =>
 {
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.name,
-    'tableName': params.database.tables.accounts,
+    'databaseName': config.database.name,
+    'tableName': config.database.tables.accounts,
     'args': { '0': '*' },
     'where': { '=': { '0': { 'key': 'uuid', 'value': log.account } } }
 
@@ -184,12 +184,12 @@ filesLogs.getPreparedLog = (log, databaseConnector, callback) =>
 
           preparedLog.id = log.id;
           
-          log.type == params.file_logs.comment ?
+          log.type == config.file_logs.comment ?
 
           databaseManager.selectQuery(
           {
-            'databaseName': params.database.name,
-            'tableName': params.database.tables.file_comments,
+            'databaseName': config.database.name,
+            'tableName': config.database.tables.file_comments,
             'args': { '0': 'content' },
             'where': { '=': { '0': { 'key': 'log', 'value': log.id } } }
             
@@ -226,8 +226,8 @@ filesLogs.getFileLog = (logID, databaseConnector, callback) =>
 
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.name,
-    'tableName': params.database.tables.file_logs,
+    'databaseName': config.database.name,
+    'tableName': config.database.tables.file_logs,
     'args': { '0': '*' },
     'where': { '=': { '0': { 'key': 'id', 'value': logID } } }
 
