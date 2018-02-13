@@ -33,7 +33,7 @@ function endConfiguration(event)
 
     $.ajax(
     {
-      type: 'GET', timeout: 5000, dataType: 'JSON', url: '/init/end', success: () => {},
+      type: 'GET', timeout: 20000, dataType: 'JSON', url: '/init/end', success: () => {},
       error: (xhr, status, error) => {}
         
     }).done((json) => 
