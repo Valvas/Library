@@ -3,6 +3,7 @@
 const fs                = require('fs');
 const mysql             = require('mysql');
 const express           = require('express');
+const nodemailer        = require('nodemailer');
 const auth              = require(`${__root}/auth`);
 const adminAuth         = require(`${__root}/admin_auth`);
 const encryption        = require(`${__root}/functions/encryption`);
@@ -63,6 +64,8 @@ module.exports.startApp = (app, callback) =>
 
   const params            = require(`${__root}/json/params`);
 
+  app.set('params', params);
+
   app.use('/', root);
   app.use('/home', home);
   app.use('/file', auth, file);
@@ -88,6 +91,24 @@ module.exports.startApp = (app, callback) =>
     port              : params.database.port,
     password          : params.database.password
   });
+
+  var transporter = nodemailer.createTransport(
+  {
+    host                  : params.transporter.address,
+    port                  : params.transporter.port,
+    secure                : params.transporter.secure,
+    auth:
+    {
+      user                : params.transporter.user,
+      pass                : params.transporter.password
+    },
+    tls: 
+    {
+      rejectUnauthorized  : false
+    }
+  });
+
+  app.set('transporter', transporter);
 
   database.createDatabases(pool, () =>
   { 

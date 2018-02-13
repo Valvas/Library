@@ -1,18 +1,19 @@
 'use strict';
 
-var params                = require(`${__root}/json/config`);
-var constants             = require(`${__root}/functions/constants`);
-var encryption            = require(`${__root}/functions/encryption`);
-var databaseManager       = require(`${__root}/functions/database/${params.database.dbms}`);
+const config                = require(`${__root}/json/config`);
+const constants             = require(`${__root}/functions/constants`);
+const encryption            = require(`${__root}/functions/encryption`);
+const accountEmail          = require(`${__root}/functions/email/account`);
+const databaseManager       = require(`${__root}/functions/database/${config.database.dbms}`);
 
 /****************************************************************************************************/
 
-module.exports.resetPassword = (emailAddress, databaseConnector, emailTransporter, callback) =>
+module.exports.resetPassword = (emailAddress, databaseConnector, emailTransporter, params, callback) =>
 {
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.name,
-    'tableName': params.database.tables.accounts,
+    'databaseName': config.database.name,
+    'tableName': config.database.tables.accounts,
 
     'args': { '0': 'id' },
 
@@ -29,22 +30,22 @@ module.exports.resetPassword = (emailAddress, databaseConnector, emailTransporte
     }
   }, databaseConnector, (boolean, accountOrErrorMessage) =>
   {
-    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
 
     else
     {
-      accountOrErrorMessage.length == 0 ? callback(false, 404, constants.ACCOUNT_NOT_FOUND) :
+      accountOrErrorMessage.length == 0 ? callback({ status: 500, code: constants.ACCOUNT_NOT_FOUND }) :
 
       encryption.getRandomPassword((clearPassword, encryptedPassword) =>
       {
-        if(clearPassword == false) callback(false, 500, constants.ENCRYPTION_FAILED);
+        if(clearPassword == false) callback({ status: 500, code: constants.ENCRYPTION_FAILED });
 
         else
         {
           databaseManager.updateQuery(
           {
-            'databaseName': params.database.name,
-            'tableName': params.database.tables.accounts,
+            'databaseName': config.database.name,
+            'tableName': config.database.tables.accounts,
 
             'args': 
             { 
@@ -64,27 +65,23 @@ module.exports.resetPassword = (emailAddress, databaseConnector, emailTransporte
             }
           }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
           {
-            if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+            if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
 
             else
             {
-              var mailOptions = 
+              if(params.init.servicesStarted.transporter == false)
               {
-                from: 'Library PEI <noreply@groupepei.fr>',
-                to: emailAddress,
-                subject: 'Nouveau mot de passe',
-                html: `<p>Voici votre nouveau mot de passe : <span>${clearPassword}</span></p>`
-              };
+                console.log(`Transporter service is not started !\nPassword for "${emailAddress}" is "${clearPassword}" !`);
+                callback({ status: 400, code: constants.PASSWORD_RESETED_WITHOUT_SENDING_EMAIL });
+              }
 
-              emailTransporter.sendMail(mailOptions, (err, info) => 
+              else
               {
-                if(err) callback(false, 500, constants.MAIL_NOT_SENT);
-
-                else
+                accountEmail.forgottenPassword(emailAddress, clearPassword, emailTransporter, (error) =>
                 {
-                  callback(true);
-                }
-              });
+                  callback(error);
+                });
+              }
             }
           });
         }

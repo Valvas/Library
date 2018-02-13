@@ -53,11 +53,11 @@ router.post('/', (req, res) =>
   
   res.status(406).send({ result: false, message: errors[10009] }) :
 
-  accountsCreate.createAccount(req.body, req.app.get('mysqlConnector'), req.app.get('transporter'), (boolean, errorStatus, errorCode) =>
+  accountsCreate.createAccount(req.body, req.app.get('mysqlConnector'), req.app.get('transporter'), req.app.get('params'), (error) =>
   {
-    boolean ? 
-    res.status(201).send({ result: true, message: `${success[constants.ACCOUNT_SUCCESSFULLY_CREATED].charAt(0).toUpperCase()}${success[constants.ACCOUNT_SUCCESSFULLY_CREATED].slice(1)}` }) : 
-    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+    error == null ? 
+    res.status(201).send({ result: true, message: success[constants.ACCOUNT_SUCCESSFULLY_CREATED] }) : 
+    res.status(error.status).send({ result: false, message: errors[error.code] });
   });
 });
 
@@ -65,7 +65,7 @@ router.post('/', (req, res) =>
 
 router.get('/reset-password', (req, res) =>
 {
-  res.render('reset_password');
+  res.render('reset_password', { service: req.app.get('params').init.servicesStarted.transporter });
 });
 
 /****************************************************************************************************/
@@ -74,11 +74,11 @@ router.put('/reset-password', (req, res) =>
 {
   req.body.email == undefined ? res.status(406).send({ result: false, message: errors[10009] }) :
 
-  accountsReset.resetPassword(req.body.email, req.app.get('mysqlConnector'), req.app.get('transporter'), (boolean, errorStatus, errorCode) =>
+  accountsReset.resetPassword(req.body.email, req.app.get('mysqlConnector'), req.app.get('transporter'), req.app.get('params'), (error) =>
   {
-    boolean == false ?
-    res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) : 
-    res.status(200).send({ result: true, message: `${success[constants.NEW_PASSWORD_SENT].charAt(0).toUpperCase()}${success[constants.NEW_PASSWORD_SENT].slice(1)}` });
+    error == null ?
+    res.status(200).send({ result: true, message: success[constants.NEW_PASSWORD_SENT] }) :
+    res.status(error.status).send({ result: false, message: errors[error.code] });
   });
 });
 

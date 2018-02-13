@@ -177,7 +177,12 @@ window.onload = $(() =>
       $.ajax(
       {
         type: 'POST', timeout: 2000, dataType: 'JSON', data: account, url: '/', success: () => {},
-        error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); } 
+        error: (xhr, status, error) => 
+        { 
+          if(status == 'timeout') printError('Le serveur a mis trop de temps à répondre');
+
+          else{ printError(JSON.parse(xhr.responseText).message); }
+        } 
   
       }).done((json) =>
       {

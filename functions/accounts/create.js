@@ -1,15 +1,16 @@
 'use strict';
 
-var params                = require(`${__root}/json/config`);
-var services              = require(`${__root}/json/services`);
-var constants             = require(`${__root}/functions/constants`);
-var encryption            = require(`${__root}/functions/encryption`);
-var accountsCheck         = require(`${__root}/functions/accounts/check`);
-var databaseManager       = require(`${__root}/functions/database/${params.database.dbms}`);
+const config                = require(`${__root}/json/config`);
+const services              = require(`${__root}/json/services`);
+const constants             = require(`${__root}/functions/constants`);
+const encryption            = require(`${__root}/functions/encryption`);
+const accountEmail          = require(`${__root}/functions/email/account`);
+const accountsCheck         = require(`${__root}/functions/accounts/check`);
+const databaseManager       = require(`${__root}/functions/database/${config.database.dbms}`);
 
 /****************************************************************************************************/
 
-module.exports.createAccount = (obj, databaseConnector, emailTransporter, callback) =>
+module.exports.createAccount = (obj, databaseConnector, emailTransporter, params, callback) =>
 {
   accountsCheck.checkAccountFormat(obj, databaseConnector, (boolean, errorStatus, errorCode) =>
   {
@@ -31,8 +32,8 @@ module.exports.createAccount = (obj, databaseConnector, emailTransporter, callba
 
             databaseManager.insertQuery(
             {
-              'databaseName': params.database.name,
-              'tableName': params.database.tables.accounts,
+              'databaseName': config.database.name,
+              'tableName': config.database.tables.accounts,
 
               'uuid': true,
       
@@ -52,23 +53,19 @@ module.exports.createAccount = (obj, databaseConnector, emailTransporter, callba
               
               else
               {
-                var mailOptions = 
+                if(params.init.servicesStarted.transporter == false)
                 {
-                  from: 'Library PEI <noreply@groupepei.fr>',
-                  to: obj.email,
-                  subject: 'Mot de passe',
-                  html: `<p>Voici votre mot de passe : <span>${uncryptedPassword}</span></p>`
-                };
+                  console.log(`Transporter service is not started !\nPassword for "${obj.email}" is "${uncryptedPassword}" !`);
+                  callback({ status: 400, code: constants.ACCOUNT_CREATED_WITHOUT_SENDING_EMAIL });
+                }
 
-                emailTransporter.sendMail(mailOptions, (err, info) => 
+                else
                 {
-                  if(err) callback(false, 500, constants.MAIL_NOT_SENT);
-
-                  else
+                  accountEmail.accountCreated(obj.email, uncryptedPassword, emailTransporter, (error) =>
                   {
-                    callback(true);
-                  }
-                });
+                    callback(error);
+                  });
+                }
               }
             });
           });

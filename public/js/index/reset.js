@@ -13,8 +13,12 @@ window.onload = $(() =>
     {
       $.ajax(
       {
-        type: 'PUT', timeout: 2000, dataType: 'JSON', data: { 'email': $('[name="email"]').val() }, url: '/reset-password', success: () => {},
-        error: (xhr, status, error) => { printError(JSON.parse(xhr.responseText).message); } 
+        type: 'PUT', timeout: 5000, dataType: 'JSON', data: { 'email': $('[name="email"]').val() }, url: '/reset-password', success: () => {},
+        error: (xhr, status, error) => 
+        { 
+          if(status == 'timeout') printError('Le serveur a mis trop de temps à répondre');
+          else{ printError(JSON.parse(xhr.responseText).message); } 
+        } 
 
       }).done((json) =>
       {
