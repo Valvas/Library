@@ -95,7 +95,7 @@ router.put('/get-ext-accepted', (req, res) =>
 router.get('/download-file/:service/:file', (req, res) =>
 {
   filesDownloading.downloadFile(req.params.service, req.params.file, req.session.uuid, req.app.get('mysqlConnector'), req.app.get('params'), (fileOrFalse, errorStatusOrLogID, errorCode) =>
-  {console.log(fileOrFalse);
+  {
     res.setHeader('logID', errorStatusOrLogID);
 
     fileOrFalse == false ? 

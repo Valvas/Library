@@ -5,6 +5,7 @@ var fs                      = require('fs');
 var config                  = require(`${__root}/json/config`);
 var constants               = require(`${__root}/functions/constants`);
 var fileLogs                = require(`${__root}/functions/files/logs`);
+var fileCommon              = require(`${__root}/functions/files/common`);
 var fileDeleting            = require(`${__root}/functions/files/deleting`);
 var accountRights           = require(`${__root}/functions/accounts/rights`);
 var databaseManager         = require(`${__root}/functions/database/${config.database.dbms}`);
@@ -197,13 +198,18 @@ function addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID,
 
 function copyFile(fileName, service, params, callback)
 {
-  fs.copyFile(`${params.storage.root}/${config.path_to_temp_storage}/${fileName}`, `${params.storage.root}/${service}/${fileName}`, (err) =>
+  fileCommon.createFolder(service, params.storage.root, (pathOrFalse, errorStatus, errorCode) =>
   {
-    err ? callback(false, 500, constants.FAILED_TO_MOVE_FILE_FROM_TMP) : 
-          
-    fs.unlink(`${params.storage.root}/${config.path_to_temp_storage}/${fileName}`, (err) =>
+    pathOrFalse == false ? callback(false, errorStatus, errorCode) :
+
+    fs.copyFile(`${params.storage.root}/${config.path_to_temp_storage}/${fileName}`, `${params.storage.root}/${service}/${fileName}`, (err) =>
     {
-      err ? callback(false, 500, constants.FAILED_TO_DELETE_FILE_FROM_TMP) : callback(true);
+      err ? callback(false, 500, constants.FAILED_TO_MOVE_FILE_FROM_TMP) : 
+            
+      fs.unlink(`${params.storage.root}/${config.path_to_temp_storage}/${fileName}`, (err) =>
+      {
+        err ? callback(false, 500, constants.FAILED_TO_DELETE_FILE_FROM_TMP) : callback(true);
+      });
     });
   });
 }
