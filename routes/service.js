@@ -14,7 +14,7 @@ var errors            = require(`${__root}/json/errors`);
 var params            = require(`${__root}/json/config`);
 var success           = require(`${__root}/json/success`);
 var servicesList      = require(`${__root}/json/services`);
-
+console.log(params);
 var storage = multer.diskStorage(
 {
   destination: (req, file, callback) => { callback(null, `${params.path_to_root_storage}/${params.path_to_temp_storage}`); },
