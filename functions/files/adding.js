@@ -11,9 +11,9 @@ var databaseManager         = require(`${__root}/functions/database/${params.dat
 
 /****************************************************************************************************/
 
-module.exports.addOneFile = (service, file, accountUUID, databaseConnector, callback) =>
+module.exports.addOneFile = (service, fileName, accountUUID, databaseConnector, callback) =>
 {
-  file.originalname.split('.').length < 2 ? callback(false, 406, constants.UNAUTHORIZED_FILE) :
+  fileName.split('.').length < 2 ? callback(false, 406, constants.UNAUTHORIZED_FILE) :
 
   accountRights.getUserRightsTowardsService(service, accountUUID, databaseConnector, (rightsOrFalse, errorStatus, errorCode) =>
   {
@@ -28,7 +28,7 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
         'databaseName': params.database.name,
         'tableName': params.database.tables.files,
         'args': { '0': '*' },
-        'where': { 'AND': { '=': { '0': { 'key': 'name', 'value': file.originalname.split('.')[0] }, '1': { 'key': 'type', 'value': file.originalname.split('.')[1] }, '2': { 'key': 'service', 'value': service } } } }
+        'where': { 'AND': { '=': { '0': { 'key': 'name', 'value': fileName.split('.')[0] }, '1': { 'key': 'type', 'value': fileName.split('.')[1] }, '2': { 'key': 'service', 'value': service } } } }
 
       }, databaseConnector, (boolean, fileOrErrorMessage) =>
       {
@@ -44,7 +44,7 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
             if(fileOrErrorMessage.length > 0) fileUUID = fileOrErrorMessage[0].uuid;
 
-            fs.stat(`${params.path_to_root_storage}/${service}/${file.originalname}`, (err, stats) =>
+            fs.stat(`${params.path_to_root_storage}/${service}/${fileName}`, (err, stats) =>
             {
               if(err  && err.code != 'ENOENT') callback(false, 500, constants.FILE_SYSTEM_ERROR);
 
@@ -54,11 +54,11 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
                 if(stats != undefined)
                 {
-                  fileDeleting.moveFileToBin(service, file.originalname, (boolean, errorStatus, errorCode) =>
+                  fileDeleting.moveFileToBin(service, fileName, (boolean, errorStatus, errorCode) =>
                   {
                     boolean == false ? callback(false, errorStatus, errorCode) :
 
-                    addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
+                    addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
                     {
                       if(logIDOrFalse == false) callback(false, errorStatus, errorCode);
 
@@ -67,8 +67,8 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
                         var logObj =
                         {
                           'service': service,
-                          'fileName': file.originalname.split('.')[0],
-                          'fileExt': file.originalname.split('.')[1],
+                          'fileName': fileName.split('.')[0],
+                          'fileExt': fileName.split('.')[1],
                           'content':
                           {
                             'account': accountUUID,
@@ -87,7 +87,7 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
                 else
                 {
-                  addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
+                  addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
                   {
                     if(logIDOrFalse == false) callback(false, errorStatus, errorCode);
 
@@ -96,8 +96,8 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
                       var logObj =
                       {
                         'service': service,
-                        'fileName': file.originalname.split('.')[0],
-                        'fileExt': file.originalname.split('.')[1],
+                        'fileName': fileName.split('.')[0],
+                        'fileExt': fileName.split('.')[1],
                         'content':
                         {
                           'account': accountUUID,
@@ -123,7 +123,7 @@ module.exports.addOneFile = (service, file, accountUUID, databaseConnector, call
 
 /****************************************************************************************************/
 
-function addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, databaseConnector, callback)
+function addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID, databaseConnector, callback)
 {
   fileUUID == false ?
 
@@ -132,7 +132,7 @@ function addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, dat
     'databaseName': params.database.name,
     'tableName': params.database.tables.files,
     'uuid': true,
-    'args': { 'name': file.originalname.split('.')[0], 'type': file.originalname.split('.')[1], 'account': accountUUID, 'service': service, 'deleted': 0 }
+    'args': { 'name': fileName.split('.')[0], 'type': fileName.split('.')[1], 'account': accountUUID, 'service': service, 'deleted': 0 }
 
   }, databaseConnector, (boolean, fileIdOrErrorMessage) =>
   {
@@ -184,7 +184,7 @@ function addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, dat
       {
         logIDOrFalse == false ? callback(false, errorStatus, errorCode) :
 
-        copyFile(file, service, (boolean, errorStatus, errorCode) =>
+        copyFile(fileName, service, (boolean, errorStatus, errorCode) =>
         {
           boolean ? callback(logIDOrFalse) : callback(false, errorStatus, errorCode);
         });
@@ -195,13 +195,13 @@ function addNewFileOnDiskAndInDatabase(service, file, accountUUID, fileUUID, dat
 
 /****************************************************************************************************/
 
-function copyFile(file, service, callback)
+function copyFile(fileName, service, callback)
 {
-  fs.copyFile(`${params.path_to_root_storage}/${params.path_to_temp_storage}/${file.originalname}`, `${params.path_to_root_storage}/${service}/${file.originalname}`, (err) =>
+  fs.copyFile(`${params.path_to_root_storage}/${params.path_to_temp_storage}/${fileName}`, `${params.path_to_root_storage}/${service}/${fileName}`, (err) =>
   {
     err ? callback(false, 500, constants.FAILED_TO_MOVE_FILE_FROM_TMP) : 
           
-    fs.unlink(`${params.path_to_root_storage}/${params.path_to_temp_storage}/${file.originalname}`, (err) =>
+    fs.unlink(`${params.path_to_root_storage}/${params.path_to_temp_storage}/${fileName}`, (err) =>
     {
       err ? callback(false, 500, constants.FAILED_TO_DELETE_FILE_FROM_TMP) : callback(true);
     });

@@ -1,7 +1,8 @@
 'use strict';
 
-var express           = require('express');
-var multer            = require('multer');
+const fs              = require('fs');
+const express         = require('express');
+const formidable      = require('formidable');
 
 var services          = require('../functions/services');
 var constants         = require('../functions/constants');
@@ -14,14 +15,6 @@ var errors            = require(`${__root}/json/errors`);
 var params            = require(`${__root}/json/config`);
 var success           = require(`${__root}/json/success`);
 var servicesList      = require(`${__root}/json/services`);
-console.log(params);
-var storage = multer.diskStorage(
-{
-  destination: (req, file, callback) => { callback(null, `${params.path_to_root_storage}/${params.path_to_temp_storage}`); },
-  filename: (req, file, callback) => { callback(null, file.originalname); }
-});
- 
-var upload = multer({ storage: storage });
 
 var router = express.Router();
 
@@ -46,15 +39,27 @@ router.put('/get-user-rights', (req, res) =>
 
 /****************************************************************************************************/
 
-router.post('/post-new-file', upload.single('file'), (req, res) =>
+router.post('/post-new-file', (req, res) =>
 {
-  req.file == undefined || req.body.service == undefined ? res.status(406).send({ result: false, message: `Erreur [406] - ${errors[constants.MISSING_DATA_IN_REQUEST]} !` }) :
-  
-  filesAdding.addOneFile(req.body.service, req.file, req.session.uuid, req.app.get('mysqlConnector'), (fileUUIDOrFalse, logIDOrErrorStatus, errorCode) =>
+  const params = require(`${__root}/json/config`);
+
+  var form = new formidable.IncomingForm();
+  form.uploadDir = `${params.path_to_root_storage}/${params.path_to_temp_storage}`;
+  //form.keepExtensions = true;
+
+  form.parse(req, (err, fields, files) =>
   {
-    fileUUIDOrFalse == false ? 
-    res.status(logIDOrErrorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
-    res.status(200).send({ result: true, message: `${success[20007].charAt(0).toUpperCase()}${success[20007].slice(1)}`, fileUUID: fileUUIDOrFalse, log: logIDOrErrorStatus });
+    Object.keys(files)[0] == undefined || fields.service == undefined ? res.status(406).send({ result: false, message: `Erreur [406] - ${errors[constants.MISSING_DATA_IN_REQUEST]} !` }) :
+
+    fs.rename(files[Object.keys(files)[0]].path, `${params.path_to_root_storage}/${params.path_to_temp_storage}/${files[Object.keys(files)[0]].name}`, (err) =>
+    {
+      filesAdding.addOneFile(fields.service, files[Object.keys(files)[0]].name, req.session.uuid, req.app.get('mysqlConnector'), (fileUUIDOrFalse, logIDOrErrorStatus, errorCode) =>
+      {
+        fileUUIDOrFalse == false ? 
+        res.status(logIDOrErrorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
+        res.status(200).send({ result: true, message: `${success[20007].charAt(0).toUpperCase()}${success[20007].slice(1)}`, fileUUID: fileUUIDOrFalse, log: logIDOrErrorStatus });
+      });
+    });
   });
 });
 
