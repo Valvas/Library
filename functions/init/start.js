@@ -9,24 +9,11 @@ const encryption        = require(`${__root}/functions/encryption`);
 const accounts          = require(`${__root}/functions/accounts/init`);
 const database          = require(`${__root}/functions/database/init`);
 
-const root              = require(`${__root}/routes/root`);
-const home              = require(`${__root}/routes/home`);
-const file              = require(`${__root}/routes/file`);
-const reports           = require(`${__root}/routes/reports`);
-const service           = require(`${__root}/routes/service`);
-
-const adminRoot         = require(`${__root}/routes/admin/root`);
-const adminUser         = require(`${__root}/routes/admin/user`);
-const adminRights       = require(`${__root}/routes/admin/rights`);
-const adminParams       = require(`${__root}/routes/admin/params`);
-const adminReports      = require(`${__root}/routes/admin/reports`);
-const adminService      = require(`${__root}/routes/admin/service`);
-
 /****************************************************************************************************/
 
 module.exports.startInit = (app, callback) =>
 {
-  var init = require(`${__root}/routes/init`);
+  const init = require(`${__root}/routes/init`);
 
   encryption.getInitPassword((password) =>
   {
@@ -60,7 +47,20 @@ module.exports.startInit = (app, callback) =>
 
 module.exports.startApp = (app, callback) =>
 {
-  const params = require(`${__root}/json/params`);
+  const root              = require(`${__root}/routes/root`);
+  const home              = require(`${__root}/routes/home`);
+  const file              = require(`${__root}/routes/file`);
+  const reports           = require(`${__root}/routes/reports`);
+  const service           = require(`${__root}/routes/service`);
+
+  const adminRoot         = require(`${__root}/routes/admin/root`);
+  const adminUser         = require(`${__root}/routes/admin/user`);
+  const adminRights       = require(`${__root}/routes/admin/rights`);
+  const adminParams       = require(`${__root}/routes/admin/params`);
+  const adminReports      = require(`${__root}/routes/admin/reports`);
+  const adminService      = require(`${__root}/routes/admin/service`);
+
+  const params            = require(`${__root}/json/params`);
 
   app.use('/', root);
   app.use('/home', home);
