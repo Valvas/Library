@@ -211,13 +211,33 @@ router.get('/end', (req, res) =>
       
       fs.writeFile(`${__root}/json/params.json`, JSON.stringify(req.app.get('params')), (err) =>
       {
-        if(err) res.status(500).send({ result: false, message: 'Could not write new configuration in file' }); 
+        if(err) res.status(500).send({ result: false, message: 'Could not write new configuration in file' });
 
         else
         {
-          initStart.startApp(req.app, () =>
+          fs.readFile(`${__root}/json/config.json`, (err, data) =>
           {
-            res.status(200).send({ result: true });
+            if(err) res.status(500).send({ result: false, message: 'Could not write new configuration in file' });
+
+            else
+            {
+              var json = JSON.parse(data);
+
+              json.path_to_root_storage = req.app.get('params').storage.root;
+
+              fs.writeFile(`${__root}/json/config.json`, JSON.stringify(json), (err) =>
+              {
+                if(err) res.status(500).send({ result: false, message: 'Could not write new configuration in file' });
+
+                else
+                {
+                  initStart.startApp(req.app, () =>
+                  {
+                    res.status(200).send({ result: true });
+                  });
+                }
+              });
+            }
           });
         }
       });  
