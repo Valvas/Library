@@ -52,11 +52,11 @@ router.post('/post-new-file', (req, res) =>
 
     fs.rename(files[Object.keys(files)[0]].path, `${req.app.get('params').storage.root}/${params.path_to_temp_storage}/${files[Object.keys(files)[0]].name}`, (err) =>
     {
-      filesAdding.addOneFile(fields.service, files[Object.keys(files)[0]].name, req.session.uuid, req.app.get('mysqlConnector'), req.app.get('params'), (fileUUIDOrFalse, logIDOrErrorStatus, errorCode) =>
+      filesAdding.addOneFile(fields.service, files[Object.keys(files)[0]].name, req.session.uuid, req.app.get('mysqlConnector'), req.app.get('params'), (error, data) =>
       {
-        fileUUIDOrFalse == false ? 
-        res.status(logIDOrErrorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
-        res.status(200).send({ result: true, message: `${success[20007].charAt(0).toUpperCase()}${success[20007].slice(1)}`, fileUUID: fileUUIDOrFalse, log: logIDOrErrorStatus });
+        error != null ? 
+        res.status(error.status).send({ result: false, message: errors[error.code] }) :
+        res.status(200).send({ result: true, message: success[20007], fileUUID: data.fileUUID, log: data.logID });
       });
     });
   });
@@ -70,7 +70,7 @@ router.delete('/delete-file', (req, res) =>
 
   filesDeleting.deleteOneFile(req.body.service, req.body.file, req.session.uuid, req.app.get('mysqlConnector'), req.app.get('params'), (deleteLogIdOrErrorMessage, errorStatus, errorCode) =>
   {
-    deleteLogIdOrErrorMessage == false ?
+    typeof(deleteLogIdOrErrorMessage) == 'boolean' && deleteLogIdOrErrorMessage == false ?
     res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` }) :
     res.status(200).send({ result: true, message: `${success[20005].charAt(0).toUpperCase()}${success[20005].slice(1)}`, log: deleteLogIdOrErrorMessage });
   });

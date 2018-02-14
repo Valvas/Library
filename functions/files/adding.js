@@ -41,10 +41,6 @@ module.exports.addOneFile = (service, fileName, accountUUID, databaseConnector, 
 
           else
           {
-            var fileUUID = undefined;
-
-            if(fileOrErrorMessage.length > 0) fileUUID = fileOrErrorMessage[0].uuid;
-
             fs.stat(`${params.storage.root}/${service}/${fileName}`, (err, stats) =>
             {
               if(err  && err.code != 'ENOENT') callback(false, 500, constants.FILE_SYSTEM_ERROR);
@@ -59,9 +55,9 @@ module.exports.addOneFile = (service, fileName, accountUUID, databaseConnector, 
                   {
                     boolean == false ? callback(false, errorStatus, errorCode) :
 
-                    addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID, databaseConnector, params, (logIDOrFalse, errorStatus, errorCode) =>
+                    addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID, databaseConnector, params, (error, data) =>
                     {
-                      if(logIDOrFalse == false) callback(false, errorStatus, errorCode);
+                      if(error != null) callback(error);
 
                       else
                       {
@@ -79,7 +75,7 @@ module.exports.addOneFile = (service, fileName, accountUUID, databaseConnector, 
 
                         fileLogs.addLog(logObj, params, (boolean, errorStatus, errorCode) =>
                         {
-                          boolean ? callback(fileUUID, logIDOrFalse) : callback(false, errorStatus, errorCode);
+                          boolean == true ? callback(null, data) : callback({ status: errorStatus, code: errorCode });
                         });
                       }
                     });
@@ -88,9 +84,9 @@ module.exports.addOneFile = (service, fileName, accountUUID, databaseConnector, 
 
                 else
                 {
-                  addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID, databaseConnector, params, (logIDOrFalse, errorStatus, errorCode) =>
+                  addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID, databaseConnector, params, (error, data) =>
                   {
-                    if(logIDOrFalse == false) callback(false, errorStatus, errorCode);
+                    if(error != null) callback(error);
 
                     else
                     {
@@ -108,7 +104,7 @@ module.exports.addOneFile = (service, fileName, accountUUID, databaseConnector, 
 
                       fileLogs.addLog(logObj, params, (boolean, errorStatus, errorCode) =>
                       {
-                        boolean ? callback(fileUUID, logIDOrFalse) : callback(false, errorStatus, errorCode);
+                        boolean == true ? callback(null, data) : callback({ status: errorStatus, code: errorCode });
                       });
                     }
                   });
@@ -137,7 +133,7 @@ function addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID,
 
   }, databaseConnector, (boolean, fileIdOrErrorMessage) =>
   {
-    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
 
     else
     {
@@ -150,17 +146,17 @@ function addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID,
         
       }, databaseConnector, (boolean, fileOrErrorMessage) =>
       {
-        if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+        if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
 
         else
         {
           fileLogs.addLogInDatabase(config.file_logs.upload, accountUUID, undefined, fileOrErrorMessage[0].uuid, databaseConnector, (logIDOrFalse, errorStatus, errorCode) =>
           {
-            logIDOrFalse == false ? callback(false, errorStatus, errorCode) :
+            logIDOrFalse == false ? callback({ status: errorStatus, code: errorCode }) :
 
-            copyFile(fileName, service, params, (boolean, errorStatus, errorCode) =>
+            copyFile(fileName, service, params, (error) =>
             {
-              boolean ? callback(logIDOrFalse) : callback(false, errorStatus, errorCode);
+              error == null ? callback(null, { logID: logIDOrFalse, fileUUID: fileOrErrorMessage[0].uuid }) : callback({ status: errorStatus, code: errorCode });
             });
           });
         }
@@ -177,7 +173,7 @@ function addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID,
 
   }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
   {
-    if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
   
     else
     {
@@ -185,9 +181,9 @@ function addNewFileOnDiskAndInDatabase(service, fileName, accountUUID, fileUUID,
       {
         logIDOrFalse == false ? callback(false, errorStatus, errorCode) :
 
-        copyFile(fileName, service, params, (boolean, errorStatus, errorCode) =>
+        copyFile(fileName, service, params, (error) =>
         {
-          boolean ? callback(logIDOrFalse) : callback(false, errorStatus, errorCode);
+          error == null ? callback(null, { logID: logIDOrFalse, fileUUID: fileOrErrorMessage[0].uuid }) : callback({ status: errorStatus, code: errorCode });
         });
       });
     }
@@ -200,15 +196,15 @@ function copyFile(fileName, service, params, callback)
 {
   fileCommon.createFolder(service, params.storage.root, (pathOrFalse, errorStatus, errorCode) =>
   {
-    pathOrFalse == false ? callback(false, errorStatus, errorCode) :
+    pathOrFalse == false ? callback({ status: errorStatus, code: errorCode }) :
 
     fs.copyFile(`${params.storage.root}/${config.path_to_temp_storage}/${fileName}`, `${params.storage.root}/${service}/${fileName}`, (err) =>
     {
-      err ? callback(false, 500, constants.FAILED_TO_MOVE_FILE_FROM_TMP) : 
+      err ? callback({ status: 500, code: constants.FAILED_TO_MOVE_FILE_FROM_TMP }) : 
             
       fs.unlink(`${params.storage.root}/${config.path_to_temp_storage}/${fileName}`, (err) =>
       {
-        err ? callback(false, 500, constants.FAILED_TO_DELETE_FILE_FROM_TMP) : callback(true);
+        err ? callback({ status: 500, code: constants.FAILED_TO_DELETE_FILE_FROM_TMP }) : callback(null);
       });
     });
   });

@@ -359,8 +359,6 @@ function updateFilesList(service, callback)
     {
       if(file['deleted'] == 0) y += 1;
 
-      document.getElementById(file.uuid).children[2].innerText = file.account;
-
       if($(`#${file['uuid']} [name="service-main-block-buttons"] [name="deleted"]`).length > 0 && file['deleted'] == 0)
       {
         $(`#${file['uuid']} [name="service-main-block-buttons"] [name="deleted"]`).remove();
@@ -375,7 +373,7 @@ function updateFilesList(service, callback)
 
       if(!document.getElementById(file['uuid']))
       {
-        $(`<tr id='${file['uuid']}' name='service-main-block-file' class='file'><td class='service-main-block-file-name'>${file['name']}</td><td class='service-main-block-file-type'>${file['type']}</td><td class='service-main-block-file-account hide-1x hide-2x hide-3x'>${file['account']}</td><td name='service-main-block-buttons' class='service-main-block-file-buttons hide-1x'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
+        $(`<tr id='${file['uuid']}' tag='${file['name']}.${file['ext']}' name='service-main-block-file' class='file'><td class='name'>${file['name']}</td><td class='type'>${file['type']}</td><td class='account'>${file['account']}</td><td name='service-main-block-buttons' class='buttons'></td></tr>`).appendTo(document.getElementById('service-main-block-table'));
   
         if(file['deleted'] == 0)
         {
@@ -387,6 +385,11 @@ function updateFilesList(service, callback)
         {
           $(`<div name='deleted' class='service-main-block-file-deleted'>Supprimé</div>`).appendTo($(document.getElementById(file['uuid'])).find('[name="service-main-block-buttons"]'));
         }
+      }
+
+      else
+      {
+        document.getElementById(file.uuid).children[2].innerText = file.account;
       }
 
       Object.keys(json['files'])[x += 1] != undefined ? loop(json['files'][Object.keys(json['files'])[x]]) : callback();
