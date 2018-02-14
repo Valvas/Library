@@ -1,29 +1,8 @@
 {
     "0":
     {
-        "title": "News 1",
-        "date": "2017-11-07 09:55:00",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam."
-    },
-
-    "1":
-    {
-        "title": "News 2",
-        "date": "2017-11-07 09:55:00",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam."
-    },
-
-    "2":
-    {
-        "title": "News 3",
-        "date": "2017-11-07 09:55:00",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam."
-    },
-
-    "3":
-    {
-        "title": "News 4",
-        "date": "2017-11-07 09:55:00",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam."
+        "title": "Lancement",
+        "date": "2018-02-14 11:30:00",
+        "content": "La version de tests de PEI Library vient d'être lancée. Cette version a pour but de trouver les bugs existants pour de les corriger mais aussi d'apporter des améliorations sur l'application afin de mieux répondre aux besoins des utilisateurs."
     }
 }
