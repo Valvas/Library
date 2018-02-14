@@ -92,7 +92,15 @@ window.onload = $(() =>
 
   socket.on('delete_file', (logID) =>
   {
-    $('.actions').html(`<div class='deleted'>Supprimé</div>`);
+    document.getElementById('actions').children[3].remove();
+    document.getElementById('actions').children[2].remove();
+    document.getElementById('actions').children[1].remove();
+  
+    var deleted = document.createElement('div');
+    deleted.setAttribute('class', 'deleted');
+    deleted.innerText = 'Supprimé';
+
+    document.getElementById('actions').appendChild(deleted);
     
     var x = 0;
     var pageSelectors = document.getElementById('pages-container').children;

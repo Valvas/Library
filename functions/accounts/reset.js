@@ -36,9 +36,9 @@ module.exports.resetPassword = (emailAddress, databaseConnector, emailTransporte
     {
       accountOrErrorMessage.length == 0 ? callback({ status: 500, code: constants.ACCOUNT_NOT_FOUND }) :
 
-      encryption.getRandomPassword((clearPassword, encryptedPassword) =>
+      encryption.getRandomPassword((error, passwords) =>
       {
-        if(clearPassword == false) callback({ status: 500, code: constants.ENCRYPTION_FAILED });
+        if(error != null) callback(error);
 
         else
         {
@@ -49,7 +49,7 @@ module.exports.resetPassword = (emailAddress, databaseConnector, emailTransporte
 
             'args': 
             { 
-              'password': encryptedPassword 
+              'password': passwords.encrypted 
             },
 
             'where':
@@ -71,13 +71,13 @@ module.exports.resetPassword = (emailAddress, databaseConnector, emailTransporte
             {
               if(params.init.servicesStarted.transporter == false)
               {
-                console.log(`Transporter service is not started !\nPassword for "${emailAddress}" is "${clearPassword}" !`);
+                console.log(`Transporter service is not started !\nPassword for "${emailAddress}" is "${passwords.clear}" !`);
                 callback({ status: 400, code: constants.PASSWORD_RESETED_WITHOUT_SENDING_EMAIL });
               }
 
               else
               {
-                accountEmail.forgottenPassword(emailAddress, clearPassword, emailTransporter, (error) =>
+                accountEmail.forgottenPassword(emailAddress, passwords.clear, emailTransporter, (error) =>
                 {
                   callback(error);
                 });

@@ -14,9 +14,9 @@ module.exports.createAccounts = (databaseConnector, callback) =>
 
   var accountCreationLoop = () =>
   {
-    encrypter.getRandomPassword((clearPassword) =>
+    encrypter.getRandomPassword((error, passwords) =>
     {
-      if(clearPassword == false)
+      if(error != null)
       {
         console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (encryption error) !`);
 
@@ -25,39 +25,27 @@ module.exports.createAccounts = (databaseConnector, callback) =>
 
       else
       {
-        encrypter.encryptPassword(clearPassword, (encryptedPassword) =>
+        databaseManager.selectQuery(
         {
-          if(encryptedPassword == false)
+          'databaseName': params.database.name,
+          'tableName': params.database.tables.accounts,
+          'args': { '0': 'password' },
+          'where': { '=': { '0': { 'key': 'email', 'value': accounts[Object.keys(accounts)[x]].email.replace(/"/g, '') } } }
+
+        }, databaseConnector, (boolean, passwordOrErrorMessage) =>
+        {
+          if(boolean == false)
           {
-            console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (encryption error) !`);
+            console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (SQL error) !`);
             
             Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
           }
 
           else
           {
-            databaseManager.selectQuery(
-            {
-              'databaseName': params.database.name,
-              'tableName': params.database.tables.accounts,
-            
-              'args':
-              {
-                '0': 'password'
-              },
-            
-              'where':
-              {
-                '=':
-                {
-                  '0':
-                  {
-                    'key': 'email',
-                    'value': accounts[Object.keys(accounts)[x]].email
-                  }
-                }
-              }
-            }, databaseConnector, (boolean, passwordOrErrorCode) =>
+            if(passwordOrErrorMessage.length > 0) passwords.encrypted = passwordOrErrorMessage[0].password;
+
+            createOrUpdateAccount(passwordOrErrorMessage.length > 0, accounts[Object.keys(accounts)[x]], passwords.encrypted, databaseConnector, (boolean) =>
             {
               if(boolean == false)
               {
@@ -68,26 +56,11 @@ module.exports.createAccounts = (databaseConnector, callback) =>
 
               else
               {
-                if(passwordOrErrorCode.length > 0) encryptedPassword = passwordOrErrorCode[0].password;
-
-                createOrUpdateAccount(passwordOrErrorCode.length > 0, accounts[Object.keys(accounts)[x]], encryptedPassword, databaseConnector, (boolean) =>
-                {
-                  if(boolean == false)
-                  {
-                    console.log(`[${params.database.name}][${params.database.tables.accounts}][ERROR] : could not create account "${accounts[Object.keys(accounts)[x]].email}" (SQL error) !`);
-                    
-                    Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
-                  }
-
-                  else
-                  {
-                    passwordOrErrorCode.length == 0 ?
-                    console.log(`[${params.database.name}][${params.database.tables.accounts}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with password : "${clearPassword}" !`) :
-                    console.log(`[${params.database.name}][${params.database.tables.accounts}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with unchanged password !`);
-                    
-                    Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
-                  }
-                });
+                passwordOrErrorMessage.length == 0 ?
+                console.log(`[${params.database.name}][${params.database.tables.accounts}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with password : "${passwords.clear}" !`) :
+                console.log(`[${params.database.name}][${params.database.tables.accounts}][SUCCESS] : account "${accounts[Object.keys(accounts)[x]].email}" created with unchanged password !`);
+                
+                Object.keys(accounts)[x += 1] == undefined ? callback() : accountCreationLoop();
               }
             });
           }

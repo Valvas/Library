@@ -359,6 +359,8 @@ function updateFilesList(service, callback)
     {
       if(file['deleted'] == 0) y += 1;
 
+      document.getElementById(file.uuid).children[2].innerText = file.account;
+
       if($(`#${file['uuid']} [name="service-main-block-buttons"] [name="deleted"]`).length > 0 && file['deleted'] == 0)
       {
         $(`#${file['uuid']} [name="service-main-block-buttons"] [name="deleted"]`).remove();

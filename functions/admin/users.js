@@ -114,7 +114,7 @@ module.exports.updateEmail = (accountUUID, emailAddress, databaseConnector, call
             {
               'databaseName': params.database.name,
               'tableName': params.database.tables.accounts,
-              'args': { 'email': emailAddress },
+              'args': { 'email': emailAddress.replace(/"/g, '') },
               'where': { '=': { '0': { 'key': 'uuid', 'value': accountUUID } } }
     
               }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
@@ -160,6 +160,8 @@ module.exports.updateLastname = (accountUUID, lastname, databaseConnector, callb
     
       else
       {
+        lastname = lastname.replace(/"/g, '');
+
         accountOrErrorMessage.length == 0 ? callback(false, 404, constants.ACCOUNT_NOT_FOUND) :
 
         databaseManager.updateQuery(
@@ -210,6 +212,8 @@ module.exports.updateFirstname = (accountUUID, firstname, databaseConnector, cal
     
       else
       {
+        firstname = firstname.replace(/"/g, '');
+
         accountOrErrorMessage.length == 0 ? callback(false, 404, constants.ACCOUNT_NOT_FOUND) :
 
         databaseManager.updateQuery(
@@ -266,7 +270,7 @@ module.exports.updateService = (accountUUID, service, databaseConnector, callbac
         {
           'databaseName': params.database.name,
           'tableName': params.database.tables.accounts,
-          'args': { 'service': service },
+          'args': { 'service': service.replace(/"/g, '') },
           'where': { '=': { '0': { 'key': 'uuid', 'value': accountUUID } } }
 
         }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>

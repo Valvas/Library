@@ -11,15 +11,15 @@ module.exports.checkAccountFormat = (obj, databaseConnector, callback) =>
 {
   format.checkEmailFormat(obj.email, (boolean) =>
   {
-    boolean == false ? callback(false, 406, constants.WRONG_EMAIL_FORMAT) :
+    boolean == false ? callback({ status: 406, code: constants.WRONG_EMAIL_FORMAT }) :
 
     format.checkStrFormat(obj.lastname, params.format.account.lastname, (boolean) =>
     {
-      boolean == false ? callback(false, 406, constants.WRONG_LASTNAME_FORMAT) :
+      boolean == false ? callback({ status: 406, code: constants.WRONG_LASTNAME_FORMAT }) :
 
       format.checkStrFormat(obj.firstname, params.format.account.firstname, (boolean) =>
       {
-        boolean == false ? callback(false, 406, constants.WRONG_FIRSTNAME_FORMAT) :
+        boolean == false ? callback({ status: 406, code: constants.WRONG_FIRSTNAME_FORMAT }) :
 
         databaseManager.selectQuery(
         {
@@ -35,17 +35,17 @@ module.exports.checkAccountFormat = (obj, databaseConnector, callback) =>
               '0':
               {
                 'key': 'email',
-                'value': obj.email
+                'value': obj.email.replace(/"/g, '')
               }
             }
           }
         }, databaseConnector, (boolean, accountOrErrorMessage) =>
         {
-          if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+          if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
 
           else
           {
-            accountOrErrorMessage.length > 0 ? callback(false, 406, constants.EMAIL_ALREADY_IN_USE) : callback(true);
+            accountOrErrorMessage.length > 0 ? callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE }) : callback(null);
           }
         });
       });

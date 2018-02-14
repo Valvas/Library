@@ -48,7 +48,7 @@ module.exports.addComment = (fileUUID, accountUUID, commentContent, databaseConn
           'databaseName': params.database.name,
           'tableName': params.database.tables.file_comments,
           'uuid': false,
-          'args': { 'log': logIdOrErrorMessage, 'content': commentContent }
+          'args': { 'log': logIdOrErrorMessage, 'content': commentContent.replace(/"/g, '\\"') }
       
         }, databaseConnector, (boolean, commentIdOrErrorMessage) =>
         {

@@ -12,23 +12,23 @@ const databaseManager       = require(`${__root}/functions/database/${config.dat
 
 module.exports.createAccount = (obj, databaseConnector, emailTransporter, params, callback) =>
 {
-  accountsCheck.checkAccountFormat(obj, databaseConnector, (boolean, errorStatus, errorCode) =>
+  accountsCheck.checkAccountFormat(obj, databaseConnector, (error) =>
   {
-    if(boolean == false) callback(false, errorStatus, errorCode);
+    if(error != null) callback(error);
 
     else
     {
-      if(obj.service == undefined || !(obj.service in services)) callback(false, 406, constants.SERVICE_NOT_FOUND);
+      if(obj.service == undefined || !(obj.service in services)) callback({ status: 406, code: constants.SERVICE_NOT_FOUND });
 
       else
       {
-        if(obj.admin == undefined || (obj.admin != '0' && obj.admin != '1')) callback(false, 406, constants.ADMIN_STATUS_IS_MISSING);
+        if(obj.admin == undefined || (obj.admin != '0' && obj.admin != '1')) callback({ status: 406, code: constants.ADMIN_STATUS_IS_MISSING });
 
         else
         {
-          encryption.getRandomPassword((uncryptedPassword, encryptedPasswordOrErrorStatus, errorCode) =>
+          encryption.getRandomPassword((error, passwords) =>
           {
-            uncryptedPassword == false ? callback(false, 500, constants.ENCRYPTION_FAILED) :
+            error != null ? callback(error) :
 
             databaseManager.insertQuery(
             {
@@ -39,29 +39,29 @@ module.exports.createAccount = (obj, databaseConnector, emailTransporter, params
       
               'args':
               {
-                'email': obj.email,
-                'lastname': obj.lastname,
-                'firstname': obj.firstname,
-                'password': encryptedPasswordOrErrorStatus,
+                'email': obj.email.replace(/"/g, ''),
+                'lastname': obj.lastname.replace(/"/g, ''),
+                'firstname': obj.firstname.replace(/"/g, ''),
+                'password': passwords.encrypted,
                 'suspended': 0,
-                'service': obj.service,
+                'service': obj.service.replace(/"/g, ''),
                 'is_admin': obj.admin
               }
             }, databaseConnector, (boolean, insertedIdOrErrorMessage) =>
             {
-              if(boolean == false) callback(false, 500, constants.SQL_SERVER_ERROR);
+              if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
               
               else
               {
                 if(params.init.servicesStarted.transporter == false)
                 {
-                  console.log(`Transporter service is not started !\nPassword for "${obj.email}" is "${uncryptedPassword}" !`);
+                  console.log(`Transporter service is not started !\nPassword for "${obj.email}" is "${passwords.clear}" !`);
                   callback({ status: 400, code: constants.ACCOUNT_CREATED_WITHOUT_SENDING_EMAIL });
                 }
 
                 else
                 {
-                  accountEmail.accountCreated(obj.email, uncryptedPassword, emailTransporter, (error) =>
+                  accountEmail.accountCreated(obj.email, passwords.clear, emailTransporter, (error) =>
                   {
                     callback(error);
                   });

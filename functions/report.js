@@ -244,7 +244,7 @@ module.exports.addComment = (reportUUID, comment, accountUUID, databaseConnector
             'date': Date.now(),
             'account': accountOrFalse.id,
             'log': insertedIdOrErrorMessage,
-            'content': comment,
+            'content': comment.replace(/"/g, '\\"'),
             'seen': accountOrFalse.is_admin == 0 ? 0 : 1,
             'admin': accountOrFalse.is_admin == 0 ? 0 : 1
           }

@@ -24,8 +24,8 @@ module.exports.createNewReport = (reportType, reportSubject, reportContent, acco
     'args':
     {
       'report_type': reportType,
-      'report_subject': reportSubject,
-      'report_content': reportContent,
+      'report_subject': reportSubject.replace(/"/g, '\\"'),
+      'report_content': reportContent.replace(/"/g, '\\"'),
       'report_account': accountUUID,
       'report_date': Date.now(),
       'report_status': 2
