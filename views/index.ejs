@@ -7,16 +7,26 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/logon.css" />
   <body class='logon-body'>
     <% include include/logs.ejs %>
-    <div class='logon-form-popup'>
-      <p id='logon-form-title' class='logon-form-title'>CONNEXION</p>
-      <form>
-        <input placeholder='Adresse Email' id='logon-form-email-input' type='text' /></br>
-        <input placeholder='Mot De Passe' id='logon-form-password-input' type='password' />
-        <button id='logon-form-send-button' class='logon-form-send-button'><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-        <a href='/reset-password' id='logon-form-forgotten-password' class='logon-form-question'>Mot de passe oublié ?</a>
+    <div id='main' class='main'>
+      <div class='title'>Connexion</div>
+      <div class='error' id='error'></div>
+      <form id='form'>
+        <div class='icon'><i class='fas fa-at'></i></div><!--
+        --><input placeholder='Adresse Email' class='input' id='email' type='text' required />
+        <div class='icon'><i class='fas fa-lock'></i></div><!--
+        --><input placeholder='Mot De Passe' class='input' id='password' type='password' required />
+        <button type='submit' id='send' class='send'>Envoyer</button>
       </form>
+      <a href='/reset-password' class='question'>Mot de passe oublié ?</a>
+    </div>
+    <div id='background' class='background'>
+      <div class='loader'>
+        <div class='spinner'><i class='fas fa-circle-notch fa-spin'></i></div>
+        <div class='message'>Vérification en cours...</div>
+      </div>
     </div>
     <% include include/scripts.ejs %>
     <script src='/js/index/logon.js'></script>
+    <script src='/js/fontawesome.js'></script>
   </body>
 </html>

@@ -352,7 +352,7 @@ function updateFilesList(service, callback)
     error: (xhr, status, error) => { printError(xhr.responseJSON.message); }
                 
   }).done((json) =>
-  {   
+  {
     var x = 0, y = 0;
 
     var loop = (file) =>

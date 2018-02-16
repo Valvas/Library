@@ -108,3 +108,39 @@ module.exports.getFile = (fileUUID, accountUUID, databaseConnector, callback) =>
 }
 
 /****************************************************************************************************/
+
+module.exports.getFilesForEachService = (databaseConnector, callback) =>
+{
+  databaseConnector == undefined ? callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+
+  databaseManager.selectQuery(
+  {
+    'databaseName': params.database.name,
+    'tableName': params.database.tables.files,
+    'args': { '0': '*' },
+    'where': {  }
+
+  }, databaseConnector, (boolean, filesOrErrorMessage) =>
+  {
+    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: filesOrErrorMessage });
+
+    else
+    {
+      var x = 0;
+      var counterObject = {};
+
+      var counterFilesLoop = () =>
+      {
+        if(counterObject[filesOrErrorMessage[x].service] == undefined) counterObject[filesOrErrorMessage[x].service] = 0;
+        
+        counterObject[filesOrErrorMessage[x].service] += 1;
+
+        filesOrErrorMessage[x += 1] == undefined ? callback(null, counterObject) : counterFilesLoop();
+      }
+
+      filesOrErrorMessage.length == 0 ? callback(null, counterObject) : counterFilesLoop();
+    }
+  });
+}
+
+/****************************************************************************************************/

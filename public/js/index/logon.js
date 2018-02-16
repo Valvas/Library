@@ -1,36 +1,39 @@
-window.onload = $(function()
+/****************************************************************************************************/
+
+document.getElementById('form').addEventListener('submit', sendFormData);
+
+/****************************************************************************************************/
+
+function sendFormData(event)
 {
-  $('body').on('click', '#logon-form-send-button', function(target)
-  {
-    target.preventDefault();
-    
-    $(document.getElementById('logon-form-email-input')).val() == '' ?
-    $(document.getElementById('logon-form-email-input')).css('border', '1px solid #FF0921'):
-    $(document.getElementById('logon-form-email-input')).css('border', '1px solid #DDDDDD');
-    
-    $(document.getElementById('logon-form-password-input')).val() == '' ?
-    $(document.getElementById('logon-form-password-input')).css('border', '1px solid #FF0921'):
-    $(document.getElementById('logon-form-password-input')).css('border', '1px solid #DDDDDD');
+  event.preventDefault();
 
-    if($(document.getElementById('logon-form-email-input')).val() != '' && $(document.getElementById('logon-form-password-input')).val() != '')
+  document.getElementById('error').innerText = '';
+  document.getElementById('main').style.filter = 'blur(3px)';
+  document.getElementById('background').style.display = 'block';
+
+  if(document.getElementById('email').value.length > 0 && document.getElementById('password').value.length > 0)
+  {
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+
+    $.ajax(
     {
-      var email = $('#logon-form-email-input').val(), password = $('#logon-form-password-input').val();
-
-      $.ajax(
+      type: 'PUT', timeout: 5000, dataType: 'JSON', data: { 'emailAddress': email, 'uncryptedPassword': password }, url: '/', success: () => {},
+      error: (xhr, status, error) => 
       {
-        type: 'PUT', timeout: 2000, dataType: 'JSON', data: { 'emailAddress': email, 'uncryptedPassword': password }, url: '/', success: function(){},
-        error: function(xhr, status, error){ printError(JSON.parse(xhr.responseText).message); } 
+        document.getElementById('background').removeAttribute('style');
+        document.getElementById('main').removeAttribute('style');
 
-      }).done(function(json)
-      {
-        json['result'] == true ? location = '/home' : printError(json['message']);
-      });
-    }
-  });
+        if(status == 'timeout') document.getElementById('error').innerText = 'Le serveur a mis trop de temps à répondre...';
+        else{ document.getElementById('error').innerText = JSON.parse(xhr.responseText).message; }
+      } 
 
-  $('body').on('click', '#logon-form-email-input, #logon-form-password-input', function()
-  {
-    $('#logon-form-email-input').css('border', '1px solid #DDDDDD');
-    $('#logon-form-password-input').css('border', '1px solid #DDDDDD');
-  });
-});
+    }).done((json) =>
+    {
+      location = '/home';
+    });
+  }
+}
+
+/****************************************************************************************************/

@@ -1,34 +1,50 @@
-window.onload = $(() =>
-{
-  $('body').on('click', 'button', (event) =>
-  {
-    event.preventDefault();
+/****************************************************************************************************/
 
-    if($('[name="email"]').val() == '')
+document.getElementById('form').addEventListener('submit', sendDataForm);
+
+/****************************************************************************************************/
+
+function sendDataForm(event)
+{
+  event.preventDefault();
+
+  document.getElementById('error').innerText = '';
+  document.getElementById('success').innerText = '';
+  document.getElementById('main').style.filter = 'blur(3px)';
+  document.getElementById('background').style.display = 'block';
+
+  if(document.getElementById('email').value.length > 0)
+  {
+    if(new RegExp("^[a-zA-Z][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$").test(document.getElementById('email').value) == false)
     {
-      $('[name="email"]').css('border', '2px solid red');
+      document.getElementById('background').removeAttribute('style');
+      document.getElementById('main').removeAttribute('style');
+      document.getElementById('error').innerText = `Le format de l'adresse email est incorrect`;
     }
 
     else
     {
       $.ajax(
       {
-        type: 'PUT', timeout: 5000, dataType: 'JSON', data: { 'email': $('[name="email"]').val() }, url: '/reset-password', success: () => {},
+        type: 'PUT', timeout: 5000, dataType: 'JSON', data: { 'email': document.getElementById('email').value }, url: '/reset-password', success: () => {},
         error: (xhr, status, error) => 
-        { 
-          if(status == 'timeout') printError('Le serveur a mis trop de temps à répondre');
-          else{ printError(JSON.parse(xhr.responseText).message); } 
+        {
+          document.getElementById('background').removeAttribute('style');
+          document.getElementById('main').removeAttribute('style');
+  
+          if(status == 'timeout') document.getElementById('error').innerText = 'Le serveur a mis trop de temps à répondre...';
+          else{ document.getElementById('error').innerText = xhr.responseJSON.message; }
         } 
-
+  
       }).done((json) =>
       {
-        printSuccess(json.message);
+        document.getElementById('background').removeAttribute('style');
+        document.getElementById('main').removeAttribute('style');
+        document.getElementById('form').reset();
+        document.getElementById('success').innerText = json.message;
       });
     }
-  });
+  }
+}
 
-  $('body').on('click', '[name="email"]', (event) =>
-  {
-    $('[name="email"]').css('border', '');
-  });
-});
+/****************************************************************************************************/

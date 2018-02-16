@@ -22,7 +22,7 @@ module.exports.insertQuery = function(queryObject, SQLPool, callback)
 
   SQLPool.getConnection((err, SQLConnection) =>
   {
-    if(err) callback(false, err.message);
+    if(err) callback(false, err.stack);
 
     else
     {
@@ -30,7 +30,7 @@ module.exports.insertQuery = function(queryObject, SQLPool, callback)
       {
         SQLConnection.release();
 
-        if(err) callback(false, err.message);
+        if(err) callback(false, err.stack);
 
         else
         {
@@ -47,7 +47,7 @@ module.exports.selectQuery = function(query, SQLPool, callback)
 {
   SQLPool.getConnection((err, SQLConnection) =>
   {
-    if(err) callback(false, err.message);
+    if(err) callback(false, err.stack);
 
     else
     {
@@ -68,7 +68,7 @@ module.exports.selectQuery = function(query, SQLPool, callback)
           SQLConnection.query(sql, function(err, result)
           {
             SQLConnection.release();
-            err ? callback(false, err.message) : callback(true, result);
+            err ? callback(false, err.stack) : callback(true, result);
           });
         });
       }
@@ -80,7 +80,7 @@ module.exports.selectQuery = function(query, SQLPool, callback)
       SQLConnection.query(sql, function(err, result)
       {
         SQLConnection.release();
-        err ? callback(false, err.message) : callback(true, result);
+        err ? callback(false, err.stack) : callback(true, result);
       });
     }
   });
@@ -92,7 +92,7 @@ module.exports.updateQuery = function(query, SQLPool, callback)
 {
   SQLPool.getConnection((err, SQLConnection) =>
   {
-    if(err) callback(false, err.message);
+    if(err) callback(false, err.stack);
 
     else
     {
@@ -118,7 +118,7 @@ module.exports.updateQuery = function(query, SQLPool, callback)
           SQLConnection.query(sql, function(err, result)
           {
             SQLConnection.release();
-            err ? callback(false, err.message) : callback(true, result.affectedRows);
+            err ? callback(false, err.stack) : callback(true, result.affectedRows);
           });
         }
       }
@@ -134,7 +134,7 @@ module.exports.updateQuery = function(query, SQLPool, callback)
           SQLConnection.query(sql, function(err, result)
           {
             SQLConnection.release();
-            err ? callback(false, err.message) : callback(true, result.affectedRows);
+            err ? callback(false, err.stack) : callback(true, result.affectedRows);
           });
         });
       }
@@ -150,7 +150,7 @@ module.exports.deleteQuery = function(query, SQLPool, callback)
 {
   SQLPool.getConnection((err, SQLConnection) =>
   {
-    if(err) callback(false, err.message);
+    if(err) callback(false, err.stack);
 
     else
     {
@@ -171,7 +171,7 @@ module.exports.deleteQuery = function(query, SQLPool, callback)
           SQLConnection.query(sql, function(err, result)
           {
             SQLConnection.release();
-            err ? callback(false, err.message) : callback(true, result.affectedRows);
+            err ? callback(false, err.stack) : callback(true, result.affectedRows);
           });
         });
       }
@@ -183,7 +183,7 @@ module.exports.deleteQuery = function(query, SQLPool, callback)
       SQLConnection.query(sql, function(err, result)
       {
         SQLConnection.release();
-        err ? callback(false, err.message) : callback(true, result.affectedRows);
+        err ? callback(false, err.stack) : callback(true, result.affectedRows);
       });
     }
   });

@@ -57,6 +57,7 @@ module.exports.startApp = (app, callback) =>
 
   const adminRoot         = require(`${__root}/routes/admin/root`);
   const adminUser         = require(`${__root}/routes/admin/user`);
+  const adminNews         = require(`${__root}/routes/admin/news`);
   const adminRights       = require(`${__root}/routes/admin/rights`);
   const adminParams       = require(`${__root}/routes/admin/params`);
   const adminReports      = require(`${__root}/routes/admin/reports`);
@@ -72,6 +73,7 @@ module.exports.startApp = (app, callback) =>
   app.use('/reports', auth, reports);
   app.use('/service', auth, service);
   app.use('/admin', auth, adminAuth, adminRoot);
+  app.use('/admin/news', auth, adminAuth, adminNews);
   app.use('/admin/users', auth, adminAuth, adminUser);
   app.use('/admin/rights', auth, adminAuth, adminRights);
   app.use('/admin/params', auth, adminAuth, adminParams);
