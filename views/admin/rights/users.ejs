@@ -8,17 +8,20 @@
   <link rel='stylesheet' type='text/css' href='/stylesheets/admin/rights/users.css' />
   <body class='private-section-body'>
     <% include ../../include/menu.ejs %>
-    <% include ../../include/admin_aside.ejs %>
-    <div class='admin-main-block'>
-      <div class='admin-rights-info'>Cliquez sur un utilisateur pour gérer ses droits</div>
-      <table class='admin-rights-table'>
+    <% include ../../include/admin_aside.ejs %><!--
+    --><div class='main'>
+      <div class='info'>
+        <div class='header'>Info</div>
+        <div class='content'>Cliquez sur un utilisateur pour gérer ses droits</div>
+      </div>
+      <table class='table'>
         <tr class='labels'>
-          <th>Adresse Email</th>
-          <th>Nom</th>
-          <th>Prénom</th>
+          <th class='email'>Adresse Email</th>
+          <th class='lastname'>Nom</th>
+          <th class='firstname'>Prénom</th>
         </tr>
         <% for(var i = 0; i < Object.keys(users).length; i++){ %>
-          <tr id='<%= users[i]['uuid'] %>' class='values <% if(i % 2 == 0){ %>odd<% } else{ %>even<% } %>'>
+          <tr id='<%= users[i]['uuid'] %>' class='values'>
             <td><%= users[i]['email'] %></td>
             <td><%= users[i]['lastname'] %></td>
             <td><%= users[i]['firstname'] %></td>
@@ -27,6 +30,7 @@
       </table>
     </div>
     <% include ../../include/scripts.ejs %>
+    <script src='/js/fontawesome.js'></script>
     <script src='/js/admin/rights/links.js'></script>
     <script src='/js/afk.js'></script>
   </body>

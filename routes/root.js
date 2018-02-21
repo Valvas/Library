@@ -24,15 +24,15 @@ router.put('/', (req, res) =>
 {
   req.body.emailAddress == undefined || req.body.uncryptedPassword == undefined ? 
   
-  res.status(406).send({ result: false, message: `${errors[constants.MISSING_DATA_IN_REQUEST].charAt(0).toUpperCase()}${errors[constants.MISSING_DATA_IN_REQUEST].slice(1)}` }) :
+  res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
 
   logon.checkIfAccountExistsUsingCredentialsProvided(req.body.emailAddress, req.body.uncryptedPassword, req.app.get('mysqlConnector'), (accountOrFalse, errorStatus, errorCode) =>
   {
-    if(accountOrFalse == false) res.status(errorStatus).send({ result: false, message: `${errors[errorCode].charAt(0).toUpperCase()}${errors[errorCode].slice(1)}` });
+    if(accountOrFalse == false) res.status(errorStatus).send({ result: false, message: errors[errorCode] });
 
     else
     {
-      if(accountOrFalse.suspended == 1) res.status(403).send({ result: false, message: `${errors[constants.ACCOUNT_SUSPENDED].charAt(0).toUpperCase()}${errors[constants.ACCOUNT_SUSPENDED].slice(1)}` });
+      if(accountOrFalse.suspended == 1) res.status(403).send({ result: false, message: errors[constants.ACCOUNT_SUSPENDED] });
 
       else
       {

@@ -1,6 +1,6 @@
 /****************************************************************************************************/
 
-.admin-main-block{ display:inline-block; vertical-align:top; }
+.admin-main-block{ display:inline-block; vertical-align:top; margin:40px 20px 40px 20px; }
 
 .admin-main-block .create{ background-color:#77B5FE; border:none; border-radius:4px; cursor:pointer; color:#FFFFFF; padding:8px; }
 
@@ -23,7 +23,7 @@
 
 @media all and (max-width: 767px)
 {
-  .admin-main-block{ width:90%; margin:20px 5% 20px 5%; }
+  .admin-main-block{ width:calc(100% - 40px); }
   .admin-main-block .create{ width:60%; margin:20px 0 20px 0; }
 
   .admin-users-table .email{ width:40%; }
@@ -36,7 +36,7 @@
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .admin-main-block{ width:70%; margin:20px 5% 20px 5%; }
+  .admin-main-block{ width:calc(100% - 290px); }
   .admin-main-block .create{ width:50%; margin:20px 0 20px 0; }
 
   .admin-users-table .email{ width:30%; }
@@ -49,7 +49,7 @@
 
 @media all and (min-width: 960px) and (max-width: 1279px)
 {
-  .admin-main-block{ width:70%; margin:20px 5% 20px 5%; }
+  .admin-main-block{ width:calc(100% - 290px); }
   .admin-main-block .create{ width:40%; margin:20px 0 20px 0; }
 
   .admin-users-table .email{ width:30%; }
@@ -62,7 +62,7 @@
 
 @media all and (min-width: 1280px) and (max-width: 1679px)
 {
-  .admin-main-block{ width:70%; margin:20px 5% 20px 5%; }
+  .admin-main-block{ width:900px; }
   .admin-main-block .create{ width:30%; margin:20px 0 20px 0; }
 
   .admin-users-table .email{ width:25%; }
@@ -75,7 +75,7 @@
 
 @media all and (min-width: 1680px)
 {
-  .admin-main-block{ width:50%; margin:20px 30% 20px 5%; }
+  .admin-main-block{ width:900px; }
   .admin-main-block .create{ width:30%; margin:20px 0 20px 0; }
 
   .admin-users-table .email{ width:25%; }

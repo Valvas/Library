@@ -1,6 +1,6 @@
 /****************************************************************************************************/
 
-.create-user-page-block{ margin:20px 5% 40px 5%; }
+.create-user-page-block{ margin:40px 20px 40px 20px; }
 .create-user-page-block .back{ text-align:center; text-decoration:none; color:#FFFFFF; background-color:#FF0921; font-family:barlow; display:inline-block; vertical-align:top; padding:8px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
 .create-user-page-block .back:hover{ background-color:#DD0600; }
 
@@ -14,7 +14,7 @@
 
 @media all and (max-width: 639px)
 {
-  .create-user-page-block{ width:90%; }
+  .create-user-page-block{ width:calc(100% - 40px); }
   .create-user-page-block .back{ width:40%; margin:20px 0 20px 0; }
   .create-user-form input{ width:calc(80% - 18px); margin:10px 10% 10px 10%; }
   .create-user-form .label{ width:80%; margin:10px 10% 0 10%; }
@@ -24,7 +24,7 @@
 
 @media all and (min-width: 640px) and (max-width: 767px)
 {
-  .create-user-page-block{ width:90%; }
+  .create-user-page-block{ width:calc(100% - 40px); }
   .create-user-page-block .back{ width:30%; margin:20px 0 20px 0; }
   .create-user-form input{ width:calc(80% - 18px); margin:10px 10% 10px 10%; }
   .create-user-form .label{ width:80%; margin:10px 10% 0 10%; }

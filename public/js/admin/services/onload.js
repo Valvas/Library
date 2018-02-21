@@ -115,23 +115,23 @@ function displayServiceBlocks(dataObject)
     members         .setAttribute('class', 'data');
     access          .setAttribute('class', 'data');
 
-    block           .setAttribute('name', Object.keys(dataObject.services)[x]);
+    block           .setAttribute('name', dataObject.services[Object.keys(dataObject.services)[x]].name);
 
     block           .addEventListener('click', openServiceDetail);
 
-    header.innerText = `${dataObject.services[Object.keys(dataObject.services)[x]].name.charAt(0).toUpperCase()}${dataObject.services[Object.keys(dataObject.services)[x]].name.slice(1)}`;
+    header.innerText = `${dataObject.services[Object.keys(dataObject.services)[x]].label.charAt(0).toUpperCase()}${dataObject.services[Object.keys(dataObject.services)[x]].label.slice(1)}`;
 
-    dataObject.filesCounter[Object.keys(dataObject.services)[x]] == undefined ?
+    dataObject.filesCounter[dataObject.services[Object.keys(dataObject.services)[x]].name] == undefined ?
     files.innerHTML = `<div class='label'>Fichiers :</div><div class='value'>0</div>` :
-    files.innerHTML = `<div class='label'>Fichiers :</div><div class='value'>${dataObject.filesCounter[Object.keys(dataObject.services)[x]]}</div>`;
+    files.innerHTML = `<div class='label'>Fichiers :</div><div class='value'>${dataObject.filesCounter[dataObject.services[Object.keys(dataObject.services)[x]].name]}</div>`;
 
-    dataObject.membersCounter[Object.keys(dataObject.services)[x]] == undefined ?
+    dataObject.membersCounter[dataObject.services[Object.keys(dataObject.services)[x]].name] == undefined ?
     members.innerHTML = `<div class='label'>Membres :</div><div class='value'>0</div>` :
-    members.innerHTML = `<div class='label'>Membres :</div><div class='value'>${dataObject.membersCounter[Object.keys(dataObject.services)[x]]}</div>`;
+    members.innerHTML = `<div class='label'>Membres :</div><div class='value'>${dataObject.membersCounter[dataObject.services[Object.keys(dataObject.services)[x]].name]}</div>`;
 
-    dataObject.accessCounter[Object.keys(dataObject.services)[x]] == undefined ?
+    dataObject.accessCounter[dataObject.services[Object.keys(dataObject.services)[x]].name] == undefined ?
     access.innerHTML = `<div class='label'>Ayant accès :</div><div class='value'>0</div>` :
-    access.innerHTML = `<div class='label'>Ayant accès :</div><div class='value'>${dataObject.accessCounter[Object.keys(dataObject.services)[x]]}</div>`;
+    access.innerHTML = `<div class='label'>Ayant accès :</div><div class='value'>${dataObject.accessCounter[dataObject.services[Object.keys(dataObject.services)[x]].name]}</div>`;
 
     block.appendChild(header);
     block.appendChild(files);

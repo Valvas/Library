@@ -26,6 +26,44 @@
 
 .main .content .error .reload:hover{ color:#000000; background-color:#2069A8; }
 
+.main .content .detail{ display:none; }
+
+.main .content .detail .actions{ margin:0 0 40px 0; background-color:#FFFFFF; width:250px; border-radius:4px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
+
+.main .content .detail .actions .header{ padding:10px 20px 10px 20px; font-size:20px; line-height:24px; font-family:barlow; margin:0 0 10px 0; border-bottom:1px solid #F0F0F0; }
+
+.main .content .detail .actions .delete{ padding:4px 0 4px 0; border:none; background-color:#D9534F; color:#FFFFFF; border-radius:4px; cursor:pointer; font-family:barlow; font-size:16px; line-height:24px; width:120px; margin:10px 20px 10px calc(100% - 140px); }
+
+.main .content .detail .actions .delete:hover{ color:#000000; background-color:#B7312D; }
+
+.main .content .detail .members{ margin:0 0 40px 0; background-color:#FFFFFF; width:350px; border-radius:4px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
+
+.main .content .detail .members .header{ padding:10px 20px 10px 20px; font-size:20px; line-height:24px; font-family:barlow; margin:0 0 10px 0; border-bottom:1px solid #F0F0F0; }
+
+.main .content .detail .members .empty{ display:none; padding:10px 20px 10px 20px; font-size:16px; line-height:24px; font-family:barlow; }
+
+.main .content .detail .members .line{ width:calc(100% - 40px); margin:0 15px 5px 15px; }
+
+.main .content .detail .members .line .value{ display:inline-block; vertical-align:top; width:calc(50% - 10px); margin:5px; font-size:14px; line-height:16px; font-family:barlow; }
+
+.main .content .detail .access{ margin:0 0 40px 0; background-color:#FFFFFF; width:600px; border-radius:4px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
+
+.main .content .detail .access .header{ padding:10px 20px 10px 20px; font-size:20px; line-height:24px; font-family:barlow; margin:0 0 10px 0; border-bottom:1px solid #F0F0F0; }
+
+.main .content .detail .access .empty{ display:none; padding:10px 20px 10px 20px; font-size:16px; line-height:24px; font-family:barlow; }
+
+.main .content .detail .access .labels{ padding:0 10px 5px 60%; width:100%; box-sizing:border-box; }
+
+.main .content .detail .access .labels .icon{ display:inline-block; vertical-align:top; font-size:16px; line-height:24px; width:25%; text-align:center; }
+
+.main .content .detail .access .line{ width:100%; padding:0 10px 5px 10px; box-sizing:border-box; }
+
+.main .content .detail .access .line .value{ display:inline-block; vertical-align:top; width:calc(30% - 10px); margin:5px; font-size:14px; line-height:16px; font-family:barlow; }
+
+.main .content .detail .access .line .tick{ display:inline-block; vertical-align:top; width:10%; text-align:center; font-size:16px; line-height:24px; color:#5CB85C; }
+
+.main .content .detail .access .line .cross{ display:inline-block; vertical-align:top; width:10%; text-align:center; font-size:16px; line-height:24px; color:#D9534F; }
+
 /****************************************************************************************************/
 
 @media all and (max-width: 479px)
@@ -33,6 +71,12 @@
   .main{ width:calc(100% - 40px); margin:40px 20px 40px 20px; }
 
   .main .content .error{ width:100%; }
+
+  .main .content .detail .actions{ width:90%; margin:0 5% 40px 5%; }
+
+  .main .content .detail .members{ width:90%; margin:0 5% 40px 5%; }
+
+  .main .content .detail .access{ width:90%; margin:0 5% 40px 5%; }
 }
 
 @media all and (min-width: 480px) and (max-width: 767px)
@@ -40,6 +84,12 @@
   .main{ width:calc(100% - 40px); margin:40px 20px 40px 20px; }
 
   .main .content .error{ width:100%; }
+
+  .main .content .detail .actions{ width:90%; margin:0 5% 40px 5%; }
+
+  .main .content .detail .members{ width:90%; margin:0 5% 40px 5%; }
+
+  .main .content .detail .access{ width:90%; margin:0 5% 40px 5%; }
 }
 
 @media all and (min-width: 768px) and (max-width: 959px)
@@ -47,21 +97,37 @@
   .main{ width:calc(80% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
 
   .main .content .error{ width:100%; }
+
+  .main .content .detail .members{ width:100%; }
+
+  .main .content .detail .access{ width:100%; }
 }
 
 @media all and (min-width: 960px) and (max-width: 1279px)
 {
   .main{ width:calc(80% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .main .content .detail .members{ width:calc(40% - 10px); display:inline-block; margin:0 10px 0 0; }
+
+  .main .content .detail .access{ width:calc(60% - 10px); display:inline-block; vertical-align:top; margin:0 0 0 10px; }
 }
 
 @media all and (min-width: 1280px) and (max-width: 1679px)
 {
-  .main{ width:800px; margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+  .main{ width:calc(80% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .main .content .detail .members{ width:350px; display:inline-block; margin:0 10px 0 0; }
+
+  .main .content .detail .access{ width:600px; display:inline-block; vertical-align:top; margin:0 0 0 10px; }
 }
 
 @media all and (min-width: 1680px)
 {
-  .main{ width:800px; margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+  .main{ width:calc(85% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .main .content .detail .members{ width:350px; display:inline-block; margin:0 10px 0 0; }
+
+  .main .content .detail .access{ width:600px; display:inline-block; vertical-align:top; margin:0 0 0 10px; }
 }
 
 /****************************************************************************************************/

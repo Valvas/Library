@@ -57,6 +57,7 @@ const TEST_EMAIL_FAILED                                                         
 const COULD_NOT_READ_CONFIG_FILE                                                  = 10053;
 const ACCOUNT_CREATED_WITHOUT_SENDING_EMAIL                                       = 10054;
 const PASSWORD_RESETED_WITHOUT_SENDING_EMAIL                                      = 10055;
+const COULD_NOT_READ_SERVICES_FILE                                                = 10056;
 
 /******************************************************************************************
 SUCCESS
@@ -142,6 +143,7 @@ module.exports =
   COULD_NOT_READ_CONFIG_FILE: COULD_NOT_READ_CONFIG_FILE,
   ACCOUNT_CREATED_WITHOUT_SENDING_EMAIL: ACCOUNT_CREATED_WITHOUT_SENDING_EMAIL,
   PASSWORD_RESETED_WITHOUT_SENDING_EMAIL: PASSWORD_RESETED_WITHOUT_SENDING_EMAIL,
+  COULD_NOT_READ_SERVICES_FILE: COULD_NOT_READ_SERVICES_FILE,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

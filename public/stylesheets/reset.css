@@ -20,9 +20,9 @@ body{ margin:0; background-color:#445566; }
 
 .loader .message{ font-size:20px; line-height:24px; padding:0 20px 20px 20px; text-align:center; color:#FFFFFF; font-family:barlow; }
 
-.error{ padding:0 40px 10px 40px; font-size:16px; line-height:24px; color:#FF0F0F; font-family:barlow; }
+.error{ display:none; padding:0 40px 10px 40px; font-size:16px; line-height:24px; color:#FF0F0F; font-family:barlow; }
 
-.success{ padding:0 40px 10px 40px; font-size:16px; line-height:24px; color:#5CB85C; font-family:barlow; }
+.success{ display:none; padding:0 40px 10px 40px; font-size:16px; line-height:24px; color:#5CB85C; font-family:barlow; }
 
 .question{ font-size:16px; line-height:23px; text-decoration:underline; font-style:italic; font-family:Arial; color:#667788; cursor:pointer; display:block; width:max-content; padding:0 0 20px 0; margin:0 40px 0 40px; }
 

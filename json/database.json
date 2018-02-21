@@ -1,4 +1,16 @@
 {
+  "apps":
+  {
+    "access":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "email": "VARCHAR(255) NOT NULL",
+      "storage": "BOOLEAN NOT NULL",
+      "disease": "BOOLEAN NOT NULL",
+      "admin": "BOOLEAN NOT NULL"
+    }
+  },
+
   "library":
   {
     "account":
@@ -83,6 +95,13 @@
       "content": "TEXT(1024) NOT NULL",
       "seen": "BOOLEAN NOT NULL",
       "`admin`": "BOOLEAN NOT NULL"
+    },
+
+    "services":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "name": "VARCHAR(255) NOT NULL",
+      "label": "VARCHAR(255) NOT NULL"
     }
   }
 }

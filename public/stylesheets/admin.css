@@ -66,11 +66,7 @@ HOME
   text-overflow:ellipsis;
 }
 
-.admin-main-block
-{
-  margin:40px 0 40px 0;
-  vertical-align:top;
-}
+.admin-main-block{ margin:40px 20px 40px 20px; vertical-align:top; }
 
 .admin-main-block .info
 {
@@ -101,7 +97,7 @@ HOME
 
 @media all and (max-width: 479px)
 {
-  .admin-main-block{ margin:40px 5% 40px 5%; width:90%; }
+  .admin-main-block{ width:calc(100% - 40px); }
   .admin-main-block .info{ width:50%; }
   .admin-main-block .create{ height:calc((100vw * 0.9) * 0.15); width:15%; margin:5% 0 0 85%; }
 
@@ -119,7 +115,7 @@ HOME
 
 @media all and (min-width: 480px) and (max-width: 767px)
 {
-  .admin-main-block{ margin:40px 5% 40px 5%; width:90%; }
+  .admin-main-block{ width:calc(100% - 40px);}
   .admin-main-block .info{ width:50%; }
   .admin-main-block .create{ height:calc((100vw * 0.9) * 0.1); width:10%; margin:5% 0 0 90%; }
 
@@ -137,7 +133,7 @@ HOME
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .admin-main-block{ display:inline-block; width:70%; }
+  .admin-main-block{ display:inline-block; width:calc(100% - 290px); }
   .admin-main-block .info{ width:40%; }
   .admin-main-block .create{ height:calc((100vw * 0.7) * 0.1); width:10%; margin:5% 0 0 90%; }
 
@@ -154,7 +150,7 @@ HOME
 
 @media all and (min-width: 960px) and (max-width: 1279px)
 {
-  .admin-main-block{ display:inline-block; width:75%; }
+  .admin-main-block{ display:inline-block; width:calc(100% - 290px); }
   .admin-main-block .info{ width:30%; }
   .admin-main-block .create{ height:calc((100vw * 0.75) * 0.075); width:7.5%; margin:5% 0 0 92.5%; }
 
@@ -170,7 +166,7 @@ HOME
 
 @media all and (min-width: 1280px) and (max-width: 1679px)
 {
-  .admin-main-block{ display:inline-block; width:75%; }
+  .admin-main-block{ display:inline-block; width:calc(100% - 290px); }
   .admin-main-block .info{ width:30%; }
   .admin-main-block .create{ height:calc((100vw * 0.75) * 0.06); width:6%; margin:5% 0 0 94%; }
 
@@ -184,7 +180,7 @@ HOME
 
 @media all and (min-width: 1680px)
 {
-  .admin-main-block{ display:inline-block; width:75%; }
+  .admin-main-block{ display:inline-block; width:calc(100% - 290px); }
   .admin-main-block .info{ width:20%; }
   .admin-main-block .create{ height:calc((100vw * 0.75) * 0.05); width:5%; margin:5% 0 0 95%; }
 

@@ -53,5 +53,6 @@
   "10052": "Echec de l'envoi de l'e-mail test",
   "10053": "Le fichier de configuration n'a pas pu être lu",
   "10054": "Le compte a été créé avec succès\nLe service d'envoi des emails est désactivé\n(l'utilisateur ne va pas recevoir son mot de passe)",
-  "10055": "Le mot de passe a été réinitialisé avec succès\nLe service d'envoi des emails est désactivé\n(l'utilisateur ne va pas recevoir son mot de passe)"
+  "10055": "Le mot de passe a été réinitialisé avec succès\nLe service d'envoi des emails est désactivé\n(l'utilisateur ne va pas recevoir son mot de passe)",
+  "10056": "Impossible de lire le fichiers des services"
 }

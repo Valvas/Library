@@ -20,7 +20,8 @@
       "report_logs":"report_logs",
       "report_comments":"report_comments",
       "file_logs":"file_logs",
-      "file_comments":"file_comments"
+      "file_comments":"file_comments",
+      "services": "services"
     }
   },
   "salt":"$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",

@@ -1,0 +1,9 @@
+/****************************************************************************************************/
+
+.main .header{ background-color:#428BCA; width:200px; box-sizing:border-box; padding:10px; margin:20px 0 20px 0; border-radius:0 4px 4px 0; }
+
+.main .header .bookmark{ color:#FFFFFF; font-size:20px; line-height:24px; width:30px; text-align:center; display:inline-block; margin-right:5px; }
+
+.main .header .location{ color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow; display:inline-block; width:calc(100% - 35px); }
+
+/****************************************************************************************************/

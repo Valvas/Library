@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 const express               = require('express');
 const errors                = require(`${__root}/json/errors`);
@@ -11,21 +11,10 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  req.session.uuid == undefined ? res.redirect('/') : 
-  
-  commonAppsAccess.getAppsAvailableForAccount(req.session.account.email, req.app.get('mysqlConnector'), (error, access) =>
-  {
-    error != null ?
-
-    res.render('block', { message: errors[error.code] }) :
-
-    res.render('home',
-    { 
-      account: req.session.account, 
-      news: require('../json/news'), 
-      strings: { navigation: commonStrings.navigation }, 
-      apps: access 
-    });
+  res.render('storage/home',
+  { 
+    account: req.session.account, 
+    strings: { navigation: commonStrings.navigation }
   });
 });
 

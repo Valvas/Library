@@ -50,14 +50,14 @@
 
 @media (min-width: 1280px) and (max-width: 1679px)
 {
-  .service-main-block .info{ width:30%; margin:0 0 20px 0; display:inline-block; }
-  .service-main-block .upload{ width:calc(70% - 20px); margin:0 0 20px 20px; display:inline-block; vertical-align:top; }
+  .service-main-block .info{ width:300px; margin:0 0 20px 0; display:inline-block; }
+  .service-main-block .upload{ width:calc(700px - 20px); margin:0 0 20px 20px; display:inline-block; vertical-align:top; }
 }
 
 @media (min-width: 1680px)
 {
-  .service-main-block .info{ width:30%; margin:0 0 20px 0; display:inline-block; }
-  .service-main-block .upload{ width:calc(70% - 20px); margin:0 0 20px 20px; display:inline-block; vertical-align:top; }
+  .service-main-block .info{ width:300px; margin:0 0 20px 0; display:inline-block; }
+  .service-main-block .upload{ width:calc(700px - 20px); margin:0 0 20px 20px; display:inline-block; vertical-align:top; }
 }
 
 /****************************************************************************************************/
@@ -88,7 +88,9 @@
 
 @media all and (max-width: 639px)
 {
-  .service-main-block{ margin:20px 10px 20px 10px; }
+  .service-main-block{ margin:40px 20px 40px 20px; width:calc(100% - 40px); }
+
+  .service-main-block .table-container{ width:100%; }
 
   .service-main-block .table-container .table .legend .name{ width:60%; }
   .service-main-block .table-container .table .legend .type{ width:40%; }
@@ -103,7 +105,9 @@
 
 @media all and (min-width: 640px) and (max-width: 767px)
 {
-  .service-main-block{ margin:20px 10px 20px 10px; }
+  .service-main-block{ margin:40px 20px 40px 20px; width:calc(100% - 40px); }
+
+  .service-main-block .table-container{ width:100%; }
 
   .service-main-block .table-container .table .legend .name{ width:50%; }
   .service-main-block .table-container .table .legend .type{ width:25%; }
@@ -117,7 +121,9 @@
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .service-main-block{ width:calc(80% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+  .service-main-block{ width:calc(100% - 290px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .service-main-block .table-container{ width:100%; }
 
   .service-main-block .table-container .table .legend .name{ width:50%; }
   .service-main-block .table-container .table .legend .type{ width:25%; }
@@ -131,7 +137,9 @@
 
 @media all and (min-width: 960px) and (max-width: 1279px)
 {
-  .service-main-block{ width:calc(80% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+  .service-main-block{ width:calc(100% - 290px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .service-main-block .table-container{ width:100%; }
 
   .service-main-block .table-container .table .legend .name{ width:45%; }
   .service-main-block .table-container .table .legend .type{ width:25%; }
@@ -143,7 +151,9 @@
 
 @media all and (min-width: 1280px) and (max-width: 1679px)
 {
-  .service-main-block{ width:calc(80% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+  .service-main-block{ width:calc(100% - 290px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .service-main-block .table-container{ width:1000px; }
 
   .service-main-block .table-container .table .legend .name{ width:45%; }
   .service-main-block .table-container .table .legend .type{ width:25%; }
@@ -155,7 +165,9 @@
 
 @media all and (min-width: 1680px)
 {
-  .service-main-block{ width:calc(60% - 40px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+  .service-main-block{ width:calc(100% - 290px); margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; }
+
+  .service-main-block .table-container{ width:1000px; }
 
   .service-main-block .table-container .table .legend .name{ width:45%; }
   .service-main-block .table-container .table .legend .type{ width:25%; }

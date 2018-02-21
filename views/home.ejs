@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <title>Library - Accueil</title>
+  <title>PEI - Accueil</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
-  <body class='private-section-body'>
-    <% include include/menu.ejs %>
-    <% include include/aside.ejs %><!-- @SuppressWhitespace
-    --><div class='home-news-block'>
-        <% for(var key in news){ %>
-          <div class='home-news-block-element'>
-            <div class='home-news-block-element-title'><%= news[key]['title'] %></div>
-            <div class='home-news-block-element-date'><%= news[key]['date'] %></div>
-            <div class='home-news-block-element-content'><%= news[key]['content'] %></div>
-          </div>
-        <% } %>
-      </div>
+  <body>
+    <% include include/navigation.ejs %>
+    <div class='main'>
+      <% for(var key in news){ %>
+        <div class='element'>
+          <div class='title'><%= news[key]['title'] %></div>
+          <div class='date'><%= news[key]['date'] %></div>
+          <div class='content'><%= news[key]['content'] %></div>
+        </div>
+      <% } %>
+    </div>
     <% include include/scripts.ejs %>
     <script src='/js/afk.js'></script>
+    <script src='/js/fontawesome.js'></script>
+    <script src='/js/navigation/menu.js'></script>
+    <script src='/js/navigation/account.js'></script>
   </body>
 </html>

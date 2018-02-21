@@ -9,7 +9,7 @@
   <body class='private-section-body'>
     <% include ../include/menu.ejs %>
     <% include ../include/admin_aside.ejs %><!--
-    --><div id='main' class='main' name='<%= service %>'>
+    --><div id='main' class='main' name='<%= service.name %>'>
       <div id='content' class='content'>
         <div class='error' id='error'>
           <div class='header'>Erreur</div>
@@ -19,6 +19,20 @@
             <div class='content'></div>
           </div>
           <button id='reload' class='reload'>Recharger</button>
+        </div>
+        <div class='detail' id='detail'>
+          <div class='actions'>
+            <div class='header'><%= `${service.label.charAt(0).toUpperCase()}${service.label.slice(1)}` %></div>
+            <button class='delete'>Supprimer</button>
+          </div>
+          <div class='members' id='members'>
+            <div class='header'>Membres</div>
+            <div class='empty'>Ce service n'a pas de membres</div>
+          </div><!--
+          --><div class='access' id='access'>
+            <div class='header'>Droits</div>
+            <div class='empty'>Aucun utilisateur n'a accès à ce service</div>
+          </div>
         </div>
       </div>
       <div id='background' class='background'>

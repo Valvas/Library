@@ -8,8 +8,8 @@ function sendDataForm(event)
 {
   event.preventDefault();
 
-  document.getElementById('error').innerText = '';
-  document.getElementById('success').innerText = '';
+  document.getElementById('error').removeAttribute('style');
+  document.getElementById('success').removeAttribute('style');
   document.getElementById('main').style.filter = 'blur(3px)';
   document.getElementById('background').style.display = 'block';
 
@@ -20,6 +20,7 @@ function sendDataForm(event)
       document.getElementById('background').removeAttribute('style');
       document.getElementById('main').removeAttribute('style');
       document.getElementById('error').innerText = `Le format de l'adresse email est incorrect`;
+      document.getElementById('error').style.display = 'block';
     }
 
     else
@@ -34,6 +35,8 @@ function sendDataForm(event)
   
           if(status == 'timeout') document.getElementById('error').innerText = 'Le serveur a mis trop de temps à répondre...';
           else{ document.getElementById('error').innerText = xhr.responseJSON.message; }
+
+          document.getElementById('error').style.display = 'block';
         } 
   
       }).done((json) =>
@@ -42,6 +45,7 @@ function sendDataForm(event)
         document.getElementById('main').removeAttribute('style');
         document.getElementById('form').reset();
         document.getElementById('success').innerText = json.message;
+        document.getElementById('success').style.display = 'block';
       });
     }
   }

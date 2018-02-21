@@ -10,6 +10,7 @@ const encryption        = require(`${__root}/functions/encryption`);
 const initFolder        = require(`${__root}/functions/init/folders`);
 const accounts          = require(`${__root}/functions/accounts/init`);
 const database          = require(`${__root}/functions/database/init`);
+const services          = require(`${__root}/functions/services/init`);
 
 /****************************************************************************************************/
 
@@ -63,6 +64,9 @@ module.exports.startApp = (app, callback) =>
   const adminReports      = require(`${__root}/routes/admin/reports`);
   const adminService      = require(`${__root}/routes/admin/service`);
 
+  const storageViewsHome          = require(`${__root}/routes/storage/views/home`);
+  const storageViewsServices      = require(`${__root}/routes/storage/views/services`);
+
   const params            = require(`${__root}/json/params`);
 
   app.set('params', params);
@@ -79,6 +83,9 @@ module.exports.startApp = (app, callback) =>
   app.use('/admin/params', auth, adminAuth, adminParams);
   app.use('/admin/reports', auth, adminAuth, adminReports);
   app.use('/admin/services', auth, adminAuth, adminService);
+
+  app.use('/storage', auth, storageViewsHome);
+  app.use('/storage/services', auth, storageViewsServices);
 
   app.use((req, res, next) =>
   {
@@ -118,11 +125,23 @@ module.exports.startApp = (app, callback) =>
     {
       accounts.createRights(pool, () =>
       {
-        app.set('mysqlConnector', pool);
-
-        initFolder.createAppFolders(params, (error) =>
+        services.createServices(pool, (error) =>
         {
-          error == null ? callback() : process.exit(0);
+          if(error != null)
+          {
+            console.log(`[ERROR] - ${error.detail} !`);
+            process.exit(1);
+          }
+
+          else
+          {
+            app.set('mysqlConnector', pool);
+
+            initFolder.createAppFolders(params, (error) =>
+            {
+              error == null ? callback() : process.exit(0);
+            });
+          }
         });
       });
     });

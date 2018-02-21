@@ -1,6 +1,6 @@
 window.onload = $(() =>
 {
-  $('body').on('click', '.admin-rights-table .values td', (event) =>
+  $('body').on('click', '.table .values td', (event) =>
   {
     location = `/admin/rights/${$(event.target).parent().attr('id')}`;
   });

@@ -1,0 +1,29 @@
+{
+  "navigation":
+  {
+    "root": "PEI",
+    "storage": "STOCKAGE",
+
+    "account":
+    {
+      "account": "Mon compte",
+      "logout": "Déconnexion"
+    },
+
+    "menu":
+    {
+      "home": "Accueil",
+      "apps":
+      {
+        "label": "Mes application",
+        "empty": "Aucune application",
+        "storage": "Stockage",
+        "disease": "AT",
+        "admin": "Administration"
+      },
+      "reports": "Rapports",
+      "services": "Services",
+      "exit": "Quitter l'application"
+    }
+  }
+}

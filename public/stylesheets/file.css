@@ -146,7 +146,7 @@
 
 @media (min-width: 768px) and (max-width: 959px)
 {
-  .file-main-block{ width:calc(80% - 40px); }
+  .file-main-block{ width:calc(100% - 290px); }
 
   .file-main-block .info{ width:100%; }
   
@@ -176,7 +176,7 @@
 
 @media (min-width: 960px) and (max-width: 1279px)
 {
-  .file-main-block{ width:calc(80% - 40px); }
+  .file-main-block{ width:calc(100% - 290px); }
 
   .file-main-block .return{ width:25%; margin:0 0 20px 0; padding:8px; }
 
@@ -196,7 +196,7 @@
 
 @media (min-width: 1280px) and (max-width: 1679px)
 {
-  .file-main-block{ width:calc(80% - 40px); }
+  .file-main-block{ width:calc(100% - 290px); }
 
   .file-main-block .return{ width:20%; margin:0 0 20px 0; padding:8px; }
 
@@ -216,7 +216,7 @@
 
 @media (min-width: 1680px)
 {
-  .file-main-block{ width:calc(60% - 40px); }
+  .file-main-block{ width:calc(100% - 290px); }
 
   .file-main-block .return{ width:20%; margin:0 0 20px 0; padding:8px; }
 

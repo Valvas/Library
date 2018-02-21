@@ -2,7 +2,7 @@
 TABLE
 ****************************************************************************************************/
 
-.reports-main-block{ vertical-align:top; display:inline-block; margin:40px 2.5% 40px 2.5%; }
+.reports-main-block{ vertical-align:top; display:inline-block; margin:40px 20px 40px 20px; }
 
 .reports-main-block .counter{ color:#334455; font-size:large; font-weight:bold; text-align:right; font-family:barlow; margin:2.5% 2.5% 2.5% 2.5%; }
 
@@ -41,7 +41,7 @@ TABLE
 
 @media all and (max-width: 639px)
 {
-  .reports-main-block{ width:95%; }
+  .reports-main-block{ width:calc(100% - 40px); }
   .reports-main-block .filters .filter{ width:50%; }
   .reports-main-block .reports-table .hide{ display:none; }
   .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
@@ -55,7 +55,7 @@ TABLE
 
 @media all and (min-width: 640px) and (max-width: 767px)
 {
-  .reports-main-block{ width:95%; }
+  .reports-main-block{ width:calc(100% - 40px); }
   .reports-main-block .filters .filter{ width:33%; }
   .reports-main-block .reports-table .hide{ display:none; }
   .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
@@ -70,7 +70,7 @@ TABLE
 
 @media all and (min-width: 768px) and (max-width: 959px)
 {
-  .reports-main-block{ width:75%; }
+  .reports-main-block{ width:calc(100% - 290px); }
   .reports-main-block .filters .filter{ width:30%; }
   .reports-main-block .reports-table .hide{ display:none; }
   .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
@@ -85,7 +85,7 @@ TABLE
 
 @media all and (min-width: 960px) and (max-width: 1279px)
 {
-  .reports-main-block{ width:75%; }
+  .reports-main-block{ width:calc(100% - 290px); }
   .reports-main-block .filters .filter{ width:25%; }
   .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
 
@@ -100,7 +100,7 @@ TABLE
 
 @media all and (min-width: 1280px) and (max-width: 1679px)
 {
-  .reports-main-block{ width:75%; }
+  .reports-main-block{ width:900px; }
   .reports-main-block .filters .filter{ width:20%; }
   .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
 
@@ -115,7 +115,7 @@ TABLE
 
 @media all and (min-width: 1680px)
 {
-  .reports-main-block{ width:55%; }
+  .reports-main-block{ width:900px; }
   .reports-main-block .filters .filter{ width:15%; }
   .reports-main-block .reports-table .reports-table-legend-row th, .reports-main-block .reports-table td{ padding:10px 5px 10px 5px; }
 
@@ -344,7 +344,7 @@ POPUP
 
 .report-popup
 { 
-  z-index:1;
+  z-index:40;
   padding:0;
   overflow:auto;
   position:fixed; 
