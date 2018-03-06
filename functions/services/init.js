@@ -38,7 +38,7 @@ module.exports.createServices = (databaseConnector, callback) =>
           {
             if(serviceOrErrorMessage.length > 0)
             {
-              console.log(`[SERVICES] - "${json[Object.keys(json)[x]].name}" already exists !`);
+              console.log(`[SERVICES] - "${Object.keys(json)[x]}" already exists !`);
               Object.keys(json)[x += 1] == undefined ? callback(null) : loop();
             }
 
@@ -48,7 +48,7 @@ module.exports.createServices = (databaseConnector, callback) =>
               {
                 'databaseName': config.database.name,
                 'tableName': config.database.tables.services,
-                'args': { 'name': Object.keys(json)[x], 'label': json[Object.keys(json)[x]].name }
+                'args': { 'name': Object.keys(json)[x] }
 
               }, databaseConnector, (boolean, insertedIDOrErrorMessage) =>
               {
@@ -56,7 +56,7 @@ module.exports.createServices = (databaseConnector, callback) =>
 
                 else
                 {
-                  console.log(`[SERVICES] - "${json[Object.keys(json)[x]].name}" successfully created !`);
+                  console.log(`[SERVICES] - "${Object.keys(json)[x]}" successfully created !`);
                   Object.keys(json)[x += 1] == undefined ? callback(null) : loop();
                 }
               });

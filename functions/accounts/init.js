@@ -157,7 +157,7 @@ module.exports.createRights = (databaseConnector, callback) =>
   
       'args':
       {
-        '0': 'uuid'
+        '0': 'email'
       },
   
       'where':
@@ -192,7 +192,7 @@ module.exports.createRights = (databaseConnector, callback) =>
         else
         {
           var account = rights[Object.keys(rights)[x]].account;
-          rights[Object.keys(rights)[x]].account = accountOrErrorMessage[0].uuid;
+          rights[Object.keys(rights)[x]].account = accountOrErrorMessage[0].email;
           
           databaseManager.selectQuery(
           {
@@ -201,7 +201,7 @@ module.exports.createRights = (databaseConnector, callback) =>
         
             'args':
             {
-              '0': 'uuid'
+              '0': 'account'
             },
         
             'where':

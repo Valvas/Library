@@ -1,9 +1,84 @@
 /****************************************************************************************************/
 
-.main .header{ background-color:#428BCA; width:200px; box-sizing:border-box; padding:10px; margin:20px 0 20px 0; border-radius:0 4px 4px 0; }
+@import url('../fonts.css');
+@import url('../navigation.css');
+
+/****************************************************************************************************/
+
+body{ margin:0; }
+
+.main .header{ background-color:#428BCA; min-width:200px; width:max-content; box-sizing:border-box; padding:10px; margin:20px 0 20px 0; border-radius:0 4px 4px 0; }
 
 .main .header .bookmark{ color:#FFFFFF; font-size:20px; line-height:24px; width:30px; text-align:center; display:inline-block; margin-right:5px; }
 
-.main .header .location{ color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow; display:inline-block; width:calc(100% - 35px); }
+.main .header .location{ color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow; display:inline-block; vertical-align:top; width:calc(100% - 35px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.main .error .message{ margin:0 0 10px 0; }
+
+.main .error .message .left{ font-size:20px; line-height:24px; color:#FF0F0F; display:inline-block; width:30px; }
+
+.main .error .message .right{ font-size:16px; line-height:24px; display:inline-block; font-family:barlow; width:calc(100% - 30px); vertical-align:top; }
+
+.main .error .detail .label{ font-family:barlow; font-size:14px; line-height:18px; text-decoration:underline; }
+
+.main .error .detail .content{ color:#909090; word-break:break-all; font-family:barlow-italic; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319px)
+{
+  .main .header{ max-width:250px; }
+
+  .main .error{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+  .main .header{ max-width:300px; }
+
+  .main .error{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 480px) and (max-width: 639px)
+{
+  .main .header{ max-width:350px; }
+
+  .main .error{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 640px) and (max-width: 779px)
+{
+  .main .header{ max-width:400px; }
+
+  .main .error{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 780px) and (max-width: 959px)
+{
+  .main .header{ max-width:400px; }
+
+  .main .error{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+  .main .header{ max-width:400px; }
+
+  .main .error{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+  .main .header{ max-width:400px; }
+
+  .main .error{ width:1200px; margin:20px; }
+}
+
+@media (min-width: 1680px)
+{
+  .main .header{ max-width:400px; }
+
+  .main .error{ width:1200px; margin:20px; }
+}
 
 /****************************************************************************************************/

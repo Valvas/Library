@@ -1,0 +1,67 @@
+{
+  "name": "Stockage",
+
+  "locations":
+  {
+    "home": "Accueil",
+    "services": "Services"
+  },
+
+  "navigation":
+  {
+    "menu":
+    {
+      "admin": "Administration",
+      "exit": "Quitter l'application",
+      "home": "Accueil",
+      "reports": "Rapports",
+      "services": "Services"
+    },
+    "title": "STOCKAGE"
+  },
+
+  "services":
+  {
+    "access":
+    {
+      "true": "Vous avez accès à ce service",
+      "false": "Vous n'avez pas accès à ce service"
+    },
+
+    "ask": "Demande d'accès",
+
+    "authorized": "Autorisé",
+
+    "detail": "Détail",
+
+    "info":
+    {
+      "count": "Fichiers",
+      "upload":
+      {
+        "true": "Envoyer un fichier",
+        "false": "Vous n'avez pas le droit d'envoyer des fichiers"
+      }
+    },
+
+    "filters":
+    {
+      "label": "Filtres"
+    },
+
+    "names":
+    {
+      "test1": "Premier Service Test",
+      "test2": "Deuxième Service Test",
+      "test3": "Troisième Service Test"
+    },
+
+    "open": "Accéder",
+
+    "rights": "Mes droits",
+
+    "selected": "Fichiers sélectionnés",
+
+    "unauthorized": "Non-autorisé"
+  }
+}

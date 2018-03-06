@@ -23,7 +23,7 @@ router.get('/', (req, res) =>
     { 
       account: req.session.account, 
       news: require('../json/news'), 
-      strings: { navigation: commonStrings.navigation }, 
+      strings: { common: commonStrings }, 
       apps: access 
     });
   });

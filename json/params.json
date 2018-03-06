@@ -6,17 +6,43 @@
     "password":"root",
     "dbms":"MySQL",
     "name":"library",
-    "names":
+    "root":
     {
-      "apps":
+      "label": "apps",
+      "tables":
       {
-        "label": "apps",
-        "tables":
-        {
-          "access": "access"
-        }
+        "access": "access",
+        "accounts": "accounts"
+      }
+    },
+    "storage":
+    {
+      "label": "library",
+      "tables":
+      {
+        "accounts": "account",
+        "files": "files",
+        "rights": "rights",
+        "services": "services"
       }
     }
+  },
+  "ext":{  
+    "txt":"Texte",
+    "doc":"Word (1997-2003)",
+    "docx":"Word",
+    "pdf":"PDF",
+    "xls":"Excel (1997-2003)",
+    "xlsx":"Excel",
+    "ppt":"Power Point (1997-2003)",
+    "pptx":"Power Point",
+    "mp3":"Audio",
+    "mp4":"Vidéo",
+    "avi":"Vidéo",
+    "png":"Image",
+    "jpg":"Image",
+    "zip":"Archive ZIP",
+    "rar":"Archive RAR"
   },
   "init":{  
     "keepSalt":true,

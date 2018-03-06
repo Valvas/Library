@@ -1,8 +1,18 @@
 {
+  "errors":
+  {
+    "detail": "Détail",
+    "timeout": "Le serveur a mis trop de temps à répondre"
+  },
+
+  "loader":
+  {
+    "message": "Chargement en cours..."
+  },
+
   "navigation":
   {
-    "root": "PEI",
-    "storage": "STOCKAGE",
+    "title": "PEI",
 
     "account":
     {
@@ -21,9 +31,7 @@
         "disease": "AT",
         "admin": "Administration"
       },
-      "reports": "Rapports",
-      "services": "Services",
-      "exit": "Quitter l'application"
+      "reports": "Rapports"
     }
   }
 }

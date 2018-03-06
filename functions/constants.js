@@ -58,6 +58,8 @@ const COULD_NOT_READ_CONFIG_FILE                                                
 const ACCOUNT_CREATED_WITHOUT_SENDING_EMAIL                                       = 10054;
 const PASSWORD_RESETED_WITHOUT_SENDING_EMAIL                                      = 10055;
 const COULD_NOT_READ_SERVICES_FILE                                                = 10056;
+const COULD_NOT_PARSE_INCOMING_FORM                                               = 10057;
+const NO_FILE_TO_DOWNLOAD                                                         = 10058;
 
 /******************************************************************************************
 SUCCESS
@@ -144,6 +146,8 @@ module.exports =
   ACCOUNT_CREATED_WITHOUT_SENDING_EMAIL: ACCOUNT_CREATED_WITHOUT_SENDING_EMAIL,
   PASSWORD_RESETED_WITHOUT_SENDING_EMAIL: PASSWORD_RESETED_WITHOUT_SENDING_EMAIL,
   COULD_NOT_READ_SERVICES_FILE: COULD_NOT_READ_SERVICES_FILE,
+  COULD_NOT_PARSE_INCOMING_FORM: COULD_NOT_PARSE_INCOMING_FORM,
+  NO_FILE_TO_DOWNLOAD: NO_FILE_TO_DOWNLOAD,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

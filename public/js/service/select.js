@@ -1,7 +1,12 @@
-window.onload = $(() =>
+/****************************************************************************************************/
+
+var files = document.getElementsByClassName('file');
+
+/****************************************************************************************************/
+
+for(var file in files)
 {
-  $('body').on('click', '.service-main-block .table-container .table .file', (event) =>
-  {
-    if(event.target.nodeName != 'I') location = `/file/${$(event.target).parent().attr('id')}`;
-  });
-});
+  console.log(files[file]);
+}
+
+/****************************************************************************************************/

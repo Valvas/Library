@@ -1,9 +1,12 @@
 'use strict'
 
-const express               = require('express');
-const errors                = require(`${__root}/json/errors`);
-const commonStrings         = require(`${__root}/json/strings/common`);
-const commonAppsAccess      = require(`${__root}/functions/common/apps/access`);
+const express                   = require('express');
+const errors                    = require(`${__root}/json/errors`);
+const commonAppStrings          = require(`${__root}/json/strings/common`);
+const storageAppStrings         = require(`${__root}/json/strings/storage`);
+const commonAppsAccess          = require(`${__root}/functions/common/apps/access`);
+const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
+const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
 
 var router = express.Router();
 
@@ -11,10 +14,102 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  res.render('storage/services',
-  { 
-    account: req.session.account, 
-    strings: { navigation: commonStrings.navigation }
+  storageAppServicesRights.getRightsTowardsServices(req.session.account.email, req.app.get('mysqlConnector'), (error, rights) =>
+  {
+    if(error != null)
+    {
+      res.render('storage/services/views/list',
+      { 
+        account: req.session.account, 
+        strings: { common: commonAppStrings, storage: storageAppStrings },
+        services: null,
+        rights: null,
+        error: { message: errors[error.code], detail: error.detail }
+      });
+    }
+
+    else
+    {
+      storageAppServicesGet.getAllServices(req.app.get('mysqlConnector'), (error, services) =>
+      {
+        if(error == null)
+        {
+          res.render('storage/services/views/list',
+          { 
+            account: req.session.account, 
+            strings: { common: commonAppStrings, storage: storageAppStrings },
+            services: services,
+            rights: rights,
+            error: null
+          });
+        }
+
+        else
+        {
+          res.render('storage/services/views/list',
+          { 
+            account: req.session.account, 
+            strings: { common: commonAppStrings, storage: storageAppStrings },
+            services: null,
+            rights: null,
+            error: { message: errors[error.code], detail: error.detail }
+          });
+        }
+      });
+    }
+  });
+});
+
+/****************************************************************************************************/
+
+router.get('/:service', (req, res) =>
+{
+  storageAppServicesRights.getRightsTowardsService(req.params.service, req.session.account.email, req.app.get('mysqlConnector'), (error, rights) =>
+  {
+    if(error != null)
+    {
+      res.render('storage/services/views/detail',
+      { 
+        account: req.session.account, 
+        strings: { common: commonAppStrings, storage: storageAppStrings },
+        rights: null,
+        files: null,
+        error: { message: errors[error.code], detail: error.detail },
+        service: req.params.service
+      });
+    }
+
+    else
+    {
+      storageAppServicesGet.getFilesFromService(req.params.service, req.app.get('mysqlConnector'), (error, files) =>
+      {
+        if(error == null)
+        {
+          res.render('storage/services/views/detail',
+          { 
+            account: req.session.account, 
+            strings: { common: commonAppStrings, storage: storageAppStrings },
+            rights: rights,
+            files: files,
+            error: null,
+            service: req.params.service
+          });
+        }
+
+        else
+        {
+          res.render('storage/services/views/detail',
+          { 
+            account: req.session.account, 
+            strings: { common: commonAppStrings, storage: storageAppStrings },
+            rights: null,
+            files: null,
+            error: { message: errors[error.code], detail: error.detail },
+            service: req.params.service
+          });
+        }
+      });
+    }
   });
 });
 

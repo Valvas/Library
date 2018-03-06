@@ -1,16 +1,20 @@
 {
-  "info":
+  "test1":
   {
-    "name": "Informatique",
     "ext_accepted":
     {
       "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf"
     }
   },
-
-  "test":
+  "test2":
   {
-    "name": "test",
+    "ext_accepted":
+    {
+      "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf"
+    }
+  },
+  "test3":
+  {
     "ext_accepted":
     {
       "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf"

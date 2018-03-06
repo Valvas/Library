@@ -2,27 +2,28 @@
   <div class='menu'>
     <div class='icon' id='navigation-menu-icon'><i class='fas fa-bars'></i></div>
     <div class='list' id='navigation-menu-list'>
+      <a href='/home' class='link'><%= strings.common.navigation.menu.home %></a>
       <div class='link' id='navigation-apps-icon'>
-        <div class='value'><%= strings.navigation.menu.apps.label %></div><div class='arrow'><i class='fas fa-angle-down'></i></div>
+        <div class='value'><%= strings.common.navigation.menu.apps.label %></div><div class='arrow'><i class='fas fa-angle-down'></i></div>
       </div>
       <div class='apps' id='navigation-apps-list'>
         <% if(Object.keys(apps).length < 2){ %>
-          <div class='empty'><%= strings.navigation.menu.apps.empty %></div>
+          <div class='empty'><%= strings.common.navigation.menu.apps.empty %></div>
         <% } else{ %>
-          <% if(apps.storage == 1){ %><a href='/storage' class='app'><div class='left'><i class='fas fa-cloud'></i></div><div class='right'><%= strings.navigation.menu.apps.storage %></div></a><% } %>
-          <% if(apps.disease == 1){ %><a href='/disease' class='app'><div class='left'><i class='fas fa-user-md'></i></div><div class='right'><%= strings.navigation.menu.apps.disease %></div></a><% } %>
-          <% if(apps.admin == 1){ %><a href='/admin' class='app'><div class='left'><i class='fas fa-gavel'></i></div><div class='right'><%= strings.navigation.menu.apps.admin %></div></a><% } %>
+          <% if(apps.storage == 1){ %><a href='/storage' class='app'><div class='left'><i class='fas fa-cloud'></i></div><div class='right'><%= strings.common.navigation.menu.apps.storage %></div></a><% } %>
+          <% if(apps.disease == 1){ %><a href='/disease' class='app'><div class='left'><i class='fas fa-user-md'></i></div><div class='right'><%= strings.common.navigation.menu.apps.disease %></div></a><% } %>
+          <% if(apps.admin == 1){ %><a href='/admin' class='app'><div class='left'><i class='fas fa-gavel'></i></div><div class='right'><%= strings.common.navigation.menu.apps.admin %></div></a><% } %>
         <% } %>
       </div>
-      <a href='/reports' class='link'><%= strings.navigation.menu.reports %></a>
+      <a href='/reports' class='link'><%= strings.common.navigation.menu.reports %></a>
     </div>
   </div><!--
---><div class='title'><%= strings.navigation.root %></div><!--
+--><div class='title'><%= strings.common.navigation.title %></div><!--
 --><div class='account'>
     <div class='header' id='navigation-account-icon'><div class='value'><%= account.email %></div><div class='icon'><i class='fas fa-user-circle'></i></div></div>
     <div class='list' id='navigation-account-list'>
-      <a href='/account' class='link'><%= strings.navigation.account.account %></a>
-      <a href='/logout' class='link'><%= strings.navigation.account.logout %></a>
+      <a href='/account' class='link'><%= strings.common.navigation.account.account %></a>
+      <a href='/logout' class='link'><%= strings.common.navigation.account.logout %></a>
     </div>
   </div><!--
 --><div id='report-button' class='bug'><i class='fas fa-bug'></i></div>

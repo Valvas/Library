@@ -15,8 +15,8 @@ module.exports.getAppsAvailableForAccount = (accountEmail, databaseConnector, ca
 
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.names.apps.label,
-    'tableName': params.database.names.apps.tables.access,
+    'databaseName': params.database.root.label,
+    'tableName': params.database.root.tables.access,
     'args': { '0': '*' },
     'where': { '=': { '0': { 'key': 'email', 'value' : accountEmail } } }
 
