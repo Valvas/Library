@@ -71,8 +71,8 @@
   "transporter":{  
     "port":"25",
     "secure":false,
-    "user":"vincent.valvas@groupepei.fr",
-    "password":"Kjiuwvoq1",
+    "user":"test@groupepei.fr",
+    "password":"Password123",
     "address":"mail.groupepei.fr"
   },
   "timeout":300000,
