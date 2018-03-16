@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <title><%= strings.storage.name %> - <%= strings.storage.locations.admin %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/aside.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/home.css" />
+  <body>
+    <% include ../includes/navigation.ejs %>
+    <div class='main'>
+      <div class='header'>
+        <div class='bookmark'><i class='fas fa-bookmark'></i></div><div class='location'><%= strings.storage.locations.admin %></div>
+      </div>
+      <div class='aside'>
+        <a href='/storage/admin/services' class='link <% if(rights.access_services == 1){ %>active<% }else{ %>inactive<% } %>'><%= strings.storage.admin.links.services %></a>
+      </div><!--
+    --><div class='rights'>
+        <div class='info'><%= strings.storage.admin.home.info %></div>
+        <div class='category'>
+          <div class='title'><%= strings.storage.admin.home.services.label %></div>
+          <div class='right'><div class='key'><%= strings.storage.admin.home.services.rights.access %></div><div class='value'><% if(rights.access_services == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
+          <div class='right'><div class='key'><%= strings.storage.admin.home.services.rights.create %></div><div class='value'><% if(rights.create_services == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
+          <div class='right'><div class='key'><%= strings.storage.admin.home.services.rights.modify %></div><div class='value'><% if(rights.modify_services == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
+          <div class='right'><div class='key'><%= strings.storage.admin.home.services.rights.remove %></div><div class='value'><% if(rights.remove_services == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
+        </div>
+      </div>
+    </div>
+    <script src='/js/jQuery.js'></script>
+    <script src='/js/afk.js'></script>
+    <script src='/js/fontawesome.js'></script>
+    <script src='/js/navigation/menu.js'></script>
+    <script src='/js/navigation/account.js'></script>
+  </body>
+</html>

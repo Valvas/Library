@@ -1,0 +1,31 @@
+'use strict'
+
+const fs                                  = require('fs');
+const params                              = require(`${__root}/json/params`);
+const constants                           = require(`${__root}/functions/constants`);
+
+//To uncomment when updated database manager will be set for all the project
+//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
+
+//To remove when updated database manager will be set for all the project
+const databaseManager             = require(`${__root}/functions/database/MySQLv2`);
+
+/****************************************************************************************************/
+
+module.exports.removeFileFromTheDatabase = (fileID, databaseConnector, callback) =>
+{
+  fileID              == undefined ||
+  databaseConnector   == undefined ?
+
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+
+  databaseManager.deleteQuery(
+  {
+
+  }, databaseConnector, (boolean, deletedRowOrErrorMessage) =>
+  {
+
+  });
+}
+
+/****************************************************************************************************/

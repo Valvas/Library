@@ -1,62 +1,12 @@
 {
-  "1":
-  {
-    "email": "user1",
-    "lastname": "Doe",
-    "firstname": "John",
-    "service": "info",
-    "suspended": 0,
-    "password": "",
-    "is_admin": 0
-  },
-  "2":
-  {
-    "email": "user2",
-    "lastname": "Doe",
-    "firstname": "John",
-    "service": "info",
-    "suspended": 0,
-    "password": "",
-    "is_admin": 0
-  },
-  "3":
-  {
-    "email": "user3",
-    "lastname": "Doe",
-    "firstname": "John",
-    "service": "info",
-    "suspended": 0,
-    "password": "",
-    "is_admin": 0
-  },
-  "4":
-  {
-    "email": "user4",
-    "lastname": "Doe",
-    "firstname": "John",
-    "service": "info",
-    "suspended": 0,
-    "password": "",
-    "is_admin": 0
-  },
-  "5":
-  {
-    "email": "user5",
-    "lastname": "Doe",
-    "firstname": "John",
-    "service": "info",
-    "suspended": 0,
-    "password": "",
-    "is_admin": 0
-  },
-  "6":
+  "0":
   {
     "email": "admin1",
     "lastname": "Doe",
     "firstname": "John",
-    "service": "info",
-    "suspended": 0,
-    "password": "",
-    "is_admin": 1
+    "suspended": false,
+    "admin": true,
+    "disease": true,
+    "storage": true
   }
 }

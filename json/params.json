@@ -1,4 +1,7 @@
-{  
+{
+  "apps":{
+
+  },
   "database":{  
     "host":"localhost",
     "port":"3306",
@@ -21,6 +24,8 @@
       "tables":
       {
         "accounts": "account",
+        "admin": "admin",
+        "fileLogs": "file_logs",
         "files": "files",
         "rights": "rights",
         "services": "services"
@@ -44,6 +49,12 @@
     "zip":"Archive ZIP",
     "rar":"Archive RAR"
   },
+  "fileLogs":{  
+    "upload":0,
+    "download":1,
+    "remove":2,
+    "comment":3
+  },
   "init":{  
     "keepSalt":true,
     "minFileSize":1024,
@@ -64,8 +75,13 @@
     }
   },
   "ready":true,
+  "salt":"$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
   "storage":{  
     "root":"C:\\Users\\dev\\Desktop\\removal",
+    "services": "STATIC_services",
+    "fileLogs": "STATIC_file_logs",
+    "bin": "STATIC_bin",
+    "tmp": "STATIC_tmp",
     "maxFileSize":10737418240
   },
   "transporter":{  

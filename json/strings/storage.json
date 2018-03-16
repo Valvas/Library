@@ -1,8 +1,77 @@
 {
+  "admin":
+  {
+    "home":
+    {
+      "info": "Voici les droits que vous possédez concernant l'administration de cette application",
+      "services":
+      {
+        "label": "Services",
+        "rights":
+        {
+          "access": "Consulter les services",
+          "create": "Créer des services",
+          "modify": "Modifier des services",
+          "remove": "Supprimer des services"
+        }
+      }
+    },
+    "links":
+    {
+      "services": "Services"
+    },
+    "services":
+    {
+      "create": "Créer un service",
+      "empty": "Aucun service",
+      "form":
+      {
+        "add": "Ajouter un membre",
+        "back": "Retour",
+        "format":
+        {
+          "correct": "Format correct",
+          "incorrect": "Format incorrect"
+        },
+        "inputs":
+        {
+          "identifier":
+          {
+            "help": "Nom technique du service (exemple: \"info1\"), ne doit pas comporter d'espaces, de caractères spéciaux ou de majuscules. Doit comporter au moins une lettre au début",
+            "placeholder": "Identifiant",
+            "value": "Identifiant"
+          },
+          "name":
+          {
+            "help": "(exemple : \"Service Informatique\")",
+            "placeholder": "Nom",
+            "value": "Nom"
+          },
+          "size":
+          {
+            "help": "Une valeur numérique en Ko ou Mo (limitée à 7 chiffres)",
+            "options":
+            {
+              "0": "Ko",
+              "1": "Mo"
+            },
+            "placeholder": "Valeur",
+            "value": "Taille maximale des fichiers"
+          }
+        },
+        "next": "Suivant",
+        "title": "Création d'un service"
+      }
+    }
+  },
+
   "name": "Stockage",
 
   "locations":
   {
+    "admin": "Administration",
+    "consultation": "Consultation",
+    "creation": "Création",
     "home": "Accueil",
     "services": "Services"
   },
@@ -34,6 +103,8 @@
 
     "detail": "Détail",
 
+    "empty": "Aucun service",
+
     "info":
     {
       "count": "Fichiers",
@@ -46,7 +117,17 @@
 
     "filters":
     {
-      "label": "Filtres"
+      "label": "Filtres",
+      "values":
+      {
+        "doc": "Word",
+        "xls": "Excel",
+        "ppt": "PowerPoint",
+        "pdf": "PDF",
+        "txt": "Texte",
+        "png": "Image",
+        "default": "Autres formats"
+      }
     },
 
     "names":
@@ -57,6 +138,20 @@
     },
 
     "open": "Accéder",
+
+    "popup":
+    {
+      "upload":
+      {
+        "choice": "Choisissez un fichier sur votre machine",
+        "close": "Fermer",
+        "ext": "Extensions acceptées",
+        "loader": "Chargement en cours...",
+        "placeholder": "Cliquez ici",
+        "send": "Envoyer",
+        "title": "Envoyer un fichier"
+      }
+    },
 
     "rights": "Mes droits",
 

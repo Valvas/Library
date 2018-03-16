@@ -3,7 +3,6 @@
 const express           = require('express');
 const errors            = require(`${__root}/json/errors`);
 const constants         = require(`${__root}/functions/constants`);
-const filesGet          = require(`${__root}/functions/files/get`);
 const servicesGet       = require(`${__root}/functions/services/get`);
 const adminServices     = require(`${__root}/functions/admin/services`);
 

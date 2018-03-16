@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var express           = require('express');
 var params            = require(`${__root}/json/config`);
@@ -8,6 +8,8 @@ var logon             = require(`${__root}/functions/logon`);
 var constants         = require(`${__root}/functions/constants`);
 var accountsReset     = require(`${__root}/functions/accounts/reset`);
 var accountsCreate    = require(`${__root}/functions/accounts/create`);
+
+const accountsLogon   = require(`${__root}/functions/accounts/logon`);
 
 var router = express.Router();
 
@@ -22,23 +24,17 @@ router.get('/', (req, res) =>
 
 router.put('/', (req, res) =>
 {
-  req.body.emailAddress == undefined || req.body.uncryptedPassword == undefined ? 
-  
-  res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
-
-  logon.checkIfAccountExistsUsingCredentialsProvided(req.body.emailAddress, req.body.uncryptedPassword, req.app.get('mysqlConnector'), (accountOrFalse, errorStatus, errorCode) =>
+  accountsLogon.authenticateAccountUsingCredentials(req.body.emailAddress, req.body.uncryptedPassword, req.app.get('mysqlConnector'), (error, account) =>
   {
-    if(accountOrFalse == false) res.status(errorStatus).send({ result: false, message: errors[errorCode] });
+    if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
 
     else
     {
-      if(accountOrFalse.suspended == 1) res.status(403).send({ result: false, message: errors[constants.ACCOUNT_SUSPENDED] });
+      if(account.suspended == 1) res.status(403).send({ result: false, message: errors[constants.ACCOUNT_SUSPENDED] });
 
       else
       {
-        req.session.uuid = accountOrFalse.uuid;
-        req.session.account = accountOrFalse;
-
+        req.session.account = account;
         res.status(200).send({ result: true });
       }
     }
@@ -95,8 +91,8 @@ router.get('/logout', (req, res) =>
 
 router.get('/afk-time', (req, res) =>
 {
-  req.session.uuid == undefined ? 
-  res.status(401).send({ result: false, message: `Erreur [401] - ${constants.AUTHENTICATION_REQUIRED} !`}) : 
+  req.session.account == undefined ? 
+  res.status(401).send({ result: false, message: errors[constants.AUTHENTICATION_REQUIRED] }) : 
   res.status(200).send({ result: true, time: params.inactivity_timeout });
 });
 

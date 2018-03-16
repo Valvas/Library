@@ -1,16 +1,16 @@
 'use strict';
 
-var bcrypt            = require('bcrypt');
-var params            = require(`${__root}/json/config`);
-var constants         = require(`${__root}/functions/constants`);
+const bcrypt            = require('bcrypt');
+const params            = require(`${__root}/json/params`);
+const constants         = require(`${__root}/functions/constants`);
 
 /****************************************************************************************************/
 
 module.exports.encryptPassword = (password, callback) =>
 {
-  bcrypt.hash(password, params.salt, (err, result) =>
+  bcrypt.hash(password, params.salt, (error, result) =>
   {
-    err != undefined ? callback(false, 500, constants.ENCRYPTION_FAILED) : callback(result);
+    error != undefined ? callback({status: 500, code: constants.ENCRYPTION_FAILED }) : callback(null, result);
   });
 }
 
@@ -18,10 +18,9 @@ module.exports.encryptPassword = (password, callback) =>
 
 module.exports.getRandomPassword = (callback) =>
 {
-  var password = '';
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  var x = 0;
+  var password = '', x = 0;
 
   var loop = () =>
   {
@@ -29,9 +28,9 @@ module.exports.getRandomPassword = (callback) =>
 
     (x += 1) < 8 ? loop() : 
       
-    bcrypt.hash(password, params.salt, (err, result) =>
+    bcrypt.hash(password, params.salt, (error, result) =>
     {
-      err != undefined ? callback({ status: 500, code: constants.ENCRYPTION_FAILED }) : callback(null, { clear: password, encrypted: result });
+      error != undefined ? callback({ status: 500, code: constants.ENCRYPTION_FAILED }) : callback(null, { clear: password, encrypted: result });
     });
   }
 
@@ -42,16 +41,15 @@ module.exports.getRandomPassword = (callback) =>
 
 module.exports.getInitPassword = (callback) =>
 {
-  var password = '';
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  var x = 0;
+  var password = '', x = 0;
 
   var loop = () =>
   {
     password += characters.charAt(Math.floor(Math.random() * characters.length));
 
-    (x += 1) < 32 ? loop() : callback(password);
+    (x += 1) < 32 ? loop() : callback(null, password);
   }
 
   loop();

@@ -48,7 +48,7 @@ module.exports.createServices = (databaseConnector, callback) =>
               {
                 'databaseName': config.database.name,
                 'tableName': config.database.tables.services,
-                'args': { 'name': Object.keys(json)[x] }
+                'args': { 'name': Object.keys(json)[x], 'file_limit': json[Object.keys(json)[x]].fileLimit }
 
               }, databaseConnector, (boolean, insertedIDOrErrorMessage) =>
               {

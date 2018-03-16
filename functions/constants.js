@@ -60,6 +60,12 @@ const PASSWORD_RESETED_WITHOUT_SENDING_EMAIL                                    
 const COULD_NOT_READ_SERVICES_FILE                                                = 10056;
 const COULD_NOT_PARSE_INCOMING_FORM                                               = 10057;
 const NO_FILE_TO_DOWNLOAD                                                         = 10058;
+const FILE_HAS_BEEN_DELETED                                                       = 10059;
+const COULD_NOT_CREATE_ARCHIVE                                                    = 10060;
+const LOG_TYPE_DOES_NOT_EXIST                                                     = 10061;
+const WRONG_SUSPENDED_STATUS_FORMAT                                               = 10062;
+const IS_A_DIRECTORY                                                              = 10063;
+const RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE                                         = 10064;
 
 /******************************************************************************************
 SUCCESS
@@ -148,6 +154,12 @@ module.exports =
   COULD_NOT_READ_SERVICES_FILE: COULD_NOT_READ_SERVICES_FILE,
   COULD_NOT_PARSE_INCOMING_FORM: COULD_NOT_PARSE_INCOMING_FORM,
   NO_FILE_TO_DOWNLOAD: NO_FILE_TO_DOWNLOAD,
+  FILE_HAS_BEEN_DELETED: FILE_HAS_BEEN_DELETED,
+  COULD_NOT_CREATE_ARCHIVE: COULD_NOT_CREATE_ARCHIVE,
+  LOG_TYPE_DOES_NOT_EXIST: LOG_TYPE_DOES_NOT_EXIST,
+  WRONG_SUSPENDED_STATUS_FORMAT: WRONG_SUSPENDED_STATUS_FORMAT,
+  IS_A_DIRECTORY: IS_A_DIRECTORY,
+  RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE: RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

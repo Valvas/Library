@@ -403,62 +403,6 @@ function updateFilesList(service, callback)
 
 /****************************************************************************************************/
 
-function checkTimeout(timeout, counter)
-{
-  if((timeout - counter) <= (timeout * 0.1) && (timeout - counter) > 0)
-  {
-    if(document.getElementById('afk-warning-popup') == null)
-    {
-      openWarningPopup((timeout - counter) / 1000);
-    }
-
-    else
-    {
-      $(document.getElementById('afk-warning-info')).text(`Temps restant avant déconnexion : ${(timeout - counter) / 1000} s`);
-    }
-  }
-
-  else if((timeout - counter) <= 0)
-  {
-    $.ajax(
-    {
-      type: 'GET', timeout: 2000, url: '/logout', success: function(){},
-      error: function(xhr, status, error){ printError(`ERROR [${xhr['status']}] - ${error} !`); }                      
-    }).done(function(){ location = '/'; });
-  }
-}
-
-/****************************************************************************************************/
-
-function openWarningPopup(remainingTime)
-{
-  var veil      = document.createElement('div');
-  var info      = document.createElement('div');
-  var popup     = document.createElement('div');
-  var title     = document.createElement('div');
-  var message   = document.createElement('div');
-
-
-  $(veil)       .attr({ id: 'afk-warning-veil',               class: 'veil'});
-  $(info)       .attr({ id: 'afk-warning-info',               class: 'popup-info'});
-  $(title)      .attr({ id: 'afk-warning-title',              class: 'popup-title'});
-  $(popup)      .attr({ id: 'afk-warning-popup',              class: 'popup'});
-  $(message)    .attr({ id: 'afk-warning-message',            class: 'popup-message'});
-
-  $(info)       .text(`Temps restant avant déconnexion : ${remainingTime} s`);
-  $(title)      .text('ATTENTION');
-  $(message)    .text('Une inactivité prolongée entraine une déconnexion automatique !');
-
-  $(veil)       .appendTo('body');
-  $(popup)      .appendTo('body');
-
-  $(title)      .appendTo(popup);
-  $(message)    .appendTo(popup);
-  $(info)       .appendTo(popup);
-}
-
-/****************************************************************************************************/
-
 function openInputPopup(obj)
 {
   var veil      = document.createElement('div');

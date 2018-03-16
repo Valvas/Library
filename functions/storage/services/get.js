@@ -2,11 +2,19 @@
 
 const params              = require(`${__root}/json/params`);
 const constants           = require(`${__root}/functions/constants`);
-const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
+const accountsGet         = require(`${__root}/functions/accounts/get`);
+
+//To uncomment when updated database manager will be set for all the project
+//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
+
+//To remove when updated database manager will be set for all the project
+const databaseManager     = require(`${__root}/functions/database/MySQLv2`);
+
+var storageAppServicesGet = module.exports = {};
 
 /****************************************************************************************************/
 
-module.exports.getService = (service, databaseConnector, callback) =>
+storageAppServicesGet.getService = (service, databaseConnector, callback) =>
 {
   service             == undefined ||
   databaseConnector   == undefined ?
@@ -18,7 +26,7 @@ module.exports.getService = (service, databaseConnector, callback) =>
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.services,
     'args': { '0': '*' },
-    'where': { '=': { '0': { 'key': 'name', 'value': service } } }
+    'where': { '0': { 'operator': '=', '0' : { 'key': 'name', 'value': service } } }
 
   }, databaseConnector, (boolean, serviceOrErrorMessage) =>
   {
@@ -35,7 +43,7 @@ module.exports.getService = (service, databaseConnector, callback) =>
 
 /****************************************************************************************************/
 
-module.exports.getAllServices = (databaseConnector, callback) =>
+storageAppServicesGet.getAllServices = (databaseConnector, callback) =>
 {
   databaseConnector == undefined ?
 
@@ -59,7 +67,9 @@ module.exports.getAllServices = (databaseConnector, callback) =>
 
       var loop = () =>
       {
-        services[x] = servicesOrErrorMessage[x];
+        services[servicesOrErrorMessage[x].id] = {};
+        services[servicesOrErrorMessage[x].id].name = servicesOrErrorMessage[x].name;
+        services[servicesOrErrorMessage[x].id].fileLimit = servicesOrErrorMessage[x].file_limit;
 
         servicesOrErrorMessage[x += 1] == undefined ? callback(null, services) : loop();
       }
@@ -71,47 +81,55 @@ module.exports.getAllServices = (databaseConnector, callback) =>
 
 /****************************************************************************************************/
 
-module.exports.getFilesFromService = (service, databaseConnector, callback) =>
+storageAppServicesGet.getFilesFromService = (serviceName, databaseConnector, callback) =>
 {
-  service             == undefined ||
+  serviceName         == undefined ||
   databaseConnector   == undefined ? 
   
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  databaseManager.selectQuery(
+  storageAppServicesGet.getService(serviceName, databaseConnector, (error, service) =>
   {
-    'databaseName': params.database.storage.label,
-    'tableName': params.database.storage.tables.files,
-    'args': { '0': '*' },  
-    'where': { '=': { '0': { 'key': 'service', 'value': service } } }
-
-  }, databaseConnector, (boolean, filesOrErrorMessage) =>
-  {
-    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: filesOrErrorMessage });
-
+    if(error != null) callback(error);
+    
     else
     {
-      var x = 0;
-      var files = {};
-      
-      var loop = () =>
+      databaseManager.selectQuery(
       {
-        files[x] = {};
-
-        files[x].ext      = filesOrErrorMessage[x].type;
-        files[x].name     = filesOrErrorMessage[x].name;
-        files[x].deleted  = filesOrErrorMessage[x].deleted;
-        files[x].type     = params.ext[filesOrErrorMessage[x].type];
-
-        filesOrErrorMessage[x += 1] != undefined ? loop() :
-
-        getFilesOwners(files, databaseConnector, (error, result) =>
+        'databaseName': params.database.storage.label,
+        'tableName': params.database.storage.tables.files,
+        'args': { '0': '*' },  
+        'where': { '0': { 'operator': '=', '0': { 'key': 'service', 'value': service.id } } }
+    
+      }, databaseConnector, (boolean, filesOrErrorMessage) =>
+      {
+        if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: filesOrErrorMessage });
+    
+        else
         {
-          error == null ? callback(null, result) : callback(error);
-        });
-      }
-
-      filesOrErrorMessage[x] == undefined ? callback(null, files) : loop();
+          var x = 0;
+          var files = {};
+          
+          var loop = () =>
+          {
+            files[x] = {};
+    
+            files[x].ext      = filesOrErrorMessage[x].ext;
+            files[x].name     = filesOrErrorMessage[x].name;
+            files[x].deleted  = filesOrErrorMessage[x].deleted;
+            files[x].account  = filesOrErrorMessage[x].account;
+    
+            filesOrErrorMessage[x += 1] != undefined ? loop() :
+    
+            getFilesOwners(files, databaseConnector, (error, result) =>
+            {
+              error == null ? callback(null, result) : callback(error);
+            });
+          }
+    
+          filesOrErrorMessage[x] == undefined ? callback(null, files) : loop();
+        }
+      });
     }
   });
 }
@@ -124,29 +142,66 @@ function getFilesOwners(files, databaseConnector, callback)
 
   var loop = () =>
   {
-    databaseManager.selectQuery(
+    accountsGet.getAccountUsingID(files[x].account, databaseConnector, (error, account) =>
     {
-      'databaseName': params.database.storage.label,
-      'tableName': params.database.storage.tables.accounts,  
-      'args': { '0': 'firstname', '1': 'lastname' },  
-      'where': { '=': { '0': { 'key': 'uuid', 'value': files[x].account } } }
-
-    }, databaseConnector, (boolean, accountOrErrorMessage) =>
-    {
-      if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: accountOrErrorMessage });
+      if(error != null && error.status != 404) callback(error);
 
       else
       {
-        accountOrErrorMessage.length == 0 ? 
+        account == undefined ?
         files[x].account = '??????' : 
-        files[x].account = `${accountOrErrorMessage[0].firstname} ${accountOrErrorMessage[0].lastname.toUpperCase()}`;
-        
+        files[x].account = `${account.firstname.charAt(0).toUpperCase()}${account.firstname.slice(1).toLowerCase()} ${account.lastname.toUpperCase()}`;
+
         files[x += 1] == undefined ? callback(null, files) : loop();
       }
     });
   }
 
   loop();
+}
+
+/****************************************************************************************************/
+
+module.exports.getAmountOfFilesFromService = (serviceID, databaseConnector, callback) =>
+{
+  serviceID           == undefined ||
+  databaseConnector   == undefined ?
+
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+
+  databaseManager.selectQuery(
+  {
+    'databaseName': params.database.storage.label,
+    'tableName': params.database.storage.tables.files,
+    'args': { '0': 'id' },  
+    'where': { '0': { 'operator': '=', '0': { 'key': 'service', 'value': serviceID } } }
+
+  }, databaseConnector, (boolean, fileIDsOrErrorMessage) =>
+  {
+    boolean == false ? callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: fileIDsOrErrorMessage }) : callback(null, Object.keys(fileIDsOrErrorMessage).length);
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.getAmountOfMembersFromService = (serviceID, databaseConnector, callback) =>
+{
+  serviceID           == undefined ||
+  databaseConnector   == undefined ?
+
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+
+  databaseManager.selectQuery(
+  {
+    'databaseName': params.database.storage.label,
+    'tableName': params.database.storage.tables.rights,
+    'args': { '0': 'id' },  
+    'where': { '0': { 'operator': '=', '0': { 'key': 'service', 'value': serviceID } } }
+
+  }, databaseConnector, (boolean, membersIDsOrErrorMessage) =>
+  {
+    boolean == false ? callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: membersIDsOrErrorMessage }) : callback(null, Object.keys(membersIDsOrErrorMessage).length);
+  });
 }
 
 /****************************************************************************************************/

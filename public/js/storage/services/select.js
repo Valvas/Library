@@ -8,10 +8,10 @@ function selectFile(target)
   {
     target = target.parentElement;
 
-    if(target.getAttribute('class') != 'file') getParentLoop();
+    if(target.hasAttribute('tag') == false) getParentLoop();
   }
 
-  if(target.getAttribute('class') != 'file') getParentLoop();
+  if(target.hasAttribute('tag') == false) getParentLoop();
 
   var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
 

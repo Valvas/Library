@@ -14,11 +14,11 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  storageAppServicesRights.getRightsTowardsServices(req.session.account.email, req.app.get('mysqlConnector'), (error, rights) =>
+  storageAppServicesRights.getRightsTowardsServices(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
   {
     if(error != null)
     {
-      res.render('storage/services/views/list',
+      res.render('storage/services/list',
       { 
         account: req.session.account, 
         strings: { common: commonAppStrings, storage: storageAppStrings },
@@ -34,7 +34,7 @@ router.get('/', (req, res) =>
       {
         if(error == null)
         {
-          res.render('storage/services/views/list',
+          res.render('storage/services/list',
           { 
             account: req.session.account, 
             strings: { common: commonAppStrings, storage: storageAppStrings },
@@ -46,7 +46,7 @@ router.get('/', (req, res) =>
 
         else
         {
-          res.render('storage/services/views/list',
+          res.render('storage/services/list',
           { 
             account: req.session.account, 
             strings: { common: commonAppStrings, storage: storageAppStrings },
@@ -64,11 +64,11 @@ router.get('/', (req, res) =>
 
 router.get('/:service', (req, res) =>
 {
-  storageAppServicesRights.getRightsTowardsService(req.params.service, req.session.account.email, req.app.get('mysqlConnector'), (error, rights) =>
+  storageAppServicesGet.getService(req.params.service, req.app.get('mysqlConnector'), (error, service) =>
   {
     if(error != null)
     {
-      res.render('storage/services/views/detail',
+      res.render('storage/services/detail',
       { 
         account: req.session.account, 
         strings: { common: commonAppStrings, storage: storageAppStrings },
@@ -81,24 +81,11 @@ router.get('/:service', (req, res) =>
 
     else
     {
-      storageAppServicesGet.getFilesFromService(req.params.service, req.app.get('mysqlConnector'), (error, files) =>
+      storageAppServicesRights.getRightsTowardsService(service.id, req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
       {
-        if(error == null)
+        if(error != null)
         {
-          res.render('storage/services/views/detail',
-          { 
-            account: req.session.account, 
-            strings: { common: commonAppStrings, storage: storageAppStrings },
-            rights: rights,
-            files: files,
-            error: null,
-            service: req.params.service
-          });
-        }
-
-        else
-        {
-          res.render('storage/services/views/detail',
+          res.render('storage/services/detail',
           { 
             account: req.session.account, 
             strings: { common: commonAppStrings, storage: storageAppStrings },
@@ -106,6 +93,38 @@ router.get('/:service', (req, res) =>
             files: null,
             error: { message: errors[error.code], detail: error.detail },
             service: req.params.service
+          });
+        }
+
+        else
+        {
+          storageAppServicesGet.getFilesFromService(req.params.service, req.app.get('mysqlConnector'), (error, files) =>
+          {
+            if(error == null)
+            {
+              res.render('storage/services/detail',
+              { 
+                account: req.session.account, 
+                strings: { common: commonAppStrings, storage: storageAppStrings },
+                rights: rights,
+                files: files,
+                error: null,
+                service: req.params.service
+              });
+            }
+
+            else
+            {
+              res.render('storage/services/detail',
+              { 
+                account: req.session.account, 
+                strings: { common: commonAppStrings, storage: storageAppStrings },
+                rights: null,
+                files: null,
+                error: { message: errors[error.code], detail: error.detail },
+                service: req.params.service
+              });
+            }
           });
         }
       });

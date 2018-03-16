@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <title><%= strings.storage.name %> - <%= strings.storage.locations.admin %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/aside.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/services/form.css" />
+  <body>
+    <div id='blur'>
+      <% include ../../includes/navigation.ejs %>
+      <div class='main'>
+        <div class='header'>
+          <div class='bookmark'><i class='fas fa-bookmark'></i></div><div class='location'><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %> / <%= strings.storage.locations.creation %></div>
+        </div>
+        <div class='aside'>
+          <a href='/storage/admin/services' class='link <% if(rights.access_services == 1){ %>active<% }else{ %>inactive<% } %>'><%= strings.storage.admin.links.services %></a>
+        </div><!--
+        --><div class='form'>
+          <% if(error != null){ %>
+            <div class='error'>
+              <div class='message'><div class='left'><i class='fas fa-exclamation-circle'></i></div><div class='right'><%= error.message %></div></div>
+              <% if(error.detail != null){ %><div class='detail'><%= error.detail %></div><% } %>
+            </div>
+          <% } else{ %>
+            <div class='block' id='form-first-block'>
+              <div class='title'><%= strings.storage.admin.services.form.title %></div>
+              <div class='correct' id='form-input-identifier-correct'><%= strings.storage.admin.services.form.format.correct %></div>
+              <div class='incorrect' id='form-input-identifier-incorrect'><%= strings.storage.admin.services.form.format.incorrect %></div>
+              <div class='input'><div class='key'><%= strings.storage.admin.services.form.inputs.identifier.value %></div><input type='text' class='value' id='form-input-identifier' placeholder='<%= strings.storage.admin.services.form.inputs.identifier.placeholder %>' required /></div>
+              <div class='help'><%= strings.storage.admin.services.form.inputs.identifier.help %></div>
+              <div class='correct' id='form-input-name-correct'><%= strings.storage.admin.services.form.format.correct %></div>
+              <div class='incorrect' id='form-input-name-incorrect'><%= strings.storage.admin.services.form.format.incorrect %></div>
+              <div class='input'><div class='key'><%= strings.storage.admin.services.form.inputs.name.value %></div><input type='text' class='value' id='form-input-name' placeholder='<%= strings.storage.admin.services.form.inputs.name.placeholder %>' required /></div>
+              <div class='help'><%= strings.storage.admin.services.form.inputs.name.help %></div>
+              <div class='correct' id='form-input-size-correct'><%= strings.storage.admin.services.form.format.correct %></div>
+              <div class='incorrect' id='form-input-size-incorrect'><%= strings.storage.admin.services.form.format.incorrect %></div>
+              <div class='input'><div class='key'><%= strings.storage.admin.services.form.inputs.size.value %></div><div class='right'><input type='number' class='input' id='form-input-size' placeholder='<%= strings.storage.admin.services.form.inputs.size.placeholder %>' min='1' required /><select class='select'><% for(var option in strings.storage.admin.services.form.inputs.size.options){ %><option><%= strings.storage.admin.services.form.inputs.size.options[option] %></option><% } %></select></select></div></div>
+              <div class='help'><%= strings.storage.admin.services.form.inputs.size.help %></div>
+              <button id='form-next-button' class='next inactive'><%= strings.storage.admin.services.form.next %></button>
+            </div>
+            <div id='form-second-block' class='members'>
+              <div class='title'><%= strings.storage.admin.services.form.title %></div>
+              <button class='back' id='form-back-to-first-block'><%= strings.storage.admin.services.form.back %></button>
+              <button class='add' id='form-second-block-add-member'><%= strings.storage.admin.services.form.add %></button>
+              <div class='rights'>
+                <div class='legend'>
+                  <div class='label'><i class='fas fa-comments'></i></div><!--
+                  --><div class='label'><i class='fas fa-cloud-upload-alt'></i></div><!--
+                  --><div class='label'><i class='fas fa-cloud-download-alt'></i></div><!--
+                  --><div class='label'><i class='fas fa-trash'></i></div>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <script src='/js/jQuery.js'></script>
+    <script src='/js/afk.js'></script>
+    <script src='/js/fontawesome.js'></script>
+    <script src='/js/navigation/menu.js'></script>
+    <script src='/js/navigation/account.js'></script>
+    <script src='/js/storage/admin/services/links.js'></script>
+    <script src='/js/storage/admin/services/form/check.js'></script>
+    <script src='/js/storage/admin/services/form/members.js'></script>
+  </body>
+</html>

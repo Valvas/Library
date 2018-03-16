@@ -6,9 +6,9 @@ const databaseManager       = require(`${__root}/functions/database/${params.dat
 
 /****************************************************************************************************/
 
-module.exports.getAppsAvailableForAccount = (accountEmail, databaseConnector, callback) =>
+module.exports.getAppsAvailableForAccount = (accountID, databaseConnector, callback) =>
 {
-  accountEmail          == undefined ||
+  accountID             == undefined ||
   databaseConnector     == undefined ?
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
@@ -18,7 +18,7 @@ module.exports.getAppsAvailableForAccount = (accountEmail, databaseConnector, ca
     'databaseName': params.database.root.label,
     'tableName': params.database.root.tables.access,
     'args': { '0': '*' },
-    'where': { '=': { '0': { 'key': 'email', 'value' : accountEmail } } }
+    'where': { '=': { '0': { 'key': 'account', 'value' : accountID } } }
 
   }, databaseConnector, (boolean, appsAccessOrErrorMessage) =>
   {

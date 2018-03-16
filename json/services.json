@@ -3,21 +3,24 @@
   {
     "ext_accepted":
     {
-      "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf"
-    }
+      "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf", "8": "png", "9": "zip"
+    },
+    "fileLimit": 10485760
   },
   "test2":
   {
     "ext_accepted":
     {
-      "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf"
-    }
+      "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf", "8": "png"
+    },
+    "fileLimit": 10485760
   },
   "test3":
   {
     "ext_accepted":
     {
-      "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf"
-    }
+      "0": "txt", "1": "doc", "2": "docx", "3": "xls", "4": "xlsx", "5": "ppt", "6": "pptx", "7": "pdf", "8": "png"
+    },
+    "fileLimit": 10485760
   }
 }

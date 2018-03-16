@@ -1,76 +1,50 @@
-'use strict';
+'use strict'
 
-const config                = require(`${__root}/json/config`);
-const services              = require(`${__root}/json/services`);
+const params                = require(`${__root}/json/params`);
 const constants             = require(`${__root}/functions/constants`);
 const encryption            = require(`${__root}/functions/encryption`);
 const accountEmail          = require(`${__root}/functions/email/account`);
-const accountsCheck         = require(`${__root}/functions/accounts/check`);
-const databaseManager       = require(`${__root}/functions/database/${config.database.dbms}`);
+
+//To uncomment when updated database manager will be set for all the project
+//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
+
+//To remove when updated database manager will be set for all the project
+const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
 
 /****************************************************************************************************/
 
-module.exports.createAccount = (obj, databaseConnector, emailTransporter, params, callback) =>
+module.exports.createAccount = (account, databaseConnector, callback) =>
 {
-  accountsCheck.checkAccountFormat(obj, databaseConnector, (error) =>
+  account.email         == undefined ||
+  account.lastname      == undefined ||
+  account.firstname     == undefined ||
+  account.suspended     == undefined ?
+
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+
+  encryption.getRandomPassword((error, passwords) =>
   {
     if(error != null) callback(error);
 
     else
     {
-      if(obj.service == undefined || !(obj.service in services)) callback({ status: 406, code: constants.SERVICE_NOT_FOUND });
-
-      else
+      databaseManager.insertQuery(
       {
-        if(obj.admin == undefined || (obj.admin != '0' && obj.admin != '1')) callback({ status: 406, code: constants.ADMIN_STATUS_IS_MISSING });
+        'databaseName': params.database.root.label,
+        'tableName': params.database.root.tables.accounts,
+        'uuid': true,
+        'args': { 'email': account.email, 'lastname': account.lastname, 'firstname': account.firstname, 'password': passwords.encrypted, 'suspended': account.suspended ? 1 : 0, }
+
+      }, databaseConnector, (boolean, accountIDOrErrorMessage) =>
+      {
+        if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
 
         else
         {
-          encryption.getRandomPassword((error, passwords) =>
-          {
-            error != null ? callback(error) :
-
-            databaseManager.insertQuery(
-            {
-              'databaseName': config.database.name,
-              'tableName': config.database.tables.accounts,
-
-              'uuid': true,
-      
-              'args':
-              {
-                'email': obj.email.replace(/"/g, ''),
-                'lastname': obj.lastname.replace(/"/g, ''),
-                'firstname': obj.firstname.replace(/"/g, ''),
-                'password': passwords.encrypted,
-                'suspended': 0,
-                'service': obj.service.replace(/"/g, ''),
-                'is_admin': obj.admin
-              }
-            }, databaseConnector, (boolean, insertedIdOrErrorMessage) =>
-            {
-              if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
-              
-              else
-              {
-                if(params.init.servicesStarted.transporter == false)
-                {
-                  console.log(`Transporter service is not started !\nPassword for "${obj.email}" is "${passwords.clear}" !`);
-                  callback({ status: 400, code: constants.ACCOUNT_CREATED_WITHOUT_SENDING_EMAIL });
-                }
-
-                else
-                {
-                  accountEmail.accountCreated(obj.email, passwords.clear, emailTransporter, (error) =>
-                  {
-                    callback(error);
-                  });
-                }
-              }
-            });
-          });
+          console.log(`[ACCOUNTS] - Warning - password for account "${account.email}" is "${passwords.clear}"`);
+          callback(null);
         }
-      }
+      });
     }
   });
 }

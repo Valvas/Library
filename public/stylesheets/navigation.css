@@ -58,6 +58,8 @@
 {
   .navigation .title{ width:calc(100% - 180px); text-align:left; }
 
+  .navigation .logo{ display:none; }
+
   .navigation .account{ width:60px; }
 
   .navigation .account .header .value{ display:none; }

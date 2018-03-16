@@ -56,5 +56,11 @@
   "10055": "Le mot de passe a été réinitialisé avec succès\nLe service d'envoi des emails est désactivé\n(l'utilisateur ne va pas recevoir son mot de passe)",
   "10056": "Impossible de lire le fichiers des services",
   "10057": "Echec lors de la récupération des données formulaires",
-  "10058": "Aucun fichier à télécharger"
+  "10058": "Aucun fichier à télécharger",
+  "10059": "Ce fichier n'est plus disponible, il a été supprimé",
+  "10060": "Erreur lors de la création de l'archive contenant les fichiers",
+  "10061": "Ce type de log n'existe pas",
+  "10062": "Format du statut de suspension de compte incorrect",
+  "10063": "Le fichier existe déjà mais il s'agit d'un dossier",
+  "10064": "Vous ne possédez pas les droits requis pour accéder à cette page"
 }

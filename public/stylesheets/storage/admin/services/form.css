@@ -1,0 +1,143 @@
+/****************************************************************************************************/
+
+.form{ width:calc(100% - 240px); max-width:800px; margin:0 20px 0 20px; display:inline-block; vertical-align:top; }
+
+.form .error .message{ margin:0 0 10px 0; }
+
+.form .error .message .left{ display:inline-block; width:20px; font-size:1.25em; margin:0 10px 0 0; color:#D9534F; }
+
+.form .error .message .right{ display:inline-block; vertical-align:top; font-size:16px; line-height:24px; font-family:barlow; width:calc(100% - 30px); }
+
+.form .error .detail{ font-family:barlow-italic; font-size:14px; line-height:18px; color:#B0B0B0; }
+
+.form .block{ background-color:#FFFFFF; border-radius:4px; }
+
+.form .block .title{ background-color:#428BCA; color:#FFFFFF; font-size:20px; line-height:24px; font-family:barlow; padding:10px; border-radius:4px 4px 0 0; margin:0 0 20px 0; }
+
+.form .block .correct{ display:none; color:#5CB85C; font-size:16px; line-height:24px; font-family:barlow-italic; margin:0 10px 0 10px; }
+
+.form .block .incorrect{ display:none; color:#D9534F; font-size:16px; line-height:24px; font-family:barlow-italic; margin:0 10px 0 10px; }
+
+.form .block .input .key{ font-size:16px; line-height:24px; font-family:barlow; margin:0 10px 0 10px; }
+
+.form .block .input .value{ box-sizing:border-box; font-size:16px; line-height:24px; padding:0 0 0 4px; font-family:barlow; width:100%; max-width:300px; border-radius:4px; border:1px solid #E0E0E0; margin:0 10px 0 10px; }
+
+.form .block .input .right{ width:100%; max-width:300px; margin:0 10px 0 10px; }
+
+.form .block .input .right .input{ box-sizing:border-box; width:calc(100% - 100px); display:inline-block; border:1px solid #E0E0E0; border-radius:4px 0 0 4px; font-size:16px; line-height:24px; font-family:barlow; padding:0 0 0 4px; }
+
+.form .block .input .right .select{ box-sizing:border-box; width:100px; display:inline-block; vertical-align:top; border-radius:0 4px 4px 0; border:1px solid #E0E0E0; height:26px; font-size:16px; line-height:24px; font-family:barlow; }
+
+.form .block .help{ padding:5px 0 5px 0; border-bottom:1px solid #F0F0F0; margin:0 10px 10px 10px; font-family:barlow-italic; line-height:18px; font-size:14px; }
+
+.form .block .next{ border:none; border-radius:4px; color:#FFFFFF; width:100px; padding:4px 0 4px 0; margin:10px 10px 10px calc(100% - 110px); font-size:16px; line-height:24px; font-family:barlow; }
+
+.form .block .next.inactive{ background-color:#D0D0D0; }
+
+.form .block .next.active{ background-color:#5CB85C; cursor:pointer; }
+
+.form .block .next.active:hover{ color:#000000; background-color:#3A963A; }
+
+.form .members{ display:none; background-color:#FFFFFF; border-radius:4px; }
+
+.form .members .title{ background-color:#428BCA; color:#FFFFFF; font-size:20px; line-height:24px; font-family:barlow; padding:10px; border-radius:4px 4px 0 0; margin:0 0 20px 0; }
+
+.form .members .back{ border:none; border-radius:4px; color:#FFFFFF; background-color:#D9534F; cursor:pointer; width:200px; padding:4px 0 4px 0; margin:0 10px 10px calc(100% - 210px); font-size:16px; line-height:24px; font-family:barlow; }
+
+.form .members .back:hover{ color:#000000; background-color:#B7312D; }
+
+.form .members .add{ border:none; border-radius:4px; color:#FFFFFF; background-color:#5CB85C; cursor:pointer; width:200px; padding:4px 0 4px 0; margin:0 10px 10px calc(100% - 210px); font-size:16px; line-height:24px; font-family:barlow; }
+
+.form .members .add:hover{ color:#000000; background-color:#3A963A; }
+
+.form .members .rights .legend{ width:240px; }
+
+.form .members .rights .legend .label{ display:inline-block; vertical-align:top; font-size:1.25em; width:60px; text-align:center; }
+
+.form .members .rights .account{ padding:4px 0 4px 0; border-bottom:1px solid #F0F0F0; }
+
+.form .members .rights .account .name{ width:calc(100% - 240px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:16px; line-height:20px; }
+
+.form .members .rights .account .values{ width:60px; display:inline-block; vertical-align:top; }
+
+.form .members .rights .account .values .true{ width:30px; display:inline-block; vertical-align:top; font-size:1.25em; text-align:center; }
+
+.form .members .rights .account .values .false{ width:30px; display:inline-block; vertical-align:top; font-size:1.25em; text-align:center; }
+
+.form .members .rights .account .values .inactive{ color:#D0D0D0; cursor:pointer; }
+
+.form .members .rights .account .values .inactive:hover{ color:#428BCA; }
+
+.form .members .rights .account .values .true.active{ color:#5CB85C; }
+
+.form .members .rights .account .values .false.active{ color:#D9534F; }
+
+.list{ border:1px solid #F0F0F0; z-index:30; position:absolute; top:80px; left:calc(50% - 300px); margin:0 0 40px 0; width:600px; background-color:#FFFFFF; border-radius:4px; }
+
+.list .search{ border-radius:4px 4px 0 0; background-color:#428BCA; width:calc(100% - 20px); padding:10px; margin:0 0 10px 0; border-bottom:1px solid #F0F0F0; }
+
+.list .search .input{ width:100%; max-width:300px; padding:0 0 0 4px; box-sizing:border-box; border-radius:4px; border:1px solid #F0F0F0; font-size:16px; line-height:24px; font-family:barlow; }
+
+.list .account{ padding:4px 10px 4px 10px; box-sizing:border-box; border-bottom:1px solid #F0F0F0; }
+
+.list .account .email{ width:calc(40% - 30px); padding-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:14px; line-height:18px; font-family:barlow; display:inline-block; vertical-align:top; }
+
+.list .account .lastname{ width:25%; padding-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:14px; line-height:18px; font-family:barlow; display:inline-block; vertical-align:top; }
+
+.list .account .firstname{ width:25%; padding-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:14px; line-height:18px; font-family:barlow; display:inline-block; vertical-align:top; }
+
+.list .account .add{ width:30px; display:inline-block; font-size:1.25em; vertical-align:top; text-align:center; }
+
+.list .account .add .icon{ cursor:pointer; color:#428BCA; }
+
+.list .account .add .icon:hover{ color:#2069A8; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319px)
+{
+  .form{ width:calc(100% - 40px); margin:20px; }
+
+  .list{ width:calc(100% - 40px); top:20px; left:20px; }
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+  .form{ width:calc(100% - 40px); margin:20px; }
+
+  .list{ width:calc(100% - 40px); top:20px; left:20px; }
+}
+
+@media (min-width: 480px) and (max-width: 639px)
+{
+  .form{ width:calc(100% - 40px); margin:20px; }
+
+  .list{ width:calc(100% - 40px); top:20px; left:20px; }
+}
+
+@media (min-width: 640px) and (max-width: 779px)
+{
+
+}
+
+@media (min-width: 780px) and (max-width: 959px)
+{
+
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+
+}
+
+@media (min-width: 1680px)
+{
+
+}
+
+/****************************************************************************************************/

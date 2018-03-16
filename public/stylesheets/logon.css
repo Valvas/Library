@@ -1,4 +1,6 @@
-body{ margin:0; background-color:#445566; }
+body{ margin:0; background-color:#556677; }
+
+.logo{ position:absolute; top:0; left:0; }
 
 .main{ background-color:#FFFFFF; box-sizing:border-box; border-radius:4px; width:500px; margin:80px calc(50% - 250px) 80px calc(50% - 250px); padding:0; }
 

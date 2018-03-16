@@ -2,19 +2,19 @@
 
 const params              = require(`${__root}/json/params`);
 const constants           = require(`${__root}/functions/constants`);
-const commonAccountsGet   = require(`${__root}/functions/common/accounts/get`);
+const accountsGet         = require(`${__root}/functions/accounts/get`);
 const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
 /****************************************************************************************************/
 
-module.exports.getRightsTowardsServices = (accountEmail, databaseConnector, callback) =>
+module.exports.getRightsTowardsServices = (accountID, databaseConnector, callback) =>
 {
-  accountEmail        == undefined ||
+  accountID           == undefined ||
   databaseConnector   == undefined ?
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  commonAccountsGet.getAccountFromEmail(accountEmail, databaseConnector, (error, account) =>
+  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
   {
     error != null ? callback(error) :
 
@@ -23,7 +23,7 @@ module.exports.getRightsTowardsServices = (accountEmail, databaseConnector, call
       'databaseName': params.database.storage.label,
       'tableName': params.database.storage.tables.rights,
       'args': { '0': '*' },
-      'where': { '=': { '0': { 'key': 'account', 'value': accountEmail } } }
+      'where': { '=': { '0': { 'key': 'account', 'value': accountID } } }
   
     }, databaseConnector, (boolean, rightsOrErrorMessage) =>
     {
@@ -53,15 +53,15 @@ module.exports.getRightsTowardsServices = (accountEmail, databaseConnector, call
 
 /****************************************************************************************************/
 
-module.exports.getRightsTowardsService = (service, accountEmail, databaseConnector, callback) =>
+module.exports.getRightsTowardsService = (service, accountID, databaseConnector, callback) =>
 {
   service             == undefined ||
-  accountEmail        == undefined ||
+  accountID           == undefined ||
   databaseConnector   == undefined ?
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  commonAccountsGet.getAccountFromEmail(accountEmail, databaseConnector, (error, account) =>
+  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
   {
     error != null ? callback(error) :
 
@@ -70,7 +70,7 @@ module.exports.getRightsTowardsService = (service, accountEmail, databaseConnect
       'databaseName': params.database.storage.label,
       'tableName': params.database.storage.tables.rights,
       'args': { '0': '*' },
-      'where': { 'AND': { '=': { '0': { 'key': 'account', 'value': accountEmail }, '1': { 'key': 'service', 'value': service } } } }
+      'where': { 'AND': { '=': { '0': { 'key': 'account', 'value': accountID }, '1': { 'key': 'service', 'value': service } } } }
   
     }, databaseConnector, (boolean, rightsOrErrorMessage) =>
     {
