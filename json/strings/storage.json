@@ -28,6 +28,11 @@
       {
         "add": "Ajouter un membre",
         "back": "Retour",
+        "extensions":
+        {
+          "message": "Cochez les extensions des fichiers autorisés à l'upload",
+          "title": "Extensions autorisées"
+        },
         "format":
         {
           "correct": "Format correct",
@@ -60,6 +65,7 @@
           }
         },
         "next": "Suivant",
+        "send": "Terminer",
         "title": "Création d'un service"
       }
     }

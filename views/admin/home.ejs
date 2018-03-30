@@ -1,24 +1,14 @@
 <!DOCTYPE html>
 <html>
-  <title>Library - Administration</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/admin.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
-  <body class='private-section-body'>
-    <% include ../include/menu.ejs %>
-    <% include ../include/admin_aside.ejs %><!-- @SuppressWhitespace
-    --><div class='home-news-block'>
-      <% for(var key in news){ %>
-        <div class='home-news-block-element'>
-          <div class='home-news-block-element-title'><%= news[key]['title'] %></div>
-          <div class='home-news-block-element-date'><%= news[key]['date'] %></div>
-          <div class='home-news-block-element-content'><%= news[key]['content'] %></div>
-        </div>
-      <% } %>
+  <title><%= strings.admin.appName %> - <%= strings.admin.locations.home %></title>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/base.css' />
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/navigation.css' />
+  <body>
+    <div id='blur'>
+      <% include include/navigation.ejs %>
     </div>
-    <% include ../include/scripts.ejs %>
-    <script src='/js/afk.js'></script>
+    <% include include/scripts.ejs %>
   </body>
 </html>

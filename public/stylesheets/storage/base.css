@@ -25,6 +25,26 @@ body{ margin:0; }
 
 .background{ position:fixed; z-index:20; top:0; left:0; right:0; bottom:0; display:none; overflow:auto; }
 
+.loader{ position:fixed; top:0; right:0; bottom:0; left:0; z-index:30; }
+
+.loader .spinner{ position:absolute; top:calc(50% - 32px); right:calc(50% - 32px); bottom:calc(50% - 32px); left:calc(50% - 32px); color:#5CB85C; font-size:4em; }
+
+.loader .box{ position:absolute; top:80px; right:calc(50% - 200px); margin:0 0 40px 0; left:calc(50% - 200px); width:400px; background-color:#FFFFFF; border-radius:4px; }
+
+.loader .box .message{ padding:20px; box-sizing:border-box; }
+
+.loader .box .message.error{ color:#D9534F; }
+
+.loader .box .message.success{ color:#5CB85C; }
+
+.loader .box .message .icon{ width:30px; font-size:1.5em; display:inline-block; }
+
+.loader .box .message .content{ font-size:16px; line-height:24px; width:calc(100% - 30px); font-family:roboto-light; text-align:center; display:inline-block; vertical-align:top; }
+
+.loader .box .button{ width:60px; border-radius:4px; border:none; font-size:16px; line-height:24px; padding:4px 0 4px 0; color:#FFFFFF; background-color:#428BCA; cursor:pointer; margin:0 calc(50% - 30px) 20px calc(50% - 30px); }
+
+.loader .box .button:hover{ color:#000000; }
+
 /****************************************************************************************************/
 
 @media (max-width: 319px)
@@ -32,6 +52,8 @@ body{ margin:0; }
   .main .header{ max-width:250px; }
 
   .main .error{ width:calc(100% - 40px); margin:20px; }
+
+  .loader .box{ width:calc(100% - 40px); margin:20px; }
 }
 
 @media (min-width: 320px) and (max-width: 479px)
@@ -39,6 +61,8 @@ body{ margin:0; }
   .main .header{ max-width:300px; }
 
   .main .error{ width:calc(100% - 40px); margin:20px; }
+
+  .loader .box{ width:calc(100% - 40px); margin:20px; }
 }
 
 @media (min-width: 480px) and (max-width: 639px)

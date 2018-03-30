@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <title><%= strings.admin.appName %> - <%= strings.admin.locations.accounts %></title>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/base.css' />
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/navigation.css' />
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/accounts/base.css' />
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/accounts/detail.css' />
+  <body>
+    <div id='blur'>
+      <% include ../include/navigation.ejs %>
+      <div class='account' id='modify-account' name='<%= result.uuid %>'>
+        <div class='title'><%= strings.admin.detail.title %></div>
+        <div class='background' id='modify-account-background'>
+          <div class='loader'><i class='fas fa-circle-notch fa-spin'></i></div>
+        </div>
+        <div class='detail' id='modify-account-detail'>
+          <div class='key'><%= strings.admin.accounts.labels.email %> :</div>
+          <div class='value' id='modify-account-email' tag='off'><div class='content' id='modify-account-email-value'><%= result.email %></div><% if(rights.modify_accounts == 1){ %><div class='icon' id='modify-account-email-pencil'><i class='fas fa-pencil-alt'></i></div><% } %></div>
+          <div class='key'><%= strings.admin.accounts.labels.lastname %> :</div>
+          <div class='value' id='modify-account-lastname' tag='off'><div class='content' id='modify-account-lastname-value'><%= result.lastname.toUpperCase() %></div><% if(rights.modify_accounts == 1){ %><div class='icon' id='modify-account-lastname-pencil'><i class='fas fa-pencil-alt'></i></div><% } %></div>
+          <div class='key'><%= strings.admin.accounts.labels.firstname %> :</div>
+          <div class='value' id='modify-account-firstname' tag='off'><div class='content' id='modify-account-firstname-value'><%= result.firstname.charAt(0).toUpperCase() %><%= result.firstname.slice(1).toLowerCase() %></div><% if(rights.modify_accounts == 1){ %><div class='icon' id='modify-account-firstname-pencil'><i class='fas fa-pencil-alt'></i></div><% } %></div>
+          <div class='key'><%= strings.admin.accounts.labels.suspended %> :</div>
+          <div class='value' id='modify-account-suspended' tag='off'>
+            <% if(result.suspended == 0){ %>
+              <div class='content false'><%= strings.admin.accounts.suspended.false %></div><% if(rights.suspend_accounts == 1){ %><div class='icon close' id='modify-account-suspended-lock' tag='on'><i class='fas fa-lock'></i></div><% } %>
+            <% } else{ %>
+              <div class='content true'><%= strings.admin.accounts.suspended.true %></div><% if(rights.suspend_accounts == 1){ %><div class='icon open' id='modify-account-suspended-lock' tag='off'><i class='fas fa-lock-open'></i></div><% } %>
+            <% } %>
+          </div>
+          <% if(rights.remove_accounts == 1){ %>
+            <button id='remove-account-button' class='button'><div class='trash'><i class='fas fa-trash-alt'></i></div><div class='content'><%= strings.admin.detail.remove %></div></button>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% include ../include/scripts.ejs %>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='/js/fontawesome.js'></script>
+    <script src='/js/admin/accounts/detailSocket.js'></script>
+    <script src='/js/admin/accounts/modify.js'></script>
+    <script src='/js/admin/accounts/remove.js'></script>
+  </body>
+</html>

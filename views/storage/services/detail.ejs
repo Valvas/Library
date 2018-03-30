@@ -7,10 +7,10 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/detail.css" />
   <body>
     <div id='blur'>
-      <% include ../../includes/navigation.ejs %>
-      <div class='main' id='main' name='<%= service %>'>
+      <% include ../includes/navigation.ejs %>
+      <div class='main' id='main' <% if(service != null){ %>name='<%= service.name %>'<% } %>>
         <div class='header'>
-          <div class='bookmark'><i class='fas fa-bookmark'></i></div><div class='location'><%= `${strings.storage.locations.services} / ${strings.storage.services.names[service]}` %></div>
+          <div class='bookmark'><i class='fas fa-bookmark'></i></div><div class='location'><%= `${strings.storage.locations.services} /` %><% if(service != null){ %><%= service.label %><% } else{ %>...<% } %> %></div>
         </div>
         <% if(error != null){ %>
           <div class='error'>

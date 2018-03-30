@@ -9,6 +9,14 @@
     "password":"root",
     "dbms":"MySQL",
     "name":"library",
+    "administration":
+    {
+      "label": "administration",
+      "tables":
+      {
+        "rights": "rights"
+      }
+    },
     "root":
     {
       "label": "apps",
@@ -58,7 +66,7 @@
   "init":{  
     "keepSalt":true,
     "minFileSize":1024,
-    "maxFileSize":10485760,
+    "maxFileSize":1048576000,
     "minTimeout":60000,
     "maxTimeout":86400000,
     "defaultPort":3000,

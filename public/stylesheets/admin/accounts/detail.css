@@ -1,0 +1,115 @@
+/****************************************************************************************************/
+
+.account{ position:relative; width:600px; background-color:#FFFFFF; border:1px solid #F0F0F0; border-radius:4px; box-sizing:border-box; margin:40px calc(50% - 300px) 40px calc(50% - 300px); }
+
+.account .background{ position:absolute; z-index:5; top:0; left:0; bottom:0; right:0; display:none; }
+
+.account .background .box{ margin:80px calc(50% - 200px) 40px calc(50% - 200px); width:400px; background-color:#FFFFFF; border-radius:4px; border:1px solid #F0F0F0; box-sizing:border-box; }
+
+.account .background .box .message{ padding:10px; line-height:24px; font-size:16px; font-family:roboto-light; text-align:center; }
+
+.account .background .box .yes{ font-size:2em; cursor:pointer; color:#5CB85C; display:inline-block; vertical-align:top; width:32px; margin:10px 10px 10px calc(50% - 42px); }
+
+.account .background .box .yes:hover{ color:#3A963A; }
+
+.account .background .box .no{ font-size:2em; cursor:pointer; color:#D9534F; display:inline-block; vertical-align:top; width:32px; margin:10px calc(50% - 42px) 10px 10px; }
+
+.account .background .box .no:hover{ color:#B7312D; }
+
+.account .background .loader{ font-size:4em; position:absolute; top:calc(50% - 32px); left:calc(50% - 32px); right:calc(50% - 32px); bottom:calc(50% - 32px); height:64px; width:64px; text-align:center; color:#5CB85C; }
+
+.account .warning{ background-color:#F08080; border-radius:4px; border:1px solid #D06060; color:#A6201C; font-size:16px; line-height:24px; text-align:center; padding:10px; max-width:calc(100% - 40px); width:300px; font-family:roboto-light-italic; position:absolute; top:20px; right:20px; }
+
+.account .success{ background-color:#B0F2B6; border-radius:4px; border:1px solid #90D094; color:#3A963A; font-size:16px; line-height:24px; text-align:center; padding:10px; max-width:calc(100% - 40px); width:300px; font-family:roboto-light-italic; position:absolute; top:20px; right:20px; }
+
+.account .title{ padding:20px; font-size:20px; line-height:24px; font-family:roboto-light; margin:0 0 10px 0; border-bottom:1px solid #F0F0F0; }
+
+.account .detail{ margin:10px 20px 10px 20px; }
+
+.account .detail .key{ font-family:roboto-light-italic; font-size:16px; line-height:24px; }
+
+.account .detail .value{ width:100%; }
+
+.account .detail .value .input{ font-family:roboto-light-italic; width:calc(100% - 105px); box-sizing:border-box; border:none; border-bottom:1px solid #F0F0F0; margin:10px 0 20px 0; font-size:18px; padding:0 0 0 0; line-height:24px; }
+
+.account .detail .value .content{ font-family:roboto-light; margin:10px 0 20px 0; width:calc(100% - 60px); border-bottom:1px solid #F0F0F0; display:inline-block; vertical-align:top; font-size:18px; line-height:24px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.account .detail .value .icon{ display:inline-block; vertical-align:top; width:30px; text-align:center; margin:10px 15px 0 15px; color:#428BCA; font-size:1.25em; cursor:pointer; }
+
+.account .detail .value .undo{ display:inline-block; vertical-align:top; width:30px; text-align:center; margin:10px 15px 0 0; color:#5CB85C; font-size:1.25em; cursor:pointer; }
+
+.account .detail .value .icon:hover{ color:#2069A8; }
+
+.account .detail .value .undo:hover{ color:#3A963A; }
+
+.account .detail .value .content.false{ color:#5CB85C; }
+
+.account .detail .value .content.true{ color:#D9534F; }
+
+.account .detail .value .icon.open{ color:#5CB85C; }
+
+.account .detail .value .icon.close{ color:#D9534F; }
+
+.account .detail .value .icon.open:hover, .account .detail .value .icon.close:hover{ color:#428BCA; }
+
+.account .detail .button{ width:200px; border:none; background-color:#D9534F; border-radius:4px; cursor:pointer; color:#FFFFFF; margin:20px 0 30px calc(100% - 200px); }
+
+.account .detail .button:hover{ color:#000000; }
+
+.account .detail .button .trash{ font-size:1.25em; padding:6px 0 4px 0; display:inline-block; width:25px; text-align:center; }
+
+.account .detail .button .content{ font-size:16px; line-height:24px; padding:5px 5px 5px 0; width:calc(100% - 30px); display:inline-block; vertical-align:top; font-family:roboto-light; }
+
+.account .removed{ padding:10px; }
+
+.account .removed .message{ margin:10px 0 10px 0; }
+
+.account .removed .message .icon{ width:32px; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319px)
+{
+  .account{ width:95%; margin:20px 2.5% 20px 2.5%; }
+
+  .account .background .box{ width:95%; margin:20px 2.5% 20px 2.5%; }
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+  .account{ width:95%; margin:20px 2.5% 20px 2.5%; }
+
+  .account .background .box{ width:95%; margin:20px 2.5% 20px 2.5%; }
+}
+
+@media (min-width: 480px) and (max-width: 639px)
+{
+  .account{ width:95%; margin:20px 2.5% 20px 2.5%; }
+}
+
+@media (min-width: 640px) and (max-width: 779px)
+{
+  
+}
+
+@media (min-width: 780px) and (max-width: 959px)
+{
+
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+
+}
+
+@media (min-width: 1680px)
+{
+
+}
+
+/****************************************************************************************************/

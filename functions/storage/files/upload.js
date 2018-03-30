@@ -20,9 +20,9 @@ const databaseManager     = require(`${__root}/functions/database/MySQLv2`);
 
 /****************************************************************************************************/
 
-module.exports.prepareUpload = (fileName, fileExt, serviceName, account, databaseConnector, callback) =>
+module.exports.prepareUpload = (fileName, fileExt, serviceName, account, fileSize, databaseConnector, callback) =>
 {
-  storageAppServicesGet.getService(serviceName, databaseConnector, (error, service) =>
+  storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
   {
     if(error != null) callback(error);
 
@@ -40,17 +40,17 @@ module.exports.prepareUpload = (fileName, fileExt, serviceName, account, databas
           {
             storageAppFilesGet.getFileFromDatabase(fileName, fileExt, service.id, databaseConnector, (error, file) =>
             {
-              if(error && error.status != 404) callback(error);
+              if(error != null && error.status != 404) callback(error);
 
               //File does not exist in database or is in status deleted
-              else if((error && error.status == 404) || (error == null && file.deleted == 1))
+              else if((error != null && error.status == 404) || (error == null && file.deleted == 1))
               {
                 storageAppFilesGet.getFileFromDisk(fileName, fileExt, serviceName, databaseConnector, (error, file) =>
                 {
-                  if(error && error.status != 404) callback(error);
+                  if(error != null && error.status != 404) callback(error);
 
                   //File does not exist on the disk
-                  else if(error && error.status == 404)
+                  else if(error != null && error.status == 404)
                   {
                     callback(null);
                   }
@@ -71,10 +71,10 @@ module.exports.prepareUpload = (fileName, fileExt, serviceName, account, databas
               {
                 storageAppFilesGet.getFileFromDisk(fileName, fileExt, serviceName, databaseConnector, (error, file) =>
                 {
-                  if(error && error.status != 404) callback(error);
+                  if(error != null && error.status != 404) callback(error);
 
                   //File does not exist on the disk
-                  else if(error && error.status == 404)
+                  else if(error != null && error.status == 404)
                   {
                     callback(null);
                   }
@@ -114,7 +114,7 @@ module.exports.uploadFile = (originalFileName, currentFileName, serviceName, acc
     else
     {
       //Check if service exists
-      storageAppServicesGet.getService(serviceName, databaseConnector, (error, service) =>
+      storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
       {
         if(error != null) callback(error);
 

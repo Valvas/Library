@@ -3,7 +3,10 @@
 const params                = require(`${__root}/json/params`);
 const constants             = require(`${__root}/functions/constants`);
 const encryption            = require(`${__root}/functions/encryption`);
-const accountEmail          = require(`${__root}/functions/email/account`);
+const accountsGet           = require(`${__root}/functions/accounts/get`);
+const commonFormatName      = require(`${__root}/functions/common/format/name`);
+const commonAppsAccess      = require(`${__root}/functions/common/apps/access`);
+const commonFormatEmail     = require(`${__root}/functions/common/format/email`);
 
 //To uncomment when updated database manager will be set for all the project
 //const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
@@ -11,37 +14,148 @@ const accountEmail          = require(`${__root}/functions/email/account`);
 //To remove when updated database manager will be set for all the project
 const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
 
+var accountsCreate = module.exports = {};
+
 /****************************************************************************************************/
 
-module.exports.createAccount = (account, databaseConnector, callback) =>
+accountsCreate.createAccount = (account, databaseConnector, callback) =>
 {
   account.email         == undefined ||
   account.lastname      == undefined ||
-  account.firstname     == undefined ||
-  account.suspended     == undefined ?
+  account.firstname     == undefined ?
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  encryption.getRandomPassword((error, passwords) =>
+  accountsGet.getAccountUsingEmail(account.email, databaseConnector, (error, resultAccount) =>
   {
-    if(error != null) callback(error);
+    if(resultAccount != undefined) callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE, target: 'email' });
+
+    else if(error != null && error.status != 404) callback(error);
+
+    else
+    {
+      commonFormatEmail.checkEmailAddressFormat(account.email, (error, boolean) =>
+      {
+        if(error != null) callback(error);
+
+        else
+        {
+          if(boolean == false) callback({ status: 406, code: constants.WRONG_EMAIL_FORMAT, target: 'email' });
+
+          else
+          {
+            commonFormatName.checkNameFormat(account.lastname, (error, boolean) =>
+            {
+              if(error != null) callback(error);
+
+              else
+              {
+                if(boolean == false) callback({ status: 406, code: constants.WRONG_LASTNAME_FORMAT, target: 'lastname' });
+
+                else
+                {
+                  commonFormatName.checkNameFormat(account.firstname, (error, boolean) =>
+                  {
+                    if(error != null) callback(error);
+
+                    else
+                    {
+                      if(boolean == false) callback({ status: 406, code: constants.WRONG_FIRSTNAME_FORMAT, target: 'firstname' });
+
+                      else
+                      {
+                        encryption.getRandomPassword((error, passwords) =>
+                        {
+                          if(error != null) callback(error);
+
+                          else
+                          {
+                            databaseManager.insertQuery(
+                            {
+                              'databaseName': params.database.root.label,
+                              'tableName': params.database.root.tables.accounts,
+                              'uuid': true,
+                              'args': { 'email': account.email, 'lastname': account.lastname, 'firstname': account.firstname, 'password': passwords.encrypted, 'suspended': 0 }
+
+                            }, databaseConnector, (boolean, accountIDOrErrorMessage) =>
+                            {
+                              if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
+
+                              else
+                              {
+                                accountsCreate.createAccess(accountIDOrErrorMessage, databaseConnector, (error) =>
+                                {
+                                  if(error != null)
+                                  {
+                                    databaseManager.deleteQuery(
+                                    {
+                                      'databaseName': params.database.root.label,
+                                      'tableName': params.database.root.tables.accounts,
+                                      'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': accountIDOrErrorMessage } } }
+                                      
+                                    }, databaseConnector, (boolean, deletedRowsOrErrorMessage) =>
+                                    {
+                                      if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: deletedRowsOrErrorMessage });
+
+                                      else
+                                      {
+                                        callback(error);
+                                      }
+                                    });
+                                  }
+
+                                  else
+                                  {
+                                    console.log(`[ACCOUNTS] - Warning - password for account "${account.email}" is "${passwords.clear}"`);
+                                    callback(null, constants.ACCOUNT_SUCCESSFULLY_CREATED);
+                                  }
+                                });
+                              }
+                            });
+                          }
+                        });
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          }
+        }
+      });
+    }
+  });
+}
+
+/****************************************************************************************************/
+
+accountsCreate.createAccess = (accountID, databaseConnector, callback) =>
+{
+  accountID == undefined ?
+
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+
+  commonAppsAccess.getAppsAvailableForAccount(accountID, databaseConnector, (error, access) =>
+  {
+    if(access != undefined) callback(null);
+
+    else if(error != null && error.status != 404) callback(error);
 
     else
     {
       databaseManager.insertQuery(
       {
         'databaseName': params.database.root.label,
-        'tableName': params.database.root.tables.accounts,
-        'uuid': true,
-        'args': { 'email': account.email, 'lastname': account.lastname, 'firstname': account.firstname, 'password': passwords.encrypted, 'suspended': account.suspended ? 1 : 0, }
+        'tableName': params.database.root.tables.access,
+        'uuid': false,
+        'args': { 'account': accountID, 'storage': 0, 'disease': 0, 'admin': 0 }
 
-      }, databaseConnector, (boolean, accountIDOrErrorMessage) =>
+      }, databaseConnector, (boolean, insertedIDOrErrorMessage) =>
       {
-        if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
+        if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: insertedIDOrErrorMessage });
 
         else
         {
-          console.log(`[ACCOUNTS] - Warning - password for account "${account.email}" is "${passwords.clear}"`);
           callback(null);
         }
       });

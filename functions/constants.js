@@ -66,6 +66,16 @@ const LOG_TYPE_DOES_NOT_EXIST                                                   
 const WRONG_SUSPENDED_STATUS_FORMAT                                               = 10062;
 const IS_A_DIRECTORY                                                              = 10063;
 const RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE                                         = 10064;
+const RIGHTS_NOT_FOUND                                                            = 10065;
+const UNAUTHORIZED_TO_CREATE_ACCOUNTS                                             = 10066;
+const UNAUTHORIZED_TO_MODIFY_ACCOUNTS                                             = 10067;
+const UNAUTHORIZED_TO_CREATE_SERVICES                                             = 10068;
+const SERVICE_IDENTIFIER_ALREADY_IN_USE                                           = 10069;
+const SERVICE_NAME_ALREADY_IN_USE                                                 = 10070;
+const SERVICE_FILE_MIN_SIZE_TOO_LOW                                               = 10071;
+const SERVICE_FILE_MIN_SIZE_TOO_HIGH                                              = 10072;
+const UNAUTHORIZED_TO_MANAGE_USER_RIGHTS                                          = 10073;
+const UNAUTHORIZED_TO_REMOVE_ACCOUNTS                                             = 10074;
 
 /******************************************************************************************
 SUCCESS
@@ -89,6 +99,7 @@ const COMMENT_STATUS_UPDATED                                                    
 const REPORT_STATUS_UPDATED                                                       = 20016;
 const ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED                                         = 20017;
 const FILE_COMMENT_SUCCESSFULLY_ADDED                                             = 20018;
+const SERVICE_SUCCESSFULLY_CREATED                                                = 20019;
 
 /******************************************************************************************
 EXPORTS
@@ -160,6 +171,15 @@ module.exports =
   WRONG_SUSPENDED_STATUS_FORMAT: WRONG_SUSPENDED_STATUS_FORMAT,
   IS_A_DIRECTORY: IS_A_DIRECTORY,
   RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE: RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE,
+  RIGHTS_NOT_FOUND: RIGHTS_NOT_FOUND,
+  UNAUTHORIZED_TO_CREATE_ACCOUNTS: UNAUTHORIZED_TO_CREATE_ACCOUNTS,
+  UNAUTHORIZED_TO_CREATE_SERVICES: UNAUTHORIZED_TO_CREATE_SERVICES,
+  SERVICE_IDENTIFIER_ALREADY_IN_USE: SERVICE_IDENTIFIER_ALREADY_IN_USE,
+  SERVICE_NAME_ALREADY_IN_USE: SERVICE_NAME_ALREADY_IN_USE,
+  SERVICE_FILE_MIN_SIZE_TOO_LOW: SERVICE_FILE_MIN_SIZE_TOO_LOW,
+  SERVICE_FILE_MIN_SIZE_TOO_HIGH: SERVICE_FILE_MIN_SIZE_TOO_HIGH,
+  UNAUTHORIZED_TO_MANAGE_USER_RIGHTS: UNAUTHORIZED_TO_MANAGE_USER_RIGHTS,
+  UNAUTHORIZED_TO_REMOVE_ACCOUNTS: UNAUTHORIZED_TO_REMOVE_ACCOUNTS,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -178,5 +198,6 @@ module.exports =
   COMMENT_STATUS_UPDATED: COMMENT_STATUS_UPDATED,
   REPORT_STATUS_UPDATED: REPORT_STATUS_UPDATED,
   ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED: ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED,
-  FILE_COMMENT_SUCCESSFULLY_ADDED: FILE_COMMENT_SUCCESSFULLY_ADDED
+  FILE_COMMENT_SUCCESSFULLY_ADDED: FILE_COMMENT_SUCCESSFULLY_ADDED,
+  SERVICE_SUCCESSFULLY_CREATED: SERVICE_SUCCESSFULLY_CREATED
 }

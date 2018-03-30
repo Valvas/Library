@@ -64,7 +64,7 @@ router.get('/', (req, res) =>
 
 router.get('/:service', (req, res) =>
 {
-  storageAppServicesGet.getService(req.params.service, req.app.get('mysqlConnector'), (error, service) =>
+  storageAppServicesGet.getServiceUsingName(req.params.service, req.app.get('mysqlConnector'), (error, service) =>
   {
     if(error != null)
     {
@@ -75,7 +75,7 @@ router.get('/:service', (req, res) =>
         rights: null,
         files: null,
         error: { message: errors[error.code], detail: error.detail },
-        service: req.params.service
+        service: null
       });
     }
 
@@ -92,7 +92,7 @@ router.get('/:service', (req, res) =>
             rights: null,
             files: null,
             error: { message: errors[error.code], detail: error.detail },
-            service: req.params.service
+            service: null
           });
         }
 
@@ -109,7 +109,7 @@ router.get('/:service', (req, res) =>
                 rights: rights,
                 files: files,
                 error: null,
-                service: req.params.service
+                service: service
               });
             }
 
@@ -122,7 +122,7 @@ router.get('/:service', (req, res) =>
                 rights: null,
                 files: null,
                 error: { message: errors[error.code], detail: error.detail },
-                service: req.params.service
+                service: null
               });
             }
           });

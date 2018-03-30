@@ -5,6 +5,7 @@ const express                   = require('express');
 const formidable                = require('formidable');
 const params                    = require(`${__root}/json/params`);
 const errors                    = require(`${__root}/json/errors`);
+const success                   = require(`${__root}/json/success`);
 const services                  = require(`${__root}/json/services`);
 const commonAppStrings          = require(`${__root}/json/strings/common`);
 const constants                 = require(`${__root}/functions/constants`);
@@ -12,6 +13,7 @@ const storageAppStrings         = require(`${__root}/json/strings/storage`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppFilesUpload     = require(`${__root}/functions/storage/files/upload`);
 const storageAppFilesDownload   = require(`${__root}/functions/storage/files/download`);
+const storageAppAdminServices   = require(`${__root}/functions/storage/admin/services`);
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
 
 var router = express.Router();
@@ -62,7 +64,7 @@ router.post('/download-files', (req, res) =>
 
     else
     {
-      storageAppServicesGet.getService(fields.service, req.app.get('mysqlConnector'), (error, service) =>
+      storageAppServicesGet.getServiceUsingName(fields.service, req.app.get('mysqlConnector'), (error, service) =>
       {
         if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
 
@@ -100,17 +102,17 @@ router.post('/download-files', (req, res) =>
 
 router.post('/get-upload-ext', (req, res) =>
 {
-  storageAppServicesGet.getService(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
+  storageAppServicesGet.getServiceUsingName(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
   {
     if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
 
     else
     {
-      if(req.body.service in services == false) res.status(406).send({ result: false, message: errors[constants.SERVICE_NOT_FOUND], detail: null });
+      if(req.body.service in req.app.get('servicesExtensionsAuthorized') == false) res.status(406).send({ result: false, message: errors[constants.SERVICE_NOT_FOUND], detail: null });
 
       else
       {
-        res.status(200).send({ result: true, ext: services[req.body.service].ext_accepted });
+        res.status(200).send({ result: true, ext: req.app.get('servicesExtensionsAuthorized')[req.body.service].ext_accepted });
       }
     }
   });
@@ -148,9 +150,58 @@ router.post('/upload-file', (req, res) =>
     storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1], fields.service, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
     {
       error != null ?
-      res.status(error.status).send({ result: false, message: error.message, detail: error.detail }) :
+      res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail }) :
       res.status(200).send({ result: true });
     });
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/create-service', (req, res) =>
+{
+  var form = new formidable.IncomingForm();
+
+  form.parse(req, (err, fields) =>
+  {
+    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
+
+    else
+    {
+      var service = JSON.parse(fields.service);
+
+      storageAppAdminServices.createService(service.identifier, service.name, service.size, service.extensions, req.session.account.id, req.app.get('servicesExtensionsAuthorized'), req.app.get('mysqlConnector'), (error, serviceID) =>
+      {
+        if(error != null)
+        {
+          res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
+        }
+
+        else
+        {
+          if(Object.keys(service.members).length == 0)
+          {
+            res.status(201).send({ result: true, message: success[constants.SERVICE_SUCCESSFULLY_CREATED] });
+          }
+
+          else
+          {
+            storageAppAdminServices.addMembersToService(serviceID, service.members, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+            {
+              if(error != null)
+              {
+                res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
+              }
+
+              else
+              {
+                res.status(201).send({ result: true, message: success[constants.SERVICE_SUCCESSFULLY_CREATED] });
+              }
+            });
+          }
+        }
+      });
+    }
   });
 });
 

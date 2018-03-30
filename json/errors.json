@@ -62,5 +62,15 @@
   "10061": "Ce type de log n'existe pas",
   "10062": "Format du statut de suspension de compte incorrect",
   "10063": "Le fichier existe déjà mais il s'agit d'un dossier",
-  "10064": "Vous ne possédez pas les droits requis pour accéder à cette page"
+  "10064": "Vous ne possédez pas les droits requis pour accéder à cette page",
+  "10065": "Aucun droit trouvé",
+  "10066": "Vous n'êtes pas autorisé(e) à créer des comptes",
+  "10067": "Vous n'êtes pas autorisé(e) à modifier des comptes",
+  "10068": "Vous n'êtes pas autorisé(e) à créer des services",
+  "10069": "Cet identifiant de service est déjà utilisé",
+  "10070": "Ce nom de service est déjà utilisé",
+  "10071": "Taille minimale des fichiers trop basse",
+  "10072": "Taille maximale des fichiers trop élevée",
+  "10073": "Vous n'êtes pas autorisé(e) à gérer les droits des comptes sur les services",
+  "10074": "Vous n'êtes pas autorisé(e) à supprimer des comptes"
 }

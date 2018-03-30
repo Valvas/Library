@@ -1,4 +1,18 @@
 {
+  "administration":
+  {
+    "rights":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "account": "BIGINT UNSIGNED NOT NULL",
+      "access_accounts": "BOOLEAN NOT NULL",
+      "create_accounts": "BOOLEAN NOT NULL",
+      "modify_accounts": "BOOLEAN NOT NULL",
+      "suspend_accounts": "BOOLEAN NOT NULL",
+      "remove_accounts": "BOOLEAN NOT NULL"
+    }
+  },
+
   "apps":
   {
     "access":
@@ -96,6 +110,7 @@
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "name": "VARCHAR(255) NOT NULL",
+      "label": "VARCHAR(255) NOT NULL",
       "file_limit": "BIGINT UNSIGNED NOT NULL"
     },
 
@@ -106,7 +121,8 @@
       "access_services": "BOOLEAN NOT NULL",
       "create_services": "BOOLEAN NOT NULL",
       "modify_services": "BOOLEAN NOT NULL",
-      "remove_services": "BOOLEAN NOT NULL"
+      "remove_services": "BOOLEAN NOT NULL",
+      "modify_account_rights": "BOOLEAN NOT NULL"
     }
   }
 }

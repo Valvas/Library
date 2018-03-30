@@ -1,6 +1,7 @@
 'use strict'
 
 const express                   = require('express');
+const params                    = require(`${__root}/json/params`);
 const errors                    = require(`${__root}/json/errors`);
 const commonAppStrings          = require(`${__root}/json/strings/common`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
@@ -79,7 +80,8 @@ router.get('/services/form', (req, res) =>
       account: req.session.account,
       rights: req.app.locals.rights,
       error: null,
-      strings: { common: commonAppStrings, storage: storageAppStrings }
+      strings: { common: commonAppStrings, storage: storageAppStrings },
+      ext: params.ext
     });
   }
 });

@@ -3,6 +3,8 @@
 require('../app')((app) =>
 {
   var app = app;
+
+  const accountsGet = require(`${__root}/functions/accounts/get`);
  
   var debug = require('debug')('library:server');
   var http = require('http');
@@ -18,6 +20,25 @@ require('../app')((app) =>
 
   io.on('connection', (socket) =>
   {
+    socket.on('adminAppAccountsHomeJoin', () => { socket.join('adminAppAccountsHome'); });
+
+    socket.on('accountCreated', (accountEmail) => 
+    {
+      accountsGet.getAccountUsingEmail(accountEmail, app.get('mysqlConnector'), (error, account) =>
+      {
+        if(error == null) io.in('adminAppAccountsHome').emit('accountCreated', null, account);
+      });
+    });
+
+    socket.on('accountModified', (accountUUID) =>
+    {
+      accountsGet.getAccountUsingUUID(accountUUID, app.get('mysqlConnector'), (error, account) =>
+      {
+        if(error == null) io.in('adminAppAccountsHome').emit('accountModified', null, account);
+      });
+    });
+
+
     socket.on('join_file', (name) => { socket.join(name); });
 
     socket.on('join_service', (name) => { socket.join(name); });

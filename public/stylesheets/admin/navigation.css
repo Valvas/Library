@@ -1,0 +1,59 @@
+/****************************************************************************************************/
+
+.navigation{ border-bottom:1px solid #E0E0E0; background-color:#FFFFFF; margin:0 0 20px 0; padding:10px; box-sizing:border-box; position:relative; }
+
+.navigation .title{ font-family:roboto-light; font-size:32px; text-transform:uppercase; line-height:40px; display:inline-block; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+
+.navigation .links{ width:100%; }
+
+.navigation .links .link{ margin:0 20px 0 0; color:#428BCA; text-decoration:none; display:inline-block; vertical-align:top; font-family:roboto-light; font-size:16px; line-height:24px; text-align:center; width:max-content; cursor:pointer; }
+
+.navigation .links .link:hover{ color:#2069A8; }
+
+.navigation .exit{ position:absolute; top:10px; right:10px; cursor:pointer; width:max-content; padding:8px; color:#FFFFFF; background-color:#D9534F; font-family:roboto-light; font-size:16px; line-height:18px; border:none; border-radius:4px; }
+
+.navigation .exit:hover{ color:#000000; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319px)
+{
+  .navigation .title{ margin:40px 0 0 0; }
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+  .navigation .title{ margin:40px 0 0 0; }
+}
+
+@media (min-width: 480px) and (max-width: 639px)
+{
+
+}
+
+@media (min-width: 640px) and (max-width: 779px)
+{
+
+}
+
+@media (min-width: 780px) and (max-width: 959px)
+{
+
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+
+}
+
+@media (min-width: 1680px)
+{
+
+}
+
+/****************************************************************************************************/

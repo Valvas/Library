@@ -5,8 +5,9 @@ const mysql               = require('mysql');
 const express             = require('express');
 const nodemailer          = require('nodemailer');
 const auth                = require(`${__root}/auth`);
-const adminAuth           = require(`${__root}/adminAuth`);
 const encryption          = require(`${__root}/functions/encryption`);
+const adminAppAuth        = require(`${__root}/functions/admin/auth`);
+const storageAppAdminAuth = require(`${__root}/functions/storage/auth`);
 const initFolder          = require(`${__root}/functions/init/folders`);
 const database            = require(`${__root}/functions/database/init`);
 const services            = require(`${__root}/functions/services/init`);
@@ -51,17 +52,13 @@ module.exports.startInit = (app, callback) =>
 
 module.exports.startApp = (app, callback) =>
 {
-  const root              = require(`${__root}/routes/root`);
-  const home              = require(`${__root}/routes/home`);
-  const reports           = require(`${__root}/routes/reports`);
+  const root                      = require(`${__root}/routes/root`);
+  const homeViews                 = require(`${__root}/routes/root/views/home`);
 
-  const adminRoot         = require(`${__root}/routes/admin/root`);
-  const adminUser         = require(`${__root}/routes/admin/user`);
-  const adminNews         = require(`${__root}/routes/admin/news`);
-  const adminRights       = require(`${__root}/routes/admin/rights`);
-  const adminParams       = require(`${__root}/routes/admin/params`);
-  const adminReports      = require(`${__root}/routes/admin/reports`);
-  const adminService      = require(`${__root}/routes/admin/service`);
+  const adminViewsHome            = require(`${__root}/routes/admin/views/home`);
+  const adminViewsAccounts        = require(`${__root}/routes/admin/views/accounts`);
+
+  const adminQueriesAccounts      = require(`${__root}/routes/admin/queries/accounts`);
 
   const storageViewsHome          = require(`${__root}/routes/storage/views/home`);
   const storageViewsAdmin         = require(`${__root}/routes/storage/views/admin`);
@@ -75,21 +72,18 @@ module.exports.startApp = (app, callback) =>
   app.set('params', params);
 
   app.use('/', root);
-  app.use('/home', home);
-  app.use('/reports', auth, reports);
-  app.use('/admin', auth, adminAuth, adminRoot);
-  app.use('/admin/news', auth, adminAuth, adminNews);
-  app.use('/admin/users', auth, adminAuth, adminUser);
-  app.use('/admin/rights', auth, adminAuth, adminRights);
-  app.use('/admin/params', auth, adminAuth, adminParams);
-  app.use('/admin/reports', auth, adminAuth, adminReports);
-  app.use('/admin/services', auth, adminAuth, adminService);
+  app.use('/home', homeViews);
+
+  app.use('/admin', auth, adminAppAuth, adminViewsHome);
+  app.use('/admin/accounts', auth, adminAppAuth, adminViewsAccounts);
+
+  app.use('/queries/admin/accounts', auth, adminAppAuth, adminQueriesAccounts);
 
   app.use('/storage', auth, storageViewsHome);
-  app.use('/storage/admin', adminAuth, storageViewsAdmin);
+  app.use('/storage/admin', storageAppAdminAuth, storageViewsAdmin);
   app.use('/storage/services', auth, storageViewsServices);
 
-  app.use('/queries/storage/admin', adminAuth, storageQueriesAdmin);
+  app.use('/queries/storage/admin', storageAppAdminAuth, storageQueriesAdmin);
   app.use('/queries/storage/services', auth, storageQueriesServices);
 
   app.use((req, res, next) =>
@@ -97,59 +91,71 @@ module.exports.startApp = (app, callback) =>
     res.render('block', { message: `404 - La page recherchée n'existe pas` });
   });
 
-  var pool = mysql.createPool(
+  fs.readFile(`${__root}/json/services.json`, (error, data) =>
   {
-    connectionLimit   : 10,
-    host              : params.database.host,
-    user              : params.database.user,
-    port              : params.database.port,
-    password          : params.database.password
-  });
+    if(error) process.exit(0);
 
-  var transporter = nodemailer.createTransport(
-  {
-    host                  : params.transporter.address,
-    port                  : params.transporter.port,
-    secure                : params.transporter.secure,
-    auth:
+    else
     {
-      user                : params.transporter.user,
-      pass                : params.transporter.password
-    },
-    tls: 
-    {
-      rejectUnauthorized  : false
-    }
-  });
+      var json = JSON.parse(data);
 
-  app.set('transporter', transporter);
+      app.set('servicesExtensionsAuthorized', json);
 
-  database.createDatabases(pool, () =>
-  { 
-    initCreateAccounts.createAccounts(pool, () =>
-    {
-      initCreateRights.createRights(pool, () =>
+      var pool = mysql.createPool(
       {
-        /*services.createServices(pool, (error) =>
-        {
-          if(error != null)
-          {
-            console.log(`[ERROR] - ${error.detail} !`);
-            process.exit(1);
-          }
-
-          else
-          {*/
-            app.set('mysqlConnector', pool);
-
-            initFolder.createAppFolders(params, (error) =>
-            {
-              error == null ? callback() : process.exit(0);
-            });
-          /*}
-        });*/
+        connectionLimit   : 10,
+        host              : params.database.host,
+        user              : params.database.user,
+        port              : params.database.port,
+        password          : params.database.password
       });
-    });
+    
+      var transporter = nodemailer.createTransport(
+      {
+        host                  : params.transporter.address,
+        port                  : params.transporter.port,
+        secure                : params.transporter.secure,
+        auth:
+        {
+          user                : params.transporter.user,
+          pass                : params.transporter.password
+        },
+        tls: 
+        {
+          rejectUnauthorized  : false
+        }
+      });
+    
+      app.set('transporter', transporter);
+    
+      database.createDatabases(pool, () =>
+      { 
+        initCreateAccounts.createAccounts(pool, () =>
+        {
+          initCreateRights.createRights(pool, () =>
+          {
+            /*services.createServices(pool, (error) =>
+            {
+              if(error != null)
+              {
+                console.log(`[ERROR] - ${error.detail} !`);
+                process.exit(1);
+              }
+    
+              else
+              {*/
+                app.set('mysqlConnector', pool);
+    
+                initFolder.createAppFolders(params, (error) =>
+                {
+                  error == null ? callback() : process.exit(0);
+                });
+              /*}
+            });*/
+          });
+        });
+      });
+    }
   });
 }
 

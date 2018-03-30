@@ -1,0 +1,61 @@
+/****************************************************************************************************/
+
+@import url('../fonts.css');
+
+body{ margin:0; background-color:#F9F9F9; }
+
+.background{ position:fixed; top:0; bottom:0; left:0; right:0; z-index:10; }
+
+.prompt{ width:400px; position:absolute; top:40px; left:calc(50% - 200px); background-color:#FFFFFF; border-radius:4px; border:1px solid #F0F0F0; z-index:20; padding:0 0 10px 0; }
+
+.prompt .title{ background-color:#D9534F; color:#FFFFFF; border-radius:4px 4px 0 0; font-size:20px; line-height:24px; padding:10px; font-family:roboto-light; }
+
+.prompt .message{ padding:10px; color:#D9534F; font-family:roboto-light; line-height:24px; font-size:16px; }
+
+.prompt .confirm{ width:80px; border:none; border-radius:4px; padding:4px 8px 4px 8px; color:#FFFFFF; background-color:#D9534F; cursor:pointer; line-height:24px; font-size:16px; font-family:roboto-light; display:inline-block; vertical-align:top; margin:0 0 0 calc(100% - 180px); }
+
+.prompt .cancel{ width:80px; border:none; border-radius:4px; padding:4px 8px 4px 8px; color:#FFFFFF; background-color:#428BCA; cursor:pointer; line-height:24px; font-size:16px; font-family:roboto-light; display:inline-block; vertical-align:top; margin:0 10px 0 10px; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319px)
+{
+  .prompt{ width:95%; top:40px; left:2.5%; }
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+  .prompt{ width:95%; top:40px; left:2.5%; }
+}
+
+@media (min-width: 480px) and (max-width: 639px)
+{
+
+}
+
+@media (min-width: 640px) and (max-width: 779px)
+{
+
+}
+
+@media (min-width: 780px) and (max-width: 959px)
+{
+
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+
+}
+
+@media (min-width: 1680px)
+{
+
+}
+
+/****************************************************************************************************/

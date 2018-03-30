@@ -5,6 +5,36 @@ if(document.getElementById('form-next-button')) document.getElementById('form-ne
 if(document.getElementById('form-input-size')) document.getElementById('form-input-size').addEventListener('change', checkSizeFormat);
 if(document.getElementById('form-input-name')) document.getElementById('form-input-name').addEventListener('change', checkNameFormat);
 if(document.getElementById('form-input-identifier')) document.getElementById('form-input-identifier').addEventListener('change', checkIdentifierFormat);
+if(document.getElementById('form-extensions-block-next')) document.getElementById('form-extensions-block-next').addEventListener('click', goToMembersBlock);
+
+/****************************************************************************************************/
+
+function goToMembersBlock(event)
+{
+  document.getElementById('form-extensions-block').removeAttribute('style');
+  document.getElementById('form-second-block').style.display = 'block';
+
+  var xhr = new XMLHttpRequest();
+
+  xhr.responseType = 'json';
+
+  xhr.onload = () =>
+  {
+    if(xhr.status != 200)
+    {
+      
+    }
+
+    else
+    {
+      createTheMembersList(xhr.response.accounts);
+    }
+  }
+
+  xhr.open('GET', '/queries/storage/admin/get-accounts-that-have-access-to-the-app', true);
+
+  xhr.send(null);
+}
 
 /****************************************************************************************************/
 
@@ -19,28 +49,7 @@ function checkFormDataToSendToTheServer(event)
   if(check == true)
   {
     document.getElementById('form-first-block').style.display = 'none';
-    document.getElementById('form-second-block').style.display = 'block';
-
-    var xhr = new XMLHttpRequest();
-
-    xhr.responseType = 'json';
-
-    xhr.onload = () =>
-    {
-      if(xhr.status != 200)
-      {
-        
-      }
-
-      else
-      {
-        createTheMembersList(xhr.response.accounts);
-      }
-    }
-
-    xhr.open('GET', '/queries/storage/admin/get-accounts-that-have-access-to-the-app', true);
-
-    xhr.send(null);
+    document.getElementById('form-extensions-block').style.display = 'block';
   }
 }
 
@@ -121,16 +130,24 @@ function createTheMembersList(accounts)
   var list          = document.createElement('div');
   var search        = document.createElement('div');
   var background    = document.createElement('div');
+  var close         = document.createElement('div');
 
+  close             .setAttribute('class', 'close');
+  close             .setAttribute('id', 'list-close-button');
   list              .setAttribute('class', 'list');
+  list              .setAttribute('id', 'list');
   background        .setAttribute('id', 'background');
   background        .setAttribute('class', 'background');
   background        .setAttribute('tag', 'off');
   
   search            .setAttribute('class', 'search');
   search            .innerHTML = `<input type='text' class='input' id='members-search' placeholder='Entrez une recherche' />`;
+  close             .innerHTML = `<i class='fas fa-times'></i>`;
+
+  close             .addEventListener('click', closeMembersList);
 
   list              .appendChild(search);
+  list              .appendChild(close);
 
   var x = 0;
 
@@ -152,6 +169,9 @@ function createTheMembersList(accounts)
     lastname          .setAttribute('class', 'lastname');
     firstname         .setAttribute('class', 'firstname');
     button            .setAttribute('class', 'add');
+    account           .setAttribute('name', accounts[Object.keys(accounts)[x]].id);
+
+    button            .addEventListener('click', addAccountToService);
 
     account           .appendChild(email);
     account           .appendChild(lastname);

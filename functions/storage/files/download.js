@@ -19,7 +19,7 @@ module.exports.downloadFiles = (filesToDownload, serviceName, databaseConnector,
 
   else
   {
-    storageAppServicesGet.getService(serviceName, databaseConnector, (error, service) =>
+    storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
     {
       if(error != null) callback(error);
 

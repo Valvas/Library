@@ -1,0 +1,50 @@
+{
+  "accounts":
+  {
+    "empty": "Aucun compte à afficher",
+    "form":
+    {
+      "reset": "Réinitialiser",
+      "send": "Envoyer",
+      "title": "Nouveau compte",
+      "forbidden": "Vous n'avez pas le droit de créer des comptes"
+    },
+    "labels":
+    {
+      "email": "Adresse email",
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "list": "Liste des comptes",
+      "suspended": "Suspendu"
+    },
+    "suspended":
+    {
+      "true": "Oui",
+      "false": "Non"
+    }
+  },
+
+  "appName": "Administration",
+
+  "detail":
+  {
+    "exit": "Retour",
+    "title": "Détail du compte",
+    "remove": "Supprimer le compte",
+    "removed": "Le compte a été supprimé avec succès"
+  },
+
+  "locations":
+  {
+    "accounts": "Comptes",
+    "home": "Accueil"
+  },
+
+  "navigation":
+  {
+    "accounts": "Gestion des comptes",
+    "exit": "Quitter l'application",
+    "home": "Accueil",
+    "rights": "Gestion des droits"
+  }
+}

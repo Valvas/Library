@@ -142,7 +142,7 @@ function checkBeforeUpload(event)
         {
           loader.remove();
 
-          if(json.rightToReplace == true)
+          /*if(json.rightToReplace == true)
           {
             document.getElementById('upload-popup-error').children[1].innerText = `Ce fichier existe déjà, voulez-vous le remplacer ?`;
             document.getElementById('upload-popup-error').style.display = 'block';
@@ -171,7 +171,9 @@ function checkBeforeUpload(event)
             document.getElementById('upload-popup-error').children[1].innerText = `Ce fichier existe déjà, vous n'avez pas les droits pour le remplacer`;
             document.getElementById('upload-popup-error').style.display = 'block';
             document.getElementById('upload-popup-close').style.display = 'block';
-          }
+          }*/
+
+          uploadFile();
         });
       }
     });

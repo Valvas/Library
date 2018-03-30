@@ -27,8 +27,8 @@
           <div class='empty'><%= strings.storage.services.empty %></div>
         <% } else{ %>
           <% for(var key in services){ %><!--
-          --><div name='<%= services[key] %>' class='block'>
-              <div class='name'><%= strings.storage.services.names[services[key]] %></div>
+          --><div name='<%= services[key].name %>' class='block'>
+              <div class='name'><%= services[key].label %></div>
               <div class='access'>
                 <% if(rights[key] == undefined){ %>
                   <div class='false'><%= strings.storage.services.access.false %></div>
@@ -54,7 +54,7 @@
               <% if(rights[key] == undefined){ %>
                 <button class='ask'><%= strings.storage.services.ask %></button>
               <% } else{ %>
-                <a href='/storage/services/<%= services[key] %>' class='open'><%= strings.storage.services.open %></a>
+                <a href='/storage/services/<%= services[key].name %>' class='open'><%= strings.storage.services.open %></a>
               <% } %>
             </div><!--
         --><% } %>

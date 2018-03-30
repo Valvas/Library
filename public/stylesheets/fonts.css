@@ -6,6 +6,48 @@
 
 @font-face
 {
+  font-family:roboto-italic;
+  src:url(../stylesheets/fonts/Roboto-Italic.ttf);
+}
+
+@font-face
+{
+  font-family:roboto-light;
+  src:url(../stylesheets/fonts/Roboto-Light.ttf);
+}
+
+@font-face
+{
+  font-family:roboto-light-italic;
+  src:url(../stylesheets/fonts/Roboto-LightItalic.ttf);
+}
+
+@font-face
+{
+  font-family:roboto-medium;
+  src:url(../stylesheets/fonts/Roboto-Medium.ttf);
+}
+
+@font-face
+{
+  font-family:roboto-regular;
+  src:url(../stylesheets/fonts/Roboto-Regular.ttf);
+}
+
+@font-face
+{
+  font-family:roboto-thin;
+  src:url(../stylesheets/fonts/Roboto-Thin.ttf);
+}
+
+@font-face
+{
+  font-family:neue;
+  src:url(../stylesheets/fonts/neue.otf);
+}
+
+@font-face
+{
   font-family:raleway-regular;
   src:url(../stylesheets/fonts/Raleway-Regular.ttf);
 }

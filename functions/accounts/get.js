@@ -91,3 +91,45 @@ module.exports.getAccountUsingEmail = (accountEmail, databaseConnector, callback
 }
 
 /****************************************************************************************************/
+
+module.exports.getAllAccounts = (databaseConnector, callback) =>
+{
+  if(databaseConnector == undefined) callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST });
+
+  else
+  {
+    databaseManager.selectQuery(
+    {
+      'databaseName': params.database.root.label,
+      'tableName': params.database.root.tables.accounts,
+      'args': { '0': '*' },
+      'where': {  }
+
+    }, databaseConnector, (boolean, accountsOrErrorMessage) =>
+    {
+      if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: accountsOrErrorMessage });
+
+      else
+      {
+        var x = 0;
+        var accounts = {};
+
+        var browseAccounts = () =>
+        {
+          accounts[x] = {};
+          accounts[x].uuid        = accountsOrErrorMessage[x].uuid;
+          accounts[x].email       = accountsOrErrorMessage[x].email;
+          accounts[x].lastname    = accountsOrErrorMessage[x].lastname;
+          accounts[x].firstname   = accountsOrErrorMessage[x].firstname;
+          accounts[x].suspended   = accountsOrErrorMessage[x].suspended == 0 ? false : true;
+
+          accountsOrErrorMessage[x += 1] == undefined ? callback(null, accounts) : browseAccounts();
+        }
+
+        accountsOrErrorMessage[x] == undefined ? callback(null, accounts) : browseAccounts();
+      }
+    });
+  }
+}
+
+/****************************************************************************************************/
