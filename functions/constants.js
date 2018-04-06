@@ -76,6 +76,7 @@ const SERVICE_FILE_MIN_SIZE_TOO_LOW                                             
 const SERVICE_FILE_MIN_SIZE_TOO_HIGH                                              = 10072;
 const UNAUTHORIZED_TO_MANAGE_USER_RIGHTS                                          = 10073;
 const UNAUTHORIZED_TO_REMOVE_ACCOUNTS                                             = 10074;
+const FILE_SIZE_EXCEED_MAX_ALLOWED                                                = 10075;
 
 /******************************************************************************************
 SUCCESS
@@ -87,7 +88,7 @@ const AUTHORIZED_TO_DELETE_FILES                                                
 const FILE_FOUND_IN_THE_DATABASE                                                  = 20004;
 const FILE_DELETED                                                                = 20005;
 const USER_IS_ADMIN                                                               = 20006;
-const FILE_ADDED_ON_DISK                                                          = 20007;
+const FILE_SENT_SUCCESSFULLY                                                      = 20007;
 const AUTHORIZED_TO_ADD_FILES                                                     = 20008;
 const SUCCESS_COPYING_FILE                                                        = 20009;
 const SUCCESS_POSTING_REPORT                                                      = 20010;
@@ -180,6 +181,7 @@ module.exports =
   SERVICE_FILE_MIN_SIZE_TOO_HIGH: SERVICE_FILE_MIN_SIZE_TOO_HIGH,
   UNAUTHORIZED_TO_MANAGE_USER_RIGHTS: UNAUTHORIZED_TO_MANAGE_USER_RIGHTS,
   UNAUTHORIZED_TO_REMOVE_ACCOUNTS: UNAUTHORIZED_TO_REMOVE_ACCOUNTS,
+  FILE_SIZE_EXCEED_MAX_ALLOWED: FILE_SIZE_EXCEED_MAX_ALLOWED,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -187,7 +189,7 @@ module.exports =
   FILE_FOUND_IN_THE_DATABASE: FILE_FOUND_IN_THE_DATABASE,
   FILE_DELETED: FILE_DELETED,
   USER_IS_ADMIN: USER_IS_ADMIN,
-  FILE_ADDED_ON_DISK: FILE_ADDED_ON_DISK,
+  FILE_SENT_SUCCESSFULLY: FILE_SENT_SUCCESSFULLY,
   AUTHORIZED_TO_ADD_FILES: AUTHORIZED_TO_ADD_FILES,
   SUCCESS_COPYING_FILE: SUCCESS_COPYING_FILE,
   SUCCESS_POSTING_REPORT: SUCCESS_POSTING_REPORT,

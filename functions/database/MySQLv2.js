@@ -115,7 +115,7 @@ module.exports.updateQuery = (query, SQLConnector, callback) =>
       Object.keys(query.where)[x += 1] != undefined ? second() :
       
       SQLConnector.query(sql, (err, result) =>
-      {
+      {console.log(sql);
         err ? callback(false, err.message) : callback(true, result.affectedRows);
       });
     });

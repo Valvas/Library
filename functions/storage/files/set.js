@@ -100,3 +100,38 @@ module.exports.setFileNotDeleted = (accountID, fileID, databaseConnector, callba
 }
 
 /****************************************************************************************************/
+
+module.exports.setFileDeleted = (fileID, databaseConnector, callback) =>
+{
+  fileID              == undefined ||
+  databaseConnector   == undefined ?
+
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+
+  storageAppfilesGet.getFileFromDatabaseUsingID(fileID, databaseConnector, (error, file) =>
+  {
+    if(error != null) callback(error);
+
+    else
+    {
+      databaseManager.updateQuery(
+      {
+        'databaseName': params.database.storage.label,
+        'tableName': params.database.storage.tables.files,
+        'args': { 'deleted': 1 },
+        'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': fileID } } }
+
+      }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
+      {
+        if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: updatedRowsOrErrorMessage });
+
+        else
+        {
+          callback(null);
+        }
+      });
+    }
+  });
+}
+
+/****************************************************************************************************/

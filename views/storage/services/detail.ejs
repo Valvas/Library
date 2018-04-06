@@ -37,6 +37,8 @@
             <div class='actions' id='actions'>
               <div class='selection'><%= strings.storage.services.selected %> : 0</div>
               <div class='content'>
+                <button class='select' id='selectAll'><%= strings.storage.services.info.selectAll %></button>
+                <button class='select' id='unselectAll'><%= strings.storage.services.info.unselectAll %></button>
                 <% if(rights.download == 0){ %>
                   <div class='download'><div class='status false'><%= strings.storage.services.unauthorized %></div><div class='disabled'><i class='fas fa-cloud-download-alt'></i></div></div>
                 <% } else{ %>
@@ -68,43 +70,27 @@
               <div name='small' tag='false' class='choice false'><i class='fas fa-th'></i></div>
               <div name='list' tag='false' class='choice false'><i class='fas fa-th-list'></i></div>
             </div>
-            <% for(var file in files)
-            { 
-              switch(files[file].ext)
+            <div id='filesBlock'>
+              <% for(var file in files)
               { 
-                case 'doc': %><div class='file large' tag='doc' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'></div><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon word'><i class='fas fa-file-word'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% case 'docx': %><div class='file large' tag='doc' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon word'><i class='fas fa-file-word'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% case 'ppt': %><div class='file large' tag='ppt' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon powerpoint'><i class='fas fa-file-powerpoint'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% case 'pptx': %><div class='file large' tag='ppt' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon powerpoint'><i class='fas fa-file-powerpoint'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% case 'xls': %><div class='file large' tag='xls' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon excel'><i class='fas fa-file-excel'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% case 'xlsx': %><div class='file large' tag='xls' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon excel'><i class='fas fa-file-excel'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% case 'pdf': %><div class='file large' tag='pdf' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon pdf'><i class='fas fa-file-pdf'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% case 'txt': %><div class='file large' tag='txt' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon text'><i class='fas fa-file-alt'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% case 'png': %><div class='file large' tag='png' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon picture'><i class='fas fa-file-image'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% case 'jpg': %><div class='file large' tag='png' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon picture'><i class='fas fa-file-image'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
-                <% default: %><div class='file large' tag='default' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon default'><i class='fas fa-file'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break 
-              } 
-            } %>
+                switch(files[file].ext)
+                { 
+                  case 'doc': %><div class='file large' tag='doc' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'></div><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon word'><i class='fas fa-file-word'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% case 'docx': %><div class='file large' tag='doc' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon word'><i class='fas fa-file-word'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% case 'ppt': %><div class='file large' tag='ppt' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon powerpoint'><i class='fas fa-file-powerpoint'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% case 'pptx': %><div class='file large' tag='ppt' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon powerpoint'><i class='fas fa-file-powerpoint'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% case 'xls': %><div class='file large' tag='xls' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon excel'><i class='fas fa-file-excel'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% case 'xlsx': %><div class='file large' tag='xls' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon excel'><i class='fas fa-file-excel'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% case 'pdf': %><div class='file large' tag='pdf' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon pdf'><i class='fas fa-file-pdf'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% case 'txt': %><div class='file large' tag='txt' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon text'><i class='fas fa-file-alt'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% case 'png': %><div class='file large' tag='png' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon picture'><i class='fas fa-file-image'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% case 'jpg': %><div class='file large' tag='png' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon picture'><i class='fas fa-file-image'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break %>
+                  <% default: %><div class='file large' tag='default' name='<%= `${files[file].name}.${files[file].ext}` %>'><% if((rights.download == 1 || rights.remove == 1) && files[file].deleted == 0){ %><div class='checkbox'><input type='checkbox' class='target' onchange='selectFile(this)' /></div><% } %><% if(files[file].deleted == 1){%><div class='deleted'><i class='fas fa-times'></i></div><% } %><div class='icon default'><i class='fas fa-file'></i></div><div class='name'><%= files[file].name %>.<%= files[file].ext %></div></div><% break 
+                } 
+              } %>
+            </div>
           </div>
         <% } %>
-      </div>
-    </div>
-    <div class='background' id='background' tag='off'>
-      <div id='upload-popup' class='popup services upload'>
-        <div class='title'><%= strings.storage.services.popup.upload.title %></div>
-        <div class='loader' id='upload-popup-loader'><div class='left'><i class='fas fa-circle-notch fa-spin fa-2x'></i></div><div class='right'><%= strings.storage.services.popup.upload.loader %></div></div>
-        <div class='error' id='upload-popup-timeout'><div class='left'><i class='fas fa-exclamation-circle fa-2x'></i></div><div class='right'><%= strings.common.errors.timeout %></div></div>
-        <div class='error' id='upload-popup-error'><div class='left'><i class='fas fa-exclamation-circle fa-2x'></i></div><div class='right'></div></div>
-        <div class='content' id='upload-popup-content'>
-          <div class='choice'><%= strings.storage.services.popup.upload.choice %></div>
-          <div class='icon'><i class='fas fa-cloud-upload-alt'></i></div><!--
-          --><label class='label' id='file-input-label' for='file-input'><%= strings.storage.services.popup.upload.placeholder %></label><!--
-          --><button id='upload-popup-send' class='send'><%= strings.storage.services.popup.upload.send %></button>
-          <input type='file' class='input' id='file-input' />
-          <div class='ext'><%= strings.storage.services.popup.upload.ext %> : </div>
-          <div class='list' id='upload-popup-content-ext-list'></div>
-        </div>
-        <button class='close' id='upload-popup-close'><%= strings.storage.services.popup.upload.close %></button>
       </div>
     </div>
     <script src='/js/jQuery.js'></script>
@@ -113,8 +99,11 @@
     <script src='/js/fontawesome.js'></script>
     <script src='/js/navigation/menu.js'></script>
     <script src='/js/navigation/account.js'></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='/js/storage/services/socket.js'></script>
     <script src='/js/storage/services/select.js'></script>
     <script src='/js/storage/services/upload.js'></script>
+    <script src='/js/storage/services/remove.js'></script>
     <script src='/js/storage/services/display.js'></script>
     <script src='/js/storage/services/filters.js'></script>
     <script src='/js/storage/services/download.js'></script>

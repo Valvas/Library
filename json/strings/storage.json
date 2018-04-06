@@ -67,6 +67,12 @@
         "next": "Suivant",
         "send": "Terminer",
         "title": "Création d'un service"
+      },
+      "info":
+      {
+        "files": "Nombre de fichiers en ligne",
+        "limit": "Taille maximale des fichiers autorisée",
+        "members": "Personnes ayant des droits sur ce service"
       }
     }
   },
@@ -114,11 +120,13 @@
     "info":
     {
       "count": "Fichiers",
+      "selectAll": "Tout sélectionner",
       "upload":
       {
         "true": "Envoyer un fichier",
         "false": "Vous n'avez pas le droit d'envoyer des fichiers"
-      }
+      },
+      "unselectAll": "Tout désélectionner"
     },
 
     "filters":
@@ -147,6 +155,29 @@
 
     "popup":
     {
+      "download":
+      {
+        "cancel": "Annuler",
+        "close": "Fermer",
+        "counter": "Fichier",
+        "done": "Fichier(s) téléchargé(s) avec succès",
+        "progress":
+        {
+          "current": "Fichier en cours",
+          "total": "Total"
+        },
+        "status": "Récupération",
+        "title": "Récupération des données en cours..."
+      },
+
+      "remove":
+      {
+        "done": "Fichiers supprimés avec succès",
+        "message": "Êtes-vous sûr(e) de vouloir supprimer ces fichiers ?",
+        "pending": "Suppression en cours...",
+        "title": "Supprimer des fichiers"
+      },
+
       "upload":
       {
         "choice": "Choisissez un fichier sur votre machine",
@@ -154,7 +185,13 @@
         "ext": "Extensions acceptées",
         "loader": "Chargement en cours...",
         "placeholder": "Cliquez ici",
+        "replace":
+        {
+          "authorized": "Ce fichier existe déjà, voulez-vous le remplacer ?",
+          "unauthorized": "Ce fichier existe déjà, vous n'êtes pas autorisé(e) à le remplacer"
+        },
         "send": "Envoyer",
+        "size": "Taille maximale",
         "title": "Envoyer un fichier"
       }
     },

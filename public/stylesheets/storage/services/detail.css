@@ -10,6 +10,10 @@
 
 .aside .actions .content{ padding:10px; }
 
+.aside .actions .content .select{ border:none; border-radius:4px; font-size:16px; line-height:24px; padding:4px; width:200px; margin:0 0 20px 0; background-color:#428BCA; color:#FFFFFF; font-family:barlow; cursor:pointer; }
+
+.aside .actions .content .select:hover{ color:#000000; background-color:#2069A8; }
+
 .aside .actions .content .download .status{ display:inline-block; width:calc(100% - 60px); line-height:24px; font-size:16px; font-family:barlow; }
 
 .aside .actions .content .download .true, .aside .actions .content .remove .true{ color:#86AA6D; }
@@ -228,112 +232,286 @@
 
 /****************************************************************************************************/
 
-.popup.services.upload{ border:1px solid #F0F0F0; position:relative; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; background-color:#FFFFFF; }
+.servicesUploadFilePopup{ position:relative; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; }
 
-.popup.services.upload .title{ padding:10px; font-family:barlow; border-radius:4px 4px 0 0; background-color:#428BCA; color:#FFFFFF; line-height:24px; font-size:20px; }
+.servicesUploadFilePopup .title{ padding:10px; font-family:barlow; border-radius:4px 4px 0 0; background-color:#428BCA; color:#FFFFFF; line-height:24px; font-size:20px; }
 
-.popup.services.upload .spinner{ display:none; color:#5CB85C; padding:32px 0 32px 0; text-align:center; }
+.servicesUploadFilePopup .spinner{ font-size:3em; color:#5CB85C; text-align:center; width:100%; padding:20px 0 20px 0; background-color:#445566; border-radius:4px; }
 
-.popup.services.upload .close{ display:none; border:none; cursor:pointer; background-color:#D9534F; color:#FFFFFF; font-family:barlow; line-height:24px; font-size:16px; border-radius:4px; padding:4px 0 4px 0; width:100px; margin:10px 10px 10px calc(100% - 110px); }
+.servicesUploadFilePopup .notch{ font-size:1.5em; position:absolute; top:10px; right:10px; color:#5CB85C; }
 
-.popup.services.upload .close:hover{ background-color:#B7312D; color:#000000; }
+.servicesUploadFilePopup .error{ padding:20px 10px 20px 10px; background-color:#445566; border-radius:4px; }
 
-.popup.services.upload .error{ display:none; padding:10px; box-sizing:border-box; }
+.servicesUploadFilePopup .error .icon{ width:32px; font-size:1.5em; padding:8px 0 0 0; color:#D9534F; display:inline-block; }
 
-.popup.services.upload .error .left{ text-align:center; margin:0 8px 0 0; display:inline-block; color:#D9534F; }
+.servicesUploadFilePopup .error .content{ width:calc(100% - 52px); display:inline-block; vertical-align:top; color:#D9534F; font-size:16px; line-height:24px; font-family:barlow; }
 
-.popup.services.upload .error .right{ display:inline-block; vertical-align:top; width:calc(100% - 40px); font-family:barlow; padding:4px 0 0 0; line-height:24px; font-size:16px; }
+.servicesUploadFilePopup .error .detail{ word-break:break-all; color:#D0D0D0; font-family:barlow-italic; font-size:14px; line-height:18px; margin:20px 0 0 0; }
 
-.popup.services.upload .loader{ display:none; padding:10px; box-sizing:border-box; }
+.servicesUploadFilePopup .error .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
 
-.popup.services.upload .loader .left{ text-align:center; margin:0 8px 0 0; display:inline-block; color:#5CB85C; }
+.servicesUploadFilePopup .error .button:hover{ color:#000000; background-color:#2069A8; }
 
-.popup.services.upload .loader .right{ display:inline-block; vertical-align:top; width:calc(100% - 40px); font-family:barlow; padding:4px 0 0 0; line-height:24px; font-size:16px; }
+.servicesUploadFilePopup .warning{ padding:20px 10px 20px 10px; background-color:#445566; border-radius:0 0 4px 4px; }
 
-.popup.services.upload .content{ margin:20px 10px 20px 10px; }
+.servicesUploadFilePopup .warning .icon{ width:32px; font-size:1.5em; padding:8px 0 0 0; color:#FFCF40; display:inline-block; }
 
-.popup.services.upload .content .choice{ padding:0 0 10px 0; font-family:barlow; line-height:24px; font-size:16px; }
+.servicesUploadFilePopup .warning .content{ width:calc(100% - 52px); display:inline-block; vertical-align:top; color:#FFCF40; font-size:14px; line-height:24px; font-family:barlow; }
 
-.popup.services.upload .content .icon{ display:inline-block; background-color:#428BCA; color:#FFFFFF; border-radius:4px 0 0 4px; width:60px; text-align:center; line-height:32px; font-size:20px; }
+.servicesUploadFilePopup .warning .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
 
-.popup.services.upload .content .label{ display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:0 0 0 5px; vertical-align:top; box-sizing:border-box; border-top:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; cursor:pointer; font-family:barlow; font-size:16px; line-height:30px; width:calc(100% - 160px); }
+.servicesUploadFilePopup .warning .button:hover{ color:#000000; background-color:#2069A8; }
 
-.popup.services.upload .content .label:hover{ font-weight:bold; }
+.servicesUploadFilePopup .warning .yes{ width:32px; margin:10px 10px 0 calc(50% - 42px); font-size:2em; cursor:pointer; color:#5CB85C; display:inline-block; }
 
-.popup.services.upload .content .input{ display:none; }
+.servicesUploadFilePopup .warning .yes:hover{ color:#3A963A; }
 
-.popup.services.upload .content .send{ cursor:pointer; display:inline-block; vertical-align:top; border:none; background-color:#5CB85C; color:#FFFFFF; border-radius:0 4px 4px 0; font-family:barlow; width:100px; font-size:16px; line-height:30px; }
+.servicesUploadFilePopup .warning .no{ width:32px; margin:10px calc(50% - 42px) 0 10px; font-size:2em; cursor:pointer; color:#D9534F; display:inline-block; }
 
-.popup.services.upload .content .send:hover{ background-color:#3A963A; color:#000000; }
+.servicesUploadFilePopup .warning .no:hover{ color:#B7312D; }
 
-.popup.services.upload .content .ext{ font-family:barlow; line-height:24px; padding:10px 0 0 0; font-size:16px; }
+.servicesUploadFilePopup .content{ padding:10px; background-color:#445566; border-radius:0 0 4px 4px; }
 
-.popup.services.upload .content .list{ word-break:break-all; font-family:barlow-italic; line-height:24px; font-size:16px; }
+.servicesUploadFilePopup .content .instructions{ font-size:16px; line-height:24px; font-family:barlow; color:#FFFFFF; }
 
-.popup.services.upload .bar{ position:relative; width:calc(100% - 20px); background-color:#E0E0E0; height:20px; border-radius:4px; margin:30px 10px 10px 10px; }
+.servicesUploadFilePopup .content .file{ margin:20px 0 20px 0; }
 
-.popup.services.upload .progress{ background-color:#7EDA7E; height:20px; border-radius:4px; width:0; }
+.servicesUploadFilePopup .content .file .label{ background-color:#FFFFFF; border-radius:4px 0 0 4px; display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:0 0 0 5px; vertical-align:top; box-sizing:border-box; cursor:pointer; font-family:barlow; font-size:16px; line-height:30px; width:calc(100% - 80px); }
 
-.popup.services.upload .status{ position:absolute; color:#317AB9; line-height:20px; z-index:20; top:0; left:0; right:0; bottom:0; font-size:16px; font-family:barlow; text-align:center; }
+.servicesUploadFilePopup .content .file .label:hover{ font-weight:bold; }
 
-.popup.services.upload .cancel{ border:none; cursor:pointer; background-color:#D9534F; color:#FFFFFF; font-family:barlow; line-height:24px; font-size:16px; border-radius:4px; padding:4px 0 4px 0; width:100px; margin:10px 10px 10px calc(100% - 110px); }
+.servicesUploadFilePopup .content .file .send{ display:inline-block; vertical-align:top; border:none; color:#FFFFFF; border-radius:0 4px 4px 0; font-family:barlow; width:80px; font-size:16px; line-height:28px; }
 
-.popup.services.upload .cancel:hover{ background-color:#B7312D; color:#000000; }
+.servicesUploadFilePopup .content .file .send.active{ background-color:#5CB85C; cursor:pointer; }
 
-.popup.services.upload .success{ width:calc(100% - 20px); margin:20px 10px 20px 10px; }
+.servicesUploadFilePopup .content .file .send.active:hover{ color:#000000; background-color:#3A963A; }
 
-.popup.services.upload .success .left{ display:inline-block; width:32px; margin-right:8px; color:#5CB85C; }
+.servicesUploadFilePopup .content .file .send.inactive{ background-color:#D0D0D0; }
 
-.popup.services.upload .success .right{ display:inline-block; vertical-align:top; line-height:24px; font-size:16px; color:#5CB85C; font-family:barlow; width:calc(100% - 40px); padding-top:4px; }
+.servicesUploadFilePopup .content .file .input{ display:none; }
 
-.popup.services.upload .no{ border:none; width:80px; margin:10px 10px 10px calc(calc(100% - 180px) / 2); color:#FFFFFF; background-color:#D9534F; font-family:barlow; font-size:16px; line-height:24px; padding:4px 0 4px 0; border-radius:4px; cursor:pointer; }
+.servicesUploadFilePopup .content .size{ color:#FFFFFF; font-size:14px; font-family:barlow-italic; line-height:18px; margin:0 0 10px 0; }
 
-.popup.services.upload .no:hover{ color:#000000; background-color:#B7312D; }
+.servicesUploadFilePopup .content .ext{ color:#FFFFFF; font-size:14px; font-family:barlow-italic; line-height:18px; margin:0 0 10px 0; }
 
-.popup.services.upload .yes{ border:none; width:80px; margin:10px calc(calc(100% - 180px) / 2) 10px 10px; color:#FFFFFF; background-color:#428BCA; font-family:barlow; font-size:16px; line-height:24px; padding:4px 0 4px 0; border-radius:4px; cursor:pointer; }
+.servicesUploadFilePopup .content .close{ border:none; margin:10px 0 0 calc(100% - 100px); cursor:pointer; border-radius:4px; line-height:24px; font-size:16px; color:#FFFFFF; font-family:barlow; background-color:#D9534F; padding:4px; width:100px; }
 
-.popup.services.upload .yes:hover{ color:#000000; background-color:#2069A8; }
+.servicesUploadFilePopup .content .close:hover{ color:#000000; background-color:#B7312D; }
+
+.servicesUploadFilePopup .loaderBackground{ position:absolute; border-radius:0 0 4px 4px; top:44px; right:0; bottom:0; left:0; z-index:40; background-color:#000000; opacity:0.6; }
+
+.servicesUploadFilePopup .loaderSpinner{ position:absolute; font-size:3em; top:calc(calc(50% - 25px) + 22px); left:calc(50% - 25px); width:50px; height:50px; z-index:40; color:#5CB85C; }
+
+.servicesUploadFilePopup .loading{ border-radius:0 0 4px 4px; background-color:#445566; padding:10px; }
+
+.servicesUploadFilePopup .loading .info{ margin:10px 0 0 0; font-size:16px; line-height:24px; font-family:barlow-italic; color:#FFFFFF; }
+
+.servicesUploadFilePopup .loading .info .left{ width:50%; display:inline-block; vertical-align:top; text-align:right; }
+
+.servicesUploadFilePopup .loading .info .right{ width:50%; display:inline-block; vertical-align:top; text-align:left; }
+
+.servicesUploadFilePopup .loading .bar{ position:relative; width:100%; background-color:#E0E0E0; height:20px; border-radius:4px; margin:10px 0 10px 0; }
+
+.servicesUploadFilePopup .loading .bar .progress{ background-color:#7EDA7E; height:20px; border-radius:4px; width:0; }
+
+.servicesUploadFilePopup .loading .bar .status{ position:absolute; color:#317AB9; line-height:20px; z-index:20; top:0; left:0; right:0; bottom:0; font-size:16px; font-family:barlow; text-align:center; }
+
+.servicesUploadFilePopup .loading .cancel{ cursor:pointer; color:#D9534F; font-size:2em; width:32px; margin:20px 0 0 calc(100% - 32px); }
+
+.servicesUploadFilePopup .loading .cancel:hover{ color:#B7312D; }
+
+.servicesUploadFilePopup .success{ padding:20px 10px 20px 10px; background-color:#445566; border-radius:0 0 4px 4px; }
+
+.servicesUploadFilePopup .success .message{ text-align:center; width:100%; color:#5CB85C; padding:0; }
+
+.servicesUploadFilePopup .success .message .icon{ width:32px; font-size:1.5em; display:inline-block; padding:0; }
+
+.servicesUploadFilePopup .success .message .content{ text-align:left; width:calc(100% - 32px); font-size:14px; line-height:24px; display:inline-block; vertical-align:top; font-family:barlow; padding:0; }
+
+.servicesUploadFilePopup .success .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
+
+.servicesUploadFilePopup .success .button:hover{ color:#000000; background-color:#2069A8; }
+
+
+.servicesDownloadFilePopup{ position:relative; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; background-color:#445566; }
+
+.servicesDownloadFilePopup .loading{ color:#5CB85C; font-size:3em; width:60px; margin:0 calc(50% - 30px) 0 calc(50% - 30px); text-align:center; padding:40px 0 40px 0; }
+
+.servicesDownloadFilePopup .title{ background-color:#428BCA; color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow; padding:10px; border-radius:4px 4px 0 0; }
+
+.servicesDownloadFilePopup .bar{ position:relative; width:calc(100% - 20px); background-color:#E0E0E0; height:20px; border-radius:4px; margin:30px 10px 10px 10px; }
+
+.servicesDownloadFilePopup .bar .progress{ background-color:#7EDA7E; height:20px; border-radius:4px; width:0; }
+
+.servicesDownloadFilePopup .bar .status{ position:absolute; color:#317AB9; line-height:20px; z-index:20; top:0; left:0; right:0; bottom:0; font-size:16px; font-family:barlow; text-align:center; }
+
+.servicesDownloadFilePopup .cancel{ cursor:pointer; width:120px; margin:10px 10px 10px calc(100% - 130px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; padding:4px; color:#FFFFFF; background-color:#D9534F; }
+
+.servicesDownloadFilePopup .cancel:hover{ background-color:#B7312D; color:#000000; }
+
+.servicesDownloadFilePopup .error{ padding:10px 10px 10px 10px; }
+
+.servicesDownloadFilePopup .error .icon{ width:32px; font-size:1.5em; color:#D9534F; display:inline-block; margin:20px 0 0 0; padding:0; }
+
+.servicesDownloadFilePopup .error .content{ margin:20px 0 0 0; width:calc(100% - 52px); padding:0; display:inline-block; vertical-align:top; color:#D9534F; font-size:14px; line-height:24px; font-family:barlow; }
+
+.servicesDownloadFilePopup .error .detail{ word-break:break-all; color:#D0D0D0; font-family:barlow-italic; font-size:14px; line-height:18px; margin:20px 0 0 0; }
+
+.servicesDownloadFilePopup .error .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
+
+.servicesDownloadFilePopup .error .button:hover{ color:#000000; background-color:#2069A8; }
+
+.servicesDownloadFilePopup .content{ padding:10px; }
+
+.servicesDownloadFilePopup .content .counter{ color:#FFFFFF; font-family:barlow; font-size:16px; line-height:24px; margin:10px 0 10px 0; }
+
+.servicesDownloadFilePopup .content .cancel{ cursor:pointer; border:none; border-radius:4px; padding:4px; background-color:#D9534F; color:#FFFFFF; font-size:16px; line-height:24px; width:120px; margin:10px 0 0 calc(100% - 120px); }
+
+.servicesDownloadFilePopup .content .cancel:hover{ background-color:#B7312D; color:#000000; }
+
+.servicesDownloadFilePopup .progress{ margin:10px 0 10px 0; }
+
+.servicesDownloadFilePopup .progress .label{ font-size:16px; line-height:24px; margin:0 10px 0 10px; color:#FFFFFF; font-family:barlow; }
+
+.servicesDownloadFilePopup .progress .bar{ position:relative; width:calc(100% - 20px); background-color:#E0E0E0; height:20px; border-radius:4px; margin:10px; }
+
+.servicesDownloadFilePopup .progress .status{ position:absolute; color:#317AB9; line-height:20px; z-index:20; top:0; left:0; right:0; bottom:0; font-size:16px; font-family:barlow; text-align:center; }
+
+.servicesDownloadFilePopup .progress .completed{ background-color:#7EDA7E; height:20px; border-radius:4px; width:0; }
+
+.servicesDownloadFilePopup .message{ text-align:center; width:calc(100% - 20px); color:#5CB85C; padding:20px 10px 10px 10px; }
+
+.servicesDownloadFilePopup .message .icon{ width:32px; font-size:1.5em; display:inline-block; padding:0; }
+
+.servicesDownloadFilePopup .message .content{ text-align:left; width:calc(100% - 32px); font-size:14px; line-height:24px; display:inline-block; vertical-align:top; font-family:barlow; padding:0; }
+
+.servicesDownloadFilePopup .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
+
+.servicesDownloadFilePopup .button:hover{ color:#000000; background-color:#2069A8; }
+
+
+.removeFilesPrompt{ position:relative; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; background-color:#445566; }
+
+.removeFilesPrompt .loading{ padding:10px; }
+
+.removeFilesPrompt .loading .spinner{ margin:20px 0 0 0; text-align:center; font-size:3em; color:#5CB85C; }
+
+.removeFilesPrompt .loading .message{ text-align:center; font-size:16px; line-height:24px; color:#FFFFFF; font-family:barlow; margin:0 0 20px 0; }
+
+.removeFilesPrompt .title{ background-color:#428BCA; color:#FFFFFF; font-family:barlow; font-size:20px; line-height:24px; padding:10px; border-radius:4px 4px 0 0; }
+
+.removeFilesPrompt .error{ padding:10px; }
+
+.removeFilesPrompt .error .message{ color:#D9534F; margin:20px 0 20px 0; }
+
+.removeFilesPrompt .error .message .icon{ width:32px; font-size:2em; display:inline-block; }
+
+.removeFilesPrompt .error .message .content{ font-family:barlow; line-height:24px; font-size:14px; padding:4px 0 0 4px; display:inline-block; vertical-align:top; width:calc(100% - 36px); }
+
+.removeFilesPrompt .error .close{ border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#428BCA; cursor:pointer; padding:4px; width:80px; margin:0 0 0 calc(100% - 80px); }
+
+.removeFilesPrompt .error .close:hover{ color:#000000; background-color:#2069A8; }
+
+.removeFilesPrompt .error .detail{ color:#D0D0D0; word-break:break-all; font-size:14px; line-height:18px; font-family:barlow-italic; text-align:justify; margin:20px 0 0 0; }
+
+.removeFilesPrompt .content{ padding:10px; }
+
+.removeFilesPrompt .content .message{ color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow; }
+
+.removeFilesPrompt .content .file{ color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow-italic; margin:0 0 0 10px; }
+
+.removeFilesPrompt .content .confirm{ color:#5CB85C; font-size:2em; cursor:pointer; width:32px; display:inline-block; margin:20px 10px 0 calc(50% - 42px); }
+
+.removeFilesPrompt .content .confirm:hover{ color:#3A963A; }
+
+.removeFilesPrompt .content .cancel{ color:#D9534F; font-size:2em; cursor:pointer; width:32px; display:inline-block; vertical-align:top; margin:20px calc(50% - 42px) 0 10px; }
+
+.removeFilesPrompt .content .cancel:hover{ color:#B7312D; }
+
+.removeFilesPrompt .success{ padding:10px; }
+
+.removeFilesPrompt .success .message{ margin:20px 0 10px 0; color:#5CB85C; }
+
+.removeFilesPrompt .success .message .icon{ width:32px; font-size:2em; display:inline-block; }
+
+.removeFilesPrompt .success .message .content{ font-family:barlow; line-height:24px; font-size:14px; padding:4px 0 0 4px; display:inline-block; vertical-align:top; width:calc(100% - 36px); }
+
+.removeFilesPrompt .success .close{ border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#428BCA; cursor:pointer; padding:4px; width:80px; margin:0 0 0 calc(100% - 80px); }
+
+.removeFilesPrompt .success .close:hover{ color:#000000; background-color:#2069A8; }
 
 /****************************************************************************************************/
 
 @media (max-width: 319px)
 {
-  .popup.services.upload{ width:95%; left:2.5%; right:2.5%; }
+  .servicesUploadFilePopup{ width:95%; left:2.5%; right:2.5%; }
+
+  .servicesDownloadFilePopup{ width:95%; left:2.5%; right:2.5%; }
+
+  .removeFilesPrompt{ width:95%; left:2.5%; right:2.5%; }
 }
 
 @media (min-width: 320px) and (max-width: 479px)
 {
-  .popup.services.upload{ width:95%; left:2.5%; right:2.5%; }
+  .servicesUploadFilePopup{ width:95%; left:2.5%; right:2.5%; }
+
+  .servicesDownloadFilePopup{ width:95%; left:2.5%; right:2.5%; }
+
+  .removeFilesPrompt{ width:95%; left:2.5%; right:2.5%; }
 }
 
 @media (min-width: 480px) and (max-width: 639px)
 {
-  .popup.services.upload{ width:400px; left:calc(50% - 200px); }
+  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
 }
 
 @media (min-width: 640px) and (max-width: 779px)
 {
-  .popup.services.upload{ width:400px; left:calc(50% - 200px); }
+  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
 }
 
 @media (min-width: 780px) and (max-width: 959px)
 {
-  .popup.services.upload{ width:400px; left:calc(50% - 200px); }
+  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
 }
 
 @media (min-width: 960px) and (max-width: 1279px)
 {
-  .popup.services.upload{ width:400px; left:calc(50% - 200px); }
+  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
 }
 
 @media (min-width: 1280px) and (max-width: 1679px)
 {
-  .popup.services.upload{ width:400px; left:calc(50% - 200px); }
+  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
 }
 
 @media (min-width: 1680px)
 {
-  .popup.services.upload{ width:400px; left:calc(50% - 200px); }
+  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+
+  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
 }
 
 /****************************************************************************************************/

@@ -82,6 +82,7 @@ module.exports.getServicesDetailForConsultation = (databaseConnector, callback) 
                 else
                 {
                   servicesObject[services[Object.keys(services)[x]].name] = {};
+                  servicesObject[services[Object.keys(services)[x]].name].label = services[Object.keys(services)[x]].label; 
                   servicesObject[services[Object.keys(services)[x]].name].files = amountOfFiles;
                   servicesObject[services[Object.keys(services)[x]].name].members = amountOfMembers;
                   servicesObject[services[Object.keys(services)[x]].name].fileLimit = services[Object.keys(services)[x]].fileLimit;

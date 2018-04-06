@@ -65,6 +65,7 @@ module.exports.startApp = (app, callback) =>
   const storageViewsServices      = require(`${__root}/routes/storage/views/services`);
 
   const storageQueriesAdmin       = require(`${__root}/routes/storage/queries/admin`);
+  const storageQueriesStrings     = require(`${__root}/routes/storage/queries/strings`);
   const storageQueriesServices    = require(`${__root}/routes/storage/queries/services`);
 
   const params            = require(`${__root}/json/params`);
@@ -84,6 +85,7 @@ module.exports.startApp = (app, callback) =>
   app.use('/storage/services', auth, storageViewsServices);
 
   app.use('/queries/storage/admin', storageAppAdminAuth, storageQueriesAdmin);
+  app.use('/queries/storage/strings', auth, storageQueriesStrings);
   app.use('/queries/storage/services', auth, storageQueriesServices);
 
   app.use((req, res, next) =>

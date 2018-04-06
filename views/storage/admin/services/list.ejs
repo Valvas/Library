@@ -27,6 +27,22 @@
           <% if(Object.keys(services).length == 0){ %>
             <div class='empty'><%= strings.storage.admin.services.empty %></div>
           <% } else{ %>
+            <% for(var service in services){ %>
+              <div class='serviceBlock'>
+                <div class='serviceBlockLabel'><%= services[service].label %></div>
+                <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.files %> :</div><div class='value'><%= services[service].files %></div></div>
+                <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.members %> :</div><div class='value'><%= services[service].members %></div></div>
+                <% if(parseInt(services[service].fileLimit) / 1024 / 1024 / 1024 > 1){ %>
+                  <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.limit %> :</div><div class='value'><%= parseInt(services[service].fileLimit) / 1024 / 1024 / 1024 %> Go</div></div>
+                <% } else if(parseInt(services[service].fileLimit) / 1024 / 1024 > 1){ %>
+                  <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.limit %> :</div><div class='value'><%= parseInt(services[service].fileLimit) / 1024 / 1024 %> Mo</div></div>
+                <% } else if(parseInt(services[service].fileLimit) / 1024 > 1){ %>
+                  <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.limit %> :</div><div class='value'><%= parseInt(services[service].fileLimit) / 1024 %> Ko</div></div>
+                <% } else{ %>
+                  <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.limit %> :</div><div class='value'><%= parseInt(services[service].fileLimit) %> o</div></div>
+                <% } %>
+              </div>
+            <% } %>
           <% } %>
         <% } %>
       </div>

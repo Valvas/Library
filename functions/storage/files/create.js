@@ -34,7 +34,7 @@ module.exports.createFileInDatabase = (fileName, fileExt, accountID, serviceID, 
 
     else
     {
-      callback(null);
+      callback(null, insertedIDOrErrorMessage);
     }
   });
 }

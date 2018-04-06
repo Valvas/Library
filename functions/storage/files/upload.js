@@ -11,6 +11,8 @@ const storageAppFilesSet                  = require(`${__root}/functions/storage
 const storageAppFilesCreate               = require(`${__root}/functions/storage/files/create`);
 const storageAppServicesGet               = require(`${__root}/functions/storage/services/get`);
 const storageAppServicesRights            = require(`${__root}/functions/storage/services/rights`);
+const storageAppLogsServicesUploadFile    = require(`${__root}/functions/storage/logs/services/addFile`);
+const storageAppLogsServicesRemoveFile    = require(`${__root}/functions/storage/logs/services/removeFile`);
 
 //To uncomment when updated database manager will be set for all the project
 //const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
@@ -20,83 +22,108 @@ const databaseManager     = require(`${__root}/functions/database/MySQLv2`);
 
 /****************************************************************************************************/
 
-module.exports.prepareUpload = (fileName, fileExt, serviceName, account, fileSize, databaseConnector, callback) =>
+module.exports.prepareUpload = (fileName, fileExt, fileSize, serviceName, accountID, authorizedExt, databaseConnector, callback) =>
 {
-  storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
-  {
-    if(error != null) callback(error);
+  fileName              == undefined ||
+  fileExt               == undefined ||
+  fileSize              == undefined ||
+  serviceName           == undefined ||
+  accountID             == undefined ||
+  authorizedExt         == undefined ||
+  databaseConnector     == undefined ?
 
-    else
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
+
+  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  {
+    error != null ? callback(error) :
+
+    storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
     {
-      storageAppServicesRights.getRightsTowardsService(service.id, account.id, databaseConnector, (error, rights) =>
+      error != null ? callback(error) :
+
+      storageAppServicesRights.getRightsTowardsService(service.id, accountID, databaseConnector, (error, rights) =>
       {
         if(error != null) callback(error);
 
         else
         {
-          if(rights.upload_files == 0) callback({ status: 403, code: constants.UNAUTHORIZED_TO_UPLOAD_FILES });
+          if(rights.upload_files == 0)
+          {
+            callback({ status: 403, code: constants.UNAUTHORIZED_TO_ADD_FILES, detail: null });
+          }
 
           else
           {
-            storageAppFilesGet.getFileFromDatabase(fileName, fileExt, service.id, databaseConnector, (error, file) =>
-            {
-              if(error != null && error.status != 404) callback(error);
+            if(fileSize > service.file_limit) callback({ result: false, code: constants.FILE_SIZE_EXCEED_MAX_ALLOWED, detail: null });
 
-              //File does not exist in database or is in status deleted
-              else if((error != null && error.status == 404) || (error == null && file.deleted == 1))
+            else
+            {
+              if(authorizedExt.includes(fileExt) == false) callback({ status: 406, code: constants.UNAUTHORIZED_FILE, detail: null });
+
+              else
               {
-                storageAppFilesGet.getFileFromDisk(fileName, fileExt, serviceName, databaseConnector, (error, file) =>
+                storageAppFilesGet.getFileFromDatabase(fileName, fileExt, service.id, databaseConnector, (error, file) =>
                 {
                   if(error != null && error.status != 404) callback(error);
 
-                  //File does not exist on the disk
-                  else if(error != null && error.status == 404)
+                  //File does not exist in database or is in status deleted
+                  else if((error != null && error.status == 404) || (error == null && file.deleted == 1))
                   {
-                    callback(null);
+                    storageAppFilesGet.getFileFromDisk(fileName, fileExt, serviceName, databaseConnector, (error, file) =>
+                    {
+                      if(error != null && error.status != 404) callback(error);
+
+                      //File does not exist on the disk
+                      else if(error != null && error.status == 404)
+                      {
+                        callback(null);
+                      }
+
+                      //File exists on the disk
+                      else
+                      {
+                        filesRemove.moveFileToBin(fileName, fileExt, `${params.storage.root}/${params.storage.services}/${serviceName}`, (error) =>
+                        {
+                          error == null ? callback(null) : callback(error);
+                        });
+                      }
+                    });
                   }
 
-                  //File exists on the disk
+                  //File already exists in database
                   else
                   {
-                    filesRemove.moveFileToBin(fileName, fileExt, `${params.storage.root}/${params.storage.services}/${service}`, (error) =>
+                    storageAppFilesGet.getFileFromDisk(fileName, fileExt, serviceName, databaseConnector, (error, file) =>
                     {
-                      error == null ? callback(null) : callback(error);
+                      if(error != null && error.status != 404) callback(error);
+
+                      //File does not exist on the disk
+                      else if(error != null && error.status == 404)
+                      {
+                        callback(null);
+                      }
+
+                      //File exists on the disk
+                      else
+                      {
+                        rights.remove_files == 0 ? callback(null, false) : callback(null, true);
+                      }
                     });
                   }
                 });
               }
-
-              //File already exists in database
-              else
-              {
-                storageAppFilesGet.getFileFromDisk(fileName, fileExt, serviceName, databaseConnector, (error, file) =>
-                {
-                  if(error != null && error.status != 404) callback(error);
-
-                  //File does not exist on the disk
-                  else if(error != null && error.status == 404)
-                  {
-                    callback(null);
-                  }
-
-                  //File exists on the disk
-                  else
-                  {
-                    rights.remove_files == 0 ? callback(null, false) : callback(null, true);
-                  }
-                });
-              }
-            });
+            }
           }
         }
       });
-    }
+    });
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.uploadFile = (originalFileName, currentFileName, serviceName, accountID, databaseConnector ,callback) =>
+module.exports.uploadFile = (originalFileName, currentFileName, serviceName, accountID, databaseConnector , callback) =>
 {
   originalFileName    == undefined ||
   currentFileName     == undefined ||
@@ -132,99 +159,156 @@ module.exports.uploadFile = (originalFileName, currentFileName, serviceName, acc
 
               else
               {
-                //Check if file exists in the database
-                storageAppFilesGet.getFileFromDatabase(originalFileName.split('.')[0], originalFileName.split('.')[1], service.id, databaseConnector, (error, file) =>
+                //Check if file has an extension, otherwise it must be rejected
+                if(originalFileName.split('.').length != 2) callback({ status: 406, code: constants.UNAUTHORIZED_FILE, detail: null });
+
+                else
                 {
-                  //Unscheduled error
-                  if(error != null && error.status != 404) callback(error);
-
-                  //File does not exist in the database
-                  else if(error != null && error.status == 404)
+                  //Check if file exists in the database
+                  storageAppFilesGet.getFileFromDatabase(originalFileName.split('.')[0], originalFileName.split('.')[1], service.id, databaseConnector, (error, file) =>
                   {
-                    storageAppFilesCreate.createFileInDatabase(originalFileName.split('.')[0], originalFileName.split('.')[1], account.id, service.id, databaseConnector, (error) =>
-                    {
-                      if(error != null) callback(error);
+                    //Unscheduled error
+                    if(error != null && error.status != 404) callback(error);
 
-                      else
+                    //File does not exist in the database
+                    else if(error != null && error.status == 404)
+                    {
+                      storageAppFilesCreate.createFileInDatabase(originalFileName.split('.')[0], originalFileName.split('.')[1], account.id, service.id, databaseConnector, (error, fileID) =>
                       {
-                        //Check if file exists on the disk
-                        storageAppFilesGet.getFileFromDisk(originalFileName.split('.')[0], originalFileName.split('.')[1], serviceName, databaseConnector, (error, file) =>
+                        if(error != null) callback(error);
+
+                        else
                         {
-                          //Unscheduled error
-                          if(error != null && error.status != 404) callback(error);
-
-                          //File does not exist on the disk
-                          else if(error != null && error.status == 404)
+                          //Check if file exists on the disk
+                          storageAppFilesGet.getFileFromDisk(originalFileName.split('.')[0], originalFileName.split('.')[1], serviceName, databaseConnector, (error, file) =>
                           {
-                            filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${service.name}`, originalFileName, (error) =>
-                            {
-                              error == null ? callback(null) : callback(error);
-                            });
-                          }
+                            //Unscheduled error
+                            if(error != null && error.status != 404) callback(error);
 
-                          //File exists on the disk and must be moved to the bin
-                          else
-                          {
-                            filesRemove.moveFileToBin(originalFileName.split('.')[0], originalFileName.split('.')[1], `${params.storage.root}/${params.storage.services}/${service.name}`, (error) =>
+                            //File does not exist on the disk
+                            else if(error != null && error.status == 404)
                             {
-                              if(error) callback(error);
-
-                              else
+                              filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${service.name}`, originalFileName, (error) =>
                               {
-                                filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${service.name}`, originalFileName, (error) =>
-                                {
-                                  error == null ? callback(null) : callback(error);
-                                });
-                              }
-                            });
-                          }
-                        });
-                      }
-                    });
-                  }
+                                error != null ? callback(error) :
 
-                  //File exists in the database
-                  else
-                  {
-                    storageAppFilesSet.setFileOwner(account.id, file.id, databaseConnector, (error) =>
+                                storageAppLogsServicesUploadFile.addUploadFileLog(params.fileLogs.upload, accountID, fileID, originalFileName.split('.')[0], originalFileName.split('.')[1], service.name, databaseConnector, (error) =>
+                                {
+                                  if(error != null) callback(error);
+
+                                  else
+                                  {
+                                    callback(null, fileID);
+                                  }
+                                });
+                              });
+                            }
+
+                            //File exists on the disk and must be moved to the bin
+                            else
+                            {
+                              filesRemove.moveFileToBin(originalFileName.split('.')[0], originalFileName.split('.')[1], `${params.storage.root}/${params.storage.services}/${service.name}`, (error) =>
+                              {
+                                error != null ? callback(error) :
+
+                                storageAppLogsServicesRemoveFile.addRemoveFileLog(params.fileLogs.remove, accountID, fileID, originalFileName.split('.')[0], originalFileName.split('.')[1], service.name, databaseConnector, (error) =>
+                                {
+                                  error != null ? callback(error) :
+
+                                  filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${service.name}`, originalFileName, (error) =>
+                                  {
+                                    error != null ? callback(error) :
+
+                                    storageAppLogsServicesUploadFile.addUploadFileLog(params.fileLogs.upload, accountID, fileID, originalFileName.split('.')[0], originalFileName.split('.')[1], service.name, databaseConnector, (error) =>
+                                    {
+                                      if(error != null) callback(error);
+
+                                      else
+                                      {
+                                        callback(null, fileID);
+                                      }
+                                    });
+                                  });
+                                });
+                              });
+                            }
+                          });
+                        }
+                      });
+                    }
+
+                    //File exists in the database
+                    else
                     {
-                      if(error != null) callback(error);
+                      var fileID = file.id;
+
+                      if(rights.remove == 0) callback({ status: 403, code: constants.UNAUTHORIZED_TO_DELETE_FILES });
 
                       else
                       {
-                        storageAppFilesSet.setFileNotDeleted(account.id, file.id, databaseConnector, (error) =>
+                        storageAppFilesSet.setFileOwner(account.id, fileID, databaseConnector, (error) =>
                         {
                           if(error != null) callback(error);
 
                           else
                           {
-                            //Check if file exists on the disk
-                            storageAppFilesGet.getFileFromDisk(originalFileName.split('.')[0], originalFileName.split('.')[1], serviceName, databaseConnector, (error, file) =>
+                            storageAppFilesSet.setFileNotDeleted(account.id, fileID, databaseConnector, (error) =>
                             {
-                              //Unscheduled error
-                              if(error != null && error.status != 404) callback(error);
+                              if(error != null) callback(error);
 
-                              //File does not exist on the disk
-                              else if(error != null && error.status == 404)
-                              {
-                                filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${service.name}`, originalFileName, (error) =>
-                                {
-                                  error == null ? callback(null) : callback(error);
-                                });
-                              }
-
-                              //File exists on the disk and must be replaced by the new one
                               else
                               {
-                                filesRemove.moveFileToBin(originalFileName.split('.')[0], originalFileName.split('.')[1], `${params.storage.root}/${params.storage.services}/${serviceName}`, (error) =>
+                                //Check if file exists on the disk
+                                storageAppFilesGet.getFileFromDisk(originalFileName.split('.')[0], originalFileName.split('.')[1], serviceName, databaseConnector, (error, file) =>
                                 {
-                                  if(error) callback(error);
+                                  //Unscheduled error
+                                  if(error != null && error.status != 404) callback(error);
 
+                                  //File does not exist on the disk
+                                  else if(error != null && error.status == 404)
+                                  {
+                                    filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${service.name}`, originalFileName, (error) =>
+                                    {
+                                      error != null ? callback(error) :
+
+                                      storageAppLogsServicesUploadFile.addUploadFileLog(params.fileLogs.upload, accountID, fileID, originalFileName.split('.')[0], originalFileName.split('.')[1], service.name, databaseConnector, (error) =>
+                                      {
+                                        if(error != null) callback(error);
+
+                                        else
+                                        {
+                                          callback(null, fileID);
+                                        }
+                                      });
+                                    });
+                                  }
+
+                                  //File exists on the disk and must be replaced by the new one
                                   else
                                   {
-                                    filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${serviceName}`, originalFileName, (error) =>
+                                    filesRemove.moveFileToBin(originalFileName.split('.')[0], originalFileName.split('.')[1], `${params.storage.root}/${params.storage.services}/${serviceName}`, (error) =>
                                     {
-                                      error == null ? callback(null) : callback(error);
+                                      error != null ? callback(error) :
+
+                                      storageAppLogsServicesRemoveFile.addRemoveFileLog(params.fileLogs.remove, accountID, fileID, originalFileName.split('.')[0], originalFileName.split('.')[1], service.name, databaseConnector, (error) =>
+                                      {
+                                        error != null ? callback(error) :
+
+                                        filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${serviceName}`, originalFileName, (error) =>
+                                        {
+                                          error != null ? callback(error) :
+
+                                          storageAppLogsServicesUploadFile.addUploadFileLog(params.fileLogs.upload, accountID, fileID, originalFileName.split('.')[0], originalFileName.split('.')[1], service.name, databaseConnector, (error) =>
+                                          {
+                                            if(error != null) callback(error);
+
+                                            else
+                                            {
+                                              callback(null, fileID);
+                                            }
+                                          });
+                                        });
+                                      });
                                     });
                                   }
                                 });
@@ -233,9 +317,9 @@ module.exports.uploadFile = (originalFileName, currentFileName, serviceName, acc
                           }
                         });
                       }
-                    });
-                  }
-                });
+                    }
+                  });
+                }
               }
             }
           });

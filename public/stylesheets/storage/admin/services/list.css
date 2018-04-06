@@ -22,16 +22,30 @@
 
 .services .error .detail{ font-family:barlow-italic; font-size:14px; line-height:18px; color:#B0B0B0; }
 
+.serviceBlock{ width:450px; margin:20px; background-color:#FFFFFF; border-radius:4px; box-sizing:border-box; border:1px solid #F0F0F0; display:inline-block; vertical-align:top; }
+
+.serviceBlockLabel{ background-color:#428BCA; color:#FFFFFF; font-family:barlow; font-size:20px; line-height:24px; padding:10px; border-radius:4px 4px 0 0; }
+
+.serviceBlockValueBlock{ padding:10px 10px 0 10px; font-size:16px; line-height:24px; font-family:barlow; }
+
+.serviceBlockValueBlock .key{ width:70%; display:inline-block; }
+
+.serviceBlockValueBlock .value{ width:30%; display:inline-block; vertical-align:top; text-align:right; }
+
 /****************************************************************************************************/
 
 @media (max-width: 319px)
 {
   .services{ width:calc(100% - 40px); margin:20px; }
+
+  .serviceBlock{ width:calc(100% - 40px); margin:20px; }
 }
 
 @media (min-width: 320px) and (max-width: 479px)
 {
   .services{ width:calc(100% - 40px); margin:20px; }
+
+  .serviceBlock{ width:calc(100% - 40px); margin:20px; }
 }
 
 @media (min-width: 480px) and (max-width: 639px)

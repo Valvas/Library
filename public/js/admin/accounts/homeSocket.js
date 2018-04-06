@@ -114,3 +114,43 @@ socket.on('accountModified', (error, account) =>
 });
 
 /****************************************************************************************************/
+
+socket.on('accountRemovedOnHome', (error, accountUUID) =>
+{
+  if(error == null)
+  {
+    var accounts = document.getElementById('account-list').children;
+
+    var x = 0;
+
+    var browseAccountsLoop = () =>
+    {
+      if(accounts[Object.keys(accounts)[x]].getAttribute('name') == accountUUID)
+      {
+        var popup             = document.createElement('div');
+
+        popup                 .setAttribute('class', 'red');
+        popup                 .innerText = `Le compte "${accounts[Object.keys(accounts)[x]].children[0].innerText}" a été supprimé`;
+
+        document.getElementById('account-list-block-popup').appendChild(popup);
+
+        accounts[Object.keys(accounts)[x]].remove();
+        updateAccountListPages();
+
+        setTimeout(() =>
+        {
+          popup.remove();
+        }, 4000);
+      }
+
+      else
+      {
+        if(Object.keys(accounts)[x += 1] != undefined) browseAccountsLoop();
+      }
+    }
+
+    if(Object.keys(accounts).length > 0) browseAccountsLoop();
+  }
+});
+
+/****************************************************************************************************/

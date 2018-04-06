@@ -5,9 +5,11 @@ const constants           = require(`${__root}/functions/constants`);
 const accountsGet         = require(`${__root}/functions/accounts/get`);
 const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
+const storageAppServicesRights = module.exports = {};
+
 /****************************************************************************************************/
 
-module.exports.getRightsTowardsServices = (accountID, databaseConnector, callback) =>
+storageAppServicesRights.getRightsTowardsServices = (accountID, databaseConnector, callback) =>
 {
   accountID           == undefined ||
   databaseConnector   == undefined ?
@@ -53,7 +55,7 @@ module.exports.getRightsTowardsServices = (accountID, databaseConnector, callbac
 
 /****************************************************************************************************/
 
-module.exports.getRightsTowardsService = (service, accountID, databaseConnector, callback) =>
+storageAppServicesRights.getRightsTowardsService = (service, accountID, databaseConnector, callback) =>
 {
   service             == undefined ||
   accountID           == undefined ||
@@ -91,6 +93,27 @@ module.exports.getRightsTowardsService = (service, accountID, databaseConnector,
         callback(null, rightsObject);
       }
     });
+  });
+}
+
+/****************************************************************************************************/
+
+storageAppServicesRights.isAuthorizedToUploadFiles = (serviceID, accountID, databaseConnector, callback) =>
+{
+  serviceID           == undefined ||
+  accountID           == undefined ||
+  databaseConnector   == undefined ?
+
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+
+  storageAppServicesRights.getRightsTowardsService(serviceID, accountID, databaseConnector, (error, rights) =>
+  {
+    if(error != null) callback(error);
+
+    else
+    {
+      rights.upload_files == 0 ? callback(null, false) : callback(null, true);
+    }
   });
 }
 

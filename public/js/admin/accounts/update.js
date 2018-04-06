@@ -6,7 +6,7 @@ function updateAccountListPages()
   var selectedPage            = null;
   var amountOfPagesRequired   = Math.ceil(accounts.length / 10) < 10 ? 10 : Math.ceil(accounts.length / 10);
 
-  if(document.getElementById('selected-page') != null) selectedPage = document.getElementById('selected-page').getAttribute('tag');
+  if(document.getElementById('selected-page') != null) selectedPage = parseInt(document.getElementById('selected-page').getAttribute('tag'));
 
   var startPage = null, endPage = null;
 
@@ -18,22 +18,25 @@ function updateAccountListPages()
 
   else
   {
-    if((selectedPage >= amountOfPagesRequired) || (selectedPage == amountOfPagesRequired - 1))
+    if(selectedPage >= amountOfPagesRequired)
     {
-      endPage = amountOfPagesRequired - 1;
+      endPage = parseInt(amountOfPagesRequired - 1);
       selectedPage = endPage;
-      startPage = endPage - 9;
     }
 
     else
     {
-      if(selectedPage + 5 > amountOfPagesRequired - 1) endPage = amountOfPagesRequired - 1;
+      if(selectedPage + 5 > amountOfPagesRequired - 1) endPage = parseInt(amountOfPagesRequired - 1);
 
       else
       {
-        endPage = selectedPage + 5;
+        endPage = parseInt(selectedPage + 5);
       }
     }
+
+    if(endPage < 9) endPage = 9;
+
+    startPage = endPage - 9 < 0 ? 0 : endPage - 9;console.log(selectedPage, startPage, endPage);
   }
 
   var pages = document.getElementById('account-pages').children;

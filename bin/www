@@ -4,7 +4,8 @@ require('../app')((app) =>
 {
   var app = app;
 
-  const accountsGet = require(`${__root}/functions/accounts/get`);
+  const accountsGet                 = require(`${__root}/functions/accounts/get`);
+  const storageAppFilesGet          = require(`${__root}/functions/storage/files/get`);
  
   var debug = require('debug')('library:server');
   var http = require('http');
@@ -21,6 +22,8 @@ require('../app')((app) =>
   io.on('connection', (socket) =>
   {
     socket.on('adminAppAccountsHomeJoin', () => { socket.join('adminAppAccountsHome'); });
+    socket.on('adminAppAccountsDetailJoin', (accountUUID) => { socket.join(accountUUID); })
+    socket.on('storageAppServicesDetailJoin', (serviceName) => { socket.join(serviceName); });
 
     socket.on('accountCreated', (accountEmail) => 
     {
@@ -38,32 +41,24 @@ require('../app')((app) =>
       });
     });
 
+    socket.on('accountRemoved', (accountUUID) =>
+    {
+      io.in('adminAppAccountsHome').emit('accountRemovedOnHome', null, accountUUID);
+      socket.to(accountUUID).emit('accountRemovedOnDetail');
+    });
 
-    socket.on('join_file', (name) => { socket.join(name); });
+    socket.on('storageAppServicesfileUploaded', (fileID, serviceName) =>
+    {
+      storageAppFilesGet.getFileFromDatabaseUsingID(fileID, app.get('mysqlConnector'), (error, file) =>
+      {
+        if(error == null) io.in(serviceName).emit('fileUploaded', null, file);
+      });
+    });
 
-    socket.on('join_service', (name) => { socket.join(name); });
-
-    socket.on('join_report', (name) => { socket.join(name); });
-
-    socket.on('join_reports_list', () => { socket.join('reports'); });
-
-    socket.on('admin_update_comment', (object) => { socket.to(object.room).emit('update_comment', object.room); });
-
-    socket.on('update_report_comments', (object) => { socket.to(object.room).emit('update_report_comments', object.room); });
-
-    socket.on('update_report_status', (object) => { socket.to(object.room).emit('update_report_status', object.status, object.color, object.report); });
-
-    socket.on('from_file_delete', (object) => { socket.to(object.room).emit('delete_file', object.logID); });
-
-    socket.on('from_service_delete', (object) => { socket.to(object.room).emit('delete_file', object.fileUUID); });
-
-    socket.on('post_comment', (object) => { socket.to(object.room).emit('post_comment', object.logID); });
-
-    socket.on('from_file_download', (object) => { socket.to(object.room).emit('download_file', object.logID); });
-
-    socket.on('from_file_upload', (object) => { socket.to(object.room).emit('upload_file', object.logID); });
-
-    socket.on('from_service_upload', (object) => { socket.to(object.room).emit('upload_file'); });
+    socket.on('storageAppServicesFileRemoved', (fileName, serviceName) =>
+    {
+      io.in(serviceName).emit('fileRemoved', null, fileName);
+    });
   });
 
   /****************************************************************************************************/

@@ -10,8 +10,10 @@ const services                  = require(`${__root}/json/services`);
 const commonAppStrings          = require(`${__root}/json/strings/common`);
 const constants                 = require(`${__root}/functions/constants`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
+const accountsGet               = require(`${__root}/functions/accounts/get`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppFilesUpload     = require(`${__root}/functions/storage/files/upload`);
+const storageAppFilesRemove     = require(`${__root}/functions/storage/files/remove`);
 const storageAppFilesDownload   = require(`${__root}/functions/storage/files/download`);
 const storageAppAdminServices   = require(`${__root}/functions/storage/admin/services`);
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
@@ -54,7 +56,7 @@ router.put('/get-account-rights', (req, res) =>
 
 /****************************************************************************************************/
 
-router.post('/download-files', (req, res) =>
+router.post('/download-file', (req, res) =>
 {
   var form = new formidable.IncomingForm();
 
@@ -80,13 +82,13 @@ router.post('/download-files', (req, res) =>
 
               else
               {
-                storageAppFilesDownload.downloadFiles(fields.files.split(','), fields.service, req.app.get('mysqlConnector'), req.session.account, (error, filePath) =>
+                storageAppFilesDownload.downloadFile(fields.files, fields.service, req.app.get('mysqlConnector'), req.session.account, (error, filePath) =>
                 {
                   if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
 
                   else
                   {
-                    res.download(filePath);
+                    res.download(filePath, fields.files);
                   }
                 });
               }
@@ -100,39 +102,70 @@ router.post('/download-files', (req, res) =>
 
 /****************************************************************************************************/
 
-router.post('/get-upload-ext', (req, res) =>
+router.post('/get-file-upload-parameters', (req, res) =>
 {
-  storageAppServicesGet.getServiceUsingName(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
+  var form = new formidable.IncomingForm();
+
+  form.parse(req, (err, fields) =>
   {
-    if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
+    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
 
     else
     {
-      if(req.body.service in req.app.get('servicesExtensionsAuthorized') == false) res.status(406).send({ result: false, message: errors[constants.SERVICE_NOT_FOUND], detail: null });
-
-      else
+      storageAppServicesGet.getServiceUsingName(fields.service, req.app.get('mysqlConnector'), (error, service) =>
       {
-        res.status(200).send({ result: true, ext: req.app.get('servicesExtensionsAuthorized')[req.body.service].ext_accepted });
-      }
+        if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
+
+        else
+        {
+          storageAppServicesGet.getFileMaxSize(service.id, req.app.get('mysqlConnector'), (error, size) =>
+          {
+            if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
+
+            else
+            {
+              if(fields.service in req.app.get('servicesExtensionsAuthorized') == false) res.status(406).send({ result: false, message: errors[constants.SERVICE_NOT_FOUND], detail: 'Authorized file extensions could not be found for the current service, please report this issue to an administrator as soon as possible' });
+
+              else
+              {
+                res.status(200).send({ result: true, strings: { common: commonAppStrings, storage: storageAppStrings }, size: size, ext: req.app.get('servicesExtensionsAuthorized')[fields.service].ext_accepted });
+              }
+            }
+          });
+        }
+      });
     }
   });
 });
 
 /****************************************************************************************************/
 
-router.post('/check-if-file-exists-before-upload', (req, res) =>
+router.post('/prepare-upload', (req, res) =>
 {
-  if(req.body.file == undefined || req.body.service == undefined || req.body.size == undefined) res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST] });
+  var form = new formidable.IncomingForm();
 
-  else
+  form.parse(req, (err, fields, files) =>
   {
-    storageAppFilesUpload.prepareUpload(req.body.file.split('.')[0], req.body.file.split('.')[1], req.body.service, req.session.account, req.body.size, req.app.get('mysqlConnector'), (error, rightToReplace) =>
+    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
+
+    else
     {
-      error != null ? 
-      res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail }) :
-      res.status(200).send({ result: true, rightToReplace: rightToReplace });
-    });
-  }
+      fields.service  == undefined ||
+      fields.file     == undefined ?
+
+      res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null }) :
+
+      storageAppFilesUpload.prepareUpload(JSON.parse(fields.file).name.split('.')[0], JSON.parse(fields.file).name.split('.')[1], JSON.parse(fields.file).size, fields.service, req.session.account.id, Object.values(req.app.get('servicesExtensionsAuthorized')[fields.service].ext_accepted), req.app.get('mysqlConnector'), (error, rightToRemoveCurrentFile) =>
+      {
+        if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
+
+        else
+        {
+          res.status(200).send({ result: true, strings: { common: commonAppStrings, storage: storageAppStrings }, remove: rightToRemoveCurrentFile == undefined ? null : rightToRemoveCurrentFile });
+        }
+      });
+    }
+  });
 });
 
 /****************************************************************************************************/
@@ -147,11 +180,11 @@ router.post('/upload-file', (req, res) =>
   {
     Object.keys(files)[0] == undefined || fields.service == undefined ? res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
 
-    storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1], fields.service, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+    storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1], fields.service, req.session.account.id, req.app.get('mysqlConnector'), (error, fileID) =>
     {
       error != null ?
-      res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail }) :
-      res.status(200).send({ result: true });
+      res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail }) :
+      res.status(200).send({ result: true, message: success[constants.FILE_SENT_SUCCESSFULLY], fileID: fileID });
     });
   });
 });
@@ -200,6 +233,36 @@ router.post('/create-service', (req, res) =>
             });
           }
         }
+      });
+    }
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/remove-files', (req, res) =>
+{
+  var form = new formidable.IncomingForm();
+
+  form.parse(req, (err, fields) =>
+  {
+    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
+
+    else
+    {
+      storageAppServicesGet.getServiceUsingName(fields.service, req.app.get('mysqlConnector'), (error, service) =>
+      {
+        error != null ? res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail }) :
+
+        storageAppFilesRemove.removeFiles(fields.files.split(','), service, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+        {
+          if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
+
+          else
+          {
+            res.status(200).send({ result: true });
+          }
+        });
       });
     }
   });

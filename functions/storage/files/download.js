@@ -1,21 +1,21 @@
 'use strict'
 
 const fs                                  = require('fs');
-const archiver                            = require('archiver');
 const params                              = require(`${__root}/json/params`);
 const errors                              = require(`${__root}/json/errors`);
 const constants                           = require(`${__root}/functions/constants`);
 const storageAppFilesGet                  = require(`${__root}/functions/storage/files/get`);
+const storageAppFilesSet                  = require(`${__root}/functions/storage/files/set`);
 const storageAppServicesGet               = require(`${__root}/functions/storage/services/get`);
 const storageAppLogsServicesDownloadFile  = require(`${__root}/functions/storage/logs/services/downloadFile`);
 
 /****************************************************************************************************/
 
-module.exports.downloadFiles = (filesToDownload, serviceName, databaseConnector, account, callback) =>
+module.exports.downloadFile = (fileToDownload, serviceName, databaseConnector, account, callback) =>
 {
-  if(filesToDownload == undefined || serviceName == undefined || databaseConnector == undefined) callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST });
+  if(fileToDownload == undefined || serviceName == undefined || databaseConnector == undefined) callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST });
 
-  else if(filesToDownload.length == 0) callback({ status: 406, code: constants.NO_FILE_TO_DOWNLOAD });
+  else if(fileToDownload.length == 0) callback({ status: 406, code: constants.NO_FILE_TO_DOWNLOAD });
 
   else
   {
@@ -25,86 +25,49 @@ module.exports.downloadFiles = (filesToDownload, serviceName, databaseConnector,
 
       else
       {
-        var x = 0, y = 0;
-
-        var checkFiles = () =>
+        storageAppFilesGet.getFileFromDatabase(fileToDownload.split('.')[0], fileToDownload.split('.')[1], service.id, databaseConnector, (error, file) =>
         {
-          storageAppFilesGet.getFileFromDatabase(filesToDownload[x].split('.')[0], filesToDownload[x].split('.')[1], service.id, databaseConnector, (error, file) =>
-          {
-            if(error != null) callback(error);
+          if(error != null) callback(error);
 
-            else
+          else
+          {
+            storageAppFilesGet.getFileFromDisk(fileToDownload.split('.')[0], fileToDownload.split('.')[1], serviceName, databaseConnector, (error, fileStats) =>
             {
-              storageAppFilesGet.getFileFromDisk(filesToDownload[x].split('.')[0], filesToDownload[x].split('.')[1], serviceName, databaseConnector, (error, fileStats) =>
+              if(error != null)
               {
-                if(error != null) callback(error);
+                //File has not been found on the disk and must be put in deleted status in the database before sending the previous error
+                if(error.status == 404)
+                {
+                  storageAppFilesSet.setFileDeleted(file.id, databaseConnector, (ignoredError) =>
+                  {
+                    callback(error);
+                  });
+                }
 
                 else
                 {
-                  storageAppLogsServicesDownloadFile.addDownloadFileLog(params.fileLogs.download, account.id, file.id, filesToDownload[x].split('.')[0], filesToDownload[x].split('.')[1], serviceName, databaseConnector, (error) =>
-                  {
-                    if(error != null) callback(error);
-
-                    else
-                    {
-                      if(filesToDownload[x += 1] != undefined) checkFiles();
-
-                      else
-                      {
-                        if(filesToDownload.length == 1) callback(null, `${params.storage.root}/${params.storage.services}/${serviceName}/${filesToDownload[0]}`);
-
-                        else
-                        {
-                          createArchiveFromFiles(filesToDownload, serviceName, account, (error, archivePath) =>
-                          {
-                            error == null ? callback(null, archivePath) : callback(error);
-                          });
-                        }
-                      }
-                    }
-                  });
+                  callback(error);
                 }
-              });
-            }
-          });
-        }
+              }
 
-        checkFiles();
+              else
+              {
+                storageAppLogsServicesDownloadFile.addDownloadFileLog(params.fileLogs.download, account.id, file.id, fileToDownload.split('.')[0], fileToDownload.split('.')[1], serviceName, databaseConnector, (error) =>
+                {
+                  if(error != null) callback(error);
+
+                  else
+                  {
+                    callback(null, `${params.storage.root}/${params.storage.services}/${serviceName}/${fileToDownload}`);
+                  }
+                });
+              }
+            });
+          }
+        });
       }
     });
   }
-}
-
-/****************************************************************************************************/
-
-function createArchiveFromFiles(filesToDownload, service, account, callback)
-{
-  var archiveName = `${account.id}-${Date.now()}.zip`;
-  var output = fs.createWriteStream(`${params.storage.root}/${params.storage.tmp}/${archiveName}`);
-  var archive = archiver('zip');
-
-  output.on('close', () =>
-  {
-    callback(null, `${params.storage.root}/${params.storage.tmp}/${archiveName}`);
-  });
-
-  archive.on('error', (error) =>
-  {
-    callback({ status: 500, code: constants.COULD_NOT_CREATE_ARCHIVE, detail: error.message });
-  });
-
-  archive.pipe(output);
-
-  var x = 0;
-
-  var addFilesToArchive = () =>
-  {
-    archive.file(`${params.storage.root}/${params.storage.services}/${service}/${filesToDownload[x]}`, { name: `${filesToDownload[x]}` });
-
-    filesToDownload[x += 1] != undefined ? addFilesToArchive() : archive.finalize();
-  }
-
-  addFilesToArchive();
 }
 
 /****************************************************************************************************/

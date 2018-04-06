@@ -122,7 +122,7 @@ function sendRemovalOrderToServer()
       var content   = document.createElement('div');
       var button    = document.createElement('button');
 
-      icon          .innerHTML = `<i class='fas fa-check-circle'></i>`;
+      icon          .innerHTML = `<i class='far fa-check-circle'></i>`;
       content       .innerText = xhr.response.strings.admin.detail.removed;
       button        .innerText = xhr.response.strings.admin.detail.exit;
 
@@ -132,6 +132,8 @@ function sendRemovalOrderToServer()
       content       .setAttribute('class', 'content');
       button        .setAttribute('class', 'button');
 
+      button        .addEventListener('click', clickOnExitButton);
+
       message       .appendChild(icon);
       message       .appendChild(content);
 
@@ -139,12 +141,21 @@ function sendRemovalOrderToServer()
       removed       .appendChild(button);
 
       document.getElementById('modify-account').appendChild(removed);
+
+      socket.emit('accountRemoved', document.getElementById('modify-account').getAttribute('name'));
     }
   }
 
   xhr.open('POST', '/queries/admin/accounts/remove', true);
 
   xhr.send(data);
+}
+
+/****************************************************************************************************/
+
+function clickOnExitButton(event)
+{
+  location = '/admin/accounts';
 }
 
 /****************************************************************************************************/

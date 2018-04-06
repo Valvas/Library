@@ -62,9 +62,15 @@
 
 .account .removed{ padding:10px; }
 
-.account .removed .message{ margin:10px 0 10px 0; }
+.account .removed .message{ margin:10px 0 10px 0; color:#5CB85C; }
 
-.account .removed .message .icon{ width:32px; }
+.account .removed .message .icon{ width:32px; display:inline-block; font-size:1.5em; }
+
+.account .removed .message .content{ font-family:roboto-light; font-size:16px; line-height:24px; display:inline-block; vertical-align:top; width:calc(100% - 32px); }
+
+.account .removed .button{ border:none; border-radius:4px; margin:10px 10px 10px calc(100% - 130px); cursor:pointer; background-color:#D9534F; color:#FFFFFF; font-size:16px; line-height:24px; font-family:roboto-light; padding:4px; width:120px; }
+
+.account .removed .button:hover{ color:#000000; background-color:#B7312D; }
 
 /****************************************************************************************************/
 
