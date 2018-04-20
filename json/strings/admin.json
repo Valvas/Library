@@ -36,15 +36,82 @@
 
   "locations":
   {
+    "access": "Accès",
     "accounts": "Comptes",
-    "home": "Accueil"
+    "home": "Accueil",
+    "rights": "Droits"
   },
 
   "navigation":
   {
+    "access": "Gestion des accès",
     "accounts": "Gestion des comptes",
     "exit": "Quitter l'application",
     "home": "Accueil",
     "rights": "Gestion des droits"
+  },
+
+  "rights":
+  {
+    "detail":
+    {
+      "accountInfo":
+      {
+        "email": "Adresse email",
+        "firstname": "Prénom",
+        "lastname": "Nom",
+        "suspended": "Suspendu",
+        "title": "Détail du compte"
+      },
+
+      "administrationRights":
+      {
+        "accessAccounts":  "Consulter les comptes",
+        "addAccess": "Ajouter des accès aux applications",
+        "addRights": "Ajouter des droits",
+        "buttons":
+        {
+          "addRight":
+          {
+            "content": "Donner le droit",
+            "titleActive": "Cliquer ici pour donner le droit à l'utilisateur",
+            "titleInactive": "Vous n'avez pas les droits requis pour effectuer cette action"
+          },
+          "removeRight":
+          {
+            "content": "Retirer le droit",
+            "titleActive": "Cliquer ici pour retirer le droit à l'utilisateur",
+            "titleInactive": "Vous n'avez pas les droits requis pour effectuer cette action"
+          }
+        },
+        "consultAccess": "Consulter les accès aux applications",
+        "consultRights": "Consulter les droits des comptes",
+        "createAccounts": "Créer des comptes",
+        "modifyAccounts": "Modifier des comptes",
+        "removeAccess": "Supprimer des accès aux applications",
+        "removeAccounts": "Supprimer des comptes",
+        "removeRights": "Supprimer des droits",
+        "suspendAccounts": "Suspendre des comptes",
+        "title": "Droits de ce compte"
+      },
+
+      "appsAccess":
+      {
+        "apps":
+        {
+          "admin": "Administration",
+          "disease": "Arrêts de travail",
+          "storage": "Stockage"
+        },
+        "giveAccess": "Donner l'accès",
+        "takeOfAccess": "Retirer l'accès",
+        "title": "Accès aux applications"
+      },
+
+      "errorBlock":
+      {
+        "title": "Une erreur est survenue"
+      }
+    }
   }
 }

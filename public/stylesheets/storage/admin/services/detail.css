@@ -1,0 +1,98 @@
+.serviceDetailBack{ display:block; width:max-content; font-size:20px; line-height:24px; font-family:barlow; margin:20px; color:#428BCA; }
+
+.serviceDetailBack:hover{ color:#2069A8; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceDetailBlock{ max-width:600px; background-color:#FFFFFF; border:1px solid #F0F0F0; border-radius:4px; margin:20px; }
+
+.serviceDetailBlockTitle{ padding:20px; font-family:barlow; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; }
+
+.serviceDetailBlockKey{ font-family:barlow-italic; font-size:16px; line-height:24px; padding:10px 20px 0 20px; }
+
+.serviceDetailBlockValue{ width:calc(100% - 40px); margin:0 20px 0 20px; }
+
+.serviceDetailBlockValueContent{ font-family:barlow; margin:10px 0 20px 0; width:calc(100% - 60px); border-bottom:1px solid #F0F0F0; display:inline-block; vertical-align:top; font-size:18px; line-height:24px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.serviceDetailBlockValueLock{ display:inline-block; vertical-align:top; width:30px; text-align:center; margin:10px 15px 0 15px; color:#D9534F; font-size:1.25em; }
+
+.serviceDetailBlockValueEdit{ display:inline-block; vertical-align:top; width:30px; text-align:center; margin:10px 15px 0 15px; color:#428BCA; font-size:1.25em; cursor:pointer; }
+
+.serviceDetailBlockValueEdit:hover{ color:#2069A8; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceModificationBackground{ position:fixed; z-index:20; top:0; left:0; right:0; bottom:0; overflow:auto; background-color:#000000; opacity:0.8; }
+
+.serviceModificationPopup{ position:absolute; z-index:30; width:600px; top:80px; left:calc(50% - 300px); margin:0 0 40px 0; max-width:600px; background-color:#FFFFFF; border-radius:4px; }
+
+.serviceModificationPopupTitle{ font-family:barlow; line-height:24px; font-size:20px; border-bottom:1px solid #F0F0F0; padding:10px; }
+
+.serviceModificationPopupContent{ padding:10px; position:relative; }
+
+.serviceModificationPopupContentLoading{ color:#5CB85C; font-size:3em; width:64px; height:64px; text-align:center; margin:10px calc(50% - 32px) 10px calc(50% - 32px); }
+
+.serviceModificationPopupError{ padding:10px; }
+
+.serviceModificationPopupErrorMessage{ color:#D9534F; font-family:barlow; line-height:24px; font-size:16px; }
+
+.serviceModificationPopupErrorClose{ border:none; border-radius:4px; background-color:#428BCA; color:#FFFFFF; font-family:barlow; line-height:24px; font-size:16px; padding:4px 0 4px 0; width:60px; margin:10px 10px 10px calc(100% - 70px); cursor:pointer; }
+
+.serviceModificationPopupErrorClose:hover{ color:#000000; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceModificationPopupErrorDetail{ color:#D0D0D0; font-family:barlow-italic; line-height:18px; font-size:14px; text-align:justify; }
+
+.serviceModificationPopupSuccess{ padding:10px; }
+
+.serviceModificationPopupSuccessMessage{ color:#5CB85C; font-family:barlow; line-height:24px; font-size:16px; }
+
+.serviceModificationPopupSuccessClose{ border:none; border-radius:4px; background-color:#428BCA; color:#FFFFFF; font-family:barlow; line-height:24px; font-size:16px; padding:4px 0 4px 0; width:60px; margin:10px 10px 10px calc(100% - 70px); cursor:pointer; }
+
+.serviceModificationPopupSuccessClose:hover{ color:#000000; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceModificationPopupSuccessDetail{ color:#D0D0D0; font-family:barlow-italic; line-height:18px; font-size:14px; text-align:justify; }
+
+.serviceModificationPopupContentLabel{ font-family:barlow-italic; line-height:24px; font-size:16px; padding:10px 0 5px 0; }
+
+.serviceModificationPopupContentValue{ border:1px solid #E0E0E0; box-sizing:border-box; font-family:barlow; font-size:16px; line-height:24px; border-radius:4px; padding:0 0 0 4px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; width:calc(100% - 36px); }
+
+.serviceModificationPopupContentInput{ display:inline-block; border:1px solid #E0E0E0; font-family:barlow; font-size:16px; line-height:24px; border-radius:4px; padding:0 0 0 4px; width:calc(100% - 42px); }
+
+.serviceModificationPopupContentInputFalse{ display:inline-block; vertical-align:top; font-size:1.5em; width:24px; height:26px; margin:0 0 0 4px; color:#D9534F; }
+
+.serviceModificationPopupContentInputTrue{ display:inline-block; vertical-align:top; font-size:2em; width:32px; height:32px; margin:0 0 0 4px; color:#5CB85C; }
+
+.serviceModificationPopupContentConfirmInactive{ border:none; border-radius:4px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#D0D0D0; padding:4px 0 4px 0; width:100px; margin:20px 0 10px calc(100% - 210px); -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceModificationPopupContentConfirmActive{ border:none; border-radius:4px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#428BCA; padding:4px 0 4px 0; width:100px; margin:20px 0 10px calc(100% - 210px); cursor:pointer; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceModificationPopupContentConfirmActive:hover{ color:#000000; background-color:#317AB9; }
+
+.serviceModificationPopupContentCancel{ border:none; border-radius:4px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#D9534F; padding:4px 0 4px 0; width:100px; cursor:pointer; margin:20px 0 10px 10px; }
+
+.serviceModificationPopupContentCancel:hover{ color:#000000; background-color:#C8423E; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceModificationPopupContentHint{ position:absolute; bottom:105px; left:120px; background:#428BCA; border-radius:4px; line-height:18px; font-size:14px; color:#FFFFFF; font-family:barlow-italic; width:max-content; padding:4px 8px 4px 8px; }
+
+.serviceModificationPopupContentHint:after{ content:''; position:absolute; bottom:0; left:10%; width:0; height:0; border:10px solid transparent; border-top-color:#428BCA; border-bottom:0; border-left:0; margin-left:-10px; margin-bottom:-10px; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319px)
+{
+  .serviceDetailBlock{ width:calc(100% - 40px); }
+
+  .serviceModificationPopup{ width:calc(100% - 40px); top:40px; left:20px; }
+
+  .serviceModificationPopupContentHint{ left:60px; }
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+  .serviceDetailBlock{ width:calc(100% - 40px); }
+
+  .serviceModificationPopup{ width:calc(100% - 40px); top:40px; left:20px; }
+}
+
+@media (min-width: 480px) and (max-width: 639px)
+{
+  .serviceDetailBlock{ width:calc(100% - 40px); }
+
+  .serviceModificationPopup{ width:calc(100% - 40px); top:40px; left:20px; }
+}

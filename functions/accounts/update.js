@@ -58,7 +58,7 @@ module.exports.updateAccount = (account, databaseConnector, callback) =>
 
                     else
                     {
-                      if(error == null && account.id != searchedAccount.id) callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE });
+                      if(searchedAccount != undefined && error == null && account.id != searchedAccount.id) callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE });
 
                       else
                       {

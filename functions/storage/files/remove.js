@@ -29,63 +29,38 @@ module.exports.removeFiles = (filesToRemove, service, accountID, databaseConnect
 
   accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
   {
-    error != null ? callback(error) :
+    if(error != null) return callback(error);
 
-    storageAppServicesRights.getRightsTowardsService(service.id, accountID, databaseConnector, (error, rights) =>
+    var x = 0;
+
+    if(filesToRemove[x] == undefined) return callback({ status: 406, code: constants.NO_FILE_PROVIDED_IN_REQUEST, detail: null });
+
+    var removeFileLoop = () =>
     {
-      if(error != null) callback(error);
-
-      else
+      filesRemove.moveFileToBin(filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], `${params.storage.root}/${params.storage.services}/${service.name}/`, (error) =>
       {
-        if(rights.remove_files == 0) callback({ status: 403, code: constants.UNAUTHORIZED_TO_DELETE_FILES, detail: null });
+        if(error != null) return callback(error);
 
-        else
+        storageAppFilesGet.getFileFromDatabaseUsingFullName(filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], service.id, databaseConnector, (error, file) =>
         {
-          var x = 0;
+          if(error != null) return callback(error);
 
-          var removeFileLoop = () =>
+          storageAppFilesSet.setFileDeleted(file.id, databaseConnector, (error) =>
           {
-            filesRemove.moveFileToBin(filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], `${params.storage.root}/${params.storage.services}/${service.name}/`, (error) =>
+            if(error != null) return callback(error);
+
+            storageAppLogsRemoveFile.addRemoveFileLog(params.fileLogs.remove, accountID, file.id, filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], service.name, databaseConnector, (error) =>
             {
-              if(error != null) callback(error);
+              if(error != null) return callback(error);
 
-              else
-              {
-                storageAppFilesGet.getFileFromDatabaseUsingFullName(filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], service.id, databaseConnector, (error, file) =>
-                {
-                  error != null ? callback(error) :
-
-                  storageAppFilesSet.setFileDeleted(file.id, databaseConnector, (error) =>
-                  {
-                    if(error != null) callback(error);
-
-                    else
-                    {
-                      storageAppLogsRemoveFile.addRemoveFileLog(params.fileLogs.remove, accountID, file.id, filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], service.name, databaseConnector, (error) =>
-                      {
-                        if(error != null) callback(error);
-
-                        else
-                        {
-                          filesToRemove[x += 1] != undefined ? removeFileLoop() : callback(null);
-                        }
-                      });
-                    }
-                  });
-                });
-              }
+              filesToRemove[x += 1] != undefined ? removeFileLoop() : callback(null);
             });
-          }
+          });
+        });
+      });
+    }
 
-          if(filesToRemove[x] != undefined) removeFileLoop();
-
-          else
-          {
-            callback({ status: 406, code: constants.NO_FILE_PROVIDED_IN_REQUEST, detail: null });
-          }
-        }
-      }
-    });
+    removeFileLoop();
   });
 }
 

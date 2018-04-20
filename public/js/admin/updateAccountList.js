@@ -4,7 +4,7 @@ function updateAccountListPages()
 {
   var accounts                = document.getElementById('account-list').children;
   var selectedPage            = null;
-  var amountOfPagesRequired   = Math.ceil(accounts.length / 10) < 10 ? 10 : Math.ceil(accounts.length / 10);
+  var amountOfPagesRequired   = Math.ceil(accounts.length / 20) < 10 ? 10 : Math.ceil(accounts.length / 20);
 
   if(document.getElementById('selected-page') != null) selectedPage = parseInt(document.getElementById('selected-page').getAttribute('tag'));
 
@@ -36,7 +36,7 @@ function updateAccountListPages()
 
     if(endPage < 9) endPage = 9;
 
-    startPage = endPage - 9 < 0 ? 0 : endPage - 9;console.log(selectedPage, startPage, endPage);
+    startPage = endPage - 9 < 0 ? 0 : endPage - 9;
   }
 
   var pages = document.getElementById('account-pages').children;
@@ -54,7 +54,7 @@ function updateAccountListPages()
       pages[x].setAttribute('class', 'page selected');
     }
 
-    if(startPage + x >= Math.ceil(accounts.length / 10)) pages[x].setAttribute('class', 'page inactive');
+    if(startPage + x >= Math.ceil(accounts.length / 20)) pages[x].setAttribute('class', 'page inactive');
 
     else
     {
@@ -70,11 +70,11 @@ function updateAccountListPages()
 
   var loop = () =>
   {
-    accounts[x].setAttribute('tag', parseInt(x / 10));
+    accounts[x].setAttribute('tag', parseInt(x / 20));
 
-    if(selectedPage == null && x < 10) accounts[x].setAttribute('class', 'account show');
+    if(selectedPage == null && x < 20) accounts[x].setAttribute('class', 'account show');
 
-    else if(selectedPage != null && selectedPage == parseInt(x / 10)) accounts[x].setAttribute('class', 'account show');
+    else if(selectedPage != null && selectedPage == parseInt(x / 20)) accounts[x].setAttribute('class', 'account show');
 
     else
     {

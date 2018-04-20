@@ -72,7 +72,35 @@
       {
         "files": "Nombre de fichiers en ligne",
         "limit": "Taille maximale des fichiers autorisée",
-        "members": "Personnes ayant des droits sur ce service"
+        "members": "Personnes ayant des droits sur ce service",
+        "modify": "Modifier",
+        "remove": "Supprimer"
+      },
+      "modify":
+      {
+        "popup":
+        {
+          "cancelButton": "Annuler",
+          "confirmButton": "Envoyer",
+          "currentLabel": "Nom actuel",
+          "currentSize": "Taille actuelle",
+          "newLabel": "Nouveau nom",
+          "newLabelPlaceholder": "Entrer un nom",
+          "newSize": "Nouvelle taille"
+        },
+        "serviceFileSizeLimit": "Taille maximale des fichiers",
+        "serviceIdentifier": "Identifiant du service",
+        "serviceLabel": "Nom du service",
+        "title": "Modification du service"
+      },
+      "remove":
+      {
+        "popup":
+        {
+          "message": "Êtes-vous sûr(e) de vouloir supprimer le service",
+          "title": "Supprimer un service",
+          "warning": "Attention : les fichiers liés à ce service seront aussi supprimés"
+        }
       }
     }
   },

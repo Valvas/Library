@@ -38,7 +38,9 @@ socket.on('accountCreated', (error, account) =>
     line                  .appendChild(firstname);
     line                  .appendChild(suspended);
 
-    line                  .addEventListener('click', openAccountDetail);
+    if(document.getElementById('account-list').getAttribute('name') == 'accounts')  line.addEventListener('click', openAccountDetail);
+    if(document.getElementById('account-list').getAttribute('name') == 'rights')    line.addEventListener('click', openAccountRightsDetail);
+    if(document.getElementById('account-list').getAttribute('name') == 'access')    line.addEventListener('click', openAccountAccessDetail);
 
     document.getElementById('account-list').insertBefore(line, document.getElementById('account-list').children[0]);
 

@@ -7,6 +7,7 @@ const accountsGet           = require(`${__root}/functions/accounts/get`);
 const foldersCreate         = require(`${__root}/functions/folders/create`);
 const storageAppAdminGet    = require(`${__root}/functions/storage/admin/get`);
 const storageAppServicesGet = require(`${__root}/functions/storage/services/get`);
+const storageAppFilesRemove = require(`${__root}/functions/storage/files/remove`);
 
 //To uncomment when updated database manager will be set for all the project
 //const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
@@ -277,6 +278,112 @@ function writeExtensionsInFileAndInAppVar(extensions, serviceName, serviceID, se
         callback(null);
       });
     }
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.removeService = (serviceName, accountID, databaseConnector, callback) =>
+{
+  if(serviceName == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'service name is missing' });
+  if(accountID == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'account ID is missing' });
+  if(databaseConnector == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'database connector is missing' });
+
+  storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
+  {
+    if(error != null) return callback(error);
+
+    storageAppAdminGet.getAccountAdminRights(accountID, databaseConnector, (error, rights) =>
+    {
+      if(error != null) return callback(error);
+
+      if(rights.remove_services == 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_REMOVE_SERVICES, detail: null });
+
+      removeFilesFromService(service, accountID, databaseConnector, (error) =>
+      {
+        if(error != null) return callback(error);
+
+        fs.rmdir(`${params.storage.root}/${params.storage.services}/${serviceName}`, (error) =>
+        {
+          databaseManager.deleteQuery(
+          {
+            'databaseName': params.database.storage.label,
+            'tableName': params.database.storage.tables.services,
+            'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': service.id } } }
+
+          }, databaseConnector, (boolean, errorMessage) =>
+          {
+            if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
+
+            return callback(null);
+          });
+        });
+      });
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function removeFilesFromService(service, accountID, databaseConnector, callback)
+{
+  databaseManager.selectQuery(
+  {
+    'databaseName': params.database.storage.label,
+    'tableName': params.database.storage.tables.files,
+    'args': { '0': '*' },
+    'where': { '0': { 'operator': '=', '0': { 'key': 'service', 'value': service.id } } }
+
+  }, databaseConnector, (boolean, filesOrErrorMessage) =>
+  {
+    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: filesOrErrorMessage });
+
+    var x = 0;
+
+    if(filesOrErrorMessage[x] == undefined) return callback(null);
+
+    var filesToRemove = [];
+
+    var browseFilesLoop = () =>
+    {
+      filesToRemove.push(`${filesOrErrorMessage[x].name}.${filesOrErrorMessage[x].ext}`);
+
+      if(filesOrErrorMessage[x += 1] != undefined) browseFilesLoop();
+
+      else
+      {
+        storageAppFilesRemove.removeFiles(filesToRemove, service, accountID, databaseConnector, (error) =>
+        {
+          return callback(error);
+        });
+      }
+    }
+
+    browseFilesLoop();
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.updateServiceLabel = (serviceID, serviceLabel, databaseConnector, callback) =>
+{
+  if(new RegExp('^[a-zA-Zàéèäëïöüâêîôû][a-zA-Zàéèäëïöüâêîôû0-9]*(( )?[a-zA-Zàéèäëïöüâêîôû0-9]+)*$').test(serviceLabel) == false)
+  {
+    return callback({ status: 406, code: constants.WRONG_SERVICE_LABEL_FORMAT, detail: null });
+  }
+
+  databaseManager.updateQuery(
+  {
+    'databaseName': params.database.storage.label,
+    'tableName': params.database.storage.tables.services,
+    'args': { 'label': serviceLabel },
+    'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': serviceID } } }
+
+  }, databaseConnector, (boolean, errorMessage) =>
+  {
+    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
+
+    return callback(null);
   });
 }
 

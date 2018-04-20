@@ -11,6 +11,7 @@ const commonAppStrings          = require(`${__root}/json/strings/common`);
 const constants                 = require(`${__root}/functions/constants`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
 const accountsGet               = require(`${__root}/functions/accounts/get`);
+const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppFilesUpload     = require(`${__root}/functions/storage/files/upload`);
 const storageAppFilesRemove     = require(`${__root}/functions/storage/files/remove`);
@@ -240,6 +241,31 @@ router.post('/create-service', (req, res) =>
 
 /****************************************************************************************************/
 
+router.post('/remove-service', (req, res) =>
+{
+  var form = new formidable.IncomingForm();
+
+  form.parse(req, (err, fields) =>
+  {
+    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
+
+    else
+    {
+      storageAppAdminServices.removeService(fields.service, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+      {
+        if(error == null) res.status(200).send({ message: success[constants.SERVICE_SUCCESSFULLY_REMOVED], detail: null });
+
+        else
+        {
+          res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+        }
+      });
+    }
+  });
+});
+
+/****************************************************************************************************/
+
 router.post('/remove-files', (req, res) =>
 {
   var form = new formidable.IncomingForm();
@@ -254,18 +280,74 @@ router.post('/remove-files', (req, res) =>
       {
         error != null ? res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail }) :
 
-        storageAppFilesRemove.removeFiles(fields.files.split(','), service, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+        storageAppServicesRights.getRightsTowardsService(service.id, req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
         {
           if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
 
           else
           {
-            res.status(200).send({ result: true });
+            if(rights.remove_files == 0) res.status(403).send({ message: errors[constants.UNAUTHORIZED_TO_DELETE_FILES], detail: null });
+
+            else
+            {
+              storageAppFilesRemove.removeFiles(fields.files.split(','), service, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+              {
+                if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
+
+                else
+                {
+                  res.status(200).send({ result: true });
+                }
+              });
+            }
           }
         });
       });
     }
   });
+});
+
+/****************************************************************************************************/
+
+router.post('/modify-service-label', (req, res) =>
+{
+  if(req.body.serviceID == undefined || req.body.serviceLabel == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null });
+
+  else
+  {
+    storageAppServicesGet.getServiceUsingName(req.body.serviceID, req.app.get('mysqlConnector'), (error, service) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      else
+      {
+        if(service.label == req.body.serviceLabel) res.status(200).send({ message: success[constants.SERVICE_LABEL_UNCHANGED], detail: null });
+
+        else
+        {
+          storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
+          {
+            if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+            else if(rights.modify_services == 0) res.status(403).send({ message: errors[constants.UNAUTHORIZED_TO_MODIFY_SERVICES], detail: null });
+
+            else
+            {
+              storageAppAdminServices.updateServiceLabel(service.id, req.body.serviceLabel, req.app.get('mysqlConnector'), (error) =>
+              {
+                if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+                else
+                {
+                  res.status(200).send({ message: success[constants.SERVICE_LABEL_SUCCESSFULLY_UPDATED], detail: null });
+                }
+              });
+            }
+          });
+        }
+      }
+    });
+  }
 });
 
 /****************************************************************************************************/

@@ -36,7 +36,7 @@ router.post('/create', (req, res) =>
         {
           rights.create_accounts == 0 ? res.status(403).send({ result: false, message: errors[constants.UNAUTHORIZED_TO_CREATE_ACCOUNTS], target: null }) :
 
-          accountsCreate.createAccount({ email: fields.email, lastname: fields.lastname, firstname: fields.firstname }, req.app.get('mysqlConnector'), (error, successCode) =>
+          accountsCreate.createAccount({ email: fields.email, lastname: fields.lastname, firstname: fields.firstname }, req.app.get('mysqlConnector'), req.app.get('transporter'), (error, successCode) =>
           {
             if(error != null)
             {

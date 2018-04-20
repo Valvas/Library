@@ -92,11 +92,12 @@
     "tmp": "STATIC_tmp",
     "maxFileSize":10737418240
   },
-  "transporter":{  
+  "transporter":{
+    "from": "intranet@groupepei.fr",  
     "port":"25",
     "secure":false,
-    "user":"test@groupepei.fr",
-    "password":"Password123",
+    "user":"vincent.valvas@groupepei.fr",
+    "password":"Kjiuwvoq1",
     "address":"mail.groupepei.fr"
   },
   "timeout":300000,

@@ -18,49 +18,22 @@ module.exports.getAccountRights = (accountID, databaseConnector, callback) =>
   accountID           == undefined ||
   databaseConnector   == undefined ?
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  databaseManager.selectQuery(
   {
-    if(error != null) callback(error);
+    'databaseName': params.database.administration.label,
+    'tableName': params.database.administration.tables.rights,
+    'args': { '0': '*' },
+    'where': { '0': { 'operator': '=', '0': { 'key': 'account', 'value': accountID } } }
 
-    else
-    {
-      commonAppsAccess.getAppsAvailableForAccount(accountID, databaseConnector, (error, access) =>
-      {
-        if(error != null) callback(error);
+  }, databaseConnector, (boolean, rightsOrErrorMessage) =>
+  {
+    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: rightsOrErrorMessage });
 
-        else
-        {
-          if(access.admin == 0) callback({ status: 403, code: constants.RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE });
+    if(rightsOrErrorMessage.length == 0) return callback({ status: 404, code: constants.RIGHTS_NOT_FOUND, detail: null });
 
-          else
-          {
-            databaseManager.selectQuery(
-            {
-              'databaseName': params.database.administration.label,
-              'tableName': params.database.administration.tables.rights,
-              'args': { '0': '*' },
-              'where': { '0': { 'operator': '=', '0': { 'key': 'account', 'value': accountID } } }
-
-            }, databaseConnector, (boolean, rightsOrErrorMessage) =>
-            {
-              if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: rightsOrErrorMessage });
-      
-              else
-              {
-                if(rightsOrErrorMessage.length == 0) callback({ status: 404, code: constants.RIGHTS_NOT_FOUND });
-      
-                else
-                {
-                  callback(null, rightsOrErrorMessage[0]);
-                }
-              }
-            });
-          }
-        }
-      });
-    }
+    return callback(null, rightsOrErrorMessage[0]);
   });
 }
 

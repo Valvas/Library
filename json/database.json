@@ -6,10 +6,16 @@
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "account": "BIGINT UNSIGNED NOT NULL",
       "access_accounts": "BOOLEAN NOT NULL",
+      "consult_access": "BOOLEAN NOT NULL",
+      "consult_rights": "BOOLEAN NOT NULL",
       "create_accounts": "BOOLEAN NOT NULL",
       "modify_accounts": "BOOLEAN NOT NULL",
       "suspend_accounts": "BOOLEAN NOT NULL",
-      "remove_accounts": "BOOLEAN NOT NULL"
+      "remove_accounts": "BOOLEAN NOT NULL",
+      "add_access": "BOOLEAN NOT NULL",
+      "remove_access": "BOOLEAN NOT NULL",
+      "add_rights": "BOOLEAN NOT NULL",
+      "remove_rights": "BOOLEAN NOT NULL"
     }
   },
 

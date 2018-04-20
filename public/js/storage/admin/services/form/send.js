@@ -40,7 +40,7 @@ function submitForm()
   {
     var identifier  = document.getElementById('form-input-identifier').value;
     var name        = document.getElementById('form-input-name').value;
-    var size        = document.getElementById('form-input-size-unit').value == 'Ko' ? document.getElementById('form-input-size').value : document.getElementById('form-input-size').value * 1024;
+    var size        = document.getElementById('form-input-size-unit').value == 'Ko' ? document.getElementById('form-input-size').value * 1024 : document.getElementById('form-input-size').value * 1024 * 1024;
 
     var members     = {};
     var extensions  = {};

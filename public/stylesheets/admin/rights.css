@@ -1,0 +1,77 @@
+/****************************************************************************************************/
+
+.rightsDetailAccountInfo{ width:400px; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; max-width:400px; display:inline-block; margin:20px; }
+
+.rightsDetailAccountInfoTitle{ font-family:roboto-light; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; padding:10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.rightsDetailAccountInfoKey{ font-family:roboto-light-italic; font-size:16px; line-height:24px; padding:10px 10px 5px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.rightsDetailAccountInfoValue{ font-family:roboto-light; font-size:16px; line-height:24px; padding:0 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.rightsDetailApps{ width:600px; max-width:600px; display:inline-block; vertical-align:top; margin:20px; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; }
+
+.rightsDetailAppsTitle{ font-family:roboto-light; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; padding:10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.rightsDetailAppsRights{ width:100%; }
+
+.rightsDetailAppsRightsTrue{ -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; width:calc(100% - 150px); color:#5CB85C; font-family:roboto-light; font-size:16px; line-height:24px; padding:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; display:inline-block; }
+
+.rightsDetailAppsRightsFalse{ -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; width:calc(100% - 150px); color:#D9534F; font-family:roboto-light; font-size:16px; line-height:24px; padding:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; display:inline-block; }
+
+.rightsDetailAppsRightsButtonActivate{ padding:0; margin:10px 10px 10px 0; display:inline-block; vertical-align:top; font-family:roboto-light; font-size:16px; line-height:24px; width:120px; border:none; border-radius:4px; color:#FFFFFF; background-color:#428BCA; cursor:pointer; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.rightsDetailAppsRightsButtonActivate:hover{ background-color:#317AB9; color:#000000; }
+
+.rightsDetailAppsRightsButtonDeactivate{ padding:0; margin:10px 10px 10px 0; display:inline-block; vertical-align:top; font-family:roboto-light; font-size:16px; line-height:24px; width:120px; border:none; border-radius:4px; color:#FFFFFF; background-color:#D9534F; cursor:pointer; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.rightsDetailAppsRightsButtonDeactivate:hover{ background-color:#C8423E; color:#000000; }
+
+.rightsDetailAppsRightsButtonInactive{ padding:0; margin:10px 10px 10px 0; display:inline-block; vertical-align:top; font-family:roboto-light; font-size:16px; line-height:24px; width:120px; border:none; border-radius:4px; color:#FFFFFF; background-color:#D0D0D0; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319px)
+{
+  .rightsDetailAccountInfo{ width:calc(100% - 40px); margin:20px; }
+
+  .rightsDetailApps{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+  .rightsDetailAccountInfo{ width:calc(100% - 40px); margin:20px; }
+
+  .rightsDetailApps{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 480px) and (max-width: 639px)
+{
+  .rightsDetailApps{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 640px) and (max-width: 779px)
+{
+
+}
+
+@media (min-width: 780px) and (max-width: 959px)
+{
+
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+
+}
+
+@media (min-width: 1680px)
+{
+
+}
+
+/****************************************************************************************************/

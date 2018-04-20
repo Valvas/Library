@@ -24,6 +24,7 @@ require('../app')((app) =>
     socket.on('adminAppAccountsHomeJoin', () => { socket.join('adminAppAccountsHome'); });
     socket.on('adminAppAccountsDetailJoin', (accountUUID) => { socket.join(accountUUID); })
     socket.on('storageAppServicesDetailJoin', (serviceName) => { socket.join(serviceName); });
+    socket.on('storageAppAdminServicesList', () => { socket.join('storageAppAdminServicesList'); });
 
     socket.on('accountCreated', (accountEmail) => 
     {
@@ -58,6 +59,11 @@ require('../app')((app) =>
     socket.on('storageAppServicesFileRemoved', (fileName, serviceName) =>
     {
       io.in(serviceName).emit('fileRemoved', null, fileName);
+    });
+
+    socket.on('storageAppAdminServiceRemoved', (serviceName) =>
+    {
+      io.in('storageAppAdminServicesList').emit('serviceRemoved', null, serviceName);
     });
   });
 

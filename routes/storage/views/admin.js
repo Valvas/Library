@@ -6,6 +6,7 @@ const errors                    = require(`${__root}/json/errors`);
 const commonAppStrings          = require(`${__root}/json/strings/common`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
 const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
+const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 
 var router = express.Router();
 
@@ -62,6 +63,27 @@ router.get('/services', (req, res) =>
       }
     });
   }
+});
+
+/****************************************************************************************************/
+
+router.get('/services/detail/:service', (req, res) =>
+{
+  storageAppServicesGet.getServiceUsingName(req.params.service, req.app.get('mysqlConnector'), (error, service) =>
+  {
+    if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    else
+    {
+      res.render('storage/admin/services/detail',
+      {
+        account: req.session.account,
+        error: null,
+        service: service,
+        strings: { common: commonAppStrings, storage: storageAppStrings }
+      });
+    }
+  });
 });
 
 /****************************************************************************************************/

@@ -42,7 +42,8 @@ function openPrompt(event)
     prompt          .appendChild(cancel);
     background      .appendChild(prompt);
 
-    document.body   .appendChild(background);
+    $(background)   .hide().appendTo(document.body);
+    $(background)   .fadeIn(250);
   }
 }
 
@@ -57,7 +58,7 @@ function exitApp(event)
 
 function closePrompt(event)
 {
-  document.getElementById('exit-background').remove();
+  $(document.getElementById('exit-background')).fadeOut(250, () => { document.getElementById('exit-background').remove(); });
   document.getElementById('blur').removeAttribute('style');
 }
 

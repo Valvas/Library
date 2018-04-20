@@ -1,0 +1,83 @@
+/****************************************************************************************************/
+
+.rightsDetailAccountInfo{ width:400px; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; max-width:400px; display:inline-block; margin:20px; }
+
+.rightsDetailAccountInfoTitle{ font-family:roboto-light; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; padding:10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.rightsDetailAccountInfoKey{ font-family:roboto-light-italic; font-size:16px; line-height:24px; padding:10px 10px 5px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.rightsDetailAccountInfoValue{ font-family:roboto-light; font-size:16px; line-height:24px; padding:0 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.rightsDetailApps{ width:400px; max-width:400px; display:inline-block; vertical-align:top; margin:20px; }
+
+.rightsDetailAppsRights{ width:100%; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; margin:0 0 20px 0; }
+
+.rightsDetailAppsRightsTitle{ font-family:roboto-light; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; padding:10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.rightsDetailAppsRightsTrue{ width:calc(100% - 20px); color:#5CB85C; font-family:roboto-light; font-size:16px; line-height:24px; padding:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; display:inline-block; }
+
+.rightsDetailAppsRightsFalse{ width:calc(100% - 20px); color:#D9534F; font-family:roboto-light; font-size:16px; line-height:24px; padding:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; display:inline-block; }
+
+.rightsDetailAppsAccess{ width:100%; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; margin:0 0 20px 0; }
+
+.rightsDetailAppsAccessTitle{ font-family:roboto-light; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; padding:10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.rightsDetailAppsAccessKey{ width:calc(100% - 150px); font-family:roboto-light; font-size:16px; line-height:24px; padding:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; display:inline-block; }
+
+.rightsDetailAppsAccessInactive{ display:inline-block; vertical-align:top; margin:10px 10px 10px 0; background-color:#E0E0E0; color:#FFFFFF; width:120px; border:none; border-radius:4px; line-height:18px; font-size:14px; padding:4px 0 4px 0; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.rightsDetailAppsAccessTrue{ display:inline-block; vertical-align:top; margin:10px 10px 10px 0; background-color:#428BCA; color:#FFFFFF; width:120px; border:none; border-radius:4px; line-height:18px; font-size:14px; cursor:pointer; padding:4px 0 4px 0; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.rightsDetailAppsAccessTrue:hover{ color:#000000; background-color:#317AB9; }
+
+.rightsDetailAppsAccessFalse{ display:inline-block; vertical-align:top; margin:10px 10px 10px 0; background-color:#D9534F; color:#FFFFFF; width:120px; border:none; border-radius:4px; line-height:18px; font-size:14px; cursor:pointer; padding:4px 0 4px 0; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.rightsDetailAppsAccessFalse:hover{ color:#000000; background-color:#C8423E; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319px)
+{
+  .rightsDetailAccountInfo{ width:calc(100% - 40px); margin:20px; }
+
+  .rightsDetailApps{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+  .rightsDetailAccountInfo{ width:calc(100% - 40px); margin:20px; }
+
+  .rightsDetailApps{ width:calc(100% - 40px); margin:20px; }
+}
+
+@media (min-width: 480px) and (max-width: 639px)
+{
+
+}
+
+@media (min-width: 640px) and (max-width: 779px)
+{
+
+}
+
+@media (min-width: 780px) and (max-width: 959px)
+{
+
+}
+
+@media (min-width: 960px) and (max-width: 1279px)
+{
+
+}
+
+@media (min-width: 1280px) and (max-width: 1679px)
+{
+
+}
+
+@media (min-width: 1680px)
+{
+
+}
+
+/****************************************************************************************************/

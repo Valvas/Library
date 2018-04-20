@@ -1,6 +1,118 @@
-'use strict';
+'use strict'
 
 const UUIDModule = require('uuid');
+
+/****************************************************************************************************/
+
+module.exports.createDatabaseAndTables = (databasesObject, SQLConnector, callback) =>
+{
+  var x = 0;
+
+  var createDatabasesLoop = (databaseName, databaseContent) =>
+  {
+    SQLConnector.query(`CREATE DATABASE IF NOT EXISTS ${databaseName}`, (error, result) =>
+    {
+      if(error) return callback(error.message);
+
+      else
+      {
+        console.log(`INFO : database "${databaseName}" created !`);
+
+        createAllTables(databaseContent, databaseName, SQLConnector, (error) =>
+        {
+          if(error != null) return callback(error);
+
+          if(Object.keys(databasesObject)[x += 1] == undefined) return callback(null);
+          
+          createDatabasesLoop(Object.keys(databasesObject)[x], databasesObject[Object.keys(databasesObject)[x]]);
+        });
+      }
+    });
+  };
+
+  if(Object.keys(databasesObject)[x] == undefined)
+  {
+    console.log('INFO : no database to create !');
+
+    return callback(null);
+  }
+  
+  else
+  {
+    createDatabasesLoop(Object.keys(databasesObject)[x], databasesObject[Object.keys(databasesObject)[x]]);
+  }
+}
+
+/****************************************************************************************************/
+
+function createAllTables(database, databaseName, pool, callback)
+{
+  var x = 0;
+
+  var loop = (tableName, tableContent) =>
+  {
+    createTable(tableContent, (result) =>
+    {
+      if(result == false)
+      {
+        console.log(`[${databaseName}] : Error - you cannot create a table "${tableName}" with no columns !`);
+        Object.keys(database)[x += 1] == undefined ? callback() : loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
+      }
+
+      else
+      {
+        pool.getConnection((err, connection) =>
+        {
+          if(err)
+          {
+            console.log(`[${databaseName}] : ${err.message} `);
+            callback();
+          }
+
+          else
+          {
+            connection.query(`CREATE TABLE IF NOT EXISTS ${databaseName}.${tableName} (${result})`, function(err, data)
+            {
+              err ? console.log(`[${databaseName}] : ${err.message} `) : console.log(`[${databaseName}] : table "${tableName}" created !`);
+              
+              connection.release();
+              
+              Object.keys(database)[x += 1] == undefined ? callback() : loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
+            });
+          }
+        });
+      }
+    });
+  };
+
+  if(Object.keys(database)[x] == undefined)
+  {
+    console.log(`INFO : no tables to create for this database !`);
+    callback();
+  }
+  
+  else
+  {
+    loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
+  }
+}
+
+/****************************************************************************************************/
+
+function createTable(table, callback)
+{
+  var x = 0;
+  var array = [];
+
+  var loop = (field, args) =>
+  {
+    array.push(`${field} ${args}`);
+
+    Object.keys(table)[x += 1] == undefined ? callback(array.join()) : loop(Object.keys(table)[x], table[Object.keys(table)[x]]);
+  };
+
+  Object.keys(table)[x] == undefined ? callback(true) : loop(Object.keys(table)[x], table[Object.keys(table)[x]]);
+}
 
 /****************************************************************************************************/
 
@@ -115,7 +227,7 @@ module.exports.updateQuery = (query, SQLConnector, callback) =>
       Object.keys(query.where)[x += 1] != undefined ? second() :
       
       SQLConnector.query(sql, (err, result) =>
-      {console.log(sql);
+      {
         err ? callback(false, err.message) : callback(true, result.affectedRows);
       });
     });

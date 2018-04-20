@@ -77,6 +77,11 @@ const SERVICE_FILE_MIN_SIZE_TOO_HIGH                                            
 const UNAUTHORIZED_TO_MANAGE_USER_RIGHTS                                          = 10073;
 const UNAUTHORIZED_TO_REMOVE_ACCOUNTS                                             = 10074;
 const FILE_SIZE_EXCEED_MAX_ALLOWED                                                = 10075;
+const UNAUTHORIZED_TO_REMOVE_SERVICES                                             = 10076;
+const UNAUTHORIZED_TO_MODIFY_SERVICES                                             = 10077;
+const WRONG_SERVICE_LABEL_FORMAT                                                  = 10078;
+const COULD_NOT_SEND_EMAIL                                                        = 10079;
+const UNAUTHORIZED_TO_CONSULT_ACCOUNT_RIGHTS                                      = 10080;
 
 /******************************************************************************************
 SUCCESS
@@ -101,6 +106,9 @@ const REPORT_STATUS_UPDATED                                                     
 const ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED                                         = 20017;
 const FILE_COMMENT_SUCCESSFULLY_ADDED                                             = 20018;
 const SERVICE_SUCCESSFULLY_CREATED                                                = 20019;
+const SERVICE_SUCCESSFULLY_REMOVED                                                = 20020;
+const SERVICE_LABEL_UNCHANGED                                                     = 20021;
+const SERVICE_LABEL_SUCCESSFULLY_UPDATED                                          = 20022;
 
 /******************************************************************************************
 EXPORTS
@@ -182,6 +190,11 @@ module.exports =
   UNAUTHORIZED_TO_MANAGE_USER_RIGHTS: UNAUTHORIZED_TO_MANAGE_USER_RIGHTS,
   UNAUTHORIZED_TO_REMOVE_ACCOUNTS: UNAUTHORIZED_TO_REMOVE_ACCOUNTS,
   FILE_SIZE_EXCEED_MAX_ALLOWED: FILE_SIZE_EXCEED_MAX_ALLOWED,
+  UNAUTHORIZED_TO_REMOVE_SERVICES: UNAUTHORIZED_TO_REMOVE_SERVICES,
+  UNAUTHORIZED_TO_MODIFY_SERVICES: UNAUTHORIZED_TO_MODIFY_SERVICES,
+  WRONG_SERVICE_LABEL_FORMAT: WRONG_SERVICE_LABEL_FORMAT,
+  COULD_NOT_SEND_EMAIL: COULD_NOT_SEND_EMAIL,
+  UNAUTHORIZED_TO_CONSULT_ACCOUNT_RIGHTS: UNAUTHORIZED_TO_CONSULT_ACCOUNT_RIGHTS,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -201,5 +214,8 @@ module.exports =
   REPORT_STATUS_UPDATED: REPORT_STATUS_UPDATED,
   ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED: ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED,
   FILE_COMMENT_SUCCESSFULLY_ADDED: FILE_COMMENT_SUCCESSFULLY_ADDED,
-  SERVICE_SUCCESSFULLY_CREATED: SERVICE_SUCCESSFULLY_CREATED
+  SERVICE_SUCCESSFULLY_CREATED: SERVICE_SUCCESSFULLY_CREATED,
+  SERVICE_SUCCESSFULLY_REMOVED: SERVICE_SUCCESSFULLY_REMOVED,
+  SERVICE_LABEL_UNCHANGED: SERVICE_LABEL_UNCHANGED,
+  SERVICE_LABEL_SUCCESSFULLY_UPDATED: SERVICE_LABEL_SUCCESSFULLY_UPDATED
 }

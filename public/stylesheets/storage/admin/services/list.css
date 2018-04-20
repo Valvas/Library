@@ -32,6 +32,64 @@
 
 .serviceBlockValueBlock .value{ width:30%; display:inline-block; vertical-align:top; text-align:right; }
 
+.serviceBlockModifyActive{ background-color:#5CB85C; color:#FFFFFF; border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; width:120px; padding:4px 0 4px 0; margin:10px 10px 10px calc(100% - 260px); }
+
+.serviceBlockModifyActive .icon{ padding:0 5px 0 0; }
+
+.serviceBlockModifyActive:hover{ color:#000000; background-color:#3A963A; }
+
+.serviceBlockModifyInactive{ background-color:#D0D0D0; color:#FFFFFF; border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; width:120px; padding:4px 0 4px 0; margin:10px 0 10px 10px; display:inline-block; }
+
+.serviceBlockModifyInactive .icon{ padding:0 5px 0 0; }
+
+.serviceBlockRemoveActive{ background-color:#D9534F; color:#FFFFFF; border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; width:120px; padding:4px 0 4px 0; margin:10px 10px 10px 0; display:inline-block; }
+
+.serviceBlockRemoveActive .icon{ padding:0 5px 0 0; }
+
+.serviceBlockRemoveActive:hover{ color:#000000; background-color:#B7312D; }
+
+.serviceBlockRemoveInactive{ background-color:#D0D0D0; color:#FFFFFF; border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; width:120px; padding:4px 0 4px 0; margin:10px 0 10px 10px; }
+
+.serviceBlockRemoveInactive .icon{ padding:0 5px 0 0; }
+
+.serviceBlockRemovePrompt{ z-index:30; position:absolute; top:80px; width:400px; left:calc(50% - 200px); margin:0 0 40px 0; background-color:#556677; border-radius:4px; }
+
+.serviceBlockRemovePromptTitle{ color:#FFFFFF; font-family:barlow; font-size:20px; line-height:24px; padding:10px; border-bottom:1px solid #FFFFFF; background-color:#428BCA; border-radius:4px 4px 0 0; }
+
+.serviceBlockRemovePromptLoading{ color:#5CB85C; font-size:3em; width:50px; text-align:center; padding:20px 0 20px 0; margin:0 calc(50% - 25px) 0 calc(50% - 25px); }
+
+.serviceBlockRemovePromptError{ padding:10px; }
+
+.serviceBlockRemovePromptErrorMessage{ color:#D9534F; font-size:16px; line-height:24px; font-family:barlow; }
+
+.serviceBlockRemovePromptErrorClose{ border:none; border-radius:4px; line-height:24px; font-size:16px; color:#FFFFFF; background-color:#428BCA; width:40px; cursor:pointer; padding:4px 0 4px 0; margin:10px 0 0 calc(100% - 40px); }
+
+.serviceBlockRemovePromptErrorClose:hover{ color:#000000; background-color:#2069A8; }
+
+.serviceBlockRemovePromptErrorDetail{ color:#D0D0D0; font-size:12px; line-height:18px; font-family:barlow-italic; margin:10px 0 0 0; }
+
+.serviceBlockRemovePromptMessage{ color:#D0D0D0; font-family:barlow; line-height:24px; font-size:16px; padding:10px; }
+
+.serviceBlockRemovePromptWarning{ color:#D9534F; font-family:barlow; line-height:18px; font-size:14px; padding:10px; }
+
+.serviceBlockRemovePromptConfirm{ color:#428BCA; font-size:2em; margin:0 0 10px calc(100% - 84px); cursor:pointer; height:32px; width:32px; display:inline-block; }
+
+.serviceBlockRemovePromptConfirm:hover{ color:#317AB9; }
+
+.serviceBlockRemovePromptCancel{ color:#D9534F; font-size:2em; margin:0 10px 10px 10px; cursor:pointer; height:32px; width:32px; display:inline-block; }
+
+.serviceBlockRemovePromptCancel:hover{ color:#C8423E; }
+
+.serviceBlockRemovePromptSuccess{ padding:10px; }
+
+.serviceBlockRemovePromptSuccessMessage{ color:#5CB85C; font-size:16px; line-height:24px; font-family:barlow; }
+
+.serviceBlockRemovePromptSuccessClose{ border:none; border-radius:4px; line-height:24px; font-size:16px; color:#FFFFFF; background-color:#428BCA; width:40px; cursor:pointer; padding:4px 0 4px 0; margin:10px 0 0 calc(100% - 40px); }
+
+.serviceBlockRemovePromptSuccessClose:hover{ color:#000000; background-color:#2069A8; }
+
+.serviceBlockRemovePromptSuccessDetail{ color:#D0D0D0; font-size:12px; line-height:18px; font-family:barlow-italic; margin:10px 0 0 0; }
+
 /****************************************************************************************************/
 
 @media (max-width: 319px)
@@ -39,6 +97,10 @@
   .services{ width:calc(100% - 40px); margin:20px; }
 
   .serviceBlock{ width:calc(100% - 40px); margin:20px; }
+
+  .serviceBlockRemoveActive, .serviceBlockRemoveInactive{ margin:10px 10px 10px calc(100% - 130px); }
+
+  .serviceBlockRemovePrompt{ width:calc(100% - 40px); top:40px; left:20px; margin-bottom:40px; }
 }
 
 @media (min-width: 320px) and (max-width: 479px)
@@ -46,6 +108,8 @@
   .services{ width:calc(100% - 40px); margin:20px; }
 
   .serviceBlock{ width:calc(100% - 40px); margin:20px; }
+
+  .serviceBlockRemovePrompt{ width:calc(100% - 40px); top:40px; left:20px; margin-bottom:40px; }
 }
 
 @media (min-width: 480px) and (max-width: 639px)
