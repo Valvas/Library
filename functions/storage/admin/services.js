@@ -128,7 +128,7 @@ module.exports.addMembersToService = (serviceID, members, accountID, databaseCon
 
       else
       {
-        if(rights.modify_account_rights == 0) callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS });
+        if(rights.add_services_rights == 0) callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS });
 
         else
         {
@@ -140,7 +140,7 @@ module.exports.addMembersToService = (serviceID, members, accountID, databaseCon
             {
               if(error != null)
               {
-                Object.keys(members)[x += 1] == undefined ? callback(null) : browseMembersList();
+                Object.keys(members)[x += 1] == undefined ? callback(error) : browseMembersList();
               }
 
               else
@@ -151,6 +151,65 @@ module.exports.addMembersToService = (serviceID, members, accountID, databaseCon
                   'tableName': params.database.storage.tables.rights,
                   'uuid': false,
                   'args': { 'account': members[Object.keys(members)[x]].id, 'service': serviceID, 'upload_files': members[Object.keys(members)[x]].upload == true ? 1 : 0, 'download_files': members[Object.keys(members)[x]].download == true ? 1 : 0, 'remove_files': members[Object.keys(members)[x]].remove == true ? 1 : 0, 'post_comments': members[Object.keys(members)[x]].comment == true ? 1 : 0 }
+
+                }, databaseConnector, (boolean, insertedIDOrErrorMessage) =>
+                {
+                  Object.keys(members)[x += 1] == undefined ? callback(null) : browseMembersList();
+                });
+              }
+            });
+          }
+
+          Object.keys(members).length == 0 ? callback(null) : browseMembersList();
+        }
+      }
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.removeMembersFromAService = (serviceID, members, accountID, databaseConnector, callback) =>
+{
+  serviceID           == undefined ||
+  members             == undefined ||
+  accountID           == undefined ||
+  databaseConnector   == undefined ?
+
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+
+  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  {
+    error != null ? callback(error) :
+
+    storageAppAdminGet.getAccountAdminRights(accountID, databaseConnector, (error, rights) =>
+    {
+      if(error != null) callback(error);
+
+      else
+      {
+        if(rights.add_services_rights == 0) callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS });
+
+        else
+        {
+          var x = 0;
+
+          var browseMembersList = () =>
+          {
+            accountsGet.getAccountUsingUUID(members[Object.keys(members)[x]], databaseConnector, (error, account) =>
+            {
+              if(error != null)
+              {
+                Object.keys(members)[x += 1] == undefined ? callback(error) : browseMembersList();
+              }
+
+              else
+              {
+                databaseManager.deleteQuery(
+                {
+                  'databaseName': params.database.storage.label,
+                  'tableName': params.database.storage.tables.rights,
+                  'where': { '0': { 'operator': 'AND', '0': { 'operator': '=', '0': { 'key': 'account', 'value': account.id }, '1': { 'key': 'service', 'value': serviceID } } } }
 
                 }, databaseConnector, (boolean, insertedIDOrErrorMessage) =>
                 {
@@ -377,6 +436,25 @@ module.exports.updateServiceLabel = (serviceID, serviceLabel, databaseConnector,
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.services,
     'args': { 'label': serviceLabel },
+    'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': serviceID } } }
+
+  }, databaseConnector, (boolean, errorMessage) =>
+  {
+    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
+
+    return callback(null);
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.updateServiceMaxFileSize = (serviceID, serviceMaxFileSize, databaseConnector, callback) =>
+{
+  databaseManager.updateQuery(
+  {
+    'databaseName': params.database.storage.label,
+    'tableName': params.database.storage.tables.services,
+    'args': { 'file_limit': serviceMaxFileSize },
     'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': serviceID } } }
 
   }, databaseConnector, (boolean, errorMessage) =>

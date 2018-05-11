@@ -1,58 +1,48 @@
 /****************************************************************************************************/
 
-.rightsDetailAccountInfo{ width:400px; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; max-width:400px; display:inline-block; margin:20px; }
+.accessDetailBlock{ width:600px; background-color:#FFFFFF; border-radius:4px; border:1px solid #E0E0E0; max-width:600px; margin:20px; display:inline-block; vertical-align:top; }
 
-.rightsDetailAccountInfoTitle{ font-family:roboto-light; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; padding:10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.accessDetailBlockTitle{ font-family:roboto-light; font-size:20px; line-height:24px; width:calc(100% - 20px); padding:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; border-bottom:1px solid #E0E0E0; }
 
-.rightsDetailAccountInfoKey{ font-family:roboto-light-italic; font-size:16px; line-height:24px; padding:10px 10px 5px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.accessDetailBlockApp{ padding:10px; }
 
-.rightsDetailAccountInfoValue{ font-family:roboto-light; font-size:16px; line-height:24px; padding:0 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.accessDetailBlockAppNameEnabled{ width:calc(100% - 76px); color:#5CB85C; font-family:roboto-light; line-height:28px; font-size:16px; display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-.rightsDetailApps{ width:400px; max-width:400px; display:inline-block; vertical-align:top; margin:20px; }
+.accessDetailBlockAppNameDisabled{ width:calc(100% - 76px); color:#D9534F; font-family:roboto-light; line-height:28px; font-size:16px; display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-.rightsDetailAppsRights{ width:100%; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; margin:0 0 20px 0; }
+.accessDetailBlockAppSwitchActive{ width:56px; display:inline-block; vertical-align:top; margin:0 10px 0 10px; cursor:pointer; }
 
-.rightsDetailAppsRightsTitle{ font-family:roboto-light; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; padding:10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.accessDetailBlockAppSwitchInactive{ width:56px; display:inline-block; vertical-align:top; margin:0 10px 0 10px; }
 
-.rightsDetailAppsRightsTrue{ width:calc(100% - 20px); color:#5CB85C; font-family:roboto-light; font-size:16px; line-height:24px; padding:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; display:inline-block; }
+.accessDetailBlockAppSwitchBackgroundEnabled{ width:56px; height:28px; background-color:#FFFFFF; border-radius:24px; content:''; position:relative; border:1px solid #428BCA; -webkit-transition-duration:500ms; transition-duration:500ms; -o-transition-duration:500ms; }
 
-.rightsDetailAppsRightsFalse{ width:calc(100% - 20px); color:#D9534F; font-family:roboto-light; font-size:16px; line-height:24px; padding:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; display:inline-block; }
+.accessDetailBlockAppSwitchBackgroundDisabled{ width:56px; height:28px; background-color:#FFFFFF; border-radius:24px; content:''; position:relative; border:1px solid #D9534F; -webkit-transition-duration:500ms; transition-duration:500ms; -o-transition-duration:500ms; }
 
-.rightsDetailAppsAccess{ width:100%; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; margin:0 0 20px 0; }
+.accessDetailBlockAppSwitchBackgroundInactive{ width:56px; height:28px; background-color:#FFFFFF; border-radius:24px; content:''; position:relative; border:1px solid #E0E0E0; -webkit-transition-duration:500ms; transition-duration:500ms; -o-transition-duration:500ms; }
 
-.rightsDetailAppsAccessTitle{ font-family:roboto-light; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; padding:10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.accessDetailBlockAppSwitchCircleEnabled{ width:24px; height:24px; position:absolute; top:2px; right:2px; content:''; background-color:#428BCA; border-radius:12px; -webkit-transition-duration:500ms; transition-duration:500ms; -o-transition-duration:500ms; }
 
-.rightsDetailAppsAccessKey{ width:calc(100% - 150px); font-family:roboto-light; font-size:16px; line-height:24px; padding:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; display:inline-block; }
+.accessDetailBlockAppSwitchCircleDisabled{ width:24px; height:24px; position:absolute; top:2px; left:2px; content:''; background-color:#D9534F; border-radius:12px; -webkit-transition-duration:500ms; transition-duration:500ms; -o-transition-duration:500ms; }
 
-.rightsDetailAppsAccessInactive{ display:inline-block; vertical-align:top; margin:10px 10px 10px 0; background-color:#E0E0E0; color:#FFFFFF; width:120px; border:none; border-radius:4px; line-height:18px; font-size:14px; padding:4px 0 4px 0; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+.accessDetailBlockAppSwitchCircleEnabledInactive{ width:24px; height:24px; position:absolute; top:2px; right:2px; content:''; background-color:#E0E0E0; border-radius:12px; -webkit-transition-duration:500ms; transition-duration:500ms; -o-transition-duration:500ms; }
 
-.rightsDetailAppsAccessTrue{ display:inline-block; vertical-align:top; margin:10px 10px 10px 0; background-color:#428BCA; color:#FFFFFF; width:120px; border:none; border-radius:4px; line-height:18px; font-size:14px; cursor:pointer; padding:4px 0 4px 0; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
-
-.rightsDetailAppsAccessTrue:hover{ color:#000000; background-color:#317AB9; }
-
-.rightsDetailAppsAccessFalse{ display:inline-block; vertical-align:top; margin:10px 10px 10px 0; background-color:#D9534F; color:#FFFFFF; width:120px; border:none; border-radius:4px; line-height:18px; font-size:14px; cursor:pointer; padding:4px 0 4px 0; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
-
-.rightsDetailAppsAccessFalse:hover{ color:#000000; background-color:#C8423E; }
+.accessDetailBlockAppSwitchCircleDisabledInactive{ width:24px; height:24px; position:absolute; top:2px; left:2px; content:''; background-color:#E0E0E0; border-radius:12px; -webkit-transition-duration:500ms; transition-duration:500ms; -o-transition-duration:500ms; }
 
 /****************************************************************************************************/
 
 @media (max-width: 319px)
 {
-  .rightsDetailAccountInfo{ width:calc(100% - 40px); margin:20px; }
-
-  .rightsDetailApps{ width:calc(100% - 40px); margin:20px; }
+  .accessDetailBlock{ width:calc(100% - 40px); }
 }
 
 @media (min-width: 320px) and (max-width: 479px)
 {
-  .rightsDetailAccountInfo{ width:calc(100% - 40px); margin:20px; }
-
-  .rightsDetailApps{ width:calc(100% - 40px); margin:20px; }
+  .accessDetailBlock{ width:calc(100% - 40px); }
 }
 
 @media (min-width: 480px) and (max-width: 639px)
 {
-
+  .accessDetailBlock{ width:calc(100% - 40px); }
 }
 
 @media (min-width: 640px) and (max-width: 779px)

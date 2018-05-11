@@ -67,6 +67,46 @@ router.get('/services', (req, res) =>
 
 /****************************************************************************************************/
 
+router.get('/services-rights', (req, res) =>
+{
+  if(req.app.locals.rights.consult_services_rights == 0)
+  {
+    res.render('block', { message: errors[constants.RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE] });
+  }
+
+  else
+  {
+    storageAppAdminGet.getServicesDetailForConsultation(req.app.get('mysqlConnector'), (error, servicesDetail) =>
+    {
+      if(error != null)
+      {
+        res.render('storage/admin/servicesRights/home',
+        {
+          account: req.session.account,
+          rights: req.app.locals.rights,
+          error: { message: errors[constants.error.code], detail: error.detail },
+          services: null,
+          strings: { common: commonAppStrings, storage: storageAppStrings }
+        });
+      }
+
+      else
+      {
+        res.render('storage/admin/servicesRights/home',
+        {
+          account: req.session.account,
+          rights: req.app.locals.rights,
+          error: null,
+          services: servicesDetail,
+          strings: { common: commonAppStrings, storage: storageAppStrings }
+        });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+
 router.get('/services/detail/:service', (req, res) =>
 {
   storageAppServicesGet.getServiceUsingName(req.params.service, req.app.get('mysqlConnector'), (error, service) =>

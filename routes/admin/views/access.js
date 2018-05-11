@@ -43,7 +43,72 @@ router.get('/', (req, res) =>
 
 router.get('/:account', (req, res) =>
 {
+  accountsGet.getAccountUsingUUID(req.params.account, req.app.get('mysqlConnector'), (error, account) =>
+  {
+    if(error != null)
+    {
+      res.render('admin/access/detail',
+      { 
+        account: req.session.account,
+        error: { message: errors[error.code], detail: error.detail == undefined ? null : error.detail },
+        strings: { common: commonAppStrings, admin: adminAppStrings },
+        detailedAccount: null,
+        currentAccountRights: null,
+        detailedAccountAccess: null
+      });
+    }
 
+    else
+    {
+      commonAppsAccess.getAppsAvailableForAccount(account.id, req.app.get('mysqlConnector'), (error, access) =>
+      {
+        if(error != null)
+        {
+          res.render('admin/access/detail',
+          { 
+            account: req.session.account,
+            error: { message: errors[error.code], detail: error.detail == undefined ? null : error.detail },
+            strings: { common: commonAppStrings, admin: adminAppStrings },
+            detailedAccount: null,
+            currentAccountRights: null,
+            detailedAccountAccess: null
+          });
+        }
+
+        else
+        {
+          if(req.app.locals.rights.consult_access == 0)
+          {
+            res.render('admin/access/detail',
+            { 
+              account: req.session.account,
+              error: { message: errors[constants.UNAUTHORIZED_TO_CONSULT_ACCOUNT_ACCESS], detail: null },
+              strings: { common: commonAppStrings, admin: adminAppStrings },
+              detailedAccount: null,
+              currentAccountRights: null,
+              detailedAccountAccess: null
+            });
+          }
+
+          else
+          {
+            delete access.id;
+            delete access.account;
+
+            res.render('admin/access/detail',
+            { 
+              account: req.session.account,
+              error: null,
+              strings: { common: commonAppStrings, admin: adminAppStrings },
+              detailedAccount: account,
+              currentAccountRights: req.app.locals.rights,
+              detailedAccountAccess: access
+            });
+          }
+        }
+      });
+    }
+  });
 });
 
 /****************************************************************************************************/

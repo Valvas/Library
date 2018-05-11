@@ -33,78 +33,102 @@ accountsCreate.createAccount = (account, databaseConnector, transporter, callbac
 
     else if(error != null && error.status != 404) return callback(error);
 
-    commonFormatEmail.checkEmailAddressFormat(account.email, (error, boolean) =>
+    else
     {
-      if(error != null) return callback(error);
-
-      if(boolean == false) return callback({ status: 406, code: constants.WRONG_EMAIL_FORMAT, target: 'email' });
-
-      commonFormatName.checkNameFormat(account.lastname, (error, boolean) =>
+      commonFormatEmail.checkEmailAddressFormat(account.email, (error, boolean) =>
       {
         if(error != null) return callback(error);
 
-        if(boolean == false) return callback({ status: 406, code: constants.WRONG_LASTNAME_FORMAT, target: 'lastname' });
+        else if(boolean == false) return callback({ status: 406, code: constants.WRONG_EMAIL_FORMAT, target: 'email' });
 
-        commonFormatName.checkNameFormat(account.firstname, (error, boolean) =>
+        else
         {
-          if(error != null) return callback(error);
-
-          if(boolean == false) return callback({ status: 406, code: constants.WRONG_FIRSTNAME_FORMAT, target: 'firstname' });
-
-          encryption.getRandomPassword((error, passwords) =>
+          commonFormatName.checkNameFormat(account.lastname, (error, boolean) =>
           {
             if(error != null) return callback(error);
 
-            databaseManager.insertQuery(
-            {
-              'databaseName': params.database.root.label,
-              'tableName': params.database.root.tables.accounts,
-              'uuid': true,
-              'args': { 'email': account.email, 'lastname': account.lastname, 'firstname': account.firstname, 'password': passwords.encrypted, 'suspended': 0 }
+            else if(boolean == false) return callback({ status: 406, code: constants.WRONG_LASTNAME_FORMAT, target: 'lastname' });
 
-            }, databaseConnector, (boolean, accountIDOrErrorMessage) =>
+            else
             {
-              if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR });
-
-              accountsCreate.createAccess(accountIDOrErrorMessage, databaseConnector, (error) =>
+              commonFormatName.checkNameFormat(account.firstname, (error, boolean) =>
               {
-                if(error != null)
-                {
-                  databaseManager.deleteQuery(
-                  {
-                    'databaseName': params.database.root.label,
-                    'tableName': params.database.root.tables.accounts,
-                    'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': accountIDOrErrorMessage } } }
-                    
-                  }, databaseConnector, (boolean, deletedRowsOrErrorMessage) =>
-                  {
-                    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: deletedRowsOrErrorMessage });
+                if(error != null) return callback(error);
 
-                    return callback(error);
-                  });
-                }
+                else if(boolean == false) return callback({ status: 406, code: constants.WRONG_FIRSTNAME_FORMAT, target: 'firstname' });
 
                 else
                 {
-                  commonEmailSend.sendEmail(
-                  {
-                    receiver: account.email,
-                    object: 'Votre mot de passe pour le portail des applications PEI',
-                    content: `<h1>BONJOUR</h1><div>Un compte vient d'être créé pour vous sur le portail des applications PEI.</div><div>Pour vous connecter il faut utiliser cette adresse email et le mot de passe suivant :</div><div style='font-weight:bold; margin:10px;'>${passwords.clear}</div>`
-
-                  }, transporter, (error) =>
+                  encryption.getRandomPassword((error, passwords) =>
                   {
                     if(error != null) return callback(error);
 
-                    return callback(null, constants.ACCOUNT_SUCCESSFULLY_CREATED);
+                    else
+                    {
+                      databaseManager.insertQuery(
+                      {
+                        'databaseName': params.database.root.label,
+                        'tableName': params.database.root.tables.accounts,
+                        'uuid': true,
+                        'args': { 'email': account.email, 'lastname': account.lastname, 'firstname': account.firstname, 'password': passwords.encrypted, 'suspended': 0 }
+
+                      }, databaseConnector, (boolean, accountIDOrErrorMessage) =>
+                      {
+                        if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR });
+
+                        else
+                        {
+                          accountsCreate.createAccess(accountIDOrErrorMessage, databaseConnector, (error) =>
+                          {
+                            if(error != null)
+                            {
+                              databaseManager.deleteQuery(
+                              {
+                                'databaseName': params.database.root.label,
+                                'tableName': params.database.root.tables.accounts,
+                                'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': accountIDOrErrorMessage } } }
+                                
+                              }, databaseConnector, (boolean, deletedRowsOrErrorMessage) =>
+                              {
+                                if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: deletedRowsOrErrorMessage });
+
+                                else
+                                {
+                                  return callback(error);
+                                }
+                              });
+                            }
+
+                            else
+                            {
+                              commonEmailSend.sendEmail(
+                              {
+                                receiver: account.email,
+                                object: 'Votre mot de passe pour le portail des applications PEI',
+                                content: `<h1>BONJOUR</h1><div>Un compte vient d'être créé pour vous sur le portail des applications PEI.</div><div>Pour vous connecter il faut utiliser cette adresse email et le mot de passe suivant :</div><div style='font-weight:bold; margin:10px;'>${passwords.clear}</div>`
+
+                              }, transporter, (error) =>
+                              {
+                                if(error != null) return callback(error);
+
+                                else
+                                {
+                                  return callback(null, constants.ACCOUNT_SUCCESSFULLY_CREATED);
+                                }
+                              });
+                            }
+                          });
+                        }
+                      });
+                    }
                   });
                 }
               });
-            });
+            }
           });
-        });
+        }
       });
-    });
+    }
   });
 }
 

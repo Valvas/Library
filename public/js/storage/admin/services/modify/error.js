@@ -53,6 +53,18 @@ function closeModifyPopup()
       });
     });
   }
+
+  if(document.getElementById('serviceMaxFileSizeModificationPopup'))
+  {
+    $(document.getElementById('serviceMaxFileSizeModificationPopup')).fadeOut(500, () =>
+    {
+      $(document.getElementById('serviceModificationBackground')).fadeOut(250, () =>
+      {
+        document.getElementById('serviceMaxFileSizeModificationPopup').remove();
+        document.getElementById('serviceModificationBackground').remove();
+      });
+    });
+  }
 }
 
 /****************************************************************************************************/

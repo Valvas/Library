@@ -17,7 +17,7 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  req.session.uuid == undefined ? res.render('index') : res.redirect('/home');
+  req.session.account == undefined ? res.render('index') : res.redirect('/home');
 });
 
 /****************************************************************************************************/

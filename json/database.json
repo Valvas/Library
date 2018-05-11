@@ -128,7 +128,9 @@
       "create_services": "BOOLEAN NOT NULL",
       "modify_services": "BOOLEAN NOT NULL",
       "remove_services": "BOOLEAN NOT NULL",
-      "modify_account_rights": "BOOLEAN NOT NULL"
+      "consult_services_rights": "BOOLEAN NOT NULL",
+      "add_services_rights": "BOOLEAN NOT NULL",
+      "remove_services_rights": "BOOLEAN NOT NULL"
     }
   }
 }

@@ -64,22 +64,6 @@ function checkDataForm()
 
   /****************************************************************************************************/
 
-  if(document.getElementById('database-name').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('database-name-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('database-name').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('database-name-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('database-name-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
   if(document.getElementById('database-manager').value.length == 0)
   {
     checkFilledFields = false;
@@ -105,22 +89,6 @@ function checkDataForm()
   }
 
   else{ document.getElementById('storage-root-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('storage-size').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('storage-size-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('storage-size').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('storage-size-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('storage-size-error').innerText = ''; }
 
   /*****************************************************************************************************
   EMAIL
@@ -267,13 +235,11 @@ function checkDataForm()
 
     formData.database.port        = document.getElementById('database-port').value;
     formData.database.user        = document.getElementById('database-user').value;
-    formData.database.name        = document.getElementById('database-name').value;
     formData.database.host        = document.getElementById('database-host').value;
     formData.database.manager     = document.getElementById('database-manager').value;
     formData.database.password    = document.getElementById('database-password').value;
 
     formData.storage.root         = document.getElementById('storage-root').value;
-    formData.storage.size         = document.getElementById('storage-size').value;
 
     formData.transporter.port     = document.getElementById('transporter-port').value;
     formData.transporter.user     = document.getElementById('transporter-user').value;

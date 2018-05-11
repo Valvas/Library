@@ -14,9 +14,7 @@
         <div class='header'>
           <div class='bookmark'><i class='fas fa-bookmark'></i></div><div class='location'><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %> / <%= strings.storage.locations.creation %></div>
         </div>
-        <div class='aside'>
-          <a href='/storage/admin/services' class='link <% if(rights.access_services == 1){ %>active<% }else{ %>inactive<% } %>'><%= strings.storage.admin.links.services %></a>
-        </div><!--
+        <% include ../../includes/admin/aside.ejs %><!--
         --><div class='form'>
           <% if(error != null){ %>
             <div class='error'>
@@ -43,9 +41,9 @@
             <div id='form-second-block' class='members'>
               <div class='title'><%= strings.storage.admin.services.form.title %></div>
               <button class='back' id='form-back-to-extension-block'><%= strings.storage.admin.services.form.back %></button>
-              <% if(rights.modify_account_rights == 1){ %><button class='add' id='form-second-block-add-member'><%= strings.storage.admin.services.form.add %></button><% } %>
+              <% if(rights.add_services_rights == 1){ %><button class='add' id='form-second-block-add-member'><%= strings.storage.admin.services.form.add %></button><% } %>
               <button class='send' id='form-second-block-send-form'><%= strings.storage.admin.services.form.send %></button>
-              <% if(rights.modify_account_rights == 1){ %>
+              <% if(rights.add_services_rights == 1){ %>
                 <div class='rights'>
                   <div class='legend'>
                     <div class='label'><i class='fas fa-comments'></i></div><!--

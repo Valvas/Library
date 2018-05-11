@@ -37,12 +37,6 @@
           <div class='info'>Entrez ici le mot de passe correspondant au compte entré juste au-dessus.</div>
         </div>
         <div class='field'>
-          <div class='label'>Nom de la base de données :</div>
-          <div class='error' id='database-name-error'></div>
-          <input type='text' class='value' placeholder='Nom de la base de données' id='database-name' value='<%= data.database.name %>' />
-          <div class='info'>Entrez ici le nom de la base de données à utiliser (elle sera créée si elle n'existe pas).</div>
-        </div>
-        <div class='field'>
           <div class='label'>Gestionnaire de base de données :</div>
           <div class='error' id='database-manager-error'></div>
           <select class='value' id='database-manager'>
@@ -59,12 +53,6 @@
           <div class='error' id='storage-root-error'></div>
           <input type='text' class='value' placeholder='Dossier racine' id='storage-root' value='<%= data.storage.root %>' />
           <div class='info'>Le chemin d'accès au dossier racine du stockage.</div>
-        </div>
-        <div class='field'>
-          <div class='label'>Taille maximale des fichiers :</div>
-          <div class='error' id='storage-size-error'></div>
-          <input type='text' class='value' placeholder='Taille maximale' id='storage-size' value='<%= parseInt(data.storage.maxFileSize / 1024) %>' />
-          <div class='info'>La taille est exprimée en Ko (1024 Ko valent 1 Mo).</div>
         </div>
       </div>
       <div class='block'>

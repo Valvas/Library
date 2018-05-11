@@ -17,13 +17,11 @@ module.exports.checkConfigDataFormat = (object, params, callback) =>
 
   object.database.port        == undefined ||
   object.database.user        == undefined ||
-  object.database.name        == undefined ||
   object.database.host        == undefined ||
   object.database.manager     == undefined ||
   object.database.password    == undefined ||
 
   object.storage.root         == undefined ||
-  object.storage.size         == undefined ||
 
   object.transporter.port     == undefined ||
   object.transporter.user     == undefined ||
@@ -37,44 +35,37 @@ module.exports.checkConfigDataFormat = (object, params, callback) =>
 
   callback({ status: 406, message: `${errors[constants.MISSING_DATA_IN_REQUEST].charAt(0).toUpperCase()}${errors[constants.MISSING_DATA_IN_REQUEST].slice(1)}` }) :
 
-  checkStorageFileMaxSize(object.storage.size, params, (newSize) =>
+  checkAppTimeout(object.other.timeout, params, (newTimeout) =>
   {
-    object.storage.size = newSize;
+    object.other.timeout = newTimeout;
 
-    checkAppTimeout(object.other.timeout, params, (newTimeout) =>
+    checkAppPort(object.other.port, params, (newPort) =>
     {
-      object.other.timeout = newTimeout;
+      object.other.port = newPort;
 
-      checkAppPort(object.other.port, params, (newPort) =>
+      checkEnvironment(object.other.environment, params, (newEnvironment) =>
       {
-        object.other.port = newPort;
+        object.other.environment = newEnvironment;
 
-        checkEnvironment(object.other.environment, params, (newEnvironment) =>
-        {
-          object.other.environment = newEnvironment;
+        params.database.host        = object.database.host;
+        params.database.port        = object.database.port;
+        params.database.user        = object.database.user;
+        params.database.dbms        = object.database.manager;
+        params.database.password    = object.database.password;
 
-          params.database.host        = object.database.host;
-          params.database.port        = object.database.port;
-          params.database.user        = object.database.user;
-          params.database.name        = object.database.name;
-          params.database.dbms        = object.database.manager;
-          params.database.password    = object.database.password;
+        params.storage.root         = object.storage.root;
 
-          params.storage.root         = object.storage.root;
-          params.storage.maxFileSize  = parseInt(object.storage.size * 1024);
+        params.transporter.user     = object.transporter.user;
+        params.transporter.port     = object.transporter.port;
+        params.transporter.secure   = object.transporter.secure == 'true' ? true : false;
+        params.transporter.address  = object.transporter.address;
+        params.transporter.password = object.transporter.password;
 
-          params.transporter.user     = object.transporter.user;
-          params.transporter.port     = object.transporter.port;
-          params.transporter.secure   = object.transporter.secure == 'true' ? true : false;
-          params.transporter.address  = object.transporter.address;
-          params.transporter.password = object.transporter.password;
+        params.timeout              = object.other.timeout;
+        params.port                 = object.other.port;
+        params.init.keepSalt        = object.other.salt == 'true' ? true : false;
 
-          params.timeout              = object.other.timeout;
-          params.port                 = object.other.port;
-          params.init.keepSalt        = object.other.salt == 'true' ? true : false;
-
-          callback(null);
-        });
+        callback(null);
       });
     });
   });

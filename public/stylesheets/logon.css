@@ -1,14 +1,12 @@
-body{ margin:0; background-color:#556677; }
+body{ margin:0; background-color:#F9F9F9; }
 
-.logo{ position:absolute; top:0; left:0; }
+.main{ background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; width:500px; margin:80px calc(50% - 250px) 80px calc(50% - 250px); padding:0; box-sizing:border-box; }
 
-.main{ background-color:#FFFFFF; box-sizing:border-box; border-radius:4px; width:500px; margin:80px calc(50% - 250px) 80px calc(50% - 250px); padding:0; }
-
-.title{ border-bottom:1px solid #F0F0F0; padding:20px 40px 10px 40px; font-size:20px; line-height:24px; font-family:barlow; margin:0 0 20px 0; }
+.title{ border-bottom:1px solid #E0E0E0; padding:20px 40px 10px 40px; font-size:20px; line-height:24px; font-family:barlow; margin:0 0 20px 0; }
 
 .icon{ margin:10px 0 10px 40px; padding:8px 0 0 0; border-radius:4px 0 0 4px; background-color:#428BCA; display:inline-block; height:32px; width:64px; text-align:center; color:#F9F9F9; box-sizing:border-box; font-size:16px; }
 
-.input{ margin:10px 40px 10px 0; width:calc(100% - 144px); display:inline-block; vertical-align:top; box-sizing:border-box; height:32px; padding:0 0 0 10px; border:1px solid #DDDDDD; }
+.input{ margin:10px 40px 10px 0; border-radius:0 4px 4px 0; width:calc(100% - 144px); display:inline-block; vertical-align:top; box-sizing:border-box; height:32px; padding:0 0 0 10px; border:1px solid #E0E0E0; }
 
 .send{ width:120px; padding:4px 0 4px 0; cursor:pointer; border-radius:4px; margin:10px 40px 20px calc(100% - 160px); border:none; background-color:#D9534F; color:#FFFFFF; font-family:barlow; line-height:24px; font-size:16px; }
 
@@ -28,7 +26,45 @@ body{ margin:0; background-color:#556677; }
 
 .question:hover{ color:#223344; }
 
-@media all and (max-width: 539px)
+/****************************************************************************************************/
+
+@media all and (max-width: 319.9px)
 {
-  .main{ width:90%; margin:80px 5% 80px 5%; }
+  .main{ width:calc(100% - 40px); margin:40px 20px 40px 20px; }
+
+  .title{ padding:20px 20px 10px 20px; }
+
+  .icon{ display:none; }
+
+  .input{ width:calc(100% - 40px); margin:10px 20px 10px 20px; border-radius:4px; }
+
+  .send{ margin:10px 20px 20px calc(100% - 140px); }
 }
+
+@media all and (min-width: 320px) and (max-width: 479px)
+{
+  .main{ width:calc(100% - 40px); margin:40px 20px 40px 20px; }
+
+  .title{ padding:20px 20px 10px 20px; }
+
+  .icon{ display:none; }
+
+  .input{ width:calc(100% - 40px); margin:10px 20px 10px 20px; border-radius:4px; }
+
+  .send{ margin:10px 20px 20px calc(100% - 140px); }
+}
+
+@media all and (min-width: 480px) and (max-width: 639px)
+{
+  .main{ width:calc(100% - 40px); margin:40px 20px 40px 20px; }
+
+  .title{ padding:20px 20px 10px 20px; }
+
+  .icon{ display:none; }
+
+  .input{ width:calc(100% - 40px); margin:10px 20px 10px 20px; border-radius:4px; }
+
+  .send{ margin:10px 20px 20px calc(100% - 140px); }
+}
+
+/****************************************************************************************************/

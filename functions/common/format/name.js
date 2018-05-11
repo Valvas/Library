@@ -10,7 +10,7 @@ module.exports.checkNameFormat = (name, callback) =>
 
   else
   {
-    callback(null, new RegExp('[a-zA-Z]+-?[a-zA-Z]+').test(name));
+    callback(null, new RegExp('^[a-zA-Z]+-?[a-zA-Z]+$').test(name));
   }
 }
 

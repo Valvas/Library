@@ -4,7 +4,7 @@
 
 .rights .info{ font-family:barlow; font-size:18px; line-height:24px; margin:0 20px 10px 20px; }
 
-.rights .category{ width:300px; margin:0 20px 20px 20px; background-color:#FFFFFF; border-radius:4px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
+.rights .category{ display:inline-block; vertical-align:top; width:300px; margin:0 20px 20px 20px; background-color:#FFFFFF; border-radius:4px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); }
 
 .rights .category .title{ background-color:#428BCA; color:#FFFFFF; border-radius:4px 4px 0 0; padding:10px; font-family:barlow; font-size:20px; line-height:24px; margin:0 0 10px 0; }
 

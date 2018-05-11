@@ -14,9 +14,7 @@
         <div class='header'>
           <div class='bookmark'><i class='fas fa-bookmark'></i></div><div class='location'><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %> / <%= strings.storage.locations.consultation %></div>
         </div>
-        <div class='aside'>
-          <a href='/storage/admin/services' class='link <% if(rights.access_services == 1){ %>active<% }else{ %>inactive<% } %>'><%= strings.storage.admin.links.services %></a>
-        </div><!--
+        <% include ../../includes/admin/aside.ejs %><!--
         --><div class='services'>
           <% if(error != null){ %>
             <div class='error'>

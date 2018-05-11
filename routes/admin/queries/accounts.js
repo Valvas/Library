@@ -72,7 +72,9 @@ router.post('/modify', (req, res) =>
 
         else
         {
-          if(rights.modify_accounts == 0) res.status(403).send({ result: false, message: errors[constants.UNAUTHORIZED_TO_MODIFY_ACCOUNTS] });
+          if(fields.suspended != undefined && rights.suspend_accounts == 0) res.status(403).send({ result: false, message: errors[constants.UNAUTHORIZED_TO_SUSPEND_ACCOUNTS] });
+
+          else if(fields.suspended == undefined && rights.modify_accounts == 0) res.status(403).send({ result: false, message: errors[constants.UNAUTHORIZED_TO_MODIFY_ACCOUNTS] });
 
           else
           {

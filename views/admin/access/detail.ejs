@@ -5,7 +5,7 @@
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <link rel='stylesheet' type='text/css' href='/stylesheets/admin/base.css' />
   <link rel='stylesheet' type='text/css' href='/stylesheets/admin/navigation.css' />
-  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/rights.css' />
+  <link rel='stylesheet' type='text/css' href='/stylesheets/admin/access.css' />
   <body>
     <div id='blur'>
       <% include ../include/navigation.ejs %>
@@ -16,52 +16,63 @@
           <% if(error.detail != null){ %><div class='errorBlockDetail'><%= error.detail %></div><% } %>
         </div>
       <% } else{ %>
-        <div class='rightsDetailAccountInfo'>
-          <div class='rightsDetailAccountInfoTitle'><%= strings.admin.rights.detail.accountInfo.title %></div>
-          <div class='rightsDetailAccountInfoKey'><%= strings.admin.rights.detail.accountInfo.email %></div>
-          <div class='rightsDetailAccountInfoValue'><%= account.email %></div>
-          <div class='rightsDetailAccountInfoKey'><%= strings.admin.rights.detail.accountInfo.lastname %></div>
-          <div class='rightsDetailAccountInfoValue'><%= account.lastname.toUpperCase() %></div>
-          <div class='rightsDetailAccountInfoKey'><%= strings.admin.rights.detail.accountInfo.firstname %></div>
-          <div class='rightsDetailAccountInfoValue'><%= account.firstname.charAt(0).toUpperCase() %><%= account.firstname.slice(1).toLowerCase() %></div>
-          <div class='rightsDetailAccountInfoKey'><%= strings.admin.rights.detail.accountInfo.suspended %></div>
-          <div class='rightsDetailAccountInfoValue'><% if(account.suspended == 0){ %>Non<% } else{ %>Oui<% } %></div>
+        <div class='accountDetailInfo' id='accessDetailAccountInfo' name='<%= detailedAccount.uuid %>'>
+          <div class='accountDetailInfoTitle'><%= strings.admin.rights.detail.accountInfo.title %></div>
+          <div class='accountDetailInfoKey'><%= strings.admin.rights.detail.accountInfo.email %></div>
+          <div class='accountDetailInfoValue'><%= detailedAccount.email %></div>
+          <div class='accountDetailInfoKey'><%= strings.admin.rights.detail.accountInfo.lastname %></div>
+          <div class='accountDetailInfoValue'><%= detailedAccount.lastname.toUpperCase() %></div>
+          <div class='accountDetailInfoKey'><%= strings.admin.rights.detail.accountInfo.firstname %></div>
+          <div class='accountDetailInfoValue'><%= detailedAccount.firstname.charAt(0).toUpperCase() %><%= detailedAccount.firstname.slice(1).toLowerCase() %></div>
+          <div class='accountDetailInfoKey'><%= strings.admin.rights.detail.accountInfo.suspended %></div>
+          <div class='accountDetailInfoValue'><% if(detailedAccount.suspended == 0){ %>Non<% } else{ %>Oui<% } %></div>
         </div>
-        <div class='rightsDetailApps'>
-          <div class='rightsDetailAppsRights'>
-            <div class='rightsDetailAppsRightsTitle'><%= strings.admin.rights.detail.administrationRights.title %></div>
-            <% if(rights.access_accounts == 1){ %><div class='rightsDetailAppsRightsTrue'><%= strings.admin.rights.detail.administrationRights.accessAccounts.true %></div><% } else{ %><div class='rightsDetailAppsRightsFalse'><%= strings.admin.rights.detail.administrationRights.accessAccounts.false %></div><% } %>
-            <% if(rights.create_accounts == 1){ %><div class='rightsDetailAppsRightsTrue'><%= strings.admin.rights.detail.administrationRights.createAccounts.true %></div><% } else{ %><div class='rightsDetailAppsRightsFalse'><%= strings.admin.rights.detail.administrationRights.createAccounts.false %></div><% } %>
-            <% if(rights.modify_accounts == 1){ %><div class='rightsDetailAppsRightsTrue'><%= strings.admin.rights.detail.administrationRights.modifyAccounts.true %></div><% } else{ %><div class='rightsDetailAppsRightsFalse'><%= strings.admin.rights.detail.administrationRights.modifyAccounts.false %></div><% } %>
-            <% if(rights.suspend_accounts == 1){ %><div class='rightsDetailAppsRightsTrue'><%= strings.admin.rights.detail.administrationRights.suspendAccounts.true %></div><% } else{ %><div class='rightsDetailAppsRightsFalse'><%= strings.admin.rights.detail.administrationRights.suspendAccounts.false %></div><% } %>
-            <% if(rights.remove_accounts == 1){ %><div class='rightsDetailAppsRightsTrue'><%= strings.admin.rights.detail.administrationRights.removeAccounts.true %></div><% } else{ %><div class='rightsDetailAppsRightsFalse'><%= strings.admin.rights.detail.administrationRights.removeAccounts.false %></div><% } %>
-            <% if(rights.add_access == 1){ %><div class='rightsDetailAppsRightsTrue'><%= strings.admin.rights.detail.administrationRights.addAccess.true %></div><% } else{ %><div class='rightsDetailAppsRightsFalse'><%= strings.admin.rights.detail.administrationRights.addAccess.false %></div><% } %>
-            <% if(rights.remove_access == 1){ %><div class='rightsDetailAppsRightsTrue'><%= strings.admin.rights.detail.administrationRights.removeAccess.true %></div><% } else{ %><div class='rightsDetailAppsRightsFalse'><%= strings.admin.rights.detail.administrationRights.removeAccess.false %></div><% } %>
-          </div>
-          <div class='rightsDetailAppsAccess'>
-            <div class='rightsDetailAppsAccessTitle'><%= strings.admin.rights.detail.appsAccess.title %></div>
-            <% for(var key in access){ %>
-              <% if(strings.admin.rights.detail.appsAccess.apps[key] != undefined){ %>
-                <% if(access[key] == 0){ %>
-                  <% if(rights.add_access == 1){ %>
-                    <div class='rightsDetailAppsAccessKey' name='<%= key %>'><%= strings.admin.rights.detail.appsAccess.apps[key] %></div><button name='giveAccess' title="Cliquer pour donner accès à cette application" class='rightsDetailAppsAccessTrue'><%= strings.admin.rights.detail.appsAccess.giveAccess %></button>
-                  <% } else{ %>
-                    <div class='rightsDetailAppsAccessKey' name='<%= key %>'><%= strings.admin.rights.detail.appsAccess.apps[key] %></div><button title="Vous n'avez pas les droits requis" class='rightsDetailAppsAccessInactive'><%= strings.admin.rights.detail.appsAccess.giveAccess %></button>
-                  <% } %>
+        <div class='accessDetailBlock'>
+          <div class='accessDetailBlockTitle'><%= strings.admin.appsAccess.title %></div>
+          <% for(var key in detailedAccountAccess){ %>
+            <div class='accessDetailBlockApp' id='<%= key %>'>
+              <% if(detailedAccountAccess[key] == 1){ %>
+                <% if(currentAccountRights.remove_access == 1){ %>
+                  <div class='accessDetailBlockAppNameEnabled'><%= strings.admin.appsAccess.apps[key] %></div><!--
+                --><div class='accessDetailBlockAppSwitchActive' onclick='removeAccess("<%= key %>")' title='<%= strings.admin.appsAccess.removeAccess.authorized %>'>
+                    <div class='accessDetailBlockAppSwitchBackgroundEnabled'>
+                      <div class='accessDetailBlockAppSwitchCircleEnabled'></div>
+                    </div>
+                  </div>
                 <% } else{ %>
-                  <% if(rights.remove_access == 1){ %>
-                    <div class='rightsDetailAppsAccessKey' name='<%= key %>'><%= strings.admin.rights.detail.appsAccess.apps[key] %></div><button name='takeOfAccess' title="Cliquer pour retirer l'accès à cette application" class='rightsDetailAppsAccessFalse'><%= strings.admin.rights.detail.appsAccess.takeOfAccess %></button>
-                  <% } else{ %>
-                    <div class='rightsDetailAppsAccessKey' name='<%= key %>'><%= strings.admin.rights.detail.appsAccess.apps[key] %></div><button title="Vous n'avez pas les droits requis" class='rightsDetailAppsAccessInactive'><%= strings.admin.rights.detail.appsAccess.takeOfAccess %></button>
-                  <% } %>
+                  <div class='accessDetailBlockAppNameEnabled'><%= strings.admin.appsAccess.apps[key] %></div><!--
+                --><div class='accessDetailBlockAppSwitchInactive' title='<%= strings.admin.appsAccess.removeAccess.unauthorized %>'>
+                    <div class='accessDetailBlockAppSwitchBackgroundInactive'>
+                      <div class='accessDetailBlockAppSwitchCircleEnabledInactive'></div>
+                    </div>
+                  </div>
+                <% } %>
+              <% } else{ %>
+                <% if(currentAccountRights.add_access == 1){ %>
+                  <div class='accessDetailBlockAppNameDisabled'><%= strings.admin.appsAccess.apps[key] %></div><!--
+                --><div class='accessDetailBlockAppSwitchActive' onclick='addAccess("<%= key %>")' title='<%= strings.admin.appsAccess.giveAccess.authorized %>'>
+                    <div class='accessDetailBlockAppSwitchBackgroundDisabled'>
+                      <div class='accessDetailBlockAppSwitchCircleDisabled'></div>
+                    </div>
+                  </div>
+                <% } else{ %>
+                  <div class='accessDetailBlockAppNameDisabled'><%= strings.admin.appsAccess.apps[key] %></div><!--
+                --><div class='accessDetailBlockAppSwitchInactive' title='<%= strings.admin.appsAccess.giveAccess.unauthorized %>'>
+                    <div class='accessDetailBlockAppSwitchBackgroundInactive'>
+                      <div class='accessDetailBlockAppSwitchCircleDisabledInactive'></div>
+                    </div>
+                  </div>
                 <% } %>
               <% } %>
-            <% } %>
-          </div>
+            </div>
+          <% } %>
         </div>
       <% } %>
     </div>
     <% include ../include/scripts.ejs %>
     <script src='/socket.io/socket.io.js'></script>
+    <script src='/js/admin/access/detailSocket.js'></script>
+    <script src='/js/admin/access/addAccess.js'></script>
+    <script src='/js/admin/access/removeAccess.js'></script>
   </body>
 </html>

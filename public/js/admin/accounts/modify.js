@@ -715,7 +715,7 @@ function sendSuspendStatusToServer(event)
       document.getElementById('modify-account-detail').removeAttribute('style');
       document.getElementById('modify-account-background').removeAttribute('style');
 
-      if(xhr.status == 500 || xhr.status == 404 || xhr.status == 406)
+      if(xhr.status == 500 || xhr.status == 404 || xhr.status == 406 || xhr.status == 401 || xhr.status == 403)
       {
         if(document.getElementById('modify-account-warning')) document.getElementById('modify-account-warning').remove();
 

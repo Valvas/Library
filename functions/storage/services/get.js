@@ -258,6 +258,41 @@ module.exports.getAmountOfFilesFromService = (serviceID, databaseConnector, call
 
 /****************************************************************************************************/
 
+module.exports.getMembersFromService = (serviceID, databaseConnector, callback) =>
+{
+  serviceID           == undefined ||
+  databaseConnector   == undefined ?
+
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
+
+  databaseManager.selectQuery(
+  {
+    'databaseName': params.database.storage.label,
+    'tableName': params.database.storage.tables.rights,
+    'args': { '0': '*' },
+    'where': { '0': { 'operator': '=', '0': { 'key': 'service', 'value': serviceID } } }
+
+  }, databaseConnector, (boolean, membersOrErrorMessage) =>
+  {
+    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: membersOrErrorMessage });
+
+    else if(membersOrErrorMessage.length == 0) return callback(null, {});
+
+    var x = 0, members = {};
+
+    var browseMembers = () =>
+    {
+      members[membersOrErrorMessage[x].account] = membersOrErrorMessage[x];
+
+      membersOrErrorMessage[x += 1] != undefined ? browseMembers() : callback(null, members);
+    }
+
+    browseMembers();
+  });
+}
+
+/****************************************************************************************************/
+
 module.exports.getAmountOfMembersFromService = (serviceID, databaseConnector, callback) =>
 {
   serviceID           == undefined ||

@@ -20,5 +20,10 @@
   "20019": "Service créé avec succès",
   "20020": "Service supprimé avec succès",
   "20021": "Le nom du service n'a pas été mis à jour car il est identique au précédent",
-  "20022": "Le nom du service a été mis à jour avec succès"
+  "20022": "Le nom du service a été mis à jour avec succès",
+  "20023": "Le droit a été supprimé avec succès",
+  "20024": "Le droit a été ajouté avec succès",
+  "20025": "L'accès a été ajouté avec succès",
+  "20026": "L'accès a été supprimé avec succès",
+  "20027": "La taille maximale des fichiers pour ce service a été mise à jour avec succès"
 }

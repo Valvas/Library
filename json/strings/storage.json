@@ -4,9 +4,19 @@
     "home":
     {
       "info": "Voici les droits que vous possédez concernant l'administration de cette application",
+      "rights":
+      {
+        "label": "Gestion des droits sur les services",
+        "rights":
+        {
+          "access": "Consulter les droits",
+          "create": "Ajouter des droits",
+          "remove": "Retirer des droits"
+        }
+      },
       "services":
       {
-        "label": "Services",
+        "label": "Gestion des services",
         "rights":
         {
           "access": "Consulter les services",
@@ -18,7 +28,9 @@
     },
     "links":
     {
-      "services": "Services"
+      "admin": "Droits d'administration",
+      "rights": "Droits sur les services",
+      "services": "Gestion des services"
     },
     "services":
     {
@@ -71,7 +83,7 @@
       "info":
       {
         "files": "Nombre de fichiers en ligne",
-        "limit": "Taille maximale des fichiers autorisée",
+        "limit": "Taille maximale des fichiers",
         "members": "Personnes ayant des droits sur ce service",
         "modify": "Modifier",
         "remove": "Supprimer"
@@ -80,15 +92,18 @@
       {
         "popup":
         {
+          "activeConfirmation": "Cliquer ici pour envoyer cette nouvelle valeur",
           "cancelButton": "Annuler",
           "confirmButton": "Envoyer",
           "currentLabel": "Nom actuel",
           "currentSize": "Taille actuelle",
+          "inactiveConfirmation": "Veuillez entrer une taille valide avant de pouvoir envoyer",
           "newLabel": "Nouveau nom",
           "newLabelPlaceholder": "Entrer un nom",
           "newSize": "Nouvelle taille"
         },
-        "serviceFileSizeLimit": "Taille maximale des fichiers",
+        "maxFileSize": "Taille maximale des fichiers",
+        "minFileSize": "Taille minimale des fichiers",
         "serviceIdentifier": "Identifiant du service",
         "serviceLabel": "Nom du service",
         "title": "Modification du service"
@@ -102,6 +117,91 @@
           "warning": "Attention : les fichiers liés à ce service seront aussi supprimés"
         }
       }
+    },
+    "servicesRights":
+    {
+      "accountsBlock":
+      {
+        "addSelected": "Ajouter (0)",
+        "close": "Fermer",
+        "empty": "Aucun compte à afficher",
+        "header":
+        {
+          "email": "Adresse email",
+          "firstname": "Prénom",
+          "lastname": "Nom"
+        },
+        "help": "Voici la liste des comptes ayant accès à l'application mais n'ayant pas de droits sur ce service",
+        "searchPlaceholder": "Rechercher un compte",
+        "title": "Liste des comptes"
+      },
+      "errorBlock":
+      {
+        "title": "Une erreur est survenue"
+      },
+      "loadingPopup":
+      {
+        "cancel": "Annuler",
+        "message": "Récupération des données depuis le serveur",
+        "title": "Chargement en cours..."
+      },
+      "manageMembers": "Gérer les membres",
+      "members": "Membres",
+      "membersBlock":
+      {
+        "rightsButton": "Droits",
+        "empty": "Aucun utilisateur ne possède de droits sur ce service pour le moment",
+        "header":
+        {
+          "add": "Ajouter",
+          "close": "Fermer",
+          "email": "Adresse email",
+          "firstname": "Prénom",
+          "lastname": "Nom"
+        },
+        "hints":
+        {
+          "accountsBlock":
+          {
+            "addOne": "Cliquer ici pour ajouter ce compte",
+            "addSelected": "Cliquer ici pour ajouter les comptes cochés",
+            "searchBar": "Entrer une valeur à rechercher parmi les comptes (adresse email, nom, prénom)",
+            "selectAll": "Cliquer ici pour sélectionner/désélectionner tous les comptes",
+            "selectOne": "Cliquer ici pour sélectionner ce compte"
+          },
+          "addMember":
+          {
+            "true": "Cliquer ici pour ajouter un membre à ce service",
+            "false": "Vous ne possédez pas les droits requis pour ajouter un membre"
+          },
+          "closeMembers": "Cliquer ici pour revenir à la liste des services",
+          "commentFiles": "Commenter des fichiers",
+          "downloadFiles": "Télécharger des fichiers",
+          "modifyRights": "Cliquer ici pour ouvrir la fenêtre de modification des droits",
+          "removeFiles": "Supprimer des fichiers",
+          "revokeAccess":
+          {
+            "true": "Retirer l'accès à ce service pour cet utilisateur",
+            "false": "Vous n'êtes pas autorisé(e) à retirer l'accès à ce service à cet utilisateur"
+          },
+          "update":
+          {
+            "addRight":
+            {
+              "true": "Cliquer ici pour donner ce droit à l'utilisateur pour ce service",
+              "false": "Vous n'êtes pas autorisé(e) à donner des droits aux utilisateurs"
+            },
+            "removeRight":
+            {
+              "true": "Cliquer ici pour retirer ce droit à l'utilisateur pour ce service",
+              "false": "Vous n'êtes pas autorisé(e) à retirer des droits aux utilisateurs"
+            }
+          },
+          "uploadFiles": "Envoyer des fichiers"
+        },
+        "title": "Liste des membres"
+      },
+      "return": "Retour"
     }
   },
 
@@ -113,6 +213,7 @@
     "consultation": "Consultation",
     "creation": "Création",
     "home": "Accueil",
+    "rights": "Droits sur les services",
     "services": "Services"
   },
 

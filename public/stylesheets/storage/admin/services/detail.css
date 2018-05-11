@@ -58,6 +58,20 @@
 
 .serviceModificationPopupContentInputTrue{ display:inline-block; vertical-align:top; font-size:2em; width:32px; height:32px; margin:0 0 0 4px; color:#5CB85C; }
 
+.serviceModificationPopupContentFileSizeInput{ position:relative; display:inline-block; border:1px solid #E0E0E0; font-family:barlow; font-size:16px; line-height:24px; border-radius:4px; padding:0 0 0 4px; width:calc(100% - 82px); }
+
+.serviceModificationPopupContentFileSizeSelect{ display:inline-block; vertical-align:top; border:1px solid #E0E0E0; font-family:barlow; font-size:16px; line-height:24px; border-radius:4px; padding:0; width:76px; height:26px; }
+
+.serviceModificationPopupContentFileSizeConfirmActive{ color:#428BCA; font-size:2em; width:32px; height:32px; cursor:pointer; display:inline-block; margin:20px calc(50% - 42px) 10px 10px; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceModificationPopupContentFileSizeConfirmActive:hover{ color:#317AB9; }
+
+.serviceModificationPopupContentFileSizeConfirmInactive{ color:#E0E0E0; font-size:2em; width:32px; height:32px; display:inline-block; margin:20px calc(50% - 42px) 10px 10px; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceModificationPopupContentFileSizeCancel{ cursor:pointer; color:#D9534F; font-size:2em; width:32px; height:32px; display:inline-block; margin:20px 10px 10px calc(50% - 42px); -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+
+.serviceModificationPopupContentFileSizeCancel:hover{ color:#C8423E; }
+
 .serviceModificationPopupContentConfirmInactive{ border:none; border-radius:4px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#D0D0D0; padding:4px 0 4px 0; width:100px; margin:20px 0 10px calc(100% - 210px); -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
 .serviceModificationPopupContentConfirmActive{ border:none; border-radius:4px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#428BCA; padding:4px 0 4px 0; width:100px; margin:20px 0 10px calc(100% - 210px); cursor:pointer; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
@@ -71,6 +85,12 @@
 .serviceModificationPopupContentHint{ position:absolute; bottom:105px; left:120px; background:#428BCA; border-radius:4px; line-height:18px; font-size:14px; color:#FFFFFF; font-family:barlow-italic; width:max-content; padding:4px 8px 4px 8px; }
 
 .serviceModificationPopupContentHint:after{ content:''; position:absolute; bottom:0; left:10%; width:0; height:0; border:10px solid transparent; border-top-color:#428BCA; border-bottom:0; border-left:0; margin-left:-10px; margin-bottom:-10px; }
+
+.serviceModificationPopupContentFileSizeInputHelp{ position:absolute; bottom:110px; left:160px; background:#428BCA; border-radius:4px; line-height:18px; font-size:14px; color:#FFFFFF; font-family:barlow-italic; width:max-content; padding:4px 8px 4px 8px; }
+
+.serviceModificationPopupContentFileSizeInputHelp:after{ content:''; position:absolute; bottom:0; left:10%; width:0; height:0; border:10px solid transparent; border-top-color:#428BCA; border-bottom:0; border-left:0; margin-left:-10px; margin-bottom:-10px; }
+
+.serviceModificationPopupLoading{ font-size:3em; color:#428BCA; text-align:center; position:absolute; top:calc(50% - 32px); left:0; width:100%; }
 
 /****************************************************************************************************/
 

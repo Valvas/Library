@@ -9,14 +9,14 @@
   <body>
     <% include ../../includes/navigation.ejs %>
     <a class='serviceDetailBack' href='/storage/admin/services'>Retour</a>
-    <div class='serviceDetailBlock'>
+    <div class='serviceDetailBlock' id='serviceDetailBlock' name='<%= service.name %>'>
       <div class='serviceDetailBlockTitle'><%= strings.storage.admin.services.modify.title %></div>
       <div class='serviceDetailBlockKey'><%= strings.storage.admin.services.modify.serviceIdentifier %> :</div>
       <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent' id='serviceName'><%= service.name %></div><div title="Cette valeur n'est pas modifiable" class='serviceDetailBlockValueLock'><i class='fas fa-lock'></i></div></div>
       <div class='serviceDetailBlockKey'><%= strings.storage.admin.services.modify.serviceLabel %> :</div>
       <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent' id='serviceLabel'><%= service.label %></div><div title='Cliquer ici pour modifier le nom du service' class='serviceDetailBlockValueEdit' id='openServiceLabelModificationPopup'><i class='fas fa-pencil-alt'></i></div></div>
-      <div class='serviceDetailBlockKey'><%= strings.storage.admin.services.modify.serviceFileSizeLimit %> :</div>
-      <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent'><% if(parseInt(service.file_limit / 1024 / 1024 / 1024, 10) > 0){ %><%= parseInt(service.file_limit / 1024 / 1024 / 1024, 10) %>Go<% } else if(parseInt(service.file_limit / 1024 / 1024, 10) > 0){ %><%= parseInt(service.file_limit / 1024 / 1024, 10) %>Mo<% } else if(parseInt(service.file_limit / 1024, 10) > 0){ %><%= parseInt(service.file_limit / 1024, 10) %>Ko<% } else{ %><%= service.file_limit %>o<% } %></div><div title='Cliquer ici pour changer la taille maximale des fichiers autorisés' class='serviceDetailBlockValueEdit' id='openServiceMaxFileSizeModificationPopup'><i class='fas fa-pencil-alt'></i></div></div>
+      <div class='serviceDetailBlockKey'><%= strings.storage.admin.services.modify.maxFileSize %> :</div>
+      <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent' id='serviceFileSize'><% if(Math.floor(service.file_limit / 1024 / 1024 / 1024) >= 1){ %><%= (service.file_limit / 1024 / 1024 / 1024).toFixed(2) %>Go<% } else if(Math.floor(service.file_limit / 1024 / 1024) >= 1){ %><%= (service.file_limit / 1024 / 1024).toFixed(2) %>Mo<% } else if(Math.floor(service.file_limit / 1024) >= 1){ %><%= (service.file_limit / 1024).toFixed(2) %>Ko<% } else{ %><%= service.file_limit %>o<% } %></div><div title='Cliquer ici pour changer la taille maximale des fichiers autorisés' class='serviceDetailBlockValueEdit' id='openServiceMaxFileSizeModificationPopup'><i class='fas fa-pencil-alt'></i></div></div>
     </div>
     <script src='/js/jQuery.js'></script>
     <script src='/js/afk.js'></script>
@@ -24,6 +24,7 @@
     <script src='/js/fontawesome.js'></script>
     <script src='/js/navigation/menu.js'></script>
     <script src='/js/navigation/account.js'></script>
+    <script src='/js/storage/admin/services/modify/detailSocket.js'></script>
     <script src='/js/storage/admin/services/modify/error.js'></script>
     <script src='/js/storage/admin/services/modify/success.js'></script>
     <script src='/js/storage/admin/services/modify/label.js'></script>

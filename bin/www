@@ -25,6 +25,10 @@ require('../app')((app) =>
     socket.on('adminAppAccountsDetailJoin', (accountUUID) => { socket.join(accountUUID); })
     socket.on('storageAppServicesDetailJoin', (serviceName) => { socket.join(serviceName); });
     socket.on('storageAppAdminServicesList', () => { socket.join('storageAppAdminServicesList'); });
+    socket.on('adminAppRightsDetailJoin', (accountUUID) => { socket.join('adminAppRightsDetail ' + accountUUID); });
+    socket.on('adminAppAccessDetailJoin', (accountUUID) => { socket.join('adminAppAccessDetail ' + accountUUID); });
+    socket.on('storageAppAdminServiceDetailJoin', (serviceName) => { socket.join('admin' + serviceName); });
+    socket.on('storageAppAdminServicesRightsJoin', (serviceName) => { socket.join('adminServicesRights'); });
 
     socket.on('accountCreated', (accountEmail) => 
     {
@@ -48,6 +52,16 @@ require('../app')((app) =>
       socket.to(accountUUID).emit('accountRemovedOnDetail');
     });
 
+    socket.on('accountRightsUpdated', (accountUUID, rights, strings) =>
+    {
+      io.in('adminAppRightsDetail ' + accountUUID).emit('updateRights', null, rights, strings);
+    });
+
+    socket.on('accountAccessUpdated', (accountUUID, access, strings) =>
+    {
+      io.in('adminAppAccessDetail ' + accountUUID).emit('updateAccess', null, access, strings);
+    });
+
     socket.on('storageAppServicesfileUploaded', (fileID, serviceName) =>
     {
       storageAppFilesGet.getFileFromDatabaseUsingID(fileID, app.get('mysqlConnector'), (error, file) =>
@@ -64,6 +78,26 @@ require('../app')((app) =>
     socket.on('storageAppAdminServiceRemoved', (serviceName) =>
     {
       io.in('storageAppAdminServicesList').emit('serviceRemoved', null, serviceName);
+    });
+
+    socket.on('storageAppAdminServiceLabelUpdated', (serviceName, serviceLabel) =>
+    {
+      io.in('admin' + serviceName).emit('serviceLabelUpdated', null, serviceLabel);
+    });
+
+    socket.on('storageAppAdminServiceFileSizeUpdated', (serviceName, serviceFileSize) =>
+    {
+      io.in('admin' + serviceName).emit('serviceFileSizeUpdated', null, serviceFileSize);
+    });
+
+    socket.on('storageAppAdminServicesRightsAccountAddedToMembers', (account) =>
+    {
+      io.in('adminServicesRights').emit('accountAddedToMembers', account);
+    });
+
+    socket.on('storageAppAdminServicesRightsAccountRemovedFromMembers', (account) =>
+    {
+      io.in('adminServicesRights').emit('accountRemovedFromMembers', account);
     });
   });
 

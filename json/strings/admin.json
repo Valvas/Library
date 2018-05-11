@@ -24,6 +24,27 @@
     }
   },
 
+  "appsAccess":
+  {
+    "apps":
+    {
+      "admin": "Administration",
+      "disease": "Arrêts de travail",
+      "storage": "Stockage"
+    },
+    "giveAccess":
+    {
+      "authorized": "Cliquer ici pour donner accès à cette application pour cet utilisateur",
+      "unauthorized": "Vous n'êtes pas autorisé(e) à donner accès aux applications"
+    },
+    "removeAccess":
+    {
+      "authorized": "Cliquer ici pour retirer l'accès à cette application pour cet utilisateur",
+      "unauthorized": "Vous n'êtes pas autorisé(e) à retirer l'accès aux applications"
+    },
+    "title": "Accès aux applications"
+  },
+
   "appName": "Administration",
 
   "detail":
@@ -49,6 +70,41 @@
     "exit": "Quitter l'application",
     "home": "Accueil",
     "rights": "Gestion des droits"
+  },
+
+  "prompts":
+  {
+    "addAccess":
+    {
+      "cancel": "Non",
+      "confirm": "Oui",
+      "message": "Êtes-vous sûr(e) de vouloir donner accès à cette application à cet utilisateur ?"
+    },
+    "addRight":
+    {
+      "cancel": "Non",
+      "confirm": "Oui",
+      "message": "Êtes-vous sûr(e) de vouloir ajouter ce droit à cet utilisateur ?"
+    },
+    "exit":
+    {
+      "cancel": "Non",
+      "confirm": "Oui",
+      "message": "Êtes-vous sûr(e) de vouloir quitter l'application ?",
+      "title": "Quitter"
+    },
+    "removeAccess":
+    {
+      "cancel": "Non",
+      "confirm": "Oui",
+      "message": "Êtes-vous sûr(e) de vouloir retirer l'accès à cette application à cet utilisateur ?"
+    },
+    "removeRight":
+    {
+      "cancel": "Non",
+      "confirm": "Oui",
+      "message": "Êtes-vous sûr(e) de vouloir retirer ce droit à cet utilisateur ?"
+    }
   },
 
   "rights":
@@ -93,19 +149,6 @@
         "removeRights": "Supprimer des droits",
         "suspendAccounts": "Suspendre des comptes",
         "title": "Droits de ce compte"
-      },
-
-      "appsAccess":
-      {
-        "apps":
-        {
-          "admin": "Administration",
-          "disease": "Arrêts de travail",
-          "storage": "Stockage"
-        },
-        "giveAccess": "Donner l'accès",
-        "takeOfAccess": "Retirer l'accès",
-        "title": "Accès aux applications"
       },
 
       "errorBlock":

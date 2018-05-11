@@ -240,9 +240,9 @@ function sendNewServiceLabel()
 
       }).done((json) =>
       {
-        document.getElementById('serviceLabel').innerText = value;
-
         displayPopupSuccess(json.message, json.detail);
+
+        socket.emit('storageAppAdminServiceLabelUpdated', document.getElementById('serviceDetailBlock').getAttribute('name'), value);
       });
     });
   });

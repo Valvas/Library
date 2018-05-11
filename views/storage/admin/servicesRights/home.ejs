@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <title><%= strings.storage.name %> - <%= strings.storage.locations.admin %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/aside.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/membersBlock.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/accountsBlock.css" />
+  <body>
+    <div id='blockToBlur'>
+      <% include ../../includes/navigation.ejs %>
+      <button class='rightsOnServicesReturn' id='rightsOnServicesReturn'><%= strings.storage.admin.servicesRights.return %></button>
+      <% if(error != null){ %>
+        <div class='rightsOnServicesErrorBlock'>
+          <div class='rightsOnServicesErrorBlockTitle'><%= strings.storage.admin.servicesRights.errorBlock.title %></div>
+          <div class='rightsOnServicesErrorBlockMessage'><%= error.message %></div>
+          <div class='rightsOnServicesErrorBlockDetail'><%= error.detail %></div>
+        </div>
+      <% } else{ %>
+        <div class='rightsOnServicesHomeServicesBlock' id='rightsOnServicesHomeServicesBlock'>
+          <% for(var service in services){ %>
+            <div class='rightsOnServicesHomeServicesBlockService'>
+              <div class='rightsOnServicesHomeServicesBlockServiceLabel'><%= services[service].label.charAt(0).toUpperCase() %><%= services[service].label.slice(1).toLowerCase() %></div>
+              <div class='rightsOnServicesHomeServicesBlockServiceMembers'>
+                <div class='rightsOnServicesHomeServicesBlockServiceMembersKey'><%= strings.storage.admin.servicesRights.members %></div><div class='rightsOnServicesHomeServicesBlockServiceMembersValue'><%= services[service].members %></div>
+              </div>
+              <button class='rightsOnServicesHomeServicesBlockServiceManage' onclick='hideServicesBlocks("<%= service %>")'>
+                <div class='rightsOnServicesHomeServicesBlockServiceManageIcon'><i class='fas fa-users'></i></div><div class='rightsOnServicesHomeServicesBlockServiceManageText'><%= strings.storage.admin.servicesRights.manageMembers %></div>
+              </button>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+    <script src='/js/jQuery.js'></script>
+    <script src='/js/jQueryUI.js'></script>
+    <script src='/js/afk.js'></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='/js/fontawesome.js'></script>
+    <script src='/js/navigation/menu.js'></script>
+    <script src='/js/navigation/account.js'></script>
+    <script src='/js/storage/admin/servicesRights/return.js'></script>
+    <script src='/js/storage/admin/servicesRights/changeMembersPage.js'></script>
+    <script src='/js/storage/admin/servicesRights/openServiceDetail.js'></script>
+    <script src='/js/storage/admin/servicesRights/servicesRightsSocket.js'></script>
+    <script src='/js/storage/admin/servicesRights/removeMemberFromList.js'></script>
+    <script src='/js/storage/admin/servicesRights/accountsBlock/selectAccount.js'></script>
+    <script src='/js/storage/admin/servicesRights/accountsBlock/addAccountToMembers.js'></script>
+    <script src='/js/storage/admin/servicesRights/accountsBlock/changeAccountsBlockPage.js'></script>
+    <script src='/js/storage/admin/servicesRights/accountsBlock/updateAccountsBlockPages.js'></script>
+    <script src='/js/storage/admin/servicesRights/accountsBlock/searchAccounts.js'></script>
+    <script src='/js/storage/admin/servicesRights/accountsBlock/openAccountsBlock.js'></script>
+    <script src='/js/storage/admin/servicesRights/accountsBlock/closeAccountsBlock.js'></script>
+  </body>
+</html>

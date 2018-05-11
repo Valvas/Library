@@ -78,5 +78,13 @@
   "10077": "Vous n'êtes pas autorisé(e) à modifier des services",
   "10078": "Le format du nom du service est incorrect",
   "10079": "Un email n'a pas pu être envoyé",
-  "10080": "Vous n'êtes pas autorisé(e) à consulter les droits des comptes"
+  "10080": "Vous n'êtes pas autorisé(e) à consulter les droits des comptes",
+  "10081": "Vous n'êtes pas autorisé(e) à supprimer des droits",
+  "10082": "Vous n'êtes pas aurotisé(e) à ajouter des droits",
+  "10083": "Vous n'êtes pas autorisé(e) à modifier le statut de suspension d'un compte",
+  "10084": "Vous n'êtes pas autorisé(e) à consulter les accès des comptes",
+  "10085": "Vous n'êtes pas autorisé(e) à donner accès à des applications",
+  "10086": "Vous n'êtes pas autorisé(e) à retirer l'accès à des applications",
+  "10087": "La taille dépasse les limites autorisées",
+  "10088": "Vous n'êtes pas autorisé(e) à consulter les droits des comptes sur les services"
 }

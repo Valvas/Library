@@ -45,6 +45,31 @@ body{ margin:0; }
 
 .loader .box .button:hover{ color:#000000; }
 
+
+.storageBackground{ position:fixed; z-index:20; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.4; }
+
+.storagePopup{ position:absolute; z-index:30; top:80px; width:400px; max-width:400px; left:calc(50% - 200px); margin:0 0 40px 0; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; box-sizing:border-box; }
+
+.storagePopupTitle{ font-family:roboto-light; line-height:24px; font-size:20px; padding:10px; border-bottom:1px solid #E0E0E0; }
+
+.storagePopupSpinner{ font-size:3em; color:#5CB85C; width:calc(100% - 40px); padding:20px 20px 0 20px; text-align:center; }
+
+.storagePopupMessage{ font-size:16px; line-height:24px; text-align:center; padding:0 20px 20px 20px; width:calc(100% - 40px); color:#428BCA; vertical-align:top; font-family:roboto-light; }
+
+.storagePopupCancel{ cursor:pointer; border:none; border-radius:4px; font-size:14px; font-family:roboto-light; padding:4px 0 4px 0; width:100px; margin:10px 10px 10px calc(100% - 110px); color:#FFFFFF; background-color:#D9534F; transition-duration:0.5s; -o-transition-duration:0.5s; -webkit-transition-duration:0.5s; }
+
+.storagePopupCancel:hover{ background-color:#C8423E; color:#000000; }
+
+.storagePopupErrorBlock{ padding:10px; }
+
+.storagePopupErrorBlockMessage{ font-family:roboto-light; color:#D9534F; line-height:24px; font-size:16px; }
+
+.storagePopupErrorBlockClose{ cursor:pointer; border:none; border-radius:4px; font-size:14px; font-family:roboto-light; padding:4px 0 4px 0; width:100px; margin:10px 10px 10px calc(100% - 110px); color:#FFFFFF; background-color:#428BCA; transition-duration:0.5s; -o-transition-duration:0.5s; -webkit-transition-duration:0.5s; }
+
+.storagePopupErrorBlockClose:hover{ color:#000000; background-color:#317AB9; }
+
+.storagePopupErrorBlockDetail{ font-family:roboto-light-italic; color:#B0B0B0; line-height:18px; font-size:14px; }
+
 /****************************************************************************************************/
 
 @media (max-width: 319px)
@@ -54,6 +79,8 @@ body{ margin:0; }
   .main .error{ width:calc(100% - 40px); margin:20px; }
 
   .loader .box{ width:calc(100% - 40px); margin:20px; }
+
+  .storagePopup{ width:calc(100% - 40px); left:20px; top:40px; }
 }
 
 @media (min-width: 320px) and (max-width: 479px)
@@ -63,6 +90,8 @@ body{ margin:0; }
   .main .error{ width:calc(100% - 40px); margin:20px; }
 
   .loader .box{ width:calc(100% - 40px); margin:20px; }
+
+  .storagePopup{ width:calc(100% - 40px); left:20px; top:40px; }
 }
 
 @media (min-width: 480px) and (max-width: 639px)

@@ -6,11 +6,11 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/block.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/logon.css" />
-  <body class='logon-body'>
-    <% include include/logs.ejs %>
-    <div class='block-page'>
-        <p class='message'><%= message %></p>
-        <a class='link' href='/home'>Accueil</a>
+  <body>
+    <div class='blockPage'>
+      <div class='blockPageTitle'>Oops !</div>
+      <div class='blockPageMessage'><%= message %></div>
+      <a class='blockPageLink' href='<%= link %>'>Retour</a>
     </div>
   </body>
 </html>

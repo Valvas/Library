@@ -4,25 +4,53 @@
 
 body{ margin:0; background-color:#F9F9F9; }
 
-.background{ position:fixed; top:0; bottom:0; left:0; right:0; z-index:10; }
+.adminAppBackground{ position:fixed; top:0; bottom:0; left:0; right:0; z-index:10; }
 
 .headerLocation{ position:relative; font-family:roboto-light; line-height:24px; font-size:20px; color:#FFFFFF; background-color:#428BCA; border-radius:0 4px 4px 0; margin:10px 0 10px 0; padding:5px 20px 5px 20px; width:max-content; max-width:calc(100% - 20px); box-sizing:border-box; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-.prompt{ width:400px; position:absolute; top:40px; left:calc(50% - 200px); background-color:#FFFFFF; border-radius:4px; border:1px solid #E0E0E0; z-index:20; padding:0 0 10px 0; }
+.adminAppPrompt{ width:400px; position:absolute; left:calc(50% - 200px); background-color:#FFFFFF; border-radius:4px; border:1px solid #E0E0E0; z-index:20; padding:0 0 10px 0; margin:0 0 40px 0; top:40px; }
 
-.prompt .title{ background-color:#D9534F; color:#FFFFFF; border-radius:4px 4px 0 0; font-size:20px; line-height:24px; padding:10px; font-family:roboto-light; }
+.adminAppPromptTitle{ background-color:#D9534F; color:#FFFFFF; border-radius:4px 4px 0 0; font-size:20px; line-height:24px; padding:10px; font-family:roboto-light; }
 
-.prompt .message{ padding:10px; color:#D9534F; font-family:roboto-light; line-height:24px; font-size:16px; }
+.adminAppPromptLoading{ color:#5CB85C; font-size:3em; text-align:center; padding:20px 0 20px 0; }
 
-.prompt .confirm{ -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; width:80px; border:none; border-radius:4px; padding:4px 8px 4px 8px; color:#FFFFFF; background-color:#D9534F; cursor:pointer; line-height:24px; font-size:16px; font-family:roboto-light; display:inline-block; vertical-align:top; margin:0 0 0 calc(100% - 180px); }
+.adminAppPromptMessage{ padding:10px; color:#D9534F; font-family:roboto-light; line-height:24px; font-size:16px; }
 
-.prompt .confirm:hover{ color:#000000; background-color:#C8423E; }
+.adminAppPromptConfirm{ -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; width:80px; border:none; border-radius:4px; padding:4px 8px 4px 8px; color:#FFFFFF; background-color:#D9534F; cursor:pointer; line-height:24px; font-size:16px; font-family:roboto-light; display:inline-block; vertical-align:top; margin:0 0 0 calc(100% - 180px); }
 
-.prompt .cancel{ -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; width:80px; border:none; border-radius:4px; padding:4px 8px 4px 8px; color:#FFFFFF; background-color:#428BCA; cursor:pointer; line-height:24px; font-size:16px; font-family:roboto-light; display:inline-block; vertical-align:top; margin:0 10px 0 10px; }
+.adminAppPromptConfirm:hover{ color:#000000; background-color:#C8423E; }
 
-.prompt .cancel:hover{ color:#000000; background-color:#317AB9; }
+.adminAppPromptCancel{ -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; width:80px; border:none; border-radius:4px; padding:4px 8px 4px 8px; color:#FFFFFF; background-color:#428BCA; cursor:pointer; line-height:24px; font-size:16px; font-family:roboto-light; display:inline-block; vertical-align:top; margin:0 10px 0 10px; }
+
+.adminAppPromptCancel:hover{ color:#000000; background-color:#317AB9; }
+
+.adminAppPromptErrorBlock{ padding:10px; }
+
+.adminAppPromptErrorMessage{ color:#D9534F; font-family:roboto-light; font-size:16px; line-height:24px; margin:0 0 10px 0; }
+
+.adminAppPromptErrorClose{ width:60px; margin:0 0 0 calc(100% - 60px); -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:roboto-light; color:#FFFFFF; background-color:#428BCA; cursor:pointer; }
+
+.adminAppPromptErrorClose:hover{ color:#000000; background-color:#317AB9; }
+
+.adminAppPromptErrorDetail{ color:#D0D0D0; font-size:14px; line-height:18px; font-family:roboto-light-italic; text-align:justify; margin:10px 0 0 0; }
+
+.adminAppPromptSuccessBlock{ padding:10px; }
+
+.adminAppPromptSuccessMessage{ color:#5CB85C; font-family:roboto-light; font-size:16px; line-height:24px; margin:0 0 10px 0; }
+
+.adminAppPromptSuccessClose{ width:60px; margin:0 0 0 calc(100% - 60px); -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:roboto-light; color:#FFFFFF; background-color:#428BCA; cursor:pointer; }
+
+.adminAppPromptSuccessClose:hover{ color:#000000; background-color:#317AB9; }
 
 .accounts{ position:relative; box-sizing:border-box; background-color:#FFFFFF; border:1px solid #F0F0F0; border-radius:4px; width:800px; margin:20px; padding:0 0 5px 0; display:inline-block; vertical-align:top; }
+
+.accountDetailInfo{ width:400px; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; max-width:400px; display:inline-block; margin:20px; }
+
+.accountDetailInfoTitle{ font-family:roboto-light; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; padding:10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.accountDetailInfoKey{ font-family:roboto-light-italic; font-size:16px; line-height:24px; padding:10px 10px 5px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.accountDetailInfoValue{ font-family:roboto-light; font-size:16px; line-height:24px; padding:0 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
 
 .accounts .popup{ position:absolute; top:0; left:0; right:0; }
 
@@ -88,7 +116,9 @@ body{ margin:0; background-color:#F9F9F9; }
 
 @media (max-width: 319px)
 {
-  .prompt{ width:95%; top:40px; left:2.5%; }
+  .adminAppPrompt{ width:95%; left:2.5%; margin:0 0 20px 0; top:20px; }
+
+  .accountDetailInfo{ width:calc(100% - 40px); margin:20px; }
 
   .accounts{ width:calc(100% - 40px); margin:20px; }
 
@@ -97,7 +127,9 @@ body{ margin:0; background-color:#F9F9F9; }
 
 @media (min-width: 320px) and (max-width: 479px)
 {
-  .prompt{ width:95%; top:40px; left:2.5%; }
+  .adminAppPrompt{ width:95%; left:2.5%; margin:0 0 20px 0; top:20px; }
+
+  .accountDetailInfo{ width:calc(100% - 40px); margin:20px; }
 
   .accounts{ width:calc(100% - 40px); margin:20px; }
 

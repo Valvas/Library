@@ -207,9 +207,10 @@ router.get('/end', (req, res) =>
   {
     setTimeout(() => 
     { 
-      req.app.get('params').ready = true;
+      var params = req.app.get('params');
+      params.ready = true;
       
-      fs.writeFile(`${__root}/json/params.json`, JSON.stringify(req.app.get('params')), (err) =>
+      fs.writeFile(`${__root}/json/params.json`, JSON.stringify(params), (err) =>
       {
         if(err) res.status(500).send({ result: false, message: 'Could not write new configuration in file' });
 
