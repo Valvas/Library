@@ -99,6 +99,16 @@ require('../app')((app) =>
     {
       io.in('adminServicesRights').emit('accountRemovedFromMembers', account);
     });
+
+    socket.on('storageAppAdminServicesRightAddedToMember', (accountUUID, right) =>
+    {
+      io.in('adminServicesRights').emit('rightAddedToMember', accountUUID, right);
+    });
+
+    socket.on('storageAppAdminServicesRightRemovedToMember', (accountUUID, right) =>
+    {
+      io.in('adminServicesRights').emit('rightRemovedToMember', accountUUID, right);
+    });
   });
 
   /****************************************************************************************************/

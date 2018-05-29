@@ -103,6 +103,110 @@ router.post('/remove-access-to-a-service', (req, res) =>
 
 /****************************************************************************************************/
 
+router.post('/add-right-on-service', (req, res) =>
+{
+  if(req.body.accountUUID == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account is missing from the request' });
+
+  else if(req.body.right == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Right is missing from the request' });
+
+  else if(req.body.service == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
+
+  else if(req.body.right != 'comment' && req.body.right != 'upload' && req.body.right != 'download' && req.body.right != 'remove') res.status(406).send({ message: errors[constants.RIGHT_DOES_NOT_EXIST], detail: null });
+
+  else
+  {
+    storageAppServicesGet.getServiceUsingName(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      else
+      {
+        accountsGet.getAccountUsingUUID(req.body.accountUUID, req.app.get('mysqlConnector'), (error, account) =>
+        {
+          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+          else
+          {
+            storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
+            {
+              if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+              else if(rights.add_services_rights == 0) res.status(403).send({ message: errors[constants.UNAUTHORIZED_TO_ADD_RIGHTS], detail: null });
+
+              else
+              {
+                storageAppAdminServices.addRightOnService(account.id, service.id, req.body.right, req.app.get('mysqlConnector'), (error) =>
+                {
+                  if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+                  else
+                  {
+                    res.status(200).send({ result: true });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+
+router.post('/remove-right-on-service', (req, res) =>
+{
+  if(req.body.accountUUID == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account is missing from the request' });
+
+  else if(req.body.right == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Right is missing from the request' });
+
+  else if(req.body.service == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
+
+  else if(req.body.right != 'comment' && req.body.right != 'upload' && req.body.right != 'download' && req.body.right != 'remove') res.status(406).send({ message: errors[constants.RIGHT_DOES_NOT_EXIST], detail: null });
+
+  else
+  {
+    storageAppServicesGet.getServiceUsingName(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      else
+      {
+        accountsGet.getAccountUsingUUID(req.body.accountUUID, req.app.get('mysqlConnector'), (error, account) =>
+        {
+          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+          else
+          {
+            storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
+            {
+              if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+              else if(rights.remove_services_rights == 0) res.status(403).send({ message: errors[constants.UNAUTHORIZED_TO_REMOVE_RIGHTS], detail: null });
+
+              else
+              {
+                storageAppAdminServices.removeRightOnService(account.id, service.id, req.body.right, req.app.get('mysqlConnector'), (error) =>
+                {
+                  if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+                  else
+                  {
+                    res.status(200).send({ result: true });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+
 router.get('/get-accounts-that-have-access-to-the-app', (req, res) =>
 {
   if(req.app.locals.rights.create_services == 0) res.status(403).send({ result: false, message: errors[constants.RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE] });

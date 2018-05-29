@@ -164,10 +164,10 @@ function addAccountToMembersBlock(rights, account, strings)
 
   else
   {
-    accountRowRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>';
-    accountRowRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>';
-    accountRowRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>';
-    accountRowRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>';
+    accountRowRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '" onclick="addRight(\'' + account.uuid + '\', \'comment\')"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>';
+    accountRowRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '" onclick="addRight(\'' + account.uuid + '\', \'upload\')"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>';
+    accountRowRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '" onclick="addRight(\'' + account.uuid + '\', \'download\')"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>';
+    accountRowRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '" onclick="addRight(\'' + account.uuid + '\', \'remove\')"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>';
     accountRowRights.innerHTML += '<button class="membersBlockListAccountsElementRightsButton" title="' + strings.admin.servicesRights.membersBlock.hints.modifyRights + '"><i class="fas fa-pencil-alt"></i></button>';
   }
 
@@ -263,6 +263,7 @@ socket.on('accountRemovedFromMembers', (accountUUID) =>
               var accountToAdd = document.createElement('div');
 
               accountToAdd.setAttribute('id', account.uuid);
+              accountToAdd.setAttribute('name', 'displayed');
               accountToAdd.setAttribute('class', 'accountsBlockListElementsAccount');
 
               accountToAdd.innerHTML  = '<div class="accountsBlockListElementsAccountBox"><input class="accountsBlockListElementsAccountBoxInput" type="checkbox"></div>';
@@ -287,6 +288,8 @@ socket.on('accountRemovedFromMembers', (accountUUID) =>
               }
 
               document.getElementById('rightsOnServicesHomeAccountsBlockListElements').insertBefore(accountToAdd, document.getElementById('rightsOnServicesHomeAccountsBlockListElements').children[0]);
+              
+              accountToAdd.children[0].children[0].addEventListener('change', selectAccount);
 
               searchAccounts();
             });
@@ -297,6 +300,268 @@ socket.on('accountRemovedFromMembers', (accountUUID) =>
 
         if(members[x] != undefined) browseMembersToRemoveSelectedOne();
       });
+    });
+  });
+});
+
+/****************************************************************************************************/
+
+socket.on('rightAddedToMember', (accountUUID, right) =>
+{
+  $.ajax(
+  {
+    method: 'GET',
+    dataType: 'json',
+    timeout: 2000,
+    url: '/queries/storage/admin/get-account-admin-rights',
+
+    error: (xhr, textStatus, errorThrown) => {  }
+
+  }).done((json) =>
+  {
+    const rights = json.rights;
+
+    $.ajax(
+    {
+      method: 'GET',
+      dataType: 'json',
+      timeout: 2000,
+      url: '/queries/storage/strings',
+  
+      error: (xhr, textStatus, errorThrown) => {  }
+  
+    }).done((json) =>
+    {
+      const strings = json.strings;
+
+      var accounts = document.getElementsByClassName('membersBlockListAccountsElement');
+
+      var selectedAccount = null;
+
+      var x = 0;
+
+      var browseAccountsToFindSelectedOne = () =>
+      {
+        if(accounts[x].getAttribute('name') == accountUUID) selectedAccount = accounts[x];
+
+        if(selectedAccount == null && accounts[x += 1] != undefined) browseAccountsToFindSelectedOne();
+      }
+
+      if(accounts[x] != undefined) browseAccountsToFindSelectedOne();
+
+      switch(right)
+      {
+        case 'comment':
+
+          if(rights.remove_services_rights == 0)
+          {
+            selectedAccount.children[1].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundInactive');
+            selectedAccount.children[1].children[0].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.removeRight.false);
+            selectedAccount.children[1].children[0].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleEnabledInactive');
+            selectedAccount.children[1].children[0].children[0].removeAttribute('onclick');
+          }
+
+          else
+          {
+            selectedAccount.children[1].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundEnabled');
+            selectedAccount.children[1].children[0].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.removeRight.true);
+            selectedAccount.children[1].children[0].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleEnabled');
+            selectedAccount.children[1].children[0].children[0].setAttribute('onclick', 'removeRight("' + accountUUID + '", "' + right + '")');
+          }
+
+        break;
+        
+        case 'upload':
+
+          if(rights.remove_services_rights == 0)
+          {
+            selectedAccount.children[1].children[1].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundInactive');
+            selectedAccount.children[1].children[1].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.removeRight.false);
+            selectedAccount.children[1].children[1].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleEnabledInactive');
+            selectedAccount.children[1].children[1].children[0].removeAttribute('onclick');
+          }
+
+          else
+          {
+            selectedAccount.children[1].children[1].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundEnabled');
+            selectedAccount.children[1].children[1].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.removeRight.true);
+            selectedAccount.children[1].children[1].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleEnabled');
+            selectedAccount.children[1].children[1].children[0].setAttribute('onclick', 'removeRight("' + accountUUID + '", "' + right + '")');
+          }
+
+        break;
+
+        case 'download':
+
+          if(rights.remove_services_rights == 0)
+          {
+            selectedAccount.children[1].children[2].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundInactive');
+            selectedAccount.children[1].children[2].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.removeRight.false);
+            selectedAccount.children[1].children[2].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleEnabledInactive');
+            selectedAccount.children[1].children[2].children[0].removeAttribute('onclick');
+          }
+
+          else
+          {
+            selectedAccount.children[1].children[2].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundEnabled');
+            selectedAccount.children[1].children[2].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.removeRight.true);
+            selectedAccount.children[1].children[2].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleEnabled');
+            selectedAccount.children[1].children[2].children[0].setAttribute('onclick', 'removeRight("' + accountUUID + '", "' + right + '")');
+          }
+
+        break;
+
+        case 'remove':
+
+          if(rights.remove_services_rights == 0)
+          {
+            selectedAccount.children[1].children[3].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundInactive');
+            selectedAccount.children[1].children[3].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.removeRight.false);
+            selectedAccount.children[1].children[3].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleEnabledInactive');
+            selectedAccount.children[1].children[3].children[0].removeAttribute('onclick');
+          }
+
+          else
+          {
+            selectedAccount.children[1].children[3].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundEnabled');
+            selectedAccount.children[1].children[3].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.removeRight.true);
+            selectedAccount.children[1].children[3].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleEnabled');
+            selectedAccount.children[1].children[3].children[0].setAttribute('onclick', 'removeRight("' + accountUUID + '", "' + right + '")');
+          }
+
+        break;
+      }
+    });
+  });
+});
+
+/****************************************************************************************************/
+
+socket.on('rightRemovedToMember', (accountUUID, right) =>
+{
+  $.ajax(
+  {
+    method: 'GET',
+    dataType: 'json',
+    timeout: 2000,
+    url: '/queries/storage/admin/get-account-admin-rights',
+
+    error: (xhr, textStatus, errorThrown) => {  }
+
+  }).done((json) =>
+  {
+    const rights = json.rights;
+
+    $.ajax(
+    {
+      method: 'GET',
+      dataType: 'json',
+      timeout: 2000,
+      url: '/queries/storage/strings',
+  
+      error: (xhr, textStatus, errorThrown) => {  }
+  
+    }).done((json) =>
+    {
+      const strings = json.strings;
+
+      var accounts = document.getElementsByClassName('membersBlockListAccountsElement');
+
+      var selectedAccount = null;
+
+      var x = 0;
+
+      var browseAccountsToFindSelectedOne = () =>
+      {
+        if(accounts[x].getAttribute('name') == accountUUID) selectedAccount = accounts[x];
+
+        if(selectedAccount == null && accounts[x += 1] != undefined) browseAccountsToFindSelectedOne();
+      }
+
+      if(accounts[x] != undefined) browseAccountsToFindSelectedOne();
+
+      switch(right)
+      {
+        case 'comment':
+
+          if(rights.add_services_rights == 0)
+          {
+            selectedAccount.children[1].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundInactive');
+            selectedAccount.children[1].children[0].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.addRight.false);
+            selectedAccount.children[1].children[0].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleDisabledInactive');
+            selectedAccount.children[1].children[0].children[0].removeAttribute('onclick');
+          }
+
+          else
+          {
+            selectedAccount.children[1].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundDisabled');
+            selectedAccount.children[1].children[0].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.addRight.true);
+            selectedAccount.children[1].children[0].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleDisabled');
+            selectedAccount.children[1].children[0].children[0].setAttribute('onclick', 'addRight("' + accountUUID + '", "' + right + '")');
+          }
+          
+        break;
+        
+        case 'upload':
+
+          if(rights.add_services_rights == 0)
+          {
+            selectedAccount.children[1].children[1].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundInactive');
+            selectedAccount.children[1].children[1].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.addRight.false);
+            selectedAccount.children[1].children[1].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleDisabledInactive');
+            selectedAccount.children[1].children[1].children[0].removeAttribute('onclick');
+          }
+
+          else
+          {
+            selectedAccount.children[1].children[1].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundDisabled');
+            selectedAccount.children[1].children[1].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.addRight.true);
+            selectedAccount.children[1].children[1].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleDisabled');
+            selectedAccount.children[1].children[1].children[0].setAttribute('onclick', 'addRight("' + accountUUID + '", "' + right + '")');
+          }
+
+        break;
+
+        case 'download':
+
+          if(rights.add_services_rights == 0)
+          {
+            selectedAccount.children[1].children[2].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundInactive');
+            selectedAccount.children[1].children[2].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.addRight.false);
+            selectedAccount.children[1].children[2].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleDisabledInactive');
+            selectedAccount.children[1].children[2].children[0].removeAttribute('onclick');
+          }
+
+          else
+          {
+            selectedAccount.children[1].children[2].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundDisabled');
+            selectedAccount.children[1].children[2].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.addRight.true);
+            selectedAccount.children[1].children[2].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleDisabled');
+            selectedAccount.children[1].children[2].children[0].setAttribute('onclick', 'addRight("' + accountUUID + '", "' + right + '")');
+          }
+
+        break;
+
+        case 'remove':
+          
+          if(rights.add_services_rights == 0)
+          {
+            selectedAccount.children[1].children[3].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundInactive');
+            selectedAccount.children[1].children[3].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.addRight.false);
+            selectedAccount.children[1].children[3].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleDisabledInactive');
+            selectedAccount.children[1].children[3].children[0].removeAttribute('onclick');
+          }
+
+          else
+          {
+            selectedAccount.children[1].children[3].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchBackgroundDisabled');
+            selectedAccount.children[1].children[3].children[0].setAttribute('title', strings.admin.servicesRights.membersBlock.hints.update.addRight.false);
+            selectedAccount.children[1].children[3].children[0].children[0].setAttribute('class', 'membersBlockListAccountsElementRightsSwitchCircleDisabled');
+            selectedAccount.children[1].children[3].children[0].setAttribute('onclick', 'addRight("' + accountUUID + '", "' + right + '")');
+          }
+
+        break;
+      }
     });
   });
 });

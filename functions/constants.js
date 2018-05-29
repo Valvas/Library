@@ -90,6 +90,7 @@ const UNAUTHORIZED_TO_GIVE_ACCESS_TO_APPS                                       
 const UNAUTHORIZED_TO_REMOVE_ACCESS_TO_APPS                                       = 10086;
 const MAX_FILE_SIZE_OUT_OF_RANGE                                                  = 10087;
 const UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS                                     = 10088;
+const RIGHT_DOES_NOT_EXIST                                                        = 10089;
 
 /******************************************************************************************
 SUCCESS
@@ -217,6 +218,7 @@ module.exports =
   UNAUTHORIZED_TO_REMOVE_ACCESS_TO_APPS: UNAUTHORIZED_TO_REMOVE_ACCESS_TO_APPS,
   MAX_FILE_SIZE_OUT_OF_RANGE: MAX_FILE_SIZE_OUT_OF_RANGE,
   UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS: UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS,
+  RIGHT_DOES_NOT_EXIST: RIGHT_DOES_NOT_EXIST,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

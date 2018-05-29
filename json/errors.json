@@ -86,5 +86,8 @@
   "10085": "Vous n'êtes pas autorisé(e) à donner accès à des applications",
   "10086": "Vous n'êtes pas autorisé(e) à retirer l'accès à des applications",
   "10087": "La taille dépasse les limites autorisées",
-  "10088": "Vous n'êtes pas autorisé(e) à consulter les droits des comptes sur les services"
+  "10088": "Vous n'êtes pas autorisé(e) à consulter les droits des comptes sur les services",
+  "10089": "Ce droit n'existe pas",
+  "10090": "Vous n'êtes pas autorisé(e) à ajouter des droits",
+  "10091": "Vous n'êtes pas autorisé(e) à retirer des droits"
 }

@@ -48,14 +48,14 @@ module.exports.getFileFromDatabase = (fileName, fileExt, serviceID, databaseConn
 
             else
             {
-              callback(null, file);
+              fileOrErrorMessage[0].deleted == 1 ? callback({ status: 404, code: constants.FILE_NOT_FOUND_IN_DATABASE }) : callback(null, file);
             }
           });
         }
 
         else
         {
-          callback(null, fileOrErrorMessage[0]);
+          fileOrErrorMessage[0].deleted == 1 ? callback({ status: 404, code: constants.FILE_NOT_FOUND_IN_DATABASE }) : callback(null, fileOrErrorMessage[0]);
         }
       }
     }

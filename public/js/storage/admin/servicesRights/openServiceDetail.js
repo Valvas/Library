@@ -346,7 +346,7 @@ function createMembersBlock(accounts, members, rights, strings, serviceName, cal
   membersBlockListIconsDownload         .setAttribute('title', strings.admin.servicesRights.membersBlock.hints.downloadFiles);
   membersBlockListIconsRemove           .setAttribute('title', strings.admin.servicesRights.membersBlock.hints.removeFiles);
 
-  membersBlockHeaderAdd                 .setAttribute('onclick', 'openAccountsBlock()');
+  if(rights.add_services_rights == 1) membersBlockHeaderAdd.setAttribute('onclick', 'openAccountsBlock()');
 
   if(rights.add_services_rights == 1) membersBlockHeaderAdd.setAttribute('class', 'membersBlockHeaderAddEnabled');
   if(rights.add_services_rights == 0) membersBlockHeaderAdd.setAttribute('class', 'membersBlockHeaderAddDisabled');
@@ -414,49 +414,49 @@ function createMembersBlock(accounts, members, rights, strings, serviceName, cal
 
       if(members[Object.keys(members)[x]].post_comments == 1)
       {
-        if(rights.remove_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundEnabled"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabled"></div></div></div>'; }
+        if(rights.remove_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundEnabled" onclick="removeRight(\'' + accounts[Object.keys(members)[x]].uuid + '\', \'comment\')"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabled"></div></div></div>'; }
         else{ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.false + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundInactive"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabledInactive"></div></div></div>'; }
       }
 
       else
       {
-        if(rights.add_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>'; }
+        if(rights.add_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled" onclick="addRight(\'' + accounts[Object.keys(members)[x]].uuid + '\', \'comment\')"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>'; }
         else{ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.false + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundInactive"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabledInactive"></div></div></div>'; }
       }
 
       if(members[Object.keys(members)[x]].upload_files == 1)
       {
-        if(rights.remove_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundEnabled"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabled"></div></div></div>'; }
+        if(rights.remove_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundEnabled" onclick="removeRight(\'' + accounts[Object.keys(members)[x]].uuid + '\', \'upload\')"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabled"></div></div></div>'; }
         else{ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.false + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundInactive"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabledInactive"></div></div></div>'; }
       }
 
       else
       {
-        if(rights.add_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>'; }
+        if(rights.add_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled" onclick="addRight(\'' + accounts[Object.keys(members)[x]].uuid + '\', \'upload\')"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>'; }
         else{ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.false + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundInactive"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabledInactive"></div></div></div>'; }
       }
 
       if(members[Object.keys(members)[x]].download_files == 1)
       {
-        if(rights.remove_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundEnabled"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabled"></div></div></div>'; }
+        if(rights.remove_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundEnabled" onclick="removeRight(\'' + accounts[Object.keys(members)[x]].uuid + '\', \'download\')"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabled"></div></div></div>'; }
         else{ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.false + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundInactive"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabledInactive"></div></div></div>'; }
       }
 
       else
       {
-        if(rights.add_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>'; }
+        if(rights.add_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled" onclick="addRight(\'' + accounts[Object.keys(members)[x]].uuid + '\', \'download\')"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>'; }
         else{ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.false + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundInactive"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabledInactive"></div></div></div>'; }
       }
 
       if(members[Object.keys(members)[x]].remove_files == 1)
       {
-        if(rights.remove_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundEnabled"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabled"></div></div></div>'; }
+        if(rights.remove_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundEnabled" onclick="removeRight(\'' + accounts[Object.keys(members)[x]].uuid + '\', \'remove\')"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabled"></div></div></div>'; }
         else{ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.removeRight.false + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundInactive"><div class="membersBlockListAccountsElementRightsSwitchCircleEnabledInactive"></div></div></div>'; }
       }
 
       else
       {
-        if(rights.add_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>'; }
+        if(rights.add_services_rights == 1){ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.true + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundDisabled" onclick="addRight(\'' + accounts[Object.keys(members)[x]].uuid + '\', \'remove\')"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabled"></div></div></div>'; }
         else{ memberAccountRights.innerHTML += '<div class="membersBlockListAccountsElementRightsSwitch" title="' + strings.admin.servicesRights.membersBlock.hints.update.addRight.false + '"><div class="membersBlockListAccountsElementRightsSwitchBackgroundInactive"><div class="membersBlockListAccountsElementRightsSwitchCircleDisabledInactive"></div></div></div>'; }
       }
 

@@ -19,6 +19,8 @@ socket.on('fileUploaded', (error, file) =>
 
   var files = document.getElementById('filesBlock').children;
 
+  var amountOfFiles = files.length;
+
   var browseCurrentFiles = () =>
   {
     if(files[x].getAttribute('name') == file.name + '.' + file.ext)
@@ -43,6 +45,8 @@ socket.on('fileUploaded', (error, file) =>
 
   if(alreadyExists == false)
   {
+    amountOfFiles += 1;
+
     var displays = document.getElementById('display').children;
     var currentDisplay = 'large';
     var x = 0;
@@ -129,6 +133,10 @@ socket.on('fileUploaded', (error, file) =>
       currentFile     .children[1].remove();
     }
   }
+
+  var amountOfFilesText = document.getElementById('filesCounter').innerText.split(':')[0] + ' : ' + amountOfFiles;
+
+  document.getElementById('filesCounter').innerText = amountOfFilesText;
 });
 
 /****************************************************************************************************/

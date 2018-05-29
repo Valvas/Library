@@ -25,7 +25,7 @@
         <% } else{ %>
           <div class='aside'>
             <div class='info'>
-              <div class='count'><%= strings.storage.services.info.count %> : <%= Object.keys(files).length %></div>
+              <div id='filesCounter' class='count'><%= strings.storage.services.info.count %> : <%= Object.keys(files).length %></div>
               <div class='upload'>
                 <% if(rights.upload == 1){ %>
                   <button id='upload' class='true'><%= strings.storage.services.info.upload.true %></button>

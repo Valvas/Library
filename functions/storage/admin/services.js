@@ -228,6 +228,106 @@ module.exports.removeMembersFromAService = (serviceID, members, accountID, datab
 
 /****************************************************************************************************/
 
+module.exports.addRightOnService = (accountID, serviceID, right, databaseConnector, callback) =>
+{
+  if(accountID == undefined || serviceID == undefined || right == undefined || databaseConnector == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
+
+  var rightToUpdate = null;
+
+  switch(right)
+  {
+    case 'comment':
+      rightToUpdate = 'post_comments';
+      break;
+
+    case 'upload':
+      rightToUpdate = 'upload_files';
+      break;
+
+    case 'download':
+      rightToUpdate = 'download_files';
+      break;
+
+    case 'remove':
+      rightToUpdate = 'remove_files';
+      break;
+
+    default:
+      return callback({ status: 406, code: constants.RIGHT_DOES_NOT_EXIST, detail: null });
+      break;
+  }
+
+  var argToUpdate = {};
+
+  argToUpdate[rightToUpdate] = 1;
+
+  databaseManager.updateQuery(
+  {
+    'databaseName': params.database.storage.label,
+    'tableName': params.database.storage.tables.rights,
+    'args': argToUpdate,
+    'where': { '0': { 'operator': 'AND', '0': { 'operator': '=', '0': { 'key': 'account', 'value': accountID }, '1': { 'key': 'service', 'value': serviceID } } } }
+
+  }, databaseConnector, (boolean, errorMessage) =>
+  {
+    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
+
+    return callback(null);
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.removeRightOnService = (accountID, serviceID, right, databaseConnector, callback) =>
+{
+  if(accountID == undefined || serviceID == undefined || right == undefined || databaseConnector == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
+
+  var rightToUpdate = null;
+
+  switch(right)
+  {
+    case 'comment':
+      rightToUpdate = 'post_comments';
+      break;
+
+    case 'upload':
+      rightToUpdate = 'upload_files';
+      break;
+
+    case 'download':
+      rightToUpdate = 'download_files';
+      break;
+
+    case 'remove':
+      rightToUpdate = 'remove_files';
+      break;
+
+    default:
+      return callback({ status: 406, code: constants.RIGHT_DOES_NOT_EXIST, detail: null });
+      break;
+  }
+
+  var argToUpdate = {};
+
+  argToUpdate[rightToUpdate] = 0;
+
+  databaseManager.updateQuery(
+  {
+    'databaseName': params.database.storage.label,
+    'tableName': params.database.storage.tables.rights,
+    'args': argToUpdate,
+    'where': { '0': { 'operator': 'AND', '0': { 'operator': '=', '0': { 'key': 'account', 'value': accountID }, '1': { 'key': 'service', 'value': serviceID } } } }
+
+  }, databaseConnector, (boolean, errorMessage) =>
+  {
+    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
+
+    return callback(null);
+  });
+}
+
+/****************************************************************************************************/
+
 function createStorageFolder(serviceName, serviceID, callback)
 {
   foldersCreate.createFolder(serviceName, `${params.storage.root}/${params.storage.services}`, (error) =>
