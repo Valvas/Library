@@ -152,7 +152,7 @@ module.exports.startApp = (app, callback) =>
     
       database.createDatabases(pool, () =>
       { 
-        initCreateAccounts.createAccounts(pool, () =>
+        initCreateAccounts.createAccounts(pool, transporter, () =>
         {
           initCreateRights.createRights(pool, () =>
           {

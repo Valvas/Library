@@ -18,7 +18,7 @@ const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
 
 /****************************************************************************************************/
 
-module.exports.createAccounts = (databaseConnector, callback) =>
+module.exports.createAccounts = (databaseConnector, transporter, callback) =>
 {
   if(databaseConnector == undefined) callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST });
 
@@ -94,7 +94,7 @@ module.exports.createAccounts = (databaseConnector, callback) =>
                   firstname: correctedAccount.firstname,
                   suspended: correctedAccount.suspended
 
-                }, databaseConnector, (error) =>
+                }, databaseConnector, transporter, (error) =>
                 {
                   if(error != null)
                   {
