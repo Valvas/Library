@@ -3,6 +3,7 @@
 global.__root = __dirname;
 
 const fs                = require('fs');
+const path              = require('path');
 const morgan            = require('morgan');
 const express           = require('express');
 const bodyParser        = require('body-parser');
@@ -37,6 +38,8 @@ module.exports = (callback) =>
       app.use(bodyParser.json());
       app.use(express.static(`${__root}/public`));
       app.use(bodyParser.urlencoded({ extended: false }));
+
+      app.use(favicon(path.join(__dirname,'public', 'pictures', 'logo.ico')));
       
       app.use(session(
       {
