@@ -1,9 +1,9 @@
 {
   "0":
   {
-    "email": "admin1",
-    "lastname": "Doe",
-    "firstname": "John",
+    "email": "vincent.valvas@groupepei.fr",
+    "lastname": "Valvas",
+    "firstname": "Vincent",
     "suspended": false,
     "admin": true,
     "disease": true,
