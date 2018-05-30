@@ -40,7 +40,7 @@ module.exports.createAccounts = (databaseConnector, transporter, callback) =>
         {
           accountsCheck.checkAccountFormat(
           {
-            email: `${accounts[x].email}@groupepei.fr`,
+            email: accounts[x].email,
             lastname: accounts[x].lastname,
             firstname: accounts[x].firstname,
             suspended: accounts[x].suspended
