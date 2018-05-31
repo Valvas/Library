@@ -129,7 +129,7 @@ function sendDataToServer(serviceData)
   }
 
   xhr.onload = () =>
-  {
+  {console.log(xhr.response);
     spinner.remove();
 
     var box       = document.createElement('div');
