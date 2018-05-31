@@ -5,16 +5,15 @@ const constants               = require(`${__root}/functions/constants`);
 
 /****************************************************************************************************/
 
-module.exports.moveFile = (oldPath, oldName, newPath, newName, callback) =>
+module.exports.moveFile = (currentPath, newPath, newName, callback) =>
 {
-  oldPath == undefined ||
-  oldName == undefined ||
-  newPath == undefined ||
-  newName == undefined ?
+  currentPath   == undefined ||
+  newPath       == undefined ||
+  newName       == undefined ?
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  fs.stat(`${oldPath}/${oldName}`, (error, stats) =>
+  fs.stat(currentPath, (error, stats) =>
   {
     if(error) callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.message });
 
@@ -22,7 +21,7 @@ module.exports.moveFile = (oldPath, oldName, newPath, newName, callback) =>
 
     else
     {
-      fs.rename(`${oldPath}/${oldName}`, `${newPath}/${newName}`, (error) =>
+      fs.rename(currentPath, `${newPath}/${newName}`, (error) =>
       {
         if(error) callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.detail });
 
