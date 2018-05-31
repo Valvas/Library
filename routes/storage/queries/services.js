@@ -220,7 +220,7 @@ router.post('/create-service', (req, res) =>
 
           else
           {
-            storageAppAdminServices.addMembersToService(serviceID, service.members, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+            storageAppAdminServices.addMembersToService(serviceID, service.members, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
             {
               if(error != null)
               {
@@ -251,7 +251,7 @@ router.post('/remove-service', (req, res) =>
 
     else
     {
-      storageAppAdminServices.removeService(fields.service, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+      storageAppAdminServices.removeService(fields.service, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
       {
         if(error == null) res.status(200).send({ message: success[constants.SERVICE_SUCCESSFULLY_REMOVED], detail: null });
 
@@ -333,7 +333,7 @@ router.post('/modify-service-label', (req, res) =>
 
             else
             {
-              storageAppAdminServices.updateServiceLabel(service.id, req.body.serviceLabel, req.app.get('mysqlConnector'), (error) =>
+              storageAppAdminServices.updateServiceLabel(service.id, req.body.serviceLabel, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
               {
                 if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 

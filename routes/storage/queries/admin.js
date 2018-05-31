@@ -43,7 +43,7 @@ router.post('/give-access-to-a-service', (req, res) =>
 
             else
             {
-              storageAppAdminServices.addMembersToService(service.id, { 0: { id: account.id, comment: false, upload: false, download: false, remove: false } }, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+              storageAppAdminServices.addMembersToService(service.id, { 0: { id: account.id, comment: false, upload: false, download: false, remove: false } }, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
               {
                 if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -87,7 +87,7 @@ router.post('/remove-access-to-a-service', (req, res) =>
 
       else
       {
-        storageAppAdminServices.removeMembersFromAService(service.id, accounts, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
+        storageAppAdminServices.removeMembersFromAService(service.id, accounts, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
         {
           if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -135,7 +135,7 @@ router.post('/add-right-on-service', (req, res) =>
 
               else
               {
-                storageAppAdminServices.addRightOnService(account.id, service.id, req.body.right, req.app.get('mysqlConnector'), (error) =>
+                storageAppAdminServices.addRightOnService(account.id, service.id, req.body.right, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
                 {
                   if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -187,7 +187,7 @@ router.post('/remove-right-on-service', (req, res) =>
 
               else
               {
-                storageAppAdminServices.removeRightOnService(account.id, service.id, req.body.right, req.app.get('mysqlConnector'), (error) =>
+                storageAppAdminServices.removeRightOnService(account.id, service.id, req.body.right, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
                 {
                   if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -262,7 +262,7 @@ router.post('/update-service-max-file-size', (req, res) =>
 
             else
             {
-              storageAppAdminServices.updateServiceMaxFileSize(service.id, req.body.fileSize, req.app.get('mysqlConnector'), (error) =>
+              storageAppAdminServices.updateServiceMaxFileSize(service.id, req.body.fileSize, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
               {
                 if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 

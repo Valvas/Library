@@ -79,15 +79,15 @@ module.exports.createService = (serviceName, serviceLabel, maxFileSize, extensio
 
                       else
                       {
-                        createStorageFolder(serviceName, insertedIDOrErrorMessage, databaseConnector, (error) =>
+                        createStorageFolder(serviceName, insertedIDOrErrorMessage, databaseConnector, params, (error) =>
                         {
                           error != null ? callback(error) :
 
-                          createLogsFolder(serviceName, insertedIDOrErrorMessage, databaseConnector, (error) =>
+                          createLogsFolder(serviceName, insertedIDOrErrorMessage, databaseConnector, params, (error) =>
                           {
                             error != null ? callback(error) :
 
-                            writeExtensionsInFileAndInAppVar(extensions, serviceName, insertedIDOrErrorMessage, servicesExtensionsAuthorized, (error) =>
+                            writeExtensionsInFileAndInAppVar(extensions, serviceName, insertedIDOrErrorMessage, servicesExtensionsAuthorized, params, (error) =>
                             {
                               error != null ? callback(error) : callback(null, insertedIDOrErrorMessage);
                             });
@@ -108,7 +108,7 @@ module.exports.createService = (serviceName, serviceLabel, maxFileSize, extensio
 
 /****************************************************************************************************/
 
-module.exports.addMembersToService = (serviceID, members, accountID, databaseConnector, callback) =>
+module.exports.addMembersToService = (serviceID, members, accountID, databaseConnector, params, callback) =>
 {
   serviceID           == undefined ||
   members             == undefined ||
@@ -168,7 +168,7 @@ module.exports.addMembersToService = (serviceID, members, accountID, databaseCon
 
 /****************************************************************************************************/
 
-module.exports.removeMembersFromAService = (serviceID, members, accountID, databaseConnector, callback) =>
+module.exports.removeMembersFromAService = (serviceID, members, accountID, databaseConnector, params, callback) =>
 {
   serviceID           == undefined ||
   members             == undefined ||
@@ -227,7 +227,7 @@ module.exports.removeMembersFromAService = (serviceID, members, accountID, datab
 
 /****************************************************************************************************/
 
-module.exports.addRightOnService = (accountID, serviceID, right, databaseConnector, callback) =>
+module.exports.addRightOnService = (accountID, serviceID, right, databaseConnector, params, callback) =>
 {
   if(accountID == undefined || serviceID == undefined || right == undefined || databaseConnector == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
 
@@ -277,7 +277,7 @@ module.exports.addRightOnService = (accountID, serviceID, right, databaseConnect
 
 /****************************************************************************************************/
 
-module.exports.removeRightOnService = (accountID, serviceID, right, databaseConnector, callback) =>
+module.exports.removeRightOnService = (accountID, serviceID, right, databaseConnector, params, callback) =>
 {
   if(accountID == undefined || serviceID == undefined || right == undefined || databaseConnector == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
 
@@ -327,7 +327,7 @@ module.exports.removeRightOnService = (accountID, serviceID, right, databaseConn
 
 /****************************************************************************************************/
 
-function createStorageFolder(serviceName, serviceID, databaseConnector, callback)
+function createStorageFolder(serviceName, serviceID, databaseConnector, params, callback)
 {
   foldersCreate.createFolder(serviceName, `${params.storage.root}/${params.storage.services}`, (error) =>
   {
@@ -354,7 +354,7 @@ function createStorageFolder(serviceName, serviceID, databaseConnector, callback
 
 /****************************************************************************************************/
 
-function createLogsFolder(serviceName, serviceID, databaseConnector, callback)
+function createLogsFolder(serviceName, serviceID, databaseConnector, params, callback)
 {
   foldersCreate.createFolder(serviceName, `${params.storage.root}/${params.storage.fileLogs}`, (error) =>
   {
@@ -381,7 +381,7 @@ function createLogsFolder(serviceName, serviceID, databaseConnector, callback)
 
 /****************************************************************************************************/
 
-function writeExtensionsInFileAndInAppVar(extensions, serviceName, serviceID, servicesExtensionsAuthorized, callback)
+function writeExtensionsInFileAndInAppVar(extensions, serviceName, serviceID, servicesExtensionsAuthorized, params, callback)
 {
   fs.readFile(`${__root}/json/services.json`, (error, data) =>
   {
@@ -441,7 +441,7 @@ function writeExtensionsInFileAndInAppVar(extensions, serviceName, serviceID, se
 
 /****************************************************************************************************/
 
-module.exports.removeService = (serviceName, accountID, databaseConnector, callback) =>
+module.exports.removeService = (serviceName, accountID, databaseConnector, params, callback) =>
 {
   if(serviceName == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'service name is missing' });
   if(accountID == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'account ID is missing' });
@@ -457,7 +457,7 @@ module.exports.removeService = (serviceName, accountID, databaseConnector, callb
 
       if(rights.remove_services == 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_REMOVE_SERVICES, detail: null });
 
-      removeFilesFromService(service, accountID, databaseConnector, (error) =>
+      removeFilesFromService(service, accountID, databaseConnector, params, (error) =>
       {
         if(error != null) return callback(error);
 
@@ -483,7 +483,7 @@ module.exports.removeService = (serviceName, accountID, databaseConnector, callb
 
 /****************************************************************************************************/
 
-function removeFilesFromService(service, accountID, databaseConnector, callback)
+function removeFilesFromService(service, accountID, databaseConnector, params, callback)
 {
   databaseManager.selectQuery(
   {
@@ -523,7 +523,7 @@ function removeFilesFromService(service, accountID, databaseConnector, callback)
 
 /****************************************************************************************************/
 
-module.exports.updateServiceLabel = (serviceID, serviceLabel, databaseConnector, callback) =>
+module.exports.updateServiceLabel = (serviceID, serviceLabel, databaseConnector, params, callback) =>
 {
   if(new RegExp('^[a-zA-Zàéèäëïöüâêîôû][a-zA-Zàéèäëïöüâêîôû0-9]*(( )?[a-zA-Zàéèäëïöüâêîôû0-9]+)*$').test(serviceLabel) == false)
   {
@@ -547,7 +547,7 @@ module.exports.updateServiceLabel = (serviceID, serviceLabel, databaseConnector,
 
 /****************************************************************************************************/
 
-module.exports.updateServiceMaxFileSize = (serviceID, serviceMaxFileSize, databaseConnector, callback) =>
+module.exports.updateServiceMaxFileSize = (serviceID, serviceMaxFileSize, databaseConnector, params, callback) =>
 {
   databaseManager.updateQuery(
   {

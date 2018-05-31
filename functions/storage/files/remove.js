@@ -45,17 +45,25 @@ module.exports.removeFiles = (filesToRemove, service, accountID, databaseConnect
         {
           if(error != null) return callback(error);
 
-          storageAppFilesSet.setFileDeleted(file.id, databaseConnector, (error) =>
+          if(file.deleted == 1)
           {
-            if(error != null) return callback(error);
+            filesToRemove[x += 1] != undefined ? removeFileLoop() : callback(null);
+          }
 
-            storageAppLogsRemoveFile.addRemoveFileLog(params.fileLogs.remove, accountID, file.id, filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], service.name, databaseConnector, (error) =>
+          else
+          {
+            storageAppFilesSet.setFileDeleted(file.id, databaseConnector, (error) =>
             {
               if(error != null) return callback(error);
 
-              filesToRemove[x += 1] != undefined ? removeFileLoop() : callback(null);
+              storageAppLogsRemoveFile.addRemoveFileLog(params.fileLogs.remove, accountID, file.id, filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], service.name, databaseConnector, (error) =>
+              {
+                if(error != null) return callback(error);
+
+                filesToRemove[x += 1] != undefined ? removeFileLoop() : callback(null);
+              });
             });
-          });
+          }
         });
       });
     }
