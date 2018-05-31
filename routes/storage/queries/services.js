@@ -156,7 +156,7 @@ router.post('/prepare-upload', (req, res) =>
 
       res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null }) :
 
-      storageAppFilesUpload.prepareUpload(JSON.parse(fields.file).name.split('.')[0], JSON.parse(fields.file).name.split('.')[1], JSON.parse(fields.file).size, fields.service, req.session.account.id, Object.values(req.app.get('servicesExtensionsAuthorized')[fields.service].ext_accepted), req.app.get('mysqlConnector'), (error, rightToRemoveCurrentFile) =>
+      storageAppFilesUpload.prepareUpload(JSON.parse(fields.file).name.split('.')[0], JSON.parse(fields.file).name.split('.')[1], JSON.parse(fields.file).size, fields.service, req.session.account.id, Object.values(req.app.get('servicesExtensionsAuthorized')[fields.service].ext_accepted), req.app.get('mysqlConnector'), req.app.get('params'), (error, rightToRemoveCurrentFile) =>
       {
         if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
 
@@ -181,7 +181,7 @@ router.post('/upload-file', (req, res) =>
   {console.log(err);
     Object.keys(files)[0] == undefined || fields.service == undefined ? res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
 
-    storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1], fields.service, req.session.account.id, req.app.get('mysqlConnector'), (error, fileID) =>
+    storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1], fields.service, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error, fileID) =>
     {
       error != null ?
       res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail }) :

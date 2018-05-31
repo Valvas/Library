@@ -1,7 +1,6 @@
 'use strict'
 
 const fs                                  = require('fs');
-const params                              = require(`${__root}/json/params`);
 const constants                           = require(`${__root}/functions/constants`);
 const filesMove                           = require(`${__root}/functions/files/move`);
 const accountsGet                         = require(`${__root}/functions/accounts/get`);
@@ -22,7 +21,7 @@ const databaseManager     = require(`${__root}/functions/database/MySQLv2`);
 
 /****************************************************************************************************/
 
-module.exports.prepareUpload = (fileName, fileExt, fileSize, serviceName, accountID, authorizedExt, databaseConnector, callback) =>
+module.exports.prepareUpload = (fileName, fileExt, fileSize, serviceName, accountID, authorizedExt, databaseConnector, params, callback) =>
 {
   fileName              == undefined ||
   fileExt               == undefined ||
@@ -123,7 +122,7 @@ module.exports.prepareUpload = (fileName, fileExt, fileSize, serviceName, accoun
 
 /****************************************************************************************************/
 
-module.exports.uploadFile = (originalFileName, currentFileName, serviceName, accountID, databaseConnector , callback) =>
+module.exports.uploadFile = (originalFileName, currentFileName, serviceName, accountID, databaseConnector, params, callback) =>
 {
   originalFileName    == undefined ||
   currentFileName     == undefined ||
