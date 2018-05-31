@@ -30,18 +30,32 @@ module.exports.addAccess = (appName, accountID, databaseConnector, callback) =>
     
     if(appName == 'admin')
     {
-      databaseManager.insertQuery(
+      databaseManager.selectQuery(
       {
         'databaseName': params.database.administration.label,
         'tableName': params.database.administration.tables.rights,
-        'uuid': false,
-        'args': { 'account': accountID, 'access_accounts': 0, 'consult_access': 0, 'consult_rights': 0, 'create_accounts': 0, 'modify_accounts': 0, 'suspend_accounts': 0, 'remove_accounts': 0, 'add_access': 0, 'remove_access': 0, 'add_rights': 0, 'remove_rights': 0 }
+        'args': { '0': 'id' },
+        'where': { '0': { 'operator': '=', '0': { 'key': 'account', 'value': accountID } } }
 
-      }, databaseConnector, (boolean, errorMessage) =>
+      }, databaseConnector, (boolean, rightsOrErrorMessage) =>
       {
         if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
 
-        return callback(null);
+        if(rightsOrErrorMessage.length > 0) return callback(null);
+
+        databaseManager.insertQuery(
+        {
+          'databaseName': params.database.administration.label,
+          'tableName': params.database.administration.tables.rights,
+          'uuid': false,
+          'args': { 'account': accountID, 'access_accounts': 0, 'consult_access': 0, 'consult_rights': 0, 'create_accounts': 0, 'modify_accounts': 0, 'suspend_accounts': 0, 'remove_accounts': 0, 'add_access': 0, 'remove_access': 0, 'add_rights': 0, 'remove_rights': 0 }
+  
+        }, databaseConnector, (boolean, errorMessage) =>
+        {
+          if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
+  
+          return callback(null);
+        });
       });
     }
 
