@@ -13,7 +13,7 @@ module.exports = (req, res, next) =>
 {
   adminAppRightsGet.getAccountRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
   {
-    if(error != null) res.render('block', { message: errors[error.code] });
+    if(error != null) res.render('block', { message: errors[error.code], link: '/home' });
 
     else
     {
