@@ -135,21 +135,21 @@ module.exports.uploadFile = (originalFileName, currentFileName, serviceName, acc
 
   //Check if account exists
   accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
-  {
+  {console.log(1);
     if(error != null) callback(error);
 
     else
     {
       //Check if service exists
       storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
-      {
+      {console.log(2);
         if(error != null) callback(error);
 
         else
         {
           //get account rights towards current service
           storageAppServicesRights.getRightsTowardsService(service.id, account.id, databaseConnector, (error, rights) =>
-          {
+          {console.log(3);
             if(error != null) callback(error);
 
             else
@@ -166,7 +166,7 @@ module.exports.uploadFile = (originalFileName, currentFileName, serviceName, acc
                 {
                   //Check if file exists in the database
                   storageAppFilesGet.getFileFromDatabase(originalFileName.split('.')[0], originalFileName.split('.')[1], service.id, databaseConnector, (error, file) =>
-                  {
+                  {console.log(4);
                     //Unscheduled error
                     if(error != null && error.status != 404) callback(error);
 
@@ -174,14 +174,14 @@ module.exports.uploadFile = (originalFileName, currentFileName, serviceName, acc
                     else if(error != null && error.status == 404)
                     {
                       storageAppFilesCreate.createFileInDatabase(originalFileName.split('.')[0], originalFileName.split('.')[1], account.id, service.id, databaseConnector, (error, fileID) =>
-                      {
+                      {console.log(5);
                         if(error != null) callback(error);
 
                         else
                         {
                           //Check if file exists on the disk
                           storageAppFilesGet.getFileFromDisk(originalFileName.split('.')[0], originalFileName.split('.')[1], serviceName, databaseConnector, (error, file) =>
-                          {
+                          {console.log(6);
                             //Unscheduled error
                             if(error != null && error.status != 404) callback(error);
 
@@ -189,11 +189,11 @@ module.exports.uploadFile = (originalFileName, currentFileName, serviceName, acc
                             else if(error != null && error.status == 404)
                             {
                               filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${service.name}`, originalFileName, (error) =>
-                              {
+                              {console.log(7);
                                 error != null ? callback(error) :
 
                                 storageAppLogsServicesUploadFile.addUploadFileLog(params.fileLogs.upload, accountID, fileID, originalFileName.split('.')[0], originalFileName.split('.')[1], service.name, databaseConnector, (error) =>
-                                {
+                                {console.log(8);
                                   if(error != null) callback(error);
 
                                   else
@@ -208,19 +208,19 @@ module.exports.uploadFile = (originalFileName, currentFileName, serviceName, acc
                             else
                             {
                               filesRemove.moveFileToBin(originalFileName.split('.')[0], originalFileName.split('.')[1], `${params.storage.root}/${params.storage.services}/${service.name}`, (error) =>
-                              {
+                              {console.log(9);
                                 error != null ? callback(error) :
 
                                 storageAppLogsServicesRemoveFile.addRemoveFileLog(params.fileLogs.remove, accountID, fileID, originalFileName.split('.')[0], originalFileName.split('.')[1], service.name, databaseConnector, (error) =>
-                                {
+                                {console.log(10);
                                   error != null ? callback(error) :
 
                                   filesMove.moveFile(`${params.storage.root}/${params.storage.tmp}`, currentFileName, `${params.storage.root}/${params.storage.services}/${service.name}`, originalFileName, (error) =>
-                                  {
+                                  {console.log(11);
                                     error != null ? callback(error) :
 
                                     storageAppLogsServicesUploadFile.addUploadFileLog(params.fileLogs.upload, accountID, fileID, originalFileName.split('.')[0], originalFileName.split('.')[1], service.name, databaseConnector, (error) =>
-                                    {
+                                    {console.log(12);
                                       if(error != null) callback(error);
 
                                       else

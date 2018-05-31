@@ -178,7 +178,7 @@ router.post('/upload-file', (req, res) =>
   form.uploadDir = `${params.storage.root}/${params.storage.tmp}`;
 
   form.parse(req, (err, fields, files) =>
-  {
+  {console.log(err);
     Object.keys(files)[0] == undefined || fields.service == undefined ? res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
 
     storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1], fields.service, req.session.account.id, req.app.get('mysqlConnector'), (error, fileID) =>
