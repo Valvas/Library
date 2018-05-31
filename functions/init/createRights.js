@@ -44,11 +44,11 @@ module.exports.createRights = (databaseConnector, callback) =>
 
         const browseRightsToAdd = () =>
         {
-          accessAdd.addAccess(Object.keys(accounts[x].rights)[rightsBrowserIndex], account.id, databaseConnector, (error) =>
+          accessAdd.addAccess(Object.keys(accounts[x].access)[rightsBrowserIndex], account.id, databaseConnector, (error) =>
           {
             if(error !== null) console.log(`[RIGHTS] - Error - could not create rights for account "${accounts[x].email}" (${errors[error.code]})`);
 
-            if(Object.keys(accounts[x].rights)[rightsBrowserIndex += 1] !== undefined) browseRightsToAdd();
+            if(Object.keys(accounts[x].access)[rightsBrowserIndex += 1] !== undefined) browseRightsToAdd();
 
             else
             {
@@ -59,7 +59,7 @@ module.exports.createRights = (databaseConnector, callback) =>
           });
         }
 
-        if(Object.keys(accounts[x].rights).length > 0) browseRightsToAdd();
+        if(Object.keys(accounts[x].access).length > 0) browseRightsToAdd();
 
         else
         {

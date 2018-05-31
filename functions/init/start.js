@@ -156,31 +156,19 @@ module.exports.startApp = (app, callback) =>
         {
           initCreateRights.createRights(pool, () =>
           {
-            /*services.createServices(pool, (error) =>
+            app.set('mysqlConnector', pool);
+
+            initFolder.createAppFolders(params, (error) =>
             {
-              if(error != null)
-              {
-                console.log(`[ERROR] - ${error.detail} !`);
-                process.exit(1);
-              }
-    
+              if(error == null) callback();
+              
               else
-              {*/
-                app.set('mysqlConnector', pool);
-    
-                initFolder.createAppFolders(params, (error) =>
-                {
-                  if(error == null) callback();
-                  
-                  else
-                  {
-                    console.log(error);
-                    
-                    process.exit(0);
-                  }
-                });
-              /*}
-            });*/
+              {
+                console.log(error);
+                
+                process.exit(0);
+              }
+            });
           });
         });
       });
