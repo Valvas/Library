@@ -246,13 +246,13 @@ module.exports.uploadFile = (originalFileName, currentFileName, serviceName, acc
 
                       else
                       {
-                        storageAppFilesSet.setFileOwner(account.id, fileID, databaseConnector, (error) =>
+                        storageAppFilesSet.setFileOwner(accountID, fileID, databaseConnector, (error) =>
                         {
                           if(error != null) callback(error);
 
                           else
                           {
-                            storageAppFilesSet.setFileNotDeleted(account.id, fileID, databaseConnector, (error) =>
+                            storageAppFilesSet.setFileNotDeleted(accountID, fileID, databaseConnector, (error) =>
                             {
                               if(error != null) callback(error);
 
