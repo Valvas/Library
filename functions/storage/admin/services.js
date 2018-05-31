@@ -1,7 +1,6 @@
 'use strict'
 
 const fs                    = require('fs');
-const params                = require(`${__root}/json/params`);
 const constants             = require(`${__root}/functions/constants`);
 const accountsGet           = require(`${__root}/functions/accounts/get`);
 const foldersCreate         = require(`${__root}/functions/folders/create`);
@@ -17,7 +16,7 @@ const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
 
 /****************************************************************************************************/
 
-module.exports.createService = (serviceName, serviceLabel, maxFileSize, extensions, accountID, servicesExtensionsAuthorized, databaseConnector, callback) =>
+module.exports.createService = (serviceName, serviceLabel, maxFileSize, extensions, accountID, servicesExtensionsAuthorized, databaseConnector, params, callback) =>
 {
   serviceName                   == undefined ||
   serviceLabel                  == undefined ||

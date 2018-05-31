@@ -204,7 +204,7 @@ router.post('/create-service', (req, res) =>
     {
       var service = JSON.parse(fields.service);
 
-      storageAppAdminServices.createService(service.identifier, service.name, service.size, service.extensions, req.session.account.id, req.app.get('servicesExtensionsAuthorized'), req.app.get('mysqlConnector'), (error, serviceID) =>
+      storageAppAdminServices.createService(service.identifier, service.name, service.size, service.extensions, req.session.account.id, req.app.get('servicesExtensionsAuthorized'), req.app.get('mysqlConnector'), req.app.get('params'), (error, serviceID) =>
       {
         if(error != null)
         {
