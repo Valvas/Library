@@ -22,7 +22,12 @@ module.exports.createAppFolders = (params, callback) =>
 
         createServicesFolder(params, (error) =>
         {
-          callback(error);
+          error != null ? callback(error) :
+
+          createServicesLogsFolder(params, (error) =>
+          {
+            callback(error);
+          });
         });
       });
     });
@@ -64,6 +69,16 @@ function createLogsFolder(params, callback)
 function createServicesFolder(params, callback)
 {
   fs.mkdir(`${params.storage.root}/${params.storage.services}`, (error) =>
+  {
+    error && error.code != 'EEXIST' ? callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message  }) : callback(null);
+  });
+}
+
+/****************************************************************************************************/
+
+function createServicesLogsFolder(params, callback)
+{
+  fs.mkdir(`${params.storage.root}/${params.storage.fileLogs}`, (error) =>
   {
     error && error.code != 'EEXIST' ? callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message  }) : callback(null);
   });
