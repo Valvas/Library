@@ -170,7 +170,14 @@ module.exports.startApp = (app, callback) =>
     
                 initFolder.createAppFolders(params, (error) =>
                 {
-                  error == null ? callback() : process.exit(0);
+                  if(error == null) callback();
+                  
+                  else
+                  {
+                    console.log(error);
+                    
+                    process.exit(0);
+                  }
                 });
               /*}
             });*/
