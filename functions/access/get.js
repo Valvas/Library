@@ -12,6 +12,24 @@ const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
 
 /****************************************************************************************************/
 
+module.exports.getAccountAccess = (accountID, databaseConnector, callback) =>
+{
+  if(accountID === undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'Error on "getAccountAccess()", account ID is missing from the request' });
+  if(databaseConnector === undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'Error on "getAccountAccess()", database connector is missing from the request' });
+
+  databaseManager.selectQuery(
+  {
+
+  }, databaseConnector, (boolean, accessOrErrorMessage) =>
+  {
+    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: accessOrErrorMessage });
+
+    return callback(null, accessOrErrorMessage[0]);
+  });
+}
+
+/****************************************************************************************************/
+
 module.exports.getAccountsThatHaveAccessToStorageApp = (databaseConnector, callback) =>
 {
   databaseConnector == undefined ?

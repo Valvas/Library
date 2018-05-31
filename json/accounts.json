@@ -5,8 +5,11 @@
     "lastname": "Valvas",
     "firstname": "Vincent",
     "suspended": false,
-    "admin": true,
-    "disease": true,
-    "storage": true
+    "access":
+    {
+      "admin": true,
+      "disease": true,
+      "storage": true
+    }
   }
 }
