@@ -80,11 +80,11 @@ module.exports.createService = (serviceName, serviceLabel, maxFileSize, extensio
 
                       else
                       {
-                        createStorageFolder(serviceName, insertedIDOrErrorMessage, (error) =>
+                        createStorageFolder(serviceName, insertedIDOrErrorMessage, databaseConnector, (error) =>
                         {
                           error != null ? callback(error) :
 
-                          createLogsFolder(serviceName, insertedIDOrErrorMessage, (error) =>
+                          createLogsFolder(serviceName, insertedIDOrErrorMessage, databaseConnector, (error) =>
                           {
                             error != null ? callback(error) :
 
@@ -328,7 +328,7 @@ module.exports.removeRightOnService = (accountID, serviceID, right, databaseConn
 
 /****************************************************************************************************/
 
-function createStorageFolder(serviceName, serviceID, callback)
+function createStorageFolder(serviceName, serviceID, databaseConnector, callback)
 {
   foldersCreate.createFolder(serviceName, `${params.storage.root}/${params.storage.services}`, (error) =>
   {
@@ -355,7 +355,7 @@ function createStorageFolder(serviceName, serviceID, callback)
 
 /****************************************************************************************************/
 
-function createLogsFolder(serviceName, serviceID, callback)
+function createLogsFolder(serviceName, serviceID, databaseConnector, callback)
 {
   foldersCreate.createFolder(serviceName, `${params.storage.root}/${params.storage.fileLogs}`, (error) =>
   {
