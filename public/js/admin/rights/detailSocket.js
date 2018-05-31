@@ -4,7 +4,7 @@ var socket = io();
 
 socket.on('connect', () =>
 {
-  socket.emit('adminAppRightsDetailJoin', document.getElementById('rightsDetailAccountInfo').getAttribute('name'));
+  if(document.getElementById('rightsDetailAccountInfo')) socket.emit('adminAppRightsDetailJoin', document.getElementById('rightsDetailAccountInfo').getAttribute('name'));
 });
 
 /****************************************************************************************************/
