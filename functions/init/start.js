@@ -79,9 +79,7 @@ module.exports.startApp = (app, callback) =>
   const storageQueriesStrings     = require(`${__root}/routes/storage/queries/strings`);
   const storageQueriesServices    = require(`${__root}/routes/storage/queries/services`);
 
-  const params = app.get('params') != undefined ? app.get('params') : require(`${__root}/json/params`);
-
-  app.set('params', params);
+  const params = app.get('params');
 
   app.use('/', root);
   app.use('/home', homeViews);
