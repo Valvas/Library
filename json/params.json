@@ -63,7 +63,7 @@
       "transporter":true
     }
   },
-  "ready":true,
+  "ready":false,
   "storage":{  
     "root":"C:\\Users\\dev\\Desktop\\removal",
     "maxFileSize":10737418240
