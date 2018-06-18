@@ -5,11 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/disease/base.css" />
   <body>
-    <nav class='navigationBar'>
-      <div class='navigationBarTitle'>%TITLE%</div>
-      <div class='navigationBarMenu'>%MENU%</div>
-      <div class='navigationBarAccount'><%= account.email %></div>
-    </nav>
+    <% include ./includes/navigation %>
+    <% include ./includes/menu %>
     <script src='/js/fontawesome.js'></script>
   </body>
 </html>

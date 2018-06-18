@@ -38,6 +38,22 @@
       "firstname": "VARCHAR(255) NOT NULL",
       "password": "VARCHAR(255) NOT NULL",
       "suspended": "BOOLEAN NOT NULL"
+    },
+    "applications":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "name": "VARCHAR(255) NOT NULL"
+    },
+    "errors":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "code": "VARCHAR(255) NOT NULL",
+      "message": "TEXT(1024) NOT NULL",
+      "detail": "TEXT(1024) NOT NULL",
+      "account": "BIGINT UNSIGNED NOT NULL",
+      "timestamp": "BIGINT UNSIGNED NOT NULL",
+      "level": "INT UNSIGNED NOT NULL",
+      "app": "BIGINT UNSIGNED NOT NULL"
     }
   },
 
