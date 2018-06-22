@@ -4,17 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/aside.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/home.css" />
   <body>
-    <% include ../includes/navigation.ejs %>
-    <div class='main'>
-      <div class='header'>
-        <div class='bookmark'><i class='fas fa-bookmark'></i></div><div class='location'><%= strings.storage.locations.admin %></div>
-      </div>
-      <% include ../includes/admin/aside.ejs %><!--
-    --><div class='rights'>
+    <% include ../includes/aside.ejs %>
+    <div class='mainBlock'>
+      <div class="mainBlockLocation"><%= strings.storage.locations.admin %></div>
+      <% include ../includes/admin/navigation.ejs %>
+      <div class='rights'>
         <div class='info'><%= strings.storage.admin.home.info %></div>
         <div class='category'>
           <div class='title'><%= strings.storage.admin.home.services.label %></div>
@@ -33,8 +32,5 @@
     </div>
     <script src='/js/jQuery.js'></script>
     <script src='/js/afk.js'></script>
-    <script src='/js/fontawesome.js'></script>
-    <script src='/js/navigation/menu.js'></script>
-    <script src='/js/navigation/account.js'></script>
   </body>
 </html>

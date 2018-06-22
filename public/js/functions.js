@@ -229,46 +229,129 @@ function openFileCommentPopup()
 
 /****************************************************************************************************/
 
-function printError(message)
+function displayLoadingVeil()
 {
-  $('#error-popup').remove();
-  
-  var errorMessage = document.createElement('div');
-
-  $(errorMessage).attr({ id: 'error-popup', class: 'error-popup'});
-
-  $(errorMessage).text(message || 'Une erreur est survenue.');
-
-  $(errorMessage).hide().appendTo('#logs-block');
-
-  $(errorMessage).slideDown(0, function()
+  if(document.getElementById('loadingVeil') == null)
   {
-    var popup = this;
+    var loadingVeil     = document.createElement('div');
+    var loadingSpinner  = document.createElement('div');
 
-    setTimeout(function(){ $(popup).slideUp(500); setTimeout(function(){ $(popup).remove(); }, 500); }, 5000);
-  });
+    loadingVeil         .setAttribute('id', 'loadingVeil');
+    loadingSpinner      .setAttribute('id', 'loadingSpinner');
+
+    loadingVeil         .setAttribute('class', 'loadingVeil');
+    loadingSpinner      .setAttribute('class', 'loadingSpinner');
+
+    loadingSpinner      .innerHTML = '<i class="fas fa-4x fa-circle-notch fa-spin"></i>';
+
+    $(loadingVeil).hide().appendTo(document.body);
+    $(loadingSpinner).hide().appendTo(document.body);
+
+    $(loadingVeil).fadeIn(250);
+    $(loadingSpinner).toggle('slide', { direction: 'up' }, 250);
+  }
 }
 
 /****************************************************************************************************/
 
-function printSuccess(message)
+function removeLoadingVeil()
 {
-  $('#success-popup').remove();
-  
-  var successPopup = document.createElement('div');
+  if(document.getElementById('loadingVeil')) document.getElementById('loadingVeil').remove();
+  if(document.getElementById('loadingSpinner')) document.getElementById('loadingSpinner').remove();
+}
 
-  $(successPopup).attr({ id: 'success-popup', class: 'success-popup'});
+/****************************************************************************************************/
 
-  $(successPopup).text(message || 'La requête a été traitée avec succès.');
-
-  $(successPopup).hide().appendTo('#logs-block');
-
-  $(successPopup).slideDown(0, function()
+function printError(message, detail)
+{
+  if(document.getElementById('errorBlock') == null)
   {
-    var popup = this;
+    var background          = document.createElement('div');
+    var errorBlock          = document.createElement('div');
+    var errorBlockTitle     = document.createElement('div');
+    var errorBlockMessage   = document.createElement('div');
+    var errorBlockDetail    = document.createElement('div');
+    var errorBlockClose     = document.createElement('button');
 
-    setTimeout(function(){ $(popup).slideUp(500); setTimeout(function(){ $(popup).remove(); }, 500); }, 5000);
-  });
+    background              .setAttribute('id', 'errorBackground');
+    errorBlock              .setAttribute('id', 'errorBlock');
+
+    background              .setAttribute('class', 'errorBackground');
+    errorBlock              .setAttribute('class', 'errorBlock');
+    errorBlockTitle         .setAttribute('class', 'errorBlockTitle');
+    errorBlockMessage       .setAttribute('class', 'errorBlockMessage');
+    errorBlockDetail        .setAttribute('class', 'errorBlockDetail');
+    errorBlockClose         .setAttribute('class', 'errorBlockClose');
+
+    errorBlockTitle         .innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+    errorBlockMessage       .innerText = message;
+    errorBlockDetail        .innerText = detail;
+    errorBlockClose         .innerText = 'Fermer';
+
+    errorBlockClose.addEventListener('click', () =>
+    {
+      $(document.getElementById('errorBlock')).toggle('slide', { direction: 'left' }, 250, () => { document.getElementById('errorBlock').remove(); });
+      $(document.getElementById('errorBackground')).fadeOut(250, () => { document.getElementById('errorBackground').remove(); });
+    });
+
+    errorBlock              .appendChild(errorBlockTitle);
+    errorBlock              .appendChild(errorBlockMessage);
+    errorBlock              .appendChild(errorBlockDetail);
+    errorBlock              .appendChild(errorBlockClose);
+
+    $(background).hide().appendTo(document.body);
+    $(errorBlock).hide().appendTo(document.body);
+
+    $(background).fadeIn(250);
+    $(errorBlock).toggle('slide', { direction: 'left' }, 250);
+  }
+}
+
+/****************************************************************************************************/
+
+function printSuccess(message, detail)
+{
+  if(document.getElementById('successBlock') == null)
+  {
+    var background            = document.createElement('div');
+    var successBlock          = document.createElement('div');
+    var successBlockTitle     = document.createElement('div');
+    var successBlockMessage   = document.createElement('div');
+    var successBlockDetail    = document.createElement('div');
+    var successBlockClose     = document.createElement('button');
+
+    background                .setAttribute('id', 'successBackground');
+    successBlock              .setAttribute('id', 'successBlock');
+
+    background                .setAttribute('class', 'successBackground');
+    successBlock              .setAttribute('class', 'successBlock');
+    successBlockTitle         .setAttribute('class', 'successBlockTitle');
+    successBlockMessage       .setAttribute('class', 'successBlockMessage');
+    successBlockDetail        .setAttribute('class', 'successBlockDetail');
+    successBlockClose         .setAttribute('class', 'successBlockClose');
+
+    successBlockTitle         .innerHTML = '<i class="fas fa-check-circle"></i>';
+    successBlockMessage       .innerText = message;
+    successBlockDetail        .innerText = detail;
+    successBlockClose         .innerText = 'Fermer';
+
+    successBlockClose.addEventListener('click', () =>
+    {
+      $(document.getElementById('successBlock')).toggle('slide', { direction: 'left' }, 250, () => { document.getElementById('successBlock').remove(); });
+      $(document.getElementById('successBackground')).fadeOut(250, () => { document.getElementById('successBackground').remove(); });
+    });
+
+    successBlock              .appendChild(successBlockTitle);
+    successBlock              .appendChild(successBlockMessage);
+    successBlock              .appendChild(successBlockDetail);
+    successBlock              .appendChild(successBlockClose);
+
+    $(background).hide().appendTo(document.body);
+    $(successBlock).hide().appendTo(document.body);
+
+    $(background).fadeIn(250);
+    $(successBlock).toggle('slide', { direction: 'left' }, 250);
+  }
 }
 
 /****************************************************************************************************/

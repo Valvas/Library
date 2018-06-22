@@ -194,74 +194,54 @@ router.post('/upload-file', (req, res) =>
 
 router.post('/create-service', (req, res) =>
 {
-  var form = new formidable.IncomingForm();
+  const service = JSON.parse(req.body.service);
 
-  form.parse(req, (err, fields) =>
+  if(service.serviceName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service name' });
+
+  else if(service.maxFileSize == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Max file size' });
+
+  else if(service.authorizedExtensions == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Authorized extensions' });
+
+  else
   {
-    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
-
-    else
+    req.app.get('databaseConnectionPool').getConnection((error, connection) =>
     {
-      var service = JSON.parse(fields.service);
+      if(error) res.status(500).send({ message: errors[constants.SQL_SERVER_ERROR], detail: error.message });
 
-      storageAppAdminServices.createService(service.identifier, service.name, service.size, service.extensions, req.session.account.id, req.app.get('servicesExtensionsAuthorized'), req.app.get('mysqlConnector'), req.app.get('params'), (error, serviceID) =>
+      else
       {
-        if(error != null)
+        storageAppAdminServices.createService(service.serviceName, service.maxFileSize, service.authorizedExtensions, req.session.account.id, connection, req.app.get('params'), (error) =>
         {
-          res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
-        }
+          connection.release();
+          
+          error != null
 
-        else
-        {
-          if(Object.keys(service.members).length == 0)
-          {
-            res.status(201).send({ result: true, message: success[constants.SERVICE_SUCCESSFULLY_CREATED] });
-          }
-
-          else
-          {
-            storageAppAdminServices.addMembersToService(serviceID, service.members, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
-            {
-              if(error != null)
-              {
-                res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
-              }
-
-              else
-              {
-                res.status(201).send({ result: true, message: success[constants.SERVICE_SUCCESSFULLY_CREATED] });
-              }
-            });
-          }
-        }
-      });
-    }
-  });
+          ? res.status(error.status).send({ message: errors[error.code], detail: error.detail })
+          : res.status(201).send({ message: success[constants.SERVICE_SUCCESSFULLY_CREATED] });
+        });
+      }
+    });
+  }
 });
 
 /****************************************************************************************************/
 
 router.post('/remove-service', (req, res) =>
 {
-  var form = new formidable.IncomingForm();
+  if(req.body.service == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service UUID' });
 
-  form.parse(req, (err, fields) =>
+  else
   {
-    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
-
-    else
+    storageAppAdminServices.removeService(req.body.service, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
-      storageAppAdminServices.removeService(fields.service, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
-      {
-        if(error == null) res.status(200).send({ message: success[constants.SERVICE_SUCCESSFULLY_REMOVED], detail: null });
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-        else
-        {
-          res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-        }
-      });
-    }
-  });
+      else
+      {
+        res.status(200).send({ message: success[constants.SERVICE_SUCCESSFULLY_REMOVED] });
+      }
+    });
+  }
 });
 
 /****************************************************************************************************/

@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/list.css" />
   <body>
-    <% include ../includes/navigation.ejs %>
-    <div class='main'>
-      <div class='header'>
-        <div class='bookmark'><i class='fas fa-bookmark'></i></div><div class='location'><%= strings.storage.locations.services %></div>
-      </div>
+    <% include ../includes/aside.ejs %>
+    <div class='mainBlock'>
+      <div class='mainBlockLocation'><%= strings.storage.locations.services %></div>
       <% if(error != null){ %>
         <div class='error'>
           <div class='message'><div class='left'><i class='fas fa-exclamation-circle'></i></div><div class='right'><%= error.message %></div></div>
@@ -24,7 +23,8 @@
         </div>
       <% } else{ %>
         <% if(Object.keys(services).length == 0){ %>
-          <div class='empty'><%= strings.storage.services.empty %></div>
+          <div class="emptyServicesIcon"><i class="fas fa-10x fa-box-open"></i></div>
+          <div class="emptyServicesMessage"><%= strings.storage.emptyServicesMessage %></div>
         <% } else{ %>
           <% for(var key in services){ %><!--
           --><div name='<%= services[key].name %>' class='block'>
@@ -64,8 +64,5 @@
     <script src='/js/jQuery.js'></script>
     <script src='/js/functions.js'></script>
     <script src='/js/afk.js'></script>
-    <script src='/js/fontawesome.js'></script>
-    <script src='/js/navigation/menu.js'></script>
-    <script src='/js/navigation/account.js'></script>
   </body>
 </html>

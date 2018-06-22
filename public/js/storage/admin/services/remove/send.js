@@ -1,88 +1,37 @@
 /****************************************************************************************************/
 
-function sendRemoveServiceRequest(serviceName)
+function sendRemoveServiceRequest(serviceUUID)
 {
-  document.getElementById('serviceBlockRemovePromptMessage').remove();
-  document.getElementById('serviceBlockRemovePromptWarning').remove();
-  document.getElementById('serviceBlockRemovePromptConfirm').remove();
-  document.getElementById('serviceBlockRemovePromptCancel').remove();
+  closeRemovePopup();
 
-  var loading         = document.createElement('div');
+  displayLoadingVeil();
 
-  loading             .setAttribute('class', 'serviceBlockRemovePromptLoading');
-
-  loading             .innerHTML = `<i class='fas fa-circle-notch fa-spin'></i>`;
-
-  document.getElementById('serviceBlockRemovePrompt').appendChild(loading);
-
-  var xhr   = new XMLHttpRequest();
-  var data  = new FormData();
-
-  data.append('service', serviceName);
-
-  xhr.timeout = 10000;
-  xhr.responseType = 'json';
-
-  xhr.open('POST', '/queries/storage/services/remove-service', true);
-
-  xhr.send(data);
-
-  xhr.ontimeout = () =>
+  $.ajax(
   {
-    loading.remove();
-
-    displayPromptError('La requête a expiré, veuillez réessayer plus tard', null);
-  }
-
-  xhr.onload = () =>
-  {
-    loading.remove();
-
-    if(xhr.status == 200)
+    type: 'POST', timeout: 5000, dataType: 'JSON', data: { service: serviceUUID }, url: '/queries/storage/services/remove-service',
+    error: (xhr, status, error) => 
     {
-      displayPromptSuccess(xhr.response.message, xhr.response.detail);
+      removeLoadingVeil();
 
-      socket.emit('storageAppAdminServiceRemoved', serviceName);
+      if(status == 'timeout')
+      {
+        printError('Le serveur a mis trop de temps à répondre', 'Celui-ci est peut-être injoignable pour le moment');
+      }
+
+      else
+      {
+        printError(xhr.responseJSON.message, xhr.responseJSON.detail);
+      }
     }
-
-    else
-    {
-      displayPromptError(xhr.response.message, xhr.response.detail);
-    }
-  }
-}
-
-/****************************************************************************************************/
-
-function displayPromptSuccess(message, detail)
-{
-  var successBlock      = document.createElement('div');
-  var successMessage    = document.createElement('div');
-  var successClose      = document.createElement('button');
-
-  successBlock          .setAttribute('class', 'serviceBlockRemovePromptSuccess');
-  successMessage        .setAttribute('class', 'serviceBlockRemovePromptSuccessMessage');
-  successClose          .setAttribute('class', 'serviceBlockRemovePromptSuccessClose');
-
-  successMessage        .innerText = message;
-  successClose          .innerText = 'OK';
-
-  successClose          .addEventListener('click', closeRemovePopup);
-
-  successBlock          .appendChild(successMessage);
-  successBlock          .appendChild(successClose);
-
-  if(detail != null)
+                
+  }).done((json) =>
   {
-    var successDetail     = document.createElement('div');
+    removeLoadingVeil();
 
-    successDetail         .innerText = detail;
-    successDetail         .setAttribute('class', 'serviceBlockRemovePromptSuccessDetail');
+    printSuccess(json.message, null);
 
-    successBlock          .appendChild(successDetail);
-  }
-
-  document.getElementById('serviceBlockRemovePrompt').appendChild(successBlock);
+    $(document.getElementById('serviceCreationFormBlock')).toggle('slide', { direction: 'up' }, 250);
+  });
 }
 
 /****************************************************************************************************/

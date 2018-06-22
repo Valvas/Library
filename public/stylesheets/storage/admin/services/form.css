@@ -1,181 +1,39 @@
 /****************************************************************************************************/
 
-.form{ width:calc(100% - 240px); max-width:800px; margin:0 20px 20px 20px; display:inline-block; vertical-align:top; }
+.serviceCreationForm{ padding:20px; font-family:roboto-light; }
 
-.form .error .message{ margin:0 0 10px 0; }
+.serviceCreationFormTitle{ font-size:20px; line-height:24px; margin:0 0 20px 0; }
 
-.form .error .message .left{ display:inline-block; width:20px; font-size:1.25em; margin:0 10px 0 0; color:#D9534F; }
+.serviceCreationFormBack{ text-decoration:none; margin:0 0 20px calc(100% - 200px); color:#FFFFFF; border-radius:4px; padding:8px 0 8px 0; display:block; background-color:#D9534F; text-align:center; width:200px; }
 
-.form .error .message .right{ display:inline-block; vertical-align:top; font-size:16px; line-height:24px; font-family:barlow; width:calc(100% - 30px); }
+.serviceCreationFormBack:hover{ color:#000000; background-color:#C8423E; }
 
-.form .error .detail{ font-family:barlow-italic; font-size:14px; line-height:18px; color:#B0B0B0; }
+.serviceCreationFormBlock{ border:1px solid #E0E0E0; border-radius:4px; padding:10px; }
 
-.form .block{ background-color:#FFFFFF; border-radius:4px; }
+.serviceCreationFormBlockLabel{ font-size:18px; line-height:24px; margin:10px 0 5px 0; }
 
-.form .block .title{ background-color:#428BCA; color:#FFFFFF; font-size:20px; line-height:24px; font-family:barlow; padding:10px; border-radius:4px 4px 0 0; margin:0 0 20px 0; }
+.serviceCreationFormBlockIncorrectFormat{ display:none; font-size:16px; line-height:24px; color:#C8423E; }
 
-.form .block .correct{ display:none; color:#5CB85C; font-size:16px; line-height:24px; font-family:barlow-italic; margin:0 10px 0 10px; }
+.serviceCreationFormBlockNameInput{ margin:0 0 10px 0; width:100%; max-width:400px; border:1px solid #C0C0C0; border-radius:4px; height:24px; padding:0 0 0 4px; box-sizing:border-box; }
 
-.form .block .incorrect{ display:none; color:#D9534F; font-size:16px; line-height:24px; font-family:barlow-italic; margin:0 10px 0 10px; }
+.serviceCreationFormBlockSizeInput{ margin:0 0 10px 0; border-top:1px solid #C0C0C0; border-right:none; border-bottom:1px solid #C0C0C0; border-left:1px solid #C0C0C0; border-radius:4px 0 0 4px; display:inline-block; vertical-align:top; height:24px; box-sizing:border-box; padding:0 0 0 4px; width:calc(100% - 80px); max-width:320px; }
 
-.form .block .input .key{ font-size:16px; line-height:24px; font-family:barlow; margin:0 10px 0 10px; }
+.serviceCreationFormBlockSizeSelect{ display:inline-block; vertical-align:top; border:1px solid #C0C0C0; border-radius:0 4px 4px 0; height:24px; width:80px; }
 
-.form .block .input .value{ box-sizing:border-box; font-size:16px; line-height:24px; padding:0 0 0 4px; font-family:barlow; width:100%; max-width:300px; border-radius:4px; border:1px solid #E0E0E0; margin:0 10px 0 10px; }
+.serviceCreationFormBlockSubmit{ border:none; border-radius:4px; font-size:16px; line-height:24px; padding:4px 0 4px 0; cursor:pointer; width:200px; display:block; background-color:#428BCA; color:#FFFFFF; margin:20px 0 0 0; }
 
-.form .block .input .right{ width:100%; max-width:300px; margin:0 10px 0 10px; }
+.serviceCreationFormBlockSubmit:hover{ color:#000000; background-color:#317AB9; }
 
-.form .block .input .right .input{ box-sizing:border-box; width:calc(100% - 100px); display:inline-block; border:1px solid #E0E0E0; border-radius:4px 0 0 4px; font-size:16px; line-height:24px; font-family:barlow; padding:0 0 0 4px; }
+.serviceCreationFormBlockExtensions{ margin:10px 0 10px 0; border:1px solid #E0E0E0; border-radius:4px; }
 
-.form .block .input .right .select{ box-sizing:border-box; width:100px; display:inline-block; vertical-align:top; border-radius:0 4px 4px 0; border:1px solid #E0E0E0; height:26px; font-size:16px; line-height:24px; font-family:barlow; }
+.serviceCreationFormBlockExtensionsTitle{ padding:10px; margin-bottom:10px; font-size:18px; line-height:20px; font-family:roboto-light; border-bottom:1px solid #E0E0E0; }
 
-.form .block .help{ padding:5px 0 5px 0; border-bottom:1px solid #F0F0F0; margin:0 10px 10px 10px; font-family:barlow-italic; line-height:18px; font-size:14px; }
+.serviceCreationFormBlockExtensionsElements{ padding:10px; }
 
-.form .block .next{ border:none; border-radius:4px; color:#FFFFFF; width:100px; padding:4px 0 4px 0; margin:10px 10px 10px calc(100% - 110px); font-size:16px; line-height:24px; font-family:barlow; }
+.serviceCreationFormBlockExtensionsElementsElement{ width:33.3%; display:inline-block; vertical-align:top; margin:0 0 10px 0; }
 
-.form .block .next.inactive{ background-color:#D0D0D0; }
+.serviceCreationFormBlockExtensionsElementsElementCheckbox{ width:24px; height:24px; cursor:pointer; display:inline-block; vertical-align:top; margin:0 10px 0 0; }
 
-.form .block .next.active{ background-color:#5CB85C; cursor:pointer; }
-
-.form .block .next.active:hover{ color:#000000; background-color:#3A963A; }
-
-.form .members{ display:none; background-color:#FFFFFF; border-radius:4px; }
-
-.form .members .title{ background-color:#428BCA; color:#FFFFFF; font-size:20px; line-height:24px; font-family:barlow; padding:10px; border-radius:4px 4px 0 0; margin:0 0 20px 0; }
-
-.form .members .back{ border:none; border-radius:4px; color:#FFFFFF; background-color:#D9534F; cursor:pointer; width:200px; padding:4px 0 4px 0; margin:0 10px 10px calc(100% - 210px); font-size:16px; line-height:24px; font-family:barlow; }
-
-.form .members .back:hover{ color:#000000; background-color:#B7312D; }
-
-.form .members .add{ border:none; border-radius:4px; color:#FFFFFF; background-color:#5CB85C; cursor:pointer; width:200px; padding:4px 0 4px 0; margin:0 10px 10px calc(100% - 210px); font-size:16px; line-height:24px; font-family:barlow; }
-
-.form .members .add:hover{ color:#000000; background-color:#3A963A; }
-
-.form .members .send{ border:none; border-radius:4px; color:#FFFFFF; background-color:#428BCA; cursor:pointer; width:200px; padding:4px 0 4px 0; margin:0 10px 10px calc(100% - 210px); font-size:16px; line-height:24px; font-family:barlow; }
-
-.form .members .send:hover{ color:#000000; background-color:#2069A8; }
-
-.form .members .rights{ padding:10px 0 10px 0; }
-
-.form .members .rights .legend{ margin:0 0 10px calc(100% - 340px); width:240px; }
-
-.form .members .rights .legend .label{ display:inline-block; vertical-align:top; font-size:1.25em; width:60px; text-align:center; }
-
-.form .members .added .account{ padding:4px 0 4px 0; border-bottom:1px solid #F0F0F0; }
-
-.form .members .added .account .name{ width:calc(100% - 340px); padding:4px 4px 0 8px; box-sizing:border-box; white-space:nowrap; overflow:hidden; display:inline-block; text-overflow:ellipsis; font-size:14px; line-height:18px; font-family:barlow; }
-
-.form .members .added .account .values{ width:240px; display:inline-block; vertical-align:top; }
-
-.form .members .added .account .values .true{ width:30px; display:inline-block; vertical-align:top; font-size:1.25em; text-align:center; }
-
-.form .members .added .account .values .false{ width:30px; display:inline-block; vertical-align:top; font-size:1.25em; text-align:center; }
-
-.form .members .added .account .values .inactive{ color:#D0D0D0; cursor:pointer; }
-
-.form .members .added .account .values .inactive:hover{ color:#428BCA; }
-
-.form .members .added .account .values .true.active{ color:#5CB85C; }
-
-.form .members .added .account .values .false.active{ color:#D9534F; }
-
-.form .members .added .account .remove{ padding:4px 0 4px 0; border:none; border-radius:4px; cursor:pointer; width:80px; margin:0 10px 0 10px; display:inline-block; vertical-align:top; color:#FFFFFF; background-color:#D9534F; font-family:barlow; font-size:14px; line-height:18px; }
-
-.form .members .added .account .remove:hover{ color:#000000; background-color:#B7312D; }
-
-.form .extensions{ background-color:#FFFFFF; border-radius:4px; display:none; }
-
-.form .extensions .title{ background-color:#428BCA; color:#FFFFFF; padding:10px 20px 10px 20px; line-height:24px; font-size:20px; font-family:barlow; border-bottom:1px solid #F0F0F0; border-radius:4px 4px 0 0; margin:0 0 10px 0; }
-
-.form .extensions .message{ padding:10px 20px 30px 20px; font-size:16px; line-height:24px; font-family:barlow-italic; }
-
-.form .extensions .element{ border-bottom:1px solid #F0F0F0; width:calc(100% - 40px); margin:0 20px 10px 20px; }
-
-.form .extensions .element .ext{ font-family:barlow; font-size:16px; line-height:24px; display:inline-block; vertical-align:top; width:calc(100% - 20px); }
-
-.form .extensions .element .box{ width:16px; display:inline-block; vertical-align:top; cursor:pointer; height:16px; margin:0; }
-
-.form .extensions .back{ display:inline-block; vertical-align:top; margin:20px 10px 20px calc(100% - 240px); width:100px; border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#D9534F; padding:4px 0 4px 0; cursor:pointer; }
-
-.form .extensions .back:hover{ color:#000000; background-color:#B7312D; }
-
-.form .extensions .next{ display:inline-block; vertical-align:top; margin:20px 20px 20px 10px; width:100px; border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#428BCA; padding:4px 0 4px 0; cursor:pointer; }
-
-.form .extensions .next:hover{ color:#000000; background-color:#2069A8; }
-
-.list{ border:1px solid #F0F0F0; z-index:30; position:absolute; top:80px; left:calc(50% - 300px); margin:0 0 40px 0; width:600px; background-color:#FFFFFF; border-radius:4px; }
-
-.list .search{ border-radius:4px 4px 0 0; background-color:#428BCA; width:calc(100% - 20px); padding:10px; margin:0 0 10px 0; border-bottom:1px solid #F0F0F0; }
-
-.list .search .input{ width:100%; max-width:300px; padding:0 0 0 4px; box-sizing:border-box; border-radius:4px; border:1px solid #F0F0F0; font-size:16px; line-height:24px; font-family:barlow; }
-
-.list .close{ color:#FFFFFF; font-size:1.25em; position:absolute; top:8px; right:8px; cursor:pointer; }
-
-.list .close:hover{ color:#D9534F; }
-
-.list .account{ padding:4px 10px 4px 10px; box-sizing:border-box; border-bottom:1px solid #F0F0F0; }
-
-.list .account .email{ width:calc(40% - 30px); padding-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:14px; line-height:18px; font-family:barlow; display:inline-block; vertical-align:top; }
-
-.list .account .lastname{ width:25%; padding-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:14px; line-height:18px; font-family:barlow; display:inline-block; vertical-align:top; }
-
-.list .account .firstname{ width:25%; padding-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:14px; line-height:18px; font-family:barlow; display:inline-block; vertical-align:top; }
-
-.list .account .add{ width:30px; display:inline-block; font-size:1.25em; vertical-align:top; text-align:center; }
-
-.list .account .add .icon{ cursor:pointer; color:#5CB85C; }
-
-.list .account .add .icon:hover{ color:#3A963A; }
-
-/****************************************************************************************************/
-
-@media (max-width: 319px)
-{
-  .form{ width:calc(100% - 40px); margin:20px; }
-
-  .list{ width:calc(100% - 40px); top:20px; left:20px; }
-
-  .form .extensions .next{ margin:10px 20px 20px calc(100% - 120px); }
-
-  .form .extensions .back{ margin:20px 20px 10px calc(100% - 120px); }
-}
-
-@media (min-width: 320px) and (max-width: 479px)
-{
-  .form{ width:calc(100% - 40px); margin:20px; }
-
-  .list{ width:calc(100% - 40px); top:20px; left:20px; }
-}
-
-@media (min-width: 480px) and (max-width: 639px)
-{
-  .form{ width:calc(100% - 40px); margin:20px; }
-
-  .list{ width:calc(100% - 40px); top:20px; left:20px; }
-}
-
-@media (min-width: 640px) and (max-width: 779px)
-{
-
-}
-
-@media (min-width: 780px) and (max-width: 959px)
-{
-
-}
-
-@media (min-width: 960px) and (max-width: 1279px)
-{
-
-}
-
-@media (min-width: 1280px) and (max-width: 1679px)
-{
-
-}
-
-@media (min-width: 1680px)
-{
-
-}
+.serviceCreationFormBlockExtensionsElementsElementLabel{ font-size:20px; line-height:24px; font-family:roboto-light; display:inline-block; vertical-align:top; width:calc(100% - 34px); }
 
 /****************************************************************************************************/

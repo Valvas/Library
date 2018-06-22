@@ -5,109 +5,62 @@
 @import url('report.css');
 @import url('aside.css');
 
-.logs-block
+body{ margin:0; background-color:#F9F9F9; }
+
+/****************************************************************************************************
+* ERROR BLOCK                                                                                       *
+****************************************************************************************************/
+
+.errorBackground{ z-index:280; background-color:#000000; opacity:0.25; position:fixed; top:0; right:0; bottom:0; left:0; }
+
+.errorBlock{ z-index:300; background-color:#FFFFFF; position:fixed; top:30vh; width:500px; left:calc(50% - 250px); box-sizing:border-box; border-radius:4px; }
+
+.errorBlockTitle{ background-color:#C8423E; color:#FFFFFF; border-radius:4px 4px 0 0; padding:10px; }
+
+.errorBlockMessage{ color:#C8423E; font-family:roboto-light; font-size:16px; line-height:20px; margin:20px 10px 10px 10px; }
+
+.errorBlockDetail{ color:#909090; font-family:roboto-light; font-size:14px; line-height:18px; margin:10px 10px 10px 10px; }
+
+.errorBlockClose{ border:none; border-radius:4px; cursor:pointer; background-color:#428BCA; color:#FFFFFF; font-family:roboto-light; font-size:16px; line-height:20px; padding:4px 0 4px 0; width:120px; margin:10px 10px 10px calc(100% - 130px); }
+
+.errorBlockClose:hover{ color:#000000; background-color:#317AB9; }
+
+/***************************************************************************************************/
+
+@media (max-width: 539px)
 {
-  z-index:99;
-  position:fixed;
+  .errorBlock{ width:calc(100% - 40px); margin:40px 20px 40px 20px; position:relative; }
 }
 
-.block-page-message
+/****************************************************************************************************
+* SUCCESS BLOCK                                                                                     *
+****************************************************************************************************/
+
+.successBackground{ z-index:280; background-color:#000000; opacity:0.25; position:fixed; top:0; right:0; bottom:0; left:0; }
+
+.successBlock{ z-index:300; background-color:#FFFFFF; position:fixed; top:30vh; width:500px; left:calc(50% - 250px); box-sizing:border-box; border-radius:4px; }
+
+.successBlockTitle{ background-color:#5CB85C; color:#FFFFFF; border-radius:4px 4px 0 0; padding:10px; }
+
+.successBlockMessage{ color:#5CB85C; font-family:roboto-light; font-size:16px; line-height:20px; margin:20px 10px 10px 10px; }
+
+.successBlockDetail{ color:#909090; font-family:roboto-light; font-size:14px; line-height:18px; margin:10px 10px 10px 10px; }
+
+.successBlockClose{ border:none; border-radius:4px; cursor:pointer; background-color:#428BCA; color:#FFFFFF; font-family:roboto-light; font-size:16px; line-height:20px; padding:4px 0 4px 0; width:120px; margin:10px 10px 10px calc(100% - 130px); }
+
+.successBlockClose:hover{ color:#000000; background-color:#317AB9; }
+
+/***************************************************************************************************/
+
+@media (max-width: 539px)
 {
-  font-size:large;
-  text-align:center;
-  font-family:barlow;
+  .successBlock{ width:calc(100% - 40px); margin:40px 20px 40px 20px; position:relative; }
 }
 
-.error-popup
-{
-  width:98%;
-  padding:1%;
-  margin-top:1%;
-  color:#FFFFFF;
-  text-align:center;
-  border-radius:8px;
-  font-family:barlow;
-  border:1px solid #E84E4F;
-  background-color:#9C2B2E;
-}
+/****************************************************************************************************
+* LOADING VEIL                                                                                      *
+****************************************************************************************************/
 
-.success-popup
-{
-  width:98%;
-  padding:1%;
-  margin-top:1%;
-  color:#FFFFFF;
-  text-align:center;
-  border-radius:8px;
-  font-family:barlow;
-  border:1px solid #77B5FE;
-  background-color:#4482CB;
-}
+.loadingVeil{ z-index:280; background-color:#000000; opacity:0.25; position:fixed; top:0; right:0; bottom:0; left:0; }
 
-.message-popup
-{
-  width:98%;
-  padding:1%;
-  margin-top:1%;
-  color:#000000;
-  text-align:center;
-  border-radius:8px;
-  font-family:barlow;
-  border:1px solid #FFFACD;
-  background-color:#CCC79A;
-}
-
-.page-not-found-link
-{
-  width:10%;
-  cursor:pointer;
-  color:#112233;
-  text-align:right;
-  margin:5% 5% 5% 5%;
-  font-family:raleway-light;
-}
-
-.page-not-found-link:hover
-{
-  color:#FF0921;
-}
-
-body
-{
-  margin:0;
-  background-color:#F9F9F9;
-}
-
-/****************************************************************************************************/
-
-@media (max-width: 639px)
-{
-  .logs-block{ top:80px; left:calc(50% - 150px); width:300px; }
-}
-
-@media (min-width: 640px) and (max-width: 767px)
-{
-  .logs-block{ top:80px; left:calc(50% - 150px); width:300px; }
-}
-
-@media (min-width: 768px) and (max-width: 959px)
-{
-  .logs-block{ top:80px; left:calc(50% - 150px); width:300px; }
-}
-
-@media (min-width: 960px) and (max-width: 1279px)
-{
-  .logs-block{ top:80px; left:calc(50% - 150px); width:300px; }
-}
-
-@media (min-width: 1280px) and (max-width: 1679px)
-{
-  .logs-block{ top:80px; left:calc(50% - 150px); width:300px; }
-}
-
-@media (min-width: 1680px)
-{
-  .logs-block{ top:80px; left:calc(50% - 150px); width:300px; }
-}
-
-/****************************************************************************************************/
+.loadingSpinner{ top:0; position:fixed; z-index:300; width:100px; padding:18px 0 18px 0; background-color:#384046; border-radius:4px; box-sizing:border-box; margin:calc(50vh - 50px) calc(50% - 50px) 20px calc(50% - 50px); color:#5CB85C; text-align:center; }

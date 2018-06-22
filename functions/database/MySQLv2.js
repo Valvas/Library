@@ -155,6 +155,25 @@ module.exports.insertQuery = (queryObject, SQLConnector, callback) =>
 
 /****************************************************************************************************/
 
+module.exports.insertQueryWithUUID = (queryObject, databaseConnection, callback) =>
+{
+  const uuid = UUIDModule.v4();
+
+  var keys = Object.keys(queryObject.args).join() + ',uuid';
+  var values = `"${Object.values(queryObject.args).join('","')}", "${uuid}"`;
+
+  databaseConnection.qeury(`INSERT INTO ${queryObject.databaseName}.${queryObject.tableName} (${keys}) VALUES (${values})`, (error, result) =>
+  {
+    console.log(result);
+
+    if(error) return callback(error.message);
+
+    return callback(null);
+  });
+}
+
+/****************************************************************************************************/
+
 module.exports.selectQuery = (query, SQLConnector, callback) =>
 {
   var sql = `SELECT ${Object.values(query.args).join()} FROM ${query.databaseName}.${query.tableName}`;

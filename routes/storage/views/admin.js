@@ -3,10 +3,13 @@
 const express                   = require('express');
 const params                    = require(`${__root}/json/params`);
 const errors                    = require(`${__root}/json/errors`);
+const constants                 = require(`${__root}/functions/constants`);
 const commonAppStrings          = require(`${__root}/json/strings/common`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
+const webContent                = require(`${__root}/json/share/webcontent`);
 const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
+const storageAppFilesExtensions = require(`${__root}/functions/storage/files/extensions`);
 
 var router = express.Router();
 
@@ -18,7 +21,10 @@ router.get('/', (req, res) =>
   { 
     account: req.session.account,
     rights: req.app.locals.rights,
-    strings: { common: commonAppStrings, storage: storageAppStrings }
+    strings: { common: commonAppStrings, storage: storageAppStrings },
+    webContent: webContent,
+    location: 'administration',
+    adminLocation: 'home'
   });
 });
 
@@ -33,20 +39,20 @@ router.get('/services', (req, res) =>
 
   else
   {
-    storageAppAdminGet.getServicesDetailForConsultation(req.app.get('mysqlConnector'), (error, servicesDetail) =>
+    storageAppAdminGet.getServicesDetailForConsultation(req.app.get('databaseConnectionPool'), (error, servicesDetail) =>
     {
       if(error != null)
       {
-        error.message = errors[error.code];
-        error.detail = error.detail == undefined ? null : error.detail;
-
         res.render('storage/admin/services/list',
         {
           account: req.session.account,
           rights: req.app.locals.rights,
-          error: error,
+          error: { message: errors[error.code], detail: error.detail },
           services: null,
-          strings: { common: commonAppStrings, storage: storageAppStrings }
+          strings: { common: commonAppStrings, storage: storageAppStrings },
+          webContent: webContent,
+          location: 'administration',
+          adminLocation: 'services'
         });
       }
 
@@ -58,7 +64,10 @@ router.get('/services', (req, res) =>
           rights: req.app.locals.rights,
           error: null,
           services: servicesDetail,
-          strings: { common: commonAppStrings, storage: storageAppStrings }
+          strings: { common: commonAppStrings, storage: storageAppStrings },
+          webContent: webContent,
+          location: 'administration',
+          adminLocation: 'services'
         });
       }
     });
@@ -84,9 +93,12 @@ router.get('/services-rights', (req, res) =>
         {
           account: req.session.account,
           rights: req.app.locals.rights,
-          error: { message: errors[constants.error.code], detail: error.detail },
+          error: { message: errors[error.code], detail: error.detail },
           services: null,
-          strings: { common: commonAppStrings, storage: storageAppStrings }
+          strings: { common: commonAppStrings, storage: storageAppStrings },
+          webContent: webContent,
+          location: 'administration',
+          adminLocation: 'rights'
         });
       }
 
@@ -98,7 +110,10 @@ router.get('/services-rights', (req, res) =>
           rights: req.app.locals.rights,
           error: null,
           services: servicesDetail,
-          strings: { common: commonAppStrings, storage: storageAppStrings }
+          strings: { common: commonAppStrings, storage: storageAppStrings },
+          webContent: webContent,
+          location: 'administration',
+          adminLocation: 'rights'
         });
       }
     });
@@ -120,7 +135,10 @@ router.get('/services/detail/:service', (req, res) =>
         account: req.session.account,
         error: null,
         service: service,
-        strings: { common: commonAppStrings, storage: storageAppStrings }
+        strings: { common: commonAppStrings, storage: storageAppStrings },
+        webContent: webContent,
+        location: 'administration',
+        adminLocation: 'services'
       });
     }
   });
@@ -137,13 +155,37 @@ router.get('/services/form', (req, res) =>
 
   else
   {
-    res.render('storage/admin/services/form',
+    storageAppFilesExtensions.getExtensions(req.app.get('databaseConnectionPool'), req.app.get('params').database.storage, (error, extensions) =>
     {
-      account: req.session.account,
-      rights: req.app.locals.rights,
-      error: null,
-      strings: { common: commonAppStrings, storage: storageAppStrings },
-      ext: params.ext
+      if(error != null)
+      {
+        res.render('storage/admin/services/form',
+        {
+          account: req.session.account,
+          rights: req.app.locals.rights,
+          error: { message: errors[error.code], detail: error.detail },
+          strings: { common: commonAppStrings, storage: storageAppStrings },
+          webContent: webContent,
+          location: 'administration',
+          adminLocation: 'services',
+          extensions: null
+        });
+      }
+
+      else
+      {
+        res.render('storage/admin/services/form',
+        {
+          account: req.session.account,
+          rights: req.app.locals.rights,
+          error: null,
+          strings: { common: commonAppStrings, storage: storageAppStrings },
+          webContent: webContent,
+          location: 'administration',
+          adminLocation: 'services',
+          extensions: extensions
+        });
+      }
     });
   }
 });

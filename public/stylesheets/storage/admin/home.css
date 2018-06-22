@@ -1,6 +1,6 @@
 /****************************************************************************************************/
 
-.rights{ width:calc(100% - 240px); max-width:1360px; display:inline-block; vertical-align:top; }
+.rights{ max-width:1360px; display:inline-block; vertical-align:top; margin:20px 0 20px 0; }
 
 .rights .info{ font-family:barlow; font-size:18px; line-height:24px; margin:0 20px 10px 20px; }
 

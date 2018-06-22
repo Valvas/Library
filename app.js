@@ -46,7 +46,7 @@ module.exports = (callback) =>
         secret: 'sdgdsfgd7ugdq87dfsd8glqgOkoh56hhqshoOHU9870jfoqo7y',
         resave: false,
         saveUninitialized: false,
-        cookie: {  }
+        cookie: { maxAge: 86400000 }
       }));
       
       const initLauncher = require(`${__root}/functions/init/start`);

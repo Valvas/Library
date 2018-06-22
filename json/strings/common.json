@@ -25,7 +25,7 @@
       "home": "Accueil",
       "apps":
       {
-        "label": "Mes application",
+        "label": "Mes applications",
         "empty": "Aucune application",
         "storage": "Stockage",
         "disease": "AT",
@@ -33,5 +33,10 @@
       },
       "reports": "Rapports"
     }
+  },
+
+  "other":
+  {
+    "back": "Retour"
   }
 }

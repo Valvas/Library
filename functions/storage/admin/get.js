@@ -9,7 +9,8 @@ const storageAppServicesGet = require(`${__root}/functions/storage/services/get`
 //const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
 //To remove when updated database manager will be set for all the project
-const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
+const oldDatabaseManager    = require(`${__root}/functions/database/MySQLv2`);
+const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
 
 /****************************************************************************************************/
 
@@ -26,7 +27,7 @@ module.exports.getAccountAdminRights = (accountID, databaseConnector, callback) 
 
     else
     {
-      databaseManager.selectQuery(
+      oldDatabaseManager.selectQuery(
       {
         'databaseName': params.database.storage.label,
         'tableName': params.database.storage.tables.admin,
@@ -53,11 +54,23 @@ module.exports.getAccountAdminRights = (accountID, databaseConnector, callback) 
 
 /****************************************************************************************************/
 
-module.exports.getServicesDetailForConsultation = (databaseConnector, callback) =>
+module.exports.getServicesDetailForConsultation = (databaseConnectionPool, callback) =>
 {
-  if(databaseConnector == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST });
+  databaseConnectionPool.getConnection((error, connection) =>
+  {
+    if(error) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error.message });
 
-  storageAppServicesGet.getAllServices(databaseConnector, (error, services) =>
+    storageAppServicesGet.getAllServices(connection, (error, services) =>
+    {
+      connection.release();
+
+      if(error != null) return callback(error);
+
+      return callback(null, services);
+    });
+  });
+
+  /*storageAppServicesGet.getAllServices(databaseConnector, (error, services) =>
   {
     if(error != null) return callback(error);
 
@@ -85,7 +98,7 @@ module.exports.getServicesDetailForConsultation = (databaseConnector, callback) 
     }
 
     Object.keys(services).length == 0 ? callback(null, {}) : browseServicesLoop();
-  });
+  });*/
 }
 
 /****************************************************************************************************/

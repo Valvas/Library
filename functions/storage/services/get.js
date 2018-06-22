@@ -8,36 +8,29 @@ const accountsGet         = require(`${__root}/functions/accounts/get`);
 //const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
 //To remove when updated database manager will be set for all the project
-const databaseManager     = require(`${__root}/functions/database/MySQLv2`);
+const oldDatabaseManager  = require(`${__root}/functions/database/MySQLv2`);
+const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 var storageAppServicesGet = module.exports = {};
 
 /****************************************************************************************************/
 
-storageAppServicesGet.getServiceUsingID = (serviceID, databaseConnector, callback) =>
+storageAppServicesGet.getServiceUsingUUID = (serviceUUID, databaseConnector, callback) =>
 {
-  serviceID           == undefined ||
-  databaseConnector   == undefined ?
-
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
-
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.storage.label,
-    'tableName': params.database.storage.tables.services,
-    'args': { '0': '*' },
-    'where': { '0': { 'operator': '=', '0' : { 'key': 'id', 'value': serviceID } } }
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.services,
+    args: [ '*' ],
+    where: { operator: '=', key: 'uuid', value: serviceUUID }
 
-  }, databaseConnector, (boolean, serviceOrErrorMessage) =>
+  }, databaseConnector, (error, result) =>
   {
-    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: serviceOrErrorMessage });
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    else
-    {
-      serviceOrErrorMessage.length == 0 ?
-      callback({ status: 404, code: constants.SERVICE_NOT_FOUND }) :
-      callback(null, serviceOrErrorMessage[0]);
-    }
+    if(result.length == 0) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
+
+    return callback(null, result[0]);
   });
 }
 
@@ -52,21 +45,18 @@ storageAppServicesGet.getServiceUsingName = (serviceName, databaseConnector, cal
 
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.storage.label,
-    'tableName': params.database.storage.tables.services,
-    'args': { '0': '*' },
-    'where': { '0': { 'operator': '=', '0' : { 'key': 'name', 'value': serviceName } } }
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.services,
+    args: [ '*' ],
+    where: { operator: '=', key: 'name', value: serviceName }
 
-  }, databaseConnector, (boolean, serviceOrErrorMessage) =>
+  }, databaseConnector, (error, result) =>
   {
-    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: serviceOrErrorMessage });
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    else
-    {
-      serviceOrErrorMessage.length == 0 ?
-      callback({ status: 404, code: constants.SERVICE_NOT_FOUND }) :
-      callback(null, serviceOrErrorMessage[0]);
-    }
+    if(result.length == 0) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
+
+    return callback(null, result[0]);
   });
 }
 
@@ -79,7 +69,7 @@ storageAppServicesGet.getServiceUsingLabel = (serviceLabel, databaseConnector, c
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  databaseManager.selectQuery(
+  oldDatabaseManager.selectQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.services,
@@ -103,38 +93,30 @@ storageAppServicesGet.getServiceUsingLabel = (serviceLabel, databaseConnector, c
 
 storageAppServicesGet.getAllServices = (databaseConnector, callback) =>
 {
-  databaseConnector == undefined ?
-
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
-
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.storage.label,
-    'tableName': params.database.storage.tables.services,
-    'args': { '0': '*' },
-    'where': {  }
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.services,
+    args: [ '*' ],
+    where: {  }
 
-  }, databaseConnector, (boolean, servicesOrErrorMessage) =>
+  }, databaseConnector, (error, services) =>
   {
-    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: servicesOrErrorMessage });
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    else
+    var x = 0;
+    var servicesObject = {};
+
+    var loop = () =>
     {
-      var x = 0;
-      var services = {};
+      servicesObject[services[x].uuid] = {};
+      servicesObject[services[x].uuid].name = services[x].name;
+      servicesObject[services[x].uuid].fileLimit = services[x].file_size_limit;
 
-      var loop = () =>
-      {
-        services[servicesOrErrorMessage[x].id] = {};
-        services[servicesOrErrorMessage[x].id].name = servicesOrErrorMessage[x].name;
-        services[servicesOrErrorMessage[x].id].label = servicesOrErrorMessage[x].label;
-        services[servicesOrErrorMessage[x].id].fileLimit = servicesOrErrorMessage[x].file_limit;
-
-        servicesOrErrorMessage[x += 1] == undefined ? callback(null, services) : loop();
-      }
-
-      servicesOrErrorMessage.length == 0 ? callback(null, services) : loop();
+      services[x += 1] == undefined ? callback(null, servicesObject) : loop();
     }
+
+    services.length == 0 ? callback(null, servicesObject) : loop();
   });
 }
 
@@ -153,7 +135,7 @@ storageAppServicesGet.getFilesFromService = (serviceName, databaseConnector, cal
     
     else
     {
-      databaseManager.selectQuery(
+      oldDatabaseManager.selectQuery(
       {
         'databaseName': params.database.storage.label,
         'tableName': params.database.storage.tables.files,
@@ -228,7 +210,7 @@ module.exports.getAmountOfFilesFromService = (serviceID, databaseConnector, call
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  databaseManager.selectQuery(
+  oldDatabaseManager.selectQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.files,
@@ -265,7 +247,7 @@ module.exports.getMembersFromService = (serviceID, databaseConnector, callback) 
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  databaseManager.selectQuery(
+  oldDatabaseManager.selectQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.rights,
@@ -300,7 +282,7 @@ module.exports.getAmountOfMembersFromService = (serviceID, databaseConnector, ca
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  databaseManager.selectQuery(
+  oldDatabaseManager.selectQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.rights,
@@ -322,7 +304,7 @@ module.exports.getFileMaxSize = (serviceID, databaseConnector, callback) =>
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  databaseManager.selectQuery(
+  oldDatabaseManager.selectQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.services,

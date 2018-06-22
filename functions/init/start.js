@@ -12,6 +12,7 @@ const initFolder          = require(`${__root}/functions/init/folders`);
 const database            = require(`${__root}/functions/database/init`);
 const services            = require(`${__root}/functions/services/init`);
 const initCreateRights    = require(`${__root}/functions/init/createRights`);
+const shareAppInit        = require(`${__root}/functions/init/shareAppInit`);
 const initCreateAccounts  = require(`${__root}/functions/init/createAccounts`);
 
 /****************************************************************************************************/
@@ -129,6 +130,14 @@ module.exports.startApp = (app, callback) =>
         port              : params.database.port,
         password          : params.database.password
       });
+
+      var connection = mysql.createConnection(
+      {
+        host              : params.database.host,
+        user              : params.database.user,
+        port              : params.database.port,
+        password          : params.database.password
+      });
     
       var transporter = nodemailer.createTransport(
       {
@@ -147,6 +156,10 @@ module.exports.startApp = (app, callback) =>
       });
     
       app.set('transporter', transporter);
+      app.set('mysqlConnector', connection);
+      app.set('databaseConnectionPool', pool);
+
+      shareAppInit.initShareApplication(params.database.storage, pool);
     
       database.createDatabases(pool, () =>
       { 
@@ -154,8 +167,6 @@ module.exports.startApp = (app, callback) =>
         {
           initCreateRights.createRights(pool, () =>
           {
-            app.set('mysqlConnector', pool);
-
             initFolder.createAppFolders(params, (error) =>
             {
               if(error == null) callback();

@@ -1,0 +1,17 @@
+{
+  "asideMenuLinks":
+  {
+    "home": "/storage",
+    "services": "/storage/services",
+    "administration": "/storage/admin",
+    "exit": "/home"
+  },
+
+  "asideMenuIcons":
+  {
+    "home": "<i class=\"fas fa-home\"></i>",
+    "services": "<i class=\"fas fa-box-open\"></i>",
+    "administration": "<i class=\"fas fa-cogs\"></i>",
+    "exit": "<i class=\"fas fa-door-open\"></i>"
+  }
+}

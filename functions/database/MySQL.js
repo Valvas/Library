@@ -43,46 +43,36 @@ module.exports.insertQuery = function(queryObject, SQLPool, callback)
 
 /****************************************************************************************************/
 
-module.exports.selectQuery = function(query, SQLPool, callback)
+module.exports.selectQuery = function(query, SQLConnection, callback)
 {
-  SQLPool.getConnection((err, SQLConnection) =>
-  {
-    if(err) callback(false, err.stack);
+  var sql = `SELECT ${Object.values(query.args).join()} FROM ${query.databaseName}.${query.tableName}`;
 
-    else
-    {
-      var sql = `SELECT ${Object.values(query.args).join()} FROM ${query.databaseName}.${query.tableName}`;
+  var x = 0;
   
-      var x = 0;
-      
-      var loop = function()
-      {
-        returnStatement(query['where'][Object.keys(query.where)[x]], [Object.keys(query.where)[x]], function(statement)
-        {
-          sql += statement;
-      
-          x += 1;
-            
-          Object.keys(query.where)[x] != undefined ? loop() :
-          
-          SQLConnection.query(sql, function(err, result)
-          {
-            SQLConnection.release();
-            err ? callback(false, err.stack) : callback(true, result);
-          });
-        });
-      }
-      
-      if(Object.keys(query.where)[x] != undefined) sql += ' WHERE ';
-      
+  var loop = function()
+  {
+    returnStatement(query['where'][Object.keys(query.where)[x]], [Object.keys(query.where)[x]], function(statement)
+    {
+      sql += statement;
+  
+      x += 1;
+        
       Object.keys(query.where)[x] != undefined ? loop() :
-
+      
       SQLConnection.query(sql, function(err, result)
       {
-        SQLConnection.release();
         err ? callback(false, err.stack) : callback(true, result);
       });
-    }
+    });
+  }
+  
+  if(Object.keys(query.where)[x] != undefined) sql += ' WHERE ';
+  
+  Object.keys(query.where)[x] != undefined ? loop() :
+
+  SQLConnection.query(sql, function(err, result)
+  {
+    err ? callback(false, err.stack) : callback(true, result);
   });
 }
 

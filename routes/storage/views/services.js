@@ -4,6 +4,7 @@ const express                   = require('express')
 const errors                    = require(`${__root}/json/errors`)
 const commonAppStrings          = require(`${__root}/json/strings/common`)
 const storageAppStrings         = require(`${__root}/json/strings/storage`)
+const webContent                = require(`${__root}/json/share/webcontent`)
 const commonAppsAccess          = require(`${__root}/functions/common/apps/access`)
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`)
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`)
@@ -24,7 +25,9 @@ router.get('/', (req, res) =>
         strings: { common: commonAppStrings, storage: storageAppStrings },
         services: null,
         rights: null,
-        error: { message: errors[error.code], detail: error.detail }
+        error: { message: errors[error.code], detail: error.detail },
+        webContent: webContent,
+        location: 'services'
       })
     }
 
@@ -40,7 +43,9 @@ router.get('/', (req, res) =>
             strings: { common: commonAppStrings, storage: storageAppStrings },
             services: services,
             rights: rights,
-            error: null
+            error: null,
+            webContent: webContent,
+            location: 'services'
           })
         }
 
@@ -52,7 +57,9 @@ router.get('/', (req, res) =>
             strings: { common: commonAppStrings, storage: storageAppStrings },
             services: null,
             rights: null,
-            error: { message: errors[error.code], detail: error.detail }
+            error: { message: errors[error.code], detail: error.detail },
+            webContent: webContent,
+            location: 'services'
           })
         }
       })
@@ -75,7 +82,9 @@ router.get('/:service', (req, res) =>
         rights: null,
         files: null,
         error: { message: errors[error.code], detail: error.detail },
-        service: null
+        service: null,
+        webContent: webContent,
+        location: 'services'
       })
     }
 
@@ -92,7 +101,9 @@ router.get('/:service', (req, res) =>
             rights: null,
             files: null,
             error: { message: errors[error.code], detail: error.detail },
-            service: null
+            service: null,
+            webContent: webContent,
+            location: 'services'
           })
         }
 
@@ -109,7 +120,9 @@ router.get('/:service', (req, res) =>
                 rights: rights,
                 files: files,
                 error: null,
-                service: service
+                service: service,
+                webContent: webContent,
+                location: 'services'
               })
             }
 
@@ -122,7 +135,9 @@ router.get('/:service', (req, res) =>
                 rights: null,
                 files: null,
                 error: { message: errors[error.code], detail: error.detail },
-                service: null
+                service: null,
+                webContent: webContent,
+                location: 'services'
               })
             }
           })

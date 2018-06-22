@@ -12,96 +12,107 @@ const storageAppFilesRemove = require(`${__root}/functions/storage/files/remove`
 //const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
 //To remove when updated database manager will be set for all the project
-const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
+const oldDatabaseManager    = require(`${__root}/functions/database/MySQLv2`);
+const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
 
 /****************************************************************************************************/
 
-module.exports.createService = (serviceName, serviceLabel, maxFileSize, extensions, accountID, servicesExtensionsAuthorized, databaseConnector, params, callback) =>
+module.exports.createService = (serviceName, maxFileSize, authorizedExtensions, accountID, databaseConnector, params, callback) =>
 {
-  serviceName                   == undefined ||
-  serviceLabel                  == undefined ||
-  maxFileSize                   == undefined ||
-  extensions                    == undefined ||
-  servicesExtensionsAuthorized  == undefined ||
-  accountID                     == undefined ||
-  databaseConnector             == undefined ?
+  serviceName = serviceName.toLowerCase();
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  if(maxFileSize < params.init.minFileSize) return callback({ status: 406, code: constants.SERVICE_FILE_MIN_SIZE_TOO_LOW, detail: null });
+
+  if(maxFileSize > params.init.maxFileSize) return callback({ status: 406, code: constants.SERVICE_FILE_MIN_SIZE_TOO_HIGH, detail: null });
+
+  if(Object.keys(authorizedExtensions).length == 0) return callback({ status: 406, code: constants.ONE_EXTENSION_REQUIRED, detail: null });
 
   accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
   {
-    error != null ? callback(error) :
+    if(error != null) return callback(error);
 
     storageAppAdminGet.getAccountAdminRights(accountID, databaseConnector, (error, rights) =>
     {
-      if(error != null) callback(error);
+      if(error != null) return callback(error);
 
-      else
+      if(rights.create_services == 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_CREATE_SERVICES });
+
+      storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
       {
-        if(rights.create_services == 0) callback({ status: 403, code: constants.UNAUTHORIZED_TO_CREATE_SERVICES });
+        if(error != null && error.status != 404) return callback(error);
 
-        else
+        if(error == null) return callback({ status: 406, code: constants.SERVICE_NAME_ALREADY_IN_USE, detail: null });
+
+        databaseManager.insertQueryWithUUID(
         {
-          serviceName = serviceName.toLowerCase();
+          databaseName: params.database.storage.label,
+          tableName: params.database.storage.tables.services,
+          args: { name: serviceName, file_size_limit: maxFileSize }
+          
+        }, databaseConnector, (error, result) =>
+        {
+          if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-          storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
+          databaseManager.selectQuery(
           {
-            if(error != null && error.status != 404) callback(error);
+            databaseName: params.database.storage.label,
+            tableName: params.database.storage.tables.services,
+            args: [ 'uuid' ],
+            where: { operator: '=', key: 'name', value: serviceName }
 
-            else if(error == null) callback({ status: 406, code: constants.SERVICE_IDENTIFIER_ALREADY_IN_USE });
+          }, databaseConnector, (error, service) =>
+          {
+            if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-            else
+            var extensionsIterator = 0;
+
+            var extensionsBrowser = () =>
             {
-              storageAppServicesGet.getServiceUsingLabel(serviceLabel, databaseConnector, (error, service) =>
+              databaseManager.selectQuery(
               {
-                if(error != null && error.status != 404) callback(error);
+                databaseName: params.database.storage.label,
+                tableName: params.database.storage.tables.extensions,
+                args: [ 'uuid' ],
+                where: { operator: '=', key: 'uuid', value: authorizedExtensions[Object.keys(authorizedExtensions)[extensionsIterator]] }
 
-                else if(error == null) callback({ status: 406, code: constants.SERVICE_NAME_ALREADY_IN_USE });
+              }, databaseConnector, (error, extension) =>
+              {
+                if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-                else
+                databaseManager.insertQueryWithUUID(
                 {
-                  if(maxFileSize < params.init.minFileSize) callback({ status: 406, code: constants.SERVICE_FILE_MIN_SIZE_TOO_LOW });
+                  databaseName: params.database.storage.label,
+                  tableName: params.database.storage.tables.extensionsForService,
+                  args: { extension_uuid: extension[0].uuid, service_uuid: service[0].uuid }
 
-                  else if(maxFileSize > params.init.maxFileSize) callback({ status: 406, code: constants.SERVICE_FILE_MIN_SIZE_TOO_HIGH });
+                }, databaseConnector, (error, result) =>
+                {
+                  if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+                  if(Object.keys(authorizedExtensions)[extensionsIterator += 1] != undefined) extensionsBrowser();
 
                   else
                   {
-                    databaseManager.insertQuery(
+                    createStorageFolder(service[0].uuid, databaseConnector, params, (error) =>
                     {
-                      'databaseName': params.database.storage.label,
-                      'tableName': params.database.storage.tables.services,
-                      'uuid': false,
-                      'args': { 'name': serviceName, 'label': serviceLabel, 'file_limit': maxFileSize }
-                      
-                    }, databaseConnector, (boolean, insertedIDOrErrorMessage) =>
-                    {
-                      if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: insertedIDOrErrorMessage });
+                      if(error != null) return callback(error);
 
-                      else
+                      createLogsFolder(service[0].uuid, databaseConnector, params, (error) =>
                       {
-                        createStorageFolder(serviceName, insertedIDOrErrorMessage, databaseConnector, params, (error) =>
-                        {
-                          error != null ? callback(error) :
+                        if(error != null) return callback(error);
 
-                          createLogsFolder(serviceName, insertedIDOrErrorMessage, databaseConnector, params, (error) =>
-                          {
-                            error != null ? callback(error) :
-
-                            writeExtensionsInFileAndInAppVar(extensions, serviceName, insertedIDOrErrorMessage, servicesExtensionsAuthorized, params, (error) =>
-                            {
-                              error != null ? callback(error) : callback(null, insertedIDOrErrorMessage);
-                            });
-                          });
-                        });
-                      }
+                        return callback(null);
+                      });
                     });
                   }
-                }
+                });
               });
             }
+
+            extensionsBrowser();
           });
-        }
-      }
+        });
+      });
     });
   });
 }
@@ -144,7 +155,7 @@ module.exports.addMembersToService = (serviceID, members, accountID, databaseCon
 
               else
               {
-                databaseManager.insertQuery(
+                oldDatabaseManager.insertQuery(
                 {
                   'databaseName': params.database.storage.label,
                   'tableName': params.database.storage.tables.rights,
@@ -204,7 +215,7 @@ module.exports.removeMembersFromAService = (serviceID, members, accountID, datab
 
               else
               {
-                databaseManager.deleteQuery(
+                oldDatabaseManager.deleteQuery(
                 {
                   'databaseName': params.database.storage.label,
                   'tableName': params.database.storage.tables.rights,
@@ -260,7 +271,7 @@ module.exports.addRightOnService = (accountID, serviceID, right, databaseConnect
 
   argToUpdate[rightToUpdate] = 1;
 
-  databaseManager.updateQuery(
+  oldDatabaseManager.updateQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.rights,
@@ -310,7 +321,7 @@ module.exports.removeRightOnService = (accountID, serviceID, right, databaseConn
 
   argToUpdate[rightToUpdate] = 0;
 
-  databaseManager.updateQuery(
+  oldDatabaseManager.updateQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.rights,
@@ -327,153 +338,77 @@ module.exports.removeRightOnService = (accountID, serviceID, right, databaseConn
 
 /****************************************************************************************************/
 
-function createStorageFolder(serviceName, serviceID, databaseConnector, params, callback)
+function createStorageFolder(serviceUUID, databaseConnector, params, callback)
 {
-  foldersCreate.createFolder(serviceName, `${params.storage.root}/${params.storage.services}`, (error) =>
+  foldersCreate.createFolder(serviceUUID, `${params.storage.root}/${params.storage.services}`, (error) =>
   {
-    if(error != null)
-    {
-      databaseManager.deleteQuery(
-      {
-        'databaseName': params.database.storage.label,
-        'tableName': params.database.storage.tables.services,
-        'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': serviceID } } }
+    if(error == null) return callback(null);
 
-      }, databaseConnector, (boolean, deletedRowsOrErrorMessage) =>
-      {
-        callback(error);
-      });
-    }
+    console.log('MUST DELETE SERVICE + EXTENSIONS AUTHORIZED');
 
-    else
-    {
-      callback(null);
-    }
+    return callback(error);
   });
 }
 
 /****************************************************************************************************/
 
-function createLogsFolder(serviceName, serviceID, databaseConnector, params, callback)
+function createLogsFolder(serviceUUID, databaseConnector, params, callback)
 {
-  foldersCreate.createFolder(serviceName, `${params.storage.root}/${params.storage.fileLogs}`, (error) =>
+  foldersCreate.createFolder(serviceUUID, `${params.storage.root}/${params.storage.fileLogs}`, (error) =>
   {
-    if(error != null)
-    {
-      databaseManager.deleteQuery(
-      {
-        'databaseName': params.database.storage.label,
-        'tableName': params.database.storage.tables.services,
-        'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': serviceID } } }
+    if(error == null) return callback(null);
 
-      }, databaseConnector, (boolean, deletedRowsOrErrorMessage) =>
-      {
-        callback(error);
-      });
-    }
+    console.log('MUST DELETE SERVICE + EXTENSIONS AUTHORIZED');
 
-    else
-    {
-      callback(null);
-    }
+    return callback(error);
   });
 }
 
 /****************************************************************************************************/
 
-function writeExtensionsInFileAndInAppVar(extensions, serviceName, serviceID, servicesExtensionsAuthorized, params, callback)
+module.exports.removeService = (serviceUUID, accountID, databaseConnectionPool, params, callback) =>
 {
-  fs.readFile(`${__root}/json/services.json`, (error, data) =>
+  databaseConnectionPool.getConnection((error, connection) =>
   {
-    if(error)
-    {
-      databaseManager.deleteQuery(
-      {
-        'databaseName': params.database.storage.label,
-        'tableName': params.database.storage.tables.services,
-        'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': insertedIDOrErrorMessage } } }
+    if(error) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error.message });
 
-      }, databaseConnector, (boolean, deletedRowsOrErrorMessage) =>
-      {
-        callback(error);
-      });
-    }
-
-    else
-    {
-      var json = JSON.parse(data), x = 0;
-
-      delete json[serviceName];
-      delete servicesExtensionsAuthorized[serviceName];
-
-      json[serviceName] = {};
-      json[serviceName].ext_accepted = {};
-
-      var addExtensionToService = () =>
-      {
-        json[serviceName].ext_accepted[x] = extensions[Object.keys(extensions)[x]];
-
-        Object.keys(extensions)[x += 1] != undefined ? addExtensionToService() :
-
-        fs.writeFile(`${__root}/json/services.json`, JSON.stringify(json), (error) =>
-        {
-          servicesExtensionsAuthorized[serviceName] = {};
-          servicesExtensionsAuthorized[serviceName].ext_accepted = {};
-          servicesExtensionsAuthorized[serviceName].ext_accepted = json[serviceName].ext_accepted;
-
-          callback(null);
-        });
-      }
-
-      Object.keys(extensions)[x] != undefined ? addExtensionToService() :
-
-      fs.writeFile(`${__root}/json/services.json`, JSON.stringify(json), (error) =>
-      {
-        servicesExtensionsAuthorized[serviceName] = {};
-        servicesExtensionsAuthorized[serviceName].ext_accepted = {};
-        servicesExtensionsAuthorized[serviceName].ext_accepted = json[serviceName].ext_accepted;
-
-        callback(null);
-      });
-    }
-  });
-}
-
-/****************************************************************************************************/
-
-module.exports.removeService = (serviceName, accountID, databaseConnector, params, callback) =>
-{
-  if(serviceName == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'service name is missing' });
-  if(accountID == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'account ID is missing' });
-  if(databaseConnector == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'database connector is missing' });
-
-  storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
-  {
-    if(error != null) return callback(error);
-
-    storageAppAdminGet.getAccountAdminRights(accountID, databaseConnector, (error, rights) =>
+    storageAppServicesGet.getServiceUsingUUID(serviceUUID, connection, (error, service) =>
     {
       if(error != null) return callback(error);
 
-      if(rights.remove_services == 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_REMOVE_SERVICES, detail: null });
-
-      removeFilesFromService(service, accountID, databaseConnector, params, (error) =>
+      storageAppAdminGet.getAccountAdminRights(accountID, databaseConnector, (error, rights) =>
       {
         if(error != null) return callback(error);
 
-        fs.rmdir(`${params.storage.root}/${params.storage.services}/${serviceName}`, (error) =>
+        if(rights.remove_services == 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_REMOVE_SERVICES, detail: null });
+
+        removeFilesFromService();
+        removeFoldersFromService();
+
+        databaseManager.deleteQuery(
         {
+          databaseName: params.database.storage.label,
+          tableName: params.database.storage.tables.authorizedExtensions,
+          where: { service_uuid: serviceUUID }
+
+        }, connection, (error, result) =>
+        {
+          if(error) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
           databaseManager.deleteQuery(
           {
-            'databaseName': params.database.storage.label,
-            'tableName': params.database.storage.tables.services,
-            'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': service.id } } }
-
-          }, databaseConnector, (boolean, errorMessage) =>
+            databaseName: params.database.storage.label,
+            tableName: params.database.storage.tables.services,
+            where: { uuid: serviceUUID }
+  
+          }, connection, (error, result) =>
           {
-            if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
+            if(error) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-            return callback(null);
+            fs.rmdir(`${params.storage.root}/${params.storage.services}/${serviceUUID}`, (error) =>
+            {
+              return callback(null);
+            });
           });
         });
       });
@@ -485,7 +420,7 @@ module.exports.removeService = (serviceName, accountID, databaseConnector, param
 
 function removeFilesFromService(service, accountID, databaseConnector, params, callback)
 {
-  databaseManager.selectQuery(
+  oldDatabaseManager.selectQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.files,
@@ -530,7 +465,7 @@ module.exports.updateServiceLabel = (serviceID, serviceLabel, databaseConnector,
     return callback({ status: 406, code: constants.WRONG_SERVICE_LABEL_FORMAT, detail: null });
   }
 
-  databaseManager.updateQuery(
+  oldDatabaseManager.updateQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.services,
@@ -549,7 +484,7 @@ module.exports.updateServiceLabel = (serviceID, serviceLabel, databaseConnector,
 
 module.exports.updateServiceMaxFileSize = (serviceID, serviceMaxFileSize, databaseConnector, params, callback) =>
 {
-  databaseManager.updateQuery(
+  oldDatabaseManager.updateQuery(
   {
     'databaseName': params.database.storage.label,
     'tableName': params.database.storage.tables.services,

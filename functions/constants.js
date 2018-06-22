@@ -91,6 +91,8 @@ const UNAUTHORIZED_TO_REMOVE_ACCESS_TO_APPS                                     
 const MAX_FILE_SIZE_OUT_OF_RANGE                                                  = 10087;
 const UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS                                     = 10088;
 const RIGHT_DOES_NOT_EXIST                                                        = 10089;
+const ONE_EXTENSION_REQUIRED                                                      = 10090;
+const COULD_NOT_CREATE_ERROR_REPORT                                               = 10091;
 
 /******************************************************************************************
 SUCCESS
@@ -219,6 +221,8 @@ module.exports =
   MAX_FILE_SIZE_OUT_OF_RANGE: MAX_FILE_SIZE_OUT_OF_RANGE,
   UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS: UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS,
   RIGHT_DOES_NOT_EXIST: RIGHT_DOES_NOT_EXIST,
+  ONE_EXTENSION_REQUIRED: ONE_EXTENSION_REQUIRED,
+  COULD_NOT_CREATE_ERROR_REPORT: COULD_NOT_CREATE_ERROR_REPORT,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

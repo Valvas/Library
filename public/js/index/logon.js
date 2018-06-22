@@ -31,6 +31,7 @@ function sendFormData(event)
 
     }).done((json) =>
     {
+      document.cookie = "token=xxxxxxxxxx";
       location = '/home';
     });
   }

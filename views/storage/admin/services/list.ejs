@@ -4,33 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/aside.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/services/list.css" />
   <body>
     <div id='blur'>
-      <% include ../../includes/navigation.ejs %>
-      <div class='main'>
-        <div class='header'>
-          <div class='bookmark'><i class='fas fa-bookmark'></i></div><div class='location'><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %> / <%= strings.storage.locations.consultation %></div>
-        </div>
-        <% include ../../includes/admin/aside.ejs %><!--
-        --><div class='services'>
-          <% if(error != null){ %>
-            <div class='error'>
-              <div class='message'><div class='left'><i class='fas fa-exclamation-circle'></i></div><div class='right'><%= error.message %></div></div>
-              <% if(error.detail != null){ %><div class='detail'><%= error.detail %></div><% } %>
+      <% include ../../includes/aside.ejs %>
+      <div class='mainBlock'>
+        <div class="mainBlockLocation"><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %></div>
+        <% include ../../includes/admin/navigation.ejs %>
+        <% if(error != null){ %>
+          <div class="shareAppErrorBlock">
+            <div class="shareAppErrorBlockMessage">
+              <div class="shareAppErrorBlockMessageIcon"><i class="fas fa-2x fa-exclamation-circle"></i></div><div class="shareAppErrorBlockMessageText"><%= error.message %></div>
             </div>
-          <% } else{ %>
-            <button id='create-service-button' tag='<% if(rights.create_services == 1){ %>true<% } else{ %>false<% } %>' class='create <% if(rights.create_services == 1){ %>true<% } else{ %>false<% } %>'><%= strings.storage.admin.services.create %></button>
+            <% if(error.detail != null){ %>
+              <div class="shareAppErrorBlockDetail"><%= error.detail %></div>
+            <% } %>
+          </div>
+        <% } else{ %>
+          <div class="servicesList">
+            <button id='create-service-button' tag='<% if(rights.create_services == 1){ %>true<% } else{ %>false<% } %>' class="<% if(rights.create_services == 1){ %>servicesListCreateButtonEnabled<% } else{ %>servicesListCreateButtonDisabled<% } %>"><%= strings.storage.admin.services.create %></button>
             <% if(Object.keys(services).length == 0){ %>
-              <div class='empty'><%= strings.storage.admin.services.empty %></div>
+              <div class="servicesListEmpty">
+                <div class="servicesListEmptyIcon"><i class="fas fa-10x fa-box-open"></i></div>
+                <div class="servicesListEmptyMessage"><%= strings.storage.admin.services.empty %></div>
+              </div>
             <% } else{ %>
               <% for(var service in services){ %>
-                <div class='serviceBlock' name='<%= service %>'>
-                  <div class='serviceBlockLabel'><%= services[service].label %></div>
-                  <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.files %> :</div><div class='value'><%= services[service].files %></div></div>
-                  <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.members %> :</div><div class='value'><%= services[service].members %></div></div>
+                <div class="servicesListBlock" name='<%= service %>'>
+                  <div class="servicesListBlockTitle"><%= services[service].name.charAt(0).toUpperCase() + services[service].name.slice(1).toLowerCase() %></div>
                   <% if(parseInt(services[service].fileLimit) / 1024 / 1024 / 1024 > 1){ %>
                     <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.limit %> :</div><div class='value'><%= parseInt(services[service].fileLimit) / 1024 / 1024 / 1024 %> Go</div></div>
                   <% } else if(parseInt(services[service].fileLimit) / 1024 / 1024 > 1){ %>
@@ -40,8 +44,8 @@
                   <% } else{ %>
                     <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.limit %> :</div><div class='value'><%= parseInt(services[service].fileLimit) %> o</div></div>
                   <% } %>
-                  <button name='serviceBlockModifyButton' class='<% if(rights.modify_services == 1){ %>serviceBlockModifyActive<% } else{ %>serviceBlockModifyInactive<% } %>'><i class='fas fa-pencil-alt icon'></i><%= strings.storage.admin.services.info.modify %></button><!--
-                  --><button name='serviceBlockRemoveButton' class='<% if(rights.remove_services == 1){ %>serviceBlockRemoveActive<% } else{ %>serviceBlockRemoveInactive<% } %>'><i class='fas fa-trash icon'></i><%= strings.storage.admin.services.info.remove %></button>
+                  <button class='<% if(rights.modify_services == 1){ %>serviceBlockModifyActive<% } else{ %>serviceBlockModifyInactive<% } %>'><i class='fas fa-pencil-alt icon'></i><%= strings.storage.admin.services.info.modify %></button><!--
+                  --><button onclick="openRemovePopup('<%= services[service].name.charAt(0).toUpperCase() + services[service].name.slice(1).toLowerCase() %>', '<%= service %>')" class='<% if(rights.remove_services == 1){ %>serviceBlockRemoveActive<% } else{ %>serviceBlockRemoveInactive<% } %>'><i class='fas fa-trash icon'></i><%= strings.storage.admin.services.info.remove %></button>
                 </div>
               <% } %>
             <% } %>
@@ -50,16 +54,14 @@
       </div>
     </div>
     <script src='/js/jQuery.js'></script>
+    <script src='/js/jQueryUI.js'></script>
     <script src='/js/afk.js'></script>
     <script src='/socket.io/socket.io.js'></script>
-    <script src='/js/fontawesome.js'></script>
-    <script src='/js/navigation/menu.js'></script>
-    <script src='/js/navigation/account.js'></script>
+    <script src='/js/functions.js'></script>
     <script src='/js/storage/admin/services/links.js'></script>
     <script src='/js/storage/admin/services/socket.js'></script>
     <script src='/js/storage/admin/services/remove/send.js'></script>
     <script src='/js/storage/admin/services/remove/openPopup.js'></script>
-    <script src='/js/storage/admin/services/remove/listener.js'></script>
     <script src='/js/storage/admin/services/modify/listener.js'></script>
   </body>
 </html>

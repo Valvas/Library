@@ -1,30 +1,18 @@
-/****************************************************************************************************/
+/****************************************************************************************************
+* SERVICES LIST BLOCK                                                                               *
+****************************************************************************************************/
 
-.services{ width:calc(100% - 240px); margin:0 20px 20px 20px; display:inline-block; vertical-align:top; }
+.servicesList{ margin:20px; }
 
-.services .empty{ width:100%; font-family:barlow; line-height:24px; font-size:18px; }
+.servicesListCreateButtonEnabled{ margin:0 0 20px 0; cursor:pointer; background-color:#428BCA; display:block; border:none; border-radius:4px; line-height:20px; font-size:16px; font-family:roboto-light; width:150px; padding:8px 0 8px 0; color:#FFFFFF; }
 
-.services .create{  margin:0 0 20px calc(100% - 150px); color:#FFFFFF; font-family:barlow; font-size:16px; line-height:24px; border:none; border-radius:4px; width:150px; padding:4px 0 4px 0; }
+.servicesListCreateButtonEnabled:hover{ color:#000000; background-color:#317AB9; }
 
-.services .create.false{ background-color:#D0D0D0; }
+.servicesListCreateButtonDisabled{ margin:0 0 20px 0; background-color:#C0C0C0; display:block; border:none; border-radius:4px; line-height:20px; font-size:16px; font-family:roboto-light; width:150px; padding:8px 0 8px 0; color:#FFFFFF; }
 
-.services .create.true{ background-color:#5CB85C; cursor:pointer; }
+.servicesListBlock{ width:400px; border:1px solid #E0E0E0; border-radius:4px; box-sizing:border-box; font-family:roboto-light; margin:0 20px 20px 0; display:inline-block; vertical-align:top; }
 
-.services .create.true:hover{ color:#000000; background-color:#3A963A; }
-
-.services .error{ width:100%; }
-
-.services .error .message{ margin:0 0 10px 0; }
-
-.services .error .message .left{ display:inline-block; width:20px; font-size:1.25em; margin:0 10px 0 0; color:#D9534F; }
-
-.services .error .message .right{ display:inline-block; vertical-align:top; font-size:16px; line-height:24px; font-family:barlow; width:calc(100% - 30px); }
-
-.services .error .detail{ font-family:barlow-italic; font-size:14px; line-height:18px; color:#B0B0B0; }
-
-.serviceBlock{ width:450px; margin:20px; background-color:#FFFFFF; border-radius:4px; box-sizing:border-box; border:1px solid #F0F0F0; display:inline-block; vertical-align:top; }
-
-.serviceBlockLabel{ background-color:#428BCA; color:#FFFFFF; font-family:barlow; font-size:20px; line-height:24px; padding:10px; border-radius:4px 4px 0 0; }
+.servicesListBlockTitle{ font-size:18px; line-height:24px; padding:10px; border-bottom:1px solid #E0E0E0; }
 
 .serviceBlockValueBlock{ padding:10px 10px 0 10px; font-size:16px; line-height:24px; font-family:barlow; }
 
@@ -52,7 +40,19 @@
 
 .serviceBlockRemoveInactive .icon{ padding:0 5px 0 0; }
 
-.serviceBlockRemovePrompt{ z-index:30; position:absolute; top:80px; width:400px; left:calc(50% - 200px); margin:0 0 40px 0; background-color:#556677; border-radius:4px; }
+/****************************************************************************************************
+* SERVICES LIST EMPTY                                                                               *
+****************************************************************************************************/
+
+.servicesListEmptyIcon{ width:200px; margin:20px calc(50% - 100px) 20px calc(50% - 100px); }
+
+.servicesListEmptyMessage{ font-family:roboto-light; font-size:32px; line-height:48px; text-align:center; }
+
+/***************************************************************************************************/
+
+.serviceBlockRemoveVeil{ z-index:180; position:fixed; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.25; }
+
+.serviceBlockRemovePrompt{ z-index:200; position:fixed; top:80px; width:400px; left:calc(50% - 200px); margin:0 0 40px 0; background-color:#556677; border-radius:4px; }
 
 .serviceBlockRemovePromptTitle{ color:#FFFFFF; font-family:barlow; font-size:20px; line-height:24px; padding:10px; border-bottom:1px solid #FFFFFF; background-color:#428BCA; border-radius:4px 4px 0 0; }
 

@@ -90,4 +90,12 @@
   .main .block{ width:400px; margin:10px 20px 10px 20px; display:inline-block; vertical-align:top; }
 }
 
+/****************************************************************************************************
+* EMPTY SERVICES                                                                                    *
+****************************************************************************************************/
+
+.emptyServicesIcon{ margin:40px calc(50% - 100px) 20px calc(50% - 100px); }
+
+.emptyServicesMessage{ font-size:32px; line-height:36px; padding:0 20px 20px 20px; text-align:center; font-family:roboto-light; }
+
 /****************************************************************************************************/
