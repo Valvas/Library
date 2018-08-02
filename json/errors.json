@@ -19,7 +19,7 @@
   "10018": "La précédente version du fichier n'a pas pu être supprimée du disque",
   "10019": "La précédente version du fichier n'a pas pu être supprimée de la base de données",
   "10020": "Vous n'êtes pas autorisé(e) à télécharger des fichiers",
-  "10021": "Le dossier n'a pas été trouvé sur le disque",
+  "10021": "Le dossier n'a pas été trouvé",
   "10022": "Le chemin ne mène pas à un dossier",
   "10023": "Vous n'êtes pas autorisé(e) à lire ou écrire dans ce fichier/dossier",
   "10024": "Le dossier existe déjà",
@@ -89,5 +89,7 @@
   "10088": "Vous n'êtes pas autorisé(e) à consulter les droits des comptes sur les services",
   "10089": "Ce droit n'existe pas",
   "10090": "Au moins une extension est requise",
-  "10091": "Un rapport d'erreur n'a pas pu être créé"
+  "10091": "Un rapport d'erreur n'a pas pu être créé",
+  "10092": "Le dossier ne fait pas partie de ce service",
+  "10093": "Le format du nom du dossier est incorrect"
 }

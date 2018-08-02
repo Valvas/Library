@@ -23,7 +23,7 @@ require('../app')((app) =>
   {
     socket.on('adminAppAccountsHomeJoin', () => { socket.join('adminAppAccountsHome'); });
     socket.on('adminAppAccountsDetailJoin', (accountUUID) => { socket.join(accountUUID); })
-    socket.on('storageAppServicesDetailJoin', (serviceName) => { socket.join(serviceName); });
+    socket.on('storageAppServicesDetailJoin', (serviceUuid) => { socket.join(serviceUuid); });
     socket.on('storageAppAdminServicesList', () => { socket.join('storageAppAdminServicesList'); });
     socket.on('adminAppRightsDetailJoin', (accountUUID) => { socket.join('adminAppRightsDetail ' + accountUUID); });
     socket.on('adminAppAccessDetailJoin', (accountUUID) => { socket.join('adminAppAccessDetail ' + accountUUID); });
@@ -62,22 +62,34 @@ require('../app')((app) =>
       io.in('adminAppAccessDetail ' + accountUUID).emit('updateAccess', null, access, strings);
     });
 
-    socket.on('storageAppServicesfileUploaded', (fileID, serviceName) =>
+    socket.on('storageAppServicesfileUploaded', (fileUuid, serviceUuid, folderUuid) =>
     {
-      storageAppFilesGet.getFileFromDatabaseUsingID(fileID, app.get('mysqlConnector'), (error, file) =>
+      storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, app.get('databaseConnectionPool'), app.get('params'), (error, fileExists, fileData) =>
       {
-        if(error == null) io.in(serviceName).emit('fileUploaded', null, file);
+        if(error == null)
+        {
+          fileData.extension = fileData.ext;
+          io.in(serviceUuid).emit('fileUploaded', fileData, folderUuid);
+        }
       });
     });
 
-    socket.on('storageAppServicesFileRemoved', (fileName, serviceName) =>
+    socket.on('storageAppServicesFolderCreated', (folderUuid, serviceUuid, parentFolderUuid) =>
     {
-      io.in(serviceName).emit('fileRemoved', null, fileName);
+      storageAppFilesGet.checkIfFolderExistsInDatabase(folderUuid, app.get('databaseConnectionPool'), app.get('params'), (error, folderExists, folderData) =>
+      {
+        if(error == null && folderExists) io.in(serviceUuid).emit('folderCreated', folderData, parentFolderUuid);
+      });
     });
 
-    socket.on('storageAppAdminServiceRemoved', (serviceName) =>
+    socket.on('storageAppServicesFileRemoved', (fileUuid, serviceUuid) =>
     {
-      io.in('storageAppAdminServicesList').emit('serviceRemoved', null, serviceName);
+      io.in(serviceUuid).emit('fileRemoved', fileUuid);
+    });
+
+    socket.on('storageAppAdminServiceRemoved', (serviceUuid) =>
+    {
+      io.in('storageAppAdminServicesList').emit('serviceRemoved', serviceUuid);
     });
 
     socket.on('storageAppAdminServiceLabelUpdated', (serviceName, serviceLabel) =>

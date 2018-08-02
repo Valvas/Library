@@ -128,7 +128,7 @@ module.exports.dropDatabase = (databaseName, databaseConnection, callback) =>
 
 /****************************************************************************************************/
 
-module.exports.insertQueryWithID = (queryObject, databaseConnection, callback) =>
+module.exports.insertQuery = (queryObject, databaseConnection, callback) =>
 {
   var keys = Object.keys(queryObject.args).join();
   var values = `"${Object.values(queryObject.args).join('","')}"`;
@@ -154,7 +154,7 @@ module.exports.insertQueryWithUUID = (queryObject, databaseConnection, callback)
   {
     if(error) return callback(error.message);
 
-    return callback(null, result);
+    return callback(null, result, uuid);
   });
 }
 
@@ -228,7 +228,7 @@ module.exports.updateQuery = (queryObject, databaseConnection, callback) =>
 
     if(queryObject.where.operator != undefined)
     {
-      sqlQuery += `${object.where.key} ${object.where.operator} "${object.where.value}"`;
+      sqlQuery += `${queryObject.where.key} ${queryObject.where.operator} "${queryObject.where.value}"`;
 
       databaseConnection.query(sqlQuery, (error, result) =>
       {
@@ -277,7 +277,7 @@ module.exports.deleteQuery = (queryObject, databaseConnection, callback) =>
 
     if(queryObject.where.operator != undefined)
     {
-      sqlQuery += `${object.where.key} ${object.where.operator} "${object.where.value}"`;
+      sqlQuery += `${queryObject.where.key} ${queryObject.where.operator} "${queryObject.where.value}"`;
 
       databaseConnection.query(sqlQuery, (error, result) =>
       {

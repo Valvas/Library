@@ -56,49 +56,31 @@ module.exports.getAccountAdminRights = (accountID, databaseConnector, callback) 
 
 module.exports.getServicesDetailForConsultation = (databaseConnectionPool, callback) =>
 {
-  databaseConnectionPool.getConnection((error, connection) =>
-  {
-    if(error) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error.message });
-
-    storageAppServicesGet.getAllServices(connection, (error, services) =>
-    {
-      connection.release();
-
-      if(error != null) return callback(error);
-
-      return callback(null, services);
-    });
-  });
-
-  /*storageAppServicesGet.getAllServices(databaseConnector, (error, services) =>
+  storageAppServicesGet.getAllServices(databaseConnectionPool, (error, services) =>
   {
     if(error != null) return callback(error);
 
-    var x = 0, servicesObject = {};
+    var x = 0;
 
-    var browseServicesLoop = () =>
+    var browseServices = () =>
     {
-      storageAppServicesGet.getAmountOfFilesFromService(Object.keys(services)[x], databaseConnector, (error, amountOfFiles) =>
+      storageAppServicesGet.getMembersFromService(Object.keys(services)[x], databaseConnectionPool, (error, members) =>
       {
         if(error != null) return callback(error);
 
-        storageAppServicesGet.getAmountOfMembersFromService(Object.keys(services)[x], databaseConnector, (error, amountOfMembers) =>
-        {
-          if(error != null) return callback(error);
+        services[Object.keys(services)[x]].members = {};
+        services[Object.keys(services)[x]].members = members;
 
-          servicesObject[services[Object.keys(services)[x]].name] = {};
-          servicesObject[services[Object.keys(services)[x]].name].label = services[Object.keys(services)[x]].label; 
-          servicesObject[services[Object.keys(services)[x]].name].files = amountOfFiles;
-          servicesObject[services[Object.keys(services)[x]].name].members = amountOfMembers;
-          servicesObject[services[Object.keys(services)[x]].name].fileLimit = services[Object.keys(services)[x]].fileLimit;
+        if(Object.keys(services)[x += 1] == null) return callback(null, services);
 
-          services[Object.keys(services)[x += 1]] == undefined ? callback(null, servicesObject) : browseServicesLoop();
-        });
+        browseServices();
       });
     }
 
-    Object.keys(services).length == 0 ? callback(null, {}) : browseServicesLoop();
-  });*/
+    if(Object.keys(services).length == 0) return callback(null, services);
+
+    browseServices();
+  });
 }
 
 /****************************************************************************************************/

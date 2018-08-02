@@ -15,22 +15,16 @@ module.exports.moveFile = (currentPath, newPath, newName, callback) =>
 
   fs.stat(currentPath, (error, stats) =>
   {
-    if(error) callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.message });
+    if(error) return callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.message });
 
-    else if(stats.isDirectory() == true) callback({ status: 406, code: constants.IS_A_DIRECTORY });
+    if(stats.isDirectory() == true) return callback({ status: 406, code: constants.IS_A_DIRECTORY, detail: null });
 
-    else
+    fs.rename(currentPath, `${newPath}/${newName}`, (error) =>
     {
-      fs.rename(currentPath, `${newPath}/${newName}`, (error) =>
-      {
-        if(error) callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.detail });
+      if(error) return callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.detail });
 
-        else
-        {
-          callback(null);
-        }
-      });
-    }
+      return callback(null);
+    });
   });
 }
 

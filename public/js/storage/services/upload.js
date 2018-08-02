@@ -13,128 +13,115 @@ function openUploadPopup(event)
   background        .setAttribute('id', 'uploadFileBackground');
   box               .setAttribute('id', 'uploadFileBox');
 
-  background        .setAttribute('class', 'background');
+  background        .setAttribute('class', 'storageBackground');
   box               .setAttribute('class', 'servicesUploadFilePopup');
   spinner           .setAttribute('class', 'spinner');
 
   spinner           .innerHTML = `<i class='fas fa-circle-notch fa-spin'></i>`;
 
-  document.getElementById('blur').style.filter = 'blur(4px)';
-
   background        .style.display = 'block';
 
   box               .appendChild(spinner);
-  background        .appendChild(box);
   document.body     .appendChild(background);
+  document.body     .appendChild(box);
 
-  var xhr   = new XMLHttpRequest();
-  var data  = new FormData();
-
-  data.append('service', document.getElementById('main').getAttribute('name'));
-
-  xhr.responseType = 'json';
-
-  xhr.timeout = 10000;
-
-  xhr.open('POST', '/queries/storage/services/get-file-upload-parameters', true);
-
-  xhr.send(data);
-
-  xhr.ontimeout = () =>
+  $.ajax(
   {
-    spinner.remove();
+    method: 'POST',
+    dataType: 'json',
+    data: { serviceUuid: document.getElementById('mainBlock').getAttribute('name') },
+    timeout: 5000,
+    url: '/queries/storage/services/get-file-upload-parameters',
 
-    displayUploadPopupError('La requête a expiré, veuillez réessayer plus tard', null);
-  }
-
-  xhr.onload = () =>
-  {
-    spinner.remove();
-
-    if(xhr.status == 500 || xhr.status == 404 || xhr.status == 406 || xhr.status == 401 || xhr.status == 403)
+    error: (xhr, textStatus, errorThrown) =>
     {
-      displayUploadPopupError(xhr.response.message, xhr.response.detail);
+      spinner.remove();
+
+      xhr.responseJSON != undefined ?
+      displayUploadPopupError(xhr.responseJSON.message, xhr.responseJSON.detail) :
+      displayUploadPopupError('Une erreur est survenue, veuillez réessayer plus tard', null);
+    }
+
+  }).done((json) =>
+  {
+    spinner.remove();
+
+    var title           = document.createElement('div');
+    var content         = document.createElement('div');
+    var instructions    = document.createElement('div'); 
+    var file            = document.createElement('div');
+    var size            = document.createElement('div');
+    var ext             = document.createElement('div');
+    var label           = document.createElement('label');
+    var input           = document.createElement('input');
+    var send            = document.createElement('button');
+    var close           = document.createElement('button');
+
+    input               .setAttribute('type', 'file');
+    input               .setAttribute('id', 'uploadFileInput');
+    label               .setAttribute('id', 'uploadFileLabel');
+    send                .setAttribute('id', 'uploadFileSend');
+    size                .setAttribute('id', 'uploadFileSize');
+    ext                 .setAttribute('id', 'uploadFileExt');
+    content             .setAttribute('id', 'uploadFileContent');
+    label               .setAttribute('for', 'uploadFileInput');
+    size                .setAttribute('tag', parseInt(json.size));
+    ext                 .setAttribute('tag', Object.values(json.ext));
+
+    title               .setAttribute('class', 'title');
+    content             .setAttribute('class', 'content');
+    instructions        .setAttribute('class', 'instructions');
+    file                .setAttribute('class', 'file');
+    label               .setAttribute('class', 'label');
+    send                .setAttribute('class', 'send inactive');
+    input               .setAttribute('class', 'input');
+    size                .setAttribute('class', 'size');
+    ext                 .setAttribute('class', 'ext');
+    close               .setAttribute('class', 'close');
+
+    close               .addEventListener('click', closeUploadFilePopup);
+    input               .addEventListener('change', changeLabelValue);
+
+    title               .innerText = json.strings.storage.services.popup.upload.title;
+    instructions        .innerText = json.strings.storage.services.popup.upload.choice;
+    label               .innerText = json.strings.storage.services.popup.upload.placeholder;
+    send                .innerText = json.strings.storage.services.popup.upload.send;
+    ext                 .innerText = json.strings.storage.services.popup.upload.ext + ' : ' + Object.values(json.ext);
+    close               .innerText = json.strings.storage.services.popup.upload.close;
+
+    if(parseInt(json.size) < 1048576)
+    {
+      size              .innerText = json.strings.storage.services.popup.upload.size + ' : ' + parseInt(json.size / 1024) + 'Ko';
+    }
+
+    else if(parseInt(json.size) < 1073741824)
+    {
+      size              .innerText = json.strings.storage.services.popup.upload.size + ' : ' + parseInt(json.size / 1024 / 1024) + 'Mo';
     }
 
     else
     {
-      var title           = document.createElement('div');
-      var content         = document.createElement('div');
-      var instructions    = document.createElement('div'); 
-      var file            = document.createElement('div');
-      var size            = document.createElement('div');
-      var ext             = document.createElement('div');
-      var label           = document.createElement('label');
-      var input           = document.createElement('input');
-      var send            = document.createElement('button');
-      var close           = document.createElement('button');
-
-      input               .setAttribute('type', 'file');
-      input               .setAttribute('id', 'uploadFileInput');
-      label               .setAttribute('id', 'uploadFileLabel');
-      send                .setAttribute('id', 'uploadFileSend');
-      size                .setAttribute('id', 'uploadFileSize');
-      ext                 .setAttribute('id', 'uploadFileExt');
-      content             .setAttribute('id', 'uploadFileContent');
-      label               .setAttribute('for', 'uploadFileInput');
-      size                .setAttribute('tag', parseInt(xhr.response.size));
-      ext                 .setAttribute('tag', Object.values(xhr.response.ext));
-
-      title               .setAttribute('class', 'title');
-      content             .setAttribute('class', 'content');
-      instructions        .setAttribute('class', 'instructions');
-      file                .setAttribute('class', 'file');
-      label               .setAttribute('class', 'label');
-      send                .setAttribute('class', 'send inactive');
-      input               .setAttribute('class', 'input');
-      size                .setAttribute('class', 'size');
-      ext                 .setAttribute('class', 'ext');
-      close               .setAttribute('class', 'close');
-
-      close               .addEventListener('click', closeUploadFilePopup);
-      input               .addEventListener('change', changeLabelValue);
-
-      title               .innerText = xhr.response.strings.storage.services.popup.upload.title;
-      instructions        .innerText = xhr.response.strings.storage.services.popup.upload.choice;
-      label               .innerText = xhr.response.strings.storage.services.popup.upload.placeholder;
-      send                .innerText = xhr.response.strings.storage.services.popup.upload.send;
-      ext                 .innerText = xhr.response.strings.storage.services.popup.upload.ext + ' : ' + Object.values(xhr.response.ext);
-      close               .innerText = xhr.response.strings.storage.services.popup.upload.close;
-
-      if(parseInt(xhr.response.size) < 1048576)
-      {
-        size              .innerText = xhr.response.strings.storage.services.popup.upload.size + ' : ' + parseInt(xhr.response.size / 1024) + 'Ko';
-      }
-
-      else if(parseInt(xhr.response.size) < 1073741824)
-      {
-        size              .innerText = xhr.response.strings.storage.services.popup.upload.size + ' : ' + parseInt(xhr.response.size / 1024 / 1024) + 'Mo';
-      }
-
-      else
-      {
-        size              .innerText = xhr.response.strings.storage.services.popup.upload.size + ' : ' + parseInt(xhr.response.size / 1024 / 1024 / 1024) + 'Go';
-      }
-
-      file                .appendChild(label);
-      file                .appendChild(send);
-      file                .appendChild(input);
-      content             .appendChild(instructions);
-      content             .appendChild(file);
-      content             .appendChild(size);
-      content             .appendChild(ext);
-      content             .appendChild(close);
-      box                 .appendChild(title);
-      box                 .appendChild(content);
+      size              .innerText = json.strings.storage.services.popup.upload.size + ' : ' + parseInt(json.size / 1024 / 1024 / 1024) + 'Go';
     }
-  }
+
+    file                .appendChild(label);
+    file                .appendChild(send);
+    file                .appendChild(input);
+    content             .appendChild(instructions);
+    content             .appendChild(file);
+    content             .appendChild(size);
+    content             .appendChild(ext);
+    content             .appendChild(close);
+    box                 .appendChild(title);
+    box                 .appendChild(content);
+  });
 }
 
 /****************************************************************************************************/
 
 function closeUploadFilePopup(event)
 {
-  if(document.getElementById('blur')) document.getElementById('blur').removeAttribute('style');
+  if(document.getElementById('uploadFileBox')) document.getElementById('uploadFileBox').remove();
   if(document.getElementById('uploadFileBackground')) document.getElementById('uploadFileBackground').remove();
 }
 
@@ -142,8 +129,8 @@ function closeUploadFilePopup(event)
 
 function closeUploadPopupError(event)
 {
-  event.target.parentNode.remove();
-  document.getElementById('uploadFileContent').removeAttribute('style');
+  if(document.getElementById('uploadFileBox')) document.getElementById('uploadFileBox').remove();
+  if(document.getElementById('uploadFileBackground')) document.getElementById('uploadFileBackground').remove();
 }
 
 /****************************************************************************************************/
@@ -200,7 +187,8 @@ function checkBeforeUpload(event)
   var xhr   = new XMLHttpRequest();
   var data  = new FormData();
 
-  data.append('service', document.getElementById('main').getAttribute('name'));
+  data.append('service', document.getElementById('mainBlock').getAttribute('name'));
+  data.append('currentFolder', document.getElementById('filesBlock').getAttribute('name'));
   data.append('file', JSON.stringify({ 'name': document.getElementById('uploadFileInput').files[0].name, 'size': document.getElementById('uploadFileInput').files[0].size }));
 
   xhr.responseType = 'json';
@@ -233,7 +221,7 @@ function checkBeforeUpload(event)
 
     else
     {
-      if(xhr.response.remove != null)
+      if(xhr.response.fileExists)
       {
         var warning       = document.createElement('div');
         var icon          = document.createElement('div');
@@ -250,7 +238,7 @@ function checkBeforeUpload(event)
         warning           .appendChild(icon);
         warning           .appendChild(content);
         
-        if(xhr.response.remove == false)
+        if(xhr.response.rightToRemove == false)
         {
           content           .innerText = xhr.response.strings.storage.services.popup.upload.replace.unauthorized;
 
@@ -304,7 +292,8 @@ function uploadFile()
 
   xhr.responseType = 'json';
 
-  data.append('service', document.getElementById('main').getAttribute('name'));
+  data.append('service', document.getElementById('mainBlock').getAttribute('name'));
+  data.append('currentFolder', document.getElementById('filesBlock').getAttribute('name'));
   data.append('file', document.getElementById('uploadFileInput').files[0]);
 
   var loader          = document.createElement('div');
@@ -413,7 +402,7 @@ function uploadFile()
 
       document.getElementById('uploadFileBox').appendChild(success);
 
-      socket.emit('storageAppServicesfileUploaded', xhr.response.fileID, document.getElementById('main').getAttribute('name'));
+      socket.emit('storageAppServicesfileUploaded', xhr.response.fileUuid, document.getElementById('mainBlock').getAttribute('name'), document.getElementById('currentPath').children[document.getElementById('currentPath').children.length - 1].getAttribute('name'));
     }
 
     else
@@ -444,7 +433,7 @@ function clickOnReplaceNo(event)
 
 function displayUploadPopupError(message, detail)
 {
-  document.getElementById('uploadFileContent').style.display = 'none';
+  if(document.getElementById('uploadFileContent')) document.getElementById('uploadFileContent').style.display = 'none';
 
   var error     = document.createElement('div');
   var icon      = document.createElement('div');

@@ -4,10 +4,11 @@ const params                = require(`${__root}/json/params`);
 const constants             = require(`${__root}/functions/constants`);
 
 //To uncomment when updated database manager will be set for all the project
-//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
+//const oldDatabaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
 
 //To remove when updated database manager will be set for all the project
-const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
+const oldDatabaseManager       = require(`${__root}/functions/database/MySQLv2`);
+const databaseManager          = require(`${__root}/functions/database/MySQLv3`);
 
 /****************************************************************************************************/
 
@@ -18,7 +19,7 @@ module.exports.getAccountUsingUUID = (accountUUID, databaseConnector, callback) 
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  databaseManager.selectQuery(
+  oldDatabaseManager.selectQuery(
   {
     'databaseName': params.database.root.label,
     'tableName': params.database.root.tables.accounts,
@@ -47,19 +48,18 @@ module.exports.getAccountUsingID = (accountID, databaseConnector, callback) =>
 
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.root.label,
-    'tableName': params.database.root.tables.accounts,
-    'args': { '0': '*' },
-    'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': accountID } } }
+    databaseName: params.database.root.label,
+    tableName: params.database.root.tables.accounts,
+    args: [ '*' ],
+    where: { operator: '=', key: 'id', value: accountID }
 
-  }, databaseConnector, (boolean, accountOrErrorMessage) =>
+  }, databaseConnector, (error, result) =>
   {
-    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR });
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    else
-    {
-      accountOrErrorMessage.length == 0 ? callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND }) : callback(null, accountOrErrorMessage[0]);
-    }
+    if(result.length == 0) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    return callback(null, result[0]);
   });
 }
 
@@ -72,7 +72,7 @@ module.exports.getAccountUsingEmail = (accountEmail, databaseConnector, callback
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
 
-  databaseManager.selectQuery(
+  oldDatabaseManager.selectQuery(
   {
     'databaseName': params.database.root.label,
     'tableName': params.database.root.tables.accounts,
@@ -98,7 +98,7 @@ module.exports.getAllAccounts = (databaseConnector, callback) =>
 
   else
   {
-    databaseManager.selectQuery(
+    oldDatabaseManager.selectQuery(
     {
       'databaseName': params.database.root.label,
       'tableName': params.database.root.tables.accounts,

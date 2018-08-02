@@ -11,19 +11,19 @@ for(var i = 0; i < filters.length; i++)
 
 function applyFilter(event)
 {
-  var files = document.getElementsByClassName('file');
+  var files = document.getElementById('filesBlock').children;
 
   for(var i = 0; i < files.length; i++)
   {
-    if(files[i].getAttribute('tag') == event.target.getAttribute('value'))
+    if(files[i].hasAttribute('tag') && files[i].getAttribute('tag') === event.target.getAttribute('value'))
     {
       if(event.target.checked == false)
       {
         files[i].style.display = 'none';
 
-        if(files[i].children[0].getAttribute('class') == 'checkbox' && files[i].children[0].children[0].checked)
+        if(files[i].children[2].checked)
         {
-          files[i].children[0].children[0].checked = false;
+          files[i].children[2].checked = false;
 
           var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
 

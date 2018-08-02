@@ -231,7 +231,7 @@ function sendNewSize()
 
   $.ajax(
   {
-    type: 'POST', timeout: 10000, dataType: 'JSON', data: { fileSize: fileSize, serviceName: document.getElementById('serviceDetailBlock').getAttribute('name') }, url: '/queries/storage/admin/update-service-max-file-size', success: () => {},
+    type: 'POST', timeout: 10000, dataType: 'JSON', data: { fileSize: fileSize, serviceUuid: document.getElementById('serviceDetailBlock').getAttribute('name') }, url: '/queries/storage/admin/update-service-max-file-size', success: () => {},
     error: (xhr, status, error) =>
     {
       document.getElementById('serviceModificationPopupContent').removeAttribute('style');

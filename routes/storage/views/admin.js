@@ -85,7 +85,7 @@ router.get('/services-rights', (req, res) =>
 
   else
   {
-    storageAppAdminGet.getServicesDetailForConsultation(req.app.get('mysqlConnector'), (error, servicesDetail) =>
+    storageAppAdminGet.getServicesDetailForConsultation(req.app.get('databaseConnectionPool'), (error, servicesDetail) =>
     {
       if(error != null)
       {
@@ -124,9 +124,21 @@ router.get('/services-rights', (req, res) =>
 
 router.get('/services/detail/:service', (req, res) =>
 {
-  storageAppServicesGet.getServiceUsingName(req.params.service, req.app.get('mysqlConnector'), (error, service) =>
+  storageAppServicesGet.getServiceUsingUUID(req.params.service, req.app.get('mysqlConnector'), (error, service) =>
   {
-    if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    if(error != null)
+    {
+      res.render('storage/admin/services/detail',
+      {
+        account: req.session.account,
+        error: error,
+        service: null,
+        strings: { common: commonAppStrings, storage: storageAppStrings },
+        webContent: webContent,
+        location: 'administration',
+        adminLocation: 'services'
+      });
+    }
 
     else
     {

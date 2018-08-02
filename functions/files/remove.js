@@ -42,7 +42,7 @@ module.exports.moveFileToBin = (fileName, fileExt, filePath, callback) =>
   fileExt   == undefined ||
   filePath  == undefined ?
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
   fs.stat(`${filePath}/${fileName}.${fileExt}`, (error, stats) =>
   {
@@ -50,7 +50,7 @@ module.exports.moveFileToBin = (fileName, fileExt, filePath, callback) =>
 
     if(error && error.code === 'ENOENT') return callback(null);
 
-    if(stats.isDirectory() == true) callback({ status: 406, code: constants.IS_A_DIRECTORY });
+    if(stats.isDirectory() == true) callback({ status: 406, code: constants.IS_A_DIRECTORY, detail: null });
 
     else
     {

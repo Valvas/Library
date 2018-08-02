@@ -31,7 +31,7 @@ function showServicesBlocks()
 
 /****************************************************************************************************/
 
-function hideServicesBlocks(serviceName)
+function hideServicesBlocks(serviceUuid)
 {
   if(!(document.getElementById('rightsOnServicesHomeServicesMembers')))
   {
@@ -50,7 +50,7 @@ function hideServicesBlocks(serviceName)
         else
         {
           document.getElementById('rightsOnServicesHomeServicesBlock').style.display = 'none';
-          createServiceDetail(serviceName);
+          createServiceDetail(serviceUuid);
         }
       });
     }
@@ -61,7 +61,7 @@ function hideServicesBlocks(serviceName)
 
 /****************************************************************************************************/
 
-function createServiceDetail(serviceName)
+function createServiceDetail(serviceUuid)
 {
   displayLoadingPopup(() =>
   {
@@ -99,7 +99,7 @@ function createServiceDetail(serviceName)
 
       xhr = $.ajax(
       {
-        type: 'POST', timeout: 10000, dataType: 'JSON', data: { serviceName: serviceName }, url: '/queries/storage/admin/get-service-members', success: () => {},
+        type: 'POST', timeout: 10000, dataType: 'JSON', data: { serviceUuid: serviceUuid }, url: '/queries/storage/admin/get-service-members', success: () => {},
         error: (xhr, status, error) =>
         {
           clearInterval(intervalFunction);
@@ -117,7 +117,7 @@ function createServiceDetail(serviceName)
         }
       }).done((json) =>
       {
-        createMembersBlock(json.accounts, json.members, json.rights, strings, serviceName, () =>
+        createMembersBlock(json.accounts, json.members, json.rights, strings, serviceUuid, () =>
         {
           createPagesList(Object.keys(json.members).length, () =>
           {
@@ -296,7 +296,7 @@ function displayLoadingPopupError(message, detail)
 
 /****************************************************************************************************/
 
-function createMembersBlock(accounts, members, rights, strings, serviceName, callback)
+function createMembersBlock(accounts, members, rights, strings, serviceUuid, callback)
 {
   var membersBlock                      = document.createElement('div');
   var membersBlockTitle                 = document.createElement('div');
@@ -321,7 +321,7 @@ function createMembersBlock(accounts, members, rights, strings, serviceName, cal
   membersBlockList                      .setAttribute('id', 'rightsOnServicesHomeMembersBlockList');
   membersBlockListAccounts              .setAttribute('id', 'rightsOnServicesHomeMembersBlockListAccounts');
 
-  membersBlock                          .setAttribute('name', serviceName);
+  membersBlock                          .setAttribute('name', serviceUuid);
 
   membersBlock                          .setAttribute('class', 'membersBlock');
   membersBlockTitle                     .setAttribute('class', 'membersBlockTitle');
@@ -389,7 +389,7 @@ function createMembersBlock(accounts, members, rights, strings, serviceName, cal
   membersBlock                          .appendChild(membersBlockList);
 
   $(membersBlockEmpty)                  .hide().appendTo(membersBlockList);
-  $(membersBlock)                       .hide().appendTo(document.getElementById('blockToBlur'));
+  $(membersBlock)                       .hide().appendTo(document.getElementById('mainBlock'));
 
   $(membersBlock).toggle('slide', 'left', 250, () =>
   {

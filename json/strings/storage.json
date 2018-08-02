@@ -12,7 +12,8 @@
     }
   },
 
-  "emptyServicesMessage": "Vous n'avez accès à aucun service pour le moment",
+  "emptyServicesMessage": "Il n'existe aucun service pour le moment",
+  "noServicesAccess": "Vous n'avez accès à aucun service pour le moment",
 
   "admin":
   {
@@ -254,6 +255,12 @@
       "false": "Vous n'avez pas accès à ce service"
     },
 
+    "actions":
+    {
+      "download": "Télécharger",
+      "remove": "Supprimer"
+    },
+
     "ask": "Demande d'accès",
 
     "authorized": "Autorisé",
@@ -285,18 +292,20 @@
         "pdf": "PDF",
         "txt": "Texte",
         "png": "Image",
+        "archive": "Archive",
         "default": "Autres formats"
       }
     },
 
-    "names":
+    "newFolder":
     {
-      "test1": "Premier Service Test",
-      "test2": "Deuxième Service Test",
-      "test3": "Troisième Service Test"
+      "button": "Nouveau dossier",
+      "popupTitle": "Création d'un nouveau dossier",
+      "popupPlaceholder": "Nom du dossier",
+      "popupSendButton": "Créer ce dossier",
+      "popupCancelButton": "Annuler",
+      "popupHelpMessage": "Le nom ne peut pas contenir de caractères spéciaux, d'accents et commencer ou terminer par un espace"
     },
-
-    "open": "Accéder",
 
     "popup":
     {
@@ -343,7 +352,9 @@
 
     "rights": "Mes droits",
 
-    "selected": "Fichiers sélectionnés",
+    "searchPlaceholder": "Rechercher",
+
+    "selected": "Eléments sélectionnés",
 
     "unauthorized": "Non-autorisé"
   }

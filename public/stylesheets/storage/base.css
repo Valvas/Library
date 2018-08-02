@@ -48,13 +48,15 @@ body{ margin:0; background-color:#F6F6F6; }
 
 .storageBackground{ position:fixed; z-index:20; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.4; }
 
+.storageSpinner{ position:absolute; z-index:30; top:160px; left:calc(50% - 60px); width:120px; height:120px; font-size:5em; text-align:center; color:#5CB85C; background-color:#384046; border-radius:4px; padding:20px; box-sizing:border-box; }
+
 .storagePopup{ position:absolute; z-index:30; top:80px; width:400px; max-width:400px; left:calc(50% - 200px); margin:0 0 40px 0; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; box-sizing:border-box; }
 
 .storagePopupTitle{ font-family:roboto-light; line-height:24px; font-size:20px; padding:10px; border-bottom:1px solid #E0E0E0; }
 
 .storagePopupSpinner{ font-size:3em; color:#5CB85C; width:calc(100% - 40px); padding:20px 20px 0 20px; text-align:center; }
 
-.storagePopupMessage{ font-size:16px; line-height:24px; text-align:center; padding:0 20px 20px 20px; width:calc(100% - 40px); color:#428BCA; vertical-align:top; font-family:roboto-light; }
+.storagePopupMessage{ font-size:16px; line-height:24px; text-align:center; padding:20px; width:calc(100% - 40px); color:#428BCA; vertical-align:top; font-family:roboto-light; }
 
 .storagePopupCancel{ cursor:pointer; border:none; border-radius:4px; font-size:14px; font-family:roboto-light; padding:4px 0 4px 0; width:100px; margin:10px 10px 10px calc(100% - 110px); color:#FFFFFF; background-color:#D9534F; transition-duration:0.5s; -o-transition-duration:0.5s; -webkit-transition-duration:0.5s; }
 
@@ -62,13 +64,20 @@ body{ margin:0; background-color:#F6F6F6; }
 
 .storagePopupErrorBlock{ padding:10px; }
 
-.storagePopupErrorBlockMessage{ font-family:roboto-light; color:#D9534F; line-height:24px; font-size:16px; }
+.storagePopupErrorBlockMessage{ font-family:roboto-light; color:#D9534F; line-height:24px; font-size:16px; padding:10px; }
 
-.storagePopupErrorBlockClose{ cursor:pointer; border:none; border-radius:4px; font-size:14px; font-family:roboto-light; padding:4px 0 4px 0; width:100px; margin:10px 10px 10px calc(100% - 110px); color:#FFFFFF; background-color:#428BCA; transition-duration:0.5s; -o-transition-duration:0.5s; -webkit-transition-duration:0.5s; }
+.storagePopupBlockClose{ cursor:pointer; border:none; border-radius:4px; font-size:14px; font-family:roboto-light; padding:4px 0 4px 0; width:100px; margin:10px 10px 10px calc(100% - 110px); color:#FFFFFF; background-color:#428BCA; transition-duration:0.5s; -o-transition-duration:0.5s; -webkit-transition-duration:0.5s; }
 
-.storagePopupErrorBlockClose:hover{ color:#000000; background-color:#317AB9; }
+.storagePopupBlockClose:hover{ color:#000000; background-color:#317AB9; }
 
-.storagePopupErrorBlockDetail{ font-family:roboto-light-italic; color:#B0B0B0; line-height:18px; font-size:14px; }
+.storagePopupBlockDetail{ font-family:roboto-light-italic; color:#B0B0B0; line-height:18px; font-size:14px; padding:10px; }
+
+
+.storageErrorBlock{ padding:20px; }
+
+.storageErrorBlockIcon{ width:32px; display:inline-block; vertical-align:top; font-size:2em; color:#D9534F; }
+
+.storageErrorBlockMessage{ width:calc(100% - 42px); display:inline-block; vertical-align:top; font-size:16px; line-height:24px; margin:4px 0 4px 10px; font-family:roboto-light; }
 
 /****************************************************************************************************/
 
@@ -154,7 +163,7 @@ body{ margin:0; background-color:#F6F6F6; }
 
 .asideMenuContentLink:hover{ color:#428BCA; background-color:#F0F0F0; -webkit-transition-duration:0.25s; transition-duration:0.25s; -moz-transition-duration:0.25s; -o-transition-duration:0.25s; }
 
-.asideMenuContentLinkIcon{ display:inline-block; vertical-align:top; width:32px; margin:0 10px 0 10px; font-size:24px; line-height:32px; }
+.asideMenuContentLinkIcon{ display:inline-block; vertical-align:top; width:32px; margin:0 10px 0 10px; font-size:24px; line-height:32px; text-align:center; }
 
 .asideMenuContentLinkText{ font-size:20px; line-height:32px; display:inline-block; vertical-align:top; width:calc(100% - 62px); margin-right:10px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; }
 
@@ -162,7 +171,7 @@ body{ margin:0; background-color:#F6F6F6; }
 * MAIN BLOCK                                                                                        *
 ****************************************************************************************************/
 
-.mainBlock{ width:calc(100% - 270px); margin:0 20px 20px 270px; background-color:#FFFFFF; padding-bottom:20px; }
+.mainBlock{ width:calc(100% - 270px); margin:0 0 20px 270px; background-color:#FFFFFF; padding-bottom:20px; position:relative; }
 
 .mainBlockLocation{ font-size:24px; line-height:24px; padding:10px; border-bottom:1px solid #E0E0E0; font-family:roboto-light; }
 
@@ -179,3 +188,44 @@ body{ margin:0; background-color:#F6F6F6; }
 .shareAppErrorBlockMessageText{ display:inline-block; vertical-align:top; width:calc(100% - 60px); font-size:18px; line-height:32px; font-family:roboto-light; }
 
 .shareAppErrorBlockDetail{ font-size:16px; line-height:20px; color:#909090; font-family:roboto-light; margin:20px; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319px)
+{
+  .asideMenuTitleText, .asideMenuTitleIcon, .asideMenuContentLinkText{ display:none; }
+
+  .asideMenu{ width:40px; }
+
+  .asideMenuContentLinkIcon{ margin:0; }
+
+  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
+
+  .mainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+  .asideMenuTitleText, .asideMenuTitleIcon, .asideMenuContentLinkText{ display:none; }
+
+  .asideMenu{ width:40px; }
+
+  .asideMenuContentLinkIcon{ margin:0; }
+
+  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
+
+  .mainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+}
+
+@media (min-width: 480px) and (max-width: 639px)
+{
+  .asideMenuTitleText, .asideMenuTitleIcon, .asideMenuContentLinkText{ display:none; }
+
+  .asideMenu{ width:40px; }
+
+  .asideMenuContentLinkIcon{ margin:0; }
+
+  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
+
+  .mainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+}

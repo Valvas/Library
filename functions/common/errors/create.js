@@ -1,7 +1,7 @@
 'use strict'
 
 const errors                = require(`${__root}/json/errors`);
-const constants             = require(`${__root}/function/constants`);
+const constants             = require(`${__root}/functions/constants`);
 const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
 
 const errorsCreate = module.exports = {};

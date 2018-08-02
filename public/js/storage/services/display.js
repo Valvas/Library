@@ -32,6 +32,7 @@ function changeDisplay(event)
     {
       displays[x].setAttribute('tag', 'false');
       displays[x].setAttribute('class', 'choice false');
+      displays[x].removeAttribute('id');
 
       if(displays[x += 1] != undefined) setTagToFalse();
     }
@@ -40,6 +41,7 @@ function changeDisplay(event)
 
     target.setAttribute('tag', 'true');
     target.setAttribute('class', 'choice true');
+    target.setAttribute('id', 'selectedDisplay');
 
     switch(target.getAttribute('name'))
     {
@@ -55,11 +57,46 @@ function changeDisplay(event)
 
 function setListDisplay()
 {
-  var files = document.getElementsByClassName('file');
+  var elements = document.getElementById('filesBlock').children;
+  var files = [];
+  var folders = [];
+
+  for(var x = 0; x < elements.length; x++)
+  {
+    if(elements[x].hasAttribute('tag')) files.push(elements[x]);
+
+    else if(elements[x].hasAttribute('name'))
+    {
+      elements[x].setAttribute('class', 'storageAppServiceReturnList');
+      elements[x].children[0].setAttribute('class', 'storageAppServiceReturnBackgroundList');
+      elements[x].children[1].setAttribute('class', 'storageAppServiceReturnIconList');
+
+      if(elements[x].children[2]) elements[x].children[2].setAttribute('class', 'storageAppServiceReturnNameList');
+    }
+
+    else
+    {
+      folders.push(elements[x]);
+    }
+  }
 
   for(var i = 0; i < files.length; i++)
   {
-    files[i].setAttribute('class', 'file list');
+    files[i].setAttribute('class', 'storageAppServicesFilesList');
+    files[i].children[0].setAttribute('class', 'storageAppServicesFilesListIcon' + ' ' + files[i].children[0].getAttribute('class').split(' ')[1]);
+    files[i].children[1].setAttribute('class', 'storageAppServicesFilesListName');
+
+    if(files[i].children[2]) files[i].children[2].setAttribute('class', 'storageAppServicesFilesListCheckbox');
+  }
+
+  for(var i = 0; i < folders.length; i++)
+  {
+    folders[i].setAttribute('class', 'storageAppServiceFolderList');
+
+    folders[i].children[0].setAttribute('class', 'storageAppServiceFolderListIcon');
+    folders[i].children[1].setAttribute('class', 'storageAppServiceFolderListName');
+
+    if(folders[i].children[2]) folders[i].children[2].setAttribute('class', 'storageAppServiceFolderListCheckbox');
   }
 }
 
@@ -67,11 +104,46 @@ function setListDisplay()
 
 function setSmallGridDisplay()
 {
-  var files = document.getElementsByClassName('file');
+  var elements = document.getElementById('filesBlock').children;
+  var files = [];
+  var folders = [];
+
+  for(var x = 0; x < elements.length; x++)
+  {
+    if(elements[x].hasAttribute('tag')) files.push(elements[x]);
+
+    else if(elements[x].hasAttribute('name'))
+    {
+      elements[x].setAttribute('class', 'storageAppServiceReturnSmall');
+      elements[x].children[0].setAttribute('class', 'storageAppServiceReturnBackgroundSmall');
+      elements[x].children[1].setAttribute('class', 'storageAppServiceReturnIconSmall');
+
+      if(elements[x].children[2]) elements[x].children[2].setAttribute('class', 'storageAppServiceReturnNameSmall');
+    }
+
+    else
+    {
+      folders.push(elements[x]);
+    }
+  }
 
   for(var i = 0; i < files.length; i++)
   {
-    files[i].setAttribute('class', 'file small');
+    files[i].setAttribute('class', 'storageAppServicesFilesSmall');
+    files[i].children[0].setAttribute('class', 'storageAppServicesFilesSmallIcon' + ' ' + files[i].children[0].getAttribute('class').split(' ')[1]);
+    files[i].children[1].setAttribute('class', 'storageAppServicesFilesSmallName');
+
+    if(files[i].children[2]) files[i].children[2].setAttribute('class', 'storageAppServicesFilesSmallCheckbox');
+  }
+
+  for(var i = 0; i < folders.length; i++)
+  {
+    folders[i].setAttribute('class', 'storageAppServiceFolderSmall');
+
+    folders[i].children[0].setAttribute('class', 'storageAppServiceFolderSmallIcon');
+    folders[i].children[1].setAttribute('class', 'storageAppServiceFolderSmallName');
+
+    if(folders[i].children[2]) folders[i].children[2].setAttribute('class', 'storageAppServiceFolderSmallCheckbox');
   }
 }
 
@@ -79,11 +151,45 @@ function setSmallGridDisplay()
 
 function setLargeGridDisplay()
 {
-  var files = document.getElementsByClassName('file');
+  var elements = document.getElementById('filesBlock').children;
+  var files = [];
+  var folders = [];
+
+  for(var x = 0; x < elements.length; x++)
+  {
+    if(elements[x].hasAttribute('tag')) files.push(elements[x]);
+
+    else if(elements[x].hasAttribute('name'))
+    {
+      elements[x].setAttribute('class', 'storageAppServiceReturnLarge');
+      elements[x].children[0].setAttribute('class', 'storageAppServiceReturnBackgroundLarge');
+      elements[x].children[1].setAttribute('class', 'storageAppServiceReturnIconLarge');
+
+      if(elements[x].children[2]) elements[x].children[2].setAttribute('class', 'storageAppServiceReturnNameLarge');
+    }
+
+    else
+    {
+      folders.push(elements[x]);
+    }
+  }
 
   for(var i = 0; i < files.length; i++)
   {
-    files[i].setAttribute('class', 'file large');
+    files[i].setAttribute('class', 'storageAppServicesFilesLarge');
+    files[i].children[0].setAttribute('class', 'storageAppServicesFilesLargeIcon' + ' ' + files[i].children[0].getAttribute('class').split(' ')[1]);
+    files[i].children[1].setAttribute('class', 'storageAppServicesFilesLargeName');
+
+    if(files[i].children[2]) files[i].children[2].setAttribute('class', 'storageAppServicesFilesLargeCheckbox');
+  }
+
+  for(var i = 0; i < folders.length; i++)
+  {
+    folders[i].setAttribute('class', 'storageAppServiceFolderLarge');
+    folders[i].children[0].setAttribute('class', 'storageAppServiceFolderLargeIcon');
+    folders[i].children[1].setAttribute('class', 'storageAppServiceFolderLargeName');
+
+    if(folders[i].children[2]) folders[i].children[2].setAttribute('class', 'storageAppServiceFolderLargeCheckbox');
   }
 }
 

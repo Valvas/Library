@@ -5,27 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/aside.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/membersBlock.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/accountsBlock.css" />
   <body>
-    <div id='blockToBlur'>
-      <% include ../../includes/navigation.ejs %>
-      <button class='rightsOnServicesReturn' id='rightsOnServicesReturn'><%= strings.storage.admin.servicesRights.return %></button>
+    <% include ../../includes/aside.ejs %>
+    <div class='mainBlock' id='mainBlock'>
+      <div class="mainBlockLocation"><%= strings.storage.locations.rights %></div>
+      <% include ../../includes/admin/navigation.ejs %>
       <% if(error != null){ %>
-        <div class='rightsOnServicesErrorBlock'>
-          <div class='rightsOnServicesErrorBlockTitle'><%= strings.storage.admin.servicesRights.errorBlock.title %></div>
-          <div class='rightsOnServicesErrorBlockMessage'><%= error.message %></div>
-          <div class='rightsOnServicesErrorBlockDetail'><%= error.detail %></div>
+        <div class="shareAppErrorBlock">
+          <div class="shareAppErrorBlockMessage">
+            <div class="shareAppErrorBlockMessageIcon"><i class="fas fa-2x fa-exclamation-circle"></i></div><div class="shareAppErrorBlockMessageText"><%= error.message %></div>
+          </div>
+          <% if(error.detail != null){ %>
+            <div class="shareAppErrorBlockDetail"><%= error.detail %></div>
+          <% } %>
         </div>
       <% } else{ %>
+        <button class='rightsOnServicesReturn' id='rightsOnServicesReturn'><%= strings.storage.admin.servicesRights.return %></button>
         <div class='rightsOnServicesHomeServicesBlock' id='rightsOnServicesHomeServicesBlock'>
           <% for(var service in services){ %>
             <div class='rightsOnServicesHomeServicesBlockService'>
-              <div class='rightsOnServicesHomeServicesBlockServiceLabel'><%= services[service].label.charAt(0).toUpperCase() %><%= services[service].label.slice(1).toLowerCase() %></div>
+              <div class='rightsOnServicesHomeServicesBlockServiceLabel'><%= services[service].name.charAt(0).toUpperCase() %><%= services[service].name.slice(1).toLowerCase() %></div>
               <div class='rightsOnServicesHomeServicesBlockServiceMembers'>
-                <div class='rightsOnServicesHomeServicesBlockServiceMembersKey'><%= strings.storage.admin.servicesRights.members %></div><div class='rightsOnServicesHomeServicesBlockServiceMembersValue'><%= services[service].members %></div>
+                <div class='rightsOnServicesHomeServicesBlockServiceMembersKey'><%= strings.storage.admin.servicesRights.members %></div><div class='rightsOnServicesHomeServicesBlockServiceMembersValue'><%= Object.keys(services[service].members).length %></div>
               </div>
               <button class='rightsOnServicesHomeServicesBlockServiceManage' onclick='hideServicesBlocks("<%= service %>")'>
                 <div class='rightsOnServicesHomeServicesBlockServiceManageIcon'><i class='fas fa-users'></i></div><div class='rightsOnServicesHomeServicesBlockServiceManageText'><%= strings.storage.admin.servicesRights.manageMembers %></div>
@@ -39,9 +46,6 @@
     <script src='/js/jQueryUI.js'></script>
     <script src='/js/afk.js'></script>
     <script src='/socket.io/socket.io.js'></script>
-    <script src='/js/fontawesome.js'></script>
-    <script src='/js/navigation/menu.js'></script>
-    <script src='/js/navigation/account.js'></script>
     <script src='/js/storage/admin/servicesRights/return.js'></script>
     <script src='/js/storage/admin/servicesRights/manageRights.js'></script>
     <script src='/js/storage/admin/servicesRights/changeMembersPage.js'></script>

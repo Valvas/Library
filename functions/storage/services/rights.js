@@ -3,96 +3,96 @@
 const params              = require(`${__root}/json/params`);
 const constants           = require(`${__root}/functions/constants`);
 const accountsGet         = require(`${__root}/functions/accounts/get`);
-const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
+const oldDatabaseManager  = require(`${__root}/functions/database/${params.database.dbms}`);
+
+const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 const storageAppServicesRights = module.exports = {};
 
 /****************************************************************************************************/
 
-storageAppServicesRights.getRightsTowardsServices = (accountID, databaseConnector, callback) =>
+storageAppServicesRights.getRightsTowardsServices = (accountId, databaseConnection, params, callback) =>
 {
-  accountID           == undefined ||
-  databaseConnector   == undefined ?
+  accountId           == undefined ||
+  databaseConnection  == undefined ?
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  accountsGet.getAccountUsingID(accountId, databaseConnection, (error, account) =>
   {
-    error != null ? callback(error) :
+    if(error != null) return callback(error);
 
     databaseManager.selectQuery(
     {
-      'databaseName': params.database.storage.label,
-      'tableName': params.database.storage.tables.rights,
-      'args': { '0': '*' },
-      'where': { '=': { '0': { 'key': 'account', 'value': accountID } } }
+      databaseName: params.database.storage.label,
+      tableName: params.database.storage.tables.rights,
+      args: [ '*' ],
+      where: { operator: '=', key: 'account', value: accountId }
   
-    }, databaseConnector, (boolean, rightsOrErrorMessage) =>
+    }, databaseConnection, (error, rights) =>
     {
-      if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: rightsOrErrorMessage });
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-      else
+      var x = 0;
+
+      var rightsObject = {};
+
+      var browseRights = () =>
       {
-        var x = 0;
-        var rightsObject = {};
+        rightsObject[rights[x].service] = {};
+        rightsObject[rights[x].service].remove      = (rights[x].remove_files == 1);
+        rightsObject[rights[x].service].upload      = (rights[x].upload_files == 1);
+        rightsObject[rights[x].service].comment     = (rights[x].post_comments == 1);
+        rightsObject[rights[x].service].download    = (rights[x].download_files == 1);
 
-        var loop = () =>
-        {
-          rightsObject[rightsOrErrorMessage[x].service] = {};
-          rightsObject[rightsOrErrorMessage[x].service].remove      = rightsOrErrorMessage[x].remove_files;
-          rightsObject[rightsOrErrorMessage[x].service].upload      = rightsOrErrorMessage[x].upload_files;
-          rightsObject[rightsOrErrorMessage[x].service].comment     = rightsOrErrorMessage[x].post_comments;
-          rightsObject[rightsOrErrorMessage[x].service].download    = rightsOrErrorMessage[x].download_files;
- 
-          rightsOrErrorMessage[x += 1] == undefined ? callback(null, rightsObject) : loop();
-        }
-
-        rightsOrErrorMessage.length == 0 ? callback(null, rightsObject) : loop();
+        if(rights[x += 1] == undefined) return callback(null, rightsObject);
+        
+        browseRights();
       }
+
+      if(rights.length == 0) return callback(null, {});
+      
+      browseRights();
     });
   });
 }
 
 /****************************************************************************************************/
 
-storageAppServicesRights.getRightsTowardsService = (service, accountID, databaseConnector, callback) =>
+storageAppServicesRights.getRightsTowardsService = (serviceUuid, accountId, databaseConnection, params, callback) =>
 {
-  service             == undefined ||
-  accountID           == undefined ||
-  databaseConnector   == undefined ?
+  serviceUuid         == undefined ||
+  accountId           == undefined ||
+  databaseConnection  == undefined ?
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  databaseManager.selectQuery(
   {
-    error != null ? callback(error) :
-
-    databaseManager.selectQuery(
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.rights,
+    args: [ '*' ],
+    where:
     {
-      'databaseName': params.database.storage.label,
-      'tableName': params.database.storage.tables.rights,
-      'args': { '0': '*' },
-      'where': { 'AND': { '=': { '0': { 'key': 'account', 'value': accountID }, '1': { 'key': 'service', 'value': service } } } }
-  
-    }, databaseConnector, (boolean, rightsOrErrorMessage) =>
-    {
-      if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: rightsOrErrorMessage });
+      condition: 'AND',
+      0: { operator: '=', key: 'account', value: accountId },
+      1: { operator: '=', key: 'service', value: serviceUuid }
+    }
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error.message });
 
-      else if(boolean == true && rightsOrErrorMessage.length == 0) callback({ status: 404, code: constants.SERVICE_NOT_FOUND });
+    if(result.length == 0) return callback({ status: 406, code: constants.UNAUTHORIZED_TO_ACCESS_SERVICE, detail: null });
 
-      else
-      {
-        var rightsObject = {};
+    var rightsObject = {};
 
-        rightsObject.service     = rightsOrErrorMessage[0].service;
-        rightsObject.remove      = rightsOrErrorMessage[0].remove_files;
-        rightsObject.upload      = rightsOrErrorMessage[0].upload_files;
-        rightsObject.comment     = rightsOrErrorMessage[0].post_comments;
-        rightsObject.download    = rightsOrErrorMessage[0].download_files;
+    rightsObject.service     = result[0].service;
+    rightsObject.remove      = result[0].remove_files;
+    rightsObject.upload      = result[0].upload_files;
+    rightsObject.comment     = result[0].post_comments;
+    rightsObject.download    = result[0].download_files;
 
-        callback(null, rightsObject);
-      }
-    });
+    return callback(null, rightsObject);
   });
 }
 

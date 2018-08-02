@@ -30,7 +30,7 @@ function sendRemoveServiceRequest(serviceUUID)
 
     printSuccess(json.message, null);
 
-    $(document.getElementById('serviceCreationFormBlock')).toggle('slide', { direction: 'up' }, 250);
+    socket.emit('storageAppAdminServiceRemoved', serviceUUID);
   });
 }
 

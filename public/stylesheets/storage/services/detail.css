@@ -36,7 +36,7 @@
 
 .aside .actions .content .remove .enabled:hover{ color:#B9272A; }
 
-.files .display{ margin:0 0 0 10px; }
+.files .display{ margin:0 0 10px 0; width:100px; display:inline-block; vertical-align:top; }
 
 .files .display .choice{ cursor:pointer; display:inline-block; vertical-align:top; width:20px; font-size:20px; line-height:24px; margin:0 5px 0 0; }
 
@@ -45,20 +45,6 @@
 .files .display .choice.false{ color:#D0D0D0; }
 
 .files .display .choice.false:hover{ color:#5CB85C; }
-
-.files .file .icon.word{ background-color:#428BCA; color:#FFFFFF; }
-
-.files .file .icon.excel{ background-color:#86AA6D; color:#FFFFFF; }
-
-.files .file .icon.powerpoint{ background-color:#EBA432; color:#FFFFFF; }
-
-.files .file .icon.pdf{ background-color:#DB494C; color:#FFFFFF; }
-
-.files .file .icon.text{ background-color:#8B9DC3; color:#FFFFFF; }
-
-.files .file .icon.picture{ background-color:#64ADEC; color:#FFFFFF; }
-
-.files .file .icon.default{ background-color:#34393C; color:#FFFFFF; }
 
 .aside .filters{ margin:20px 0 0 0; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); border-radius:4px; background-color:#FFFFFF; }
 
@@ -90,6 +76,50 @@
 
 .aside .info .upload .false{ font-family:barlow; color:#D9534F; font-size:16px; line-height:24px; }
 
+/* ACTIONS BUTTONS */
+
+.downloadFilesButton{ width:120px; cursor:pointer; border:none; border-radius:4px; padding:4px 8px 4px 8px; height:32px; font-size:16px; font-family:roboto-light; color:#FFFFFF; background-color:#5CB85C; }
+
+.downloadFilesButton:hover{ color:#000000; background-color:#4BA74B; }
+
+.removeFilesButton{ width:120px; cursor:pointer; border:none; border-radius:4px; padding:4px 8px 4px 8px; height:32px; font-size:16px; font-family:roboto-light; color:#FFFFFF; background-color:#D9534F; }
+
+.removeFilesButton:hover{ color:#000000; background-color:#C8423E; }
+
+/* CURRENT FOLDER PATH */
+
+.currentPath{ border:1px solid #E0E0E0; padding:0px; font-size:20px; font-family:barlow; border-radius:4px; }
+
+.currentPathBlock{ display:inline-block; vertical-align:top; background-color:#E5E5FF; padding:5px 20px 5px 20px; border-radius:4px; color:#428BCA; cursor:pointer; margin:0 5px 0 0; }
+
+.currentPathBlockSelected{ display:inline-block; vertical-align:top; background-color:#D4D4FF; padding:5px 20px 5px 20px; border-radius:4px; color:#428BCA; margin:0 5px 0 0; }
+
+.currentPathBlock:hover{ background-color:#D4D4FF; }
+
+.loadingFolderSpinner{ color:#428BCA; margin:20px; text-align:center; }
+
+/* SEARCH BAR */
+
+.searchBar{ width:200px; box-sizing:border-box; border-radius:4px; border:1px solid #E0E0E0; font-size:18px; padding:5px 0 5px 5px; height:32px; font-family:roboto-light; margin:0 10px 10px 0; }
+
+/* NEW FOLDER */
+
+.newFolderButton{ border:none; border-radius:4px; cursor:pointer; background-color:#428BCA; color:#FFFFFF; font-family:roboto-light; padding:4px 8px 4px 8px; width:180px; display:inline-block; vertical-align:top; margin:0 0 10px 0; font-size:16px; height:32px; }
+
+.newFolderButton:hover{ background-color:#317AB9; color:#000000; }
+
+.newFolderInput{ width:calc(100% - 40px); margin:20px; height:32px; font-size:18px; padding:5px 0 5px 5px; font-family:roboto-light; border-radius:4px; border:1px solid #E0E0E0; box-sizing:border-box; }
+
+.newFolderHelpMessage{ font-family:roboto-light; font-size:18px; margin:0 20px 10px 20px; }
+
+.newFolderSendButton{ width:160px; cursor:pointer; border:none; height:32px; box-sizing:border-box; border-radius:4px; font-family:roboto-light; padding:4px 8px 4px 8px; display:inline-block; vertical-align:top; font-size:16px; background-color:#428BCA; color:#FFFFFF; margin:0 0 10px calc(100% - 300px); }
+
+.newFolderSendButton:hover{ background-color:#317AB9; color:#000000; }
+
+.newFolderCancelButton{ width:120px; cursor:pointer; border:none; height:32px; box-sizing:border-box; border-radius:4px; font-family:roboto-light; padding:4px 8px 4px 8px; display:inline-block; vertical-align:top; font-size:16px; background-color:#D9534F; color:#FFFFFF; margin:0 10px 10px 10px; }
+
+.newFolderCancelButton:hover{ background-color:#C8423E; color:#000000; }
+
 /****************************************************************************************************/
 
 @media (max-width: 319px)
@@ -103,6 +133,12 @@
   .aside .filters .label:hover{ color:#428BCA; }
 
   .aside .filters .content{ display:none; }
+
+  .files .display{ width:100%; display:block; }
+
+  .downloadFilesButton{ width:calc(100% - 20px); margin:10px; }
+
+  .removeFilesButton{ width:calc(100% - 20px); margin:10px; }
 }
 
 @media (min-width: 320px) and (max-width: 479px)
@@ -116,6 +152,12 @@
   .aside .filters .label:hover{ color:#428BCA; }
 
   .aside .filters .content{ display:none; }
+
+  .searchBar{ display:inline-block; vertical-align:top; }
+
+  .downloadFilesButton{ width:calc(100% - 20px); margin:10px; }
+
+  .removeFilesButton{ width:calc(100% - 20px); margin:10px; }
 }
 
 @media (min-width: 480px) and (max-width: 639px)
@@ -129,6 +171,8 @@
   .aside .filters .label:hover{ color:#428BCA; }
 
   .aside .filters .content{ display:none; }
+
+  .searchBar{ display:inline-block; vertical-align:top; }
 }
 
 @media (min-width: 640px) and (max-width: 779px)
@@ -142,6 +186,8 @@
   .aside .filters .label:hover{ color:#428BCA; }
 
   .aside .filters .content{ display:none; }
+
+  .searchBar{ display:inline-block; vertical-align:top; }
 }
 
 @media (min-width: 780px) and (max-width: 959px)
@@ -151,6 +197,8 @@
   .files{ width:calc(100% - 20px); }
 
   .aside .filters .label .right{ display:none; }
+
+  .searchBar{ display:inline-block; vertical-align:top; }
 }
 
 @media (min-width: 960px) and (max-width: 1279px)
@@ -160,6 +208,8 @@
   .files{ display:inline-block; vertical-align:top; }
 
   .aside .filters .label .right{ display:none; }
+
+  .searchBar{ display:inline-block; vertical-align:top; }
 }
 
 @media (min-width: 1280px) and (max-width: 1679px)
@@ -169,6 +219,8 @@
   .files{ display:inline-block; vertical-align:top; }
 
   .aside .filters .label .right{ display:none; }
+
+  .searchBar{ display:inline-block; vertical-align:top; }
 }
 
 @media (min-width: 1680px)
@@ -178,61 +230,127 @@
   .files{ display:inline-block; vertical-align:top; }
 
   .aside .filters .label .right{ display:none; }
+
+  .searchBar{ display:inline-block; vertical-align:top; }
 }
 
 /****************************************************************************************************/
 
-.files .file.list{ border-bottom:1px solid #F0F0F0; background-color:#FFFFFF; margin:5px 10px 0 10px; padding:5px 0 5px 0; }
+.storageAppServicesFilesLargeIcon.doc, .storageAppServicesFilesListIcon.doc, .storageAppServicesFilesSmallIcon.doc{ color:#428BCA; }
+.storageAppServicesFilesLargeIcon.ppt, .storageAppServicesFilesListIcon.ppt, .storageAppServicesFilesSmallIcon.ppt{ color:#EBA432; }
+.storageAppServicesFilesLargeIcon.xls, .storageAppServicesFilesListIcon.xls, .storageAppServicesFilesSmallIcon.xls{ color:#86AA6D; }
+.storageAppServicesFilesLargeIcon.png, .storageAppServicesFilesListIcon.png, .storageAppServicesFilesSmallIcon.png{ color:#64ADEC; }
+.storageAppServicesFilesLargeIcon.txt, .storageAppServicesFilesListIcon.txt, .storageAppServicesFilesSmallIcon.txt{ color:#8B9DC3; }
+.storageAppServicesFilesLargeIcon.pdf, .storageAppServicesFilesListIcon.pdf, .storageAppServicesFilesSmallIcon.pdf{ color:#DB494C; }
+.storageAppServicesFilesLargeIcon.zip, .storageAppServicesFilesListIcon.zip, .storageAppServicesFilesSmallIcon.zip{ color:#34393C; }
+.storageAppServicesFilesLargeIcon.default, .storageAppServicesFilesListIcon.default, .storageAppServicesFilesSmallIcon.default{ color:#34393C; }
 
-.files .file.small{ position:relative; background-color:#F7F7F7; display:inline-block; vertical-align:top; margin:10px 10px 10px 10px; width:max-content; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); border-radius:4px; }
+/* FILES WITH LARGE GRID DISPLAY */
 
-.files .file.large{ position:relative; background-color:#F7F7F7; display:inline-block; vertical-align:top; margin:10px 10px 10px 10px; width:max-content; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); border-radius:4px; }
+.storageAppServicesFilesLarge{ display:inline-block; vertical-align:top; margin:10px; width:100px; position:relative; }
 
-.files .file.list .checkbox{ width:40px; display:inline-block; text-align:center; margin:5px 0 0 0; }
+.storageAppServicesFilesLargeIcon{ text-align:center; font-size:64px; color:#FFFFFF; border-radius:4px; padding:15px 0 5px 0; margin:0 10% 0 10%; height:85px; }
 
-.files .file.list .checkbox .target{ cursor:pointer; width:20px; height:20px; margin:0; }
+.storageAppServicesFilesLargeName{ font-family:roboto-light; text-align:center; font-size:12px; margin-top:5px; }
 
-.files .file.small .checkbox{ position:absolute; top:2px; right:2px; }
+.storageAppServicesFilesLargeCheckbox{ width:20px; height:20px; cursor:pointer; position:absolute; top:2px; right:calc(10% + 2px); margin:0; }
 
-.files .file.small .checkbox .target{ cursor:pointer; width:14px; height:14px; margin:0; }
+/* FILES WITH SMALL GRID DISPLAY */
 
-.files .file.large .checkbox{ position:absolute; top:4px; right:4px; }
+.storageAppServicesFilesSmall{ display:inline-block; vertical-align:top; margin:10px 10px 10px 10px; width:60px; position:relative; }
 
-.files .file.large .checkbox .target{ cursor:pointer; width:20px; height:20px; }
+.storageAppServicesFilesSmallIcon{ text-align:center; font-size:3em; color:#FFFFFF; border-radius:4px; padding:25px 0 5px 0; width:80%; margin:0 10% 0 10%; }
 
-.files .file.list .icon{ border-radius:4px; padding:3px 0 3px 0; height:24px; width:30px; text-align:center; display:inline-block; vertical-align:top; }
+.storageAppServicesFilesSmallName{ font-family:roboto-light; text-align:center; font-size:12px; margin-top:5px; }
 
-.files .file.list .icon svg{ width:1.5em; height:1.5em; }
+.storageAppServicesFilesSmallCheckbox{ width:20px; height:20px; cursor:pointer; position:absolute; top:2px; right:calc(10% + 2px); margin:0; }
 
-.files .file.small .icon{ border-radius:4px 4px 0 0; padding:10px 0 0 0; height:50px; width:60px; text-align:center; }
+/* FILES WITH LIST DISPLAY */
 
-.files .file.small .icon svg{ width:2.5em; height:2.5em; }
+.storageAppServicesFilesList{ margin:5px 10px 5px 10px; box-sizing:border-box; position:relative; }
 
-.files .file.large .icon{ border-radius:4px 4px 0 0; padding:20px 0 0 0; height:100px; width:120px; text-align:center; }
+.storageAppServicesFilesListIcon{ position:relative; font-size:2em; width:50px; color:#FFFFFF; padding:5px; border-radius:4px; text-align:center; display:inline-block; margin:0 0 0 25px; }
 
-.files .file.large .icon svg{ width:5em; height:5em; }
+.storageAppServicesFilesListName{ display:inline-block; vertical-align:top; width:calc(100% - 95px); margin:14px 0 0 10px; font-family:roboto-light; font-size:18px; }
 
-.files .file.list .deleted{ color:#D9534F; width:40px; display:inline-block; text-align:center; padding:3px 0 3px 0; height:24px; }
+.storageAppServicesFilesListCheckbox{ position:absolute; top:calc(50% - 10px); left:0; height:20px; width:20px; cursor:pointer; margin:0; }
 
-.files .file.list .deleted svg{ width:1.5em; height:1.5em; }
+/* WHEN HOVERING FILES AND FOLDERS */
 
-.files .file.small .deleted{ color:#D9534F; position:absolute; top:10px; left:10px; }
+.storageAppServicesFilesLarge:hover, .storageAppServicesFilesSmall:hover, .storageAppServicesFilesList:hover, .storageAppServiceFolderLarge:hover, .storageAppServiceFolderList:hover, .storageAppServiceReturnLarge:hover, .storageAppServiceReturnSmall:hover, .storageAppServiceReturnList:hover{ cursor:pointer; background-color:#F5F5FF; }
 
-.files .file.small .deleted svg{ width:2.5em; height:2.5em; }
+/* FOLDERS WITH LARGE GRID DISPLAY */
 
-.files .file.large .deleted{ color:#D9534F; position:absolute; top:20px; left:20px; }
+.storageAppServiceFolderLarge{ width:100px; margin:10px; position:relative; display:inline-block; vertical-align:top; }
 
-.files .file.large .deleted svg{ width:5em; height:5em; }
+.storageAppServiceFolderLargeIcon{ text-align:center; font-size:64px; color:#F8D775; border-radius:4px; padding:15px 0 5px 0; margin:0 10% 0 10%; height:85px; }
 
-.files .file.list .name{ overflow:hidden; white-space:nowrap; text-overflow:ellipsis; width:calc(100% - 90px); font-family:barlow; font-size:14px; line-height:18px; display:inline-block; vertical-align:top; margin:6px 10px 0 10px; }
+.storageAppServiceFolderLargeName{ font-size:12px; font-family:roboto-light; text-align:center; margin:5px 0 0 0; }
 
-.files .file.small .name{ padding:5px; box-sizing:border-box; text-align:center; overflow:hidden; word-break:normal; text-overflow:ellipsis; width:60px; font-family:barlow; font-size:12px; line-height:14px; }
+.storageAppServiceFolderLargeCheckbox{ width:20px; height:20px; position:absolute; top:2px; right:calc(10% + 2px); margin:0; }
 
-.files .file.large .name{ padding:10px; box-sizing:border-box; text-align:center; overflow:hidden; word-break:normal; text-overflow:ellipsis; width:120px; font-family:barlow; font-size:14px; line-height:18px; }
+/* FOLDERS WITH SMALL GRID DISPLAY */
+
+.storageAppServiceFolderSmall{ width:60px; margin:10px; position:relative; display:inline-block; vertical-align:top; }
+
+.storageAppServiceFolderSmallIcon{ text-align:center; font-size:3em; color:#F8D775; border-radius:4px; padding:25px 0 5px 0; margin:0 10% 0 10%; width:80%; }
+
+.storageAppServiceFolderSmallName{ font-size:12px; font-family:roboto-light; text-align:center; margin:5px 0 0 0; }
+
+.storageAppServiceFolderSmallCheckbox{ width:20px; height:20px; position:absolute; top:2px; right:calc(10% + 2px); margin:0; }
+
+/* FOLDERS WITH LIST DISPLAY */
+
+.storageAppServiceFolderList{ margin:5px 10px 5px 10px; box-sizing:border-box; position:relative; }
+
+.storageAppServiceFolderListIcon{ text-align:center; font-size:2em; color:#F8D775; border-radius:4px; padding:5px; width:50px; display:inline-block; margin:0 0 0 25px; }
+
+.storageAppServiceFolderListName{ display:inline-block; vertical-align:top; width:calc(100% - 95px); margin:14px 0 0 10px; font-family:roboto-light; font-size:18px; }
+
+.storageAppServiceFolderListCheckbox{ position:absolute; top:calc(50% - 10px); left:0; height:20px; width:20px; cursor:pointer; margin:0; }
+
+
+.storageAppServiceReturnLarge{ width:100px; margin:10px; position:relative; display:inline-block; vertical-align:top; }
+
+.storageAppServiceReturnIconLarge{ font-size:48px; position:absolute; top:26px; left:26px; height:48px; width:48px; }
+
+.storageAppServiceReturnBackgroundLarge{ text-align:center; font-size:64px; color:#F8D775; border-radius:4px; padding:15px 0 5px 0; margin:0 10% 0 10%; height:85px; }
+
+.storageAppServiceReturnNameLarge{ font-size:20px; text-align:center; }
+
+
+.storageAppServiceReturnSmall{ width:60px; margin:10px; position:relative; display:inline-block; vertical-align:top; }
+
+.storageAppServiceReturnIconSmall{ font-size:32px; position:absolute; top:36px; left:16px; height:32px; width:32px; }
+
+.storageAppServiceReturnBackgroundSmall{ text-align:center; font-size:3em; color:#F8D775; border-radius:4px; padding:25px 0 5px 0; margin:0 10% 0 10%; width:80%; }
+
+.storageAppServiceReturnNameSmall{ font-size:12px; font-family:roboto-light; text-align:center; margin:5px 0 0 0; }
+
+
+.storageAppServiceReturnList{ margin:5px 10px 5px 10px; box-sizing:border-box; position:relative; }
+
+.storageAppServiceReturnIconList{ position:absolute; top:12px; left:42px; font-size:24px; width:24px; height:24px; }
+
+.storageAppServiceReturnBackgroundList{ text-align:center; font-size:2em; color:#F8D775; border-radius:4px; padding:5px; width:50px; display:inline-block; margin:0 0 0 25px; }
+
+.storageAppServiceReturnNameList{ display:inline-block; vertical-align:top; width:calc(100% - 95px); margin:14px 0 0 10px; font-family:roboto-light; font-size:18px; }
 
 /****************************************************************************************************/
 
-.servicesUploadFilePopup{ position:relative; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; }
+.elementDetailBlock{ width:300px; position:absolute; top:0; right:0; bottom:0; border-left:1px solid #D0D0D0; background-color:#FFFFFF; box-shadow:8px 0 8px -10px #000000,-8px 0 8px -10px #000000; }
+
+.elementDetailBlockTitle{ border-bottom:1px solid #E0E0E0; font-size:20px; font-family:roboto-light; padding:20px; margin:0 0 10px 0; }
+
+.elementDetailBlockClose{ position:absolute; top:10px; right:10px; font-size:3em; width:48px; height:48px; cursor:pointer; }
+
+.elementDetailBlockClose:hover{ color:#D9534F; }
+
+.elementDetailBlockSpinner{ font-size:6em; position:absolute; color:#5CB85C; height:96px; width:96px; top:calc(50% - 48px); left:calc(50% - 48px); }
+
+/****************************************************************************************************/
+
+.servicesUploadFilePopup{ position:absolute; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; }
 
 .servicesUploadFilePopup .title{ padding:10px; font-family:barlow; border-radius:4px 4px 0 0; background-color:#428BCA; color:#FFFFFF; line-height:24px; font-size:20px; }
 
@@ -333,7 +451,7 @@
 .servicesUploadFilePopup .success .button:hover{ color:#000000; background-color:#2069A8; }
 
 
-.servicesDownloadFilePopup{ position:relative; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; background-color:#445566; }
+.servicesDownloadFilePopup{ position:absolute; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; background-color:#445566; }
 
 .servicesDownloadFilePopup .loading{ color:#5CB85C; font-size:3em; width:60px; margin:0 calc(50% - 30px) 0 calc(50% - 30px); text-align:center; padding:40px 0 40px 0; }
 
@@ -390,7 +508,7 @@
 .servicesDownloadFilePopup .button:hover{ color:#000000; background-color:#2069A8; }
 
 
-.removeFilesPrompt{ position:relative; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; background-color:#445566; }
+.removeFilesPrompt{ position:absolute; z-index:30; top:80px; margin:0 0 40px 0; border-radius:4px; background-color:#445566; }
 
 .removeFilesPrompt .loading{ padding:10px; }
 
@@ -420,13 +538,13 @@
 
 .removeFilesPrompt .content .file{ color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow-italic; margin:0 0 0 10px; }
 
-.removeFilesPrompt .content .confirm{ color:#5CB85C; font-size:2em; cursor:pointer; width:32px; display:inline-block; margin:20px 10px 0 calc(50% - 42px); }
+.removeFilesPrompt .confirm{ color:#5CB85C; font-size:2em; cursor:pointer; width:32px; display:inline-block; margin:20px 10px 10px calc(50% - 42px); }
 
-.removeFilesPrompt .content .confirm:hover{ color:#3A963A; }
+.removeFilesPrompt .confirm:hover{ color:#3A963A; }
 
-.removeFilesPrompt .content .cancel{ color:#D9534F; font-size:2em; cursor:pointer; width:32px; display:inline-block; vertical-align:top; margin:20px calc(50% - 42px) 0 10px; }
+.removeFilesPrompt .cancel{ color:#D9534F; font-size:2em; cursor:pointer; width:32px; display:inline-block; vertical-align:top; margin:20px calc(50% - 42px) 10px 10px; }
 
-.removeFilesPrompt .content .cancel:hover{ color:#B7312D; }
+.removeFilesPrompt .cancel:hover{ color:#B7312D; }
 
 .removeFilesPrompt .success{ padding:10px; }
 

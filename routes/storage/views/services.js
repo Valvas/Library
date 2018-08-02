@@ -2,10 +2,12 @@
 
 const express                   = require('express')
 const errors                    = require(`${__root}/json/errors`)
+const constants                 = require(`${__root}/functions/constants`)
 const commonAppStrings          = require(`${__root}/json/strings/common`)
 const storageAppStrings         = require(`${__root}/json/strings/storage`)
 const webContent                = require(`${__root}/json/share/webcontent`)
 const commonAppsAccess          = require(`${__root}/functions/common/apps/access`)
+const storageAppFilesGet        = require(`${__root}/functions/storage/files/get`)
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`)
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`)
 
@@ -15,7 +17,7 @@ var router = express.Router()
 
 router.get('/', (req, res) =>
 {
-  storageAppServicesRights.getRightsTowardsServices(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
+  storageAppServicesRights.getRightsTowardsServices(req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error, rights) =>
   {
     if(error != null)
     {
@@ -71,27 +73,16 @@ router.get('/', (req, res) =>
 
 router.get('/:service', (req, res) =>
 {
-  storageAppServicesGet.getServiceUsingName(req.params.service, req.app.get('mysqlConnector'), (error, service) =>
+  req.app.get('databaseConnectionPool').getConnection((error, connection) =>
   {
-    if(error != null)
-    {
-      res.render('storage/services/detail',
-      {
-        account: req.session.account,
-        strings: { common: commonAppStrings, storage: storageAppStrings },
-        rights: null,
-        files: null,
-        error: { message: errors[error.code], detail: error.detail },
-        service: null,
-        webContent: webContent,
-        location: 'services'
-      })
-    }
+    if(error) res.status(500).send({ message: errors[constants.SQL_SERVER_ERROR], detail: error.message });
 
     else
     {
-      storageAppServicesRights.getRightsTowardsService(service.id, req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
+      storageAppServicesGet.accessService(req.params.service, req.session.account.id, connection, req.app.get('params'), (error, service, rights, files) =>
       {
+        connection.release();
+
         if(error != null)
         {
           res.render('storage/services/detail',
@@ -99,53 +90,32 @@ router.get('/:service', (req, res) =>
             account: req.session.account,
             strings: { common: commonAppStrings, storage: storageAppStrings },
             rights: null,
-            files: null,
+            elements: null,
             error: { message: errors[error.code], detail: error.detail },
             service: null,
             webContent: webContent,
             location: 'services'
-          })
+          });
         }
 
         else
         {
-          storageAppServicesGet.getFilesFromService(req.params.service, req.app.get('mysqlConnector'), (error, files) =>
+          res.render('storage/services/detail',
           {
-            if(error == null)
-            {
-              res.render('storage/services/detail',
-              {
-                account: req.session.account,
-                strings: { common: commonAppStrings, storage: storageAppStrings },
-                rights: rights,
-                files: files,
-                error: null,
-                service: service,
-                webContent: webContent,
-                location: 'services'
-              })
-            }
-
-            else
-            {
-              res.render('storage/services/detail',
-              {
-                account: req.session.account,
-                strings: { common: commonAppStrings, storage: storageAppStrings },
-                rights: null,
-                files: null,
-                error: { message: errors[error.code], detail: error.detail },
-                service: null,
-                webContent: webContent,
-                location: 'services'
-              })
-            }
-          })
+            account: req.session.account,
+            strings: { common: commonAppStrings, storage: storageAppStrings },
+            rights: rights,
+            elements: files,
+            error: null,
+            service: service,
+            webContent: webContent,
+            location: 'services'
+          });
         }
-      })
+      });
     }
-  })
-})
+  });
+});
 
 /****************************************************************************************************/
 

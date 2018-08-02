@@ -4,72 +4,98 @@ const params                              = require(`${__root}/json/params`);
 const constants                           = require(`${__root}/functions/constants`);
 const accountsGet                         = require(`${__root}/functions/accounts/get`);
 const filesRemove                         = require(`${__root}/functions/files/remove`);
+const databaseManager                     = require(`${__root}/functions/database/MySQLv3`);
 const storageAppFilesGet                  = require(`${__root}/functions/storage/files/get`);
 const storageAppFilesSet                  = require(`${__root}/functions/storage/files/set`);
 const storageAppServicesGet               = require(`${__root}/functions/storage/services/get`);
 const storageAppServicesRights            = require(`${__root}/functions/storage/services/rights`);
 const storageAppLogsRemoveFile            = require(`${__root}/functions/storage/logs/services/removeFile`);
 
-//To uncomment when updated database manager will be set for all the project
-//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
-
-//To remove when updated database manager will be set for all the project
-const databaseManager             = require(`${__root}/functions/database/MySQLv2`);
-
 /****************************************************************************************************/
 
-module.exports.removeFiles = (filesToRemove, service, accountID, databaseConnector, callback) =>
-{
+module.exports.removeFiles = (filesToRemove, serviceUuid, accountID, databaseConnection, params, callback) =>
+{console.log(filesToRemove);
   filesToRemove         == undefined ||
-  service               == undefined ||
+  serviceUuid           == undefined ||
   accountID             == undefined ||
-  databaseConnector     == undefined ?
+  databaseConnection    == undefined ||
+  params                == undefined ?
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  getAccountData(filesToRemove, serviceUuid, accountID, databaseConnection, params, (error) =>
+  {
+    return callback(error);
+  });
+}
+
+/****************************************************************************************************/
+
+function getAccountData(filesToRemove, serviceUuid, accountID, databaseConnection, params, callback)
+{
+  accountsGet.getAccountUsingID(accountID, databaseConnection, (error, account) =>
   {
     if(error != null) return callback(error);
 
-    var x = 0;
+    checkAccountRights(filesToRemove, serviceUuid, account, databaseConnection, params, callback);
+  });
+}
 
-    if(filesToRemove[x] == undefined) return callback({ status: 406, code: constants.NO_FILE_PROVIDED_IN_REQUEST, detail: null });
+/****************************************************************************************************/
 
-    var removeFileLoop = () =>
+function checkAccountRights(filesToRemove, serviceUuid, account, databaseConnection, params, callback)
+{
+  storageAppServicesRights.getRightsTowardsService(serviceUuid, account.id, databaseConnection, params, (error, accountRights) =>
+  {
+    if(error != null) return callback(error);
+
+    if(accountRights.remove == 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_DELETE_FILES, detail: null });
+
+    browseFilesToRemove(filesToRemove, serviceUuid, account, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function browseFilesToRemove(filesToRemove, serviceUuid, account, databaseConnection, params, callback)
+{
+  var index = 0;
+
+  var fileBrowser = () =>
+  {
+    storageAppFilesGet.getFileFromDatabaseUsingUuid(filesToRemove[index], databaseConnection, params, (error, fileExists, fileData) =>
     {
-      filesRemove.moveFileToBin(filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], `${params.storage.root}/${params.storage.services}/${service.name}/`, (error) =>
-      {
-        if(error != null) return callback(error);
+      if(error != null) return callback(error);
 
-        storageAppFilesGet.getFileFromDatabaseUsingFullName(filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], service.id, databaseConnector, (error, file) =>
+      if(fileExists == false)
+      {
+        if(filesToRemove[index += 1] == undefined) return callback(null);
+
+        fileBrowser();
+      }
+
+      else
+      {
+        filesRemove.moveFileToBin(fileData.uuid, fileData.ext, `${params.storage.root}/${params.storage.services}/${serviceUuid}`, (error) =>
         {
           if(error != null) return callback(error);
 
-          if(file.deleted == 1)
+          storageAppFilesSet.setFileDeletedInDatabase(fileData.uuid, databaseConnection, params, (error) =>
           {
-            filesToRemove[x += 1] != undefined ? removeFileLoop() : callback(null);
-          }
+            if(error != null) return callback(error);
 
-          else
-          {
-            storageAppFilesSet.setFileDeleted(file.id, databaseConnector, (error) =>
-            {
-              if(error != null) return callback(error);
+            if(filesToRemove[index += 1] == undefined) return callback(null);
 
-              storageAppLogsRemoveFile.addRemoveFileLog(params.fileLogs.remove, accountID, file.id, filesToRemove[x].split('.')[0], filesToRemove[x].split('.')[1], service.name, databaseConnector, (error) =>
-              {
-                if(error != null) return callback(error);
-
-                filesToRemove[x += 1] != undefined ? removeFileLoop() : callback(null);
-              });
-            });
-          }
+            fileBrowser();
+          });
         });
-      });
-    }
+      }
+    });
+  }
 
-    removeFileLoop();
-  });
+  if(filesToRemove[index] == undefined) return callback(null);
+
+  fileBrowser();
 }
 
 /****************************************************************************************************/

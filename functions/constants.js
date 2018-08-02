@@ -93,6 +93,8 @@ const UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS                                   
 const RIGHT_DOES_NOT_EXIST                                                        = 10089;
 const ONE_EXTENSION_REQUIRED                                                      = 10090;
 const COULD_NOT_CREATE_ERROR_REPORT                                               = 10091;
+const FOLDER_NOT_PART_OF_PROVIDED_SERVICE                                         = 10092;
+const NEW_FOLDER_NAME_BAD_FORMAT                                                  = 10093;
 
 /******************************************************************************************
 SUCCESS
@@ -125,6 +127,7 @@ const RIGHT_SUCCESSFULLY_ADDED                                                  
 const ACCOUNT_ACCESS_SUCCESSFULLY_ADDED                                           = 20025;
 const ACCOUNT_ACCESS_SUCCESSFULLY_REMOVED                                         = 20026;
 const SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED                                  = 20027;
+const NEW_FOLDER_SUCCESSFULLY_CREATED                                             = 20028;
 
 /******************************************************************************************
 EXPORTS
@@ -223,6 +226,8 @@ module.exports =
   RIGHT_DOES_NOT_EXIST: RIGHT_DOES_NOT_EXIST,
   ONE_EXTENSION_REQUIRED: ONE_EXTENSION_REQUIRED,
   COULD_NOT_CREATE_ERROR_REPORT: COULD_NOT_CREATE_ERROR_REPORT,
+  FOLDER_NOT_PART_OF_PROVIDED_SERVICE: FOLDER_NOT_PART_OF_PROVIDED_SERVICE,
+  NEW_FOLDER_NAME_BAD_FORMAT: NEW_FOLDER_NAME_BAD_FORMAT,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -250,5 +255,6 @@ module.exports =
   RIGHT_SUCCESSFULLY_ADDED: RIGHT_SUCCESSFULLY_ADDED,
   ACCOUNT_ACCESS_SUCCESSFULLY_ADDED: ACCOUNT_ACCESS_SUCCESSFULLY_ADDED,
   ACCOUNT_ACCESS_SUCCESSFULLY_REMOVED: ACCOUNT_ACCESS_SUCCESSFULLY_REMOVED,
-  SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED: SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED
+  SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED: SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED,
+  NEW_FOLDER_SUCCESSFULLY_CREATED: NEW_FOLDER_SUCCESSFULLY_CREATED
 }

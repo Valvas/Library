@@ -1,17 +1,16 @@
 'use strict'
 
-const fs                        = require('fs');
 const express                   = require('express');
 const formidable                = require('formidable');
 const params                    = require(`${__root}/json/params`);
 const errors                    = require(`${__root}/json/errors`);
 const success                   = require(`${__root}/json/success`);
-const services                  = require(`${__root}/json/services`);
 const commonAppStrings          = require(`${__root}/json/strings/common`);
 const constants                 = require(`${__root}/functions/constants`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
-const accountsGet               = require(`${__root}/functions/accounts/get`);
 const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
+const storageAppFilesGet        = require(`${__root}/functions/storage/files/get`);
+const storageAppFilesCreate     = require(`${__root}/functions/storage/files/create`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppFilesUpload     = require(`${__root}/functions/storage/files/upload`);
 const storageAppFilesRemove     = require(`${__root}/functions/storage/files/remove`);
@@ -67,34 +66,13 @@ router.post('/download-file', (req, res) =>
 
     else
     {
-      storageAppServicesGet.getServiceUsingName(fields.service, req.app.get('mysqlConnector'), (error, service) =>
+      storageAppFilesDownload.downloadFile(fields.fileUuid, fields.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filePath) =>
       {
-        if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
+        if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
         else
         {
-          storageAppServicesRights.getRightsTowardsService(service.id, req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
-          {
-            if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
-
-            else
-            {
-              if(rights.download_files == 0) res.status(403).send({ result: false, message: errors[constants.UNAUTHORIZED_TO_DOWNLOAD_FILES] });
-
-              else
-              {
-                storageAppFilesDownload.downloadFile(fields.files, fields.service, req.app.get('mysqlConnector'), req.session.account, (error, filePath) =>
-                {
-                  if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
-
-                  else
-                  {
-                    res.download(filePath, fields.files);
-                  }
-                });
-              }
-            }
-          });
+          res.download(filePath, fields.fileUuid);
         }
       });
     }
@@ -105,38 +83,36 @@ router.post('/download-file', (req, res) =>
 
 router.post('/get-file-upload-parameters', (req, res) =>
 {
-  var form = new formidable.IncomingForm();
+  if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null });
 
-  form.parse(req, (err, fields) =>
+  else
   {
-    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
-
-    else
+    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('databaseConnectionPool'), (error, service) =>
     {
-      storageAppServicesGet.getServiceUsingName(fields.service, req.app.get('mysqlConnector'), (error, service) =>
+      if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
+
+      else
       {
-        if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
-
-        else
+        storageAppServicesGet.getFileMaxSize(service.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceFilesMaxSize) =>
         {
-          storageAppServicesGet.getFileMaxSize(service.id, req.app.get('mysqlConnector'), (error, size) =>
-          {
-            if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
+          if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
 
-            else
+          else
+          {
+            storageAppServicesGet.getAuthorizedExtensionsForService(service.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceExtensions) =>
             {
-              if(fields.service in req.app.get('servicesExtensionsAuthorized') == false) res.status(406).send({ result: false, message: errors[constants.SERVICE_NOT_FOUND], detail: 'Authorized file extensions could not be found for the current service, please report this issue to an administrator as soon as possible' });
+              if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
 
               else
               {
-                res.status(200).send({ result: true, strings: { common: commonAppStrings, storage: storageAppStrings }, size: size, ext: req.app.get('servicesExtensionsAuthorized')[fields.service].ext_accepted });
+                res.status(200).send({ strings: { common: commonAppStrings, storage: storageAppStrings }, size: serviceFilesMaxSize, ext: serviceExtensions });
               }
-            }
-          });
-        }
-      });
-    }
-  });
+            });
+          }
+        });
+      }
+    });
+  }
 });
 
 /****************************************************************************************************/
@@ -151,18 +127,21 @@ router.post('/prepare-upload', (req, res) =>
 
     else
     {
-      fields.service  == undefined ||
-      fields.file     == undefined ?
+      fields.service        == undefined ||
+      fields.currentFolder  == undefined ||
+      fields.file           == undefined ?
 
       res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null }) :
 
-      storageAppFilesUpload.prepareUpload(JSON.parse(fields.file).name.split('.')[0], JSON.parse(fields.file).name.split('.')[1], JSON.parse(fields.file).size, fields.service, req.session.account.id, Object.values(req.app.get('servicesExtensionsAuthorized')[fields.service].ext_accepted), req.app.get('mysqlConnector'), req.app.get('params'), (error, rightToRemoveCurrentFile) =>
+      storageAppFilesUpload.prepareUpload(JSON.parse(fields.file).name.split('.')[0], JSON.parse(fields.file).name.split('.')[1], JSON.parse(fields.file).size, fields.service, fields.currentFolder, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileAlreadyExists, authorizedToRemoveExistingFile) =>
       {
-        if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
+        if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+        if(fileAlreadyExists == false) res.status(200).send({ strings: { common: commonAppStrings, storage: storageAppStrings }, fileExists: false });
 
         else
         {
-          res.status(200).send({ result: true, strings: { common: commonAppStrings, storage: storageAppStrings }, remove: rightToRemoveCurrentFile == undefined ? null : rightToRemoveCurrentFile });
+          res.status(200).send({ strings: { common: commonAppStrings, storage: storageAppStrings }, fileExists: true, rightToRemove: authorizedToRemoveExistingFile });
         }
       });
     }
@@ -179,13 +158,13 @@ router.post('/upload-file', (req, res) =>
 
   form.parse(req, (err, fields, files) =>
   {
-    Object.keys(files)[0] == undefined || fields.service == undefined ? res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
+    Object.keys(files)[0] == undefined || fields.service == undefined  || fields.currentFolder == undefined ? res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
 
-    storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].path, fields.service, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error, fileID) =>
+    storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name.split('.')[0], files[Object.keys(files)[0]].name.split('.')[1], files[Object.keys(files)[0]].size, files[Object.keys(files)[0]].path, fields.service, fields.currentFolder, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileUuid) =>
     {
       error != null ?
-      res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail }) :
-      res.status(200).send({ result: true, message: success[constants.FILE_SENT_SUCCESSFULLY], fileID: fileID });
+      res.status(error.status).send({ message: errors[error.code], detail: error.detail }) :
+      res.status(200).send({ message: success[constants.FILE_SENT_SUCCESSFULLY], fileUuid: fileUuid });
     });
   });
 });
@@ -246,56 +225,35 @@ router.post('/remove-service', (req, res) =>
 
 /****************************************************************************************************/
 
-router.post('/remove-files', (req, res) =>
+router.delete('/remove-files', (req, res) =>
 {
-  var form = new formidable.IncomingForm();
+  if(req.body.filesToRemove == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'filesToRemove' });
 
-  form.parse(req, (err, fields) =>
+  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'filesToRemove' });
+
+  else
   {
-    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
-
-    else
+    storageAppFilesRemove.removeFiles(JSON.parse(req.body.filesToRemove), req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
-      storageAppServicesGet.getServiceUsingName(fields.service, req.app.get('mysqlConnector'), (error, service) =>
+      if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
+
+      else
       {
-        error != null ? res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail }) :
-
-        storageAppServicesRights.getRightsTowardsService(service.id, req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
-        {
-          if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
-
-          else
-          {
-            if(rights.remove_files == 0) res.status(403).send({ message: errors[constants.UNAUTHORIZED_TO_DELETE_FILES], detail: null });
-
-            else
-            {
-              storageAppFilesRemove.removeFiles(fields.files.split(','), service, req.session.account.id, req.app.get('mysqlConnector'), (error) =>
-              {
-                if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
-
-                else
-                {
-                  res.status(200).send({ result: true });
-                }
-              });
-            }
-          }
-        });
-      });
-    }
-  });
+        res.status(200).send({  });
+      }
+    });
+  }
 });
 
 /****************************************************************************************************/
 
 router.post('/modify-service-label', (req, res) =>
 {
-  if(req.body.serviceID == undefined || req.body.serviceLabel == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null });
+  if(req.body.serviceUuid == undefined || req.body.serviceLabel == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null });
 
   else
   {
-    storageAppServicesGet.getServiceUsingName(req.body.serviceID, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('mysqlConnector'), (error, service) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -313,7 +271,7 @@ router.post('/modify-service-label', (req, res) =>
 
             else
             {
-              storageAppAdminServices.updateServiceLabel(service.id, req.body.serviceLabel, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
+              storageAppAdminServices.updateServiceName(req.body.serviceUuid, req.body.serviceLabel, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
               {
                 if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -325,6 +283,82 @@ router.post('/modify-service-label', (req, res) =>
             }
           });
         }
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+
+router.put('/get-folder-content', (req, res) =>
+{
+  if(req.body.folderUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'folderUuid' });
+
+  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+
+  else
+  {
+    storageAppFilesGet.getFilesFromService(req.body.serviceUuid, req.session.account.id, req.body.folderUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filesAndFolders) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      else
+      {
+        res.status(200).send({ result: filesAndFolders });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+
+router.put('/get-parent-folder', (req, res) =>
+{
+  if(req.body.folderUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'folderUuid' });
+
+  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+
+  else
+  {
+    storageAppFilesGet.getParentFolder(req.body.folderUuid, req.body.serviceUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, isRoot, folderData) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      else
+      {
+        storageAppFilesGet.getFilesFromService(req.body.serviceUuid, req.session.account.id, isRoot ? null : folderData.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filesAndFolders) =>
+        {
+          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+          else
+          {
+            res.status(200).send({ result: filesAndFolders });
+          }
+        });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+
+router.post('/create-new-folder', (req, res) =>
+{
+  if(req.body.parentFolderUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'parentFolderUuid' });
+
+  else if(req.body.newFolderName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newFolderName' });
+
+  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+
+  else
+  {
+    storageAppFilesCreate.createNewFolder(req.body.newFolderName, req.body.parentFolderUuid, req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, folderUuid) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+      
+      else
+      {
+        res.status(201).send({ message: success[constants.NEW_FOLDER_SUCCESSFULLY_CREATED], folderUuid: folderUuid });
       }
     });
   }

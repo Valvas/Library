@@ -37,97 +37,93 @@ function openLabelModificationPopup(event)
     { 
       $(popup).fadeIn(500, () => 
       {
-        var xhr = new XMLHttpRequest();
-    
-        xhr.timeout = 10000;
-        xhr.responseType = 'json';
+        $.ajax(
+        {
+          type: 'GET', timeout: 5000, dataType: 'JSON', url: '/queries/storage/strings',
+          error: (xhr, status, error) => 
+          {
+            $(loading).fadeOut(250, () =>
+            {
+              loading.remove();
 
-        xhr.open('GET', '/queries/storage/strings', true);
+              if(status == 'timeout')
+              {
+                displayPopupError('La requête a expiré, veuillez réessayer plus tard', null);
+              }
 
-        xhr.send(null);
-
-        xhr.ontimeout = () =>
+              else
+              {
+                displayPopupError(xhr.responseJSON.message, xhr.responseJSON.detail);
+              }
+            });
+          }
+                      
+        }).done((json) =>
         {
           $(loading).fadeOut(250, () =>
           {
             loading.remove();
 
-            displayPopupError('La requête a expiré, veuillez réessayer plus tard', null);
+            var strings = json.strings;
+
+            title.innerText = strings.admin.services.modify.serviceLabel;
+
+            var currentLabel      = document.createElement('div');
+            var currentInput      = document.createElement('div');
+            var newLabel          = document.createElement('div');
+            var newInput          = document.createElement('input');
+            var checkIcon         = document.createElement('div');
+            var confirmButton     = document.createElement('button');
+            var cancelButton      = document.createElement('button');
+
+            newInput              .setAttribute('id', 'serviceModificationPopupContentInput');
+            checkIcon             .setAttribute('id', 'serviceModificationPopupContentInputCheck');
+            confirmButton         .setAttribute('id', 'serviceModificationPopupContentConfirm');
+
+            currentLabel          .setAttribute('class', 'serviceModificationPopupContentLabel');
+            newLabel              .setAttribute('class', 'serviceModificationPopupContentLabel');
+            currentInput          .setAttribute('class', 'serviceModificationPopupContentValue');
+            newInput              .setAttribute('class', 'serviceModificationPopupContentInput');
+            checkIcon             .setAttribute('class', 'serviceModificationPopupContentInputFalse');
+            confirmButton         .setAttribute('class', 'serviceModificationPopupContentConfirmInactive');
+            cancelButton          .setAttribute('class', 'serviceModificationPopupContentCancel');
+
+            cancelButton          .addEventListener('click', closeModifyPopup);
+
+            newInput              .addEventListener('change', () => { checkLabelValue(newInput.value); });
+
+            newInput              .addEventListener('focus', () => { displayHint(); });
+
+            newInput              .addEventListener('focusout', () => { removeHint(); });
+
+            newInput              .setAttribute('type', 'text');
+            newInput              .setAttribute('placeholder', strings.admin.services.modify.popup.newLabelPlaceholder);
+
+            currentLabel          .innerText = strings.admin.services.modify.popup.currentLabel;
+            newLabel              .innerText = strings.admin.services.modify.popup.newLabel;
+            confirmButton         .innerHTML = strings.admin.services.modify.popup.confirmButton;
+            cancelButton          .innerHTML = strings.admin.services.modify.popup.cancelButton;
+
+            checkIcon             .innerHTML = `<i class="fas fa-times"></i>`;
+
+            checkIcon             .setAttribute('title', `Valeur incorrecte`);
+
+            currentInput          .innerText = document.getElementById('serviceLabel').innerText;
+
+            content               .appendChild(currentLabel);
+            content               .appendChild(currentInput);
+            content               .appendChild(newLabel);
+            content               .appendChild(newInput);
+            content               .appendChild(confirmButton);
+            content               .appendChild(cancelButton);
+
+            $(checkIcon)          .hide().insertAfter(newInput);
+
+            newInput              .style.border = '1px solid #EA645F';
+
+            $(checkIcon)          .fadeIn(500);
           });
-        }
-
-        xhr.onload = () =>
-        {
-          $(loading).fadeOut(250, () =>
-          {
-            loading.remove();
-
-            if(xhr.status == 200)
-            {
-              title.innerText = xhr.response.strings.admin.services.modify.serviceLabel;
-
-              var currentLabel      = document.createElement('div');
-              var currentInput      = document.createElement('div');
-              var newLabel          = document.createElement('div');
-              var newInput          = document.createElement('input');
-              var checkIcon         = document.createElement('div');
-              var confirmButton     = document.createElement('button');
-              var cancelButton      = document.createElement('button');
-
-              newInput              .setAttribute('id', 'serviceModificationPopupContentInput');
-              checkIcon             .setAttribute('id', 'serviceModificationPopupContentInputCheck');
-              confirmButton         .setAttribute('id', 'serviceModificationPopupContentConfirm');
-
-              currentLabel          .setAttribute('class', 'serviceModificationPopupContentLabel');
-              newLabel              .setAttribute('class', 'serviceModificationPopupContentLabel');
-              currentInput          .setAttribute('class', 'serviceModificationPopupContentValue');
-              newInput              .setAttribute('class', 'serviceModificationPopupContentInput');
-              checkIcon             .setAttribute('class', 'serviceModificationPopupContentInputFalse');
-              confirmButton         .setAttribute('class', 'serviceModificationPopupContentConfirmInactive');
-              cancelButton          .setAttribute('class', 'serviceModificationPopupContentCancel');
-
-              cancelButton          .addEventListener('click', closeModifyPopup);
-
-              newInput              .addEventListener('change', () => { checkLabelValue(newInput.value); });
-
-              newInput              .addEventListener('focus', () => { displayHint(); });
-
-              newInput              .addEventListener('focusout', () => { removeHint(); });
-
-              newInput              .setAttribute('type', 'text');
-              newInput              .setAttribute('placeholder', xhr.response.strings.admin.services.modify.popup.newLabelPlaceholder);
-
-              currentLabel          .innerText = xhr.response.strings.admin.services.modify.popup.currentLabel;
-              newLabel              .innerText = xhr.response.strings.admin.services.modify.popup.newLabel;
-              confirmButton         .innerHTML = xhr.response.strings.admin.services.modify.popup.confirmButton;
-              cancelButton          .innerHTML = xhr.response.strings.admin.services.modify.popup.cancelButton;
-
-              checkIcon             .innerHTML = `<i class="fas fa-times"></i>`;
-
-              checkIcon             .setAttribute('title', `Valeur incorrecte`);
-
-              currentInput          .innerText = document.getElementById('serviceLabel').innerText;
-
-              content               .appendChild(currentLabel);
-              content               .appendChild(currentInput);
-              content               .appendChild(newLabel);
-              content               .appendChild(newInput);
-              content               .appendChild(confirmButton);
-              content               .appendChild(cancelButton);
-
-              $(checkIcon)          .hide().insertAfter(newInput);
-
-              newInput              .style.border = '1px solid #EA645F';
-
-              $(checkIcon)          .fadeIn(500);
-            }
-
-            else
-            {
-              displayPopupError(xhr.response.message, xhr.response.detail);
-            }
-          });
-        }
+        });
       }); 
     });
   }
@@ -224,7 +220,7 @@ function sendNewServiceLabel()
         dataType: 'json',
         timeout: 10000,
         url: '/queries/storage/services/modify-service-label',
-        data: { serviceLabel: value, serviceID: document.getElementById('serviceName').innerText },
+        data: { serviceLabel: value, serviceUuid: document.getElementById('serviceDetailBlock').getAttribute('name') },
 
         error: (xhr, textStatus, errorThrown) =>
         {

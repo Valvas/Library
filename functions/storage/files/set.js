@@ -2,135 +2,103 @@
 
 const params              = require(`${__root}/json/params`);
 const constants           = require(`${__root}/functions/constants`);
-const accountsGet         = require(`${__root}/functions/accounts/get`);
+const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 const storageAppfilesGet  = require(`${__root}/functions/storage/files/get`);
 
-//To uncomment when updated database manager will be set for all the project
-//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
-
-//To remove when updated database manager will be set for all the project
-const databaseManager     = require(`${__root}/functions/database/MySQLv2`);
-
 /****************************************************************************************************/
 
-module.exports.setFileOwner = (accountID, fileID, databaseConnector, callback) =>
+module.exports.setFileOwner = (accountId, fileUuid, databaseConnection, params, callback) =>
 {
-  accountID           == undefined ||
-  fileID              == undefined ||
-  databaseConnector   == undefined ?
+  accountId             == undefined ||
+  fileUuid              == undefined ||
+  params                == undefined ||
+  databaseConnection    == undefined ?
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  storageAppfilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
   {
-    if(error != null) callback(error);
+    if(error != null) return callback(error);
 
-    else
+    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND, detail: null });
+
+    databaseManager.updateQuery(
     {
-      storageAppfilesGet.getFileFromDatabaseUsingID(fileID, databaseConnector, (error, file) =>
-      {
-        if(error != null) callback(error);
+      databaseName: params.database.storage.label,
+      tableName: params.database.storage.tables.files,
+      args: { account: accountId },
+      where: { operator: '=', key: 'uuid', value: fileUuid }
 
-        else
-        {
-          databaseManager.updateQuery(
-          {
-            'databaseName': params.database.storage.label,
-            'tableName': params.database.storage.tables.files,
-            'args': { 'account': accountID },
-            'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': fileID } } }
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-          }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
-          {
-            if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: updatedRowsOrErrorMessage });
-
-            else
-            {
-              callback(null);
-            }
-          });
-        }
-      });
-    }
+      return callback(null);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.setFileNotDeleted = (accountID, fileID, databaseConnector, callback) =>
+module.exports.setFileNotDeletedInDatabase = (fileUuid, databaseConnection, params, callback) =>
 {
-  accountID           == undefined ||
-  fileID              == undefined ||
-  databaseConnector   == undefined ?
+  fileUuid              == undefined ||
+  params                == undefined ||
+  databaseConnection    == undefined ?
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  storageAppfilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
   {
-    if(error != null) callback(error);
+    if(error != null) return callback(error);
 
-    else
+    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND, detail: null });
+
+    databaseManager.updateQuery(
     {
-      storageAppfilesGet.getFileFromDatabaseUsingID(fileID, databaseConnector, (error, file) =>
-      {
-        if(error != null) callback(error);
+      databaseName: params.database.storage.label,
+      tableName: params.database.storage.tables.files,
+      args: { deleted: 0 },
+      where: { operator: '=', key: 'uuid', value: fileUuid }
 
-        else
-        {
-          databaseManager.updateQuery(
-          {
-            'databaseName': params.database.storage.label,
-            'tableName': params.database.storage.tables.files,
-            'args': { 'deleted': 0 },
-            'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': fileID } } }
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-          }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
-          {
-            if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: updatedRowsOrErrorMessage });
-
-            else
-            {
-              callback(null);
-            }
-          });
-        }
-      });
-    }
+      return callback(null);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.setFileDeleted = (fileID, databaseConnector, callback) =>
+module.exports.setFileDeletedInDatabase = (fileUuid, databaseConnection, params, callback) =>
 {
-  fileID              == undefined ||
-  databaseConnector   == undefined ?
+  params                == undefined ||
+  fileUuid              == undefined ||
+  databaseConnection    == undefined ?
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  storageAppfilesGet.getFileFromDatabaseUsingID(fileID, databaseConnector, (error, file) =>
+  storageAppfilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
   {
-    if(error != null) callback(error);
+    if(error != null) return callback(error);
 
-    else
+    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND, detail: null });
+
+    databaseManager.updateQuery(
     {
-      databaseManager.updateQuery(
-      {
-        'databaseName': params.database.storage.label,
-        'tableName': params.database.storage.tables.files,
-        'args': { 'deleted': 1 },
-        'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': fileID } } }
+      databaseName: params.database.storage.label,
+      tableName: params.database.storage.tables.files,
+      args: { deleted: 1 },
+      where: { operator: '=', key: 'uuid', value: fileUuid }
 
-      }, databaseConnector, (boolean, updatedRowsOrErrorMessage) =>
-      {
-        if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: updatedRowsOrErrorMessage });
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-        else
-        {
-          callback(null);
-        }
-      });
-    }
+      return callback(null);
+    });
   });
 }
 

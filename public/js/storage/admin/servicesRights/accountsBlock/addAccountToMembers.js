@@ -27,7 +27,7 @@ function addAccountToMembers(account)
       {
         method: 'POST',
         dataType: 'json',
-        data: { accounts: JSON.stringify(accounts), serviceName: document.getElementById('rightsOnServicesHomeMembersBlock').getAttribute('name') },
+        data: { accounts: JSON.stringify(accounts), serviceUuid: document.getElementById('rightsOnServicesHomeMembersBlock').getAttribute('name') },
         timeout: 10000,
         url: '/queries/storage/admin/give-access-to-a-service',
     

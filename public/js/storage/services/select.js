@@ -9,77 +9,60 @@ function selectFile(target)
 {
   var checked = target.checked;
 
-  var getParentLoop = () =>
-  {
-    target = target.parentElement;
-
-    if(target.hasAttribute('tag') == false) getParentLoop();
-  }
-
-  if(target.hasAttribute('tag') == false) getParentLoop();
-
   var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
 
-  checked ?
+  if(checked)
+  {
+    document.getElementById('actions').children[0].setAttribute('name', parseInt(document.getElementById('actions').children[0].getAttribute('name')) + 1);
+    document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${parseInt(selectedFilesLabelAndCounter[1]) + 1}`;
+  }
 
-  document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${parseInt(selectedFilesLabelAndCounter[1]) + 1}`:
-  document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${parseInt(selectedFilesLabelAndCounter[1]) - 1}`;
+  else
+  {
+    document.getElementById('actions').children[0].setAttribute('name', parseInt(document.getElementById('actions').children[0].getAttribute('name')) - 1);
+    document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${parseInt(selectedFilesLabelAndCounter[1]) - 1}`;
+  }
 }
 
 /****************************************************************************************************/
 
 function selectAll(event)
 {
-  var files = document.getElementById('filesBlock').children;
+  var elements = document.getElementById('filesBlock').children;
+  var selectedElements = 0;
 
-  var x = 0;
-
-  var loop = () =>
+  for(var x = 0; x < elements.length; x++)
   {
-    if(files[x].children[0].getAttribute('class') == 'checkbox')
+    if(elements[x].hasAttribute('tag'))
     {
-      if(files[x].children[0].children[0].checked == false)
-      {
-        files[x].children[0].children[0].checked = true;
+      elements[x].children[2].checked = true;
 
-        var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
-
-        document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${parseInt(selectedFilesLabelAndCounter[1]) + 1}`;
-      }
+      selectedElements += 1;
     }
-
-    if(files[x += 1] != undefined) loop();
   }
 
-  if(files[x] != undefined) loop();
+  var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
+
+  document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${selectedElements}`;
 }
 
 /****************************************************************************************************/
 
 function unselectAll(event)
 {
-  var files = document.getElementsByClassName('file');
+  var elements = document.getElementById('filesBlock').children;
 
-  var x = 0;
-
-  var loop = () =>
+  for(var x = 0; x < elements.length; x++)
   {
-    if(files[x].children[0].getAttribute('class') == 'checkbox')
+    if(elements[x].hasAttribute('tag'))
     {
-      if(files[x].children[0].children[0].checked == true)
-      {
-        files[x].children[0].children[0].checked = false;
-
-        var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
-
-        document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${parseInt(selectedFilesLabelAndCounter[1]) - 1}`;
-      }
+      elements[x].children[2].checked = false;
     }
-    
-    if(files[x += 1] != undefined) loop();
   }
 
-  if(files[x] != undefined) loop();
+  var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
+
+  document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : 0`;
 }
 
 /****************************************************************************************************/

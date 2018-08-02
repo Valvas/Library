@@ -62,7 +62,7 @@
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "account": "BIGINT UNSIGNED NOT NULL",
-      "service": "BIGINT UNSIGNED NOT NULL",
+      "service": "VARCHAR(255) NOT NULL",
       "upload_files": "BOOLEAN NOT NULL",
       "download_files": "BOOLEAN NOT NULL",
       "remove_files": "BOOLEAN NOT NULL",
@@ -72,11 +72,12 @@
     "files":
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "uuid": "VARCHAR(255) NOT NULL",
       "name": "VARCHAR(255) NOT NULL",
       "ext": "VARCHAR(255) NOT NULL",
       "parent_folder": "VARCHAR(255)",
       "account": "BIGINT UNSIGNED NOT NULL",
-      "service": "BIGINT UNSIGNED NOT NULL",
+      "service": "VARCHAR(255) NOT NULL",
       "deleted": "BOOLEAN NOT NULL"
     },
 
@@ -84,9 +85,11 @@
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "uuid": "VARCHAR(255) NOT NULL",
+      "name": "VARCHAR(255) NOT NULL",
       "account": "BIGINT UNSIGNED NOT NULL",
-      "service": "BIGINT UNSIGNED NOT NULL",
-      "parent_folder": "VARCHAR(255)"
+      "service": "VARCHAR(255) NOT NULL",
+      "parent_folder": "VARCHAR(255)",
+      "deleted": "BOOLEAN NOT NULL"
     },
 
     "file_logs":
@@ -94,7 +97,7 @@
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "type": "INT NOT NULL",
       "account": "BIGINT UNSIGNED NOT NULL",
-      "file": "BIGINT UNSIGNED NOT NULL",
+      "file": "VARCHAR(255) NOT NULL",
       "date": "BIGINT UNSIGNED NOT NULL"
     },
 

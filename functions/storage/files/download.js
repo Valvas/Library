@@ -1,73 +1,79 @@
 'use strict'
 
-const fs                                  = require('fs');
-const params                              = require(`${__root}/json/params`);
-const errors                              = require(`${__root}/json/errors`);
 const constants                           = require(`${__root}/functions/constants`);
 const storageAppFilesGet                  = require(`${__root}/functions/storage/files/get`);
-const storageAppFilesSet                  = require(`${__root}/functions/storage/files/set`);
 const storageAppServicesGet               = require(`${__root}/functions/storage/services/get`);
+const storageAppServicesRights            = require(`${__root}/functions/storage/services/rights`);
 const storageAppLogsServicesDownloadFile  = require(`${__root}/functions/storage/logs/services/downloadFile`);
 
 /****************************************************************************************************/
 
-module.exports.downloadFile = (fileToDownload, serviceName, databaseConnector, account, callback) =>
+module.exports.downloadFile = (fileUuid, serviceUuid, accountId, databaseConnection, params, callback) =>
 {
-  if(fileToDownload == undefined || serviceName == undefined || databaseConnector == undefined) callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST });
+  if(fileUuid == undefined || serviceUuid == undefined || accountId == undefined || databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
 
-  else if(fileToDownload.length == 0) callback({ status: 406, code: constants.NO_FILE_TO_DOWNLOAD });
-
-  else
+  checkIfServiceExists(fileUuid, serviceUuid, accountId, databaseConnection, params, (error, filePath) =>
   {
-    storageAppServicesGet.getServiceUsingName(serviceName, databaseConnector, (error, service) =>
-    {
-      if(error != null) callback(error);
+    return callback(error, filePath);
+  });
+}
 
-      else
-      {
-        storageAppFilesGet.getFileFromDatabase(fileToDownload.split('.')[0], fileToDownload.split('.')[1], service.id, databaseConnector, (error, file) =>
-        {
-          if(error != null) callback(error);
+/****************************************************************************************************/
 
-          else
-          {
-            storageAppFilesGet.getFileFromDisk(fileToDownload.split('.')[0], fileToDownload.split('.')[1], serviceName, databaseConnector, (error, fileStats) =>
-            {
-              if(error != null)
-              {
-                //File has not been found on the disk and must be put in deleted status in the database before sending the previous error
-                if(error.status == 404)
-                {
-                  storageAppFilesSet.setFileDeleted(file.id, databaseConnector, (ignoredError) =>
-                  {
-                    callback(error);
-                  });
-                }
+function checkIfServiceExists(fileUuid, serviceUuid, accountId, databaseConnection, params, callback)
+{
+  storageAppServicesGet.getServiceUsingUUID(serviceUuid, databaseConnection, (error, serviceData) =>
+  {
+    if(error != null) return callback(error);
 
-                else
-                {
-                  callback(error);
-                }
-              }
+    checkUserRightsTowardsCurrentService(fileUuid, serviceUuid, accountId, databaseConnection, params, callback);
+  });
+}
 
-              else
-              {
-                storageAppLogsServicesDownloadFile.addDownloadFileLog(params.fileLogs.download, account.id, file.id, fileToDownload.split('.')[0], fileToDownload.split('.')[1], serviceName, databaseConnector, (error) =>
-                {
-                  if(error != null) callback(error);
+/****************************************************************************************************/
 
-                  else
-                  {
-                    callback(null, `${params.storage.root}/${params.storage.services}/${serviceName}/${fileToDownload}`);
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
-    });
-  }
+function checkUserRightsTowardsCurrentService(fileUuid, serviceUuid, accountId, databaseConnection, params, callback)
+{
+  storageAppServicesRights.getRightsTowardsService(serviceUuid, accountId, databaseConnection, params, (error, accountRights) =>
+  {
+    if(error != null) return callback(error);
+
+    if(accountRights.download_files === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_DOWNLOAD_FILES, detail: null });
+
+    getFileFromDatabase(fileUuid, serviceUuid, accountId, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function getFileFromDatabase(fileUuid, serviceUuid, accountId, databaseConnection, params, callback)
+{
+  storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND, detail: 'database' });
+
+    if(fileData.deleted === 1) return callback({ status: 404, code: constants.FILE_HAS_BEEN_DELETED, detail: null });
+
+    getFileFromStorage(fileData, serviceUuid, accountId, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function getFileFromStorage(fileData, serviceUuid, accountId, databaseConnection, params, callback)
+{
+  storageAppFilesGet.checkIfFileExistsOnStorage(fileData.uuid, fileData.ext, serviceUuid, params, (error, fileExists, fileStats) =>
+  {
+    if(error != null) return callback(error);
+
+    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND, detail: 'storage' });
+
+    storageAppLogsServicesDownloadFile.addDownloadFileLog(params.fileLogs.download, accountId, fileData.uuid, serviceUuid, databaseConnection, params, (error) => {  });
+
+    return callback(null, `${params.storage.root}/${params.storage.services}/${serviceUuid}/${fileData.uuid}.${fileData.ext}`);
+  });
 }
 
 /****************************************************************************************************/

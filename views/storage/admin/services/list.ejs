@@ -33,7 +33,7 @@
               </div>
             <% } else{ %>
               <% for(var service in services){ %>
-                <div class="servicesListBlock" name='<%= service %>'>
+                <div class="servicesListBlock" id='<%= service %>'>
                   <div class="servicesListBlockTitle"><%= services[service].name.charAt(0).toUpperCase() + services[service].name.slice(1).toLowerCase() %></div>
                   <% if(parseInt(services[service].fileLimit) / 1024 / 1024 / 1024 > 1){ %>
                     <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.limit %> :</div><div class='value'><%= parseInt(services[service].fileLimit) / 1024 / 1024 / 1024 %> Go</div></div>
@@ -44,7 +44,7 @@
                   <% } else{ %>
                     <div class='serviceBlockValueBlock'><div class='key'><%= strings.storage.admin.services.info.limit %> :</div><div class='value'><%= parseInt(services[service].fileLimit) %> o</div></div>
                   <% } %>
-                  <button class='<% if(rights.modify_services == 1){ %>serviceBlockModifyActive<% } else{ %>serviceBlockModifyInactive<% } %>'><i class='fas fa-pencil-alt icon'></i><%= strings.storage.admin.services.info.modify %></button><!--
+                  <button <% if(rights.modify_services == 1){ %>onclick='openServiceDetail("<%= service %>")'<% } %> class='<% if(rights.modify_services == 1){ %>serviceBlockModifyActive<% } else{ %>serviceBlockModifyInactive<% } %>'><i class='fas fa-pencil-alt icon'></i><%= strings.storage.admin.services.info.modify %></button><!--
                   --><button onclick="openRemovePopup('<%= services[service].name.charAt(0).toUpperCase() + services[service].name.slice(1).toLowerCase() %>', '<%= service %>')" class='<% if(rights.remove_services == 1){ %>serviceBlockRemoveActive<% } else{ %>serviceBlockRemoveInactive<% } %>'><i class='fas fa-trash icon'></i><%= strings.storage.admin.services.info.remove %></button>
                 </div>
               <% } %>

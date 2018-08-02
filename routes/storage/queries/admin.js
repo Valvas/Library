@@ -21,13 +21,13 @@ router.post('/give-access-to-a-service', (req, res) =>
 {
   if(req.body.accounts == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account(s) is/are missing from the request' });
 
-  else if(req.body.serviceName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
+  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
 
   else
   {
     const accounts = JSON.parse(req.body.accounts);
 
-    storageAppServicesGet.getServiceUsingName(req.body.serviceName, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('mysqlConnector'), (error, service) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -43,7 +43,7 @@ router.post('/give-access-to-a-service', (req, res) =>
 
             else
             {
-              storageAppAdminServices.addMembersToService(service.id, { 0: { id: account.id, comment: false, upload: false, download: false, remove: false } }, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
+              storageAppAdminServices.addMembersToService(service.uuid, { 0: { id: account.id, comment: false, upload: false, download: false, remove: false } }, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
               {
                 if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -75,19 +75,19 @@ router.post('/remove-access-to-a-service', (req, res) =>
 {
   if(req.body.accounts == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account(s) is/are missing from the request' });
 
-  else if(req.body.serviceName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
+  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
 
   else
   {
     const accounts = JSON.parse(req.body.accounts);
 
-    storageAppServicesGet.getServiceUsingName(req.body.serviceName, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('mysqlConnector'), (error, service) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
       else
       {
-        storageAppAdminServices.removeMembersFromAService(service.id, accounts, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
+        storageAppAdminServices.removeMembersFromAService(service.uuid, accounts, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
         {
           if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -115,7 +115,7 @@ router.post('/add-right-on-service', (req, res) =>
 
   else
   {
-    storageAppServicesGet.getServiceUsingName(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppServicesGet.getServiceUsingUUID(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -135,7 +135,7 @@ router.post('/add-right-on-service', (req, res) =>
 
               else
               {
-                storageAppAdminServices.addRightOnService(account.id, service.id, req.body.right, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
+                storageAppAdminServices.addRightOnService(account.id, service.uuid, req.body.right, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
                 {
                   if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -167,7 +167,7 @@ router.post('/remove-right-on-service', (req, res) =>
 
   else
   {
-    storageAppServicesGet.getServiceUsingName(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppServicesGet.getServiceUsingUUID(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -187,7 +187,7 @@ router.post('/remove-right-on-service', (req, res) =>
 
               else
               {
-                storageAppAdminServices.removeRightOnService(account.id, service.id, req.body.right, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
+                storageAppAdminServices.removeRightOnService(account.id, service.uuid, req.body.right, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
                 {
                   if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -236,13 +236,13 @@ router.get('/get-min-and-max-file-size', (req, res) =>
 
 router.post('/update-service-max-file-size', (req, res) =>
 {
-  if(req.body.serviceName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'service name is missing' });
+  if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'service identifier is missing' });
 
   else if(req.body.fileSize == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'max file size is missing' });
 
   else
   {
-    storageAppServicesGet.getServiceUsingName(req.body.serviceName, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('mysqlConnector'), (error, service) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -262,7 +262,7 @@ router.post('/update-service-max-file-size', (req, res) =>
 
             else
             {
-              storageAppAdminServices.updateServiceMaxFileSize(service.id, req.body.fileSize, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
+              storageAppAdminServices.updateServiceMaxFileSize(req.body.serviceUuid, req.body.fileSize, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
               {
                 if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -283,11 +283,11 @@ router.post('/update-service-max-file-size', (req, res) =>
 
 router.post('/get-service-members', (req, res) =>
 {
-  if(req.body.serviceName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'service name is missing from the request' });
+  if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'service identifier is missing from the request' });
 
   else
   {
-    storageAppServicesGet.getServiceUsingName(req.body.serviceName, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('mysqlConnector'), (error, service) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -307,7 +307,7 @@ router.post('/get-service-members', (req, res) =>
 
               else
               {
-                storageAppServicesGet.getMembersFromService(service.id, req.app.get('mysqlConnector'), (error, members) =>
+                storageAppServicesGet.getMembersFromService(service.uuid, req.app.get('mysqlConnector'), (error, members) =>
                 {
                   if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 

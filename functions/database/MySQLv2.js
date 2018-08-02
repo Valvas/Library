@@ -162,7 +162,7 @@ module.exports.insertQueryWithUUID = (queryObject, databaseConnection, callback)
   var keys = Object.keys(queryObject.args).join() + ',uuid';
   var values = `"${Object.values(queryObject.args).join('","')}", "${uuid}"`;
 
-  databaseConnection.qeury(`INSERT INTO ${queryObject.databaseName}.${queryObject.tableName} (${keys}) VALUES (${values})`, (error, result) =>
+  databaseConnection.query(`INSERT INTO ${queryObject.databaseName}.${queryObject.tableName} (${keys}) VALUES (${values})`, (error, result) =>
   {
     console.log(result);
 

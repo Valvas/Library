@@ -9,60 +9,34 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/list.css" />
   <body>
     <% include ../includes/aside.ejs %>
-    <div class='mainBlock'>
+    <div id='mainBlock' class='mainBlock'>
       <div class='mainBlockLocation'><%= strings.storage.locations.services %></div>
       <% if(error != null){ %>
-        <div class='error'>
-          <div class='message'><div class='left'><i class='fas fa-exclamation-circle'></i></div><div class='right'><%= error.message %></div></div>
-          <% if(error.detail != undefined){ %>
-            <div class='detail'>
-              <div class='label'><%= strings.common.errors.detail %></div>
-              <div class='content'><%= error.detail %></div>
-            </div>
-          <% } %>
+        <div class='storageErrorBlock'>
+          <div class='storageErrorBlockIcon'><i class='fas fa-exclamation-circle'></i></div><div class='storageErrorBlockMessage'><%= error.message %></div>
         </div>
       <% } else{ %>
-        <% if(Object.keys(services).length == 0){ %>
+        <% if(Object.keys(rights).length == 0){ %>
+          <div class="emptyServicesIcon"><i class="fas fa-10x fa-box-open"></i></div>
+          <div class="emptyServicesMessage"><%= strings.storage.noServicesAccess %></div>
+        <% } else if(Object.keys(services).length == 0){ %>
           <div class="emptyServicesIcon"><i class="fas fa-10x fa-box-open"></i></div>
           <div class="emptyServicesMessage"><%= strings.storage.emptyServicesMessage %></div>
         <% } else{ %>
-          <% for(var key in services){ %><!--
-          --><div name='<%= services[key].name %>' class='block'>
-              <div class='name'><%= services[key].label %></div>
-              <div class='access'>
-                <% if(rights[key] == undefined){ %>
-                  <div class='false'><%= strings.storage.services.access.false %></div>
-                <% }else{ %>
-                  <div class='true'><%= strings.storage.services.access.true %></div>
-                  <div class='rights'>
-                    <div class='title'><%= strings.storage.services.rights %></div>
-                    <div class='labels'>
-                      <div class='label'><i class='fas fa-comments'></i></div><!--
-                      --><div class='label'><i class='fas fa-cloud-upload-alt'></i></div><!--
-                      --><div class='label'><i class='fas fa-cloud-download-alt'></i></div><!--
-                      --><div class='label'><i class='fas fa-trash'></i></div>
-                    </div>
-                    <div class='values'>
-                      <div <% if(rights[key].comment == 1){ %>class='true'<% } else{ %>class='false'<% } %>><i <% if(rights[key].comment == 1){ %>class='far fa-check-circle'<% } else{ %>class='far fa-times-circle'<% } %>></i></div><!--
-                      --><div <% if(rights[key].upload == 1){ %>class='true'<% } else{ %>class='false'<% } %>><i <% if(rights[key].upload == 1){ %>class='far fa-check-circle'<% } else{ %>class='far fa-times-circle'<% } %>></i></div><!--
-                      --><div <% if(rights[key].download == 1){ %>class='true'<% } else{ %>class='false'<% } %>><i <% if(rights[key].download == 1){ %>class='far fa-check-circle'<% } else{ %>class='far fa-times-circle'<% } %>></i></div><!--
-                      --><div <% if(rights[key].remove == 1){ %>class='true'<% } else{ %>class='false'<% } %>><i <% if(rights[key].remove == 1){ %>class='far fa-check-circle'<% } else{ %>class='far fa-times-circle'<% } %>></i></div>
-                    </div>
-                  </div>
-                <% } %>
-              </div>
-              <% if(rights[key] == undefined){ %>
-                <button class='ask'><%= strings.storage.services.ask %></button>
-              <% } else{ %>
-                <a href='/storage/services/<%= services[key].name %>' class='open'><%= strings.storage.services.open %></a>
-              <% } %>
-            </div><!--
-        --><% } %>
+          <% for(var key in services){ %>
+            <% if(rights[key] != undefined){ %><!--
+           --><div name='serviceBlock' ondblclick='openService("<%= key %>")' onclick='selectService("<%= key %>")' id='<%= key %>' class='serviceBlock'>
+                <div class='serviceBlockIcon'><i class="fas fa-folder"></i></div>
+                <div class='serviceBlockName'><%= services[key].name.charAt(0).toUpperCase() %><%= services[key].name.slice(1).toLowerCase() %></div>
+              </div><!--
+         --><% } %>
+          <% } %>
         <% } %>
       <% } %>
     </div>
     <script src='/js/jQuery.js'></script>
     <script src='/js/functions.js'></script>
     <script src='/js/afk.js'></script>
+    <script src='/js/storage/services/list.js'></script>
   </body>
 </html>

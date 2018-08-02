@@ -1,27 +1,26 @@
 /****************************************************************************************************/
 
-if(document.getElementById('remove')) document.getElementById('remove').addEventListener('click', removeSelection);
+if(document.getElementById('removeFilesButton')) document.getElementById('removeFilesButton').addEventListener('click', removeSelection);
 
 /****************************************************************************************************/
 
 function removeSelection(event)
 {
-  var files = document.getElementById('filesBlock').children;
-
-  var x = 0;
-  var filesToRemove = [];
-
-  var browseFileLoop = () =>
+  if(document.getElementById('removePromptBackground') == null)
   {
-    if(files[x].children[0].children[0].checked) filesToRemove.push(files[x].getAttribute('name'));
-    if(files[x += 1] != undefined) browseFileLoop();
-  }
+    var elements = document.getElementById('filesBlock').children;
 
-  if(files[x] != undefined) browseFileLoop();
+    var filesToRemove = [];
 
-  if(filesToRemove.length > 0)
-  {
-    openConfirmationPrompt(filesToRemove);
+    for(var x = 0; x < elements.length; x++)
+    {
+      if(elements[x].hasAttribute('tag'))
+      {
+        if(elements[x].children[2] && elements[x].children[2].checked) filesToRemove.push({ uuid: elements[x].getAttribute('name'), name: elements[x].children[1].innerText });
+      }
+    }
+
+    if(filesToRemove.length > 0) openConfirmationPrompt(filesToRemove);
   }
 }
 
@@ -29,154 +28,97 @@ function removeSelection(event)
 
 function openConfirmationPrompt(filesToRemove)
 {
-  document.getElementById('blur').style.filter = 'blur(4px)';
-
   var background      = document.createElement('div');
+  var spinner         = document.createElement('div');
   var prompt          = document.createElement('div');
   var title           = document.createElement('div');
   var content         = document.createElement('div');
   var message         = document.createElement('div');
-  var loading         = document.createElement('div');
   var confirm         = document.createElement('div');
   var cancel          = document.createElement('div');
 
   background          .setAttribute('id', 'removePromptBackground');
   prompt              .setAttribute('id', 'removePrompt');
   content             .setAttribute('id', 'removePromptContent');
+  confirm             .setAttribute('id', 'removePromptConfirm');
+  cancel              .setAttribute('id', 'removePromptCancel');
 
-  background          .setAttribute('class', 'background');
+  background          .setAttribute('class', 'storageBackground');
+  spinner             .setAttribute('class', 'storageSpinner');
   prompt              .setAttribute('class', 'removeFilesPrompt');
   title               .setAttribute('class', 'title');
-  loading             .setAttribute('class', 'loading');
   content             .setAttribute('class', 'content');
   message             .setAttribute('class', 'message');
   confirm             .setAttribute('class', 'confirm');
   cancel              .setAttribute('class', 'cancel');
 
-  title               .innerText = '...';
-  loading             .innerHTML = `<div class='spinner'><i class='fas fa-circle-notch fa-spin'></i></div>`;
-  confirm             .innerHTML = `<i class='fas fa-check-circle'></i>`;
-  cancel              .innerHTML = `<i class='fas fa-times-circle'></i>`;
+  spinner             .innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+  confirm             .innerHTML = '<i class="fas fa-check-circle"></i>';
+  cancel              .innerHTML = '<i class="fas fa-times-circle"></i>';
 
-  background          .style.display = 'block';
+  content             .appendChild(message);
 
   prompt              .appendChild(title);
-  prompt              .appendChild(loading);
-  background          .appendChild(prompt);
+  prompt              .appendChild(content);
+  prompt              .appendChild(confirm);
+  prompt              .appendChild(cancel);
+
+  document.body       .appendChild(spinner);
   document.body       .appendChild(background);
 
-  var xhr = new XMLHttpRequest();
-
-  xhr.responseType = 'json';
-  xhr.timeout = 10000;
-
-  xhr.open('GET', '/queries/storage/strings', true);
-
-  xhr.send(null);
-
-  xhr.ontimeout = () =>
+  $.ajax(
   {
-    loading.remove();
+    method: 'GET',
+    dataType: 'json',
+    timeout: 5000,
+    url: '/queries/storage/strings',
 
-    displayRemovePromptError('La requête a expiré, veuillez réessayer plus tard', null);
-  }
-
-  xhr.onload = () =>
-  {
-    loading.remove();
-
-    if(xhr.status == 200)
+    error: (xhr, textStatus, errorThrown) =>
     {
-      title           .innerText = xhr.response.strings.services.popup.remove.title;
-      message         .innerText = xhr.response.strings.services.popup.remove.message;
+      spinner.remove();
+      background.remove();
 
-      confirm         .addEventListener('click', () => { confirmSuppression(filesToRemove, xhr.response.strings); });
-      cancel          .addEventListener('click', closeConfirmationPrompt);
+      xhr.responseJSON != undefined ?
+      displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail) :
+      displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
+    }
+  }).done((json) =>
+  {
+    spinner.remove();
 
-      content         .appendChild(message);
+    title           .innerText = json.strings.services.popup.remove.title;
+    message         .innerText = json.strings.services.popup.remove.message;
 
-      var x = 0;
+    confirm         .addEventListener('click', () => { confirmSuppression(filesToRemove, json.strings); });
+    cancel          .addEventListener('click', closeConfirmationPrompt);
 
-      var listFiles = () =>
-      {
-        var file      = document.createElement('div');
-        file          .innerText = '- ' + filesToRemove[x];
-        file          .setAttribute('class', 'file');
-        content       .appendChild(file);
-
-        if(filesToRemove[x += 1] != undefined) listFiles();
-      }
-
-      listFiles();
-
-      content         .appendChild(confirm);
-      content         .appendChild(cancel);
-
-      prompt          .appendChild(content);
+    for(var x = 0; x < filesToRemove.length; x++)
+    {
+      var file      = document.createElement('div');
+      file          .innerText = '- ' + filesToRemove[x].name;
+      file          .setAttribute('class', 'file');
+      content       .appendChild(file);
     }
 
-    else
-    {
-      displayRemovePromptError(xhr.response.message, xhr.response.detail);
-    }
-  }
-}
-
-/****************************************************************************************************/
-
-function displayRemovePromptError(errorMessage, errorDetail)
-{
-  if(document.getElementById('removePromptContent')) document.getElementById('removePromptContent').style.display = 'none';
-
-  var error           = document.createElement('div');
-  var message         = document.createElement('div');
-  var icon            = document.createElement('div');
-  var content         = document.createElement('div');
-  var close           = document.createElement('button');
-
-  error               .setAttribute('class', 'error');
-  message             .setAttribute('class', 'message');
-  icon                .setAttribute('class', 'icon');
-  content             .setAttribute('class', 'content');
-  close               .setAttribute('class', 'close');
-
-  icon                .innerHTML = `<i class='far fa-times-circle'></i>`;
-  content             .innerText = errorMessage;
-  close               .innerText = 'OK';
-
-  close               .addEventListener('click', closeConfirmationPrompt);
-
-  message             .appendChild(icon);
-  message             .appendChild(content);
-  error               .appendChild(message);
-  error               .appendChild(close);
-
-  if(errorDetail != null)
-  {
-    var detail        = document.createElement('div');
-
-    detail            .setAttribute('class', 'detail');
-    detail            .innerText = errorDetail;
-
-    error             .appendChild(detail);
-  }
-
-  document.getElementById('removePrompt').appendChild(error);
+    document.body       .appendChild(prompt);
+  });
 }
 
 /****************************************************************************************************/
 
 function closeConfirmationPrompt(event)
 {
-  document.getElementById('removePromptBackground').remove();
-  document.getElementById('blur').removeAttribute('style');
+  if(document.getElementById('removePromptBackground')) document.getElementById('removePromptBackground').remove();
+  if(document.getElementById('removePrompt')) document.getElementById('removePrompt').remove();
 }
 
 /****************************************************************************************************/
 
 function confirmSuppression(filesToRemove, strings)
 {
-  document.getElementById('removePromptContent').remove();
+  if(document.getElementById('removePromptContent')) document.getElementById('removePromptContent').remove();
+  if(document.getElementById('removePromptConfirm')) document.getElementById('removePromptConfirm').remove();
+  if(document.getElementById('removePromptCancel')) document.getElementById('removePromptCancel').remove();
 
   var loading         = document.createElement('div');
   var spinner         = document.createElement('div');
@@ -194,72 +136,37 @@ function confirmSuppression(filesToRemove, strings)
 
   document.getElementById('removePrompt').appendChild(loading);
 
-  var xhr   = new XMLHttpRequest();
-  var data  = new FormData();
+  var filesUuid = [];
 
-  data.append('service', document.getElementById('main').getAttribute('name'));
-  data.append('files', filesToRemove.join());
-
-  xhr.timeout = 10000;
-  xhr.responseType = 'json';
-
-  xhr.open('POST', '/queries/storage/services/remove-files', true);
-
-  xhr.send(data);
-
-  xhr.ontimeout = () =>
+  for(var x = 0; x < filesToRemove.length; x++)
   {
-    loading.remove();
-
-    displayRemovePromptError('La requête a expiré, veuillez réessayer plus tard', null);
+    filesUuid.push(filesToRemove[x].uuid);
   }
 
-  xhr.onload = () =>
+  $.ajax(
   {
-    loading.remove();
+    method: 'DELETE',
+    dataType: 'json',
+    timeout: 5000,
+    data: { filesToRemove: JSON.stringify(filesUuid), serviceUuid: document.getElementById('mainBlock').getAttribute('name') },
+    url: '/queries/storage/services/remove-files',
 
-    if(xhr.status == 200)
+    error: (xhr, textStatus, errorThrown) =>
     {
-      var success     = document.createElement('div');
-      var message     = document.createElement('div');
-      var icon        = document.createElement('div');
-      var content     = document.createElement('div');
-      var close       = document.createElement('button');
+      if(document.getElementById('removePrompt')) document.getElementById('removePrompt').remove();
+      if(document.getElementById('removePromptBackground')) document.getElementById('removePromptBackground').remove();
 
-      success         .setAttribute('class', 'success');
-      message         .setAttribute('class', 'message');
-      icon            .setAttribute('class', 'icon');
-      content         .setAttribute('class', 'content');
-      close           .setAttribute('class', 'close');
-
-      icon            .innerHTML = `<i class='far fa-check-circle'></i>`;
-      content         .innerText = strings.services.popup.remove.done;
-      close           .innerText = 'OK';
-
-      close           .addEventListener('click', closeConfirmationPrompt);
-
-      message         .appendChild(icon);
-      message         .appendChild(content);
-      success         .appendChild(message);
-      success         .appendChild(close);
-
-      document.getElementById('removePrompt').appendChild(success);
-
-      var x = 0;
-
-      var emitRemoveSignalLoop = () =>
-      {
-        socket.emit('storageAppServicesFileRemoved', filesToRemove[x], document.getElementById('main').getAttribute('name'));
-
-        if(filesToRemove[x += 1] != undefined) emitRemoveSignalLoop();
-      }
-
-      if(filesToRemove[x] != undefined) emitRemoveSignalLoop();
+      xhr.responseJSON != undefined ?
+      displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail) :
+      displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
     }
+  }).done((json) =>
+  {
+    if(document.getElementById('removePrompt')) document.getElementById('removePrompt').remove();
+    if(document.getElementById('removePromptBackground')) document.getElementById('removePromptBackground').remove();
 
-    else
-    {
-      displayRemovePromptError(xhr.response.message, xhr.response.detail);
-    }
-  }
+    displaySuccessMessage(strings.services.popup.remove.done, null);
+
+    for(var x = 0; x < filesUuid.length; x++) socket.emit('storageAppServicesFileRemoved', filesUuid[x], document.getElementById('mainBlock').getAttribute('name'));
+  });
 }

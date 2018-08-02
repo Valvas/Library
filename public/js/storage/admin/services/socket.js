@@ -11,29 +11,15 @@ socket.on('connect', () =>
 
 /****************************************************************************************************/
 
-socket.on('serviceRemoved', (error, serviceName) =>
+socket.on('serviceRemoved', (serviceUuid) =>
 {
-  var serviceBlocks = document.getElementsByClassName('serviceBlock');
-
-  var x = 0;
-
-  var browseBlocks = () =>
+  if(document.getElementById(serviceUuid))
   {
-    if(serviceBlocks[x].getAttribute('name') == serviceName)
+    $(document.getElementById(serviceUuid)).fadeOut(1000, () =>
     {
-      $(serviceBlocks[x]).fadeOut(1000, () =>
-      {
-        serviceBlocks[x].remove();
-      });
-    }
-
-    else
-    {
-      if(serviceBlocks[x += 1] != undefined) browseBlocks();
-    }
+      document.getElementById(serviceUuid).remove();
+    });
   }
-
-  if(serviceBlocks[x] != undefined) browseBlocks();
 });
 
 /****************************************************************************************************/
