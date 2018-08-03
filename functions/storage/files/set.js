@@ -3,7 +3,7 @@
 const params              = require(`${__root}/json/params`);
 const constants           = require(`${__root}/functions/constants`);
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
-const storageAppfilesGet  = require(`${__root}/functions/storage/files/get`);
+const storageAppFilesGet  = require(`${__root}/functions/storage/files/get`);
 
 /****************************************************************************************************/
 
@@ -16,7 +16,7 @@ module.exports.setFileOwner = (accountId, fileUuid, databaseConnection, params, 
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  storageAppfilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
+  storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
   {
     if(error != null) return callback(error);
 
@@ -48,7 +48,7 @@ module.exports.setFileNotDeletedInDatabase = (fileUuid, databaseConnection, para
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  storageAppfilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
+  storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
   {
     if(error != null) return callback(error);
 
@@ -80,7 +80,7 @@ module.exports.setFileDeletedInDatabase = (fileUuid, databaseConnection, params,
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  storageAppfilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
+  storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
   {
     if(error != null) return callback(error);
 
@@ -99,6 +99,86 @@ module.exports.setFileDeletedInDatabase = (fileUuid, databaseConnection, params,
 
       return callback(null);
     });
+  });
+}
+
+/****************************************************************************************************/
+// UPDATE FOLDER NAME
+/****************************************************************************************************/
+
+module.exports.setNewFolderName = (folderUuid, newFolderName, serviceUuid, accountId, databaseConnection, params, callback) =>
+{
+  if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountId == undefined)          return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(folderUuid == undefined)         return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'folderUuid' });
+  if(serviceUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(newFolderName == undefined)      return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'newFolderName' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  if(new RegExp('^[a-zA-Z0-9]([ ]?[a-zA-Z0-9]+)*$').test(newFolderName) == false) return callback({ status: 406, code: constants.NEW_FOLDER_NAME_BAD_FORMAT, detail: null });
+
+  getFolderFromDatabase(folderUuid, newFolderName, serviceUuid, accountId, databaseConnection, params, (error) =>
+  {
+    return callback(error);
+  });
+}
+
+/****************************************************************************************************/
+
+function getFolderFromDatabase(folderUuid, newFolderName, serviceUuid, accountId, databaseConnection, params, callback)
+{
+  storageAppFilesGet.checkIfFolderExistsInDatabase(folderUuid, databaseConnection, params, (error, folderExists, folderData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(folderExists == false) return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
+
+    if(folderData.service !== serviceUuid) return callback({ status: 406, code: constants.FOLDER_NOT_PART_OF_PROVIDED_SERVICE, detail: null });
+
+    checkIfNameIsAvailable(folderData, newFolderName, serviceUuid, accountId, databaseConnection, params, callback);
+  }); 
+}
+
+/****************************************************************************************************/
+
+function checkIfNameIsAvailable(folderData, newFolderName, serviceUuid, accountId, databaseConnection, params, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.folders,
+    args: [ '*' ],
+    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: newFolderName }, 1: { operator: '=', key: 'service', value: serviceUuid }, 2: { operator: '=', key: 'parent_folder', value: folderData.parent_folder } }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    for(var x = 0; x < result.length; x++)
+    {
+      if(newFolderName === result[x].name) return callback({ status: 406, code: constants.FOLDER_NAME_NOT_AVAILABLE, detail: null });
+    }
+
+    updateFolderNameInDatabase(folderData, newFolderName, serviceUuid, accountId, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function updateFolderNameInDatabase(folderData, newFolderName, serviceUuid, accountId, databaseConnection, params, callback)
+{
+  databaseManager.updateQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.folders,
+    args: { name: newFolderName },
+    where: { operator: '=', key: 'uuid', value: folderData.uuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    return callback(null);
   });
 }
 

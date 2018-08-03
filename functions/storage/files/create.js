@@ -88,7 +88,7 @@ function checkIfServiceExists(newFolderName, parentFolderUuid, serviceUuid, acco
 
 function checkIfParentFolderExists(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback)
 {
-  if(parentFolderUuid.length === 0) createNewFolderInTheDatabase(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
+  if(parentFolderUuid.length === 0) checkIfFolderNameIsAvailable(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
 
   else
   {
@@ -100,9 +100,33 @@ function checkIfParentFolderExists(newFolderName, parentFolderUuid, serviceUuid,
 
       if(folderData.service !== serviceUuid) return callback({ status: 406, code: constants.FOLDER_NOT_PART_OF_PROVIDED_SERVICE, detail: null });
 
-      createNewFolderInTheDatabase(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
+      checkIfFolderNameIsAvailable(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
     });
   }
+}
+
+/****************************************************************************************************/
+
+function checkIfFolderNameIsAvailable(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.folders,
+    args: [ '*' ],
+    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: newFolderName }, 1: { operator: '=', key: 'service', value: serviceUuid }, 2: { operator: '=', key: 'parent_folder', value: parentFolderUuid } }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    for(var x = 0; x < result.length; x++)
+    {
+      if(newFolderName === result[x].name) return callback({ status: 406, code: constants.FOLDER_NAME_NOT_AVAILABLE, detail: null });
+    }
+
+    createNewFolderInTheDatabase(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
+  });
 }
 
 /****************************************************************************************************/

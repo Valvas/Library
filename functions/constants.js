@@ -95,6 +95,7 @@ const ONE_EXTENSION_REQUIRED                                                    
 const COULD_NOT_CREATE_ERROR_REPORT                                               = 10091;
 const FOLDER_NOT_PART_OF_PROVIDED_SERVICE                                         = 10092;
 const NEW_FOLDER_NAME_BAD_FORMAT                                                  = 10093;
+const FOLDER_NAME_NOT_AVAILABLE                                                   = 10094;
 
 /******************************************************************************************
 SUCCESS
@@ -128,6 +129,7 @@ const ACCOUNT_ACCESS_SUCCESSFULLY_ADDED                                         
 const ACCOUNT_ACCESS_SUCCESSFULLY_REMOVED                                         = 20026;
 const SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED                                  = 20027;
 const NEW_FOLDER_SUCCESSFULLY_CREATED                                             = 20028;
+const FOLDER_NAME_UPDATED                                                         = 20029;
 
 /******************************************************************************************
 EXPORTS
@@ -228,6 +230,7 @@ module.exports =
   COULD_NOT_CREATE_ERROR_REPORT: COULD_NOT_CREATE_ERROR_REPORT,
   FOLDER_NOT_PART_OF_PROVIDED_SERVICE: FOLDER_NOT_PART_OF_PROVIDED_SERVICE,
   NEW_FOLDER_NAME_BAD_FORMAT: NEW_FOLDER_NAME_BAD_FORMAT,
+  FOLDER_NAME_NOT_AVAILABLE: FOLDER_NAME_NOT_AVAILABLE,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -256,5 +259,6 @@ module.exports =
   ACCOUNT_ACCESS_SUCCESSFULLY_ADDED: ACCOUNT_ACCESS_SUCCESSFULLY_ADDED,
   ACCOUNT_ACCESS_SUCCESSFULLY_REMOVED: ACCOUNT_ACCESS_SUCCESSFULLY_REMOVED,
   SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED: SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED,
-  NEW_FOLDER_SUCCESSFULLY_CREATED: NEW_FOLDER_SUCCESSFULLY_CREATED
+  NEW_FOLDER_SUCCESSFULLY_CREATED: NEW_FOLDER_SUCCESSFULLY_CREATED,
+  FOLDER_NAME_UPDATED: FOLDER_NAME_UPDATED
 }

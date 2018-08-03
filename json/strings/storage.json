@@ -269,6 +269,44 @@
 
     "empty": "Aucun service",
 
+    "fileDetail":
+    {
+      "title": "Détail du fichier",
+      "fileName": "Nom du fichier :",
+      "events": "Événements",
+      "comment": "Ajouter un commentaire",
+
+      "logs":
+      {
+        "uploaded": "Fichier mis en ligne par",
+        "removed": "Fichier supprimé par",
+        "restored": "Fichier restauré par",
+        "commented": "Commentaire de",
+        "downloaded": "Fichier téléchargé par"
+      }
+    },
+
+    "folderDetail":
+    {
+      "title": "Détail du dossier :",
+      "folderName": "Nom du dossier :",
+      "folderContent": "Contenu du dossier :",
+      "files": "fichier(s)",
+      "folders": "dossier(s)",
+      "rename": "Renommer ce dossier",
+      "remove": "Supprimer ce dossier",
+
+      "renamePopup":
+      {
+        "title": "Renommer ce dossier",
+        "message": "Le nom ne doit pas contenir de caractères spéciaux, d'accents et ne doit pas commencer ou finir par un espace",
+        "currentName": "Nom actuel :",
+        "placeholder": "Nouveau nom",
+        "send": "Valider",
+        "cancel": "Annuler"
+      }
+    },
+
     "info":
     {
       "count": "Fichiers",

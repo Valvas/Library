@@ -12,7 +12,7 @@ function downloadSelection(event)
 
   for(var x = 0; x < elements.length; x++)
   {
-    if(elements[x].hasAttribute('tag') && elements[x].children[2].checked) filesToDownload.push({ uuid: elements[x].getAttribute('name'), name: elements[x].innerText.slice(0, -1) });
+    if(elements[x].hasAttribute('tag') && elements[x].children[2].checked) filesToDownload.push({ uuid: elements[x].getAttribute('id'), name: elements[x].innerText.slice(0, -1) });
   }
 
   if(filesToDownload.length > 0)

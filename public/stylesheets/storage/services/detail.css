@@ -277,7 +277,7 @@
 
 /* WHEN HOVERING FILES AND FOLDERS */
 
-.storageAppServicesFilesLarge:hover, .storageAppServicesFilesSmall:hover, .storageAppServicesFilesList:hover, .storageAppServiceFolderLarge:hover, .storageAppServiceFolderList:hover, .storageAppServiceReturnLarge:hover, .storageAppServiceReturnSmall:hover, .storageAppServiceReturnList:hover{ cursor:pointer; background-color:#F5F5FF; }
+.storageAppServicesFilesLarge:hover, .storageAppServicesFilesSmall:hover, .storageAppServicesFilesList:hover, .storageAppServiceFolderLarge:hover, .storageAppServiceFolderSmall:hover, .storageAppServiceFolderList:hover, .storageAppServiceReturnLarge:hover, .storageAppServiceReturnSmall:hover, .storageAppServiceReturnList:hover{ cursor:pointer; background-color:#F5F5FF; }
 
 /* FOLDERS WITH LARGE GRID DISPLAY */
 
@@ -342,11 +342,43 @@
 
 .elementDetailBlockTitle{ border-bottom:1px solid #E0E0E0; font-size:20px; font-family:roboto-light; padding:20px; margin:0 0 10px 0; }
 
-.elementDetailBlockClose{ position:absolute; top:10px; right:10px; font-size:3em; width:48px; height:48px; cursor:pointer; }
+.elementDetailBlockClose{ position:absolute; top:15px; right:10px; font-size:2em; width:32px; height:32px; cursor:pointer; }
 
 .elementDetailBlockClose:hover{ color:#D9534F; }
 
 .elementDetailBlockSpinner{ font-size:6em; position:absolute; color:#5CB85C; height:96px; width:96px; top:calc(50% - 48px); left:calc(50% - 48px); }
+
+.elementDetailBlockLabel{ font-size:18px; font-family:roboto-light; padding:10px 10px 5px 10px; }
+
+.elementDetailBlockValue{ font-size:18px; font-family:roboto-light; padding:5px 10px 10px 10px; }
+
+.elementDetailBlockRename{ border:none; border-radius:4px; cursor:pointer; padding:4px 8px 4px 8px; width:calc(100% - 40px); margin:10px 20px 10px 20px; font-size:16px; font-family:roboto-light; color:#FFFFFF; box-sizing:border-box; background-color:#5CB85C; }
+
+.elementDetailBlockRename:hover{ color:#000000; background-color:#4BA74B; }
+
+.elementDetailBlockRemove{ border:none; border-radius:4px; padding:4px 8px 4px 8px; width:calc(100% - 40px); margin:10px 20px 10px 20px; font-size:16px; font-family:roboto-light; color:#FFFFFF; box-sizing:border-box; background-color:#E0E0E0; }
+
+.elementDetailBlockEvents{ width:calc(100% - 20px); margin:20px 10px 20px 10px; box-sizing:border-box; border:1px solid #E0E0E0; border-radius:4px; }
+
+.elementDetailBlockEventsTitle{ margin:0 0 10px 0; padding:10px; font-family:roboto-light; font-size:16px; border-bottom:1px solid #E0E0E0; }
+
+/****************************************************************************************************/
+
+.renameFolderPopupMessage{ font-family:roboto-light; font-size:16px; padding:20px 20px 10px 20px; }
+
+.renameFolderPopupCurrentNameLabel{ font-family:roboto-light; font-size:18px; padding:5px 20px 5px 20px; }
+
+.renameFolderPopupCurrentNameValue{ font-family:roboto-light; font-size:18px; margin:0 20px 10px 20px; border:1px solid #E0E0E0; border-radius:4px; height:32px; padding:6px 0 0 4px; box-sizing:border-box; }
+
+.renameFolderPopupNewNameInput{ font-family:roboto-light; font-size:18px; margin:10px 20px 10px 20px; border:1px solid #E0E0E0; border-radius:4px; height:32px; padding:0 0 0 4px; box-sizing:border-box; width:calc(100% - 40px); }
+
+.renameFolderPopupSend{ cursor:pointer; border:none; border-radius:4px; color:#FFFFFF; background-color:#5CB85C; font-family:roboto-light; font-size:16px; padding:4px 8px 4px 8px; width:120px; margin:10px 10px 10px calc(100% - 270px); }
+
+.renameFolderPopupSend:hover{ color:#000000; background-color:#4BA74B; }
+
+.renameFolderPopupCancel{ cursor:pointer; border:none; border-radius:4px; color:#FFFFFF; background-color:#D9534F; font-family:roboto-light; font-size:16px; padding:4px 8px 4px 8px; width:120px; margin:10px 20px 10px 0; }
+
+.renameFolderPopupCancel:hover{ color:#000000; background-color:#C8423E; }
 
 /****************************************************************************************************/
 

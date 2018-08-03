@@ -14,7 +14,7 @@ const storageAppLogsRemoveFile            = require(`${__root}/functions/storage
 /****************************************************************************************************/
 
 module.exports.removeFiles = (filesToRemove, serviceUuid, accountID, databaseConnection, params, callback) =>
-{console.log(filesToRemove);
+{
   filesToRemove         == undefined ||
   serviceUuid           == undefined ||
   accountID             == undefined ||
@@ -96,6 +96,15 @@ function browseFilesToRemove(filesToRemove, serviceUuid, account, databaseConnec
   if(filesToRemove[index] == undefined) return callback(null);
 
   fileBrowser();
+}
+
+/****************************************************************************************************/
+// REMOVE FOLDER
+/****************************************************************************************************/
+
+module.exports.removeFolder = () =>
+{
+
 }
 
 /****************************************************************************************************/

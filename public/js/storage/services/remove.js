@@ -16,7 +16,7 @@ function removeSelection(event)
     {
       if(elements[x].hasAttribute('tag'))
       {
-        if(elements[x].children[2] && elements[x].children[2].checked) filesToRemove.push({ uuid: elements[x].getAttribute('name'), name: elements[x].children[1].innerText });
+        if(elements[x].children[2] && elements[x].children[2].checked) filesToRemove.push({ uuid: elements[x].getAttribute('id'), name: elements[x].children[1].innerText });
       }
     }
 

@@ -13,7 +13,7 @@ function checkSingleOrDoubleClick(folderUuid)
     clickedFolderIsAlreadyOpen = true;
   }
 
-  document.getElementById(folderUuid).style.backgroundColor = '#E5E5FF';
+  if(clickedFolderIsAlreadyOpen == false) document.getElementById(folderUuid).style.backgroundColor = '#E5E5FF';
 
   closeDetailBlock();
 
@@ -361,7 +361,7 @@ function addFile(fileData)
 
   checkbox        .setAttribute('type', 'checkbox');
   name            .innerText = fileData.name + '.' + fileData.extension;
-  file            .setAttribute('name', fileData.uuid);
+  file            .setAttribute('id', fileData.uuid);
 
   switch(fileData.extension)
   {

@@ -82,6 +82,11 @@ require('../app')((app) =>
       });
     });
 
+    socket.on('storageAppServicesFolderNameUpdated', (folderUuid, serviceUuid, newFolderName) =>
+    {
+      io.in(serviceUuid).emit('folderNameUpdated', folderUuid, newFolderName);
+    });
+
     socket.on('storageAppServicesFileRemoved', (fileUuid, serviceUuid) =>
     {
       io.in(serviceUuid).emit('fileRemoved', fileUuid);

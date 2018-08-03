@@ -10,6 +10,7 @@ const constants                 = require(`${__root}/functions/constants`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
 const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
 const storageAppFilesGet        = require(`${__root}/functions/storage/files/get`);
+const storageAppFilesSet        = require(`${__root}/functions/storage/files/set`);
 const storageAppFilesCreate     = require(`${__root}/functions/storage/files/create`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppFilesUpload     = require(`${__root}/functions/storage/files/upload`);
@@ -359,6 +360,30 @@ router.post('/create-new-folder', (req, res) =>
       else
       {
         res.status(201).send({ message: success[constants.NEW_FOLDER_SUCCESSFULLY_CREATED], folderUuid: folderUuid });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+
+router.put('/update-folder-name', (req, res) =>
+{
+  if(req.body.folderUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'folderUuid' });
+
+  else if(req.body.newFolderName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newFolderName' });
+
+  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+
+  else
+  {
+    storageAppFilesSet.setNewFolderName(req.body.folderUuid, req.body.newFolderName, req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      else
+      {
+        res.status(200).send({ message: success[constants.FOLDER_NAME_UPDATED] });
       }
     });
   }
