@@ -1,32 +1,55 @@
 'use strict'
 
-const params              = require(`${__root}/json/params`);
 const constants           = require(`${__root}/functions/constants`);
-const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
+const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 /****************************************************************************************************/
 
-module.exports.getAccountFromEmail = (accountEmail, databaseConnector, callback) =>
+module.exports.checkIfAccountExistsFromId = (accountId, databaseConnection, params, callback) =>
 {
-  accountEmail        == undefined ||
-  databaseConnector   == undefined ?
-
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.storage.label,
-    'tableName': params.database.storage.tables.accounts, 
-    'args': { '0': '*' },  
-    'where': { '=': { '0': { 'key': 'email', 'value': accountEmail } } }
+    databaseName: params.database.root.label,
+    tableName: params.database.root.tables.accounts,
+    args: [ '*' ],
+    where: { operator: '=', key: 'id', value: accountId }
 
-  }, databaseConnector, (boolean, accountOrErrorMessage) =>
+  }, databaseConnection, (error, result) =>
   {
-    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: accountOrErrorMessage });
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    else if(boolean == true && accountOrErrorMessage.length == 0) callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND });
+    if(result.length == 0) return callback(null, false);
 
-    else{ callback(null, accountOrErrorMessage[0]); }
+    return callback(null, true, result[0]);
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.checkIfAccountExistsFromUuid = (accountUuid, databaseConnection, params, callback) =>
+{
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.root.label,
+    tableName: params.database.root.tables.accounts,
+    args: [ '*' ],
+    where: { operator: '=', key: 'uuid', value: accountUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length == 0) return callback(null, false);
+
+    return callback(null, true, result[0]);
   });
 }
 

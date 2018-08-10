@@ -124,33 +124,31 @@ router.get('/services-rights', (req, res) =>
 
 router.get('/services/detail/:service', (req, res) =>
 {
-  storageAppServicesGet.getServiceUsingUUID(req.params.service, req.app.get('mysqlConnector'), (error, service) =>
+  storageAppServicesGet.checkIfServiceExists(req.params.service, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceExists, serviceData) =>
   {
     if(error != null)
     {
-      res.render('storage/admin/services/detail',
-      {
-        account: req.session.account,
-        error: error,
-        service: null,
-        strings: { common: commonAppStrings, storage: storageAppStrings },
-        webContent: webContent,
-        location: 'administration',
-        adminLocation: 'services'
-      });
+      res.render('storage/admin/services/detail', { account: req.session.account, error: error, service: null, strings: { common: commonAppStrings, storage: storageAppStrings }, webContent: webContent, location: 'administration', adminLocation: 'services' });
+    }
+
+    else if(serviceExists == false)
+    {
+      res.render('storage/admin/services/detail', { account: req.session.account, error: { status: 404, code: constants.SERVICE_NOT_FOUND, detail: null }, service: null, strings: { common: commonAppStrings, storage: storageAppStrings }, webContent: webContent, location: 'administration', adminLocation: 'services' });
     }
 
     else
     {
-      res.render('storage/admin/services/detail',
+      storageAppServicesGet.getAuthorizedExtensionsForService(req.params.service, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceExtensions, allExtensions) =>
       {
-        account: req.session.account,
-        error: null,
-        service: service,
-        strings: { common: commonAppStrings, storage: storageAppStrings },
-        webContent: webContent,
-        location: 'administration',
-        adminLocation: 'services'
+        if(error != null)
+        {
+          res.render('storage/admin/services/detail', { account: req.session.account, error: error, service: null, strings: { common: commonAppStrings, storage: storageAppStrings }, webContent: webContent, location: 'administration', adminLocation: 'services' });
+        }
+
+        else
+        {
+          res.render('storage/admin/services/detail', { account: req.session.account, error: null, service: { serviceData: serviceData, serviceExtensions: serviceExtensions, allExtensions: allExtensions }, strings: { common: commonAppStrings, storage: storageAppStrings }, webContent: webContent, location: 'administration', adminLocation: 'services' });
+        }
       });
     }
   });

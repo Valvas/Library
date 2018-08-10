@@ -17,22 +17,43 @@ var storageAppServicesGet = module.exports = {};
 
 /****************************************************************************************************/
 
-storageAppServicesGet.getServiceUsingUUID = (serviceUUID, databaseConnector, callback) =>
+storageAppServicesGet.getServiceUsingUUID = (serviceUuid, databaseConnection, callback) =>
 {
   databaseManager.selectQuery(
   {
     databaseName: params.database.storage.label,
     tableName: params.database.storage.tables.services,
     args: [ '*' ],
-    where: { operator: '=', key: 'uuid', value: serviceUUID }
+    where: { operator: '=', key: 'uuid', value: serviceUuid }
 
-  }, databaseConnector, (error, result) =>
+  }, databaseConnection, (error, result) =>
   {
     if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
     if(result.length == 0) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
 
     return callback(null, result[0]);
+  });
+}
+
+/****************************************************************************************************/
+
+storageAppServicesGet.checkIfServiceExists = (serviceUuid, databaseConnection, params, callback) =>
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.services,
+    args: [ '*' ],
+    where: { operator: '=', key: 'uuid', value: serviceUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length == 0) return callback(null, false);
+
+    return callback(null, true, result[0]);
   });
 }
 
@@ -273,11 +294,11 @@ function getCurrentServiceFiles(service, account, rights, databaseConnection, pa
 
 module.exports.getAuthorizedExtensionsForService = (serviceUuid, databaseConnection, params, callback) =>
 {
-  getExtensionsUuidAuthorizedForCurrentService(serviceUuid, databaseConnection, params, (error, serviceExtensions) =>
+  getExtensionsUuidAuthorizedForCurrentService(serviceUuid, databaseConnection, params, (error, serviceExtensions, allExtensions) =>
   {
     if(error != null) return callback(error);
 
-    return callback(null, serviceExtensions);
+    return callback(null, serviceExtensions, allExtensions);
   });
 }
 
@@ -296,7 +317,14 @@ function getExtensionsUuidAuthorizedForCurrentService(serviceUuid, databaseConne
   {
     if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    getValueForEachExtensionFromItsUuid(serviceUuid, result, databaseConnection, params, callback);
+    var extensionsUuid = [];
+
+    for(var x = 0; x < result.length; x++)
+    {
+      extensionsUuid.push(result[x].extension_uuid);
+    }
+
+    getValueForEachExtensionFromItsUuid(serviceUuid, extensionsUuid, databaseConnection, params, callback);
   });
 }
 
@@ -304,32 +332,32 @@ function getExtensionsUuidAuthorizedForCurrentService(serviceUuid, databaseConne
 
 function getValueForEachExtensionFromItsUuid(serviceUuid, extensionsUuid, databaseConnection, params, callback)
 {
-  var index = 0, serviceExtensions = [];
+  if(extensionsUuid.length === 0) return callback(null, []);
 
-  if(extensionsUuid.length == 0) return callback(null, []);
-
-  var browseExtensions = () =>
+  databaseManager.selectQuery(
   {
-    databaseManager.selectQuery(
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.extensions,
+    args: [ '*' ],
+    where: {  }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length === 0) return callback(null, []);
+
+    var allExtensions = [], serviceExtensions = [];
+
+    for(var x = 0; x < result.length; x++)
     {
-      databaseName: params.database.storage.label,
-      tableName: params.database.storage.tables.extensions,
-      args: [ 'value' ],
-      where: { operator: '=', key: 'uuid', value: extensionsUuid[index].extension_uuid }
-  
-    }, databaseConnection, (error, result) =>
-    {
-      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+      allExtensions.push({ extensionUuid: result[x].uuid, extensionValue: result[x].value });
 
-      serviceExtensions[index] = result[0].value;
+      if(extensionsUuid.includes(result[x].uuid)) serviceExtensions.push(result[x].uuid);
+    }
 
-      if(extensionsUuid[index += 1] == undefined) return callback(null, serviceExtensions);
-
-      browseExtensions();
-    });
-  }
-
-  browseExtensions();
+    return callback(null, serviceExtensions, allExtensions);
+  });
 }
 
 /****************************************************************************************************/

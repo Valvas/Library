@@ -2,7 +2,11 @@
   <div class="asideMenuTitle"><div class="asideMenuTitleIcon"><i class="fas fa-3x fa-folder-open"></i></div><div class="asideMenuTitleText"><%= strings.storage.asideMenu.title %></div></div>
   <div class="asideMenuContent">
     <% for(var link in strings.storage.asideMenu.links){ %>
-      <a <% if(location === link){ %>class="asideMenuContentLinkSelected"<% } else{ %>class="asideMenuContentLink"<% } %><% if(webContent.asideMenuLinks[link] != undefined){ %>href="<%= webContent.asideMenuLinks[link] %>"<% } %>><div class="asideMenuContentLinkIcon"><%- webContent.asideMenuIcons[link] %></div><div class="asideMenuContentLinkText"><%= strings.storage.asideMenu.links[link] %></div></a>
+      <% if(link === 'exit'){ %>
+        <div onclick="openExitPrompt()" class="asideMenuContentLink"><div class="asideMenuContentLinkIcon"><%- webContent.asideMenuIcons[link] %></div><div class="asideMenuContentLinkText"><%= strings.storage.asideMenu.links[link] %></div></div>
+      <% } else{ %>
+        <a <% if(location === link){ %>class="asideMenuContentLinkSelected"<% } else{ %>class="asideMenuContentLink"<% } %><% if(webContent.asideMenuLinks[link] != undefined){ %>href="<%= webContent.asideMenuLinks[link] %>"<% } %>><div class="asideMenuContentLinkIcon"><%- webContent.asideMenuIcons[link] %></div><div class="asideMenuContentLinkText"><%= strings.storage.asideMenu.links[link] %></div></a>
+      <% } %>
     <% } %>
   </div>
 </aside>

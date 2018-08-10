@@ -75,3 +75,75 @@ function displaySuccessMessage(successMessage, successDetail)
 }
 
 /****************************************************************************************************/
+
+function displayErrorToInformationBlock(messageToDisplay)
+{
+  if(document.getElementById('storageInformationsBlock'))
+  {
+    var errorMessageBlock = document.createElement('div');
+
+    errorMessageBlock.setAttribute('class', 'informationsBlockError');
+
+    errorMessageBlock.innerText = messageToDisplay;
+
+    $(errorMessageBlock).hide().appendTo(document.getElementById('storageInformationsBlock'));
+
+    $(errorMessageBlock).slideDown(250, () =>
+    {
+      setTimeout(() =>
+      {
+        $(errorMessageBlock).slideUp(250, () => { errorMessageBlock.remove(); });
+      }, 5000);
+    });
+  }
+}
+
+/****************************************************************************************************/
+
+function displayMessageToInformationBlock(messageToDisplay)
+{
+  if(document.getElementById('storageInformationsBlock'))
+  {
+    var messageBlock = document.createElement('div');
+
+    messageBlock.setAttribute('class', 'informationsBlockMessage');
+
+    messageBlock.innerText = messageToDisplay;
+
+    $(messageBlock).hide().appendTo(document.getElementById('storageInformationsBlock'));
+
+    $(messageBlock).slideDown(250, () =>
+    {
+      setTimeout(() =>
+      {
+        $(messageBlock).slideUp(250, () => { messageBlock.remove(); });
+      }, 5000);
+    });
+  }
+}
+
+/****************************************************************************************************/
+
+function displaySuccessToInformationBlock(messageToDisplay)
+{
+  if(document.getElementById('storageInformationsBlock'))
+  {
+    var successMessageBlock = document.createElement('div');
+
+    successMessageBlock.setAttribute('class', 'informationsBlockSuccess');
+
+    successMessageBlock.innerText = messageToDisplay;
+
+    $(successMessageBlock).hide().appendTo(document.getElementById('storageInformationsBlock'));
+
+    $(successMessageBlock).slideDown(250, () =>
+    {
+      setTimeout(() =>
+      {
+        $(successMessageBlock).slideUp(250, () => { successMessageBlock.remove(); });
+      }, 5000);
+    });
+  }
+}
+
+/****************************************************************************************************/

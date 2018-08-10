@@ -86,13 +86,43 @@ storageAppServicesRights.getRightsTowardsService = (serviceUuid, accountId, data
 
     var rightsObject = {};
 
-    rightsObject.service     = result[0].service;
-    rightsObject.remove      = result[0].remove_files;
-    rightsObject.upload      = result[0].upload_files;
-    rightsObject.comment     = result[0].post_comments;
-    rightsObject.download    = result[0].download_files;
+    rightsObject.service          = result[0].service == 1;
+    rightsObject.removeFiles      = result[0].remove_files == 1;
+    rightsObject.uploadFiles      = result[0].upload_files == 1;
+    rightsObject.commentFiles     = result[0].post_comments == 1;
+    rightsObject.downloadFiles    = result[0].download_files == 1;
+    rightsObject.createFolders    = result[0].create_folders == 1;
+    rightsObject.renameFolders    = result[0].rename_folders == 1;
+    rightsObject.removeFolders    = result[0].remove_folders == 1;
+    rightsObject.restoreFiles     = result[0].restore_files == 1;
 
     return callback(null, rightsObject);
+  });
+}
+
+/****************************************************************************************************/
+
+storageAppServicesRights.checkIfAccountHasRightsOnService = (accountId, serviceUuid, databaseConnection, params, callback) =>
+{
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.rights,
+    args: [ '*' ],
+    where: { condition: 'AND', 0: { operator: '=', key: 'account', value: accountId }, 1: { operator: '=', key: 'service', value: serviceUuid } }
+    
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error.message });
+
+    if(result.length === 0) return callback(null, false);
+
+    return callback(null, true, result[0]);
   });
 }
 

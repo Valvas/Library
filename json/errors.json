@@ -92,5 +92,7 @@
   "10091": "Un rapport d'erreur n'a pas pu être créé",
   "10092": "Le dossier ne fait pas partie de ce service",
   "10093": "Le format du nom du dossier est incorrect",
-  "10094": "Ce nom de dossier n'est pas disponible"
+  "10094": "Ce nom de dossier n'est pas disponible",
+  "10095": "Format du commentaire incorrect",
+  "10096": "Une application est introuvable dans la base de données"
 }

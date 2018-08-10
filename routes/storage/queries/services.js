@@ -15,44 +15,65 @@ const storageAppFilesCreate     = require(`${__root}/functions/storage/files/cre
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppFilesUpload     = require(`${__root}/functions/storage/files/upload`);
 const storageAppFilesRemove     = require(`${__root}/functions/storage/files/remove`);
+const storageAppFilesComment    = require(`${__root}/functions/storage/files/comment`);
 const storageAppFilesDownload   = require(`${__root}/functions/storage/files/download`);
 const storageAppAdminServices   = require(`${__root}/functions/storage/admin/services`);
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
+
+const commonAccountsGet         = require(`${__root}/functions/common/accounts/get`);
 
 var router = express.Router();
 
 /****************************************************************************************************/
 
-router.put('/get-account-rights', (req, res) =>
+router.put('/get-rights-for-service', (req, res) =>
 {
-  req.body.service == undefined ?
+  if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
 
-  res.status(406).send(
+  else
   {
-    message: errors[constants.MISSING_DATA_IN_REQUEST],
-    detail: null
-  }) :
+    storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rights) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-  storageAppServicesRights.getRightsTowardsServices(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
+      else
+      {
+        res.status(200).send({ rights: rights });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+
+router.put('/get-account-rights-for-service', (req, res) =>
+{
+  if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+
+  else if(req.body.accountUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'accountUuid' });
+
+  else
   {
-    if(error != null)
+    commonAccountsGet.checkIfAccountExistsFromUuid(req.body.accountUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountExists, accountData) =>
     {
-      res.status(error.status).send(
-      {
-        message: errors[error.code],
-        detail: error.detail == undefined ? null : error.detail
-      });
-    }
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-    else
-    {
-      res.status(200).send(
+      else if(accountExists == false) res.status(404).send({ message: errors[constants.ACCOUNT_NOT_FOUND], detail: null });
+
+      else
       {
-        rights: rights,
-        strings: { common: commonAppStrings, storage: storageAppStrings }
-      });
-    }
-  });
+        storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, accountData.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rights) =>
+        {
+          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+          else
+          {
+            res.status(200).send({ rights: rights });
+          }
+        });
+      }
+    });
+  }
 });
 
 /****************************************************************************************************/
@@ -384,6 +405,47 @@ router.put('/update-folder-name', (req, res) =>
       else
       {
         res.status(200).send({ message: success[constants.FOLDER_NAME_UPDATED] });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+
+router.put('/get-file-logs', (req, res) =>
+{
+  if(req.body.fileUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'fileUuid' });
+
+  storageAppFilesGet.getFileLogs(req.body.fileUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileData, fileLogs) =>
+  {
+    if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    else
+    {
+      res.status(200).send({ fileData: fileData, fileLogs: fileLogs });
+    }
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/post-file-comment', (req, res) =>
+{
+  if(req.body.fileUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'fileUuid' });
+
+  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+
+  else if(req.body.fileComment == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+
+  else
+  {
+    storageAppFilesComment.addCommentToFile(req.body.fileComment, req.body.fileUuid, req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      else
+      {
+        res.status(200).send({ message: success[constants.FILE_COMMENT_SUCCESSFULLY_ADDED] });
       }
     });
   }

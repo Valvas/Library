@@ -76,6 +76,8 @@ function browseFilesToRemove(filesToRemove, serviceUuid, account, databaseConnec
 
       else
       {
+        storageAppLogsRemoveFile.addRemoveFileLog(params.fileLogs.remove, account.id, filesToRemove[index], serviceUuid, databaseConnection, params, (error) => {  });
+
         filesRemove.moveFileToBin(fileData.uuid, fileData.ext, `${params.storage.root}/${params.storage.services}/${serviceUuid}`, (error) =>
         {
           if(error != null) return callback(error);

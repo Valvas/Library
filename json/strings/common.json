@@ -1,4 +1,19 @@
 {
+  "apps":
+  {
+    "storage":
+    {
+      "name": "Partage Fichiers PEI",
+      "description": "Il s'agit d'une plateforme de stockage en ligne pour le partage de fichiers entre collaborateurs",
+      "launch": "Accéder à l'application"
+    }
+  },
+
+  "appsSection":
+  {
+    "title": "Liste de vos applications"
+  },
+
   "errors":
   {
     "detail": "Détail",
@@ -10,9 +25,16 @@
     "message": "Chargement en cours..."
   },
 
+  "locations":
+  {
+    "home": "Accueil",
+    "apps": "Mes applications",
+    "logout": "Déconnexion"
+  },
+
   "navigation":
   {
-    "title": "PEI",
+    "title": "Portail PEI",
 
     "account":
     {

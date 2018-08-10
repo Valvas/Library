@@ -7,10 +7,13 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/block.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/logon.css" />
   <body>
-    <div class='blockPage'>
-      <div class='blockPageTitle'>Oops !</div>
-      <div class='blockPageMessage'><%= message %></div>
-      <a class='blockPageLink' href='<%= link %>'>Retour</a>
+    <div class="blockPage">
+      <div class="blockPageTitle">Oops !</div>
+      <div class="blockPageMessage"><%= message %></div>
+      <% if(detail != null){ %>
+        <div class="blockPageDetail"><%= detail %></div>
+      <% } %>
+      <a class="blockPageLink" href="<%= link %>">Retour</a>
     </div>
   </body>
 </html>

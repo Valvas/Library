@@ -6,6 +6,7 @@ require('../app')((app) =>
 
   const accountsGet                 = require(`${__root}/functions/accounts/get`);
   const storageAppFilesGet          = require(`${__root}/functions/storage/files/get`);
+  const commonAccountsGet           = require(`${__root}/functions/common/accounts/get`);
  
   var debug = require('debug')('library:server');
   var http = require('http');
@@ -28,7 +29,7 @@ require('../app')((app) =>
     socket.on('adminAppRightsDetailJoin', (accountUUID) => { socket.join('adminAppRightsDetail ' + accountUUID); });
     socket.on('adminAppAccessDetailJoin', (accountUUID) => { socket.join('adminAppAccessDetail ' + accountUUID); });
     socket.on('storageAppAdminServiceDetailJoin', (serviceName) => { socket.join('admin' + serviceName); });
-    socket.on('storageAppAdminServicesRightsJoin', (serviceName) => { socket.join('adminServicesRights'); });
+    socket.on('storageAppAdminServicesRightsJoin', () => { socket.join('adminServicesRights'); });
 
     socket.on('accountCreated', (accountEmail) => 
     {
@@ -62,18 +63,6 @@ require('../app')((app) =>
       io.in('adminAppAccessDetail ' + accountUUID).emit('updateAccess', null, access, strings);
     });
 
-    socket.on('storageAppServicesfileUploaded', (fileUuid, serviceUuid, folderUuid) =>
-    {
-      storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, app.get('databaseConnectionPool'), app.get('params'), (error, fileExists, fileData) =>
-      {
-        if(error == null)
-        {
-          fileData.extension = fileData.ext;
-          io.in(serviceUuid).emit('fileUploaded', fileData, folderUuid);
-        }
-      });
-    });
-
     socket.on('storageAppServicesFolderCreated', (folderUuid, serviceUuid, parentFolderUuid) =>
     {
       storageAppFilesGet.checkIfFolderExistsInDatabase(folderUuid, app.get('databaseConnectionPool'), app.get('params'), (error, folderExists, folderData) =>
@@ -87,10 +76,50 @@ require('../app')((app) =>
       io.in(serviceUuid).emit('folderNameUpdated', folderUuid, newFolderName);
     });
 
+    /****************************************************************************************************/
+    // MANAGE EVENTS ON FILES IN APPLICATION STORAGE
+    /****************************************************************************************************/
+
+    socket.on('storageAppServicesfileUploaded', (fileUuid, serviceUuid, folderUuid) =>
+    {
+      storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, app.get('databaseConnectionPool'), app.get('params'), (error, fileExists, fileData) =>
+      {
+        if(error == null)
+        {
+          fileData.extension = fileData.ext;
+          io.in(serviceUuid).emit('fileUploaded', fileData, folderUuid);
+        }
+      });
+    });
+
+    /****************************************************************************************************/
+
     socket.on('storageAppServicesFileRemoved', (fileUuid, serviceUuid) =>
     {
       io.in(serviceUuid).emit('fileRemoved', fileUuid);
     });
+
+    /****************************************************************************************************/
+
+    socket.on('storageAppServicesFileDownloaded', (fileUuid, serviceUuid) =>
+    {
+      storageAppFilesGet.getFileLogs(fileUuid, app.get('databaseConnectionPool'), app.get('params'), (error, fileData, fileLogs) =>
+      {
+        if(error == null) io.in(serviceUuid).emit('updateFileLogs', fileUuid, fileLogs);
+      });
+    });
+
+    /****************************************************************************************************/
+
+    socket.on('storageAppServicesFileCommented', (fileUuid, serviceUuid) =>
+    {
+      storageAppFilesGet.getFileLogs(fileUuid, app.get('databaseConnectionPool'), app.get('params'), (error, fileData, fileLogs) =>
+      {
+        if(error == null) io.in(serviceUuid).emit('updateFileLogs', fileUuid, fileLogs);
+      });
+    });
+
+    /****************************************************************************************************/
 
     socket.on('storageAppAdminServiceRemoved', (serviceUuid) =>
     {
@@ -112,9 +141,20 @@ require('../app')((app) =>
       io.in('adminServicesRights').emit('accountAddedToMembers', account);
     });
 
-    socket.on('storageAppAdminServicesRightsAccountRemovedFromMembers', (account) =>
+    socket.on('storageAppAdminServicesRightsAccountRemovedFromMembers', (accountUuid, serviceUuid) =>
     {
-      io.in('adminServicesRights').emit('accountRemovedFromMembers', account);
+      commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, app.get('databaseConnectionPool'), app.get('params'), (error, accountExists, accountData) =>
+      {
+        if(error == null && accountExists) io.in('adminServicesRights').emit('accountRemovedFromMembers', accountData, serviceUuid);
+      });
+    });
+
+    socket.on('accountRightsUpdatedOnService', (accountUuid, accountRights, serviceUuid) =>
+    {
+      commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, app.get('databaseConnectionPool'), app.get('params'), (error, accountExists, accountData) =>
+      {
+        if(error == null && accountExists) io.in('adminServicesRights').emit('accountRightsUpdatedOnService', accountData, accountRights, serviceUuid);
+      });
     });
 
     socket.on('storageAppAdminServicesRightAddedToMember', (accountUUID, right) =>

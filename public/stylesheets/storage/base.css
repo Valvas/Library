@@ -46,11 +46,11 @@ body{ margin:0; background-color:#F6F6F6; }
 .loader .box .button:hover{ color:#000000; }
 
 
-.storageBackground{ position:fixed; z-index:20; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.4; }
+.storageBackground{ position:fixed; z-index:200; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.4; }
 
-.storageSpinner{ position:absolute; z-index:30; top:160px; left:calc(50% - 60px); width:120px; height:120px; font-size:5em; text-align:center; color:#5CB85C; background-color:#384046; border-radius:4px; padding:20px; box-sizing:border-box; }
+.storageSpinner{ box-sizing:border-box; padding:17px; position:fixed; z-index:300; background-color:#FFFFFF; border:1px solid #F0F0F0; border-radius:4px; width:100px; top:calc(50% - 50px); right:calc(50% - 50px); margin-bottom:40px; left:calc(50% - 50px); color:#428BCA; font-size:4em; }
 
-.storagePopup{ position:absolute; z-index:30; top:80px; width:400px; max-width:400px; left:calc(50% - 200px); margin:0 0 40px 0; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; box-sizing:border-box; }
+.storagePopup{ position:absolute; z-index:300; top:80px; width:400px; max-width:400px; left:calc(50% - 200px); margin:0 0 40px 0; background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; box-sizing:border-box; }
 
 .storagePopupTitle{ font-family:roboto-light; line-height:24px; font-size:20px; padding:10px; border-bottom:1px solid #E0E0E0; }
 
@@ -58,7 +58,11 @@ body{ margin:0; background-color:#F6F6F6; }
 
 .storagePopupMessage{ font-size:16px; line-height:24px; text-align:center; padding:20px; width:calc(100% - 40px); color:#428BCA; vertical-align:top; font-family:roboto-light; }
 
-.storagePopupCancel{ cursor:pointer; border:none; border-radius:4px; font-size:14px; font-family:roboto-light; padding:4px 0 4px 0; width:100px; margin:10px 10px 10px calc(100% - 110px); color:#FFFFFF; background-color:#D9534F; transition-duration:0.5s; -o-transition-duration:0.5s; -webkit-transition-duration:0.5s; }
+.storagePopupValidate{ cursor:pointer; border:none; border-radius:4px; font-size:14px; font-family:roboto-light; padding:4px 0 4px 0; width:100px; margin:10px 10px 10px calc(100% - 230px); color:#FFFFFF; background-color:#5CB85C; transition-duration:0.5s; -o-transition-duration:0.5s; -webkit-transition-duration:0.5s; }
+
+.storagePopupValidate:hover{ background-color:#4BA74B; color:#000000; }
+
+.storagePopupCancel{ cursor:pointer; border:none; border-radius:4px; font-size:14px; font-family:roboto-light; padding:4px 0 4px 0; width:100px; margin:10px; color:#FFFFFF; background-color:#D9534F; transition-duration:0.5s; -o-transition-duration:0.5s; -webkit-transition-duration:0.5s; }
 
 .storagePopupCancel:hover{ background-color:#C8423E; color:#000000; }
 
@@ -78,6 +82,18 @@ body{ margin:0; background-color:#F6F6F6; }
 .storageErrorBlockIcon{ width:32px; display:inline-block; vertical-align:top; font-size:2em; color:#D9534F; }
 
 .storageErrorBlockMessage{ width:calc(100% - 42px); display:inline-block; vertical-align:top; font-size:16px; line-height:24px; margin:4px 0 4px 10px; font-family:roboto-light; }
+
+/****************************************************************************************************/
+/* INFORMATIONS BLOCK 
+/****************************************************************************************************/
+
+.informationsBlock{ z-index:500; width:400px; top:20px; right:20px; position:fixed; font-family:roboto-light; font-size:1em; }
+
+.informationsBlockError{ margin:0 0 10px 0; background-color:#D9534F; border-radius:4px; color:#FFFFFF; padding:10px; text-align:center; }
+
+.informationsBlockMessage{ margin:0 0 10px 0; background-color:#428BCA; border-radius:4px; color:#FFFFFF; padding:10px; text-align:center; }
+
+.informationsBlockSuccess{ margin:0 0 10px 0; background-color:#5CB85C; border-radius:4px; color:#FFFFFF; padding:10px; text-align:center; }
 
 /****************************************************************************************************/
 
@@ -218,6 +234,19 @@ body{ margin:0; background-color:#F6F6F6; }
 }
 
 @media (min-width: 480px) and (max-width: 639px)
+{
+  .asideMenuTitleText, .asideMenuTitleIcon, .asideMenuContentLinkText{ display:none; }
+
+  .asideMenu{ width:40px; }
+
+  .asideMenuContentLinkIcon{ margin:0; }
+
+  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
+
+  .mainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+}
+
+@media (min-width: 640px) and (max-width: 779px)
 {
   .asideMenuTitleText, .asideMenuTitleIcon, .asideMenuContentLinkText{ display:none; }
 

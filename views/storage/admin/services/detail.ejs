@@ -11,7 +11,7 @@
   <body>
     <% include ../../includes/aside.ejs %>
     <div class='mainBlock'>
-      <div class="mainBlockLocation"><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %> / <%= service.name.charAt(0).toUpperCase() %><%= service.name.slice(1).toLowerCase() %></div>
+      <div class="mainBlockLocation"><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %> / <%= service.serviceData.name.charAt(0).toUpperCase() %><%= service.serviceData.name.slice(1).toLowerCase() %></div>
       <% include ../../includes/admin/navigation.ejs %>
       <% if(error != null){ %>
         <div class="shareAppErrorBlock">
@@ -24,14 +24,25 @@
         </div>
       <% } else{ %>
         <a class='serviceDetailBack' href='/storage/admin/services'>Retour</a>
-        <div class='serviceDetailBlock' id='serviceDetailBlock' name='<%= service.uuid %>'>
+        <div class='serviceDetailBlock' id='serviceDetailBlock' name='<%= service.serviceData.uuid %>'>
           <div class='serviceDetailBlockTitle'><%= strings.storage.admin.services.modify.title %></div>
           <div class='serviceDetailBlockKey'><%= strings.storage.admin.services.modify.serviceIdentifier %> :</div>
-          <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent' id='serviceName'><%= service.uuid %></div><div title="Cette valeur n'est pas modifiable" class='serviceDetailBlockValueLock'><i class='fas fa-lock'></i></div></div>
+          <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent' id='serviceName'><%= service.serviceData.uuid %></div><div title="Cette valeur n'est pas modifiable" class='serviceDetailBlockValueLock'><i class='fas fa-lock'></i></div></div>
           <div class='serviceDetailBlockKey'><%= strings.storage.admin.services.modify.serviceLabel %> :</div>
-          <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent' id='serviceLabel'><%= service.name.charAt(0).toUpperCase() %><%= service.name.slice(1).toLowerCase() %></div><div title='Cliquer ici pour modifier le nom du service' class='serviceDetailBlockValueEdit' id='openServiceLabelModificationPopup'><i class='fas fa-pencil-alt'></i></div></div>
+          <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent' id='serviceLabel'><%= service.serviceData.name.charAt(0).toUpperCase() %><%= service.serviceData.name.slice(1).toLowerCase() %></div><div title='Cliquer ici pour modifier le nom du service' class='serviceDetailBlockValueEdit' id='openServiceLabelModificationPopup'><i class='fas fa-pencil-alt'></i></div></div>
           <div class='serviceDetailBlockKey'><%= strings.storage.admin.services.modify.maxFileSize %> :</div>
-          <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent' id='serviceFileSize'><% if(Math.floor(service.file_size_limit / 1024 / 1024 / 1024) >= 1){ %><%= (service.file_size_limit / 1024 / 1024 / 1024).toFixed(2) %>Go<% } else if(Math.floor(service.file_size_limit / 1024 / 1024) >= 1){ %><%= (service.file_size_limit / 1024 / 1024).toFixed(2) %>Mo<% } else if(Math.floor(service.file_size_limit / 1024) >= 1){ %><%= (service.file_size_limit / 1024).toFixed(2) %>Ko<% } else{ %><%= service.file_size_limit %>o<% } %></div><div title='Cliquer ici pour changer la taille maximale des fichiers autorisés' class='serviceDetailBlockValueEdit' id='openServiceMaxFileSizeModificationPopup'><i class='fas fa-pencil-alt'></i></div></div>
+          <div class='serviceDetailBlockValue'><div class='serviceDetailBlockValueContent' id='serviceFileSize'><% if(Math.floor(service.serviceData.file_size_limit / 1024 / 1024 / 1024) >= 1){ %><%= (service.serviceData.file_size_limit / 1024 / 1024 / 1024).toFixed(2) %>Go<% } else if(Math.floor(service.serviceData.file_size_limit / 1024 / 1024) >= 1){ %><%= (service.serviceData.file_size_limit / 1024 / 1024).toFixed(2) %>Mo<% } else if(Math.floor(service.serviceData.file_size_limit / 1024) >= 1){ %><%= (service.serviceData.file_size_limit / 1024).toFixed(2) %>Ko<% } else{ %><%= service.serviceData.file_size_limit %>o<% } %></div><div title='Cliquer ici pour changer la taille maximale des fichiers autorisés' class='serviceDetailBlockValueEdit' id='openServiceMaxFileSizeModificationPopup'><i class='fas fa-pencil-alt'></i></div></div>
+        </div>
+        <div class="serviceDetailBlockExtensions">
+          <% for(var x = 0; x < service.allExtensions.length; x++){ %>
+            <div class="serviceDetailBlockExtensionsElement" name="<%= service.allExtensions[x].extensionUuid %>">
+              <% if(service.serviceExtensions.includes(service.allExtensions[x].extensionUuid)){ %>
+                <input class="serviceDetailBlockExtensionsElementCheckbox" type="checkbox" checked /><div class="serviceDetailBlockExtensionsElementValue"><%= service.allExtensions[x].extensionValue %></div>
+              <% } else { %>
+                <input class="serviceDetailBlockExtensionsElementCheckbox" type="checkbox" /><div class="serviceDetailBlockExtensionsElementValue"><%= service.allExtensions[x].extensionValue %></div>
+              <% } %>
+            </div>
+          <% } %>
         </div>
       <% } %>
     </div>
@@ -43,5 +54,6 @@
     <script src='/js/storage/admin/services/modify/success.js'></script>
     <script src='/js/storage/admin/services/modify/label.js'></script>
     <script src='/js/storage/admin/services/modify/fileSize.js'></script>
+    <script src='/js/storage/exit.js'></script>
   </body>
 </html>

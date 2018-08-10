@@ -24,10 +24,8 @@
     "access":
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "account": "BIGINT UNSIGNED NOT NULL",
-      "storage": "BOOLEAN NOT NULL",
-      "disease": "BOOLEAN NOT NULL",
-      "admin": "BOOLEAN NOT NULL"
+      "account": "VARCHAR(255) NOT NULL",
+      "app": "VARCHAR(255) NOT NULL"
     },
     "accounts":
     {
@@ -61,12 +59,16 @@
     "rights":
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "account": "BIGINT UNSIGNED NOT NULL",
+      "account": "VARCHAR(255) NOT NULL",
       "service": "VARCHAR(255) NOT NULL",
       "upload_files": "BOOLEAN NOT NULL",
       "download_files": "BOOLEAN NOT NULL",
       "remove_files": "BOOLEAN NOT NULL",
-      "post_comments": "BOOLEAN NOT NULL"
+      "post_comments": "BOOLEAN NOT NULL",
+      "restore_files": "BOOLEAN NOT NULL",
+      "create_folders": "BOOLEAN NOT NULL",
+      "rename_folders": "BOOLEAN NOT NULL",
+      "remove_folders": "BOOLEAN NOT NULL"
     },
 
     "files":
@@ -169,8 +171,7 @@
       "modify_services": "BOOLEAN NOT NULL",
       "remove_services": "BOOLEAN NOT NULL",
       "consult_services_rights": "BOOLEAN NOT NULL",
-      "add_services_rights": "BOOLEAN NOT NULL",
-      "remove_services_rights": "BOOLEAN NOT NULL"
+      "update_services_rights": "BOOLEAN NOT NULL"
     }
   }
 }

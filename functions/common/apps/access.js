@@ -1,35 +1,56 @@
 'use strict'
 
-const params                = require(`${__root}/json/params`);
 const constants             = require(`${__root}/functions/constants`);
-const databaseManager       = require(`${__root}/functions/database/${params.database.dbms}`);
+const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
 
 /****************************************************************************************************/
 
-module.exports.getAppsAvailableForAccount = (accountID, databaseConnector, callback) =>
+module.exports.getAppsAvailableForAccount = (accountUuid, databaseConnection, params, callback) =>
 {
-  accountID             == undefined ||
-  databaseConnector     == undefined ?
-
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   databaseManager.selectQuery(
   {
-    'databaseName': params.database.root.label,
-    'tableName': params.database.root.tables.access,
-    'args': { '0': '*' },
-    'where': { '=': { '0': { 'key': 'account', 'value' : accountID } } }
+    databaseName: params.database.root.label,
+    tableName: params.database.root.tables.access,
+    args: [ '*' ],
+    where: { operator: '=', key: 'account', value: accountUuid }
 
-  }, databaseConnector, (boolean, appsAccessOrErrorMessage) =>
+  }, databaseConnection, (error, result) =>
   {
-    if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: appsAccessOrErrorMessage });
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    else
+    if(result.length == 0) return callback(null, []);
+
+    const currentAccess = result;
+    var accessArray = [], index = 0;
+
+    var browseAccess = () =>
     {
-      appsAccessOrErrorMessage.length == 0 ?
-      callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND }) :
-      callback(null, appsAccessOrErrorMessage[0]);
+      databaseManager.selectQuery(
+      {
+        databaseName: params.database.root.label,
+        tableName: params.database.root.tables.applications,
+        args: [ '*' ],
+        where: { operator: '=', key: 'uuid', value: currentAccess[index].app }
+
+      }, databaseConnection, (error, result) =>
+      {
+        if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+        if(result.length == 0) return callback({ status: 404, code: constants.APP_NOT_FOUND, detail: null });
+
+        accessArray.push(result[0].name);
+
+        if(currentAccess[index += 1] == undefined) return callback(null, accessArray);
+
+        browseAccess();
+      });
     }
+      
+    browseAccess();
   });
 }
 

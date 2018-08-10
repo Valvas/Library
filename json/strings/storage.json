@@ -26,8 +26,7 @@
         "rights":
         {
           "access": "Consulter les droits",
-          "create": "Ajouter des droits",
-          "remove": "Retirer des droits"
+          "updateRights": "Mettre à jour les droits"
         }
       },
       "services":
@@ -152,18 +151,39 @@
         "searchPlaceholder": "Rechercher un compte",
         "title": "Liste des comptes"
       },
-      "errorBlock":
+      "accountRightsBlock":
       {
-        "title": "Une erreur est survenue"
-      },
-      "loadingPopup":
-      {
-        "cancel": "Annuler",
-        "message": "Récupération des données depuis le serveur",
-        "title": "Chargement en cours..."
+        "title": "Droits du compte : ",
+        "remove": "Retirer ce compte du service",
+        "close": "Fermer",
+        "save": "Enregistrer",
+        "list":
+        {
+          "uploadFiles": "Poster des fichiers",
+          "downloadFiles": "Télécharger des fichiers",
+          "removeFiles": "Supprimer des fichiers",
+          "commentFiles": "Poster des commentaires sur les fichiers",
+          "createFolders": "Créer des dossiers",
+          "renameFolders": "Renommer des dossiers",
+          "removeFolders": "Supprimer des dossiers",
+          "restoreFiles": "Restaurer des fichiers depuis la corbeille"
+        },
+        "prompt":
+        {
+          "title": "Attention",
+          "message": "Êtes-vous sûr(e) de vouloir retirer cet utilisateur du service ?",
+          "yes": "Oui",
+          "no": "Non"
+        }
       },
       "manageMembers": "Gérer les membres",
       "members": "Membres",
+      "messages":
+      {
+        "addedToService": "est maintenant membre de ce service",
+        "removedFromService": "n'est plus membre de ce service",
+        "rightsUpdated": "Droits mis à jour sur ce service pour"
+      },
       "membersBlock":
       {
         "rightsButton": "Droits",
@@ -222,6 +242,14 @@
     }
   },
 
+  "exitPrompt":
+  {
+    "title": "Quitter",
+    "message": "Êtes-vous sûr(e) de vouloir quitter l'application ?",
+    "validate": "Oui",
+    "cancel": "Non"
+  },
+
   "name": "Partage Fichiers PEI",
 
   "locations":
@@ -249,21 +277,43 @@
 
   "services":
   {
-    "access":
-    {
-      "true": "Vous avez accès à ce service",
-      "false": "Vous n'avez pas accès à ce service"
-    },
-
     "actions":
     {
-      "download": "Télécharger",
-      "remove": "Supprimer"
+      "downloadButton":
+      {
+        "label": "Télécharger",
+        "titles":
+        {
+          "true": "Cliquez ici pour télécharger les fichiers sélectionnés",
+          "false": "Vous n'avez pas le droit de télécharger des fichiers"
+        }
+      },
+
+      "removeButton":
+      {
+        "label": "Supprimer",
+        "titles":
+        {
+          "true": "Cliquez ici pour supprimer les fichiers sélectionnés",
+          "false": "Vous n'avez pas le droit de supprimer des fichiers"
+        }
+      }
     },
 
     "ask": "Demande d'accès",
 
     "authorized": "Autorisé",
+
+    "commentPopup":
+    {
+      "notAuthorizedToPostComments": "Vous n'êtes pas autorisé(e) à poster des commentaires dans ce service",
+      "title": "Ajouter un commentaire",
+      "label": "Commentaire",
+      "placeholder": "Entrez ici votre commentaire",
+      "help": "256 caractères maximum, sans espaces au début et à la fin (attention aux espaces consécutifs)",
+      "send": "Ajouter ce commentaire",
+      "cancel": "Annuler"
+    },
 
     "detail": "Détail",
 
@@ -274,8 +324,15 @@
       "title": "Détail du fichier",
       "fileName": "Nom du fichier :",
       "events": "Événements",
-      "comment": "Ajouter un commentaire",
-
+      "commentButton": 
+      {
+        "label": "Ajouter un commentaire",
+        "titles":
+        {
+          "true": "Cliquez ici pour ajouter un commentaire sur ce fichier",
+          "false": "Vous n'avez pas le droit d'ajouter des commentaires"
+        }
+      },
       "logs":
       {
         "uploaded": "Fichier mis en ligne par",
@@ -293,9 +350,24 @@
       "folderContent": "Contenu du dossier :",
       "files": "fichier(s)",
       "folders": "dossier(s)",
-      "rename": "Renommer ce dossier",
-      "remove": "Supprimer ce dossier",
-
+      "renameButton":
+      {
+        "label": "Renommer ce dossier",
+        "titles":
+        {
+          "true": "Cliquez ici pour renommer ce dossier",
+          "false": "Vous n'avez pas le droit de renommer des dossiers"
+        }
+      },
+      "removeButton":
+      {
+        "label": "Supprimer ce dossier",
+        "titles":
+        {
+          "true": "Fonctionnalité indisponible pour le moment",
+          "false": "Fonctionnalité indisponible pour le moment"
+        }
+      },
       "renamePopup":
       {
         "title": "Renommer ce dossier",
@@ -337,7 +409,15 @@
 
     "newFolder":
     {
-      "button": "Nouveau dossier",
+      "button":
+      {
+       "label": "Nouveau dossier" ,
+       "titles":
+       {
+         "true": "Cliquez ici pour créer un nouveau dossier",
+         "false": "Vous n'avez pas le droit de créer des dossiers"
+       }
+      },
       "popupTitle": "Création d'un nouveau dossier",
       "popupPlaceholder": "Nom du dossier",
       "popupSendButton": "Créer ce dossier",

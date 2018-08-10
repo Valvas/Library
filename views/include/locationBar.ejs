@@ -1,0 +1,8 @@
+<div class="locationBar">
+  <div class="locationBarTitle">Location actuelle :</div>
+  <div class="locationBarPath">
+    <% for(var x = 0; x < locations.length; x++){ %><!--
+    --><div class="locationBarPathLink"><%= strings.common.locations[locations[x]] %> |</div><!--
+    --><% } %>
+  </div>
+</div>

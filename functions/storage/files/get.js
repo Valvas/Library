@@ -3,8 +3,10 @@
 const fs                        = require('fs');
 const params                    = require(`${__root}/json/params`);
 const constants                 = require(`${__root}/functions/constants`);
+const storageStrings            = require(`${__root}/json/strings/storage`);
 const accountsGet               = require(`${__root}/functions/accounts/get`);
-const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
+const commonFormatDate          = require(`${__root}/functions/common/format/date`);
+const commonAccountsGet         = require(`${__root}/functions/common/accounts/get`);
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
 
 //To uncomment when updated database manager will be set for all the project
@@ -329,6 +331,129 @@ storageAppFilesGet.getParentFolder = (childUuid, serviceUuid, databaseConnection
       });
     }
   });
+}
+
+/****************************************************************************************************/
+// GET FILE LOGS
+/****************************************************************************************************/
+
+module.exports.getFileLogs = (fileUuid, databaseConnection, params, callback) =>
+{
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(fileUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'fileUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  getFileFromDatabase(fileUuid, databaseConnection, params, (error, fileData, fileLogs) =>
+  {
+    return callback(error, fileData, fileLogs);
+  });
+}
+
+/****************************************************************************************************/
+
+function getFileFromDatabase(fileUuid, databaseConnection, params, callback)
+{
+  storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND_IN_DATABASE, detail: null });
+
+    getLogsFromFile(fileData, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function getLogsFromFile(fileData, databaseConnection, params, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.fileLogs,
+    args: [ '*' ],
+    where: { operator: '=', key: 'file', value: fileData.uuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length == 0) return callback(null, fileData, []);
+
+    getAccountLinkedToEachLog(fileData, result, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function getAccountLinkedToEachLog(fileData, logsData, databaseConnection, params, callback)
+{
+  var preparedLogs = [], index = 0;
+
+  var browseLogs = () =>
+  {
+    commonAccountsGet.checkIfAccountExistsFromId(logsData[index].account, databaseConnection, params, (error, accountExists, accountData) =>
+    {
+      if(error != null) return callback(error);
+
+      preparedLogs[index] = {};
+
+      const accountName = accountExists == false
+      ? '?'
+      : `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}`;
+
+      var message = '';
+
+      switch(logsData[index].type)
+      {
+        case 0: message = `${storageStrings.services.fileDetail.logs.uploaded} ${accountName}`; break;
+        case 1: message = `${storageStrings.services.fileDetail.logs.downloaded} ${accountName}`; break;
+        case 2: message = `${storageStrings.services.fileDetail.logs.removed} ${accountName}`; break;
+        case 3: message = `${storageStrings.services.fileDetail.logs.commented} ${accountName}`; break;
+      }
+
+      commonFormatDate.getStringifyDateFromTimestamp(logsData[index].date, (error, stringifyTimestamp) =>
+      {
+        if(error != null) return callback(error);
+
+        preparedLogs[index].date = stringifyTimestamp;
+        preparedLogs[index].message = message;
+        preparedLogs[index].type = logsData[index].type;
+
+        if(logsData[index].type === 3)
+        {
+          databaseManager.selectQuery(
+          {
+            databaseName: params.database.storage.label,
+            tableName: params.database.storage.tables.fileComments,
+            args: [ '*' ],
+            where: { operator: '=', key: 'log', value: logsData[index].id }
+
+          }, databaseConnection, (error, result) =>
+          {
+            if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+            if(result.length === 0) return callback({ status: 404, code: constants.COMMENT_NOT_FOUND, detail: null });
+
+            preparedLogs[index].comment = result[0].content;
+
+            if(logsData[index += 1] == undefined) return callback(null, fileData, preparedLogs);
+
+            browseLogs();
+          });
+        }
+
+        else
+        {
+          if(logsData[index += 1] == undefined) return callback(null, fileData, preparedLogs);
+
+          browseLogs();
+        }
+      });
+    });
+  }
+
+  browseLogs();
 }
 
 /****************************************************************************************************/

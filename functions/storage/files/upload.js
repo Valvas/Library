@@ -110,7 +110,7 @@ function checkIfFileExistsOnStorage(fileName, fileExtension, service, rights, da
     {
       if(error != null) return callback(error);
 
-      if(fileExistsOnStorage && fileDataFromDatabase.deleted == 0) return callback(null, true, rights.remove_files == 1, fileDataFromDatabase.uuid);
+      if(fileExistsOnStorage && fileDataFromDatabase.deleted == 0) return callback(null, true, rights.remove == 1, fileDataFromDatabase.uuid);
 
       if(fileExistsOnStorage && fileDataFromDatabase.deleted == 1)
       {
@@ -225,29 +225,31 @@ function moveNewFile(filePath, fileUuid, fileExtension, serviceUuid, accountId, 
   {
     if(error != null) return callback(error);
 
-    updateFileStatusInDatabase(fileUuid, accountId, databaseConnection, params, callback);
+    updateFileStatusInDatabase(fileUuid, accountId, serviceUuid, databaseConnection, params, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function updateFileStatusInDatabase(fileUuid, accountId, databaseConnection, params, callback)
+function updateFileStatusInDatabase(fileUuid, accountId, serviceUuid, databaseConnection, params, callback)
 {
   storageAppFilesSet.setFileNotDeletedInDatabase(fileUuid, databaseConnection, params, (error) =>
   {
     if(error != null) return callback(error);
 
-    updateFileOwnerInDatabase(fileUuid, accountId, databaseConnection, params, callback);
+    updateFileOwnerInDatabase(fileUuid, accountId, serviceUuid, databaseConnection, params, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function updateFileOwnerInDatabase(fileUuid, accountId, databaseConnection, params, callback)
+function updateFileOwnerInDatabase(fileUuid, accountId, serviceUuid, databaseConnection, params, callback)
 {
   storageAppFilesSet.setFileOwner(accountId, fileUuid, databaseConnection, params, (error) =>
   {
     if(error != null) return callback(error);
+
+    storageAppLogsServicesUploadFile.addUploadFileLog(params.fileLogs.upload, accountId, fileUuid, serviceUuid, databaseConnection, params, (error) => {  });
 
     return callback(null, fileUuid);
   });

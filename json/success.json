@@ -27,5 +27,7 @@
   "20026": "L'accès a été supprimé avec succès",
   "20027": "La taille maximale des fichiers pour ce service a été mise à jour avec succès",
   "20028": "Nouveau dossier créé avec succès",
-  "20029": "Nom du dossier mis à jour avec succès"
+  "20029": "Nom du dossier mis à jour avec succès",
+  "20030": "Compte(s) ajouté(s) avec succès au service",
+  "20031": "Compte(s) retiré(s) avec succès du service"
 }

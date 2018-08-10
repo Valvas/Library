@@ -171,6 +171,8 @@ function browseFilesToDownload(filesToDownload, index, strings)
   {
     if(xhr.status == 200)
     {
+      socket.emit('storageAppServicesFileDownloaded', filesToDownload[index].uuid, document.getElementById('mainBlock').getAttribute('name'));
+
       var file    = xhr.response;
       var link    = document.createElement('a');
       link        .href = window.URL.createObjectURL(file);

@@ -1,14 +1,15 @@
 'use strict'
 
-const fs                    = require('fs');
-const errors                = require(`${__root}/json/errors`);
-const constants             = require(`${__root}/functions/constants`);
-const accountsGet           = require(`${__root}/functions/accounts/get`);
-const foldersCreate         = require(`${__root}/functions/folders/create`);
-const storageAppAdminGet    = require(`${__root}/functions/storage/admin/get`);
-const storageAppServicesGet = require(`${__root}/functions/storage/services/get`);
-const storageAppFilesRemove = require(`${__root}/functions/storage/files/remove`);
-const errorReportsCreate    = require(`${__root}/functions/common/errors/create`);
+const fs                        = require('fs');
+const constants                 = require(`${__root}/functions/constants`);
+const accountsGet               = require(`${__root}/functions/accounts/get`);
+const foldersCreate             = require(`${__root}/functions/folders/create`);
+const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
+const commonAccountsGet         = require(`${__root}/functions/common/accounts/get`);
+const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
+const storageAppFilesRemove     = require(`${__root}/functions/storage/files/remove`);
+const errorReportsCreate        = require(`${__root}/functions/common/errors/create`);
+const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
 
 //To uncomment when updated database manager will be set for all the project
 //const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
@@ -120,227 +121,267 @@ module.exports.createService = (serviceName, maxFileSize, authorizedExtensions, 
 }
 
 /****************************************************************************************************/
+// ADD ACCOUNTS IN SERVICE FROM AN ARRRAY OF UUIDs
+/****************************************************************************************************/
 
-module.exports.addMembersToService = (serviceUuid, members, accountID, databaseConnector, params, callback) =>
+module.exports.addMembersToService = (serviceUuid, accountUuids, accountId, databaseConnection, params, callback) =>
 {
-  serviceUuid         == undefined ||
-  members             == undefined ||
-  accountID           == undefined ||
-  databaseConnector   == undefined ?
+  if(params == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountId == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(serviceUuid == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(accountUuids == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuids' });
+  if(databaseConnection == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  if(typeof(accountUuids) !== 'object' || accountUuids.length == 0) return callback(null);
 
-  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  getAccountData(serviceUuid, accountUuids, accountId, databaseConnection, params, (error) =>
   {
-    error != null ? callback(error) :
+    return callback(error);
+  });
+}
 
-    storageAppAdminGet.getAccountAdminRights(accountID, databaseConnector, (error, rights) =>
+/****************************************************************************************************/
+
+function getAccountData(serviceUuid, accountUuids, accountId, databaseConnection, params, callback)
+{
+  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    checkAccountRights(serviceUuid, accountUuids, accountData, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function checkAccountRights(serviceUuid, accountUuids, accountData, databaseConnection, params, callback)
+{
+  storageAppAdminGet.getAccountAdminRights(accountData.id, databaseConnection, params, (error, rights) =>
+  {
+    if(error != null) return callback(error);
+
+    if(rights.update_services_rights === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS, detail: null });
+
+    getServiceData(serviceUuid, accountUuids, accountData, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function getServiceData(serviceUuid, accountUuids, accountData, databaseConnection, params, callback)
+{
+  storageAppServicesGet.checkIfServiceExists(serviceUuid, databaseConnection, params, (error, serviceExists, serviceData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(serviceExists == false) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
+
+    browseAccountsToAddToService(serviceUuid, accountUuids, accountData, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function browseAccountsToAddToService(serviceUuid, accountUuids, accountData, databaseConnection, params, callback)
+{
+  var index = 0;
+
+  var accountBrowser = () =>
+  {
+    commonAccountsGet.checkIfAccountExistsFromUuid(accountUuids[index], databaseConnection, params, (error, accountExists, accountData) =>
     {
-      if(error != null) callback(error);
+      if(error != null) return callback(error);
 
-      else
+      if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+      storageAppServicesRights.checkIfAccountHasRightsOnService(accountData.id, serviceUuid, databaseConnection, params, (error, hasRights, accountRights) =>
       {
-        if(rights.add_services_rights == 0) callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS });
+        if(error != null) return callback(error);
+
+        if(hasRights)
+        {
+          if(accountUuids[index += 1] == undefined) return callback(null);
+
+          accountBrowser();
+        }
 
         else
         {
-          var x = 0;
-
-          var browseMembersList = () =>
+          databaseManager.insertQuery(
           {
-            accountsGet.getAccountUsingID(members[Object.keys(members)[x]].id, databaseConnector, (error, account) =>
-            {
-              if(error != null)
-              {
-                Object.keys(members)[x += 1] == undefined ? callback(error) : browseMembersList();
-              }
+            databaseName: params.database.storage.label,
+            tableName: params.database.storage.tables.rights,
+            args: { account: accountData.id, service: serviceUuid, upload_files: 0, download_files: 0, remove_files: 0, post_comments: 0, restore_files: 0, create_folders: 0, rename_folders: 0, remove_folders: 0 }
 
-              else
-              {
-                databaseManager.insertQuery(
-                {
-                  databaseName: params.database.storage.label,
-                  tableName: params.database.storage.tables.rights,
-                  args: { account: members[Object.keys(members)[x]].id, service: serviceUuid, upload_files: members[Object.keys(members)[x]].upload == true ? 1 : 0, download_files: members[Object.keys(members)[x]].download == true ? 1 : 0, remove_files: members[Object.keys(members)[x]].remove == true ? 1 : 0, post_comments: members[Object.keys(members)[x]].comment == true ? 1 : 0 }
+          }, databaseConnection, (error, result) =>
+          {
+            if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-                }, databaseConnector, (error, result) =>
-                {
-                  if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+            if(accountUuids[index += 1] == undefined) return callback(null);
 
-                  Object.keys(members)[x += 1] == undefined ? callback(null) : browseMembersList();
-                });
-              }
-            });
-          }
-
-          Object.keys(members).length == 0 ? callback(null) : browseMembersList();
+            accountBrowser();
+          });
         }
-      }
+      });
+    });
+  }
+
+  accountBrowser();
+}
+
+/****************************************************************************************************/
+// REMOVE MEMBERS FROM A SERVICE USING AN ARRAY OF UUIDs
+/****************************************************************************************************/
+
+module.exports.removeMembersFromService = (serviceUuid, accountUuids, accountId, databaseConnection, params, callback) =>
+{
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(accountUuids == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuids' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    storageAppAdminGet.getAccountAdminRights(accountId, databaseConnection, params, (error, rights) =>
+    {
+      if(error != null) return callback(error);
+
+      if(rights.update_services_rights === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS, detail: null });
+
+      browseAccountsToRemoveFromService(serviceUuid, accountUuids, databaseConnection, params, (error) =>
+      {
+        return callback(error);
+      });
     });
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.removeMembersFromAService = (serviceUuid, members, accountID, databaseConnector, params, callback) =>
+function browseAccountsToRemoveFromService(serviceUuid, accountUuids, databaseConnection, params, callback)
 {
-  serviceUuid         == undefined ||
-  members             == undefined ||
-  accountID           == undefined ||
-  databaseConnector   == undefined ?
+  var index = 0;
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
-
-  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  var browseAccounts = () =>
   {
-    error != null ? callback(error) :
-
-    storageAppAdminGet.getAccountAdminRights(accountID, databaseConnector, (error, rights) =>
+    commonAccountsGet.checkIfAccountExistsFromUuid(accountUuids[index], databaseConnection, params, (error, accountExists, accountData) =>
     {
-      if(error != null) callback(error);
+      if(error != null) return callback(error);
 
-      else
+      if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+      databaseManager.deleteQuery(
       {
-        if(rights.add_services_rights == 0) callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS });
+        databaseName: params.database.storage.label,
+        tableName: params.database.storage.tables.rights,
+        where: { condition: 'AND', 0: { operator: '=', key: 'account', value: accountData.id }, 1: { operator: '=', key: 'service', value: serviceUuid } }
+  
+      }, databaseConnection, (error, result) =>
+      {
+        if(error != null) return callback({ status: 500, code: Constants.SQL_SERVER_ERROR, detail: error });
 
-        else
-        {
-          var x = 0;
+        if(accountUuids[index += 1] == undefined) return callback(null);
 
-          var browseMembersList = () =>
-          {
-            accountsGet.getAccountUsingUUID(members[Object.keys(members)[x]], databaseConnector, (error, account) =>
-            {
-              if(error != null)
-              {
-                Object.keys(members)[x += 1] == undefined ? callback(error) : browseMembersList();
-              }
+        browseAccounts();
+      });
+    });
+  }
 
-              else
-              {
-                databaseManager.deleteQuery(
-                {
-                  databaseName: params.database.storage.label,
-                  tableName: params.database.storage.tables.rights,
-                  where: { condition: 'AND', 0: { operator: '=', key: 'account', value: account.id }, 1: { operator: '=', key: 'service', value: serviceUuid } }
+  if(accountUuids.length === 0) return callback(null);
 
-                }, databaseConnector, (error, result) =>
-                {
-                  if(error != null) return callback({ status: 500, code: Constants.SQL_SERVER_ERROR, detail: error });
+  browseAccounts();
+}
 
-                  Object.keys(members)[x += 1] == undefined ? callback(null) : browseMembersList();
-                });
-              }
-            });
-          }
+/****************************************************************************************************/
+// UPDATE ACCOUNT RIGHTS ON SERVICE
+/****************************************************************************************************/
 
-          Object.keys(members).length == 0 ? callback(null) : browseMembersList();
-        }
-      }
+module.exports.updateRightsOnService = (serviceUuid, accountUuid, accountId, rightsObject, databaseConnection, params, callback) =>
+{
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(accountUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(rightsObject == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+  if(rightsObject.uploadFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.uploadFiles' });
+  if(rightsObject.removeFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.removeFiles' });
+  if(rightsObject.commentFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.commentFiles' });
+  if(rightsObject.restoreFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.restoreFiles' });
+  if(rightsObject.createFolders == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.createFolders' });
+  if(rightsObject.renameFolders == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.renameFolders' });
+  if(rightsObject.removeFolders == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.removeFolders' });
+  if(rightsObject.downloadFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.downloadFiles' });
+
+  storageAppServicesGet.checkIfServiceExists(serviceUuid, databaseConnection, params, (error, serviceExists, serviceData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(serviceExists == false) return callback({ status: 406, code: constants.SERVICE_NOT_FOUND, detail: null });
+
+    checkRequestSenderRights(serviceUuid, accountUuid, accountId, rightsObject, databaseConnection, params, (error) =>
+    {
+      return callback(error);
     });
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.addRightOnService = (accountID, serviceUuid, right, databaseConnector, params, callback) =>
+function checkRequestSenderRights(serviceUuid, accountUuid, accountId, rightsObject, databaseConnection, params, callback)
 {
-  if(accountID == undefined || serviceUuid == undefined || right == undefined || databaseConnector == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
-
-  var rightToUpdate = null;
-
-  switch(right)
+  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
   {
-    case 'comment':
-      rightToUpdate = 'post_comments';
-      break;
+    if(error != null) return callback(error);
 
-    case 'upload':
-      rightToUpdate = 'upload_files';
-      break;
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
 
-    case 'download':
-      rightToUpdate = 'download_files';
-      break;
+    storageAppAdminGet.getAccountAdminRights(accountId, databaseConnection, params, (error, rights) =>
+    {
+      if(error != null) return callback(error);
 
-    case 'remove':
-      rightToUpdate = 'remove_files';
-      break;
+      if(rights.update_services_rights === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS, detail: null });
 
-    default:
-      return callback({ status: 406, code: constants.RIGHT_DOES_NOT_EXIST, detail: null });
-      break;
-  }
-
-  var argToUpdate = {};
-
-  argToUpdate[rightToUpdate] = 1;
-
-  databaseManager.updateQuery(
-  {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.rights,
-    args: argToUpdate,
-    where: { condition: 'AND', 0: { operator: '=', key: 'account', value: accountID }, 1: { operator: '=', key: 'service', value: serviceUuid } }
-
-  }, databaseConnector, (error, result) =>
-  {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-
-    return callback(null);
+      updateAccountRights(serviceUuid, accountUuid, rightsObject, databaseConnection, params, callback);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.removeRightOnService = (accountID, serviceID, right, databaseConnector, params, callback) =>
+function updateAccountRights(serviceUuid, accountUuid, rightsObject, databaseConnection, params, callback)
 {
-  if(accountID == undefined || serviceID == undefined || right == undefined || databaseConnector == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
-
-  var rightToUpdate = null;
-
-  switch(right)
+  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, params, (error, accountExists, accountData) =>
   {
-    case 'comment':
-      rightToUpdate = 'post_comments';
-      break;
+    if(error != null) return callback(error);
 
-    case 'upload':
-      rightToUpdate = 'upload_files';
-      break;
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
 
-    case 'download':
-      rightToUpdate = 'download_files';
-      break;
+    databaseManager.updateQuery(
+    {
+      databaseName: params.database.storage.label,
+      tableName: params.database.storage.tables.rights,
+      args: { upload_files: rightsObject.uploadFiles == true ? 1 : 0, download_files: rightsObject.downloadFiles == true ? 1 : 0, remove_files: rightsObject.removeFiles == true ? 1 : 0, post_comments: rightsObject.commentFiles == true ? 1 : 0, restore_files: rightsObject.restoreFiles == true ? 1 : 0, create_folders: rightsObject.createFolders == true ? 1 : 0, rename_folders: rightsObject.renameFolders == true ? 1 : 0, remove_folders: rightsObject.removeFolders == true ? 1 : 0 },
+      where: { condition: 'AND', 0: { operator: '=', key: 'account', value: accountData.id }, 1: { operator: '=', key: 'service', value: serviceUuid } }
 
-    case 'remove':
-      rightToUpdate = 'remove_files';
-      break;
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    default:
-      return callback({ status: 406, code: constants.RIGHT_DOES_NOT_EXIST, detail: null });
-      break;
-  }
-
-  var argToUpdate = {};
-
-  argToUpdate[rightToUpdate] = 0;
-
-  oldDatabaseManager.updateQuery(
-  {
-    'databaseName': params.database.storage.label,
-    'tableName': params.database.storage.tables.rights,
-    'args': argToUpdate,
-    'where': { '0': { 'operator': 'AND', '0': { 'operator': '=', '0': { 'key': 'account', 'value': accountID }, '1': { 'key': 'service', 'value': serviceID } } } }
-
-  }, databaseConnector, (boolean, errorMessage) =>
-  {
-    if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
-
-    return callback(null);
+      return callback(null);
+    });
   });
 }
 
+/****************************************************************************************************/
+// FUNCTION USED ON SERVICE CREATION
 /****************************************************************************************************/
 
 function createStorageFolder(serviceUUID, databaseConnector, params, callback)

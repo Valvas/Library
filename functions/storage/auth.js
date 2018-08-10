@@ -11,9 +11,9 @@ var app = express();
 
 module.exports = (req, res, next) =>
 {
-  storageAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
+  storageAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rights) =>
   {
-    if(error != null) res.render('block', { message: errors[error.code], link: req.header('Referer') == undefined ? '/' : req.header('Referer') });
+    if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.header('Referer') == undefined ? '/' : req.header('Referer') });
 
     else
     {

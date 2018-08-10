@@ -6,13 +6,13 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/aside.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/membersBlock.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/accountsBlock.css" />
   <body>
     <% include ../../includes/aside.ejs %>
+    <div class="informationsBlock" id="storageInformationsBlock"></div>
     <div class='mainBlock' id='mainBlock'>
       <div class="mainBlockLocation"><%= strings.storage.locations.rights %></div>
       <% include ../../includes/admin/navigation.ejs %>
@@ -59,5 +59,7 @@
     <script src='/js/storage/admin/servicesRights/accountsBlock/searchAccounts.js'></script>
     <script src='/js/storage/admin/servicesRights/accountsBlock/openAccountsBlock.js'></script>
     <script src='/js/storage/admin/servicesRights/accountsBlock/closeAccountsBlock.js'></script>
+    <script src='/js/storage/exit.js'></script>
+    <script src='/js/storage/messages.js'></script>
   </body>
 </html>

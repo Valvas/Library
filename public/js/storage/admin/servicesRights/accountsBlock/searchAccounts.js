@@ -1,8 +1,8 @@
 /****************************************************************************************************/
 
-function searchAccounts(event)
+function searchAccounts()
 {
-  var x = 0, accountsFound = 0;
+  var x = 0;
   var accounts = document.getElementById('rightsOnServicesHomeAccountsBlockListElements').children;
 
   var browseAccountsWithRegex = () =>
@@ -15,7 +15,6 @@ function searchAccounts(event)
 
     if(accountMatchesRegex == true)
     {
-      accountsFound += 1;
       accounts[x].setAttribute('name', 'displayed');
 
       if(document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').checked)

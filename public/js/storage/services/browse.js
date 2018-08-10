@@ -352,81 +352,94 @@ function addReturnFolder(folderUuid)
 
 function addFile(fileData)
 {
-  var tag = null;
-
-  var file        = document.createElement('div');
-  var icon        = document.createElement('div');
-  var name        = document.createElement('div');
-  var checkbox    = document.createElement('input');
-
-  checkbox        .setAttribute('type', 'checkbox');
-  name            .innerText = fileData.name + '.' + fileData.extension;
-  file            .setAttribute('id', fileData.uuid);
-
-  switch(fileData.extension)
+  $.ajax(
   {
-    case 'doc': icon.innerHTML = '<i class="far fa-file-word"></i>'; tag = 'doc'; break;
-    case 'docx': icon.innerHTML = '<i class="far fa-file-word"></i>'; tag = 'doc'; break;
-    case 'xls': icon.innerHTML = '<i class="far fa-file-excel"></i>'; tag = 'xls'; break;
-    case 'xlsx': icon.innerHTML = '<i class="far fa-file-excel"></i>'; tag = 'xls'; break;
-    case 'ppt': icon.innerHTML = '<i class="far fa-file-powerpoint"></i>'; tag = 'ppt'; break;
-    case 'pptx': icon.innerHTML = '<i class="far fa-file-powerpoint"></i>'; tag = 'ppt'; break;
-    case 'pdf': icon.innerHTML = '<i class="far fa-file-pdf"></i>'; tag = 'pdf'; break;
-    case 'txt': icon.innerHTML = '<i class="far fa-file-alt"></i>'; tag = 'txt'; break;
-    case 'png': icon.innerHTML = '<i class="far fa-file-picture"></i>'; tag = 'png'; break;
-    case 'jpg': icon.innerHTML = '<i class="far fa-file-picture"></i>'; tag = 'png'; break;
-    case 'zip': icon.innerHTML = '<i class="far fa-file-archive"></i>'; tag = 'zip'; break;
-    case 'rar': icon.innerHTML = '<i class="far fa-file-archive"></i>'; tag = 'zip'; break;
-    default : icon.innerHTML = '<i class="far fa-file"></i>'; tag = 'default'; break;
-  }
+    method: 'PUT', dataType: 'json', timeout: 5000, url: '/queries/storage/services/get-rights-for-service', data: { serviceUuid: document.getElementById('mainBlock').getAttribute('name') },
+    error: (xhr, textStatus, errorThrown) => {  }
 
-  var filters = document.getElementsByName('filter');
-
-  for(var x = 0; x < filters.length; x++)
+  }).done((json) =>
   {
-    if(tag === filters[x].getAttribute('value') && filters[x].checked == false)
+    const rights = json.rights;
+
+    var tag = null;
+
+    var file        = document.createElement('div');
+    var icon        = document.createElement('div');
+    var name        = document.createElement('div');
+    var checkbox    = document.createElement('input');
+
+    checkbox        .setAttribute('type', 'checkbox');
+    name            .innerText = fileData.name + '.' + fileData.extension;
+    file            .setAttribute('id', fileData.uuid);
+
+    file            .addEventListener('click', openFileDetail);
+
+    switch(fileData.extension)
     {
-      file.style.display = 'none';
+      case 'doc': icon.innerHTML = '<i class="far fa-file-word"></i>'; tag = 'doc'; break;
+      case 'docx': icon.innerHTML = '<i class="far fa-file-word"></i>'; tag = 'doc'; break;
+      case 'xls': icon.innerHTML = '<i class="far fa-file-excel"></i>'; tag = 'xls'; break;
+      case 'xlsx': icon.innerHTML = '<i class="far fa-file-excel"></i>'; tag = 'xls'; break;
+      case 'ppt': icon.innerHTML = '<i class="far fa-file-powerpoint"></i>'; tag = 'ppt'; break;
+      case 'pptx': icon.innerHTML = '<i class="far fa-file-powerpoint"></i>'; tag = 'ppt'; break;
+      case 'pdf': icon.innerHTML = '<i class="far fa-file-pdf"></i>'; tag = 'pdf'; break;
+      case 'txt': icon.innerHTML = '<i class="far fa-file-alt"></i>'; tag = 'txt'; break;
+      case 'png': icon.innerHTML = '<i class="far fa-file-picture"></i>'; tag = 'png'; break;
+      case 'jpg': icon.innerHTML = '<i class="far fa-file-picture"></i>'; tag = 'png'; break;
+      case 'zip': icon.innerHTML = '<i class="far fa-file-archive"></i>'; tag = 'zip'; break;
+      case 'rar': icon.innerHTML = '<i class="far fa-file-archive"></i>'; tag = 'zip'; break;
+      default : icon.innerHTML = '<i class="far fa-file"></i>'; tag = 'default'; break;
     }
-  }
 
-  file.setAttribute('tag', tag);
+    var filters = document.getElementsByName('filter');
 
-  switch(document.getElementById('selectedDisplay').getAttribute('name'))
-  {
-    case 'large':
+    for(var x = 0; x < filters.length; x++)
+    {
+      if(tag === filters[x].getAttribute('value') && filters[x].checked == false)
+      {
+        file.style.display = 'none';
+      }
+    }
 
-      file.setAttribute('class', 'storageAppServicesFilesLarge');
-      icon.setAttribute('class', `storageAppServicesFilesLargeIcon ${tag}`);
-      name.setAttribute('class', 'storageAppServicesFilesLargeName');
-      checkbox.setAttribute('class', 'storageAppServicesFilesLargeCheckbox');
+    file.setAttribute('tag', tag);
 
-    break;
+    switch(document.getElementById('selectedDisplay').getAttribute('name'))
+    {
+      case 'large':
 
-    case 'small':
+        file.setAttribute('class', 'storageAppServicesFilesLarge');
+        icon.setAttribute('class', `storageAppServicesFilesLargeIcon ${tag}`);
+        name.setAttribute('class', 'storageAppServicesFilesLargeName');
+        checkbox.setAttribute('class', 'storageAppServicesFilesLargeCheckbox');
 
-      file.setAttribute('class', 'storageAppServicesFilesSmall');
-      icon.setAttribute('class', `storageAppServicesFilesSmallIcon ${tag}`);
-      name.setAttribute('class', 'storageAppServicesFilesSmallName');
-      checkbox.setAttribute('class', 'storageAppServicesFilesSmallCheckbox');
+      break;
 
-    break;
+      case 'small':
 
-    case 'list':
+        file.setAttribute('class', 'storageAppServicesFilesSmall');
+        icon.setAttribute('class', `storageAppServicesFilesSmallIcon ${tag}`);
+        name.setAttribute('class', 'storageAppServicesFilesSmallName');
+        checkbox.setAttribute('class', 'storageAppServicesFilesSmallCheckbox');
 
-      file.setAttribute('class', 'storageAppServicesFilesList');
-      icon.setAttribute('class', `storageAppServicesFilesListIcon ${tag}`);
-      name.setAttribute('class', 'storageAppServicesFilesListName');
-      checkbox.setAttribute('class', 'storageAppServicesFilesListCheckbox');
+      break;
 
-    break;
-  }
+      case 'list':
 
-  file.appendChild(icon);
-  file.appendChild(name);
-  file.appendChild(checkbox);
+        file.setAttribute('class', 'storageAppServicesFilesList');
+        icon.setAttribute('class', `storageAppServicesFilesListIcon ${tag}`);
+        name.setAttribute('class', 'storageAppServicesFilesListName');
+        checkbox.setAttribute('class', 'storageAppServicesFilesListCheckbox');
 
-  document.getElementById('filesBlock').appendChild(file);
+      break;
+    }
+
+    file.appendChild(icon);
+    file.appendChild(name);
+
+    if(rights.downloadFiles || rights.removeFiles) file.appendChild(checkbox);
+
+    document.getElementById('filesBlock').appendChild(file);
+  });
 }
 
 /****************************************************************************************************/

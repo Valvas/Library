@@ -18,6 +18,20 @@
 
 .serviceDetailBlockValueEdit:hover{ color:#2069A8; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
+
+.serviceDetailBlockExtensions{ max-width:600px; background-color:#FFFFFF; border:1px solid #F0F0F0; border-radius:4px; margin:20px; }
+
+.serviceDetailBlockExtensionsElement{ margin:10px 20px 10px 20px; }
+
+.serviceDetailBlockExtensionsElementCheckbox{ display:inline-block; vertical-align:top; width:20px; height:20px; margin:0; cursor:pointer; }
+
+.serviceDetailBlockExtensionsElementValue{ display:inline-block; vertical-align:top; width:calc(100% - 30px); margin:0 0 0 10px; font-size:1em; font-family:roboto-light; }
+
+.serviceDetailBlockExtensionsSave{}
+
+.serviceDetailBlockExtensionsSave:hover{}
+
+
 .serviceModificationBackground{ position:fixed; z-index:20; top:0; left:0; right:0; bottom:0; overflow:auto; background-color:#000000; opacity:0.8; }
 
 .serviceModificationPopup{ position:absolute; z-index:30; width:600px; top:80px; left:calc(50% - 300px); margin:0 0 40px 0; max-width:600px; background-color:#FFFFFF; border-radius:4px; }

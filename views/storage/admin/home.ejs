@@ -25,12 +25,12 @@
         <div class='category'>
           <div class='title'><%= strings.storage.admin.home.rights.label %></div>
           <div class='right'><div class='key'><%= strings.storage.admin.home.rights.rights.access %></div><div class='value'><% if(rights.consult_services_rights == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
-          <div class='right'><div class='key'><%= strings.storage.admin.home.rights.rights.create %></div><div class='value'><% if(rights.add_services_rights == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
-          <div class='right'><div class='key'><%= strings.storage.admin.home.rights.rights.remove %></div><div class='value'><% if(rights.remove_services_rights == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
+          <div class='right'><div class='key'><%= strings.storage.admin.home.rights.rights.updateRights %></div><div class='value'><% if(rights.update_services_rights == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
         </div>
       </div>
     </div>
     <script src='/js/jQuery.js'></script>
     <script src='/js/afk.js'></script>
+    <script src='/js/storage/exit.js'></script>
   </body>
 </html>

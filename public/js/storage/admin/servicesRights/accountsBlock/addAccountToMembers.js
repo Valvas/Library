@@ -1,8 +1,10 @@
 /****************************************************************************************************/
 
-function addAccountToMembers(account)
+function addAccountToMembers(accountUuid)
 {
-  var accounts = { 0: account.uuid };
+  var accountUuids = [];
+
+  accountUuids.push(accountUuid);
 
   var background    = document.createElement('div');
   var popup         = document.createElement('div');
@@ -16,54 +18,42 @@ function addAccountToMembers(account)
 
   popup             .appendChild(spinner);
 
-  $(popup)          .hide().appendTo(document.body);
-  $(background)     .hide().appendTo(document.body);
+  document.body     .appendChild(background);
+  document.body     .appendChild(popup);
 
-  $(background).slideDown(250, () =>
+  $.ajax(
   {
-    $(popup).fadeIn(250, () =>
-    {
-      $.ajax(
-      {
-        method: 'POST',
-        dataType: 'json',
-        data: { accounts: JSON.stringify(accounts), serviceUuid: document.getElementById('rightsOnServicesHomeMembersBlock').getAttribute('name') },
-        timeout: 10000,
-        url: '/queries/storage/admin/give-access-to-a-service',
-    
-        error: (xhr, textStatus, errorThrown) =>
-        {
-          xhr.responseJSON != undefined ?
-          openAccountsBlockErrorPopup(background, popup, xhr.responseJSON.message) :
-          openAccountsBlockErrorPopup(background, popup, 'Une erreur est survenue, veuillez réessayer plus tard');
-        }
-    
-      }).done((json) =>
-      {
-        socket.emit('storageAppAdminServicesRightsAccountAddedToMembers', account.uuid);
+    method: 'POST',
+    dataType: 'json',
+    data: { accountUuids: JSON.stringify(accountUuids), serviceUuid: document.getElementById('rightsOnServicesHomeMembersBlock').getAttribute('name') },
+    timeout: 5000,
+    url: '/queries/storage/admin/give-access-to-a-service',
 
-        setTimeout(() =>
-        {
-          $(popup).toggle('slide', 'left', 250, () =>
-          {
-            $(background).slideUp(250, () =>
-            {
-              popup.remove();
-              background.remove();
-            });
-          });
-        }, 1000);
-      });
-    });
+    error: (xhr, textStatus, errorThrown) =>
+    {
+      popup.remove();
+      background.remove();
+
+      xhr.responseJSON != undefined ?
+      displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail) :
+      displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
+    }
+
+  }).done((json) =>
+  {
+    socket.emit('storageAppAdminServicesRightsAccountAddedToMembers', accountUuid);
+
+    popup.remove();
+    background.remove();
+
+    displaySuccessMessage(json.message, null);
   });
 }
 
 /****************************************************************************************************/
 
-function addMultipleAccountsToMembers(event)
+function addMultipleAccountsToMembers()
 {
-  var accounts = {};
-
   var background    = document.createElement('div');
   var popup         = document.createElement('div');
   var spinner       = document.createElement('div');
@@ -76,77 +66,52 @@ function addMultipleAccountsToMembers(event)
 
   popup             .appendChild(spinner);
 
-  $(popup)          .hide().appendTo(document.body);
-  $(background)     .hide().appendTo(document.body);
+  document.body     .appendChild(background);
+  document.body     .appendChild(popup);
 
-  $(background).slideDown(250, () =>
+  document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').checked = false;
+  document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = false;
+
+  document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText = document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[0] + ' (0)';
+
+  var accounts = document.getElementById('rightsOnServicesHomeAccountsBlockListElements').children;
+
+  var accountsToAdd = [];
+
+  for(var x = 0; x < accounts.length; x++)
   {
-    $(popup).fadeIn(250, () =>
+    if(accounts[x].children[0].children[0].checked == true) accountsToAdd.push(accounts[x].getAttribute('id'));
+  }
+
+  $.ajax(
+  {
+    method: 'POST',
+    dataType: 'json',
+    data: { accountUuids: JSON.stringify(accountsToAdd), serviceUuid: document.getElementById('rightsOnServicesHomeMembersBlock').getAttribute('name') },
+    timeout: 5000,
+    url: '/queries/storage/admin/give-access-to-a-service',
+
+    error: (xhr, textStatus, errorThrown) =>
     {
-      var accountsToAdd = document.querySelectorAll('input.accountsBlockListElementsAccountBoxInput:checked');
+      popup.remove();
+      background.remove();
 
-      document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').checked = false;
-      document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = false;
+      xhr.responseJSON != undefined ?
+      displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail) :
+      displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
+    }
 
-      document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText = document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[0] + ' (0)';
+  }).done((json) =>
+  {
+    popup.remove();
+    background.remove();
 
-      var x = 0;
+    for(var x = 0; x < accountsToAdd.length; x++)
+    {
+      socket.emit('storageAppAdminServicesRightsAccountAddedToMembers', accountsToAdd[x]);
+    }
 
-      var browseAccountsToAdd = () =>
-      {
-        var row = accountsToAdd[x].parentNode.parentNode;
-
-        accounts[x] = row.getAttribute('id');
-
-        if(accountsToAdd[x += 1] != undefined) browseAccountsToAdd();
-
-        else
-        {
-          $.ajax(
-          {
-            method: 'POST',
-            dataType: 'json',
-            data: { accounts: JSON.stringify(accounts), serviceName: document.getElementById('rightsOnServicesHomeMembersBlock').getAttribute('name') },
-            timeout: 10000,
-            url: '/queries/storage/admin/give-access-to-a-service',
-        
-            error: (xhr, textStatus, errorThrown) =>
-            {
-              xhr.responseJSON != undefined ?
-              openAccountsBlockErrorPopup(background, popup, xhr.responseJSON.message) :
-              openAccountsBlockErrorPopup(background, popup, 'Une erreur est survenue, veuillez réessayer plus tard');
-            }
-        
-          }).done((json) =>
-          {
-            setTimeout(() =>
-            {
-              $(popup).toggle('slide', 'left', 250, () =>
-              {
-                $(background).slideUp(250, () =>
-                {
-                  popup.remove();
-                  background.remove();
-                });
-              });
-            }, 1000);
-
-            x = 0;
-
-            var browseAccountsToEmitEvent = () =>
-            {
-              socket.emit('storageAppAdminServicesRightsAccountAddedToMembers', accounts[x]);
-
-              setTimeout(() => { if(accounts[x += 1] != undefined) browseAccountsToEmitEvent(); }, 250);
-            }
-
-            browseAccountsToEmitEvent();
-          });
-        }
-      }
-
-      if(accountsToAdd[x] != undefined) browseAccountsToAdd();
-    });
+    displaySuccessMessage(json.message, null);
   });
 }
 

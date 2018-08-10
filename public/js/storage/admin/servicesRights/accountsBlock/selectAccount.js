@@ -1,133 +1,107 @@
 /****************************************************************************************************/
 
-function selectAccount(event)
+function selectAccount(target)
 {
-  var x = 0;
   var accounts = document.getElementById('rightsOnServicesHomeAccountsBlockListElements').children;
 
-  var amountOfAccounts = accounts.length;
   var amountOfAccountsChecked = 0;
 
-  var browseAccounts = () =>
+  for(var x = 0; x < accounts.length; x++)
   {
     if(accounts[x].children[0].children[0].checked == true) amountOfAccountsChecked += 1;
+  }
 
-    if(accounts[x += 1] != undefined) browseAccounts();
+  if(target.checked)
+  {
+    if(document.getElementById('rightsOnServicesHomeAccountsBlockAdd'))
+    {
+      var buttonText = document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[0];
+      buttonText += ' (' + (parseInt(document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[1].slice(1, -1), 10) + 1) + ')';
+
+      document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText = buttonText;
+    }
+
+    if(amountOfAccountsChecked == accounts.length)
+    {
+      document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = false;
+      document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').checked = true;
+    }
 
     else
     {
-      if(event.target.checked == true)
-      {
-        if(document.getElementById('rightsOnServicesHomeAccountsBlockAdd'))
-        {
-          var buttonText = document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[0];
-          buttonText += ' (' + (parseInt(document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[1].slice(1, -1), 10) + 1) + ')';
-
-          document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText = buttonText;
-        }
-
-        if(amountOfAccountsChecked == amountOfAccounts)
-        {
-          document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = false;
-          document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').checked = true;
-        }
-
-        else
-        {
-          document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = true;
-        }
-      }
-
-      else
-      {
-        if(document.getElementById('rightsOnServicesHomeAccountsBlockAdd'))
-        {
-          var buttonText = document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[0];
-          buttonText += ' (' + (parseInt(document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[1].slice(1, -1), 10) - 1) + ')';
-
-          document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText = buttonText;
-        }
-
-        if(amountOfAccountsChecked == 0)
-        {
-          document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').checked = false;
-          document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = false;
-        }
-
-        else
-        {
-          document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = true;
-        }
-      }
+      document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = true;
     }
   }
 
-  browseAccounts();
+  else
+  {
+    if(document.getElementById('rightsOnServicesHomeAccountsBlockAdd'))
+    {
+      var buttonText = document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[0];
+      buttonText += ' (' + (parseInt(document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[1].slice(1, -1), 10) - 1) + ')';
+
+      document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText = buttonText;
+    }
+
+    if(amountOfAccountsChecked == 0)
+    {
+      document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').checked = false;
+      document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = false;
+    }
+
+    else
+    {
+      document.getElementById('rightsOnServicesHomeAccountsBlockSelectAll').indeterminate = true;
+    }
+  }
 }
 
 /****************************************************************************************************/
 
-function selectAllAccounts(event)
+function selectAllAccounts(target)
 {
-  event.target.indeterminate = false;
+  target.indeterminate = false;
 
-  var x = 0;
   var accounts = document.getElementById('rightsOnServicesHomeAccountsBlockListElements').children;
 
-  var accountsToSelect = [];
-  var accountsSelected = [];
+  var accountsSelected = 0, accountsDisplayed = accounts.length;
 
-  var browseAccountsToGetThoseDisplayed = () =>
+  for(var x = 0; x < accounts.length; x++)
   {
-    if(accounts[x].hasAttribute('name')) accountsToSelect.push(accounts[x]);
-
-    if(accounts[x].children[0].children[0].checked) accountsSelected.push(accounts[x]);
-
-    if(accounts[x += 1] != undefined) browseAccountsToGetThoseDisplayed();
+    if(accounts[x].hasAttribute('name'))
+    {
+      if(accounts[x].children[0].children[0].checked) accountsSelected += 1;
+    }
 
     else
     {
-      x = 0;
-
-      if(accountsToSelect[x] != undefined) browseAccountsToSelect();
+      accountsDisplayed -= 1;
     }
   }
 
-  var browseAccountsToSelect = () =>
+  if(accountsDisplayed === accountsSelected)
   {
-    if(accountsSelected.length > 0)
+    target.checked = false;
+
+    document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText = document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[0] + ` (0)`;
+
+    for(var x = 0; x < accounts.length; x++)
     {
-      accountsToSelect[x].children[0].children[0].checked = false;
-    }
-
-    else
-    {
-      accountsToSelect[x].children[0].children[0].checked = true;
-    }
-
-    if(accountsToSelect[x += 1] != undefined) browseAccountsToSelect();
-
-    else
-    {
-      var buttonText = document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[0];
-
-      if(accountsSelected.length > 0)
-      {
-        event.target.checked = false;
-        buttonText += ' (0)';
-      }
-
-      else
-      {
-        event.target.checked = true;
-        buttonText += ' (' + accountsToSelect.length + ')';
-      }
-
-      document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText = buttonText;
+      accounts[x].children[0].children[0].checked = false;
     }
   }
 
-  if(accounts[x] != undefined) browseAccountsToGetThoseDisplayed();
+  else
+  {
+    target.checked = true;
+
+    document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText = document.getElementById('rightsOnServicesHomeAccountsBlockAdd').innerText.split(' ')[0] + ` (${accounts.length})`;
+
+    for(var x = 0; x < accounts.length; x++)
+    {
+      accounts[x].children[0].children[0].checked = true;
+    }
+  }
 }
 
 /****************************************************************************************************/

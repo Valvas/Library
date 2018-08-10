@@ -2,20 +2,19 @@
 
 const fs                          = require('fs');
 const constants                   = require(`${__root}/functions/constants`);
-const accountsGet                 = require(`${__root}/functions/accounts/get`);
 const filesCreate                 = require(`${__root}/functions/files/create`);
 const databaseManager             = require(`${__root}/functions/database/MySQLv3`);
 const storageAppFilesGet          = require(`${__root}/functions/storage/files/get`);
 
 /****************************************************************************************************/
 
-module.exports.addRemoveFileLog = (logType, accountId, fileUuid, serviceUuid, databaseConnection, params, callback) =>
+module.exports.addCommentFileLog = (fileComment, logType, accountId, fileUuid, serviceUuid, databaseConnection, params, callback) =>
 {
-  if(logType == undefined || accountId == undefined || fileUuid == undefined || serviceUuid == undefined || databaseConnection == undefined || params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
+  if(fileComment == undefined || logType == undefined || accountId == undefined || fileUuid == undefined || serviceUuid == undefined || databaseConnection == undefined || params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
 
   if(Object.values(params.fileLogs).includes(logType) == false) return callback({ status: 406, code: constants.LOG_TYPE_DOES_NOT_EXIST, detail: null });
 
-  checkIfFileExistsInDatabase(logType, accountId, fileUuid, serviceUuid, databaseConnection, params, (error) =>
+  checkIfFileExistsInDatabase(fileComment, logType, accountId, fileUuid, serviceUuid, databaseConnection, params, (error) =>
   {
     return callback(error);
   });
@@ -23,7 +22,7 @@ module.exports.addRemoveFileLog = (logType, accountId, fileUuid, serviceUuid, da
 
 /****************************************************************************************************/
 
-function checkIfFileExistsInDatabase(logType, accountId, fileUuid, serviceUuid, databaseConnection, params, callback)
+function checkIfFileExistsInDatabase(fileComment, logType, accountId, fileUuid, serviceUuid, databaseConnection, params, callback)
 {
   storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
   {
@@ -33,13 +32,13 @@ function checkIfFileExistsInDatabase(logType, accountId, fileUuid, serviceUuid, 
 
     const currentTimestamp = Date.now();
 
-    addRemoveFileLogInDatabase(logType, accountId, fileData, serviceUuid, currentTimestamp, databaseConnection, params, callback);
+    addCommentFileLogInDatabase(fileComment, logType, accountId, fileData, serviceUuid, currentTimestamp, databaseConnection, params, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function addRemoveFileLogInDatabase(logType, accountId, fileData, serviceUuid, currentTimestamp, databaseConnection, params, callback)
+function addCommentFileLogInDatabase(fileComment, logType, accountId, fileData, serviceUuid, currentTimestamp, databaseConnection, params, callback)
 {
   databaseManager.insertQuery(
   {
@@ -51,13 +50,24 @@ function addRemoveFileLogInDatabase(logType, accountId, fileData, serviceUuid, c
   {
     if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    addRemoveFileLogInJSON(logType, accountId, fileData, serviceUuid, currentTimestamp, params, callback);
+    databaseManager.insertQuery(
+    {
+      databaseName: params.database.storage.label,
+      tableName: params.database.storage.tables.fileComments,
+      args: { log: result.insertId, content: fileComment }
+      
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+      addCommentFileLogInJSON(logType, accountId, fileData, serviceUuid, currentTimestamp, params, callback);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-function addRemoveFileLogInJSON(logType, accountId, fileData, serviceUuid, currentTimestamp, params, callback)
+function addCommentFileLogInJSON(logType, accountId, fileData, serviceUuid, currentTimestamp, params, callback)
 {
   filesCreate.createFile(`${fileData.uuid}.json`, `${params.storage.root}/${params.storage.fileLogs}/${serviceUuid}`, (error) =>
   {

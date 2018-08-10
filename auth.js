@@ -10,7 +10,7 @@ var app = express();
 
 module.exports = (req, res, next) =>
 {
-  req.session.account != undefined ? next() : res.render('block', { message: `${errors[constants.AUTHENTICATION_REQUIRED].charAt(0).toUpperCase()}${errors[constants.AUTHENTICATION_REQUIRED].slice(1)}`, link: '/' });
+  req.session.account != undefined ? next() : res.render('block', { message: errors[constants.AUTHENTICATION_REQUIRED], detail: null, link: '/' });
 };
 
 /*****************************************************************************************************************************/

@@ -6,6 +6,8 @@
 
 .blockPageMessage{ text-align:center; font-size:1em; font-family:roboto-light; padding:20px 10px 20px 10px; }
 
+.blockPageDetail{ text-align:right; font-size:0.75; font-family:roboto-light; padding:20px 10px 20px 10px; color:#D0D0D0; }
+
 .blockPageLink{ display:block; color:#778899; font-size:1em; font-family:roboto-light-italic; padding:10px; width:max-content; }
 
 .blockPageLink:hover{ color:#77B5FE; transition-duration:0.5s; -o-transition-duration:0.5s; -webkit-transition-duration:0.5s; }

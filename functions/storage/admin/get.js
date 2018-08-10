@@ -1,60 +1,47 @@
 'use strict'
 
-const params                = require(`${__root}/json/params`);
 const constants             = require(`${__root}/functions/constants`);
-const accountsGet           = require(`${__root}/functions/accounts/get`);
+const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
+const commonAccountsGet     = require(`${__root}/functions/common/accounts/get`);
 const storageAppServicesGet = require(`${__root}/functions/storage/services/get`);
 
-//To uncomment when updated database manager will be set for all the project
-//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
-
-//To remove when updated database manager will be set for all the project
-const oldDatabaseManager    = require(`${__root}/functions/database/MySQLv2`);
-const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
+const currentModuleFunctions = module.exports = {};
 
 /****************************************************************************************************/
 
-module.exports.getAccountAdminRights = (accountID, databaseConnector, callback) =>
+currentModuleFunctions.getAccountAdminRights = (accountId, databaseConnection, params, callback) =>
 {
-  accountID           == undefined ||
-  databaseConnector   == undefined ?
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
-
-  accountsGet.getAccountUsingID(accountID, databaseConnector, (error, account) =>
+  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
   {
-    if(error != null) callback(error);
+    if(error != null) return callback(error);
 
-    else
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    databaseManager.selectQuery(
     {
-      oldDatabaseManager.selectQuery(
-      {
-        'databaseName': params.database.storage.label,
-        'tableName': params.database.storage.tables.admin,
-        'args': { '0': '*' },
-        'where': { '0': { 'operator': '=', '0': { 'key': 'account', 'value': accountID } } }
+      databaseName: params.database.storage.label,
+      tableName: params.database.storage.tables.admin,
+      args: [ '*' ],
+      where: { operator: '=', key: 'account', value: accountId }
 
-      }, databaseConnector, (boolean, rightsOrErrorMessage) =>
-      {
-        if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: rightsOrErrorMessage });
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-        else
-        {
-          if(rightsOrErrorMessage.length == 0) callback({ status: 403, code: constants.USER_IS_NOT_ADMIN });
+      if(result.length == 0) return callback({ status: 403, code: constants.USER_IS_NOT_ADMIN, detail: null });
 
-          else
-          {
-            callback(null, rightsOrErrorMessage[0]);
-          }
-        }
-      });
-    }
+      return callback(null, result[0]);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-module.exports.getServicesDetailForConsultation = (databaseConnectionPool, callback) =>
+currentModuleFunctions.getServicesDetailForConsultation = (databaseConnectionPool, callback) =>
 {
   storageAppServicesGet.getAllServices(databaseConnectionPool, (error, services) =>
   {
@@ -81,6 +68,215 @@ module.exports.getServicesDetailForConsultation = (databaseConnectionPool, callb
 
     browseServices();
   });
+}
+
+/****************************************************************************************************/
+// GET MEMBERS OF A SERVICE
+/****************************************************************************************************/
+
+currentModuleFunctions.getServiceMembers = (serviceUuid, accountId, databaseConnection, params, callback) =>
+{
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  currentModuleFunctions.getAccountAdminRights(accountId, databaseConnection, params, (error, rights) =>
+  {
+    if(error != null) return callback(error);
+
+    if(rights.add_services_rights === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS, detail: null });
+
+    storageAppServicesGet.checkIfServiceExists(serviceUuid, databaseConnection, params, (error, serviceExists, serviceData) =>
+    {
+      if(error != null) return callback(error);
+
+      if(serviceExists == false) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
+
+      getAccountsThatHaveRightsOnCurrentService(serviceUuid, databaseConnection, params, (error, members) =>
+      {
+        return callback(error, members);
+      });
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function getAccountsThatHaveRightsOnCurrentService(serviceUuid, databaseConnection, params, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.rights,
+    args: [ '*' ],
+    where: { operator: '=', key: 'service', value: serviceUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length == 0) return callback(null, []);
+
+    browseServiceMembers(serviceUuid, result, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function browseServiceMembers(serviceUuid, serviceMembers, databaseConnection, params, callback)
+{
+  var index = 0, members = [];
+
+  var browseAccounts = () =>
+  {
+    commonAccountsGet.checkIfAccountExistsFromId(serviceMembers[index].account, databaseConnection, params, (error, accountExists, accountData) =>
+    {
+      if(error != null) return callback(error);
+
+      if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+      members[index] = {};
+      members[index].accountUuid        = accountData.uuid;
+      members[index].accountEmail       = accountData.email;
+      members[index].accountLastname    = accountData.lastname;
+      members[index].accountFirstname   = accountData.firstname;
+      members[index].uploadFiles        = serviceMembers.upload_files === 1;
+      members[index].removeFiles        = serviceMembers.remove_files === 1;
+      members[index].commentFiles       = serviceMembers.post_comments === 1;
+      members[index].restoreFiles       = serviceMembers.restore_files === 1;
+      members[index].downloadFiles      = serviceMembers.download_files === 1;
+      members[index].createFolders      = serviceMembers.create_folders === 1;
+      members[index].renameFolders      = serviceMembers.rename_folders === 1;
+      members[index].removeFolders      = serviceMembers.remove_folders === 1;
+
+      if(serviceMembers[index += 1] == undefined) return callback(null, members);
+
+      browseAccounts();
+    });
+  }
+
+  browseAccounts();
+}
+
+/****************************************************************************************************/
+// GET ACCOUNTS THAT CAN BE ADDED TO PROVIDED SERVICE
+/****************************************************************************************************/
+
+currentModuleFunctions.getAccountsThatCanBeAddedToService = (serviceUuid, accountId, databaseConnection, params, callback) =>
+{
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  currentModuleFunctions.getAccountAdminRights(accountId, databaseConnection, params, (error, rights) =>
+  {
+    if(error != null) return callback(error);
+
+    if(rights.add_services_rights === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS, detail: null });
+
+    storageAppServicesGet.checkIfServiceExists(serviceUuid, databaseConnection, params, (error, serviceExists, serviceData) =>
+    {
+      if(error != null) return callback(error);
+
+      if(serviceExists == false) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
+
+      getAccountsThatHaveAccessToTheApp(serviceUuid, databaseConnection, params, (error, accounts) =>
+      {
+        return callback(error, accounts);
+      });
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function getAccountsThatHaveAccessToTheApp(serviceUuid, databaseConnection, params, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.root.label,
+    tableName: params.database.root.tables.applications,
+    args: [ '*' ],
+    where: { operator: '=', key: 'name', value: 'storage' }
+
+  }, databaseConnection, (error, storageAppData) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(storageAppData.length == 0) return callback({ status: 404, code: constants.APP_NOT_FOUND, detail: null });
+
+    databaseManager.selectQuery(
+    {
+      databaseName: params.database.root.label,
+      tableName: params.database.root.tables.access,
+      args: [ '*' ],
+      where: { operator: '=', key: 'app', value: storageAppData[0].uuid }
+  
+    }, databaseConnection, (error, appMembers) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+      if(appMembers.length == 0) return callback(null, []);
+
+      browseAccountsToGetThoseWithNoRightsOnProvidedService(serviceUuid, appMembers, databaseConnection, params, callback);
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function browseAccountsToGetThoseWithNoRightsOnProvidedService(serviceUuid, appMembers, databaseConnection, params, callback)
+{
+  var index = 0, accounts = [];
+
+  var browseAccounts = () =>
+  {
+    commonAccountsGet.checkIfAccountExistsFromUuid(appMembers[index].account, databaseConnection, params, (error, accountExists, accountData) =>
+    {
+      if(error != null) return callback(error);
+
+      if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+      databaseManager.selectQuery(
+      {
+        databaseName: params.database.storage.label,
+        tableName: params.database.storage.tables.rights,
+        args: [ '*' ],
+        where: { condition: 'AND', 0: { operator: '=', key: 'account', value: accountData.id }, 1: { operator: '=', key: 'service', value: serviceUuid } }
+
+      }, databaseConnection, (error, result) =>
+      {
+        if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+        if(result.length > 0)
+        {
+          if(appMembers[index += 1] == undefined) return callback(null, accounts);
+
+          browseAccounts();
+        }
+
+        else
+        {
+          commonAccountsGet.checkIfAccountExistsFromUuid(appMembers[index].account, databaseConnection, params, (error, accountExists, accountData) =>
+          {
+            if(error != null) return callback(error);
+
+            if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+            accounts.push(accountData);
+
+            if(appMembers[index += 1] == undefined) return callback(null, accounts);
+
+            browseAccounts();
+          });
+        }
+      });
+    });
+  }
+
+  browseAccounts();
 }
 
 /****************************************************************************************************/

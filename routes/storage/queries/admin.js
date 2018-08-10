@@ -19,51 +19,21 @@ var router = express.Router();
 
 router.post('/give-access-to-a-service', (req, res) =>
 {
-  if(req.body.accounts == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account(s) is/are missing from the request' });
+  if(req.body.accountUuids == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account(s) is/are missing from the request' });
 
   else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
 
   else
   {
-    const accounts = JSON.parse(req.body.accounts);
-
-    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('mysqlConnector'), (error, service) =>
+    const accountUuids = JSON.parse(req.body.accountUuids);
+    
+    storageAppAdminServices.addMembersToService(req.body.serviceUuid, accountUuids, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
       else
       {
-        var x = 0;
-
-        var browseAccounts = () =>
-        {
-          accountsGet.getAccountUsingUUID(accounts[Object.keys(accounts)[x]], req.app.get('mysqlConnector'), (error, account) =>
-          {
-            if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-            else
-            {
-              storageAppAdminServices.addMembersToService(service.uuid, { 0: { id: account.id, comment: false, upload: false, download: false, remove: false } }, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
-              {
-                if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-                else if(Object.keys(accounts)[x += 1] != undefined) browseAccounts();
-
-                else
-                {
-                  res.status(200).send({ result: true });
-                }
-              });
-            }
-          });
-        }
-
-        if(Object.keys(accounts)[x] != undefined) browseAccounts();
-
-        else
-        {
-          res.status(200).send({ result: true });
-        }
+        res.status(201).send({ message: success[constants.ACCOUNTS_SUCCESSFULLY_ADDED_TO_SERVICE] });
       }
     });
   }
@@ -71,31 +41,23 @@ router.post('/give-access-to-a-service', (req, res) =>
 
 /****************************************************************************************************/
 
-router.post('/remove-access-to-a-service', (req, res) =>
+router.delete('/remove-access-to-a-service', (req, res) =>
 {
-  if(req.body.accounts == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account(s) is/are missing from the request' });
+  if(req.body.accountUuids == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account(s) is/are missing from the request' });
 
   else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
 
   else
   {
-    const accounts = JSON.parse(req.body.accounts);
+    const accountUuids = JSON.parse(req.body.accountUuids);
 
-    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppAdminServices.removeMembersFromService(req.body.serviceUuid, accountUuids, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
       else
       {
-        storageAppAdminServices.removeMembersFromAService(service.uuid, accounts, req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
-        {
-          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-          else
-          {
-            res.status(200).send({ result: true });
-          }
-        });
+        res.status(200).send({ message: success[constants.ACCOUNTS_SUCCESSFULLY_REMOVED_FROM_SERVICE] });
       }
     });
   }
@@ -103,106 +65,17 @@ router.post('/remove-access-to-a-service', (req, res) =>
 
 /****************************************************************************************************/
 
-router.post('/add-right-on-service', (req, res) =>
+router.put('/update-rights-on-service', (req, res) =>
 {
-  if(req.body.accountUUID == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account is missing from the request' });
-
-  else if(req.body.right == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Right is missing from the request' });
-
-  else if(req.body.service == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
-
-  else if(req.body.right != 'comment' && req.body.right != 'upload' && req.body.right != 'download' && req.body.right != 'remove') res.status(406).send({ message: errors[constants.RIGHT_DOES_NOT_EXIST], detail: null });
-
-  else
+  storageAppAdminServices.updateRightsOnService(req.body.serviceUuid, req.body.accountUuid, req.session.account.id, JSON.parse(req.body.rightsObject), req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
-    storageAppServicesGet.getServiceUsingUUID(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
+    if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    else
     {
-      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-      else
-      {
-        accountsGet.getAccountUsingUUID(req.body.accountUUID, req.app.get('mysqlConnector'), (error, account) =>
-        {
-          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-          else
-          {
-            storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
-            {
-              if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-              else if(rights.add_services_rights == 0) res.status(403).send({ message: errors[constants.UNAUTHORIZED_TO_ADD_RIGHTS], detail: null });
-
-              else
-              {
-                storageAppAdminServices.addRightOnService(account.id, service.uuid, req.body.right, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
-                {
-                  if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-                  else
-                  {
-                    res.status(200).send({ result: true });
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-});
-
-/****************************************************************************************************/
-
-router.post('/remove-right-on-service', (req, res) =>
-{
-  if(req.body.accountUUID == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Account is missing from the request' });
-
-  else if(req.body.right == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Right is missing from the request' });
-
-  else if(req.body.service == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service is missing from the request' });
-
-  else if(req.body.right != 'comment' && req.body.right != 'upload' && req.body.right != 'download' && req.body.right != 'remove') res.status(406).send({ message: errors[constants.RIGHT_DOES_NOT_EXIST], detail: null });
-
-  else
-  {
-    storageAppServicesGet.getServiceUsingUUID(req.body.service, req.app.get('mysqlConnector'), (error, service) =>
-    {
-      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-      else
-      {
-        accountsGet.getAccountUsingUUID(req.body.accountUUID, req.app.get('mysqlConnector'), (error, account) =>
-        {
-          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-          else
-          {
-            storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
-            {
-              if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-              else if(rights.remove_services_rights == 0) res.status(403).send({ message: errors[constants.UNAUTHORIZED_TO_REMOVE_RIGHTS], detail: null });
-
-              else
-              {
-                storageAppAdminServices.removeRightOnService(account.id, service.uuid, req.body.right, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
-                {
-                  if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-                  else
-                  {
-                    res.status(200).send({ result: true });
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
-    });
-  }
+      res.status(200).send({ message: success[constants.ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED] });
+    }
+  });
 });
 
 /****************************************************************************************************/
@@ -254,7 +127,7 @@ router.post('/update-service-max-file-size', (req, res) =>
 
         else
         {
-          storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
+          storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), req.app.get('params'), (error, rights) =>
           {
             if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -281,65 +154,39 @@ router.post('/update-service-max-file-size', (req, res) =>
 
 /****************************************************************************************************/
 
-router.post('/get-service-members', (req, res) =>
+router.put('/get-service-members', (req, res) =>
 {
   if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'service identifier is missing from the request' });
 
   else
   {
-    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppAdminGet.getServiceMembers(req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceMembers) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
       else
       {
-        storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
-        {
-          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+        res.status(200).send({ serviceMembers: serviceMembers });
+      }
+    });
+  }
+});
 
-          else if(rights.consult_services_rights == 0) res.status(403).send({ message: errors[constants.UNAUTHORIZED_TO_CONSULT_SERVICES_RIGHTS], detail: null });
+/****************************************************************************************************/
 
-          else
-          {
-            accessGet.getAccountsThatHaveAccessToStorageApp(req.app.get('mysqlConnector'), (error, accounts) =>
-            {
-              if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+router.put('/get-accounts-that-can-be-added-to-service', (req, res) =>
+{
+  if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'service identifier is missing from the request' });
 
-              else
-              {
-                storageAppServicesGet.getMembersFromService(service.uuid, req.app.get('mysqlConnector'), (error, members) =>
-                {
-                  if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+  else
+  {
+    storageAppAdminGet.getAccountsThatCanBeAddedToService(req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accounts) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-                  else
-                  {
-                    var x = 0, updatedAccounts = {};
-
-                    var browseAccounts = () =>
-                    {
-                      updatedAccounts[accounts[x].id] = {};
-                      updatedAccounts[accounts[x].id] = accounts[x];
-                      
-                      if(accounts[x += 1] != undefined) browseAccounts();
-
-                      else
-                      {
-                        res.status(200).send({ accounts: updatedAccounts, members: members, rights: rights });
-                      }
-                    }
-
-                    if(accounts[x] != undefined) browseAccounts();
-
-                    else
-                    {
-                      res.status(200).send({ accounts: updatedAccounts, members: members, rights: rights });
-                    }
-                  }
-                });
-              }
-            });
-          }
-        });
+      else
+      {
+        res.status(200).send({ accounts: accounts });
       }
     });
   }
@@ -349,7 +196,7 @@ router.post('/get-service-members', (req, res) =>
 
 router.get('/get-account-admin-rights', (req, res) =>
 {
-  storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
+  storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rights) =>
   {
     if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
