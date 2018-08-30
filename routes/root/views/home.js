@@ -4,7 +4,7 @@ const express               = require('express');
 const errors                = require(`${__root}/json/errors`);
 const commonStrings         = require(`${__root}/json/strings/common`);
 const webContent            = require(`${__root}/json/share/webcontent`);
-const commonAppsAccess      = require(`${__root}/functions/common/apps/access`);
+const commonNewsGet         = require(`${__root}/functions/common/news/get`);
 
 var router = express.Router();
 
@@ -13,14 +13,22 @@ var router = express.Router();
 router.get('/', (req, res) =>
 {
   req.session.account == undefined ? res.redirect('/') : 
+  
+  commonNewsGet.getLastNewsFromIndex(0, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news) =>
+  {
+    if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
-  res.render('home',
-  { 
-    account: req.session.account, 
-    navigationBarLocation: 'home',
-    locations: [ 'home' ],
-    webContent: webContent,
-    strings: { common: commonStrings }
+    else
+    {
+      res.render('home',
+      {
+        account: req.session.account, 
+        currentLocation: 'home',
+        webContent: webContent,
+        strings: { common: commonStrings }, 
+        news: news
+      });
+    }
   });
 });
 

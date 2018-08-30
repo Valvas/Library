@@ -20,12 +20,11 @@
           <div class='mainBlockLocation'><%= strings.storage.locations.services %> / <%= service.name %></div>
           <div class='aside'>
             <div class='info'>
-              <div id='filesCounter' class='count'><%= strings.storage.services.info.count %> : <%= elements.files.length %></div>
               <div class='upload'>
                 <% if(rights.uploadFiles == true){ %>
-                  <button id='upload' class='true'><%= strings.storage.services.info.upload.true %></button>
+                  <button id='upload' class="uploadFileButton"><%= strings.storage.services.info.upload.true %></button>
                 <% } else{ %>
-                  <div class='false'><%= strings.storage.services.info.upload.false %></div>
+                  <div class="uploadFileFalse"><%= strings.storage.services.info.upload.false %></div>
                 <% } %>
               </div>
             </div>

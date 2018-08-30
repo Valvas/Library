@@ -216,11 +216,11 @@ function sendNewServiceLabel()
     {
       $.ajax(
       {
-        method: 'POST',
+        method: 'PUT',
         dataType: 'json',
-        timeout: 10000,
-        url: '/queries/storage/services/modify-service-label',
-        data: { serviceLabel: value, serviceUuid: document.getElementById('serviceDetailBlock').getAttribute('name') },
+        timeout: 5000,
+        url: '/queries/storage/services/update-service-name',
+        data: { serviceName: value, serviceUuid: document.getElementById('serviceDetailBlock').getAttribute('name') },
 
         error: (xhr, textStatus, errorThrown) =>
         {
@@ -236,7 +236,17 @@ function sendNewServiceLabel()
 
       }).done((json) =>
       {
-        displayPopupSuccess(json.message, json.detail);
+        loading.remove();
+
+        if(document.getElementById('serviceModificationPopup'))
+        {
+          $(document.getElementById('serviceModificationPopup')).slideUp(250, () =>
+          {
+            document.getElementById('serviceModificationPopup').remove();
+
+            document.getElementById('serviceModificationBackground').remove();
+          });
+        }
 
         socket.emit('storageAppAdminServiceLabelUpdated', document.getElementById('serviceDetailBlock').getAttribute('name'), value);
       });

@@ -66,7 +66,7 @@ function openUploadPopup(event)
     content             .setAttribute('id', 'uploadFileContent');
     label               .setAttribute('for', 'uploadFileInput');
     size                .setAttribute('tag', parseInt(json.size));
-    ext                 .setAttribute('tag', Object.values(json.ext));
+    ext                 .setAttribute('tag', json.ext.join());
 
     title               .setAttribute('class', 'title');
     content             .setAttribute('class', 'content');

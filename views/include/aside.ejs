@@ -1,3 +1,11 @@
-<aside class="asidePanel">
-  <div class="asidePanelTitle">TEST</div>
+<aside class="asideBlock">
+  <div class="asideBlockList">
+    <% for(var element in strings.common.locations){ %>
+      <% if(currentLocation === element){ %>
+        <a class="asideBlockListElementSelected" href="<%= webContent.rootAsideLinks[element] %>"><div class="asideBlockListElementIcon"><%- webContent.asideMenuIcons[element] %></div><div class="asideBlockListElementValue"><%= strings.common.locations[element] %></div></a>
+      <% } else{ %>
+        <a class="asideBlockListElement" href="<%= webContent.rootAsideLinks[element] %>"><div class="asideBlockListElementIcon"><%- webContent.asideMenuIcons[element] %></div><div class="asideBlockListElementValue"><%= strings.common.locations[element] %></div></a>
+      <% } %>
+    <% } %>
+  </div>
 </aside>

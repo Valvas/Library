@@ -1,8 +1,16 @@
 {
+  "admin":
+  {
+    "icon": "<i class=\"fas fa-folder-open\"></i>"
+  },
+
+  "disease":
+  {
+    "icon": "<i class=\"fas fa-folder-open\"></i>"
+  },
+
   "storage":
   {
-    "name": "Partage Fichiers PEI",
-    "icon": "<i class=\"fas fa-folder-open\"></i>",
-    "color": "6184D8"
+    "icon": "<i class=\"fas fa-folder-open\"></i>"
   }
 }

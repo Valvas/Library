@@ -252,10 +252,16 @@ function sendNewSize()
   }).done((json) =>
   {
     loading.remove();
+    
+    if(document.getElementById('serviceMaxFileSizeModificationPopup'))
+    {
+      $(document.getElementById('serviceMaxFileSizeModificationPopup')).slideUp(250, () =>
+      {
+        document.getElementById('serviceMaxFileSizeModificationPopup').remove();
 
-    document.getElementById('serviceModificationPopupContent').removeAttribute('style');
-
-    displayPopupSuccess(json.message, null);
+        document.getElementById('serviceModificationBackground').remove();
+      });
+    }
 
     socket.emit('storageAppAdminServiceFileSizeUpdated', document.getElementById('serviceDetailBlock').getAttribute('name'), fileSize);
   });

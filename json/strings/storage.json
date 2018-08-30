@@ -122,7 +122,9 @@
         "minFileSize": "Taille minimale des fichiers",
         "serviceIdentifier": "Identifiant du service",
         "serviceLabel": "Nom du service",
-        "title": "Modification du service"
+        "title": "Modification du service",
+        "extensionsBlockTitle": "Modification des extensions autorisées",
+        "saveExtensions": "Enregistrer les extensions"
       },
       "remove":
       {

@@ -4,9 +4,12 @@ require('../app')((app) =>
 {
   var app = app;
 
+  const success                     = require(`${__root}/json/success`);
+  const constants                   = require(`${__root}/functions/constants`);
   const accountsGet                 = require(`${__root}/functions/accounts/get`);
   const storageAppFilesGet          = require(`${__root}/functions/storage/files/get`);
   const commonAccountsGet           = require(`${__root}/functions/common/accounts/get`);
+  const storageAppServicesGet       = require(`${__root}/functions/storage/services/get`);
  
   var debug = require('debug')('library:server');
   var http = require('http');
@@ -126,14 +129,22 @@ require('../app')((app) =>
       io.in('storageAppAdminServicesList').emit('serviceRemoved', serviceUuid);
     });
 
-    socket.on('storageAppAdminServiceLabelUpdated', (serviceName, serviceLabel) =>
+    socket.on('storageAppAdminServiceLabelUpdated', (serviceUuid, serviceName) =>
     {
-      io.in('admin' + serviceName).emit('serviceLabelUpdated', null, serviceLabel);
+      io.in('admin' + serviceUuid).emit('serviceNameUpdated', serviceName, success[constants.SERVICE_LABEL_SUCCESSFULLY_UPDATED]);
     });
 
-    socket.on('storageAppAdminServiceFileSizeUpdated', (serviceName, serviceFileSize) =>
+    socket.on('storageAppAdminServiceFileSizeUpdated', (serviceUuid, serviceFileSize) =>
     {
-      io.in('admin' + serviceName).emit('serviceFileSizeUpdated', null, serviceFileSize);
+      io.in('admin' + serviceUuid).emit('serviceFileSizeUpdated', serviceFileSize, success[constants.SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED]);
+    });
+
+    socket.on('storageAppAdminServiceExtensionsUpdated', (serviceUuid) =>
+    {
+      storageAppServicesGet.getAuthorizedExtensionsForService(serviceUuid, app.get('databaseConnectionPool'), app.get('params'), (error, serviceExtensions, allExtensions) =>
+      {
+        if(error == null) io.in('admin' + serviceUuid).emit('serviceExtensionsUpdated', serviceExtensions, allExtensions, success[constants.SERVICE_EXTENSIONS_SUCCESSFULLY_UPDATED]);
+      });
     });
 
     socket.on('storageAppAdminServicesRightsAccountAddedToMembers', (account) =>

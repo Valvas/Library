@@ -98,6 +98,7 @@ const NEW_FOLDER_NAME_BAD_FORMAT                                                
 const FOLDER_NAME_NOT_AVAILABLE                                                   = 10094;
 const WRONG_COMMENT_FORMAT                                                        = 10095;
 const APP_NOT_FOUND                                                               = 10096;
+const NEWS_NOT_FOUND                                                              = 10097;
 
 /******************************************************************************************
 SUCCESS
@@ -134,6 +135,7 @@ const NEW_FOLDER_SUCCESSFULLY_CREATED                                           
 const FOLDER_NAME_UPDATED                                                         = 20029;
 const ACCOUNTS_SUCCESSFULLY_ADDED_TO_SERVICE                                      = 20030;
 const ACCOUNTS_SUCCESSFULLY_REMOVED_FROM_SERVICE                                  = 20031;
+const SERVICE_EXTENSIONS_SUCCESSFULLY_UPDATED                                     = 20032;
 
 /******************************************************************************************
 EXPORTS
@@ -237,6 +239,7 @@ module.exports =
   FOLDER_NAME_NOT_AVAILABLE: FOLDER_NAME_NOT_AVAILABLE,
   WRONG_COMMENT_FORMAT: WRONG_COMMENT_FORMAT,
   APP_NOT_FOUND: APP_NOT_FOUND,
+  NEWS_NOT_FOUND: NEWS_NOT_FOUND,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -268,5 +271,6 @@ module.exports =
   NEW_FOLDER_SUCCESSFULLY_CREATED: NEW_FOLDER_SUCCESSFULLY_CREATED,
   FOLDER_NAME_UPDATED: FOLDER_NAME_UPDATED,
   ACCOUNTS_SUCCESSFULLY_ADDED_TO_SERVICE: ACCOUNTS_SUCCESSFULLY_ADDED_TO_SERVICE,
-  ACCOUNTS_SUCCESSFULLY_REMOVED_FROM_SERVICE: ACCOUNTS_SUCCESSFULLY_REMOVED_FROM_SERVICE
+  ACCOUNTS_SUCCESSFULLY_REMOVED_FROM_SERVICE: ACCOUNTS_SUCCESSFULLY_REMOVED_FROM_SERVICE,
+  SERVICE_EXTENSIONS_SUCCESSFULLY_UPDATED: SERVICE_EXTENSIONS_SUCCESSFULLY_UPDATED
 }

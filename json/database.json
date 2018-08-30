@@ -51,6 +51,14 @@
       "account_uuid": "VARCHAR(255) NOT NULL",
       "timestamp": "BIGINT UNSIGNED NOT NULL",
       "application_uuid": "VARCHAR(255) NOT NULL"
+    },
+    "news":
+    {
+      "uuid": "VARCHAR(255) NOT NULL",
+      "title": "VARCHAR(255) NOT NULL",
+      "timestamp": "BIGINT UNSIGNED NOT NULL",
+      "author": "VARCHAR(255) NOT NULL",
+      "content": "MEDIUMTEXT NOT NULL"
     }
   },
 

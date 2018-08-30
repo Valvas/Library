@@ -498,26 +498,49 @@ function removeFilesFromService(service, accountID, databaseConnector, params, c
 }
 
 /****************************************************************************************************/
+// UPDATE SERVICE NAME
+/****************************************************************************************************/
 
-module.exports.updateServiceName = (serviceUuid, newServiceName, databaseConnection, params, callback) =>
+module.exports.updateServiceName = (serviceUuid, newServiceName, accountId, databaseConnection, params, callback) =>
 {
   if(new RegExp('^[a-zA-Zàéèäëïöüâêîôû][a-zA-Zàéèäëïöüâêîôû0-9]*(( )?[a-zA-Zàéèäëïöüâêîôû0-9]+)*$').test(newServiceName) == false)
   {
     return callback({ status: 406, code: constants.WRONG_SERVICE_LABEL_FORMAT, detail: null });
   }
 
-  databaseManager.updateQuery(
+  storageAppServicesGet.checkIfServiceExists(serviceUuid, databaseConnection, params, (error, serviceExists, serviceData) =>
   {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.services,
-    args: { 'name': newServiceName },
-    where: { operator: '=', key: 'uuid', value: serviceUuid }
+    if(error != null) return callback(error);
 
-  }, databaseConnection, (error, result) =>
-  {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    if(serviceExists == false) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
 
-    return callback(null);
+    commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
+    {
+      if(error != null) return callback(error);
+
+      if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+      storageAppAdminGet.getAccountAdminRights(accountId, databaseConnection, params, (error, accountRights) =>
+      {
+        if(error != null) return callback(error);
+
+        if(accountRights.modify_services === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_MODIFY_SERVICES, detail: null });
+
+        databaseManager.updateQuery(
+        {
+          databaseName: params.database.storage.label,
+          tableName: params.database.storage.tables.services,
+          args: { 'name': newServiceName },
+          where: { operator: '=', key: 'uuid', value: serviceUuid }
+      
+        }, databaseConnection, (error, result) =>
+        {
+          if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+      
+          return callback(null);
+        });
+      });
+    });
   });
 }
 
@@ -559,6 +582,85 @@ function removeFoldersFromService(service, databaseConnection, params, callback)
     if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
 
     return callback(null);
+  });
+}
+
+/****************************************************************************************************/
+// UPDATE EXTENSIONS AUTHORIZED FOR A SERVICE
+/****************************************************************************************************/
+
+module.exports.updateAuthorizedExtensions = (serviceUuid, extensionsAuthorized, accountId, databaseConnection, params, callback) =>
+{
+  if(params == undefined)                 return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params are missing' });
+  if(accountId == undefined)              return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'account ID is missing' });
+  if(serviceUuid == undefined)            return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'service uuid is missing' });
+  if(databaseConnection == undefined)     return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'database connection is missing' });
+  if(extensionsAuthorized == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'service extensions are missing' });
+
+  storageAppServicesGet.checkIfServiceExists(serviceUuid, databaseConnection, params, (error, serviceExists, serviceData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(serviceExists == false) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
+
+    commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
+    {
+      if(error != null) return callback(error);
+
+      if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+      storageAppAdminGet.getAccountAdminRights(accountId, databaseConnection, params, (error, rights) =>
+      {
+        if(error != null) return callback(error);
+
+        if(rights.modify_services === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_MODIFY_SERVICES, detail: null });
+
+        updateExtensionsInTheDatabase(serviceUuid, extensionsAuthorized, databaseConnection, params, (error) =>
+        {
+          return callback(error);
+        });
+      });
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function updateExtensionsInTheDatabase(serviceUuid, extensionsAuthorized, databaseConnection, params, callback)
+{
+  databaseManager.deleteQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.extensionsForService,
+    where: { operator: '=', key: 'service_uuid', value: serviceUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
+
+    var browserIndex = 0;
+
+    var browser = () =>
+    {
+      databaseManager.insertQueryWithUUID(
+      {
+        databaseName: params.database.storage.label,
+        tableName: params.database.storage.tables.extensionsForService,
+        args: { 'service_uuid': serviceUuid, 'extension_uuid': extensionsAuthorized[browserIndex] }
+
+      }, databaseConnection, (error, result, insertedUuid) =>
+      {
+        if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: errorMessage });
+
+        if(extensionsAuthorized[browserIndex += 1] == undefined) return callback(null);
+
+        browser();
+      });
+    }
+
+    extensionsAuthorized[browserIndex] == undefined
+    ? callback(null)
+    : browser();
   });
 }
 

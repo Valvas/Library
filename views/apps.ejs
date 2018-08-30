@@ -1,32 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <title>PEI - Applications</title>
+  <title>PEI - <%= strings.common.locations[currentLocation] %></title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <body>
-    <% include include/navigation.ejs %>
-    <% include include/locationBar.ejs %>
+    <% include include/header.ejs %>
+    <% include include/informations.ejs %>
     <div class="mainBlock">
-      <div class="appsSection">
-        <div class="appsSectionTitle"><%= strings.common.appsSection.title %></div>
-        <div class="appsSectionList">
-        <% for(var x = 0; x < access.length; x++){ %>
-          <% if(apps[access[x]] != undefined){ %>
-            <div class="appSectionListBlock" style="background-color:#<%= apps[access[x]].color %>">
-              <div class="appSectionListBlockName">
-                <div class="appSectionListBlockNameIcon"><%- apps[access[x]].icon %></div><div class="appSectionListBlockNameValue"><%= strings.common.apps[access[x]].name %></div>
-              </div>
-              <div class="appSectionListBlockDescription"><%= strings.common.apps[access[x]].description %></div>
-              <button class="appSectionListBlockAccess"><%= strings.common.apps[access[x]].launch %></button>
-            </div>
-          <% } %>
-        <% } %>
+      <div class="startColumn">
+        <% include include/aside.ejs %>
+        <% include include/news.ejs %>
+      </div><!--
+      --><div class="centerColumn">
+      </div><!--
+      --><div class="endColumn">
       </div>
     </div>
-    <% include include/aside.ejs %>
-    <% include include/scripts.ejs %>
+    <% include include/footer.ejs %>
+    <% include include/root_scripts.ejs %>
+    <script src='/js/root/news/selectNewsExternal.js'></script>
   </body>
 </html>

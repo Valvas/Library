@@ -14,43 +14,45 @@ module.exports.getAppsAvailableForAccount = (accountUuid, databaseConnection, pa
   databaseManager.selectQuery(
   {
     databaseName: params.database.root.label,
-    tableName: params.database.root.tables.access,
+    tableName: params.database.root.tables.applications,
     args: [ '*' ],
-    where: { operator: '=', key: 'account', value: accountUuid }
+    where: {  }
 
   }, databaseConnection, (error, result) =>
   {
     if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    if(result.length == 0) return callback(null, []);
+    const apps = result;
 
-    const currentAccess = result;
-    var accessArray = [], index = 0;
-
-    var browseAccess = () =>
+    databaseManager.selectQuery(
     {
-      databaseManager.selectQuery(
+      databaseName: params.database.root.label,
+      tableName: params.database.root.tables.access,
+      args: [ '*' ],
+      where: { operator: '=', key: 'account', value: accountUuid }
+  
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+      var accountAccess = [];
+
+      for(var x = 0; x < result.length; x++)
       {
-        databaseName: params.database.root.label,
-        tableName: params.database.root.tables.applications,
-        args: [ '*' ],
-        where: { operator: '=', key: 'uuid', value: currentAccess[index].app }
+        accountAccess.push(result[x].app);
+      }
 
-      }, databaseConnection, (error, result) =>
+      var valuesToReturn = [];
+
+      for(var x = 0; x < apps.length; x++)
       {
-        if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+        accountAccess.includes(apps[x].uuid)
+        ? valuesToReturn.push({ uuid: apps[x].uuid, name: apps[x].name, hasAccess: true })
+        : valuesToReturn.push({ uuid: apps[x].uuid, name: apps[x].name, hasAccess: false });
+      }
 
-        if(result.length == 0) return callback({ status: 404, code: constants.APP_NOT_FOUND, detail: null });
-
-        accessArray.push(result[0].name);
-
-        if(currentAccess[index += 1] == undefined) return callback(null, accessArray);
-
-        browseAccess();
-      });
-    }
-      
-    browseAccess();
+      return callback(null, valuesToReturn);
+    });
   });
 }
 

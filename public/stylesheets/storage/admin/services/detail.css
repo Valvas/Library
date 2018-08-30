@@ -2,15 +2,15 @@
 
 .serviceDetailBack:hover{ color:#2069A8; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
-.serviceDetailBlock{ max-width:600px; background-color:#FFFFFF; border:1px solid #F0F0F0; border-radius:4px; margin:20px; }
+.serviceDetailBlock{ max-width:600px; background-color:#FFFFFF; border:1px solid #D0D0D0; border-radius:4px; margin:20px; }
 
-.serviceDetailBlockTitle{ padding:20px; font-family:barlow; font-size:20px; line-height:24px; border-bottom:1px solid #E0E0E0; }
+.serviceDetailBlockTitle{ padding:20px; font-family:barlow; font-size:20px; line-height:24px; border-bottom:1px solid #D0D0D0; }
 
 .serviceDetailBlockKey{ font-family:barlow-italic; font-size:16px; line-height:24px; padding:10px 20px 0 20px; }
 
 .serviceDetailBlockValue{ width:calc(100% - 40px); margin:0 20px 0 20px; }
 
-.serviceDetailBlockValueContent{ font-family:barlow; margin:10px 0 20px 0; width:calc(100% - 60px); border-bottom:1px solid #F0F0F0; display:inline-block; vertical-align:top; font-size:18px; line-height:24px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.serviceDetailBlockValueContent{ font-family:barlow; margin:10px 0 20px 0; width:calc(100% - 60px); border-bottom:1px solid #D0D0D0; display:inline-block; vertical-align:top; font-size:18px; line-height:24px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 .serviceDetailBlockValueLock{ display:inline-block; vertical-align:top; width:30px; text-align:center; margin:10px 15px 0 15px; color:#D9534F; font-size:1.25em; }
 
@@ -19,17 +19,19 @@
 .serviceDetailBlockValueEdit:hover{ color:#2069A8; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
 
-.serviceDetailBlockExtensions{ max-width:600px; background-color:#FFFFFF; border:1px solid #F0F0F0; border-radius:4px; margin:20px; }
+.serviceDetailBlockExtensions{ max-width:600px; background-color:#FFFFFF; border:1px solid #D0D0D0; border-radius:4px; margin:20px; }
 
-.serviceDetailBlockExtensionsElement{ margin:10px 20px 10px 20px; }
+.serviceDetailBlockExtensionsTitle{ padding:20px; font-family:barlow; font-size:20px; line-height:24px; border-bottom:1px solid #D0D0D0; margin:0 0 10px 0; }
+
+.serviceDetailBlockExtensionsElement{ margin:10px 20px 10px 20px; display:inline-block; vertical-align:top; width:150px; }
 
 .serviceDetailBlockExtensionsElementCheckbox{ display:inline-block; vertical-align:top; width:20px; height:20px; margin:0; cursor:pointer; }
 
 .serviceDetailBlockExtensionsElementValue{ display:inline-block; vertical-align:top; width:calc(100% - 30px); margin:0 0 0 10px; font-size:1em; font-family:roboto-light; }
 
-.serviceDetailBlockExtensionsSave{}
+.serviceDetailBlockExtensionsSave{ border:none; border-radius:4px; padding:4px 8px 4px 8px; margin:20px; width:250px; cursor:pointer; font-size:16px; font-family:raleway-light; color:#FFFFFF; background-color:#428BCA; }
 
-.serviceDetailBlockExtensionsSave:hover{}
+.serviceDetailBlockExtensionsSave:hover{ color:#000000; background-color:#317AB9; }
 
 
 .serviceModificationBackground{ position:fixed; z-index:20; top:0; left:0; right:0; bottom:0; overflow:auto; background-color:#000000; opacity:0.8; }

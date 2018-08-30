@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <title>PEI - Accueil</title>
+  <title>PEI - <%= strings.common.locations[currentLocation] %></title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <body>
-    <% include include/navigation.ejs %>
-    <% include include/locationBar.ejs %>
-    <div class='mainBlock'>
+    <% include include/header.ejs %>
+    <% include include/informations.ejs %>
+    <div class="mainBlock">
+      <div class="startColumn">
+        <% include include/aside.ejs %>
+        <% include include/news.ejs %>
+      </div><!--
+      --><div class="centerColumn">
+      </div><!--
+      --><div class="endColumn">
+      </div>
     </div>
-    <% include include/aside.ejs %>
-    <% include include/scripts.ejs %>
+    <% include include/footer.ejs %>
+    <% include include/root_scripts.ejs %>
+    <script src='/js/root/news/selectNewsExternal.js'></script>
   </body>
 </html>

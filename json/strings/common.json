@@ -1,64 +1,26 @@
 {
-  "apps":
-  {
-    "storage":
-    {
-      "name": "Partage Fichiers PEI",
-      "description": "Il s'agit d'une plateforme de stockage en ligne pour le partage de fichiers entre collaborateurs",
-      "launch": "Accéder à l'application"
-    }
-  },
-
-  "appsSection":
-  {
-    "title": "Liste de vos applications"
-  },
-
-  "errors":
-  {
-    "detail": "Détail",
-    "timeout": "Le serveur a mis trop de temps à répondre"
-  },
-
-  "loader":
-  {
-    "message": "Chargement en cours..."
-  },
-
   "locations":
   {
     "home": "Accueil",
-    "apps": "Mes applications",
-    "logout": "Déconnexion"
+    "apps": "Applications",
+    "news": "Nouvelles",
+    "account": "Mon Compte"
   },
 
-  "navigation":
+  "root":
   {
-    "title": "Portail PEI",
-
-    "account":
+    "news":
     {
-      "account": "Mon compte",
-      "logout": "Déconnexion"
-    },
-
-    "menu":
-    {
-      "home": "Accueil",
-      "apps":
+      "create":
       {
-        "label": "Mes applications",
-        "empty": "Aucune application",
-        "storage": "Stockage",
-        "disease": "AT",
-        "admin": "Administration"
-      },
-      "reports": "Rapports"
+        "header": "Créer un nouvel article",
+        "titleLabel": "Titre de l'article",
+        "tools":
+        {
+          "bold": "Gras",
+          "italic": "Italic"
+        }
+      }
     }
-  },
-
-  "other":
-  {
-    "back": "Retour"
   }
 }

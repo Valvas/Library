@@ -10,8 +10,19 @@
   "asideMenuIcons":
   {
     "home": "<i class=\"fas fa-home\"></i>",
+    "account": "<i class=\"fas fa-user-circle\"></i>",
+    "apps": "<i class=\"fas fa-cubes\"></i>",
+    "news": "<i class=\"far fa-newspaper\"></i>",
     "services": "<i class=\"fas fa-box-open\"></i>",
     "administration": "<i class=\"fas fa-cogs\"></i>",
     "exit": "<i class=\"fas fa-door-open\"></i>"
+  },
+
+  "rootAsideLinks":
+  {
+    "home": "/home",
+    "apps": "/apps",
+    "news": "/news",
+    "account": "/account"
   }
 }

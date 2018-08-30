@@ -4,7 +4,6 @@ var express           = require('express');
 var params            = require(`${__root}/json/config`);
 var errors            = require(`${__root}/json/errors`);
 var success           = require(`${__root}/json/success`);
-var logon             = require(`${__root}/functions/logon`);
 var constants         = require(`${__root}/functions/constants`);
 var accountsReset     = require(`${__root}/functions/accounts/reset`);
 var accountsCreate    = require(`${__root}/functions/accounts/create`);

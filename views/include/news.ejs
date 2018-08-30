@@ -1,0 +1,82 @@
+<div class="asideNewsDeploy" id="asideNewsDeploy">
+  <div class="asideNewsDeployIcon"><i class="fas fa-list"></i></div><div class="asideNewsDeployText">Articles</div>
+</div>
+<div class="asideNewsDeployBlock" id="asideNewsDeployBlock">
+  <div class="asideNewsDeployBlockClose" id="asideNewsDeployBlockClose"><i class="fas fa-times"></i></div>
+  <div class="asideNewsDeployBlockTitle">Dernières nouvelles</div>
+  <div class="asideNewsDeployBlockList" id="asideNewsDeployBlockList">
+    <% for(var x = (news.length - 1); x >= 0; x--){ %>
+      <div name="<%= news[x].uuid %>" class="<% if((locals.index || locals.index === 0) && x === index){ %>asideNewsDeployBlockListArticleSelected<% } else{ %>asideNewsDeployBlockListArticle<% } %>">
+        <div class="asideNewsDeployBlockListArticleDate"><%= news[x].timestamp %></div>
+        <div class="asideNewsDeployBlockListArticleTitle"><%= news[x].title %></div>
+      </div>
+    <% } %>
+  </div>
+  <div class="asideNewsDeployBlockPages">
+    <% if(locals.asideNewsPage){ %>
+      <% for(var x = asideNewsPage.start; x < asideNewsPage.end; x++){ %>
+        <% if(x === asideNewsPage.current){ %>
+          <div class="asideNewsDeployBlockPagesSelected"><%= x + 1 %></div>
+        <% } else if(Math.ceil(news.length / 10) > x){ %>
+          <div class="asideNewsDeployBlockPagesEnabled"><%= x + 1 %></div>
+        <% } else{ %>
+          <div class="asideNewsDeployBlockPagesDisabled"><%= x + 1 %></div>
+        <% } %>
+      <% } %>
+    <% } else{ %>
+      <% for(var x = 0; x < 8; x++){ %>
+        <% if(news.length > 0 && x === 0){ %>
+          <div class="asideNewsDeployBlockPagesSelected"><%= x + 1 %></div>
+        <% } else if(Math.ceil(news.length / 10) > x){ %>
+          <div class="asideNewsDeployBlockPagesEnabled"><%= x + 1 %></div>
+        <% } else{ %>
+          <div class="asideNewsDeployBlockPagesDisabled"><%= x + 1 %></div>
+        <% } %>
+      <% } %>
+    <% } %>
+  </div>
+</div>
+<div class="asideNewsBlock">
+  <div class="asideNewsBlockTitle">Dernières nouvelles</div>
+  <% if(news == null){ %>
+    <div class="errorBlock">
+      <div class="errorBlockTitle">
+        <div class="errorBlockTitleIcon"><i class="far fa-times-circle"></i></div><div class="errorBlockTitleText">Erreur</div>
+      </div>
+      <div class="errorBlockMessage">Impossible de charger les articles</div>
+      <div class="errorBlockDetail">Raison : <%= error.message %></div>
+    </div>
+  <% } else{ %>
+    <div class="asideNewsBlockList" id="asideNewsBlockList">
+      <% for(var x = (news.length - 1); x >= 0; x--){ %>
+        <div name="<%= news[x].uuid %>" class="<% if((locals.index || locals.index === 0) && x === index){ %>asideNewsBlockListElementSelected<% } else{ %>asideNewsBlockListElement<% } %>">
+          <div class="asideNewsBlockListElementDate"><%= news[x].timestamp %></div>
+          <div class="asideNewsBlockListElementTitle"><%= news[x].title %></div>
+        </div>
+      <% } %>
+    </div>
+    <div class="asideNewsBlockPages">
+      <% if(locals.asideNewsPage){ %>
+        <% for(var x = asideNewsPage.start; x < asideNewsPage.end; x++){ %>
+          <% if(x === asideNewsPage.current){ %>
+            <div class="asideNewsBlockPagesElementSelected"><%= x + 1 %></div>
+          <% } else if(Math.ceil(news.length / 10) > x){ %>
+            <div class="asideNewsBlockPagesElementEnabled"><%= x + 1 %></div>
+          <% } else{ %>
+            <div class="asideNewsBlockPagesElementDisabled"><%= x + 1 %></div>
+          <% } %>
+        <% } %>
+      <% } else{ %>
+        <% for(var x = 0; x < 8; x++){ %>
+          <% if(news.length > 0 && x === 0){ %>
+            <div class="asideNewsBlockPagesElementSelected"><%= x + 1 %></div>
+          <% } else if(Math.ceil(news.length / 10) > x){ %>
+            <div class="asideNewsBlockPagesElementEnabled"><%= x + 1 %></div>
+          <% } else{ %>
+            <div class="asideNewsBlockPagesElementDisabled"><%= x + 1 %></div>
+          <% } %>
+        <% } %>
+      <% } %>
+    </div>
+  <% } %>
+</div>

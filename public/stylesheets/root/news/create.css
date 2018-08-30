@@ -1,0 +1,27 @@
+/****************************************************************************************************/
+/* CREATE ARTICLE BLOCK */
+/****************************************************************************************************/
+
+.createArticleBlock{  }
+
+.createArticleBlockHeader{ font-size:32px; font-family:roboto-regular; border-bottom:1px solid #D0D0D0; padding:10px; }
+
+.createArticleBlockTitleLabel{ font-size:24px; font-family:roboto-regular; padding:20px 20px 5px 20px; }
+
+.createArticleBlockTitleInput{ border:1px solid #D0D0D0; border-radius:4px; padding:10px; width:calc(100% - 60px); margin:5px 20px 20px 20px; font-size:16px; line-height:20px; font-family:roboto-regular; }
+
+.createArticleBlockTools{ display:flex; flex-direction:row; }
+
+.createArticleBlockToolsElement, .createArticleBlockToolsElementSelected{ width:80px; margin:0 10px 0 0; }
+
+.createArticleBlockToolsElement .createArticleBlockToolsElementIcon{ border:1px solid #D0D0D0; }
+
+.createArticleBlockToolsElement .createArticleBlockToolsElementIcon:hover{ border:1px solid #D9E789; background-color:#D9E789; }
+
+.createArticleBlockToolsElementSelected .createArticleBlockToolsElementIcon{ background-color:#90BB2C; border:1px solid #90BB2C; }
+
+.createArticleBlockToolsElementIcon{ font-size:2em; width:52px; height:32px; padding:10px 0 10px 0; text-align:center; border-radius:4px; cursor:pointer; margin:0 14px 0 14px; }
+
+.createArticleBlockToolsElementValue{ text-align:center; font-size:16px; font-family:roboto-regular; }
+
+/****************************************************************************************************/

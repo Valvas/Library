@@ -121,13 +121,20 @@ router.post('/get-file-upload-parameters', (req, res) =>
 
           else
           {
-            storageAppServicesGet.getAuthorizedExtensionsForService(service.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceExtensions) =>
+            storageAppServicesGet.getAuthorizedExtensionsForService(service.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceExtensions, allExtensions) =>
             {
               if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
 
               else
               {
-                res.status(200).send({ strings: { common: commonAppStrings, storage: storageAppStrings }, size: serviceFilesMaxSize, ext: serviceExtensions });
+                var serviceExtensionsLabels = [];
+
+                for(var x = 0; x < allExtensions.length; x++)
+                {
+                  if(serviceExtensions.includes(allExtensions[x].extensionUuid)) serviceExtensionsLabels.push(allExtensions[x].extensionValue);
+                }
+
+                res.status(200).send({ strings: { common: commonAppStrings, storage: storageAppStrings }, size: serviceFilesMaxSize, ext: serviceExtensionsLabels });
               }
             });
           }
@@ -269,42 +276,19 @@ router.delete('/remove-files', (req, res) =>
 
 /****************************************************************************************************/
 
-router.post('/modify-service-label', (req, res) =>
+router.put('/update-service-name', (req, res) =>
 {
-  if(req.body.serviceUuid == undefined || req.body.serviceLabel == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null });
+  if(req.body.serviceUuid == undefined || req.body.serviceName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null });
 
   else
   {
-    storageAppServicesGet.getServiceUsingUUID(req.body.serviceUuid, req.app.get('mysqlConnector'), (error, service) =>
+    storageAppAdminServices.updateServiceName(req.body.serviceUuid, req.body.serviceName, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
       else
       {
-        if(service.label == req.body.serviceLabel) res.status(200).send({ message: success[constants.SERVICE_LABEL_UNCHANGED], detail: null });
-
-        else
-        {
-          storageAppAdminGet.getAccountAdminRights(req.session.account.id, req.app.get('mysqlConnector'), (error, rights) =>
-          {
-            if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-            else if(rights.modify_services == 0) res.status(403).send({ message: errors[constants.UNAUTHORIZED_TO_MODIFY_SERVICES], detail: null });
-
-            else
-            {
-              storageAppAdminServices.updateServiceName(req.body.serviceUuid, req.body.serviceLabel, req.app.get('mysqlConnector'), req.app.get('params'), (error) =>
-              {
-                if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-                else
-                {
-                  res.status(200).send({ message: success[constants.SERVICE_LABEL_SUCCESSFULLY_UPDATED], detail: null });
-                }
-              });
-            }
-          });
-        }
+        res.status(200).send({ message: success[constants.SERVICE_LABEL_SUCCESSFULLY_UPDATED] });
       }
     });
   }

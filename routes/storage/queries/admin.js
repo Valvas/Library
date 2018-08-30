@@ -154,6 +154,25 @@ router.post('/update-service-max-file-size', (req, res) =>
 
 /****************************************************************************************************/
 
+router.put('/update-service-extensions', (req, res) =>
+{
+  if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'service identifier is missing from the request' });
+
+  else if(req.body.extensionValues == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'extensions are missing from the request' });
+
+  else
+  {
+    storageAppAdminServices.updateAuthorizedExtensions(req.body.serviceUuid, JSON.parse(req.body.extensionValues), req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+    {
+      error != null
+      ? res.status(error.status).send({ message: errors[error.code], detail: error.detail })
+      : res.status(200).send({ message: success[constants.SERVICE_EXTENSIONS_SUCCESSFULLY_UPDATED] });
+    });
+  }
+});
+
+/****************************************************************************************************/
+
 router.put('/get-service-members', (req, res) =>
 {
   if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'service identifier is missing from the request' });

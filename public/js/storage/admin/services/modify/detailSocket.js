@@ -9,30 +9,16 @@ socket.on('connect', () =>
 
 /****************************************************************************************************/
 
-socket.on('serviceLabelUpdated', (error, serviceLabel) =>
+socket.on('serviceNameUpdated', (serviceName, message) =>
 {
-  var serviceLabelToArray = serviceLabel.split(' ');
+  document.getElementById('serviceLabel').innerHTML = serviceName.charAt(0).toUpperCase() + serviceName.slice(1).toLowerCase();
 
-  var x = 0;
-
-  var formatServiceLabel = () =>
-  {
-    serviceLabelToArray[x] = serviceLabelToArray[x].charAt(0).toUpperCase() + serviceLabelToArray[x].slice(1).toLowerCase();
-
-    if(serviceLabelToArray[x += 1] != undefined) formatServiceLabel();
-
-    else
-    {
-      document.getElementById('serviceLabel').innerHTML = serviceLabelToArray.join(' ');
-    }
-  }
-
-  formatServiceLabel();
+  displaySuccessToInformationBlock(message);
 });
 
 /****************************************************************************************************/
 
-socket.on('serviceFileSizeUpdated', (error, serviceFileSize) =>
+socket.on('serviceFileSizeUpdated', (serviceFileSize, message) =>
 {
   var newFileSize = '';
 
@@ -42,6 +28,24 @@ socket.on('serviceFileSizeUpdated', (error, serviceFileSize) =>
   else{ newFileSize = serviceFileSize + 'o'; }
 
   document.getElementById('serviceFileSize').innerText = newFileSize;
+
+  displaySuccessToInformationBlock(message);
+});
+
+/****************************************************************************************************/
+
+socket.on('serviceExtensionsUpdated', (serviceExtensions, allExtensions, message) =>
+{
+  var extensionBlocks = document.getElementById('serviceDetailBlockExtensionsElements').children;
+
+  for(var x = 0; x < extensionBlocks.length; x++)
+  {
+    serviceExtensions.includes(extensionBlocks[x].getAttribute('name'))
+    ? extensionBlocks[x].children[0].checked = true
+    : extensionBlocks[x].children[0].checked = false;
+  }
+
+  displaySuccessToInformationBlock(message);
 });
 
 /****************************************************************************************************/
