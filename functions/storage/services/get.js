@@ -353,7 +353,7 @@ function getValueForEachExtensionFromItsUuid(serviceUuid, extensionsUuid, databa
     {
       allExtensions.push({ extensionUuid: result[x].uuid, extensionValue: result[x].value });
 
-      if(extensionsUuid.includes(result[x].uuid)) serviceExtensions.push(result[x].uuid);
+      if(extensionsUuid.includes(result[x].uuid)) serviceExtensions.push({ uuid: result[x].uuid, value: result[x].value });
     }
 
     return callback(null, serviceExtensions, allExtensions);

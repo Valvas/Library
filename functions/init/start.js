@@ -117,7 +117,7 @@ module.exports.startApp = (app, callback) =>
 
   app.use((req, res, next) =>
   {
-    res.render('block', { message: `La page recherchée n'existe pas`, link: '/' });
+    res.render('block', { message: `La page recherchée n'existe pas`, detail: null, link: req.headers.referer });
   });
 
   fs.readFile(`${__root}/json/services.json`, (error, data) =>

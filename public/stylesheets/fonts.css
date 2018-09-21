@@ -42,6 +42,12 @@
 
 @font-face
 {
+  font-family:roboto-black;
+  src:url(../stylesheets/fonts/Roboto-Black.ttf);
+}
+
+@font-face
+{
   font-family:neue;
   src:url(../stylesheets/fonts/neue.otf);
 }
@@ -80,4 +86,10 @@
 {
   font-family:barlow-italic;
   src:url(../stylesheets/fonts/Barlow-Italic.ttf);
+}
+
+@font-face
+{
+  font-family:rubik;
+  src:url(../stylesheets/fonts/Rubik.ttf);
 }

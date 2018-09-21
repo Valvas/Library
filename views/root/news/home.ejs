@@ -16,13 +16,20 @@
       </div><!--
       --><div class="centerColumn">
         <div class="mainNewsBlock">
-          <% if(news.length > 0){ %>
-            <div class="mainNewsBlockArticle" name="<%= news[index].uuid %>" id="mainNewsBlockArticle">
-              <div class="mainNewsBlockArticleDate"><%= news[index].timestamp %></div>
-              <div class="mainNewsBlockArticleTitle"><%= news[index].title %></div>
-              <div class="mainNewsBlockArticleContent"><%- news[index].content %></div>
-              <div class="mainNewsBlockArticleAuthor"><%= news[index].author %></div>
-            </div>
+          <a href="/news/create" class="mainNewsBlockArticleButton">Créer un article</a>
+          <% if(locals.newsSelected){ %>
+            <% for(var x = 0; x < news.length; x++){ %>
+              <% for(var y = 0; y < news[x].length; y++){ %>
+                <% if(news[x][y].uuid === locals.newsSelected){ %>
+                  <div class="mainNewsBlockArticle" name="<%= news[x][y].uuid %>" id="mainNewsBlockArticle">
+                    <div class="mainNewsBlockArticleDate"><%= news[x][y].timestamp %></div>
+                    <div class="mainNewsBlockArticleTitle"><%= news[x][y].title %></div>
+                    <div class="mainNewsBlockArticleContent"><%- news[x][y].content %></div>
+                    <div class="mainNewsBlockArticleAuthor"><%= news[x][y].author %></div>
+                  </div>
+                <% } %>
+              <% } %>
+            <% } %>
           <% } else{ %>
             <div class="mainNewsBlockEmpty">
               <div class="mainNewsBlockEmptyIcon"><i class="far fa-paper-plane"></i></div>
@@ -33,19 +40,8 @@
       </div><!--
       --><div class="endColumn">
         <div class="newsManagementBlock">
-          <div class="newsManagementBlockTitle">Gestion des articles</div>
           <div class="newsManagementBlockContent">
-            <a href="/news/create" class="newsManagementBlockContentElement">
-              <div class="newsManagementBlockContentElementIcon"><i class="fas fa-plus-circle"></i></div><div class="newsManagementBlockContentElementText">Créer un article</div>
-            </a>
-            <% if(news.length > 0){ %>
-              <div class="newsManagementBlockContentElement">
-                <div class="newsManagementBlockContentElementIcon"><i class="fas fa-pencil-alt"></i></div><div class="newsManagementBlockContentElementText">Modifier cet article</div>
-              </div>
-              <div class="newsManagementBlockContentElement">
-                <div class="newsManagementBlockContentElementIcon"><i class="far fa-trash-alt"></i></div><div class="newsManagementBlockContentElementText">Supprimer cet article</div>
-              </div>
-            <% } %>
+            <a href="/news/create" class="newsManagementBlockContentElement">Créer un article</a>
           </div>
         </div>
       </div>

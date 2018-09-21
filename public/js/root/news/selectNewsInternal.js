@@ -2,29 +2,34 @@
 
 var currentRequest = null;
 
+applyNewsSelectionListeners();
+
 /****************************************************************************************************/
 
-if(document.getElementById('asideNewsBlockList'))
+function applyNewsSelectionListeners()
 {
-  var asideListNews = document.getElementById('asideNewsBlockList').children;
-
-  for(var x = 0; x < asideListNews.length; x++)
+  if(document.getElementById('asideNewsBlockList'))
   {
-    const currentNewsUuid = asideListNews[x].getAttribute('name');
+    var asideListNews = document.getElementById('asideNewsBlockList').children;
 
-    asideListNews[x].addEventListener('click', () => { newsSelected(currentNewsUuid) });
+    for(var x = 0; x < asideListNews.length; x++)
+    {
+      const currentNewsUuid = asideListNews[x].getAttribute('name');
+
+      asideListNews[x].addEventListener('click', () => { newsSelected(currentNewsUuid) });
+    }
   }
-}
 
-if(document.getElementById('asideNewsDeployBlockList'))
-{
-  var asideListNews = document.getElementById('asideNewsDeployBlockList').children;
-
-  for(var x = 0; x < asideListNews.length; x++)
+  if(document.getElementById('asideNewsDeployBlockList'))
   {
-    const currentNewsUuid = asideListNews[x].getAttribute('name');
+    var asideListNews = document.getElementById('asideNewsDeployBlockList').children;
 
-    asideListNews[x].addEventListener('click', () => { newsSelected(currentNewsUuid) });
+    for(var x = 0; x < asideListNews.length; x++)
+    {
+      const currentNewsUuid = asideListNews[x].getAttribute('name');
+
+      asideListNews[x].addEventListener('click', () => { newsSelected(currentNewsUuid) });
+    }
   }
 }
 
@@ -47,6 +52,8 @@ function newsSelected(newsUuid)
     
         error: (xhr, textStatus, errorThrown) =>
         {
+          currentRequest = null;
+
           removeLoader(loader, () =>
           {
             if(textStatus !== 'abort')
@@ -60,24 +67,16 @@ function newsSelected(newsUuid)
     
       }).done((json) =>
       {
+        currentRequest = null;
+        
         removeLoader(loader, () => {});
 
         var articles = document.getElementById('asideNewsBlockList').children;
+        var currentPage = null;
 
         for(var x = 0; x < articles.length; x++)
         {
-          articles[x].getAttribute('name') === newsUuid
-          ? articles[x].setAttribute('class', 'asideNewsBlockListElementSelected')
-          : articles[x].setAttribute('class', 'asideNewsBlockListElement');
-        }
-
-        var articles = document.getElementById('asideNewsDeployBlockList').children;
-
-        for(var x = 0; x < articles.length; x++)
-        {
-          articles[x].getAttribute('name') === newsUuid
-          ? articles[x].setAttribute('class', 'asideNewsDeployBlockListArticleSelected')
-          : articles[x].setAttribute('class', 'asideNewsDeployBlockListArticle');
+          if(articles[x].getAttribute('name') === newsUuid) currentPage = Math.floor(x / 5);
         }
 
         closeAsideNews();

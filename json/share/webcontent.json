@@ -15,7 +15,8 @@
     "news": "<i class=\"far fa-newspaper\"></i>",
     "services": "<i class=\"fas fa-box-open\"></i>",
     "administration": "<i class=\"fas fa-cogs\"></i>",
-    "exit": "<i class=\"fas fa-door-open\"></i>"
+    "exit": "<i class=\"fas fa-door-open\"></i>",
+    "bugs": "<i class=\"fas fa-bug\"></i>"
   },
 
   "rootAsideLinks":
@@ -23,6 +24,7 @@
     "home": "/home",
     "apps": "/apps",
     "news": "/news",
-    "account": "/account"
+    "account": "/account",
+    "bugs": "/bugs"
   }
 }

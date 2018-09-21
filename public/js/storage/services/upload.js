@@ -86,7 +86,7 @@ function openUploadPopup(event)
     instructions        .innerText = json.strings.storage.services.popup.upload.choice;
     label               .innerText = json.strings.storage.services.popup.upload.placeholder;
     send                .innerText = json.strings.storage.services.popup.upload.send;
-    ext                 .innerText = json.strings.storage.services.popup.upload.ext + ' : ' + Object.values(json.ext);
+    ext                 .innerText = json.strings.storage.services.popup.upload.ext + ' : ' + json.ext.join();
     close               .innerText = json.strings.storage.services.popup.upload.close;
 
     if(parseInt(json.size) < 1048576)

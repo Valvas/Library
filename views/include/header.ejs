@@ -1,12 +1,19 @@
 <div class="headerBlock">
-  <div class="headerBlockIcon"><img src="/pictures/a.png" height="52px" width="77px" /></div>
-  <div class="headerBlockValue">Intranet</div><!--
---><div class="headerBlockCorner">
-    <div class="headerBlockCornerAccount">
-      <div class="headerBlockCornerAccountValue"><%= account.email %></div><div class="headerBlockCornerAccountIcon"><i class="fas fa-user-circle"></i></div>
+  <div class="headerBlockNavigation">
+    <div class="headerBlockNavigationTitle">
+      <div class="headerBlockNavigationTitleIcon"><img src="/pictures/a.png" height="52px" width="77px" /></div>
+      <div class="headerBlockNavigationTitleValue">INTRANET</div>
     </div><!--
- --><div class="headerBlockCornerBugs">
-      <div class="headerBlockCornerBugsValue">Bugs</div><div class="headerBlockCornerBugsIcon"><i class="fas fa-bug"></i></div>
+    --><div class="headerBlockNavigationAccount">
+      <div class="headerBlockNavigationAccountBlock" id="headerBlockNavigationAccountBlock">
+        <div class="headerBlockNavigationAccountBlockValue"><%= account.email %></div><div class="headerBlockNavigationAccountBlockAvatar"><img class="headerBlockNavigationAccountBlockPicture" src="data:image/jpeg;base64,<%= account.picture %>" /></div>
+        <div class="headerBlockNavigationAccountMenu" id="headerBlockNavigationAccountBlockMenu">
+          <ul class="headerBlockNavigationAccountMenuList">
+            <li class="headerBlockNavigationAccountMenuListElement"><a class="headerBlockNavigationAccountMenuListElementLink" href="/account">Mon Profil</a></li>
+            <li class="headerBlockNavigationAccountMenuListElement"><a class="headerBlockNavigationAccountMenuListElementLink" href="/logout">Déconnexion</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>

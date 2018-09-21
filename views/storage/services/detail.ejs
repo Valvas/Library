@@ -10,7 +10,7 @@
   <body>
     <% include ../includes/aside.ejs %>
       <div class="informationsBlock" id="storageInformationsBlock"></div>
-      <div class='mainBlock' id='mainBlock' name="<%= service.uuid %>">
+      <div class='storageMainBlock' id='mainBlock' name="<%= service.uuid %>">
         <% if(error != null){ %>
           <div class='mainBlockLocation'><%= strings.storage.locations.services %></div>
           <div class='storageErrorBlock'>

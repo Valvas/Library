@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/quill.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/news/create.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <body>
@@ -19,22 +20,18 @@
         <div class="createArticleBlock">
           <div class="createArticleBlockHeader"><%= strings.common.root.news.create.header %></div>
           <div class="createArticleBlockTitleLabel"><%= strings.common.root.news.create.titleLabel %></div>
-          <input class="createArticleBlockTitleInput" type="text" maxlength="255" />
-          <div class="createArticleBlockTools">
-            <div class="createArticleBlockToolsElement">
-              <div class="createArticleBlockToolsElementIcon"><i class="fas fa-italic"></i></div><div class="createArticleBlockToolsElementValue"><%= strings.common.root.news.create.tools.italic %></div>
-            </div>
-            <div class="createArticleBlockToolsElement">
-              <div class="createArticleBlockToolsElementIcon"><i class="fas fa-bold"></i></div><div class="createArticleBlockToolsElementValue"><%= strings.common.root.news.create.tools.bold %></div>
-            </div>
-          </div>
+          <input type="text" class="createArticleBlockTitleInput" id="createArticleBlockTitleInput" required />
+          <div id="createArticleContainer"></div>
         </div>
+        <button class="createArticleSendButton" id="createArticleSendButton">Créer l'article</button>
       </div><!--
       --><div class="endColumn">
       </div>
     </div>
     <% include ../../include/footer.ejs %>
     <% include ../../include/root_scripts.ejs %>
+    <script src='/js/quill.js'></script>
     <script src='/js/root/news/selectNewsExternal.js'></script>
+    <script src='/js/root/news/creation/manageEditor.js'></script>
   </body>
 </html>

@@ -95,5 +95,7 @@
   "10094": "Ce nom de dossier n'est pas disponible",
   "10095": "Format du commentaire incorrect",
   "10096": "Une application est introuvable dans la base de données",
-  "10097": "Article introuvable"
+  "10097": "Article introuvable",
+  "10098": "Le format du titre de l'article est incorrect",
+  "10099": "Le format du contenu de l'article est incorrect"
 }

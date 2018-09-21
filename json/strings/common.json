@@ -4,7 +4,8 @@
     "home": "Accueil",
     "apps": "Applications",
     "news": "Nouvelles",
-    "account": "Mon Compte"
+    "account": "Mon Compte",
+    "bugs": "Rapports De Bugs"
   },
 
   "root":

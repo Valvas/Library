@@ -10,27 +10,7 @@ module.exports.createAppFolders = (params, callback) =>
 {
   createTmpFolder(params, (error) =>
   {
-    error != null ? callback(error) :
-
-    createBinFolder(params, (error) =>
-    {
-      error != null ? callback(error) :
-
-      createLogsFolder(params, (error) =>
-      {
-        error != null ? callback(error) :
-
-        createServicesFolder(params, (error) =>
-        {
-          error != null ? callback(error) :
-
-          createServicesLogsFolder(params, (error) =>
-          {
-            callback(error);
-          });
-        });
-      });
-    });
+    return callback(error);
   });
 }
 
@@ -40,7 +20,9 @@ function createTmpFolder(params, callback)
 {
   fs.mkdir(`${params.storage.root}/${config.path_to_temp_storage}`, (error) =>
   {
-    error && error.code != 'EEXIST' ? callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message }) : callback(null);
+    if(error && error.code !== 'EEXIST') return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
+
+    createBinFolder(params, callback);
   });
 }
 
@@ -50,7 +32,9 @@ function createBinFolder(params, callback)
 {
   fs.mkdir(`${params.storage.root}/${config.path_to_bin_storage}`, (error) =>
   {
-    error && error.code != 'EEXIST' ? callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message  }) : callback(null);
+    if(error && error.code !== 'EEXIST') return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
+
+    createLogsFolder(params, callback);
   });
 }
 
@@ -60,7 +44,9 @@ function createLogsFolder(params, callback)
 {
   fs.mkdir(`${params.storage.root}/${config.path_to_logs_storage}`, (error) =>
   {
-    error && error.code != 'EEXIST' ? callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message  }) : callback(null);
+    if(error && error.code !== 'EEXIST') return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
+
+    createServicesFolder(params, callback);
   });
 }
 
@@ -70,7 +56,9 @@ function createServicesFolder(params, callback)
 {
   fs.mkdir(`${params.storage.root}/${params.storage.services}`, (error) =>
   {
-    error && error.code != 'EEXIST' ? callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message  }) : callback(null);
+    if(error && error.code !== 'EEXIST') return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
+
+    createServicesLogsFolder(params, callback);
   });
 }
 
@@ -80,7 +68,21 @@ function createServicesLogsFolder(params, callback)
 {
   fs.mkdir(`${params.storage.root}/${params.storage.fileLogs}`, (error) =>
   {
-    error && error.code != 'EEXIST' ? callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message  }) : callback(null);
+    if(error && error.code !== 'EEXIST') return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
+
+    createAccountsFolder(params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function createAccountsFolder(params, callback)
+{
+  fs.mkdir(`${params.storage.root}/${params.storage.accounts}`, (error) =>
+  {
+    if(error && error.code !== 'EEXIST') return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
+
+    return callback(null);
   });
 }
 

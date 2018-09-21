@@ -1,26 +1,33 @@
 /****************************************************************************************************/
 
-if(document.getElementById('asideNewsBlockList'))
+applyNewsSelectionListeners();
+
+/****************************************************************************************************/
+
+function applyNewsSelectionListeners()
 {
-  var asideListNews = document.getElementById('asideNewsBlockList').children;
-
-  for(var x = 0; x < asideListNews.length; x++)
+  if(document.getElementById('asideNewsBlockList'))
   {
-    const currentNewsUuid = asideListNews[x].getAttribute('name');
+    var asideListNews = document.getElementById('asideNewsBlockList').children;
 
-    asideListNews[x].addEventListener('click', () => { newsSelected(currentNewsUuid) });
+    for(var x = 0; x < asideListNews.length; x++)
+    {
+      const currentNewsUuid = asideListNews[x].getAttribute('name');
+
+      asideListNews[x].addEventListener('click', () => { newsSelected(currentNewsUuid) });
+    }
   }
-}
 
-if(document.getElementById('asideNewsDeployBlockList'))
-{
-  var asideListNews = document.getElementById('asideNewsDeployBlockList').children;
-
-  for(var x = 0; x < asideListNews.length; x++)
+  if(document.getElementById('asideNewsDeployBlockList'))
   {
-    const currentNewsUuid = asideListNews[x].getAttribute('name');
+    var asideListNews = document.getElementById('asideNewsDeployBlockList').children;
 
-    asideListNews[x].addEventListener('click', () => { newsSelected(currentNewsUuid) });
+    for(var x = 0; x < asideListNews.length; x++)
+    {
+      const currentNewsUuid = asideListNews[x].getAttribute('name');
+
+      asideListNews[x].addEventListener('click', () => { newsSelected(currentNewsUuid) });
+    }
   }
 }
 

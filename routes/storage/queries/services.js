@@ -129,9 +129,9 @@ router.post('/get-file-upload-parameters', (req, res) =>
               {
                 var serviceExtensionsLabels = [];
 
-                for(var x = 0; x < allExtensions.length; x++)
+                for(var x = 0; x < serviceExtensions.length; x++)
                 {
-                  if(serviceExtensions.includes(allExtensions[x].extensionUuid)) serviceExtensionsLabels.push(allExtensions[x].extensionValue);
+                  serviceExtensionsLabels.push(serviceExtensions[x].value);
                 }
 
                 res.status(200).send({ strings: { common: commonAppStrings, storage: storageAppStrings }, size: serviceFilesMaxSize, ext: serviceExtensionsLabels });
@@ -166,7 +166,7 @@ router.post('/prepare-upload', (req, res) =>
       {
         if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-        if(fileAlreadyExists == false) res.status(200).send({ strings: { common: commonAppStrings, storage: storageAppStrings }, fileExists: false });
+        else if(fileAlreadyExists == false) res.status(200).send({ strings: { common: commonAppStrings, storage: storageAppStrings }, fileExists: false });
 
         else
         {

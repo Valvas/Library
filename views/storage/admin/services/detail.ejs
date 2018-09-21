@@ -11,7 +11,7 @@
   <body>
     <% include ../../includes/aside.ejs %>
     <div class="informationsBlock" id="storageInformationsBlock"></div>
-    <div class='mainBlock'>
+    <div class='storageMainBlock'>
       <div class="mainBlockLocation"><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %> / <%= service.serviceData.name.charAt(0).toUpperCase() %><%= service.serviceData.name.slice(1).toLowerCase() %></div>
       <% include ../../includes/admin/navigation.ejs %>
       <% if(error != null){ %>

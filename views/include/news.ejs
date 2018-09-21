@@ -5,33 +5,29 @@
   <div class="asideNewsDeployBlockClose" id="asideNewsDeployBlockClose"><i class="fas fa-times"></i></div>
   <div class="asideNewsDeployBlockTitle">Dernières nouvelles</div>
   <div class="asideNewsDeployBlockList" id="asideNewsDeployBlockList">
-    <% for(var x = (news.length - 1); x >= 0; x--){ %>
-      <div name="<%= news[x].uuid %>" class="<% if((locals.index || locals.index === 0) && x === index){ %>asideNewsDeployBlockListArticleSelected<% } else{ %>asideNewsDeployBlockListArticle<% } %>">
-        <div class="asideNewsDeployBlockListArticleDate"><%= news[x].timestamp %></div>
-        <div class="asideNewsDeployBlockListArticleTitle"><%= news[x].title %></div>
-      </div>
+    <% for(var x = 0; x < news.length; x++){ %>
+      <% for(var y = 0; y < news[x].length; y++){ %>
+        <div name="<%= news[x][y].uuid %>" class="<% if(locals.newsSelected && locals.newsSelected === news[x][y].uuid){ %>asideNewsDeployBlockListArticleSelected<% } else if(x === (locals.pageInfos.currentIndex - locals.pageInfos.startIndex)){ %>asideNewsDeployBlockListArticle<% } else{ %>asideNewsDeployBlockListArticleHidden<% } %>">
+          <div class="asideNewsDeployBlockListArticleDate"><%= news[x][y].timestamp %></div>
+          <div class="asideNewsDeployBlockListArticleTitle"><%= news[x][y].title %></div>
+        </div>
+      <% } %>
     <% } %>
   </div>
-  <div class="asideNewsDeployBlockPages">
-    <% if(locals.asideNewsPage){ %>
-      <% for(var x = asideNewsPage.start; x < asideNewsPage.end; x++){ %>
-        <% if(x === asideNewsPage.current){ %>
+  <div class="asideNewsDeployBlockPages" id="asideNewsDeployBlockPages">
+    <% if(locals.pageInfos){ %>
+      <% for(var x = pageInfos.startIndex; x < (pageInfos.startIndex + 8); x++){ %>
+        <% if(x === pageInfos.currentIndex){ %>
           <div class="asideNewsDeployBlockPagesSelected"><%= x + 1 %></div>
-        <% } else if(Math.ceil(news.length / 10) > x){ %>
-          <div class="asideNewsDeployBlockPagesEnabled"><%= x + 1 %></div>
+        <% } else if(news.length > x){ %>
+          <div class="asideNewsDeployBlockPagesEnabled" tag="<%= x %>"><%= x + 1 %></div>
         <% } else{ %>
           <div class="asideNewsDeployBlockPagesDisabled"><%= x + 1 %></div>
         <% } %>
       <% } %>
     <% } else{ %>
       <% for(var x = 0; x < 8; x++){ %>
-        <% if(news.length > 0 && x === 0){ %>
-          <div class="asideNewsDeployBlockPagesSelected"><%= x + 1 %></div>
-        <% } else if(Math.ceil(news.length / 10) > x){ %>
-          <div class="asideNewsDeployBlockPagesEnabled"><%= x + 1 %></div>
-        <% } else{ %>
-          <div class="asideNewsDeployBlockPagesDisabled"><%= x + 1 %></div>
-        <% } %>
+        <div class="asideNewsDeployBlockPagesDisabled"><%= x + 1 %></div>
       <% } %>
     <% } %>
   </div>
@@ -48,33 +44,29 @@
     </div>
   <% } else{ %>
     <div class="asideNewsBlockList" id="asideNewsBlockList">
-      <% for(var x = (news.length - 1); x >= 0; x--){ %>
-        <div name="<%= news[x].uuid %>" class="<% if((locals.index || locals.index === 0) && x === index){ %>asideNewsBlockListElementSelected<% } else{ %>asideNewsBlockListElement<% } %>">
-          <div class="asideNewsBlockListElementDate"><%= news[x].timestamp %></div>
-          <div class="asideNewsBlockListElementTitle"><%= news[x].title %></div>
-        </div>
+      <% for(var x = 0; x < news.length; x++){ %>
+        <% for(var y = 0; y < news[x].length; y++){ %>
+          <div name="<%= news[x][y].uuid %>" class="<% if(locals.newsSelected && locals.newsSelected === news[x][y].uuid){ %>asideNewsBlockListElementSelected<% } else if(x === (locals.pageInfos.currentIndex - locals.pageInfos.startIndex)){ %>asideNewsBlockListElement<% } else{ %>asideNewsBlockListElementHidden<% } %>">
+            <div class="asideNewsBlockListElementDate"><%= news[x][y].timestamp %></div>
+            <div class="asideNewsBlockListElementTitle"><%= news[x][y].title %></div>
+          </div>
+        <% } %>
       <% } %>
     </div>
-    <div class="asideNewsBlockPages">
-      <% if(locals.asideNewsPage){ %>
-        <% for(var x = asideNewsPage.start; x < asideNewsPage.end; x++){ %>
-          <% if(x === asideNewsPage.current){ %>
+    <div class="asideNewsBlockPages" id="asideNewsBlockPages">
+      <% if(locals.pageInfos){ %>
+        <% for(var x = pageInfos.startIndex; x < (pageInfos.startIndex + 8); x++){ %>
+          <% if(x === pageInfos.currentIndex){ %>
             <div class="asideNewsBlockPagesElementSelected"><%= x + 1 %></div>
-          <% } else if(Math.ceil(news.length / 10) > x){ %>
-            <div class="asideNewsBlockPagesElementEnabled"><%= x + 1 %></div>
+          <% } else if(news.length > x){ %>
+            <div class="asideNewsBlockPagesElementEnabled" tag="<%= x %>"><%= x + 1 %></div>
           <% } else{ %>
             <div class="asideNewsBlockPagesElementDisabled"><%= x + 1 %></div>
           <% } %>
         <% } %>
       <% } else{ %>
         <% for(var x = 0; x < 8; x++){ %>
-          <% if(news.length > 0 && x === 0){ %>
-            <div class="asideNewsBlockPagesElementSelected"><%= x + 1 %></div>
-          <% } else if(Math.ceil(news.length / 10) > x){ %>
-            <div class="asideNewsBlockPagesElementEnabled"><%= x + 1 %></div>
-          <% } else{ %>
-            <div class="asideNewsBlockPagesElementDisabled"><%= x + 1 %></div>
-          <% } %>
+          <div class="asideNewsBlockPagesElementDisabled"><%= x + 1 %></div>
         <% } %>
       <% } %>
     </div>

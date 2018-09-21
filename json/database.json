@@ -35,7 +35,8 @@
       "lastname": "VARCHAR(255) NOT NULL",
       "firstname": "VARCHAR(255) NOT NULL",
       "password": "VARCHAR(255) NOT NULL",
-      "suspended": "BOOLEAN NOT NULL"
+      "suspended": "BOOLEAN NOT NULL",
+      "picture": "MEDIUMTEXT NOT NULL"
     },
     "applications":
     {

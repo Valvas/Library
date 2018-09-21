@@ -82,7 +82,14 @@ function checkIfFileExtensionIsAuthorizedForCurrentService(fileName, fileExtensi
   {
     if(error != null) return callback(error);
 
-    if(serviceExtensions.includes(fileExtension) == false) return callback({ status: 406, code: constants.UNAUTHORIZED_FILE, detail: null });
+    var extensionAuthorized = false;
+
+    for(var x = 0; x < serviceExtensions.length; x++)
+    {
+      if(serviceExtensions[x].value === fileExtension) extensionAuthorized = true;
+    }
+
+    if(extensionAuthorized == false) return callback({ status: 406, code: constants.UNAUTHORIZED_FILE, detail: null });
 
     checkIfFileExistsInDatabase(fileName, fileExtension, fileSize, service, parentFolderUuid, account, rights, databaseConnection, params, callback);
   });

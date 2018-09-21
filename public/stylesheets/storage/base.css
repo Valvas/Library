@@ -187,7 +187,7 @@ body{ margin:0; background-color:#F6F6F6; }
 * MAIN BLOCK                                                                                        *
 ****************************************************************************************************/
 
-.mainBlock{ width:calc(100% - 270px); margin:0 0 20px 270px; background-color:#FFFFFF; padding-bottom:20px; position:relative; }
+.storageMainBlock{ width:calc(100% - 270px); margin:0 0 20px 270px; background-color:#FFFFFF; padding-bottom:20px; position:relative; }
 
 .mainBlockLocation{ font-size:24px; line-height:24px; padding:10px; border-bottom:1px solid #E0E0E0; font-family:roboto-light; }
 
@@ -217,7 +217,7 @@ body{ margin:0; background-color:#F6F6F6; }
 
   .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
 
-  .mainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+  .storageMainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
 }
 
 @media (min-width: 320px) and (max-width: 479px)
@@ -230,7 +230,7 @@ body{ margin:0; background-color:#F6F6F6; }
 
   .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
 
-  .mainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+  .storageMainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
 }
 
 @media (min-width: 480px) and (max-width: 639px)
@@ -243,7 +243,7 @@ body{ margin:0; background-color:#F6F6F6; }
 
   .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
 
-  .mainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+  .storageMainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
 }
 
 @media (min-width: 640px) and (max-width: 779px)
@@ -256,5 +256,5 @@ body{ margin:0; background-color:#F6F6F6; }
 
   .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
 
-  .mainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+  .storageMainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
 }

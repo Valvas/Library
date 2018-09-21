@@ -99,6 +99,8 @@ const FOLDER_NAME_NOT_AVAILABLE                                                 
 const WRONG_COMMENT_FORMAT                                                        = 10095;
 const APP_NOT_FOUND                                                               = 10096;
 const NEWS_NOT_FOUND                                                              = 10097;
+const INCORRECT_ARTICLE_TITLE_FORMAT                                              = 10098;
+const INCORRECT_ARTICLE_CONTENT_FORMAT                                            = 10099;
 
 /******************************************************************************************
 SUCCESS
@@ -240,6 +242,8 @@ module.exports =
   WRONG_COMMENT_FORMAT: WRONG_COMMENT_FORMAT,
   APP_NOT_FOUND: APP_NOT_FOUND,
   NEWS_NOT_FOUND: NEWS_NOT_FOUND,
+  INCORRECT_ARTICLE_TITLE_FORMAT: INCORRECT_ARTICLE_TITLE_FORMAT,
+  INCORRECT_ARTICLE_CONTENT_FORMAT: INCORRECT_ARTICLE_CONTENT_FORMAT,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
