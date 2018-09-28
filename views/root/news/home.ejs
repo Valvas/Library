@@ -16,20 +16,29 @@
       </div><!--
       --><div class="centerColumn">
         <div class="mainNewsBlock">
-          <a href="/news/create" class="mainNewsBlockArticleButton">Créer un article</a>
-          <% if(locals.newsSelected){ %>
-            <% for(var x = 0; x < news.length; x++){ %>
-              <% for(var y = 0; y < news[x].length; y++){ %>
-                <% if(news[x][y].uuid === locals.newsSelected){ %>
-                  <div class="mainNewsBlockArticle" name="<%= news[x][y].uuid %>" id="mainNewsBlockArticle">
-                    <div class="mainNewsBlockArticleDate"><%= news[x][y].timestamp %></div>
-                    <div class="mainNewsBlockArticleTitle"><%= news[x][y].title %></div>
-                    <div class="mainNewsBlockArticleContent"><%- news[x][y].content %></div>
-                    <div class="mainNewsBlockArticleAuthor"><%= news[x][y].author %></div>
+          <% if(locals.intranetRights.create_articles == true){ %><a href="/news/create" class="mainNewsBlockArticleButton">Créer un article</a><% } %>
+          <% if(news.length > 0){ %>
+            <% if(locals.newsSelected == false || locals.newsSelected == null){ %>
+              <div class="mainNewsBlockArticle" name="<%= news[0].uuid %>" id="mainNewsBlockArticle">
+                <div class="mainNewsBlockArticleDate"><%= news[0].timestamp %></div>
+                <div class="mainNewsBlockArticleTitle"><%= news[0].title %></div>
+                <div class="mainNewsBlockArticleContent"><%- news[0].content %></div>
+                <div class="mainNewsBlockArticleAuthor"><%= news[0].author %></div>
+              </div>
+            <% } else{ %>
+              <% for(var x = 0; x < news.length; x++){ %>
+                <% if(news[x].uuid === locals.newsSelected){ %>
+                  <div class="mainNewsBlockArticle" name="<%= news[x].uuid %>" id="mainNewsBlockArticle">
+                    <div class="mainNewsBlockArticleDate"><%= news[x].timestamp %></div>
+                    <div class="mainNewsBlockArticleTitle"><%= news[x].title %></div>
+                    <div class="mainNewsBlockArticleContent"><%- news[x].content %></div>
+                    <div class="mainNewsBlockArticleAuthor"><%= news[x].author %></div>
                   </div>
                 <% } %>
               <% } %>
             <% } %>
+            <div class="">Modifier cet article</div>
+            <div class="">Supprimer cet article</div>
           <% } else{ %>
             <div class="mainNewsBlockEmpty">
               <div class="mainNewsBlockEmptyIcon"><i class="far fa-paper-plane"></i></div>
@@ -40,8 +49,20 @@
       </div><!--
       --><div class="endColumn">
         <div class="newsManagementBlock">
+          <div class="newsManagementBlockTitle">Gestion</div>
           <div class="newsManagementBlockContent">
-            <a href="/news/create" class="newsManagementBlockContentElement">Créer un article</a>
+             <div class="newsManagementBlockContentMessage">Si le bouton en-dessous n'est pas cliquable c'est que vous n'avez pas le droit de créer des articles</div>
+            <% if(locals.intranetRights.create_articles == true){ %>
+              <a href="/news/create" class="newsManagementBlockContentButton">Créer un article</a>
+            <% } else{ %>
+              <div class="newsManagementBlockContentButtonDisabled">Créer un article</div>
+            <% } %>
+            <% if(news.length > 0){ %>
+              <div class="newsManagementBlockContentMessage">Si le bouton en-dessous n'est pas cliquable c'est que vous n'avez pas le droit de modifier cet article</div>
+              <div class="newsManagementBlockContentButtonDisabled">Modifier cet article</div>
+              <div class="newsManagementBlockContentMessage">Si le bouton en-dessous n'est pas cliquable c'est que vous n'avez pas le droit de supprimer cet article</div>
+              <div class="newsManagementBlockContentButtonDisabled">Supprimer cet article</div>
+            <% } %>
           </div>
         </div>
       </div>

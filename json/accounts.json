@@ -4,12 +4,6 @@
     "email": "vincent.valvas@groupepei.fr",
     "lastname": "Valvas",
     "firstname": "Vincent",
-    "suspended": false,
-    "access":
-    {
-      "admin": true,
-      "disease": true,
-      "storage": true
-    }
+    "suspended": false
   }
 }

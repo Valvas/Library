@@ -88,24 +88,35 @@ function displayConfirmationPopup()
 
 function sendNewArticle()
 {
-  $.ajax(
+  displayLoader('Enregistrement', `Enregistrement de l'article en cours`, null, (loader) =>
   {
-    method: 'POST',
-    dataType: 'json',
-    timeout: 5000,
-    data: { articleTitle: document.getElementById('createArticleBlockTitleInput').value, articleContent: document.getElementById('createArticleContainer').children[0].innerHTML },
-    url: '/queries/root/news/create-article',
-
-    error: (xhr, textStatus, errorThrown) =>
+    $.ajax(
     {
-      xhr.responseJSON != undefined ?
-      displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-      displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
-    }
-
-  }).done((json) =>
-  {
-    console.log(json);
+      method: 'POST',
+      dataType: 'json',
+      timeout: 5000,
+      data: { articleTitle: document.getElementById('createArticleBlockTitleInput').value, articleContent: document.getElementById('createArticleContainer').children[0].innerHTML },
+      url: '/queries/root/news/create-article',
+  
+      error: (xhr, textStatus, errorThrown) =>
+      {
+        removeLoader(loader, () =>
+        {
+          xhr.responseJSON != undefined ?
+          displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
+          displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+        });
+      }
+  
+    }).done((json) =>
+    {
+      removeLoader(loader, () =>
+      {
+        displaySuccess('Enregistrement', 'Le nouvel article a été ajouté avec succès');
+        document.getElementById('createArticleContainer').children[0].innerHTML = '';
+        document.getElementById('createArticleBlockTitleInput').value = '';
+      });
+    });
   });
 }
 

@@ -8,19 +8,59 @@
     "bugs": "Rapports De Bugs"
   },
 
+  "global":
+  {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "loading": "Chargement"
+  },
+
   "root":
   {
+    "account":
+    {
+      "accountLoadingError":
+      {
+        "title": "Erreur",
+        "message": "Impossible de charger les données de votre compte",
+        "reload": "Recharger"
+      },
+
+      "accountPictureBlockUpdate": "Modifier ma photo",
+
+      "emailBlockUpdate": "Modifier mon adresse email",
+
+      "lastnameBlockUpdate": "Modifier mon nom",
+
+      "firstnameBlockUpdate": "Modifier mon prénom",
+
+      "passwordBlockUpdate": "Modifier mon mot de passe",
+
+      "accountUpdate":
+      {
+        "emailLabel": "Nouvelle adresse email",
+        "emailFormatError": "Le format de cette adresse email est incorrect",
+        "emailDuplicateError": "Cette adresse email est identique à la précédente",
+        "emailSending": "Enregistrement de la nouvelle adresse en cours",
+
+        "lastnameLabel": "Nouveau nom",
+        "lastnameFormatError": "Le format de ce nom est incorrect",
+        "lastnameDuplicateError": "Ce nom est identique au précédent",
+        "lastnameSending": "Enregistrement du nouveau nom en cours",
+
+        "firstnameLabel": "Nouveau prénom",
+        "firstnameFormatError": "Le format de ce prénom est incorrect",
+        "firstnameDuplicateError": "Ce prénom est identique au précédent",
+        "firstnameSending": "Enregistrement du nouveau prénom en cours"
+      }
+    },
+
     "news":
     {
       "create":
       {
         "header": "Créer un nouvel article",
-        "titleLabel": "Titre de l'article",
-        "tools":
-        {
-          "bold": "Gras",
-          "italic": "Italic"
-        }
+        "titleLabel": "Titre de l'article"
       }
     }
   }

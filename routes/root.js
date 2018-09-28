@@ -8,6 +8,8 @@ var constants         = require(`${__root}/functions/constants`);
 var accountsReset     = require(`${__root}/functions/accounts/reset`);
 var accountsCreate    = require(`${__root}/functions/accounts/create`);
 
+const commonRightsGet = require(`${__root}/functions/common/rights/get`);
+
 const accountsLogon   = require(`${__root}/functions/accounts/logon`);
 
 var router = express.Router();
@@ -33,8 +35,22 @@ router.put('/', (req, res) =>
 
       else
       {
-        req.session.account = account;
-        res.status(200).send({ result: true });
+        commonRightsGet.checkIfRightsExistsForAccount(account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rightsExist, rightsData) =>
+        {
+          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail});
+
+          else if(rightsExist == false) res.status(404).send({ message: errors[constants.INTRANET_RIGHTS_NOT_FOUND], detail: null});
+
+          else
+          {
+            account.rights = {};
+            account.rights.intranet = {};
+            account.rights.intranet = rightsData;
+            
+            req.session.account = account;
+            res.status(200).send({ result: true });
+          }
+        });
       }
     }
   });

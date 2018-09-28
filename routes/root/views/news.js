@@ -6,6 +6,7 @@ const constants             = require(`${__root}/functions/constants`);
 const commonStrings         = require(`${__root}/json/strings/common`);
 const webContent            = require(`${__root}/json/share/webcontent`);
 const commonNewsGet         = require(`${__root}/functions/common/news/get`);
+const commonRightsGet       = require(`${__root}/functions/common/rights/get`);
 
 var router = express.Router();
 
@@ -15,7 +16,7 @@ router.get('/', (req, res) =>
 {
   req.session.account == undefined ? res.redirect('/') :
 
-  commonNewsGet.getLastNewsFromIndex(0, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news, pageInfos) =>
+  commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news) =>
   {
     error != null
 
@@ -28,8 +29,8 @@ router.get('/', (req, res) =>
       webContent: webContent,
       strings: { common: commonStrings },
       news: news,
-      pageInfos: pageInfos,
-      newsSelected: (news.length > 0) ? news[0][0].uuid : null
+      newsSelected: false,
+      intranetRights: req.session.account.rights.intranet
     });
   });
 });
@@ -38,38 +39,54 @@ router.get('/', (req, res) =>
 
 router.get('/create', (req, res) =>
 {
-  req.session.account == undefined ? res.redirect('/') :
+  if(req.session.account == undefined) res.redirect('/');
 
-  commonNewsGet.getLastNewsFromIndex(0, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news, pageInfos) =>
+  else if(req.session.account.rights.intranet.create_articles == false) res.render('block', { message: errors[constants.UNAUTHORIZED_TO_CREATE_ARTICLES], detail: null, link: req.headers.referer });
+
+  else
   {
-    error != null
-    ? res.render('root/news/create', { account: req.session.account, currentLocation: 'news', webContent: webContent, strings: { common: commonStrings }, news: null, error: { message: errors[error.code], detail: error.detail }})
-    : res.render('root/news/create', { account: req.session.account, currentLocation: 'news', webContent: webContent, strings: { common: commonStrings }, news: news, pageInfos: pageInfos });
-  });
+    commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news, pageInfos) =>
+    {
+      error != null
+      ? res.render('root/news/create', { account: req.session.account, currentLocation: 'news', webContent: webContent, strings: { common: commonStrings }, news: null, error: { message: errors[error.code], detail: error.detail }})
+      : res.render('root/news/create', { account: req.session.account, currentLocation: 'news', webContent: webContent, strings: { common: commonStrings }, news: news, pageInfos: pageInfos });
+    });
+  }
 });
 
 /****************************************************************************************************/
 
-router.get('/:news', (req, res) =>
+router.get('/:newsUuid', (req, res) =>
 {
   req.session.account == undefined ? res.redirect('/') :
 
-  commonNewsGet.getLastNewsFromIndex(0, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news, pageInfos) =>
+  commonNewsGet.getNewsIndexFromUuid(req.params.newsUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsIndex) =>
   {
-    error != null
+    if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
-    ? res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer }) :
+    else
+    {
+      const startIndex = 0;
+      const endIndex = (Math.floor(newsIndex / 10) + 1) * 10;
 
-    res.render('root/news/home',
-    { 
-      account: req.session.account, 
-      currentLocation: 'news',
-      webContent: webContent,
-      strings: { common: commonStrings },
-      news: news,
-      pageInfos: pageInfos,
-      newsSelected: req.params.news
-    });
+      commonNewsGet.getLastNewsFromIndex(startIndex, endIndex, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news) =>
+      {
+        error != null
+
+        ? res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer }) :
+
+        res.render('root/news/home',
+        { 
+          account: req.session.account, 
+          currentLocation: 'news',
+          webContent: webContent,
+          strings: { common: commonStrings },
+          news: news,
+          newsSelected: req.params.newsUuid,
+          intranetRights: req.session.account.rights.intranet
+        });
+      });
+    }
   });
 });
 

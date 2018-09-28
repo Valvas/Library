@@ -2,7 +2,6 @@
 
 const fs                  = require('fs');
 const mysql               = require('mysql');
-const express             = require('express');
 const nodemailer          = require('nodemailer');
 const auth                = require(`${__root}/auth`);
 const encryption          = require(`${__root}/functions/encryption`);
@@ -10,8 +9,6 @@ const adminAppAuth        = require(`${__root}/functions/admin/auth`);
 const storageAppAdminAuth = require(`${__root}/functions/storage/auth`);
 const initFolder          = require(`${__root}/functions/init/folders`);
 const database            = require(`${__root}/functions/database/init`);
-const services            = require(`${__root}/functions/services/init`);
-const initCreateRights    = require(`${__root}/functions/init/createRights`);
 const shareAppInit        = require(`${__root}/functions/init/shareAppInit`);
 const initCreateAccounts  = require(`${__root}/functions/init/createAccounts`);
 
@@ -59,8 +56,12 @@ module.exports.startApp = (app, callback) =>
   const homeViews                 = require(`${__root}/routes/root/views/home`);
   const appsViews                 = require(`${__root}/routes/root/views/apps`);
   const newsViews                 = require(`${__root}/routes/root/views/news`);
+  const accountViews              = require(`${__root}/routes/root/views/account`);
+
+  const stringsQueries            = require(`${__root}/routes/strings`);
 
   const rootQueriesNews           = require(`${__root}/routes/root/queries/news`);
+  const rootQueriesAccount        = require(`${__root}/routes/root/queries/account`);
 
   const accountsQueries           = require(`${__root}/routes/accounts`);
 
@@ -90,8 +91,12 @@ module.exports.startApp = (app, callback) =>
   app.use('/home', homeViews);
   app.use('/apps', appsViews);
   app.use('/news', newsViews);
+  app.use('/account', accountViews);
+
+  app.use('/queries/strings', auth, stringsQueries);
 
   app.use('/queries/root/news', auth, rootQueriesNews);
+  app.use('/queries/root/account', auth, rootQueriesAccount);
 
   app.use('/queries/accounts', auth, accountsQueries);
 
@@ -173,19 +178,16 @@ module.exports.startApp = (app, callback) =>
       { 
         initCreateAccounts.createAccounts(pool, transporter, () =>
         {
-          initCreateRights.createRights(pool, () =>
+          initFolder.createAppFolders(params, (error) =>
           {
-            initFolder.createAppFolders(params, (error) =>
+            if(error == null) callback();
+            
+            else
             {
-              if(error == null) callback();
+              console.log(error);
               
-              else
-              {
-                console.log(error);
-                
-                process.exit(0);
-              }
-            });
+              process.exit(0);
+            }
           });
         });
       });

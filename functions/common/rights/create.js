@@ -1,36 +1,45 @@
 'use strict'
 
-const params                = require(`${__root}/json/params`);
+const uuidModule            = require('uuid');
 const constants             = require(`${__root}/functions/constants`);
-
-//To uncomment when updated database manager will be set for all the project
-//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
-
-//To remove when updated database manager will be set for all the project
-const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
+const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
+const commonAccountsGet     = require(`${__root}/functions/common/accounts/get`);
 
 /****************************************************************************************************/
 
-module.exports.createAppsAccessRights = (account, databaseConnector, callback) =>
+module.exports.createRightsForAccountOnIntranet = (accountUuid, databaseConnection, params, callback) =>
 {
-  account.id          == undefined ||
-  account.admin       == undefined ||
-  account.disease     == undefined ||
-  account.storage     == undefined ||
-  databaseConnector   == undefined ?
+  if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
-
-  databaseManager.insertQuery(
+  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, params, (error, accountExists, accountData) =>
   {
-    'databaseName': params.database.root.label,
-    'tableName': params.database.root.tables.access,
-    'uuid': false,
-    'args': { 'admin': account.admin ? 1 : 0, 'disease': account.disease ? 1 : 0, 'storage': account.storage ? 1 : 0, 'account': account.id }
+    if(error != null) return callback(error);
 
-  }, databaseConnector, (boolean, rightsIDOrErrorMessage) =>
-  {
-    boolean == false ? callback({ status: 500, code: constants.SQL_SERVER_ERROR }) : callback(null);
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    commonRightsGet.checkIfRightsExistsForAccount(accountUuid, databaseConnection, params, (error, rightsExist, rightsData) =>
+    {
+      if(error != null) return callback(error);
+
+      if(rightsExist) return callback(null);
+
+      const uuid = uuidModule.v4();
+
+      databaseManager.insertQuery(
+      {
+        databaseName: params.database.root.label,
+        tableName: params.database.root.tables.rights,
+        args: { account: accountUuid, create_articles: 0, update_articles: 0, update_own_articles: 0, remove_articles: 0, remove_own_articles: 0 }
+
+      }, databaseConnection, (error, result) =>
+      {
+        if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+        return callback(null);
+      });
+    });
   });
 }
 

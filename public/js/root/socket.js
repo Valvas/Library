@@ -16,34 +16,59 @@ socket.on('newsCreated', (newsData) =>
 {
   if(document.getElementById('asideNewsBlockList'))
   {
-    const news = document.getElementById('asideNewsBlockList').children;
-    var currentPage = null;
+    if(document.getElementById('asideNewsBlockListEmpty')) document.getElementById('asideNewsBlockListEmpty').remove();
 
-    for(var x = 0; x < news.length; x++)
+    if(document.getElementById('asideNewsBlockList').children.length === 0)
     {
-      if(news[x].getAttribute('class') === 'asideNewsBlockListElementSelected') currentPage = Math.floor(x / 5);
+      var loadMoreNewsButton = document.createElement('div');
+      loadMoreNewsButton.setAttribute('id', 'asideNewsBlockListLoad');
+      loadMoreNewsButton.setAttribute('class', 'asideNewsBlockListLoad');
+      loadMoreNewsButton.innerText = `Charger plus d'articles`;
+      loadMoreNewsButton.addEventListener('click', loadMoreNews);
+
+      document.getElementById('asideNewsBlockList').appendChild(loadMoreNewsButton);
     }
 
-    var newsBlock         = document.createElement('div');
-    var newsBlockDate     = document.createElement('div');
-    var newsBlockTitle    = document.createElement('div');
+    var asideNewsBlock         = document.createElement('div');
 
-    newsBlock             .setAttribute('id', newsData.uuid);
+    asideNewsBlock             .setAttribute('name', newsData.uuid);
+    asideNewsBlock             .setAttribute('class', 'asideNewsBlockListElement');
 
-    newsBlock             .setAttribute('class', 'asideNewsBlockListElementHidden');
-    newsBlockDate         .setAttribute('class', 'asideNewsBlockListElementDate');
-    newsBlockTitle        .setAttribute('class', 'asideNewsBlockListElementTitle');
+    asideNewsBlock             .innerHTML = `<div class="asideNewsBlockListElementDate">${newsData.timestamp}</div><div class="asideNewsBlockListElementTitle">${newsData.title}</div>`;
 
-    newsBlockDate         .innerText = newsData.timestamp;
-    newsBlockTitle        .innerText = newsData.title;
+    asideNewsBlock             .addEventListener('click', () => { newsSelected(newsData.uuid) });
 
-    newsBlock             .appendChild(newsBlockDate);
-    newsBlock             .appendChild(newsBlockTitle);
-
-    document.getElementById('asideNewsBlockList').insertBefore(newsBlock, document.getElementById('asideNewsBlockList').children[0]);
-
-    changeNewsAsidePage(currentPage);
+    document.getElementById('asideNewsBlockList').insertBefore(asideNewsBlock, document.getElementById('asideNewsBlockList').children[0]);
   }
+
+  if(document.getElementById('asideNewsDeployBlockList'))
+  {
+    if(document.getElementById('asideNewsDeployBlockListEmpty')) document.getElementById('asideNewsDeployBlockListEmpty').remove();
+
+    if(document.getElementById('asideNewsDeployBlockList').children.length === 0)
+    {
+      var loadMoreNewsButton = document.createElement('div');
+      loadMoreNewsButton.setAttribute('id', 'asideNewsDeployBlockListLoad');
+      loadMoreNewsButton.setAttribute('class', 'asideNewsDeployBlockListLoad');
+      loadMoreNewsButton.innerText = `Charger plus d'articles`;
+      loadMoreNewsButton.addEventListener('click', loadMoreNews);
+
+      document.getElementById('asideNewsDeployBlockList').appendChild(loadMoreNewsButton);
+    }
+
+    var deployNewsBlock        = document.createElement('div');
+
+    deployNewsBlock            .setAttribute('name', newsData.uuid);
+    deployNewsBlock            .setAttribute('class', 'asideNewsDeployBlockListArticle');
+
+    deployNewsBlock            .innerHTML = `<div class="asideNewsDeployBlockListArticleDate">${newsData.timestamp}</div><div class="asideNewsDeployBlockListArticleTitle">${newsData.title}</div>`;
+
+    deployNewsBlock            .addEventListener('click', () => { newsSelected(newsData.uuid) });
+
+    document.getElementById('asideNewsDeployBlockList').insertBefore(deployNewsBlock, document.getElementById('asideNewsDeployBlockList').children[0]);
+  }
+
+  displayInfo('Information', 'Un nouvel article a été ajouté', null);
 });
 
 /****************************************************************************************************/

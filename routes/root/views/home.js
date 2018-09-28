@@ -14,7 +14,7 @@ router.get('/', (req, res) =>
 {
   req.session.account == undefined ? res.redirect('/') : 
   
-  commonNewsGet.getLastNewsFromIndex(0, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news, pageInfos) =>
+  commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news) =>
   {
     if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
@@ -26,8 +26,7 @@ router.get('/', (req, res) =>
         currentLocation: 'home',
         webContent: webContent,
         strings: { common: commonStrings },
-        news: news,
-        pageInfos: pageInfos
+        news: news
       });
     }
   });

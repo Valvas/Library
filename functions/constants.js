@@ -101,6 +101,8 @@ const APP_NOT_FOUND                                                             
 const NEWS_NOT_FOUND                                                              = 10097;
 const INCORRECT_ARTICLE_TITLE_FORMAT                                              = 10098;
 const INCORRECT_ARTICLE_CONTENT_FORMAT                                            = 10099;
+const INTRANET_RIGHTS_NOT_FOUND                                                   = 10100;
+const UNAUTHORIZED_TO_CREATE_ARTICLES                                             = 10101;
 
 /******************************************************************************************
 SUCCESS
@@ -244,6 +246,8 @@ module.exports =
   NEWS_NOT_FOUND: NEWS_NOT_FOUND,
   INCORRECT_ARTICLE_TITLE_FORMAT: INCORRECT_ARTICLE_TITLE_FORMAT,
   INCORRECT_ARTICLE_CONTENT_FORMAT: INCORRECT_ARTICLE_CONTENT_FORMAT,
+  INTRANET_RIGHTS_NOT_FOUND: INTRANET_RIGHTS_NOT_FOUND,
+  UNAUTHORIZED_TO_CREATE_ARTICLES: UNAUTHORIZED_TO_CREATE_ARTICLES,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

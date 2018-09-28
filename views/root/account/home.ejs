@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.common.locations[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/account/base.css" />
+  <body>
+    <% include ../../include/header.ejs %>
+    <% include ../../include/informations.ejs %>
+    <div class="mainBlock">
+      <div class="startColumn">
+        <% include ../../include/aside.ejs %>
+        <% include ../../include/news.ejs %>
+      </div><!--
+      --><div class="centerColumn">
+        <% if(locals.account == null){ %>
+          <div class="accountDataErrorBlock">
+            <div class="accountDataErrorBlockTitle"><%= strings.common.root.account.accountLoadingError.title %></div>
+            <div class="accountDataErrorBlockMessage"><%= strings.common.root.account.accountLoadingError.message %></div>
+            <a href="/account" class="accountDataErrorBlockReload"><%= strings.common.root.account.accountLoadingError.reload %></a>
+          </div>
+        <% } else{ %>
+          <div class="accountDataPictureBlock">
+            <div class="accountDataPictureBlockCircle"><img class="accountDataPictureBlockAvatar" src="data:image/png;base64,<%= locals.account.picture %>" /></div>
+            <div class="accountDataPictureBlockUpdate"><%= strings.common.root.account.accountPictureBlockUpdate %></div>
+          </div>
+          <div class="accountDataBlock">
+            <div class="accountDataBlockValue"><%= locals.account.email %></div>
+            <div class="accountDataBlockUpdate" id="accountDataUpdateEmail"><%= strings.common.root.account.emailBlockUpdate %></div>
+          </div>
+          <div class="accountDataBlock">
+            <div class="accountDataBlockValue"><%= locals.account.lastname.charAt(0).toUpperCase() %><%= locals.account.lastname.slice(1).toLowerCase() %></div>
+            <div class="accountDataBlockUpdate" id="accountDataUpdateLastname"><%= strings.common.root.account.lastnameBlockUpdate %></div>
+          </div>
+          <div class="accountDataBlock">
+            <div class="accountDataBlockValue"><%= locals.account.firstname.charAt(0).toUpperCase() %><%= locals.account.firstname.slice(1).toLowerCase() %></div>
+            <div class="accountDataBlockUpdate" id="accountDataUpdateEmailFirstname"><%= strings.common.root.account.firstnameBlockUpdate %></div>
+          </div>
+          <button class="accountPasswordUpdate"><%= strings.common.root.account.passwordBlockUpdate %></button>
+        <% } %>
+      </div><!--
+      --><div class="endColumn">
+      </div>
+    </div>
+    <% include ../../include/footer.ejs %>
+    <% include ../../include/root_scripts.ejs %>
+    <script src='/js/root/news/selectNewsExternal.js'></script>
+    <script src='/js/root/account/updateData.js'></script>
+  </body>
+</html>

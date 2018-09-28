@@ -6,9 +6,9 @@ const commonAccountsGet = require(`${__root}/functions/common/accounts/get`);
 
 /****************************************************************************************************/
 
-module.exports.createNewArticle = (articleTitle, articleContent, accountId, databaseConnection, params, callback) =>
+module.exports.createNewArticle = (articleTitle, articleContent, accountUuid, databaseConnection, params, callback) =>
 {
-  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
+  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, params, (error, accountExists, accountData) =>
   {
     if(error != null) return callback(error);
 

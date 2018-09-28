@@ -97,5 +97,7 @@
   "10096": "Une application est introuvable dans la base de données",
   "10097": "Article introuvable",
   "10098": "Le format du titre de l'article est incorrect",
-  "10099": "Le format du contenu de l'article est incorrect"
+  "10099": "Le format du contenu de l'article est incorrect",
+  "10100": "Les droits de votre compte sur le portail sont introuvables",
+  "10101": "Vous n'êtes pas autorisé(e) à créer des articles"
 }

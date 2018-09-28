@@ -1,0 +1,57 @@
+/****************************************************************************************************/
+/* ERROR BLOCK */
+/****************************************************************************************************/
+
+.accountDataErrorBlock{ border-radius:2px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); max-width:400px; margin:20px; padding:0 0 20px 0; }
+
+.accountDataErrorBlockTitle{ border-bottom:1px solid #CCC; padding:20px; font-size:1.5em; font-family:roboto-regular; margin:0 0 10px 0; }
+
+.accountDataErrorBlockMessage{ font-size:1em; font-family:roboto-light; color:#D9534F; padding:20px;}
+
+.accountDataErrorBlockReload{ font-family:roboto-italic; font-size:0.8em; color:#444; display:block; width:max-content; margin:0 20px 0 auto; text-decoration:underline; }
+
+.accountDataErrorBlockReload:hover{ color:#888; }
+
+/****************************************************************************************************/
+/* PICTURE BLOCK */
+/****************************************************************************************************/
+
+.accountDataPictureBlock{ position:relative; }
+
+.accountDataPictureBlockCircle{ width:128px; height:128px; font-size:2em; display:inline-block; vertical-align:top; border-radius:50%; margin:10px 10px 10px 0; border:3px solid #90BB2C; overflow:hidden; position:relative; }
+
+.accountDataPictureBlockAvatar{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.accountDataPictureBlockUpdate{ color:#555; font-family:roboto-italic; text-decoration:underline; font-size:14px; width:max-content; margin:10px 10px 40px 10px; cursor:pointer; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.accountDataPictureBlockUpdate:hover{ color:#90BB2C; }
+
+/****************************************************************************************************/
+/* ACCOUNT DATA BLOCK */
+/****************************************************************************************************/
+
+.accountDataBlock{ margin:10px 10px 20px 10px; }
+
+.accountDataBlockValue{ font-size:16px; font-family:roboto-regular; line-height:20px; color:#555; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; margin:20px 10px 10px 10px; }
+
+.accountDataBlockUpdate{ color:#555; font-family:roboto-italic; text-decoration:underline; font-size:14px; width:max-content; margin:0 10px 10px auto; cursor:pointer; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.accountDataBlockUpdate:hover{ color:#90BB2C; }
+
+.accountPasswordUpdate{ background-color:#FFFFFF; border:1px solid #CCC; border-radius:2px; color:#555; font-family:roboto-italic; font-size:14px; line-height:18px; padding:5px; width:max-content; cursor:pointer; margin:40px auto 40px 10px; }
+
+.accountPasswordUpdate:hover{ color:#90BB2C; }
+
+/****************************************************************************************************/
+/* ACCOUNT DATA UPDATE */
+/****************************************************************************************************/
+
+.accountDataUpdateForm{ padding:20px; }
+
+.accountDataUpdateFormInput{ width:100%; border:1px solid #CCC; border-radius:2px; padding:6px; font-size:16px; line-height:20px; box-sizing:border-box; margin:0 0 20px 0; }
+
+.accountDataUpdateFormSubmit{ background-color:#EEE; color:#555; font-family:roboto-regular; font-size:16px; line-height:20px; padding:6px; width:150px; max-width:100%; margin:10px 0 10px auto; border:1px solid #CCC; cursor:pointer; border-radius:2px; }
+
+.accountDataUpdateFormSubmit:hover{ color:#90BB2C; }
+
+.accountDataUpdateError{ color:#D9534F; font-family:roboto-regular; font-size:16px; line-height:20px; margin:0 0 10px 0; }

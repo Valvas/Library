@@ -5,10 +5,10 @@ const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 /****************************************************************************************************/
 
-module.exports.checkIfAccountExistsFromId = (accountId, databaseConnection, params, callback) =>
+module.exports.checkIfAccountExistsFromUuid = (accountUuid, databaseConnection, params, callback) =>
 {
   if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
-  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(accountUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   databaseManager.selectQuery(
@@ -16,7 +16,7 @@ module.exports.checkIfAccountExistsFromId = (accountId, databaseConnection, para
     databaseName: params.database.root.label,
     tableName: params.database.root.tables.accounts,
     args: [ '*' ],
-    where: { operator: '=', key: 'id', value: accountId }
+    where: { operator: '=', key: 'uuid', value: accountUuid }
 
   }, databaseConnection, (error, result) =>
   {
@@ -30,10 +30,10 @@ module.exports.checkIfAccountExistsFromId = (accountId, databaseConnection, para
 
 /****************************************************************************************************/
 
-module.exports.checkIfAccountExistsFromUuid = (accountUuid, databaseConnection, params, callback) =>
+module.exports.checkIfAccountExistsFromEmail = (accountEmail, databaseConnection, params, callback) =>
 {
   if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
-  if(accountUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(accountEmail == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountEmail' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   databaseManager.selectQuery(
@@ -41,7 +41,7 @@ module.exports.checkIfAccountExistsFromUuid = (accountUuid, databaseConnection, 
     databaseName: params.database.root.label,
     tableName: params.database.root.tables.accounts,
     args: [ '*' ],
-    where: { operator: '=', key: 'uuid', value: accountUuid }
+    where: { operator: '=', key: 'email', value: accountEmail }
 
   }, databaseConnection, (error, result) =>
   {

@@ -2,87 +2,65 @@
 
 const params                = require(`${__root}/json/params`);
 const constants             = require(`${__root}/functions/constants`);
-const accountsGet           = require(`${__root}/functions/accounts/get`);
 const commonFormatName      = require(`${__root}/functions/common/format/name`);
+const commonAccountsGet     = require(`${__root}/functions/common/accounts/get`);
 const commonFormatEmail     = require(`${__root}/functions/common/format/email`);
 
-//To uncomment when updated database manager will be set for all the project
-//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
-
-//To remove when updated database manager will be set for all the project
-const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
+const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
 
 /****************************************************************************************************/
 
 module.exports.updateAccount = (account, databaseConnector, callback) =>
 {
-  account.id            == undefined ||
-  account.uuid          == undefined ||
-  account.email         == undefined ||
-  account.lastname      == undefined ||
-  account.firstname     == undefined ||
-  account.password      == undefined ||
-  account.suspended     == undefined ?
+  if(account.uuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'uuid' });
+  if(account.email == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'email' });
+  if(account.lastname == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'lastname' });
+  if(account.password == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'password' });
+  if(account.firstname == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'firstname' });
+  if(account.suspended == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'suspended' });
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
-
-  accountsGet.getAccountUsingEmail(account.email, databaseConnector, (error, searchedAccount) =>
+  commonAccountsGet.checkIfAccountExistsFromEmail(account.email, databaseConnector, params, (error, accountExists, accountData) =>
   {
-    if(error != null && (error.status == 500 || error.status == 406)) callback(error);
+    if(error != null) return callback(error);
 
-    else
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    if(account.uuid !== accountData.uuid) return callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE, detail: null });
+
+    commonFormatEmail.checkEmailAddressFormat(account.email, (error, boolean) =>
     {
-      commonFormatEmail.checkEmailAddressFormat(account.email, (error, boolean) =>
+      if(error != null) return callback(error);
+
+      if(boolean == false) return callback({ status: 406, code: constants.WRONG_EMAIL_FORMAT, target: 'email' });
+
+      commonFormatName.checkNameFormat(account.lastname, (error, boolean) =>
       {
-        if(error != null) callback(error);
+        if(error != null) return callback(error);
 
-        else
+        if(boolean == false) return callback({ status: 406, code: constants.WRONG_LASTNAME_FORMAT, target: 'lastname' });
+
+        commonFormatName.checkNameFormat(account.firstname, (error, boolean) =>
         {
-          if(boolean == false) callback({ status: 406, code: constants.WRONG_EMAIL_FORMAT, target: 'email' });
+          if(error != null) return callback(error);
 
-          else
+          if(boolean == false) return callback({ status: 406, code: constants.WRONG_FIRSTNAME_FORMAT, target: 'firstname' });
+
+          databaseManager.updateQuery(
           {
-            commonFormatName.checkNameFormat(account.lastname, (error, boolean) =>
-            {
-              if(error != null) callback(error);
+            databaseName: params.database.root.label,
+            tableName: params.database.root.tables.accounts,
+            args: { email: account.email, lastname: account.lastname.toLowerCase(), firstname: account.firstname.toLowerCase(), password: account.password, suspended: account.suspended ? 1 : 0 },
+            where: { operator: '=', key: 'uuid', value: account.uuid }
 
-              else
-              {
-                if(boolean == false) callback({ status: 406, code: constants.WRONG_LASTNAME_FORMAT, target: 'lastname' });
-
-                else
-                {
-                  commonFormatName.checkNameFormat(account.firstname, (error, boolean) =>
-                  {
-                    if(error != null) callback(error);
-
-                    else
-                    {
-                      if(searchedAccount != undefined && error == null && account.id != searchedAccount.id) callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE });
-
-                      else
-                      {
-                        databaseManager.updateQuery(
-                        {
-                          'databaseName': params.database.root.label,
-                          'tableName': params.database.root.tables.accounts,
-                          'args': { 'email': account.email, 'lastname': account.lastname.toLowerCase(), 'firstname': account.firstname.toLowerCase(), 'password': account.password, 'suspended': account.suspended ? 1 : 0 },
-                          'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': account.id } } }
-
-                        }, databaseConnector, (boolean, updatedRowOrErrorMessage) =>
-                        {
-                          boolean == false ? callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: updatedRowOrErrorMessage }) : callback(null);
-                        });
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-        }
+          }, databaseConnector, (error, result) =>
+          {
+            if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+            
+            return callback(null);
+          });
+        });
       });
-    }
+    });
   });
 }
 

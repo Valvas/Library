@@ -6,165 +6,129 @@ const encryption            = require(`${__root}/functions/encryption`);
 const accountsGet           = require(`${__root}/functions/accounts/get`);
 const commonEmailSend       = require(`${__root}/functions/common/email/send`);
 const commonFormatName      = require(`${__root}/functions/common/format/name`);
-const commonAppsAccess      = require(`${__root}/functions/common/apps/access`);
 const commonFormatEmail     = require(`${__root}/functions/common/format/email`);
+const commonAccountsGet     = require(`${__root}/functions/common/accounts/get`);
+const commonRightsCreate    = require(`${__root}/functions/common/rights/create`);
 
-//To uncomment when updated database manager will be set for all the project
-//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
-
-//To remove when updated database manager will be set for all the project
-const databaseManager       = require(`${__root}/functions/database/MySQLv2`);
+const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
 
 var accountsCreate = module.exports = {};
 
 /****************************************************************************************************/
 
-accountsCreate.createAccount = (account, databaseConnector, transporter, callback) =>
+accountsCreate.createAccount = (account, databaseConnection, transporter, callback) =>
 {
-  account.email         == undefined ||
-  account.lastname      == undefined ||
-  account.firstname     == undefined ?
+  if(account.email == undefined)      return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'email' });
+  if(account.lastname == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'lastname' });
+  if(account.firstname == undefined)  return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'firstname' });
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
-
-  accountsGet.getAccountUsingEmail(account.email, databaseConnector, (error, resultAccount) =>
+  commonAccountsGet.checkIfAccountExistsFromEmail(account.email, databaseConnection, params, (error, accountExists, accountData) =>
   {
-    if(resultAccount != undefined) return callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE, target: 'email' });
+    if(error != null) return callback(error);
 
-    else if(error != null && error.status != 404) return callback(error);
+    if(accountExists) return callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE, target: 'email' });
 
-    else
+    checkEmailFormat(account, databaseConnection, transporter, (error) =>
     {
-      commonFormatEmail.checkEmailAddressFormat(account.email, (error, boolean) =>
-      {
-        if(error != null) return callback(error);
-
-        else if(boolean == false) return callback({ status: 406, code: constants.WRONG_EMAIL_FORMAT, target: 'email' });
-
-        else
-        {
-          commonFormatName.checkNameFormat(account.lastname, (error, boolean) =>
-          {
-            if(error != null) return callback(error);
-
-            else if(boolean == false) return callback({ status: 406, code: constants.WRONG_LASTNAME_FORMAT, target: 'lastname' });
-
-            else
-            {
-              commonFormatName.checkNameFormat(account.firstname, (error, boolean) =>
-              {
-                if(error != null) return callback(error);
-
-                else if(boolean == false) return callback({ status: 406, code: constants.WRONG_FIRSTNAME_FORMAT, target: 'firstname' });
-
-                else
-                {
-                  encryption.getRandomPassword((error, passwords) =>
-                  {
-                    if(error != null) return callback(error);
-
-                    else
-                    {
-                      databaseManager.insertQuery(
-                      {
-                        'databaseName': params.database.root.label,
-                        'tableName': params.database.root.tables.accounts,
-                        'uuid': true,
-                        'args': { 'email': account.email, 'lastname': account.lastname, 'firstname': account.firstname, 'password': passwords.encrypted, 'suspended': 0 }
-
-                      }, databaseConnector, (boolean, accountIDOrErrorMessage) =>
-                      {
-                        if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR });
-
-                        else
-                        {
-                          accountsCreate.createAccess(accountIDOrErrorMessage, databaseConnector, (error) =>
-                          {
-                            if(error != null)
-                            {
-                              databaseManager.deleteQuery(
-                              {
-                                'databaseName': params.database.root.label,
-                                'tableName': params.database.root.tables.accounts,
-                                'where': { '0': { 'operator': '=', '0': { 'key': 'id', 'value': accountIDOrErrorMessage } } }
-                                
-                              }, databaseConnector, (boolean, deletedRowsOrErrorMessage) =>
-                              {
-                                if(boolean == false) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: deletedRowsOrErrorMessage });
-
-                                else
-                                {
-                                  return callback(error);
-                                }
-                              });
-                            }
-
-                            else
-                            {
-                              commonEmailSend.sendEmail(
-                              {
-                                receiver: account.email,
-                                object: 'Votre mot de passe pour le portail des applications PEI',
-                                content: `<h1>BONJOUR</h1><div>Un compte vient d'être créé pour vous sur le portail des applications PEI.</div><div>Pour vous connecter il faut utiliser cette adresse email et le mot de passe suivant :</div><div style='font-weight:bold; margin:10px;'>${passwords.clear}</div>`
-
-                              }, transporter, (error) =>
-                              {
-                                if(error != null) return callback(error);
-
-                                else
-                                {
-                                  return callback(null, constants.ACCOUNT_SUCCESSFULLY_CREATED);
-                                }
-                              });
-                            }
-                          });
-                        }
-                      });
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-    }
+      return callback(error);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-accountsCreate.createAccess = (accountID, databaseConnector, callback) =>
+function checkEmailFormat(account, databaseConnection, transporter, callback)
 {
-  accountID == undefined ?
-
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
-
-  commonAppsAccess.getAppsAvailableForAccount(accountID, databaseConnector, (error, access) =>
+  commonFormatEmail.checkEmailAddressFormat(account.email, (error, isValid) =>
   {
-    if(access != undefined) callback(null);
+    if(error != null) return callback(error);
 
-    else if(error != null && error.status != 404) callback(error);
+    if(isValid == false) return callback({ status: 406, code: constants.WRONG_EMAIL_FORMAT, target: 'email' });
 
-    else
+    checkLastnameFormat(account, databaseConnection, transporter, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function checkLastnameFormat(account, databaseConnection, transporter, callback)
+{
+  commonFormatName.checkNameFormat(account.lastname, (error, isValid) =>
+  {
+    if(error != null) return callback(error);
+
+    if(isValid == false) return callback({ status: 406, code: constants.WRONG_LASTNAME_FORMAT, target: 'lastname' });
+
+    checkFirstnameFormat(account, databaseConnection, transporter, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function checkFirstnameFormat(account, databaseConnection, transporter, callback)
+{
+  commonFormatName.checkNameFormat(account.firstname, (error, isValid) =>
+  {
+    if(error != null) return callback(error);
+
+    if(isValid == false) return callback({ status: 406, code: constants.WRONG_LASTNAME_FORMAT, target: 'firstname' });
+
+    getPasswordsAndInsertAccountInDatabase(account, databaseConnection, transporter, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function getPasswordsAndInsertAccountInDatabase(account, databaseConnection, transporter, callback)
+{
+  encryption.getRandomPassword((error, passwords) =>
+  {
+    if(error != null) return callback(error);
+
+    databaseManager.insertQueryWithUUID(
     {
-      databaseManager.insertQuery(
-      {
-        'databaseName': params.database.root.label,
-        'tableName': params.database.root.tables.access,
-        'uuid': false,
-        'args': { 'account': accountID, 'storage': 0, 'disease': 0, 'admin': 0 }
+      databaseName: params.database.root.label,
+      tableName: params.database.root.tables.accounts,
+      args: { email: account.email, lastname: account.lastname, firstname: account.firstname, password: passwords.encrypted, suspended: 0 }
 
-      }, databaseConnector, (boolean, insertedIDOrErrorMessage) =>
-      {
-        if(boolean == false) callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: insertedIDOrErrorMessage });
+    }, databaseConnection, (error, result, accountUuid) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-        else
-        {
-          callback(null);
-        }
-      });
-    }
+      account.uuid = accountUuid;
+
+      createRightsOnIntranet(account, databaseConnection, transporter, callback);
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function createRightsOnIntranet(account, databaseConnection, transporter, callback)
+{
+  commonRightsCreate.createRightsForAccountOnIntranet(account.uuid, databaseConnection, params, (error) =>
+  {
+    if(error != null) return callback(error);
+
+    sendEmailWithPassword(account, databaseConnection, transporter, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function sendEmailWithPassword(account, databaseConnection, transporter, callback)
+{
+  commonEmailSend.sendEmail(
+  {
+    receiver: account.email,
+    object: 'Votre mot de passe pour le portail des applications PEI',
+    content: `<h1>BONJOUR</h1><div>Un compte vient d'être créé pour vous sur le portail des applications PEI.</div><div>Pour vous connecter il faut utiliser cette adresse email et le mot de passe suivant :</div><div style='font-weight:bold; margin:10px;'>${passwords.clear}</div>`
+
+  }, transporter, (error) =>
+  {
+    if(error != null) return callback(error);
+
+    return callback(null, constants.ACCOUNT_SUCCESSFULLY_CREATED);
   });
 }
 

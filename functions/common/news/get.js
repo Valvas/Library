@@ -7,10 +7,11 @@ const commonAccountsGet   = require(`${__root}/functions/common/accounts/get`);
 
 /****************************************************************************************************/
 
-module.exports.getLastNewsFromIndex = (currentPage, databaseConnection, params, callback) =>
+module.exports.getLastNewsFromIndex = (startIndex, endIndex, databaseConnection, params, callback) =>
 {
   if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
-  if(currentPage == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'index' });
+  if(endIndex == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'index' });
+  if(startIndex == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'index' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   databaseManager.selectQuery(
@@ -30,12 +31,7 @@ module.exports.getLastNewsFromIndex = (currentPage, databaseConnection, params, 
 
     var resultsToKeep = [];
 
-    const amountOfPages = Math.ceil(result.length / 5);
-
-    const startIndex = (currentPage - 3) < 0 ? 0 : (currentPage - 3);
-    const endIndex = (startIndex + 8) > amountOfPages ? amountOfPages : (startIndex + 8);
-
-    for(var x = (startIndex * 5); x < (endIndex * 5); x++)
+    for(var x = startIndex; x < endIndex; x++)
     {
       if(result[x] != undefined) resultsToKeep.push({ uuid: result[x].uuid, title: result[x].title, content: result[x].content, timestamp: result[x].timestamp, author: result[x].author })
     }
@@ -55,52 +51,50 @@ module.exports.getLastNewsFromIndex = (currentPage, databaseConnection, params, 
           resultsToKeep[x].timestamp  = stringifyTimestamp;
           resultsToKeep[x].author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : '??????????';
 
-          resultsToKeep[x += 1] != undefined ? resultBrowser() : formatNews();
-        });
-      });
-    }
-
-    var formatNews = () =>
-    {
-      var newsToReturn = [];
-
-      for(var x = 0; x < resultsToKeep.length; x++)
-      {
-        if(newsToReturn[Math.floor(x / 5)] == undefined) newsToReturn.push([]);
-        newsToReturn[Math.floor(x / 5)].push(resultsToKeep[x]);
-      }
-
-      return callback(null, newsToReturn, { startIndex: startIndex, endIndex: endIndex, currentIndex: parseInt(currentPage) });
-    }
-
-    resultBrowser();
-
-    /*var x = 0;
-
-    var resultBrowser = () =>
-    {
-      commonAccountsGet.checkIfAccountExistsFromUuid(newsToReturn[x].author, databaseConnection, params, (error, accountExists, accountData) =>
-      {
-        if(error != null) return callback(error);
-
-        commonFormatDate.getStringifyDateFromTimestamp(newsToReturn[x].timestamp, (error, stringifyTimestamp) =>
-        {
-          if(error != null) return callback(error);
-
-          newsArray[x].uuid       = result[startIndex + x].uuid;
-          newsArray[x].title      = result[startIndex + x].title;
-          newsArray[x].content    = result[startIndex + x].content;
-          newsArray[x].timestamp  = stringifyTimestamp;
-          newsArray[x].author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : '??????????';
-
-          if(startIndex + (x += 1) === endIndex) return callback(null, newsArray);
+          if(resultsToKeep[x += 1] == undefined) return callback(null, resultsToKeep);
 
           resultBrowser();
         });
       });
     }
 
-    resultBrowser();*/
+    if(resultsToKeep.length === 0) return callback(null, []);
+
+    resultBrowser();
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.getNewsIndexFromUuid = (newsUuid, databaseConnection, params, callback) =>
+{
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(newsUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'newsUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.root.label,
+    tableName: params.database.root.tables.news,
+    args: [ '*' ],
+    where: {  }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length === 0) return callback(null, []);
+
+    result.reverse();
+
+    var index = null;
+
+    for(var x = 0; x < result.length; x++)
+    {
+      if(result[x].uuid === newsUuid) return callback(null, x);
+    }
+
+    return callback({ status: 404, code: constants.ARTICLE_NOT_FOUND, detail: null });
   });
 }
 
