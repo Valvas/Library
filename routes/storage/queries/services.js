@@ -32,7 +32,7 @@ router.put('/get-rights-for-service', (req, res) =>
 
   else
   {
-    storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rights) =>
+    storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rights) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -88,7 +88,7 @@ router.post('/download-file', (req, res) =>
 
     else
     {
-      storageAppFilesDownload.downloadFile(fields.fileUuid, fields.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filePath) =>
+      storageAppFilesDownload.downloadFile(fields.fileUuid, fields.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filePath) =>
       {
         if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -162,7 +162,7 @@ router.post('/prepare-upload', (req, res) =>
 
       res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null }) :
 
-      storageAppFilesUpload.prepareUpload(JSON.parse(fields.file).name.split('.')[0], JSON.parse(fields.file).name.split('.')[1], JSON.parse(fields.file).size, fields.service, fields.currentFolder, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileAlreadyExists, authorizedToRemoveExistingFile) =>
+      storageAppFilesUpload.prepareUpload(JSON.parse(fields.file).name.split('.')[0], JSON.parse(fields.file).name.split('.')[1], JSON.parse(fields.file).size, fields.service, fields.currentFolder, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileAlreadyExists, authorizedToRemoveExistingFile) =>
       {
         if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -189,7 +189,7 @@ router.post('/upload-file', (req, res) =>
   {
     Object.keys(files)[0] == undefined || fields.service == undefined  || fields.currentFolder == undefined ? res.status(406).send({ result: false, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
 
-    storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name.split('.')[0], files[Object.keys(files)[0]].name.split('.')[1], files[Object.keys(files)[0]].size, files[Object.keys(files)[0]].path, fields.service, fields.currentFolder, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileUuid) =>
+    storageAppFilesUpload.uploadFile(files[Object.keys(files)[0]].name.split('.')[0], files[Object.keys(files)[0]].name.split('.')[1], files[Object.keys(files)[0]].size, files[Object.keys(files)[0]].path, fields.service, fields.currentFolder, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileUuid) =>
     {
       error != null ?
       res.status(error.status).send({ message: errors[error.code], detail: error.detail }) :
@@ -218,7 +218,7 @@ router.post('/create-service', (req, res) =>
 
       else
       {
-        storageAppAdminServices.createService(service.serviceName, service.maxFileSize, service.authorizedExtensions, req.session.account.id, connection, req.app.get('params'), (error) =>
+        storageAppAdminServices.createService(service.serviceName, service.maxFileSize, service.authorizedExtensions, req.app.locals.account.uuid, connection, req.app.get('params'), (error) =>
         {
           connection.release();
           
@@ -240,7 +240,7 @@ router.post('/remove-service', (req, res) =>
 
   else
   {
-    storageAppAdminServices.removeService(req.body.service, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+    storageAppAdminServices.removeService(req.body.service, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -262,7 +262,7 @@ router.delete('/remove-files', (req, res) =>
 
   else
   {
-    storageAppFilesRemove.removeFiles(JSON.parse(req.body.filesToRemove), req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+    storageAppFilesRemove.removeFiles(JSON.parse(req.body.filesToRemove), req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
       if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
 
@@ -282,7 +282,7 @@ router.put('/update-service-name', (req, res) =>
 
   else
   {
-    storageAppAdminServices.updateServiceName(req.body.serviceUuid, req.body.serviceName, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+    storageAppAdminServices.updateServiceName(req.body.serviceUuid, req.body.serviceName, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -304,7 +304,7 @@ router.put('/get-folder-content', (req, res) =>
 
   else
   {
-    storageAppFilesGet.getFilesFromService(req.body.serviceUuid, req.session.account.id, req.body.folderUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filesAndFolders) =>
+    storageAppFilesGet.getFilesFromService(req.body.serviceUuid, req.app.locals.account.uuid, req.body.folderUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filesAndFolders) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -332,7 +332,7 @@ router.put('/get-parent-folder', (req, res) =>
 
       else
       {
-        storageAppFilesGet.getFilesFromService(req.body.serviceUuid, req.session.account.id, isRoot ? null : folderData.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filesAndFolders) =>
+        storageAppFilesGet.getFilesFromService(req.body.serviceUuid, req.app.locals.account.uuid, isRoot ? null : folderData.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filesAndFolders) =>
         {
           if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -358,7 +358,7 @@ router.post('/create-new-folder', (req, res) =>
 
   else
   {
-    storageAppFilesCreate.createNewFolder(req.body.newFolderName, req.body.parentFolderUuid, req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, folderUuid) =>
+    storageAppFilesCreate.createNewFolder(req.body.newFolderName, req.body.parentFolderUuid, req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, folderUuid) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
       
@@ -382,7 +382,7 @@ router.put('/update-folder-name', (req, res) =>
 
   else
   {
-    storageAppFilesSet.setNewFolderName(req.body.folderUuid, req.body.newFolderName, req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+    storageAppFilesSet.setNewFolderName(req.body.folderUuid, req.body.newFolderName, req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -423,7 +423,7 @@ router.post('/post-file-comment', (req, res) =>
 
   else
   {
-    storageAppFilesComment.addCommentToFile(req.body.fileComment, req.body.fileUuid, req.body.serviceUuid, req.session.account.id, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+    storageAppFilesComment.addCommentToFile(req.body.fileComment, req.body.fileUuid, req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
     {
       if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 

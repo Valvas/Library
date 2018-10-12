@@ -1,0 +1,125 @@
+/****************************************************************************************************/
+
+.accountsLevelSection{  }
+
+.accountsLevelSectionSearch{ width:calc(100% - 20px); margin:20px 10px 20px 10px; max-width:300px; border:1px solid #CCC; border-radius:4px; font-size:1em; font-family:roboto-regular; padding:5px; box-sizing:border-box; }
+
+.accountsLevelSectionTable{ width:calc(100% - 20px); margin:10px; box-shadow:0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.2); max-height:10px; overflow-y:scroll; padding:0; border-spacing:0; border-collapse:collapse; max-width:1000px; }
+
+.accountsLevelSectionTableRow{ border-bottom:1px solid #CCC; }
+
+.accountsLevelSectionTableRow.header{ background-color:#428BCA; color:#FFFFFF; text-align:left; }
+
+.accountsLevelSectionTableColumn{ text-overflow:ellipsis; overflow:hidden; white-space:nowrap; text-align:center; padding:10px; font-family:roboto-light; }
+
+.accountsLevelSectionTableColumn.emailColumn{ width:25%; }
+
+.accountsLevelSectionTableColumn.lastnameColumn{ width:20%; }
+
+.accountsLevelSectionTableColumn.firstnameColumn{ width:20%; }
+
+.accountsLevelSectionTableColumn.levelColumn{ width:20%; }
+
+.accountsLevelSectionTableColumn.buttonColumn{ width:15%; }
+
+.accountsLevelSectionTableColumn.buttonColumn .modifyButton{ text-decoration:underline; cursor:pointer; width:max-content; margin:0 auto 0 auto; display:block; color:rgba(0,0,0,0.65); }
+
+.accountsLevelSectionTableColumn.buttonColumn .modifyButton:hover{ color:#428BCA; }
+
+/****************************************************************************************************/
+
+.accountDataBlock{ margin:40px auto 40px auto; border:1px solid #CCC; border-radius:4px; max-width:500px; width:100%; }
+
+.accountDataBlockTitle{ font-size:1.2em; font-family:roboto-regular; padding:10px; border-bottom:1px solid #CCC; }
+
+.accountDataBlockElement{ font-family:roboto-regular; font-size:1em; margin:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+.accountDataBlockSelect{ width:calc(100% - 40px); margin:20px; max-width:150px; border:1px solid #CCC; border-radius:4px; padding:5px; }
+
+.accountDataBlockRightsList{ list-style:none; padding:10px; margin:0; }
+
+.accountDataBlockRightsListEnabled, .accountDataBlockRightsListDisabled{ font-family:roboto-regular; font-size:1em; margin:10px 0 10px 0; }
+
+.accountDataBlockRightsListEnabled{ color:#428BCA; }
+
+.accountDataBlockRightsListDisabled{ opacity:0.7; }
+
+.accountDataBlockLegends{ margin:10px; }
+
+.accountDataBlockLegendsElement{ margin:10px 0 0 0; }
+
+.accountDataBlockLegendsElementEnabled, .accountDataBlockLegendsElementDisabled{ display:inline-block; vertical-align:top; border-radius:2px; width:50px; height:24px; }
+
+.accountDataBlockLegendsElementEnabled{ background-color:#428BCA; }
+
+.accountDataBlockLegendsElementDisabled{ background-color:rgba(0,0,0,0.65); opacity:0.7; }
+
+.accountDataBlockLegendsElementValue{ font-family:roboto-regular; font-size:1em; line-height:1em; padding:4px 0 4px 0; display:inline-block; vertical-align:top; width:calc(100% - 60px); margin:0 0 0 10px; }
+
+/****************************************************************************************************/
+
+@media (max-width: 319.9px)
+{
+  .accountsLevelSectionTableColumn.emailColumn{ width:70%; }
+  .accountsLevelSectionTableColumn.lastnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.levelColumn{ display:none; }
+  .accountsLevelSectionTableColumn.buttonColumn{ width:30%; }
+}
+
+@media (min-width: 320px) and (max-width: 479.9px)
+{
+  .accountsLevelSectionTableColumn.emailColumn{ width:70%; }
+  .accountsLevelSectionTableColumn.lastnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.levelColumn{ display:none; }
+  .accountsLevelSectionTableColumn.buttonColumn{ width:30%; }
+}
+
+@media (min-width: 480px) and (max-width: 639.9px)
+{
+  .accountsLevelSectionTableColumn.emailColumn{ width:70%; }
+  .accountsLevelSectionTableColumn.lastnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.levelColumn{ display:none; }
+  .accountsLevelSectionTableColumn.buttonColumn{ width:30%; }
+}
+
+@media (min-width: 640px) and (max-width: 779.9px)
+{
+  .accountsLevelSectionTableColumn.emailColumn{ width:50%; }
+  .accountsLevelSectionTableColumn.lastnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.levelColumn{ width:30%; }
+  .accountsLevelSectionTableColumn.buttonColumn{ width:20%; }
+}
+
+@media (min-width: 780px) and (max-width: 959.9px)
+{
+  .accountsLevelSectionTableColumn.emailColumn{ width:30%; }
+  .accountsLevelSectionTableColumn.lastnameColumn{ width:25%; }
+  .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.levelColumn{ width:25%; }
+  .accountsLevelSectionTableColumn.buttonColumn{ width:20%; }
+}
+
+@media (min-width: 960px) and (max-width: 1279.9px)
+{
+  .accountsLevelSectionTableColumn.emailColumn{ width:30%; }
+  .accountsLevelSectionTableColumn.lastnameColumn{ width:25%; }
+  .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.levelColumn{ width:25%; }
+  .accountsLevelSectionTableColumn.buttonColumn{ width:20%; }
+}
+
+@media (min-width: 1280px) and (max-width: 1679.9px)
+{
+
+}
+
+@media (min-width: 1680px)
+{
+
+}
+
+/****************************************************************************************************/

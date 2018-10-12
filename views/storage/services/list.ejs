@@ -8,29 +8,32 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/list.css" />
   <body>
-    <% include ../includes/aside.ejs %>
-    <div id='mainBlock' class='storageMainBlock'>
+    <% include ../includes/aside.ejs %><!--
+    --><div class="storageMainBlock">
       <div class='mainBlockLocation'><%= strings.storage.locations.services %></div>
       <% if(error != null){ %>
         <div class='storageErrorBlock'>
           <div class='storageErrorBlockIcon'><i class='fas fa-exclamation-circle'></i></div><div class='storageErrorBlockMessage'><%= error.message %></div>
         </div>
       <% } else{ %>
-        <% if(Object.keys(rights).length == 0){ %>
-          <div class="emptyServicesIcon"><i class="fas fa-10x fa-box-open"></i></div>
-          <div class="emptyServicesMessage"><%= strings.storage.noServicesAccess %></div>
-        <% } else if(Object.keys(services).length == 0){ %>
+        <% if(Object.keys(services).length == 0){ %>
           <div class="emptyServicesIcon"><i class="fas fa-10x fa-box-open"></i></div>
           <div class="emptyServicesMessage"><%= strings.storage.emptyServicesMessage %></div>
         <% } else{ %>
-          <% for(var key in services){ %>
-            <% if(rights[key] != undefined){ %><!--
-           --><div name='serviceBlock' ondblclick='openService("<%= key %>")' onclick='selectService("<%= key %>")' id='<%= key %>' class='serviceBlock'>
-                <div class='serviceBlockIcon'><i class="fas fa-folder"></i></div>
-                <div class='serviceBlockName'><%= services[key].name.charAt(0).toUpperCase() %><%= services[key].name.slice(1).toLowerCase() %></div>
+          <div class="serviceBlocks">
+            <% for(var key in services){ %><!--
+            --><div class="<% if(rights[key] != undefined){ %>serviceBlockEnabled<% } else{ %>serviceBlockDisabled<% } %>">
+                <div class="serviceBlockName"><%= services[key].name.charAt(0).toUpperCase() %><%= services[key].name.slice(1).toLowerCase() %></div>
+                <div class="serviceBlockInfo">Dossiers : <%= services[key].amountOfFolders %></div>
+                <div class="serviceBlockInfo">Fichiers : <%= services[key].amountOfFiles %></div>
+                <% if(rights[key] != undefined){ %>
+                  <a href="/storage/services/<%= key %>" class="serviceBlockEnabledLink">Accéder</a>
+                <% } else{ %>
+                  <div class="serviceBlockDisabledMessage">Vous n'avez pas accès à ce service</div>
+                <% } %>
               </div><!--
-         --><% } %>
-          <% } %>
+            --><% } %>
+          </div>
         <% } %>
       <% } %>
     </div>

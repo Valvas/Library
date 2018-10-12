@@ -11,9 +11,7 @@ var router = express.Router();
 /****************************************************************************************************/
 
 router.get('/', (req, res) =>
-{
-  req.session.account == undefined ? res.redirect('/') : 
-  
+{  
   commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news) =>
   {
     if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
@@ -22,7 +20,7 @@ router.get('/', (req, res) =>
     {
       res.render('root/account/home',
       {
-        account: req.session.account, 
+        account: req.app.locals.account, 
         currentLocation: 'account',
         webContent: webContent,
         strings: { common: commonStrings },

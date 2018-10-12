@@ -4,6 +4,7 @@ const params                      = require(`${__root}/json/params`);
 const constants                   = require(`${__root}/functions/constants`);
 const accountsGet                 = require(`${__root}/functions/accounts/get`);
 const storageAppFilesGet          = require(`${__root}/functions/storage/files/get`);
+const commonAccountsGet           = require(`${__root}/functions/common/accounts/get`);
 const storageAppServicesRights    = require(`${__root}/functions/storage/services/rights`);
 
 //To uncomment when updated database manager will be set for all the project
@@ -14,6 +15,65 @@ const oldDatabaseManager  = require(`${__root}/functions/database/MySQLv2`);
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 var storageAppServicesGet = module.exports = {};
+
+/****************************************************************************************************/
+
+storageAppServicesGet.getServicesData = (databaseConnection, params, callback) =>
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.services,
+    args: [ '*' ],
+    where: {  }
+
+  }, databaseConnection, (error, services) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    var x = 0;
+    var servicesObject = {};
+
+    var loop = () =>
+    {
+      servicesObject[services[x].uuid] = {};
+      servicesObject[services[x].uuid].name = services[x].name;
+      servicesObject[services[x].uuid].fileLimit = services[x].file_size_limit;
+
+      databaseManager.selectQuery(
+      {
+        databaseName: params.database.storage.label,
+        tableName: params.database.storage.tables.folders,
+        args: [ '*' ],
+        where: { operator: '=', key: 'service', value: services[x].uuid }
+    
+      }, databaseConnection, (error, result) =>
+      {
+        if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+        servicesObject[services[x].uuid].amountOfFolders = result.length;
+
+        databaseManager.selectQuery(
+        {
+          databaseName: params.database.storage.label,
+          tableName: params.database.storage.tables.files,
+          args: [ '*' ],
+          where: { operator: '=', key: 'service', value: services[x].uuid }
+      
+        }, databaseConnection, (error, result) =>
+        {
+          if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+  
+          servicesObject[services[x].uuid].amountOfFiles = result.length;
+
+          services[x += 1] == undefined ? callback(null, servicesObject) : loop();
+        });
+      });
+    }
+
+    services.length == 0 ? callback(null, servicesObject) : loop();
+  });
+}
 
 /****************************************************************************************************/
 
@@ -80,37 +140,6 @@ storageAppServicesGet.getServiceUsingName = (serviceName, databaseConnector, cal
     if(result.length == 0) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
 
     return callback(null, result[0]);
-  });
-}
-
-/****************************************************************************************************/
-
-storageAppServicesGet.getAllServices = (databaseConnector, callback) =>
-{
-  databaseManager.selectQuery(
-  {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.services,
-    args: [ '*' ],
-    where: {  }
-
-  }, databaseConnector, (error, services) =>
-  {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-
-    var x = 0;
-    var servicesObject = {};
-
-    var loop = () =>
-    {
-      servicesObject[services[x].uuid] = {};
-      servicesObject[services[x].uuid].name = services[x].name;
-      servicesObject[services[x].uuid].fileLimit = services[x].file_size_limit;
-
-      services[x += 1] == undefined ? callback(null, servicesObject) : loop();
-    }
-
-    services.length == 0 ? callback(null, servicesObject) : loop();
   });
 }
 
@@ -235,52 +264,54 @@ module.exports.getFileMaxSize = (serviceUuid, databaseConnection, params, callba
 // WHEN A USER TRIES TO ACCESS A SERVICE
 /****************************************************************************************************/
 
-module.exports.accessService = (serviceUuid, accountId, databaseConnection, params, callback) =>
+module.exports.accessService = (serviceUuid, accountUuid, databaseConnection, params, callback) =>
 {
-  checkIfServiceExists(serviceUuid, accountId, databaseConnection, params, callback);
+  checkIfServiceExists(serviceUuid, accountUuid, databaseConnection, params, callback);
 }
 
 /****************************************************************************************************/
 
-function checkIfServiceExists(serviceUuid, accountId, databaseConnection, params, callback)
+function checkIfServiceExists(serviceUuid, accountUuid, databaseConnection, params, callback)
 {
   storageAppServicesGet.getServiceUsingUUID(serviceUuid, databaseConnection, (error, service) =>
   {
     if(error != null) return callback(error);
 
-    checkIfAccountExists(service, accountId, databaseConnection, params, callback);
+    checkIfAccountExists(service, accountUuid, databaseConnection, params, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function checkIfAccountExists(service, accountId, databaseConnection, params, callback)
+function checkIfAccountExists(service, accountUuid, databaseConnection, params, callback)
 {
-  accountsGet.getAccountUsingID(accountId, databaseConnection, (error, account) =>
+  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, params, (error, accountExists, accountData) =>
   {
     if(error != null) return callback(error);
 
-    getCurrentUserRightsOnService(service, account, databaseConnection, params, callback);
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    getCurrentUserRightsOnService(service, accountData, databaseConnection, params, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function getCurrentUserRightsOnService(service, account, databaseConnection, params, callback)
+function getCurrentUserRightsOnService(service, accountData, databaseConnection, params, callback)
 {
-  storageAppServicesRights.getRightsTowardsService(service.uuid, account.id, databaseConnection, params, (error, rights) =>
+  storageAppServicesRights.getRightsTowardsService(service.uuid, accountData.uuid, databaseConnection, params, (error, rights) =>
   {
     if(error != null) return callback(error);
 
-    getCurrentServiceFiles(service, account, rights, databaseConnection, params, callback);
+    getCurrentServiceFiles(service, accountData, rights, databaseConnection, params, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function getCurrentServiceFiles(service, account, rights, databaseConnection, params, callback)
+function getCurrentServiceFiles(service, accountData, rights, databaseConnection, params, callback)
 {
-  storageAppFilesGet.getFilesFromService(service.uuid, account.id, null, databaseConnection, params, (error, files) =>
+  storageAppFilesGet.getFilesFromService(service.uuid, null, databaseConnection, params, (error, files) =>
   {
     if(error != null) return callback(error);
 

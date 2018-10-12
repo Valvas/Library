@@ -9,33 +9,100 @@ const currentModuleFunctions = module.exports = {};
 
 /****************************************************************************************************/
 
-currentModuleFunctions.getAccountAdminRights = (accountId, databaseConnection, params, callback) =>
+module.exports.getAccountAdminLevel = (accountUuid, databaseConnection, params, callback) =>
 {
-  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
-  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
-  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
-
-  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
+  databaseManager.selectQuery(
   {
-    if(error != null) return callback(error);
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.adminRights,
+    args: [ '*' ],
+    where: { operator: '=', key: 'account', value: accountUuid }
 
-    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    databaseManager.selectQuery(
+    if(result.length > 0) return callback(null, result[0].level);
+
+    databaseManager.insertQuery(
     {
       databaseName: params.database.storage.label,
-      tableName: params.database.storage.tables.admin,
-      args: [ '*' ],
-      where: { operator: '=', key: 'account', value: accountId }
+      tableName: params.database.storage.tables.adminRights,
+      args: { account: accountUuid, level: 0 }
 
     }, databaseConnection, (error, result) =>
     {
       if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-      if(result.length == 0) return callback({ status: 403, code: constants.USER_IS_NOT_ADMIN, detail: null });
-
-      return callback(null, result[0]);
+      return callback(null, 0);
     });
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.getAdminRightsForAllLevels = (databaseConnection, params, callback) =>
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.adminLevels,
+    args: [ '*' ],
+    where: {  }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length === 0) return callback(null, {});
+
+    var rightsData = {};
+
+    for(var x = 0; x < result.length; x++)
+    {
+      rightsData[result[x].level] = {};
+
+      rightsData[result[x].level].accessService   = result[x].access_service  === 1;
+      rightsData[result[x].level].commentFiles    = result[x].comment_files   === 1;
+      rightsData[result[x].level].uploadFiles     = result[x].upload_files    === 1;
+      rightsData[result[x].level].createFolders   = result[x].create_folders  === 1;
+      rightsData[result[x].level].renameFolders   = result[x].rename_folders  === 1;
+      rightsData[result[x].level].moveFiles       = result[x].move_files      === 1;
+      rightsData[result[x].level].downloadFiles   = result[x].download_files  === 1;
+      rightsData[result[x].level].restoreFiles    = result[x].restore_files   === 1;
+      rightsData[result[x].level].removeFolders   = result[x].remove_folders  === 1;
+      rightsData[result[x].level].removeFiles     = result[x].remove_files    === 1;
+      rightsData[result[x].level].createServices  = result[x].create_services === 1;
+      rightsData[result[x].level].modifyServices  = result[x].modify_services === 1;
+      rightsData[result[x].level].removeServices  = result[x].remove_services === 1;
+    }
+
+    return callback(null, rightsData);
+  });
+}
+
+/****************************************************************************************************/
+
+currentModuleFunctions.getAccountAdminRights = (accountUuid, databaseConnection, params, callback) =>
+{
+  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.admin,
+    args: [ '*' ],
+    where: { operator: '=', key: 'account', value: accountUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length === 0) return callback(null, false);
+
+    return callback(null, true, result[0]);
   });
 }
 

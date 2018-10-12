@@ -1,4 +1,9 @@
 {
+  "apps":
+  {
+    "storage": "Partage Fichiers PEI"
+  },
+
   "locations":
   {
     "home": "Accueil",
@@ -51,7 +56,28 @@
         "firstnameLabel": "Nouveau prénom",
         "firstnameFormatError": "Le format de ce prénom est incorrect",
         "firstnameDuplicateError": "Ce prénom est identique au précédent",
-        "firstnameSending": "Enregistrement du nouveau prénom en cours"
+        "firstnameSending": "Enregistrement du nouveau prénom en cours",
+
+        "passwordLabel": "Nouveau mot de passe",
+        "passwordInputOld": "Mot de passe actuel",
+        "passwordInputNew": "Nouveau mot de passe",
+        "passwordInputConfirmation": "Confirmation du nouveau mot de passe",
+        "passwordFormatHelp": "Votre mot de passe doit faire de 8 à 64 caractères, ne doit contenir que des minuscules, lettres capitales et chiffres (pas d'accents, d'espaces ou caractères spéciaux)",
+        "passwordFormatError": "Le format du nouveau mot de passe est incorrect",
+        "passwordDusplicateError": "Le nouveau mot de passe et sa confirmation ne correspondent pas",
+        "passwordOldMismatch": "Le mot de passe actuel est incorrect",
+        "passwordSending": "Enregistrement du nouveau mot de passe en cours"
+      }
+    },
+
+    "apps":
+    {
+      "accessApp": "Accéder",
+      "noAccess": "Vous n'avez pas accès à cette application",
+
+      "descriptions":
+      {
+        "storage": "Cette application permet de partager des fichiers entre utilisateurs et par service"
       }
     },
 

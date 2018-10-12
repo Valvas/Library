@@ -1,110 +1,17 @@
 /****************************************************************************************************/
 
-.main .empty{ font-family:barlow; margin:20px; font-size:20px; line-height:24px; }
+.serviceBlocks{ max-width:max-content; padding:20px 0 0 0; display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; }
 
-.main .block{ border-radius:4px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); background-color:#FFFFFF; }
+.serviceBlockEnabled, .serviceBlockDisabled{ margin-bottom:20px; margin-left:20px; border-radius:4px; box-shadow:0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.2); width:250px; }
 
-.main .block .name{ font-family:barlow; font-size:16px; line-height:24px; padding:10px; overflow:hidden; text-overflow:ellipsis; border-bottom:1px solid #F0F0F0; }
+.serviceBlockName{ padding:20px 10px 20px 10px; font-size:1.2em; font-family:roboto-regular; color:#000000; border-bottom:1px solid #CCC; margin:0 0 10px 0; }
 
-.main .block .access{ box-sizing:border-box; padding:10px; font-family:barlow; font-size:16px; line-height:24px; text-align:right; }
+.serviceBlockInfo{ padding:10px; font-family:roboto-regular; font-size:1em; }
 
-.main .block .access .true{ color:#5CB85C; }
+.serviceBlockEnabledLink{ display:block; margin:10px 0 0 0; cursor:pointer; text-align:center; color:#000000; font-size:1em; padding:10px; font-family:roboto-regular; border-top:1px solid #CCC; background-color:#FAFAFA; border-radius:0 0 4px 4px; }
 
-.main .block .access .false{ color:#D9534F; }
+.serviceBlockEnabledLink:hover{ color:#428BCA; }
 
-.main .block .rights .title{ font-family:barlow; text-align:left; margin-left:10px; }
-
-.main .block .rights .labels{ width:160px; margin:10px calc(100% - 180px) 10px 10px; }
-
-.main .block .rights .labels .label{ font-size:18px; line-height:24px; text-align:left; width:40px; display:inline-block; vertical-align:top; }
-
-.main .block .rights .values{ width:160px; margin:10px calc(100% - 180px) 10px 10px; }
-
-.main .block .rights .values .true{ font-size:18px; line-height:24px; text-align:left; width:40px; display:inline-block; vertical-align:top; color:#5CB85C; }
-
-.main .block .rights .values .false{ font-size:18px; line-height:24px; text-align:left; width:40px; display:inline-block; vertical-align:top; color:#FF0F0F; }
-
-.main .ask{ cursor:pointer; border:none; border-radius:4px; color:#FFFFFF; background-color:#D9534F; font-family:barlow; font-size:16px; line-height:24px; padding:4px 0 4px 0; width:150px; margin:0 10px 10px calc(100% - 160px); }
-
-.main .ask:hover{ color:#000000; background-color:#B7312D; }
-
-.main .open{ text-align:center; text-decoration:none; display:block; cursor:pointer; border:none; border-radius:4px; color:#FFFFFF; background-color:#428BCA; font-family:barlow; font-size:16px; line-height:24px; padding:4px 0 4px 0; width:150px; margin:0 10px 10px calc(100% - 160px); }
-
-.main .open:hover{ color:#000000; background-color:#2069A8; }
-
-
-.serviceBlock{ width:150px; display:inline-block; vertical-align:top; border-radius:4px; cursor:pointer; }
-
-.serviceBlockIcon{ color:#F8D775; text-align:center; font-size:5em; height:80px; }
-
-.serviceBlockName{ margin-bottom:10px; font-family:roboto-light; text-align:center; font-size:20px; line-height:24px; color:#000000; text-decoration:none; }
-
-.serviceBlock:hover{ background-color:#F5F5FF; }
-
-/****************************************************************************************************/
-
-@media (max-width: 319px)
-{
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-
-  .main .block{ width:calc(100% - 40px); margin:10px 20px 10px 20px; }
-}
-
-@media (min-width: 320px) and (max-width: 479px)
-{
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-
-  .main .block{ width:calc(100% - 40px); margin:10px 20px 10px 20px; }
-}
-
-@media (min-width: 480px) and (max-width: 639px)
-{
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-
-  .main .block{ width:400px; margin:10px calc(50% - 200px) 10px calc(50% - 200px); }
-}
-
-@media (min-width: 640px) and (max-width: 779px)
-{
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-
-  .main .block{ width:400px; margin:10px calc(50% - 200px) 10px calc(50% - 200px); }
-}
-
-@media (min-width: 780px) and (max-width: 959px)
-{
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-
-  .main .block{ width:400px; margin:10px 20px 10px 20px; display:inline-block; vertical-align:top; }
-}
-
-@media (min-width: 960px) and (max-width: 1279px)
-{
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-
-  .main .block{ width:400px; margin:10px 20px 10px 20px; display:inline-block; vertical-align:top; }
-}
-
-@media (min-width: 1280px) and (max-width: 1679px)
-{
-  .main .error{ width:1200px; margin:20px; }
-
-  .main .block{ width:400px; margin:10px 20px 10px 20px; display:inline-block; vertical-align:top; }
-}
-
-@media (min-width: 1680px)
-{
-  .main .error{ width:1200px; margin:20px; }
-
-  .main .block{ width:400px; margin:10px 20px 10px 20px; display:inline-block; vertical-align:top; }
-}
-
-/****************************************************************************************************
-* EMPTY SERVICES                                                                                    *
-****************************************************************************************************/
-
-.emptyServicesIcon{ margin:40px calc(50% - 100px) 20px calc(50% - 100px); }
-
-.emptyServicesMessage{ font-size:32px; line-height:36px; padding:0 20px 20px 20px; text-align:center; font-family:roboto-light; }
+.serviceBlockDisabledMessage{ margin:10px 0 0 0; color:#D9534F; font-size:1em; padding:10px; font-family:roboto-regular; border-top:1px solid #CCC; background-color:#FAFAFA; border-radius:0 0 4px 4px; }
 
 /****************************************************************************************************/

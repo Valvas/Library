@@ -31,7 +31,8 @@ function sendFormData(event)
 
     }).done((json) =>
     {
-      document.cookie = "token=xxxxxxxxxx";
+      document.cookie = 'peiauth=' + json.token + '; max-age=' + json.maxAge;
+
       location = '/home';
     });
   }

@@ -99,5 +99,12 @@
   "10098": "Le format du titre de l'article est incorrect",
   "10099": "Le format du contenu de l'article est incorrect",
   "10100": "Les droits de votre compte sur le portail sont introuvables",
-  "10101": "Vous n'êtes pas autorisé(e) à créer des articles"
+  "10101": "Vous n'êtes pas autorisé(e) à créer des articles",
+  "10102": "La nouvelle adresse email est identique à la précédente",
+  "10103": "Token d'authentification absent",
+  "10104": "Le mot de passe actuel est incorrect",
+  "10105": "Le format du mot de passe est incorrect",
+  "10106": "Le nouveau mot de passe et sa confirmation ne correspondent pas",
+  "10107": "Les données de l'application sont introuvables (erreur critique)",
+  "10108": "Vous n'êtes pas autorisé(e) à accéder à cette application"
 }

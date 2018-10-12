@@ -28,18 +28,18 @@
             <div class="accountDataPictureBlockUpdate"><%= strings.common.root.account.accountPictureBlockUpdate %></div>
           </div>
           <div class="accountDataBlock">
-            <div class="accountDataBlockValue"><%= locals.account.email %></div>
+            <div class="accountDataBlockValue" id="accountDataEmail"><%= locals.account.email %></div>
             <div class="accountDataBlockUpdate" id="accountDataUpdateEmail"><%= strings.common.root.account.emailBlockUpdate %></div>
           </div>
           <div class="accountDataBlock">
-            <div class="accountDataBlockValue"><%= locals.account.lastname.charAt(0).toUpperCase() %><%= locals.account.lastname.slice(1).toLowerCase() %></div>
+            <div class="accountDataBlockValue" id="accountDataLastname"><%= locals.account.lastname.charAt(0).toUpperCase() %><%= locals.account.lastname.slice(1).toLowerCase() %></div>
             <div class="accountDataBlockUpdate" id="accountDataUpdateLastname"><%= strings.common.root.account.lastnameBlockUpdate %></div>
           </div>
           <div class="accountDataBlock">
-            <div class="accountDataBlockValue"><%= locals.account.firstname.charAt(0).toUpperCase() %><%= locals.account.firstname.slice(1).toLowerCase() %></div>
-            <div class="accountDataBlockUpdate" id="accountDataUpdateEmailFirstname"><%= strings.common.root.account.firstnameBlockUpdate %></div>
+            <div class="accountDataBlockValue" id="accountDataFirstname"><%= locals.account.firstname.charAt(0).toUpperCase() %><%= locals.account.firstname.slice(1).toLowerCase() %></div>
+            <div class="accountDataBlockUpdate" id="accountDataUpdateFirstname"><%= strings.common.root.account.firstnameBlockUpdate %></div>
           </div>
-          <button class="accountPasswordUpdate"><%= strings.common.root.account.passwordBlockUpdate %></button>
+          <button id="accountDataUpdatePassword" class="accountPasswordUpdate"><%= strings.common.root.account.passwordBlockUpdate %></button>
         <% } %>
       </div><!--
       --><div class="endColumn">
@@ -49,5 +49,7 @@
     <% include ../../include/root_scripts.ejs %>
     <script src='/js/root/news/selectNewsExternal.js'></script>
     <script src='/js/root/account/updateData.js'></script>
+    <script src='/js/root/account/updatePassword.js'></script>
+    <script src='/js/root/account/updatePicture.js'></script>
   </body>
 </html>

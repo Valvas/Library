@@ -11,18 +11,18 @@ const storageAppLogsComment       = require(`${__root}/functions/storage/logs/se
 // ADD COMMENT TO A FILE
 /****************************************************************************************************/
 
-module.exports.addCommentToFile = (fileComment, fileUuid, serviceUuid, accountId, databaseConnection, params, callback) =>
+module.exports.addCommentToFile = (fileComment, fileUuid, serviceUuid, accountUuid, databaseConnection, params, callback) =>
 {
   if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
   if(fileUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'fileUuid' });
-  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
+  if(accountUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
   if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
   if(fileComment == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'fileComment' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   if(new RegExp('^(\\S)+(( )?(\\S)+)*$').test(fileComment) == false) return callback({ status: 406, code: constants.WRONG_COMMENT_FORMAT, detail: null });
 
-  getAccountData(fileComment, fileUuid, serviceUuid, accountId, databaseConnection, params, (error) =>
+  getAccountData(fileComment, fileUuid, serviceUuid, accountUuid, databaseConnection, params, (error) =>
   {
     return callback(error);
   });
@@ -30,9 +30,9 @@ module.exports.addCommentToFile = (fileComment, fileUuid, serviceUuid, accountId
 
 /****************************************************************************************************/
 
-function getAccountData(fileComment, fileUuid, serviceUuid, accountId, databaseConnection, params, callback)
+function getAccountData(fileComment, fileUuid, serviceUuid, accountUuid, databaseConnection, params, callback)
 {
-  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
+  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, params, (error, accountExists, accountData) =>
   {
     if(error != null) return callback(error);
 
@@ -60,13 +60,13 @@ function getFileData(fileComment, fileUuid, serviceUuid, accountData, databaseCo
 
 function getAccountRights(fileComment, fileData, serviceUuid, accountData, databaseConnection, params, callback)
 {
-  storageAppServicesRights.getRightsTowardsService(serviceUuid, accountData.id, databaseConnection, params, (error, rights) =>
+  storageAppServicesRights.getRightsTowardsService(serviceUuid, accountData.uuid, databaseConnection, params, (error, rights) =>
   {
     if(error != null) return callback(error);
 
     if(rights.comment === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_POST_COMMENTS, detail: null });
 
-    storageAppLogsComment.addCommentFileLog(fileComment, params.fileLogs.comment, accountData.id, fileData.uuid, serviceUuid, databaseConnection, params, (error) =>
+    storageAppLogsComment.addCommentFileLog(fileComment, params.fileLogs.comment, accountData.uuid, fileData.uuid, serviceUuid, databaseConnection, params, (error) =>
     {
       return callback(error);
     });

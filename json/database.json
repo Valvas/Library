@@ -70,11 +70,10 @@
     }
   },
 
-  "library":
+  "storage":
   {
     "rights":
     {
-      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "account": "VARCHAR(255) NOT NULL",
       "service": "VARCHAR(255) NOT NULL",
       "upload_files": "BOOLEAN NOT NULL",
@@ -89,22 +88,20 @@
 
     "files":
     {
-      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "uuid": "VARCHAR(255) NOT NULL",
       "name": "VARCHAR(255) NOT NULL",
       "ext": "VARCHAR(255) NOT NULL",
       "parent_folder": "VARCHAR(255)",
-      "account": "BIGINT UNSIGNED NOT NULL",
+      "account": "VARCHAR(255) NOT NULL",
       "service": "VARCHAR(255) NOT NULL",
       "deleted": "BOOLEAN NOT NULL"
     },
 
     "folders":
     {
-      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "uuid": "VARCHAR(255) NOT NULL",
       "name": "VARCHAR(255) NOT NULL",
-      "account": "BIGINT UNSIGNED NOT NULL",
+      "account": "VARCHAR(255) NOT NULL",
       "service": "VARCHAR(255) NOT NULL",
       "parent_folder": "VARCHAR(255)",
       "deleted": "BOOLEAN NOT NULL"
@@ -114,7 +111,7 @@
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "type": "INT NOT NULL",
-      "account": "BIGINT UNSIGNED NOT NULL",
+      "account": "VARCHAR(255) NOT NULL",
       "file": "VARCHAR(255) NOT NULL",
       "date": "BIGINT UNSIGNED NOT NULL"
     },
@@ -146,16 +143,29 @@
       "service_uuid": "VARCHAR(255) NOT NULL"
     },
 
-    "admin":
+    "admin_rights":
+    {
+      "account": "VARCHAR(255) NOT NULL",
+      "level": "INT UNSIGNED NOT NULL"
+    },
+
+    "admin_levels":
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "account": "BIGINT UNSIGNED NOT NULL",
-      "access_services": "BOOLEAN NOT NULL",
+      "level": "INT UNSIGNED NOT NULL",
       "create_services": "BOOLEAN NOT NULL",
       "modify_services": "BOOLEAN NOT NULL",
       "remove_services": "BOOLEAN NOT NULL",
-      "consult_services_rights": "BOOLEAN NOT NULL",
-      "update_services_rights": "BOOLEAN NOT NULL"
+      "access_service": "BOOLEAN NOT NULL",
+      "comment_files": "BOOLEAN NOT NULL",
+      "upload_files": "BOOLEAN NOT NULL",
+      "create_folders": "BOOLEAN NOT NULL",
+      "rename_folders": "BOOLEAN NOT NULL",
+      "move_files": "BOOLEAN NOT NULL",
+      "download_files": "BOOLEAN NOT NULL",
+      "restore_files": "BOOLEAN NOT NULL",
+      "remove_folders": "BOOLEAN NOT NULL",
+      "remove_files": "BOOLEAN NOT NULL"
     }
   }
 }

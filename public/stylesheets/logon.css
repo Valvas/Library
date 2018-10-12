@@ -27,6 +27,24 @@ body{ margin:0; background-color:#F9F9F9; }
 .question:hover{ color:#223344; }
 
 /****************************************************************************************************/
+/* NO SCRIPT BLOCK */
+/****************************************************************************************************/
+
+.noScriptWarningBlock{ width:100%; background-color:#D9534F; font-family:roboto-light; color:#FFFFFF; }
+
+.noScriptWarningBlockMessage{ font-size:18px; line-height:24px; padding:20px; }
+
+/****************************************************************************************************/
+
+.cookiesWarningBlock{ background-color:#0277BD; position:fixed; right:0; bottom:0; left:0; border-radius:2px 2px 0 0; }
+
+.cookiesWarningBlockMessage{ width:calc(100% - 100px); box-sizing:border-box; color:#FFFFFF; font-family:roboto-light; font-size:1em; padding:20px 10px 20px 10px; display:inline-block; vertical-align:top; }
+
+.cookiesWarningBlockClose{ width:80px; text-align:center; box-sizing:border-box; color:#FFFFFF; font-family:roboto-light; text-decoration:underline; font-size:1.20em; display:inline-block; vertical-align:top; margin:18px 10px 18px 10px; cursor:pointer; }
+
+.cookiesWarningBlockClose:hover{ color:#CCC; }
+
+/****************************************************************************************************/
 
 @media all and (max-width: 319.9px)
 {

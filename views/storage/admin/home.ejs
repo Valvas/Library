@@ -9,28 +9,28 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/home.css" />
   <body>
-    <% include ../includes/aside.ejs %>
-    <div class='storageMainBlock'>
+    <% include ../includes/aside.ejs %><!--
+    --><div class='storageMainBlock'>
       <div class="mainBlockLocation"><%= strings.storage.locations.admin %></div>
       <% include ../includes/admin/navigation.ejs %>
-      <div class='rights'>
-        <div class='info'><%= strings.storage.admin.home.info %></div>
-        <div class='category'>
-          <div class='title'><%= strings.storage.admin.home.services.label %></div>
-          <div class='right'><div class='key'><%= strings.storage.admin.home.services.rights.access %></div><div class='value'><% if(rights.access_services == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
-          <div class='right'><div class='key'><%= strings.storage.admin.home.services.rights.create %></div><div class='value'><% if(rights.create_services == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
-          <div class='right'><div class='key'><%= strings.storage.admin.home.services.rights.modify %></div><div class='value'><% if(rights.modify_services == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
-          <div class='right'><div class='key'><%= strings.storage.admin.home.services.rights.remove %></div><div class='value'><% if(rights.remove_services == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
-        </div>
-        <div class='category'>
-          <div class='title'><%= strings.storage.admin.home.rights.label %></div>
-          <div class='right'><div class='key'><%= strings.storage.admin.home.rights.rights.access %></div><div class='value'><% if(rights.consult_services_rights == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
-          <div class='right'><div class='key'><%= strings.storage.admin.home.rights.rights.updateRights %></div><div class='value'><% if(rights.update_services_rights == 1){ %><i class='far fa-check-circle true'></i><% }else{ %><i class='far fa-times-circle false'></i><% } %></div></div>
+      <div class="rightsBlock">
+        <div class="rightsBlockTitle"><%= strings.storage.admin.home.myRights %></div>
+        <div class="rightsBlockLevel"><%= strings.storage.admin.home.myLevel %> <%= storageAdminAccountLevel %></div>
+        <div class="rightsBlockContainer">
+          <div class="rightsBlockInfo"><%= strings.storage.admin.home.rightsInfo %> :</div>
+          <ul class="rightsBlockList">
+            <% for(var right in storageAdminRights[storageAdminAccountLevel]){ %>
+              <% if(storageAdminRights[storageAdminAccountLevel][right]){ %>
+                <li class="rightsBlockListEnabled"><%= strings.storage.admin.home.rightsLabels[right] %></li>
+              <% } else{ %>
+                <li class="rightsBlockListDisabled"><%= strings.storage.admin.home.rightsLabels[right] %></li>
+              <% } %>
+            <% } %>
+          </ul>
         </div>
       </div>
     </div>
     <script src='/js/jQuery.js'></script>
-    <script src='/js/afk.js'></script>
     <script src='/js/storage/exit.js'></script>
   </body>
 </html>

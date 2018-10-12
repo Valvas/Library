@@ -2,8 +2,6 @@
 
 const params                = require(`${__root}/json/params`);
 const constants             = require(`${__root}/functions/constants`);
-const accountsGet           = require(`${__root}/functions/accounts/get`);
-const commonAppsAccess      = require(`${__root}/functions/common/apps/access`);
 
 //To uncomment when updated database manager will be set for all the project
 //const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);

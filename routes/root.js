@@ -1,16 +1,17 @@
 'use strict'
 
-var express           = require('express');
-var params            = require(`${__root}/json/config`);
-var errors            = require(`${__root}/json/errors`);
-var success           = require(`${__root}/json/success`);
-var constants         = require(`${__root}/functions/constants`);
-var accountsReset     = require(`${__root}/functions/accounts/reset`);
-var accountsCreate    = require(`${__root}/functions/accounts/create`);
+const express               = require('express');
+const jwt                   = require('jsonwebtoken');
+const params                = require(`${__root}/json/config`);
+const errors                = require(`${__root}/json/errors`);
+const success               = require(`${__root}/json/success`);
+const constants             = require(`${__root}/functions/constants`);
+const accountsReset         = require(`${__root}/functions/accounts/reset`);
+const accountsCreate        = require(`${__root}/functions/accounts/create`);
+const commonAccountsCheck   = require(`${__root}/functions/common/accounts/check`);
 
-const commonRightsGet = require(`${__root}/functions/common/rights/get`);
-
-const accountsLogon   = require(`${__root}/functions/accounts/logon`);
+const commonTokenGet        = require(`${__root}/functions/common/token/get`);
+const commonTokenCheck      = require(`${__root}/functions/common/token/check`);
 
 var router = express.Router();
 
@@ -18,40 +19,35 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  req.session.account == undefined ? res.render('index') : res.redirect('/home');
+  commonTokenGet.getAuthTokenFromHeaders(req.headers.cookie, (error, token) =>
+  {
+    error != null ? res.render('index') :
+
+    commonTokenCheck.checkIfTokenIsValid(token, req.app.get('params'), (error, decodedToken) =>
+    {
+      error != null
+      ? res.render('index')
+      : res.redirect('/home');
+    });
+  });
 });
 
 /****************************************************************************************************/
 
 router.put('/', (req, res) =>
 {
-  accountsLogon.authenticateAccountUsingCredentials(req.body.emailAddress, req.body.uncryptedPassword, req.app.get('mysqlConnector'), (error, account) =>
+  commonAccountsCheck.checkIfAccountExistsFromCredentials(req.body.emailAddress, req.body.uncryptedPassword, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountData) =>
   {
-    if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail == undefined ? null : error.detail });
+    if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
     else
     {
-      if(account.suspended == 1) res.status(403).send({ result: false, message: errors[constants.ACCOUNT_SUSPENDED] });
-
-      else
+      jwt.sign({ uuid: accountData.uuid }, req.app.get('params').tokenSecretKey, (error, token) =>
       {
-        commonRightsGet.checkIfRightsExistsForAccount(account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rightsExist, rightsData) =>
-        {
-          if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail});
-
-          else if(rightsExist == false) res.status(404).send({ message: errors[constants.INTRANET_RIGHTS_NOT_FOUND], detail: null});
-
-          else
-          {
-            account.rights = {};
-            account.rights.intranet = {};
-            account.rights.intranet = rightsData;
-            
-            req.session.account = account;
-            res.status(200).send({ result: true });
-          }
-        });
-      }
+        error != null
+        ? res.status(406).send({ message: error.message, detail: null })
+        : res.status(200).send({ token: token, maxAge: (60 * 60 * 24) });
+      });
     }
   });
 });
@@ -91,15 +87,6 @@ router.put('/reset-password', (req, res) =>
     res.status(200).send({ result: true, message: success[constants.NEW_PASSWORD_SENT] }) :
     res.status(error.status).send({ result: false, message: errors[error.code] });
   });
-});
-
-/****************************************************************************************************/
-
-router.get('/logout', (req, res) =>
-{
-  req.session.destroy();
-
-  res.redirect('/');
 });
 
 /****************************************************************************************************/

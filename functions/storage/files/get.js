@@ -163,46 +163,36 @@ storageAppFilesGet.getFileFromDatabaseUsingFullName = (fileName, fileExt, servic
 
 /****************************************************************************************************/
 
-storageAppFilesGet.getFilesFromService = (serviceUuid, accountId, folderUuid, databaseConnection, params, callback) =>
+storageAppFilesGet.getFilesFromService = (serviceUuid, folderUuid, databaseConnection, params, callback) =>
 {
-  accountsGet.getAccountUsingID(accountId, databaseConnection, (error, account) =>
+  var objectWithFiles = {};
+
+  objectWithFiles.parentFolder = folderUuid;
+
+  var queryObject = {};
+
+  queryObject.databaseName = params.database.storage.label;
+  queryObject.tableName = params.database.storage.tables.files;
+  queryObject.args = [ '*' ];
+
+  if(folderUuid != null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service', value: serviceUuid }, 1: { operator: '=', key: 'deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: folderUuid } };
+  if(folderUuid == null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service', value: serviceUuid }, 1: { operator: '=', key: 'deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: '' } };
+
+  browseFiles(queryObject, databaseConnection, (error, files) =>
   {
     if(error != null) return callback(error);
 
-    storageAppServicesRights.getRightsTowardsService(serviceUuid, accountId, databaseConnection, params, (error, rights) =>
+    objectWithFiles.files = files;
+
+    queryObject.tableName = params.database.storage.tables.folders;
+
+    browseFolders(queryObject, databaseConnection, (error, folders) =>
     {
       if(error != null) return callback(error);
 
-      var objectWithFiles = {};
+      objectWithFiles.folders = folders;
 
-      objectWithFiles.parentFolder = folderUuid;
-
-      var queryObject = {};
-
-      queryObject.databaseName = params.database.storage.label;
-      queryObject.tableName = params.database.storage.tables.files;
-      queryObject.args = [ '*' ];
-
-      if(folderUuid != null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service', value: serviceUuid }, 1: { operator: '=', key: 'deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: folderUuid } };
-      if(folderUuid == null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service', value: serviceUuid }, 1: { operator: '=', key: 'deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: '' } };
-
-      browseFiles(queryObject, databaseConnection, (error, files) =>
-      {
-        if(error != null) return callback(error);
-
-        objectWithFiles.files = files;
-
-        queryObject.tableName = params.database.storage.tables.folders;
-
-        browseFolders(queryObject, databaseConnection, (error, folders) =>
-        {
-          if(error != null) return callback(error);
-
-          objectWithFiles.folders = folders;
-
-          return callback(null, objectWithFiles);
-        });
-      });
+      return callback(null, objectWithFiles);
     });
   });
 }
@@ -392,7 +382,7 @@ function getAccountLinkedToEachLog(fileData, logsData, databaseConnection, param
 
   var browseLogs = () =>
   {
-    commonAccountsGet.checkIfAccountExistsFromId(logsData[index].account, databaseConnection, params, (error, accountExists, accountData) =>
+    commonAccountsGet.checkIfAccountExistsFromUuid(logsData[index].account, databaseConnection, params, (error, accountExists, accountData) =>
     {
       if(error != null) return callback(error);
 

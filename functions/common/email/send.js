@@ -15,8 +15,8 @@ module.exports.sendEmail = (emailObject, transporter, callback) =>
   if(emailObject.object   == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'No email object provided' });
   if(emailObject.content  == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'No email content provided' });
 
-  if(emailObject.object.length  == 0) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'Email object is empty' });
-  if(emailObject.content.length == 0) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'Email content is empty' });
+  if(emailObject.object.length  === 0) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'Email object is empty' });
+  if(emailObject.content.length === 0) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'Email content is empty' });
 
   commonFormatEmail.checkEmailAddressFormat(emailObject.receiver, (error, emailFormatIsCorrect) =>
   {

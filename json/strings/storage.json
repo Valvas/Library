@@ -19,26 +19,24 @@
   {
     "home":
     {
-      "info": "Voici les droits que vous possédez concernant l'administration de cette application",
-      "rights":
+      "myRights": "Vos droits",
+      "myLevel": "Vous avez un compte administrateur niveau",
+      "rightsInfo": "Votre niveau d'administration vous donne les droits suivants",
+      "rightsLabels":
       {
-        "label": "Gestion des droits sur les services",
-        "rights":
-        {
-          "access": "Consulter les droits",
-          "updateRights": "Mettre à jour les droits"
-        }
-      },
-      "services":
-      {
-        "label": "Gestion des services",
-        "rights":
-        {
-          "access": "Consulter les services",
-          "create": "Créer des services",
-          "modify": "Modifier des services",
-          "remove": "Supprimer des services"
-        }
+        "accessService": "Donner/Retirer l'accès à un service",
+        "commentFiles": "Donner/Retirer le droit de poster des commentaires sur les fichiers",
+        "uploadFiles": "Donner/Retirer le droit de poster des fichiers",
+        "createFolders": "Donner/Retirer le droit de créer des dossiers",
+        "renameFolders": "Donner/Retirer le droit de renommer des dossiers",
+        "moveFiles": "Donner/Retirer le droit de déplacer des fichiers",
+        "downloadFiles": "Donner/Retirer le droit de télécharger des fichiers",
+        "restoreFiles": "Donner/Retirer le droit de restaurer des fichiers",
+        "removeFolders": "Donner/Retirer le droit de supprimer des dossiers",
+        "removeFiles": "Donner/Retirer le droit de supprimer des fichiers",
+        "createServices": "Créer des services",
+        "modifyServices": "Modifier des services",
+        "removeServices": "Supprimer des services"
       }
     },
     "links":
@@ -46,7 +44,34 @@
       "home": "Accueil administration",
       "admin": "Droits d'administration",
       "rights": "Droits sur les services",
-      "services": "Gestion des services"
+      "services": "Gestion des services",
+      "levels": "Gestion des droits d'administration"
+    },
+    "accountsLevel":
+    {
+      "detail":
+      {
+        "accountDataTitle": "Informations du compte",
+        "currentLevel": "Niveau d'administration actuel",
+        "selectedLevel": "Niveau actuellement selectionné",
+        "rightsForSelectedLevel": "Droits associés au niveau selectionné",
+        "saveSelectedLevel": "Enregistrer",
+        "returnToList": "Retour",
+        "rightEnabled": "Oui",
+        "rightDisabled": "Non"
+      },
+      "searchInput": "Rechercher",
+      "accountsTable":
+      {
+        "header":
+        {
+          "email": "Adresse email",
+          "lastname": "Nom",
+          "firstname": "Prénom",
+          "level": "Niveau d'administration"
+        },
+        "modifyButton": "Modifier"
+      }
     },
     "services":
     {

@@ -14,23 +14,31 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  req.session.account == undefined ? res.redirect('/') :
-
   commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news) =>
   {
     error != null
 
     ? res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer }) :
 
-    res.render('root/news/home',
-    { 
-      account: req.session.account, 
-      currentLocation: 'news',
-      webContent: webContent,
-      strings: { common: commonStrings },
-      news: news,
-      newsSelected: false,
-      intranetRights: req.session.account.rights.intranet
+    commonRightsGet.checkIfRightsExistsForAccount(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rightsExist, rightsData) =>
+    {
+      if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
+
+      else if(rightsExist == false) res.render('block', { message: errors[constants.INTRANET_RIGHTS_NOT_FOUND], detail: null, link: req.headers.referer });
+
+      else
+      {
+        res.render('root/news/home',
+        { 
+          account: req.app.locals.account, 
+          currentLocation: 'news',
+          webContent: webContent,
+          strings: { common: commonStrings },
+          news: news,
+          newsSelected: false,
+          intranetRights: rightsData
+        });
+      }
     });
   });
 });
@@ -39,27 +47,32 @@ router.get('/', (req, res) =>
 
 router.get('/create', (req, res) =>
 {
-  if(req.session.account == undefined) res.redirect('/');
-
-  else if(req.session.account.rights.intranet.create_articles == false) res.render('block', { message: errors[constants.UNAUTHORIZED_TO_CREATE_ARTICLES], detail: null, link: req.headers.referer });
-
-  else
+  commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news) =>
   {
-    commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news, pageInfos) =>
+    error != null
+
+    ? res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer }) :
+
+    commonRightsGet.checkIfRightsExistsForAccount(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rightsExist, rightsData) =>
     {
-      error != null
-      ? res.render('root/news/create', { account: req.session.account, currentLocation: 'news', webContent: webContent, strings: { common: commonStrings }, news: null, error: { message: errors[error.code], detail: error.detail }})
-      : res.render('root/news/create', { account: req.session.account, currentLocation: 'news', webContent: webContent, strings: { common: commonStrings }, news: news, pageInfos: pageInfos });
+      if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
+
+      else if(rightsExist == false) res.render('block', { message: errors[constants.INTRANET_RIGHTS_NOT_FOUND], detail: null, link: req.headers.referer });
+
+      else
+      {
+        rightsData.create_articles == false
+        ? res.render('block', { message: errors[constants.UNAUTHORIZED_TO_CREATE_ARTICLES], detail: null, link: req.headers.referer })
+        : res.render('root/news/create', { account: req.app.locals.account, currentLocation: 'news', webContent: webContent, strings: { common: commonStrings }, news: news });
+      }
     });
-  }
+  });
 });
 
 /****************************************************************************************************/
 
 router.get('/:newsUuid', (req, res) =>
 {
-  req.session.account == undefined ? res.redirect('/') :
-
   commonNewsGet.getNewsIndexFromUuid(req.params.newsUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsIndex) =>
   {
     if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
@@ -75,15 +88,25 @@ router.get('/:newsUuid', (req, res) =>
 
         ? res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer }) :
 
-        res.render('root/news/home',
-        { 
-          account: req.session.account, 
-          currentLocation: 'news',
-          webContent: webContent,
-          strings: { common: commonStrings },
-          news: news,
-          newsSelected: req.params.newsUuid,
-          intranetRights: req.session.account.rights.intranet
+        commonRightsGet.checkIfRightsExistsForAccount(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rightsExist, rightsData) =>
+        {
+          if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
+
+          else if(rightsExist == false) res.render('block', { message: errors[constants.INTRANET_RIGHTS_NOT_FOUND], detail: null, link: req.headers.referer });
+
+          else
+          {
+            res.render('root/news/home',
+            { 
+              account: req.app.locals.account, 
+              currentLocation: 'news',
+              webContent: webContent,
+              strings: { common: commonStrings },
+              news: news,
+              newsSelected: req.params.newsUuid,
+              intranetRights: rightsData
+            });
+          }
         });
       });
     }

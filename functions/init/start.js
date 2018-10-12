@@ -6,11 +6,13 @@ const nodemailer          = require('nodemailer');
 const auth                = require(`${__root}/auth`);
 const encryption          = require(`${__root}/functions/encryption`);
 const adminAppAuth        = require(`${__root}/functions/admin/auth`);
-const storageAppAdminAuth = require(`${__root}/functions/storage/auth`);
 const initFolder          = require(`${__root}/functions/init/folders`);
 const database            = require(`${__root}/functions/database/init`);
 const shareAppInit        = require(`${__root}/functions/init/shareAppInit`);
 const initCreateAccounts  = require(`${__root}/functions/init/createAccounts`);
+
+const storageAppAccess        = require(`${__root}/functions/storage/checkAccess`);
+const storageAppAdminAccess   = require(`${__root}/functions/storage/checkAdminAccess`);
 
 /****************************************************************************************************/
 
@@ -88,10 +90,10 @@ module.exports.startApp = (app, callback) =>
   const params = app.get('params');
 
   app.use('/', root);
-  app.use('/home', homeViews);
-  app.use('/apps', appsViews);
-  app.use('/news', newsViews);
-  app.use('/account', accountViews);
+  app.use('/home', auth, homeViews);
+  app.use('/apps', auth, appsViews);
+  app.use('/news', auth, newsViews);
+  app.use('/account', auth, accountViews);
 
   app.use('/queries/strings', auth, stringsQueries);
 
@@ -110,13 +112,13 @@ module.exports.startApp = (app, callback) =>
   app.use('/queries/admin/strings', auth, adminAppAuth, adminQueriesStrings);
   app.use('/queries/admin/accounts', auth, adminAppAuth, adminQueriesAccounts);
 
-  app.use('/storage', auth, storageViewsHome);
-  app.use('/storage/admin', storageAppAdminAuth, storageViewsAdmin);
-  app.use('/storage/services', auth, storageViewsServices);
+  app.use('/storage', auth, storageAppAccess, storageViewsHome);
+  app.use('/storage/admin', auth, storageAppAccess, storageAppAdminAccess, storageViewsAdmin);
+  app.use('/storage/services', auth, storageAppAccess, storageViewsServices);
 
-  app.use('/queries/storage/admin', storageAppAdminAuth, storageQueriesAdmin);
-  app.use('/queries/storage/strings', auth, storageQueriesStrings);
-  app.use('/queries/storage/services', auth, storageQueriesServices);
+  app.use('/queries/storage/admin', auth, storageAppAccess, storageAppAdminAccess, storageQueriesAdmin);
+  app.use('/queries/storage/strings', auth, storageAppAccess, storageQueriesStrings);
+  app.use('/queries/storage/services', auth, storageAppAccess, storageQueriesServices);
 
   app.use('/disease', auth, diseaseViewsRoot);
 

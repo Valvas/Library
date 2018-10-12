@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.common.locations[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/apps/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <body>
+    <% include ../../include/header.ejs %>
+    <% include ../../include/informations.ejs %>
+    <div class="mainBlock">
+      <div class="startColumn">
+        <% include ../../include/aside.ejs %>
+        <% include ../../include/news.ejs %>
+      </div><!--
+      --><div class="centerColumn">
+        <div id="appBlocks">
+          <% for(var x = 0; x < locals.apps.length; x++){ %>
+            <% if(locals.access.includes(locals.apps[x].uuid)){ %>
+              <a class="appBlock" href="/<%= locals.apps[x].name %>">
+                <div class="appBlockPictureContainer">
+                  <img class="appBlockPicture" src="<%= locals.webContent.appsPictures[locals.apps[x].name] %>"/>
+                </div>
+                <div class="appBlockName"><%= locals.strings.common.apps[locals.apps[x].name] %></div>
+                <div class="appBlockAccess"><%= strings.common.root.apps.accessApp %></div>
+                <div class="appBlockDescription">
+                  <div class="appBlockDescriptionTitle"><%= locals.strings.common.apps[locals.apps[x].name] %></div>
+                  <div class="appBlockDescriptionContent"><%= locals.strings.common.root.apps.descriptions[locals.apps[x].name] %></div>
+                </div>
+              </a>
+            <% } else{ %>
+              <div class="appBlockNoAccess">
+                <div class="appBlockNoAccessPictureContainer">
+                  <img class="appBlockNoAccessPicture" src="<%= locals.webContent.appsPictures[locals.apps[x].name] %>"/>
+                </div>
+                <div class="appBlockNoAccessName"><%= locals.strings.common.apps[locals.apps[x].name] %></div>
+                <div class="appBlockNoAccessMessage"><%= strings.common.root.apps.noAccess %></div>
+                <div class="appBlockNoAccessDescription">
+                  <div class="appBlockNoAccessDescriptionTitle"><%= locals.strings.common.apps[locals.apps[x].name] %></div>
+                  <div class="appBlockNoAccessDescriptionContent"><%= locals.strings.common.root.apps.descriptions[locals.apps[x].name] %></div>
+                </div>
+              </div>
+            <% } %>
+          <% } %>
+        </div>
+      </div><!--
+      --><div class="endColumn">
+      </div>
+    </div>
+    <% include ../../include/footer.ejs %>
+    <% include ../../include/root_scripts.ejs %>
+    <script src='/js/root/news/selectNewsExternal.js'></script>
+  </body>
+</html>

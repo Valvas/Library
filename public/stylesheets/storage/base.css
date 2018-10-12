@@ -2,49 +2,11 @@
 
 @import url('../fonts.css');
 @import url('../navigation.css');
+@import url('aside.css');
 
 /****************************************************************************************************/
 
-body{ margin:0; background-color:#F6F6F6; }
-
-.main .header{ background-color:#428BCA; min-width:200px; width:max-content; box-sizing:border-box; padding:10px; margin:20px 0 20px 0; border-radius:0 4px 4px 0; }
-
-.main .header .bookmark{ color:#FFFFFF; font-size:20px; line-height:24px; width:30px; text-align:center; display:inline-block; margin-right:5px; }
-
-.main .header .location{ color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow; display:inline-block; vertical-align:top; width:calc(100% - 35px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-.main .error .message{ margin:0 0 10px 0; }
-
-.main .error .message .left{ font-size:20px; line-height:24px; color:#FF0F0F; display:inline-block; width:30px; }
-
-.main .error .message .right{ font-size:16px; line-height:24px; display:inline-block; font-family:barlow; width:calc(100% - 30px); vertical-align:top; }
-
-.main .error .detail .label{ font-family:barlow; font-size:14px; line-height:18px; text-decoration:underline; }
-
-.main .error .detail .content{ color:#909090; word-break:break-all; font-family:barlow-italic; }
-
-.background{ position:fixed; z-index:20; top:0; left:0; right:0; bottom:0; display:none; overflow:auto; }
-
-.loader{ position:fixed; top:0; right:0; bottom:0; left:0; z-index:30; }
-
-.loader .spinner{ position:absolute; top:calc(50% - 32px); right:calc(50% - 32px); bottom:calc(50% - 32px); left:calc(50% - 32px); color:#5CB85C; font-size:4em; }
-
-.loader .box{ position:absolute; top:80px; right:calc(50% - 200px); margin:0 0 40px 0; left:calc(50% - 200px); width:400px; background-color:#FFFFFF; border-radius:4px; }
-
-.loader .box .message{ padding:20px; box-sizing:border-box; }
-
-.loader .box .message.error{ color:#D9534F; }
-
-.loader .box .message.success{ color:#5CB85C; }
-
-.loader .box .message .icon{ width:30px; font-size:1.5em; display:inline-block; }
-
-.loader .box .message .content{ font-size:16px; line-height:24px; width:calc(100% - 30px); font-family:roboto-light; text-align:center; display:inline-block; vertical-align:top; }
-
-.loader .box .button{ width:60px; border-radius:4px; border:none; font-size:16px; line-height:24px; padding:4px 0 4px 0; color:#FFFFFF; background-color:#428BCA; cursor:pointer; margin:0 calc(50% - 30px) 20px calc(50% - 30px); }
-
-.loader .box .button:hover{ color:#000000; }
-
+body{ margin:0; }
 
 .storageBackground{ position:fixed; z-index:200; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.4; }
 
@@ -99,10 +61,6 @@ body{ margin:0; background-color:#F6F6F6; }
 
 @media (max-width: 319px)
 {
-  .main .header{ max-width:250px; }
-
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-
   .loader .box{ width:calc(100% - 40px); margin:20px; }
 
   .storagePopup{ width:calc(100% - 40px); left:20px; top:40px; }
@@ -110,86 +68,18 @@ body{ margin:0; background-color:#F6F6F6; }
 
 @media (min-width: 320px) and (max-width: 479px)
 {
-  .main .header{ max-width:300px; }
-
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-
   .loader .box{ width:calc(100% - 40px); margin:20px; }
 
   .storagePopup{ width:calc(100% - 40px); left:20px; top:40px; }
 }
 
-@media (min-width: 480px) and (max-width: 639px)
-{
-  .main .header{ max-width:350px; }
-
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-}
-
-@media (min-width: 640px) and (max-width: 779px)
-{
-  .main .header{ max-width:400px; }
-
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-}
-
-@media (min-width: 780px) and (max-width: 959px)
-{
-  .main .header{ max-width:400px; }
-
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-}
-
-@media (min-width: 960px) and (max-width: 1279px)
-{
-  .main .header{ max-width:400px; }
-
-  .main .error{ width:calc(100% - 40px); margin:20px; }
-}
-
-@media (min-width: 1280px) and (max-width: 1679px)
-{
-  .main .header{ max-width:400px; }
-
-  .main .error{ width:1200px; margin:20px; }
-}
-
-@media (min-width: 1680px)
-{
-  .main .header{ max-width:400px; }
-
-  .main .error{ width:1200px; margin:20px; }
-}
-
-/****************************************************************************************************
-* ASIDE MENU                                                                                        *
-****************************************************************************************************/
-
-.asideMenu{ width:250px; position:fixed; top:0; bottom:0; left:0; background-color:#FFFFFF; }
-
-.asideMenuTitle{ background-color:#428BCA; color:#FFFFFF; padding:20px 10px 20px 10px; text-align:center; }
-
-.asideMenuTitleText{ font-size:24px; line-height:24px; font-family:roboto-light; }
-
-.asideMenuContent{ padding-bottom:5px; }
-
-.asideMenuContentLink{ display:block; padding:10px; cursor:pointer; border-bottom:1px solid #E0E0E0; text-decoration:none; color:#2C2F33; font-family:roboto-light; }
-
-.asideMenuContentLinkSelected{ display:block; padding:10px; cursor:pointer; border-bottom:1px solid #E0E0E0; text-decoration:none; color:#428BCA; font-family:roboto-light; }
-
-.asideMenuContentLink:hover{ color:#428BCA; background-color:#F0F0F0; -webkit-transition-duration:0.25s; transition-duration:0.25s; -moz-transition-duration:0.25s; -o-transition-duration:0.25s; }
-
-.asideMenuContentLinkIcon{ display:inline-block; vertical-align:top; width:32px; margin:0 10px 0 10px; font-size:24px; line-height:32px; text-align:center; }
-
-.asideMenuContentLinkText{ font-size:20px; line-height:32px; display:inline-block; vertical-align:top; width:calc(100% - 62px); margin-right:10px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; }
-
 /****************************************************************************************************
 * MAIN BLOCK                                                                                        *
 ****************************************************************************************************/
 
-.storageMainBlock{ width:calc(100% - 270px); margin:0 0 20px 270px; background-color:#FFFFFF; padding-bottom:20px; position:relative; }
+.storageMainBlock{ width:calc(100% - 310px); margin:40px 0 40px 0; display:inline-block; vertical-align:top; }
 
-.mainBlockLocation{ font-size:24px; line-height:24px; padding:10px; border-bottom:1px solid #E0E0E0; font-family:roboto-light; }
+.mainBlockLocation{ font-size:24px; line-height:24px; padding:10px; border-bottom:1px solid #CCC; font-family:roboto-light; }
 
 /****************************************************************************************************
 * ERROR BLOCK                                                                                       *
@@ -209,52 +99,20 @@ body{ margin:0; background-color:#F6F6F6; }
 
 @media (max-width: 319px)
 {
-  .asideMenuTitleText, .asideMenuTitleIcon, .asideMenuContentLinkText{ display:none; }
-
-  .asideMenu{ width:40px; }
-
-  .asideMenuContentLinkIcon{ margin:0; }
-
-  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
-
-  .storageMainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+  .storageMainBlock{ width:calc(100% - 60px); margin:20px 10px 20px 0; }
 }
 
 @media (min-width: 320px) and (max-width: 479px)
 {
-  .asideMenuTitleText, .asideMenuTitleIcon, .asideMenuContentLinkText{ display:none; }
-
-  .asideMenu{ width:40px; }
-
-  .asideMenuContentLinkIcon{ margin:0; }
-
-  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
-
-  .storageMainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+  .storageMainBlock{ width:calc(100% - 60px); margin:20px 10px 20px 0; }
 }
 
 @media (min-width: 480px) and (max-width: 639px)
 {
-  .asideMenuTitleText, .asideMenuTitleIcon, .asideMenuContentLinkText{ display:none; }
-
-  .asideMenu{ width:40px; }
-
-  .asideMenuContentLinkIcon{ margin:0; }
-
-  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
-
-  .storageMainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+  .storageMainBlock{ width:calc(100% - 60px); margin:20px 10px 20px 0; }
 }
 
 @media (min-width: 640px) and (max-width: 779px)
 {
-  .asideMenuTitleText, .asideMenuTitleIcon, .asideMenuContentLinkText{ display:none; }
-
-  .asideMenu{ width:40px; }
-
-  .asideMenuContentLinkIcon{ margin:0; }
-
-  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; }
-
-  .storageMainBlock{ width:calc(100% - 50px); margin:0 0 10px 50px; }
+  .storageMainBlock{ width:calc(100% - 60px); margin:20px 10px 20px 0; }
 }

@@ -103,6 +103,13 @@ const INCORRECT_ARTICLE_TITLE_FORMAT                                            
 const INCORRECT_ARTICLE_CONTENT_FORMAT                                            = 10099;
 const INTRANET_RIGHTS_NOT_FOUND                                                   = 10100;
 const UNAUTHORIZED_TO_CREATE_ARTICLES                                             = 10101;
+const SAME_EMAIL_ADDRESS                                                          = 10102;
+const AUTHENTICATION_TOKEN_NOT_FOUND                                              = 10103;
+const INCORRECT_CURRENT_PASSWORD                                                  = 10104;
+const INCORRECT_PASSWORD_FORMAT                                                   = 10105;
+const NEW_PASSWORD_AND_CONFIRMATION_MISMATCH                                      = 10106;
+const APP_DATA_NOT_FOUND                                                          = 10107;
+const UNAUTHORIZED_TO_ACCESS_THIS_APP                                             = 10108;
 
 /******************************************************************************************
 SUCCESS
@@ -248,6 +255,13 @@ module.exports =
   INCORRECT_ARTICLE_CONTENT_FORMAT: INCORRECT_ARTICLE_CONTENT_FORMAT,
   INTRANET_RIGHTS_NOT_FOUND: INTRANET_RIGHTS_NOT_FOUND,
   UNAUTHORIZED_TO_CREATE_ARTICLES: UNAUTHORIZED_TO_CREATE_ARTICLES,
+  SAME_EMAIL_ADDRESS: SAME_EMAIL_ADDRESS,
+  AUTHENTICATION_TOKEN_NOT_FOUND: AUTHENTICATION_TOKEN_NOT_FOUND,
+  INCORRECT_CURRENT_PASSWORD: INCORRECT_CURRENT_PASSWORD,
+  INCORRECT_PASSWORD_FORMAT: INCORRECT_PASSWORD_FORMAT,
+  NEW_PASSWORD_AND_CONFIRMATION_MISMATCH: NEW_PASSWORD_AND_CONFIRMATION_MISMATCH,
+  APP_DATA_NOT_FOUND: APP_DATA_NOT_FOUND,
+  UNAUTHORIZED_TO_ACCESS_THIS_APP: UNAUTHORIZED_TO_ACCESS_THIS_APP,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

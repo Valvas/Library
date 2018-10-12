@@ -1,4 +1,9 @@
 {
+  "appsPictures":
+  {
+    "storage": "/pictures/apps/storage.png"
+  },
+
   "asideMenuLinks":
   {
     "home": "/storage",

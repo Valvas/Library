@@ -1,9 +1,7 @@
 'use strict'
 
-const params              = require(`${__root}/json/params`);
 const constants           = require(`${__root}/functions/constants`);
-const accountsGet         = require(`${__root}/functions/accounts/get`);
-const oldDatabaseManager  = require(`${__root}/functions/database/${params.database.dbms}`);
+const commonAccountsGet   = require(`${__root}/functions/common/accounts/get`);
 
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
@@ -11,61 +9,54 @@ const storageAppServicesRights = module.exports = {};
 
 /****************************************************************************************************/
 
-storageAppServicesRights.getRightsTowardsServices = (accountId, databaseConnection, params, callback) =>
+storageAppServicesRights.getRightsTowardsServices = (accountUuid, databaseConnection, params, callback) =>
 {
-  accountId           == undefined ||
-  databaseConnection  == undefined ?
+  if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
-
-  accountsGet.getAccountUsingID(accountId, databaseConnection, (error, account) =>
+  databaseManager.selectQuery(
   {
-    if(error != null) return callback(error);
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.rights,
+    args: [ '*' ],
+    where: { operator: '=', key: 'account', value: accountUuid }
 
-    databaseManager.selectQuery(
+  }, databaseConnection, (error, rights) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    var x = 0;
+
+    var rightsObject = {};
+
+    var browseRights = () =>
     {
-      databaseName: params.database.storage.label,
-      tableName: params.database.storage.tables.rights,
-      args: [ '*' ],
-      where: { operator: '=', key: 'account', value: accountId }
-  
-    }, databaseConnection, (error, rights) =>
-    {
-      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+      rightsObject[rights[x].service] = {};
+      rightsObject[rights[x].service].remove      = (rights[x].remove_files == 1);
+      rightsObject[rights[x].service].upload      = (rights[x].upload_files == 1);
+      rightsObject[rights[x].service].comment     = (rights[x].post_comments == 1);
+      rightsObject[rights[x].service].download    = (rights[x].download_files == 1);
 
-      var x = 0;
-
-      var rightsObject = {};
-
-      var browseRights = () =>
-      {
-        rightsObject[rights[x].service] = {};
-        rightsObject[rights[x].service].remove      = (rights[x].remove_files == 1);
-        rightsObject[rights[x].service].upload      = (rights[x].upload_files == 1);
-        rightsObject[rights[x].service].comment     = (rights[x].post_comments == 1);
-        rightsObject[rights[x].service].download    = (rights[x].download_files == 1);
-
-        if(rights[x += 1] == undefined) return callback(null, rightsObject);
-        
-        browseRights();
-      }
-
-      if(rights.length == 0) return callback(null, {});
+      if(rights[x += 1] == undefined) return callback(null, rightsObject);
       
       browseRights();
-    });
+    }
+
+    if(rights.length == 0) return callback(null, {});
+    
+    browseRights();
   });
 }
 
 /****************************************************************************************************/
 
-storageAppServicesRights.getRightsTowardsService = (serviceUuid, accountId, databaseConnection, params, callback) =>
+storageAppServicesRights.getRightsTowardsService = (serviceUuid, accountUuid, databaseConnection, params, callback) =>
 {
-  serviceUuid         == undefined ||
-  accountId           == undefined ||
-  databaseConnection  == undefined ?
-
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
+  if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(serviceUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   databaseManager.selectQuery(
   {
@@ -75,7 +66,7 @@ storageAppServicesRights.getRightsTowardsService = (serviceUuid, accountId, data
     where:
     {
       condition: 'AND',
-      0: { operator: '=', key: 'account', value: accountId },
+      0: { operator: '=', key: 'account', value: accountUuid },
       1: { operator: '=', key: 'service', value: serviceUuid }
     }
   }, databaseConnection, (error, result) =>
