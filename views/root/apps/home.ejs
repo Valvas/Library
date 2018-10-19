@@ -8,12 +8,12 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/apps/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <body>
-    <% include ../../include/header.ejs %>
+    <% include ../include/header.ejs %>
     <% include ../../include/informations.ejs %>
     <div class="mainBlock">
       <div class="startColumn">
-        <% include ../../include/aside.ejs %>
-        <% include ../../include/news.ejs %>
+        <% include ../include/aside.ejs %>
+        <% include ../include/news.ejs %>
       </div><!--
       --><div class="centerColumn">
         <div id="appBlocks">
@@ -21,7 +21,7 @@
             <% if(locals.access.includes(locals.apps[x].uuid)){ %>
               <a class="appBlock" href="/<%= locals.apps[x].name %>">
                 <div class="appBlockPictureContainer">
-                  <img class="appBlockPicture" src="<%= locals.webContent.appsPictures[locals.apps[x].name] %>"/>
+                  <img class="appBlockPicture" src=""/>
                 </div>
                 <div class="appBlockName"><%= locals.strings.common.apps[locals.apps[x].name] %></div>
                 <div class="appBlockAccess"><%= strings.common.root.apps.accessApp %></div>
@@ -49,8 +49,8 @@
       --><div class="endColumn">
       </div>
     </div>
-    <% include ../../include/footer.ejs %>
-    <% include ../../include/root_scripts.ejs %>
+    <% include ../include/footer.ejs %>
+    <% include ../include/scripts.ejs %>
     <script src='/js/root/news/selectNewsExternal.js'></script>
   </body>
 </html>

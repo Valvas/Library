@@ -4,7 +4,6 @@ const express               = require('express');
 const errors                = require(`${__root}/json/errors`);
 const constants             = require(`${__root}/functions/constants`);
 const commonStrings         = require(`${__root}/json/strings/common`);
-const webContent            = require(`${__root}/json/share/webcontent`);
 const commonNewsGet         = require(`${__root}/functions/common/news/get`);
 const commonRightsGet       = require(`${__root}/functions/common/rights/get`);
 
@@ -32,7 +31,6 @@ router.get('/', (req, res) =>
         { 
           account: req.app.locals.account, 
           currentLocation: 'news',
-          webContent: webContent,
           strings: { common: commonStrings },
           news: news,
           newsSelected: false,
@@ -63,7 +61,7 @@ router.get('/create', (req, res) =>
       {
         rightsData.create_articles == false
         ? res.render('block', { message: errors[constants.UNAUTHORIZED_TO_CREATE_ARTICLES], detail: null, link: req.headers.referer })
-        : res.render('root/news/create', { account: req.app.locals.account, currentLocation: 'news', webContent: webContent, strings: { common: commonStrings }, news: news });
+        : res.render('root/news/create', { account: req.app.locals.account, currentLocation: 'news', strings: { common: commonStrings }, news: news });
       }
     });
   });
@@ -100,7 +98,6 @@ router.get('/:newsUuid', (req, res) =>
             { 
               account: req.app.locals.account, 
               currentLocation: 'news',
-              webContent: webContent,
               strings: { common: commonStrings },
               news: news,
               newsSelected: req.params.newsUuid,

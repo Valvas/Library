@@ -8,12 +8,107 @@ const constants                 = require(`${__root}/functions/constants`);
 const commonAppStrings          = require(`${__root}/json/strings/common`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
 const accessGet                 = require(`${__root}/functions/access/get`);
-const accountsGet               = require(`${__root}/functions/accounts/get`);
 const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
+const storageAppAdminUpdate     = require(`${__root}/functions/storage/admin/update`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppAdminServices   = require(`${__root}/functions/storage/admin/services`);
 
 var router = express.Router();
+
+/****************************************************************************************************/
+/* CREATE SERVICE */
+/****************************************************************************************************/
+
+router.post('/create-service', (req, res) =>
+{
+  const serviceData = JSON.parse(req.body.serviceData);
+
+  if(serviceData.serviceName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service name' });
+
+  else if(serviceData.maxFileSize == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Max file size' });
+
+  else if(serviceData.authorizedExtensions == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Authorized extensions' });
+
+  else
+  {
+    storageAppAdminServices.createService(serviceData.serviceName, serviceData.maxFileSize, serviceData.authorizedExtensions, req.app.locals.storageAdminRights[req.app.locals.storageAdminAccountLevel], req.app.get('databaseConnectionPool'), req.app.get('params'), (error, createdServiceUuid) =>
+    {      
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      else
+      {
+        req.app.get('io').in('storageAppAdminServicesList').emit('serviceCreated', { serviceUuid: createdServiceUuid, serviceName: serviceData.serviceName, fileLimit: serviceData.maxFileSize }, storageAppStrings, req.app.locals.storageAdminRights[req.app.locals.storageAdminAccountLevel]);
+
+        res.status(201).send({ title: '', message: success[constants.SERVICE_SUCCESSFULLY_CREATED], detail: null });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+/* UPDATE SERVICE */
+/****************************************************************************************************/
+
+router.put('/update-service', (req, res) =>
+{
+  const serviceData = JSON.parse(req.body.serviceData);
+
+  if(serviceData.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service uuid' });
+  
+  else if(serviceData.serviceName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service name' });
+
+  else if(serviceData.maxFileSize == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Max file size' });
+
+  else if(serviceData.authorizedExtensions == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Authorized extensions' });
+
+  else
+  {
+    storageAppAdminServices.updateService(serviceData.serviceUuid, serviceData.serviceName, serviceData.maxFileSize, serviceData.authorizedExtensions, req.app.locals.storageAdminRights[req.app.locals.storageAdminAccountLevel], req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      else
+      {
+        req.app.get('io').in('storageAppAdminServicesList').emit('serviceUpdated', { serviceUuid: serviceData.serviceUuid, serviceName: serviceData.serviceName, fileLimit: serviceData.maxFileSize }, storageAppStrings);
+        
+        res.status(201).send({ title: '', message: success[constants.SERVICE_SUCCESSFULLY_UPDATED], detail: null });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+/* REMOVE SERVICE */
+/****************************************************************************************************/
+
+router.put('/remove-service', (req, res) =>
+{
+  if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Service uuid' });
+
+  else
+  {
+    storageAppAdminServices.removeService(req.body.serviceUuid, req.app.locals.storageAdminRights[req.app.locals.storageAdminAccountLevel], req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceRemoveStats) =>
+    {
+      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail, serviceRemoveStats: serviceRemoveStats });
+      
+      else
+      {
+        req.app.get('io').in('storageAppAdminServicesList').emit('serviceRemoved', req.body.serviceUuid, storageAppStrings);
+
+        res.status(200).send({ message: success[constants.SERVICE_SUCCESSFULLY_REMOVED], serviceRemoveStats: serviceRemoveStats });
+      }
+    });
+  }
+});
+
+/****************************************************************************************************/
+/* GET ADMIN ACCOUNT RIGHTS */
+/****************************************************************************************************/
+
+router.get('/get-admin-account-rights', (req, res) =>
+{
+  res.status(200).send({ accountAdminRights: req.locals.storageAdminRights[req.app.locals.storageAdminAccountLevel] });
+});
 
 /****************************************************************************************************/
 
@@ -223,6 +318,18 @@ router.get('/get-account-admin-rights', (req, res) =>
     {
       res.status(200).send({ rights: rights });
     }
+  });
+});
+
+/****************************************************************************************************/
+
+router.put('/update-account-admin-level', (req, res) =>
+{
+  storageAppAdminUpdate.updateAccountAdminLevel(req.body.accountUuid, req.body.adminLevel, req.app.locals.storageAdminAccountLevel, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  {
+    error != null
+    ? res.status(error.status).send({ message: errors[error.code], detail: error.detail })
+    : res.status(200).send({ title: commonAppStrings.global.success, message: success[constants.ADMIN_ACCOUNT_LEVEL_SUCCESSFULLY_UPDATED] });
   });
 });
 

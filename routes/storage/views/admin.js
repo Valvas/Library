@@ -5,12 +5,11 @@ const errors                    = require(`${__root}/json/errors`);
 const constants                 = require(`${__root}/functions/constants`);
 const commonAppStrings          = require(`${__root}/json/strings/common`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
-const webContent                = require(`${__root}/json/share/webcontent`);
 const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
 const commonAccessGet           = require(`${__root}/functions/common/access/get`);
 const commonAccountsGet         = require(`${__root}/functions/common/accounts/get`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
-const storageAppFilesExtensions = require(`${__root}/functions/storage/files/extensions`);
+const storageAppExtensionsGet   = require(`${__root}/functions/storage/extensions/get`);
 
 var router = express.Router();
 
@@ -22,7 +21,6 @@ router.get('/', (req, res) =>
   { 
     account: req.app.locals.account,
     strings: { common: commonAppStrings, storage: storageAppStrings },
-    webContent: webContent,
     location: 'administration',
     adminLocation: 'home',
     storageAdminAccountLevel: req.app.locals.storageAdminAccountLevel,
@@ -44,7 +42,6 @@ router.get('/account-levels', (req, res) =>
       { 
         account: req.app.locals.account,
         strings: { common: commonAppStrings, storage: storageAppStrings },
-        webContent: webContent,
         location: 'administration',
         adminLocation: 'level',
         storageAdminAccountLevel: req.app.locals.storageAdminAccountLevel,
@@ -75,7 +72,6 @@ router.get('/account-levels', (req, res) =>
               { 
                 account: req.app.locals.account,
                 strings: { common: commonAppStrings, storage: storageAppStrings },
-                webContent: webContent,
                 location: 'administration',
                 adminLocation: 'level',
                 storageAdminAccountLevel: req.app.locals.storageAdminAccountLevel,
@@ -112,6 +108,7 @@ router.get('/account-levels/:accountUuid', (req, res) =>
         {
           var account = {};
 
+          account.uuid = accountData.uuid;
           account.email = accountData.email;
           account.firstname = accountData.firstname;
           account.lastname = accountData.lastname;
@@ -121,7 +118,6 @@ router.get('/account-levels/:accountUuid', (req, res) =>
           { 
             account: req.app.locals.account,
             strings: { common: commonAppStrings, storage: storageAppStrings },
-            webContent: webContent,
             location: 'administration',
             adminLocation: 'level',
             storageAdminAccountLevel: req.app.locals.storageAdminAccountLevel,
@@ -138,122 +134,79 @@ router.get('/account-levels/:accountUuid', (req, res) =>
 
 router.get('/services', (req, res) =>
 {
-  if(req.app.locals.rights.access_services == 0)
+  storageAppServicesGet.getServicesData(req.app.get('databaseConnectionPool'), req.app.get('params'), (error, servicesDetail) =>
   {
-    res.render('block', { message: errors[constants.RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE] });
-  }
+    if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
-  else
-  {
-    storageAppAdminGet.getServicesDetailForConsultation(req.app.get('databaseConnectionPool'), (error, servicesDetail) =>
+    else
     {
-      if(error != null)
+      res.render('storage/admin/services/home',
       {
-        res.render('storage/admin/services/list',
-        {
-          account: req.session.account,
-          rights: req.app.locals.rights,
-          error: { message: errors[error.code], detail: error.detail },
-          services: null,
-          strings: { common: commonAppStrings, storage: storageAppStrings },
-          webContent: webContent,
-          location: 'administration',
-          adminLocation: 'services'
-        });
-      }
-
-      else
-      {
-        res.render('storage/admin/services/list',
-        {
-          account: req.session.account,
-          rights: req.app.locals.rights,
-          error: null,
-          services: servicesDetail,
-          strings: { common: commonAppStrings, storage: storageAppStrings },
-          webContent: webContent,
-          location: 'administration',
-          adminLocation: 'services'
-        });
-      }
-    });
-  }
+        account: req.app.locals.account,
+        strings: { common: commonAppStrings, storage: storageAppStrings },
+        location: 'administration',
+        adminLocation: 'services',
+        storageAdminAccountLevel: req.app.locals.storageAdminAccountLevel,
+        storageAdminRights: req.app.locals.storageAdminRights,
+        services: servicesDetail
+      });
+    }
+  });
 });
 
 /****************************************************************************************************/
 
 router.get('/services-rights', (req, res) =>
 {
-  if(req.app.locals.rights.consult_services_rights == 0)
+  storageAppServicesGet.getServicesData(req.app.get('databaseConnectionPool'), req.app.get('params'), (error, servicesDetail) =>
   {
-    res.render('block', { message: errors[constants.RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE] });
-  }
+    if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
-  else
-  {
-    storageAppAdminGet.getServicesDetailForConsultation(req.app.get('databaseConnectionPool'), (error, servicesDetail) =>
+    else
     {
-      if(error != null)
+      res.render('storage/admin/servicesRights/home',
       {
-        res.render('storage/admin/servicesRights/home',
-        {
-          account: req.session.account,
-          rights: req.app.locals.rights,
-          error: { message: errors[error.code], detail: error.detail },
-          services: null,
-          strings: { common: commonAppStrings, storage: storageAppStrings },
-          webContent: webContent,
-          location: 'administration',
-          adminLocation: 'rights'
-        });
-      }
-
-      else
-      {
-        res.render('storage/admin/servicesRights/home',
-        {
-          account: req.session.account,
-          rights: req.app.locals.rights,
-          error: null,
-          services: servicesDetail,
-          strings: { common: commonAppStrings, storage: storageAppStrings },
-          webContent: webContent,
-          location: 'administration',
-          adminLocation: 'rights'
-        });
-      }
-    });
-  }
+        account: req.app.locals.account,
+        strings: { common: commonAppStrings, storage: storageAppStrings },
+        location: 'administration',
+        adminLocation: 'rights',
+        storageAdminAccountLevel: req.app.locals.storageAdminAccountLevel,
+        storageAdminRights: req.app.locals.storageAdminRights,
+        services: servicesDetail
+      });
+    }
+  });
 });
 
 /****************************************************************************************************/
 
-router.get('/services/detail/:service', (req, res) =>
+router.get('/services/update/:service', (req, res) =>
 {
   storageAppServicesGet.checkIfServiceExists(req.params.service, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceExists, serviceData) =>
   {
-    if(error != null)
-    {
-      res.render('storage/admin/services/detail', { account: req.session.account, error: error, service: null, strings: { common: commonAppStrings, storage: storageAppStrings }, webContent: webContent, location: 'administration', adminLocation: 'services' });
-    }
+    if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
-    else if(serviceExists == false)
-    {
-      res.render('storage/admin/services/detail', { account: req.session.account, error: { status: 404, code: constants.SERVICE_NOT_FOUND, detail: null }, service: null, strings: { common: commonAppStrings, storage: storageAppStrings }, webContent: webContent, location: 'administration', adminLocation: 'services' });
-    }
+    else if(serviceExists == false) res.render('block', { message: errors[constants.SERVICE_NOT_FOUND], detail: null, link: req.headers.referer });
 
     else
     {
-      storageAppServicesGet.getAuthorizedExtensionsForService(req.params.service, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceExtensions, allExtensions) =>
+      storageAppExtensionsGet.getAllExtensions(req.app.get('databaseConnectionPool'), req.app.get('params'), (error, extensions) =>
       {
-        if(error != null)
-        {
-          res.render('storage/admin/services/detail', { account: req.session.account, error: error, service: null, strings: { common: commonAppStrings, storage: storageAppStrings }, webContent: webContent, location: 'administration', adminLocation: 'services' });
-        }
+        if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
         else
         {
-          res.render('storage/admin/services/detail', { account: req.session.account, error: null, service: { serviceData: serviceData, serviceExtensions: serviceExtensions, allExtensions: allExtensions }, strings: { common: commonAppStrings, storage: storageAppStrings }, webContent: webContent, location: 'administration', adminLocation: 'services' });
+          res.render('storage/admin/services/update',
+          {
+            account: req.app.locals.account,
+            strings: { common: commonAppStrings, storage: storageAppStrings },
+            location: 'administration',
+            adminLocation: 'services',
+            storageAdminAccountLevel: req.app.locals.storageAdminAccountLevel,
+            storageAdminRights: req.app.locals.storageAdminRights,
+            extensions: extensions,
+            serviceData: serviceData
+          });
         }
       });
     }
@@ -262,43 +215,29 @@ router.get('/services/detail/:service', (req, res) =>
 
 /****************************************************************************************************/
 
-router.get('/services/form', (req, res) =>
+router.get('/services/create', (req, res) =>
 {
-  if(req.app.locals.rights.create_services == 0)
+  if(req.app.locals.storageAdminRights[req.app.locals.storageAdminAccountLevel].createServices == false)
   {
-    res.render('block', { message: errors[constants.RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE] });
+    res.render('block', { message: errors[constants.RIGHTS_REQUIRED_TO_ACCESS_THIS_PAGE], detail: null, link: req.headers.referer });
   }
 
   else
   {
-    storageAppFilesExtensions.getExtensions(req.app.get('databaseConnectionPool'), req.app.get('params').database.storage, (error, extensions) =>
+    storageAppExtensionsGet.getAllExtensions(req.app.get('databaseConnectionPool'), req.app.get('params'), (error, extensions) =>
     {
-      if(error != null)
-      {
-        res.render('storage/admin/services/form',
-        {
-          account: req.session.account,
-          rights: req.app.locals.rights,
-          error: { message: errors[error.code], detail: error.detail },
-          strings: { common: commonAppStrings, storage: storageAppStrings },
-          webContent: webContent,
-          location: 'administration',
-          adminLocation: 'services',
-          extensions: null
-        });
-      }
+      if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
       else
       {
-        res.render('storage/admin/services/form',
+        res.render('storage/admin/services/create',
         {
-          account: req.session.account,
-          rights: req.app.locals.rights,
-          error: null,
+          account: req.app.locals.account,
           strings: { common: commonAppStrings, storage: storageAppStrings },
-          webContent: webContent,
           location: 'administration',
           adminLocation: 'services',
+          storageAdminAccountLevel: req.app.locals.storageAdminAccountLevel,
+          storageAdminRights: req.app.locals.storageAdminRights,
           extensions: extensions
         });
       }

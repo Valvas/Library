@@ -2,10 +2,8 @@
 
 const express                   = require('express')
 const errors                    = require(`${__root}/json/errors`)
-const constants                 = require(`${__root}/functions/constants`)
 const commonAppStrings          = require(`${__root}/json/strings/common`)
 const storageAppStrings         = require(`${__root}/json/strings/storage`)
-const webContent                = require(`${__root}/json/share/webcontent`)
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`)
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`)
 
@@ -34,7 +32,6 @@ router.get('/', (req, res) =>
             services: services,
             rights: rights,
             error: null,
-            webContent: webContent,
             location: 'services'
           });
         }
@@ -61,7 +58,6 @@ router.get('/:service', (req, res) =>
         elements: files,
         error: null,
         service: service,
-        webContent: webContent,
         location: 'services'
       });
     }

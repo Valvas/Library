@@ -7,7 +7,7 @@ const filesRemove                         = require(`${__root}/functions/files/r
 const databaseManager                     = require(`${__root}/functions/database/MySQLv3`);
 const storageAppFilesGet                  = require(`${__root}/functions/storage/files/get`);
 const storageAppFilesSet                  = require(`${__root}/functions/storage/files/set`);
-const storageAppServicesGet               = require(`${__root}/functions/storage/services/get`);
+const commonFilesMove                     = require(`${__root}/functions/common/files/move`);
 const storageAppServicesRights            = require(`${__root}/functions/storage/services/rights`);
 const storageAppLogsRemoveFile            = require(`${__root}/functions/storage/logs/services/removeFile`);
 
@@ -107,6 +107,30 @@ function browseFilesToRemove(filesToRemove, serviceUuid, account, databaseConnec
 module.exports.removeFolder = () =>
 {
 
+}
+
+/****************************************************************************************************/
+// REMOVE FILE
+/****************************************************************************************************/
+
+module.exports.removeFileFromService = (fileUuid, serviceUuid, databaseConnection, params, callback) =>
+{
+  databaseManager.updateQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.serviceElements,
+    args: { is_deleted: 1, parent_folder: null },
+    where: { operator: '=', key: 'uuid', value: fileUuid }
+
+  }, databaseConnection, (error) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    commonFilesMove.moveFile(`${params.storage.root}/${params.storage.services}/${serviceUuid}/${fileUuid}`, `${params.storage.root}/${params.storage.bin}/${fileUuid}`, (error) =>
+    {
+      return callback(error);
+    });
+  });
 }
 
 /****************************************************************************************************/

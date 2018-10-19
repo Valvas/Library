@@ -8,7 +8,6 @@ const encryption          = require(`${__root}/functions/encryption`);
 const adminAppAuth        = require(`${__root}/functions/admin/auth`);
 const initFolder          = require(`${__root}/functions/init/folders`);
 const database            = require(`${__root}/functions/database/init`);
-const shareAppInit        = require(`${__root}/functions/init/shareAppInit`);
 const initCreateAccounts  = require(`${__root}/functions/init/createAccounts`);
 
 const storageAppAccess        = require(`${__root}/functions/storage/checkAccess`);
@@ -173,8 +172,6 @@ module.exports.startApp = (app, callback) =>
       app.set('transporter', transporter);
       app.set('mysqlConnector', connection);
       app.set('databaseConnectionPool', pool);
-
-      shareAppInit.initShareApplication(params.database.storage, pool);
     
       database.createDatabases(pool, () =>
       { 

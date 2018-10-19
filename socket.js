@@ -2,6 +2,7 @@
 
 const success                     = require(`${__root}/json/success`);
 const constants                   = require(`${__root}/functions/constants`);
+const storageAppStrings           = require(`${__root}/json/strings/storage`);
 const accountsGet                 = require(`${__root}/functions/accounts/get`);
 const storageAppFilesGet          = require(`${__root}/functions/storage/files/get`);
 const commonAccountsGet           = require(`${__root}/functions/common/accounts/get`);
@@ -120,59 +121,17 @@ module.exports = (io, app, callback) =>
     });
 
     /****************************************************************************************************/
+    // STORAGE APP ADMIN SERVICE EVENTS
+    /****************************************************************************************************/
 
     socket.on('storageAppAdminServiceRemoved', (serviceUuid) =>
     {
-      io.in('storageAppAdminServicesList').emit('serviceRemoved', serviceUuid);
+      io.in('storageAppAdminServicesList').emit('serviceRemoved', serviceUuid, storageAppStrings);
     });
 
-    socket.on('storageAppAdminServiceLabelUpdated', (serviceUuid, serviceName) =>
+    socket.on('storageAppAdminServiceCreated', (serviceUuid) =>
     {
-      io.in('admin' + serviceUuid).emit('serviceNameUpdated', serviceName, success[constants.SERVICE_LABEL_SUCCESSFULLY_UPDATED]);
-    });
-
-    socket.on('storageAppAdminServiceFileSizeUpdated', (serviceUuid, serviceFileSize) =>
-    {
-      io.in('admin' + serviceUuid).emit('serviceFileSizeUpdated', serviceFileSize, success[constants.SERVICE_MAX_FILE_SIZE_SUCCESSFULLY_UPDATED]);
-    });
-
-    socket.on('storageAppAdminServiceExtensionsUpdated', (serviceUuid) =>
-    {
-      storageAppServicesGet.getAuthorizedExtensionsForService(serviceUuid, app.get('databaseConnectionPool'), app.get('params'), (error, serviceExtensions, allExtensions) =>
-      {
-        if(error == null) io.in('admin' + serviceUuid).emit('serviceExtensionsUpdated', serviceExtensions, allExtensions, success[constants.SERVICE_EXTENSIONS_SUCCESSFULLY_UPDATED]);
-      });
-    });
-
-    socket.on('storageAppAdminServicesRightsAccountAddedToMembers', (account) =>
-    {
-      io.in('adminServicesRights').emit('accountAddedToMembers', account);
-    });
-
-    socket.on('storageAppAdminServicesRightsAccountRemovedFromMembers', (accountUuid, serviceUuid) =>
-    {
-      commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, app.get('databaseConnectionPool'), app.get('params'), (error, accountExists, accountData) =>
-      {
-        if(error == null && accountExists) io.in('adminServicesRights').emit('accountRemovedFromMembers', accountData, serviceUuid);
-      });
-    });
-
-    socket.on('accountRightsUpdatedOnService', (accountUuid, accountRights, serviceUuid) =>
-    {
-      commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, app.get('databaseConnectionPool'), app.get('params'), (error, accountExists, accountData) =>
-      {
-        if(error == null && accountExists) io.in('adminServicesRights').emit('accountRightsUpdatedOnService', accountData, accountRights, serviceUuid);
-      });
-    });
-
-    socket.on('storageAppAdminServicesRightAddedToMember', (accountUUID, right) =>
-    {
-      io.in('adminServicesRights').emit('rightAddedToMember', accountUUID, right);
-    });
-
-    socket.on('storageAppAdminServicesRightRemovedToMember', (accountUUID, right) =>
-    {
-      io.in('adminServicesRights').emit('rightRemovedToMember', accountUUID, right);
+      io.in('storageAppAdminServicesList').emit('serviceRemoved', serviceUuid, storageAppStrings);
     });
   });
 

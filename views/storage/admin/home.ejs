@@ -9,12 +9,10 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/home.css" />
   <body>
-    <% include ../includes/aside.ejs %><!--
-    --><div class='storageMainBlock'>
-      <div class="mainBlockLocation"><%= strings.storage.locations.admin %></div>
+    <% include ../includes/aside.ejs %>
+    <div class='storageMainBlock'>
       <% include ../includes/admin/navigation.ejs %>
       <div class="rightsBlock">
-        <div class="rightsBlockTitle"><%= strings.storage.admin.home.myRights %></div>
         <div class="rightsBlockLevel"><%= strings.storage.admin.home.myLevel %> <%= storageAdminAccountLevel %></div>
         <div class="rightsBlockContainer">
           <div class="rightsBlockInfo"><%= strings.storage.admin.home.rightsInfo %> :</div>

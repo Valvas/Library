@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <title><%= strings.storage.name %> - <%= strings.storage.locations.admin %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/services/list.css" />
+  <body>
+    <% include ../../../include/informations.ejs %>
+    <% include ../../includes/aside.ejs %>
+    <div class='storageMainBlock'>
+      <% include ../../includes/admin/navigation.ejs %>
+      <div class="createServiceBlock">
+        <div class="createServiceTitle"><%= locals.strings.storage.admin.services.listPage.createServiceBlock.title %></div>
+        <% if(storageAdminRights[storageAdminAccountLevel].createServices == true){ %>
+          <div class="createServiceEnabledMessage"><%= locals.strings.storage.admin.services.listPage.createServiceBlock.enabledMessage %></div>
+          <a class="createServiceLink" href="/storage/admin/services/create"><%= locals.strings.storage.admin.services.listPage.createServiceBlock.link %></a>
+        <% } else{ %>
+          <div class="createServiceDisabledMessage"><%= locals.strings.storage.admin.services.listPage.createServiceBlock.disabledMessage %></div>
+        <% } %>
+      </div>
+      <div class="servicesList" id="servicesList">
+        <% if(Object.keys(services).length == 0){ %>
+          <div class="servicesListEmpty" id="servicesListEmpty"><%= strings.storage.admin.services.empty %></div>
+        <% } else{ %>
+          <% for(var service in services){ %>
+            <div class="servicesListBlock" id='<%= service %>'>
+              <div class="servicesListBlockTitle"><%= services[service].name.charAt(0).toUpperCase() + services[service].name.slice(1).toLowerCase() %></div>
+              <% if(parseInt(services[service].fileLimit) / 1024 / 1024 / 1024 >= 1){ %>
+                <div class='servicesListBlockKey'><%= strings.storage.admin.services.listPage.serviceBlock.fileSize %></div><div class='servicesListBlockValue'><%= parseInt(services[service].fileLimit) / 1024 / 1024 / 1024 %> Go</div>
+              <% } else if(parseInt(services[service].fileLimit) / 1024 / 1024 >= 1){ %>
+                <div class='servicesListBlockKey'><%= strings.storage.admin.services.listPage.serviceBlock.fileSize %></div><div class='servicesListBlockValue'><%= parseInt(services[service].fileLimit) / 1024 / 1024 %> Mo</div>
+              <% } else if(parseInt(services[service].fileLimit) / 1024 >= 1){ %>
+                <div class='servicesListBlockKey'><%= strings.storage.admin.services.listPage.serviceBlock.fileSize %></div><div class='servicesListBlockValue'><%= parseInt(services[service].fileLimit) / 1024 %> Ko</div>
+              <% } else{ %>
+                <div class='servicesListBlockKey'><%= strings.storage.admin.services.listPage.serviceBlock.fileSize %></div><div class='servicesListBlockValue'><%= parseInt(services[service].fileLimit) %> o</div>
+              <% } %>
+              <div class="serviceListBlockUpdate">
+                <% if(locals.storageAdminRights[locals.storageAdminAccountLevel].modifyServices){ %>
+                  <div class="serviceListBlockUpdateEnabledMessage"><%= strings.storage.admin.services.listPage.serviceBlock.updateServiceBlock.enabledMessage %></div>
+                  <a href="/storage/admin/services/update/<%= service %>" class="serviceListBlockUpdateButton"><%= strings.storage.admin.services.listPage.serviceBlock.updateServiceBlock.updateButton %></a>
+                <% } else{ %>
+                  <div class="serviceListBlockUpdateDisabledMessage"><%= strings.storage.admin.services.listPage.serviceBlock.updateServiceBlock.disabledMessage %></div>
+                <% } %>
+              </div>
+              <div class="serviceListBlockRemove">
+                <% if(locals.storageAdminRights[locals.storageAdminAccountLevel].removeServices){ %>
+                  <div class="serviceListBlockRemoveEnabledMessage"><%= strings.storage.admin.services.listPage.serviceBlock.removeServiceBlock.enabledMessage %></div>
+                  <button class="serviceListBlockRemoveButton" onclick="removeService('<%= service %>')"><%= strings.storage.admin.services.listPage.serviceBlock.removeServiceBlock.removeButton %></button>
+                <% } else{ %>
+                  <div class="serviceListBlockRemoveDisabledMessage"><%= strings.storage.admin.services.listPage.serviceBlock.removeServiceBlock.disabledMessage %></div>
+                <% } %>
+              </div>
+          </div>
+          <% } %>
+        <% } %>
+      </div>
+    </div>
+    <% include ../../../include/common_scripts.ejs %>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='/js/storage/admin/services/links.js'></script>
+    <script src='/js/storage/admin/services/remove.js'></script>
+    <script src='/js/storage/admin/services/socket.js'></script>
+    <script src='/js/storage/exit.js'></script>
+  </body>
+</html>

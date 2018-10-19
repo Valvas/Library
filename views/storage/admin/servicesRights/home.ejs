@@ -4,62 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/membersBlock.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/servicesRights/accountsBlock.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/serviceRights/home.css" />
   <body>
+    <% include ../../../include/informations.ejs %>
     <% include ../../includes/aside.ejs %>
-    <div class="informationsBlock" id="storageInformationsBlock"></div>
-    <div class='storageMainBlock' id='mainBlock'>
-      <div class="mainBlockLocation"><%= strings.storage.locations.rights %></div>
+    <div class="storageMainBlock">
       <% include ../../includes/admin/navigation.ejs %>
-      <% if(error != null){ %>
-        <div class="shareAppErrorBlock">
-          <div class="shareAppErrorBlockMessage">
-            <div class="shareAppErrorBlockMessageIcon"><i class="fas fa-2x fa-exclamation-circle"></i></div><div class="shareAppErrorBlockMessageText"><%= error.message %></div>
-          </div>
-          <% if(error.detail != null){ %>
-            <div class="shareAppErrorBlockDetail"><%= error.detail %></div>
-          <% } %>
-        </div>
-      <% } else{ %>
-        <button class='rightsOnServicesReturn' id='rightsOnServicesReturn'><%= strings.storage.admin.servicesRights.return %></button>
-        <div class='rightsOnServicesHomeServicesBlock' id='rightsOnServicesHomeServicesBlock'>
+      <a href="/storage/admin" class="rightsOnServicesHomeReturn"><%= strings.storage.admin.serviceRights.home.returnLink %></a>
+      <div class="rightsOnServicesHomeInformation">
+        <div class="rightsOnServicesHomeInformationTitle"><%= strings.storage.admin.serviceRights.home.informationBlockTitle %></div>
+        <ul>
+          <li class="rightsOnServicesHomeInformationMessage"><%= strings.storage.admin.serviceRights.home.informationBlockFirstMessage %></li>
+          <li class="rightsOnServicesHomeInformationMessage"><%= strings.storage.admin.serviceRights.home.informationBlockSecondMessage %></li>
+          <li class="rightsOnServicesHomeInformationMessage"><%= strings.storage.admin.serviceRights.home.informationBlockThirdMessage %></li>
+        </ul>
+        <div class="rightsOnServicesHomeInformationWarning"><%= strings.storage.admin.serviceRights.home.informationBlockWarning %></div>
+      </div>
+      <div class="rightsOnServicesHomeServices">
+        <div class="rightsOnServicesHomeServicesTitle"><%= strings.storage.admin.serviceRights.home.servicesBlockTitle %></div>
+        <div class="rightsOnServicesHomeServicesList">
           <% for(var service in services){ %>
-            <div class='rightsOnServicesHomeServicesBlockService'>
-              <div class='rightsOnServicesHomeServicesBlockServiceLabel'><%= services[service].name.charAt(0).toUpperCase() %><%= services[service].name.slice(1).toLowerCase() %></div>
-              <div class='rightsOnServicesHomeServicesBlockServiceMembers'>
-                <div class='rightsOnServicesHomeServicesBlockServiceMembersKey'><%= strings.storage.admin.servicesRights.members %></div><div class='rightsOnServicesHomeServicesBlockServiceMembersValue'><%= Object.keys(services[service].members).length %></div>
-              </div>
-              <button class='rightsOnServicesHomeServicesBlockServiceManage' onclick='hideServicesBlocks("<%= service %>")'>
-                <div class='rightsOnServicesHomeServicesBlockServiceManageIcon'><i class='fas fa-users'></i></div><div class='rightsOnServicesHomeServicesBlockServiceManageText'><%= strings.storage.admin.servicesRights.manageMembers %></div>
-              </button>
+            <div class="rightsOnServicesHomeServicesBlock">
+              <div class="rightsOnServicesHomeServicesBlockTitle"><%= services[service].name %></div>
+              <div class="rightsOnServicesHomeServicesBlockLevel"><%= strings.storage.admin.serviceRights.home.servicesBlockLevel %> : 0</div>
+              <div class="rightsOnServicesHomeServicesBlockAccess"><%= strings.storage.admin.serviceRights.home.servicesBlockAccess %></div>
             </div>
           <% } %>
         </div>
-      <% } %>
+      </div>
     </div>
-    <script src='/js/jQuery.js'></script>
-    <script src='/js/jQueryUI.js'></script>
-    <script src='/js/afk.js'></script>
-    <script src='/socket.io/socket.io.js'></script>
-    <script src='/js/storage/admin/servicesRights/return.js'></script>
-    <script src='/js/storage/admin/servicesRights/manageRights.js'></script>
-    <script src='/js/storage/admin/servicesRights/changeMembersPage.js'></script>
-    <script src='/js/storage/admin/servicesRights/openServiceDetail.js'></script>
-    <script src='/js/storage/admin/servicesRights/servicesRightsSocket.js'></script>
-    <script src='/js/storage/admin/servicesRights/removeMemberFromList.js'></script>
-    <script src='/js/storage/admin/servicesRights/accountsBlock/selectAccount.js'></script>
-    <script src='/js/storage/admin/servicesRights/accountsBlock/addAccountToMembers.js'></script>
-    <script src='/js/storage/admin/servicesRights/accountsBlock/changeAccountsBlockPage.js'></script>
-    <script src='/js/storage/admin/servicesRights/accountsBlock/updateAccountsBlockPages.js'></script>
-    <script src='/js/storage/admin/servicesRights/accountsBlock/searchAccounts.js'></script>
-    <script src='/js/storage/admin/servicesRights/accountsBlock/openAccountsBlock.js'></script>
-    <script src='/js/storage/admin/servicesRights/accountsBlock/closeAccountsBlock.js'></script>
-    <script src='/js/storage/exit.js'></script>
-    <script src='/js/storage/messages.js'></script>
+    <% include ../../../include/common_scripts.ejs %>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/storage/exit.js"></script>
   </body>
 </html>

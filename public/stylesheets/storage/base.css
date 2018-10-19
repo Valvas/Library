@@ -6,7 +6,7 @@
 
 /****************************************************************************************************/
 
-body{ margin:0; }
+body{ margin:0; font-family:Arial, Helvetica, sans-serif; }
 
 .storageBackground{ position:fixed; z-index:200; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.4; }
 
@@ -77,42 +77,8 @@ body{ margin:0; }
 * MAIN BLOCK                                                                                        *
 ****************************************************************************************************/
 
-.storageMainBlock{ width:calc(100% - 310px); margin:40px 0 40px 0; display:inline-block; vertical-align:top; }
+.storageMainBlock{ max-width:1200px; margin:40px auto 40px auto; width:calc(100% - 40px); }
 
 .mainBlockLocation{ font-size:24px; line-height:24px; padding:10px; border-bottom:1px solid #CCC; font-family:roboto-light; }
 
-/****************************************************************************************************
-* ERROR BLOCK                                                                                       *
-****************************************************************************************************/
-
-.shareAppErrorBlock{ width:600px; margin:20px calc(50% - 300px) 20px calc(50% - 300px); box-sizing:border-box; border:1px solid #E0E0E0; border-radius:4px; }
-
-.shareAppErrorBlockMessage{ margin:20px; }
-
-.shareAppErrorBlockMessageIcon{ display:inline-block; vertical-align:top; width:60px; color:#D9534F; }
-
-.shareAppErrorBlockMessageText{ display:inline-block; vertical-align:top; width:calc(100% - 60px); font-size:18px; line-height:32px; font-family:roboto-light; }
-
-.shareAppErrorBlockDetail{ font-size:16px; line-height:20px; color:#909090; font-family:roboto-light; margin:20px; }
-
 /****************************************************************************************************/
-
-@media (max-width: 319px)
-{
-  .storageMainBlock{ width:calc(100% - 60px); margin:20px 10px 20px 0; }
-}
-
-@media (min-width: 320px) and (max-width: 479px)
-{
-  .storageMainBlock{ width:calc(100% - 60px); margin:20px 10px 20px 0; }
-}
-
-@media (min-width: 480px) and (max-width: 639px)
-{
-  .storageMainBlock{ width:calc(100% - 60px); margin:20px 10px 20px 0; }
-}
-
-@media (min-width: 640px) and (max-width: 779px)
-{
-  .storageMainBlock{ width:calc(100% - 60px); margin:20px 10px 20px 0; }
-}

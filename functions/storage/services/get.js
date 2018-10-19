@@ -2,9 +2,9 @@
 
 const params                      = require(`${__root}/json/params`);
 const constants                   = require(`${__root}/functions/constants`);
-const accountsGet                 = require(`${__root}/functions/accounts/get`);
 const storageAppFilesGet          = require(`${__root}/functions/storage/files/get`);
 const commonAccountsGet           = require(`${__root}/functions/common/accounts/get`);
+const storageAppExtensionsGet     = require(`${__root}/functions/storage/extensions/get`);
 const storageAppServicesRights    = require(`${__root}/functions/storage/services/rights`);
 
 //To uncomment when updated database manager will be set for all the project
@@ -43,31 +43,25 @@ storageAppServicesGet.getServicesData = (databaseConnection, params, callback) =
       databaseManager.selectQuery(
       {
         databaseName: params.database.storage.label,
-        tableName: params.database.storage.tables.folders,
+        tableName: params.database.storage.tables.serviceElements,
         args: [ '*' ],
-        where: { operator: '=', key: 'service', value: services[x].uuid }
+        where: { operator: '=', key: 'service_uuid', value: services[x].uuid }
     
       }, databaseConnection, (error, result) =>
       {
         if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-        servicesObject[services[x].uuid].amountOfFolders = result.length;
+        servicesObject[services[x].uuid].amountOfFiles = 0;
+        servicesObject[services[x].uuid].amountOfFolders = 0;
 
-        databaseManager.selectQuery(
+        for(var i = 0; i < result.length; i++)
         {
-          databaseName: params.database.storage.label,
-          tableName: params.database.storage.tables.files,
-          args: [ '*' ],
-          where: { operator: '=', key: 'service', value: services[x].uuid }
-      
-        }, databaseConnection, (error, result) =>
-        {
-          if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-  
-          servicesObject[services[x].uuid].amountOfFiles = result.length;
+          result[x].is_directory
+          ? servicesObject[services[x].uuid].amountOfFolders += 1
+          : servicesObject[services[x].uuid].amountOfFiles += 1;
+        }
 
-          services[x += 1] == undefined ? callback(null, servicesObject) : loop();
-        });
+        services[x += 1] == undefined ? callback(null, servicesObject) : loop();
       });
     }
 
@@ -113,18 +107,29 @@ storageAppServicesGet.checkIfServiceExists = (serviceUuid, databaseConnection, p
 
     if(result.length == 0) return callback(null, false);
 
-    return callback(null, true, result[0]);
+    storageAppExtensionsGet.getExtensionsForService(serviceUuid, databaseConnection, params, (error, serviceExtensions) =>
+    {
+      if(error != null) return callback(error);
+
+      var serviceData = {};
+
+      serviceData.serviceUuid = result[0].uuid;
+      serviceData.serviceName = result[0].name;
+      serviceData.maxFileSize = result[0].file_size_limit;
+      serviceData.authorizedExtensions = serviceExtensions;
+
+      return callback(null, true, serviceData);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-storageAppServicesGet.getServiceUsingName = (serviceName, databaseConnector, callback) =>
+storageAppServicesGet.getServiceUsingName = (serviceName, databaseConnection, params, callback) =>
 {
-  serviceName         == undefined ||
-  databaseConnector   == undefined ?
-
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
+  if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(serviceName == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceName' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   databaseManager.selectQuery(
   {
@@ -133,13 +138,13 @@ storageAppServicesGet.getServiceUsingName = (serviceName, databaseConnector, cal
     args: [ '*' ],
     where: { operator: '=', key: 'name', value: serviceName }
 
-  }, databaseConnector, (error, result) =>
+  }, databaseConnection, (error, result) =>
   {
     if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    if(result.length == 0) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
+    if(result.length === 0) return callback(null, false);
 
-    return callback(null, result[0]);
+    return callback(null, true, result[0]);
   });
 }
 
@@ -388,6 +393,36 @@ function getValueForEachExtensionFromItsUuid(serviceUuid, extensionsUuid, databa
     }
 
     return callback(null, serviceExtensions, allExtensions);
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.getFilesFromService = (serviceUuid, databaseConnection, params, callback) =>
+{
+  if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(serviceUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+  
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.serviceElements,
+    args: [ '*' ],
+    where: { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: serviceUuid }, 1: { operator: '=', key: 'is_deleted', value: '0' }, 2: { operator: '=', key: 'is_directory', value: '0' } }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    var serviceFiles = [];
+
+    for(var x = 0; x < result.length; x++)
+    {
+      serviceFiles.push({ fileUuid: result[x].uuid, fileName: result[x].name, parentFolder: result[x].parent_folder });
+    }
+
+    return callback(null, serviceFiles);
   });
 }
 

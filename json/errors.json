@@ -106,5 +106,18 @@
   "10105": "Le format du mot de passe est incorrect",
   "10106": "Le nouveau mot de passe et sa confirmation ne correspondent pas",
   "10107": "Les données de l'application sont introuvables (erreur critique)",
-  "10108": "Vous n'êtes pas autorisé(e) à accéder à cette application"
+  "10108": "Vous n'êtes pas autorisé(e) à accéder à cette application",
+  "10109": "Ce niveau d'administration n'existe pas",
+  "10110": "Niveau d'administration trop faible pour exécuter cette requête",
+  "10111": "La suppression du dossier a échoué",
+  "10112": "Une extension n'a pas été trouvée",
+  "10113": "Echec de la mise à jour du service (les nouvelles données n'ont pas été enregistrées)",
+  "10114": "Erreur lors de l'enregistrement des données suivantes : nom du service, taille maximale des fichiers.",
+  "10115": "Erreur lors de l'enregistrement des nouvelles extensions",
+  "10116": "Une erreur est survenue pendant la modification des extensions du service (Le nom et la taille des fichiers ont été mis à jour cependant les nouvelles extensions peuvent partiellement ou en totalité ne pas avoir été enregistrées)",
+  "10117": "Une erreur est survenue pendant l'enregistrement des extensions autorisées du service",
+  "10118": "Echec de la création du nouveau service",
+  "10119": "Echec de la création du nouveau service (celui-ci a été partiellement créé et un retour arrière n'a pas réussi, veuillez signaler ce problème à un administrateur et ne pas utiliser ce service)",
+  "10120": "Echec de la suppression du service",
+  "10121": "Une erreur s'est produite lors du déplacement d'un fichier"
 }

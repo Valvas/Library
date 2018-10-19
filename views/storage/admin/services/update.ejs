@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <title><%= strings.storage.name %> - <%= strings.storage.locations.admin %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/services/form.css" />
+  <body>
+    <% include ../../../include/informations.ejs %>
+    <% include ../../includes/aside.ejs %>
+    <div class='storageMainBlock'>
+      <div class="mainBlockLocation"><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %> / <%= strings.storage.locations.update %></div>
+      <% include ../../includes/admin/navigation.ejs %>
+      <div class="serviceCreationForm">
+        <div class="serviceCreationFormTitle"><%= strings.storage.admin.services.updatePage.updateBlockTitle %></div>
+        <form id="serviceUpdateFormBlock" name="<%= locals.serviceData.serviceUuid %>">
+          <div class="serviceCreationFormBlockIncorrectFormat" id="serviceUpdateFormBlockNameIncorrect"><%= strings.storage.admin.services.form.format.incorrect %></div>
+          <input value="<%= locals.serviceData.serviceName %>" class="serviceCreationFormBlockNameInput" id="serviceUpdateFormBlockName" type="text" placeholder="<%= strings.storage.admin.services.form.inputs.name.placeholder %>" required />
+          <div class="serviceCreationFormBlockHelp"><%= strings.storage.admin.services.form.inputs.name.help %></div>
+          <div class="serviceCreationFormBlockLabel"><%= strings.storage.admin.services.form.inputs.size.value %></div>
+          <% if(locals.serviceData.maxFileSize / 1024 / 1024 >= 1){ %>
+            <input class="serviceCreationFormBlockSizeInput" id="serviceUpdateFormBlockSizeValue" type="number" placeholder="<%= strings.storage.admin.services.form.inputs.size.placeholder %>" min="1" max="9999" value="<%= parseInt(locals.serviceData.maxFileSize / 1024 / 1024) %>" required /><!--
+            --><select class="serviceCreationFormBlockSizeSelect" id="serviceUpdateFormBlockSizeQuantifier">
+              <% for(var option in strings.storage.admin.services.form.inputs.size.options){ %>
+                <option value="<%= option %>" <% if(parseInt(option) === 2){ %>selected<% } %>><%= strings.storage.admin.services.form.inputs.size.options[option] %></option>
+              <% } %>
+            </select>
+          <% } else{ %>
+            <input class="serviceCreationFormBlockSizeInput" id="serviceUpdateFormBlockSizeValue" type="number" placeholder="<%= strings.storage.admin.services.form.inputs.size.placeholder %>" min="1" max="9999" value="<%= parseInt(locals.serviceData.maxFileSize / 1024) %>" required /><!--
+            --><select class="serviceCreationFormBlockSizeSelect" id="serviceUpdateFormBlockSizeQuantifier">
+              <% for(var option in strings.storage.admin.services.form.inputs.size.options){ %>
+                <option value="<%= option %>" <% if(parseInt(option) === 1){ %>selected<% } %>><%= strings.storage.admin.services.form.inputs.size.options[option] %></option>
+              <% } %>
+            </select>
+          <% } %>
+          <div class="serviceCreationFormBlockHelp"><%= strings.storage.admin.services.form.inputs.size.help %></div>
+          <div class="serviceCreationFormExtensionsBlock">
+            <div class="serviceCreationFormExtensionsTitle"><%= strings.storage.admin.services.form.extensions.title %></div>
+            <div class="serviceCreationFormExtensionsMessage"><%= strings.storage.admin.services.form.extensions.message %></div>
+            <div class="serviceCreationFormBlockIncorrectFormat" id="serviceUpdateFormBlockExtensionsError"><%= strings.storage.admin.services.form.extensions.required %></div>
+            <div class="serviceCreationFormExtensionsBlockList">
+              <% for(var x = 0; x < locals.extensions.length; x++){ %>
+                <div class="serviceCreationFormExtensionsBlockElement">
+                  <input name="extensionCheckbox" type="checkbox" class="serviceCreationFormExtensionsBlockElementCheckbox" value="<%= locals.extensions[x].uuid %>" <% if(locals.serviceData.authorizedExtensions.includes(locals.extensions[x].uuid)){ %>checked<% } %> /><div class="serviceCreationFormExtensionsBlockElementLabel"><%= locals.extensions[x].value %></div>
+                </div>
+              <% } %>
+            </div>
+          </div>
+          <div class="serviceCreationFormButtonsBlock">
+            <button class="serviceCreationFormSubmit"><%= strings.storage.admin.services.updatePage.updateServiceButton %></button>
+            <a href="/storage/admin/services" class="serviceCreationFormBack"><%= strings.common.global.cancel %></a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <% include ../../../include/common_scripts.ejs %>
+    <script src='/js/storage/admin/services/links.js'></script>
+    <script src='/js/storage/admin/services/update.js'></script>
+    <script src='/js/storage/exit.js'></script>
+  </body>
+</html>

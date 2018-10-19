@@ -30,5 +30,7 @@
   "20029": "Nom du dossier mis à jour avec succès",
   "20030": "Compte(s) ajouté(s) avec succès au service",
   "20031": "Compte(s) retiré(s) avec succès du service",
-  "20032": "Extensions mises à jour"
+  "20032": "Extensions mises à jour",
+  "20033": "Niveau d'administration du compte mis à jour avec succès",
+  "20034": "Service mis à jour avec succès"
 }

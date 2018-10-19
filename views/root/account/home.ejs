@@ -8,12 +8,12 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/account/base.css" />
   <body>
-    <% include ../../include/header.ejs %>
+    <% include ../include/header.ejs %>
     <% include ../../include/informations.ejs %>
     <div class="mainBlock">
       <div class="startColumn">
-        <% include ../../include/aside.ejs %>
-        <% include ../../include/news.ejs %>
+        <% include ../include/aside.ejs %>
+        <% include ../include/news.ejs %>
       </div><!--
       --><div class="centerColumn">
         <% if(locals.account == null){ %>
@@ -45,8 +45,8 @@
       --><div class="endColumn">
       </div>
     </div>
-    <% include ../../include/footer.ejs %>
-    <% include ../../include/root_scripts.ejs %>
+    <% include ../include/footer.ejs %>
+    <% include ../include/scripts.ejs %>
     <script src='/js/root/news/selectNewsExternal.js'></script>
     <script src='/js/root/account/updateData.js'></script>
     <script src='/js/root/account/updatePassword.js'></script>

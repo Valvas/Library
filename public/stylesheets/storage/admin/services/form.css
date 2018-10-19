@@ -1,39 +1,68 @@
 /****************************************************************************************************/
 
-.serviceCreationForm{ padding:20px; font-family:roboto-light; }
+.serviceCreationForm{ border-radius:2px; padding-bottom:20px; margin:40px auto 40px 0; max-width:500px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); color:#000000; }
 
-.serviceCreationFormTitle{ font-size:20px; line-height:24px; margin:0 0 20px 0; }
+.serviceCreationFormTitle{ font-size:1.2em; padding:40px 20px 40px 20px; margin-bottom:40px; border-bottom:1px solid rgba(0,0,0,0.07); }
 
-.serviceCreationFormBack{ text-decoration:none; margin:0 0 20px calc(100% - 200px); color:#FFFFFF; border-radius:4px; padding:8px 0 8px 0; display:block; background-color:#D9534F; text-align:center; width:200px; }
+.serviceCreationFormButtonsBlock{ display:flex; flex-direction:row; flex-wrap:wrap; justify-content:flex-end; }
 
-.serviceCreationFormBack:hover{ color:#000000; background-color:#C8423E; }
+.serviceCreationFormBack{ font-size:1em; background-color:#FFFFFF; color:#D9534F; text-decoration:none; border:1px solid #CCC; border-radius:4px; padding:10px; width:max-content; margin:20px 20px 0 0; }
 
-.serviceCreationFormBlock{ border:1px solid #E0E0E0; border-radius:4px; padding:10px; }
+.serviceCreationFormBack:hover{ color:#C8423E; }
 
-.serviceCreationFormBlockLabel{ font-size:18px; line-height:24px; margin:10px 0 5px 0; }
+.serviceCreationFormSubmit{ font-size:1em; background-color:#FFFFFF; cursor:pointer; color:#428BCA; width:max-content; border:1px solid #CCC; border-radius:4px; padding:10px; margin:20px 20px 0 20px; }
 
-.serviceCreationFormBlockIncorrectFormat{ display:none; font-size:16px; line-height:24px; color:#C8423E; }
+.serviceCreationFormSubmit:hover{ color:#317AB9; }
 
-.serviceCreationFormBlockNameInput{ margin:0 0 10px 0; width:100%; max-width:400px; border:1px solid #C0C0C0; border-radius:4px; height:24px; padding:0 0 0 4px; box-sizing:border-box; }
+.serviceCreationFormBlockLabel{ font-size:1em; margin:5px 20px 5px 20px; }
 
-.serviceCreationFormBlockSizeInput{ margin:0 0 10px 0; border-top:1px solid #C0C0C0; border-right:none; border-bottom:1px solid #C0C0C0; border-left:1px solid #C0C0C0; border-radius:4px 0 0 4px; display:inline-block; vertical-align:top; height:24px; box-sizing:border-box; padding:0 0 0 4px; width:calc(100% - 80px); max-width:320px; }
+.serviceCreationFormBlockHelp{ font-size:0.8em; margin:5px 20px 40px 20px; }
 
-.serviceCreationFormBlockSizeSelect{ display:inline-block; vertical-align:top; border:1px solid #C0C0C0; border-radius:0 4px 4px 0; height:24px; width:80px; }
+.serviceCreationFormBlockIncorrectFormat{ font-size:0.9em; margin:0 20px 10px 20px; color:#D9534F; display:none; }
 
-.serviceCreationFormBlockSubmit{ border:none; border-radius:4px; font-size:16px; line-height:24px; padding:4px 0 4px 0; cursor:pointer; width:200px; display:block; background-color:#428BCA; color:#FFFFFF; margin:20px 0 0 0; }
+.serviceCreationFormBlockNameInput{ margin:0 20px 0 20px; width:calc(100% - 40px); border:1px solid #C0C0C0; border-radius:4px; padding:5px; box-sizing:border-box; font-size:1em; }
 
-.serviceCreationFormBlockSubmit:hover{ color:#000000; background-color:#317AB9; }
+.serviceCreationFormBlockSizeInput{ margin:0 0 0 20px; border-top:1px solid #C0C0C0; border-right:none; border-bottom:1px solid #C0C0C0; border-left:1px solid #C0C0C0; border-radius:4px 0 0 4px; display:inline-block; vertical-align:top; box-sizing:border-box; padding:5px; font-size:1em; width:calc(100% - 120px); }
+
+.serviceCreationFormBlockSizeSelect{ display:inline-block; vertical-align:top; border:1px solid #C0C0C0; border-radius:0 4px 4px 0; height:30px; width:80px; }
 
 .serviceCreationFormBlockExtensions{ margin:10px 0 10px 0; border:1px solid #E0E0E0; border-radius:4px; }
 
-.serviceCreationFormBlockExtensionsTitle{ padding:10px; margin-bottom:10px; font-size:18px; line-height:20px; font-family:roboto-light; border-bottom:1px solid #E0E0E0; }
+.serviceCreationFormExtensionsTitle{ font-size:1.2em; margin:0 0 20px 0; }
 
-.serviceCreationFormBlockExtensionsElements{ padding:10px; }
+.serviceCreationFormExtensionsMessage{ font-size:0.9em; margin:0 0 20px 0; }
 
-.serviceCreationFormBlockExtensionsElementsElement{ width:33.3%; display:inline-block; vertical-align:top; margin:0 0 10px 0; }
+.serviceCreationFormExtensionsBlock{ background-color:#F8F8F8; padding:20px; border-top:1px solid rgba(0,0,0,0.07); border-bottom:1px solid rgba(0,0,0,0.07); }
 
-.serviceCreationFormBlockExtensionsElementsElementCheckbox{ width:24px; height:24px; cursor:pointer; display:inline-block; vertical-align:top; margin:0 10px 0 0; }
+.serviceCreationFormExtensionsBlockList{ display:flex; padding:10px; border-radius:2px; flex-direction:row; flex-wrap:wrap; justify-content:flex-start; background-color:#FFFFFF; box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); }
 
-.serviceCreationFormBlockExtensionsElementsElementLabel{ font-size:20px; line-height:24px; font-family:roboto-light; display:inline-block; vertical-align:top; width:calc(100% - 34px); }
+.serviceCreationFormExtensionsBlockElement{ width:33.3%; display:flex; flex-direction:row; align-items:center; margin:5px 0 5px 0; }
+
+.serviceCreationFormExtensionsBlockElementCheckbox{ height:18px; width:18px; cursor:pointer; margin:0 10px 0 0; }
+
+.serviceCreationFormExtensionsBlockElementLabel{ font-size:1.2em; }
+
+/****************************************************************************************************/
+
+.serviceCreationSavingPopup{ font-family:Arial, Helvetica, sans-serif; padding-bottom:20px; z-index:300; position:fixed; top:120px; margin-bottom:40px; left:calc(50% - 250px); background-color:#FFFFFF; border-radius:4px; width:500px; }
+
+.serviceCreationSavingPopupTitle{ font-size:1.2em; padding:20px; border-bottom:1px solid #CCC; }
+
+.serviceCreationSavingPopupMessage{ font-size:1em; padding:20px; }
+
+.serviceCreationSavingPopupButtons{ display:flex; flex-direction:row; justify-content:flex-end; }
+
+.serviceCreationSavingPopupButtonsConfirm, .serviceCreationSavingPopupButtonsCancel{ margin:0 20px 0 0; padding:10px; cursor:pointer; background-color:#FFFFFF; border:1px solid #CCC; border-radius:4px; font-size:1em; }
+
+.serviceCreationSavingPopupButtonsConfirm{ color:#428BCA; }
+
+.serviceCreationSavingPopupButtonsCancel{ color:#D9534F; }
+
+/****************************************************************************************************/
+
+@media (max-width: 539.9px)
+{
+  .serviceCreationSavingPopup{ width:calc(100% - 40px); top:80px; left:20px; }
+}
 
 /****************************************************************************************************/

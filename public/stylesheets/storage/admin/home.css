@@ -1,61 +1,17 @@
 /****************************************************************************************************/
 
-.rightsBlock{ width:600px; }
+.rightsBlock{ max-width:600px; width:100%; margin:40px auto 40px 0; }
 
-.rightsBlockTitle{ font-size:1.2em; font-family:roboto-regular; padding:20px; }
+.rightsBlockLevel{ font-size:1em; margin-bottom:20px; }
 
-.rightsBlockLevel{ font-size:1em; font-family:roboto-regular; padding:20px; }
+.rightsBlockContainer{ box-shadow:0 1px 3px 0 rgba(0,0,0,.2), 0 1px 2px 0 rgba(0,0,0,.2); border-radius:2px; }
 
-.rightsBlockContainer{ box-shadow:0 1px 3px 0 rgba(0,0,0,.2), 0 1px 2px 0 rgba(0,0,0,.2); border-radius:4px; }
+.rightsBlockInfo{ font-size:0.9em; padding:20px; border-bottom:1px solid #CCC; }
 
-.rightsBlockInfo{ font-size:0.9em; font-family:roboto-regular; padding:20px; border-bottom:1px solid #CCC; }
-
-.rightsBlockList{ list-style:none; font-size:1em; font-family:roboto-regular; margin:0; padding:10px; }
+.rightsBlockList{ list-style:none; font-size:1em; margin:0; padding:10px; }
 
 .rightsBlockListEnabled{ padding:10px; color:#428BCA; }
 
 .rightsBlockListDisabled{ padding:10px; opacity:0.6; }
-
-/****************************************************************************************************/
-
-@media (max-width: 319px)
-{
-  .rightsBlock{ width:100%; }
-}
-
-@media (min-width: 320px) and (max-width: 479.9px)
-{
-  .rightsBlock{ width:100%; }
-}
-
-@media (min-width: 480px) and (max-width: 639.9px)
-{
-  .rightsBlock{ width:100%; }
-}
-
-@media (min-width: 640px) and (max-width: 779.9px)
-{
-  .rightsBlock{ width:100%; }
-}
-
-@media (min-width: 780px) and (max-width: 959.9px)
-{
-
-}
-
-@media (min-width: 960px) and (max-width: 1279.9px)
-{
-
-}
-
-@media (min-width: 1280px) and (max-width: 1679.9px)
-{
-
-}
-
-@media (min-width: 1680px)
-{
-
-}
 
 /****************************************************************************************************/

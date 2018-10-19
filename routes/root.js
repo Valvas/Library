@@ -21,12 +21,12 @@ router.get('/', (req, res) =>
 {
   commonTokenGet.getAuthTokenFromHeaders(req.headers.cookie, (error, token) =>
   {
-    error != null ? res.render('index') :
+    error != null ? res.render('root/index') :
 
     commonTokenCheck.checkIfTokenIsValid(token, req.app.get('params'), (error, decodedToken) =>
     {
       error != null
-      ? res.render('index')
+      ? res.render('root/index')
       : res.redirect('/home');
     });
   });

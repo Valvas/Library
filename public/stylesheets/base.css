@@ -10,23 +10,31 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 /* INFORMATION BLOCK */
 /****************************************************************************************************/
 
-.informationBlock{ position:fixed; top:100px; right:60px; width:400px; z-index:400; }
+.informationBlock{ position:fixed; top:100px; right:60px; width:400px; z-index:400; font-family:Arial, Helvetica, sans-serif; }
 
-.informationBlockMessage{ width:100%; margin:0 0 20px 0; border-radius:4px; border:1px solid #D0D0D0; background-color:#FFFFFF; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.05); }
+.informationBlockMessageInfo, .informationBlockMessageError, .informationBlockMessageSuccess, .informationBlockMessageLoader{ font-size:0.9em; color:#FFFFFF; padding:20px 10px 20px 10px; width:100%; margin:0 0 20px 0; border-radius:4px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); }
 
-.informationBlockMessageTitleIcon{ width:32px; height:24px; text-align:center; color:#FFFFFF; font-size:1.5em; display:inline-block; vertical-align:top; }
+.informationBlockMessageInfo{ background-color:#6184D8; }
 
-.informationBlockMessageTitleText{ width:calc(100% - 45px); color:#FFFFFF; font-size:16px; line-height:20px; font-family:roboto-regular; display:inline-block; vertical-align:top; margin:2px 0 0 5px; }
+.informationBlockMessageError{ background-color:#D9534F; }
 
-.informationBlockMessageTitleInfo{ background-color:#6184D8; border-radius:4px 4px 0 0; padding:10px; }
+.informationBlockMessageSuccess{ background-color:#5CB85C; }
 
-.informationBlockMessageTitleError{ background-color:#D9534F; border-radius:4px 4px 0 0; padding:10px; }
+.informationBlockMessageLoader{ background-color:#6184D8; }
 
-.informationBlockMessageTitleSuccess{ background-color:#90BB2C; border-radius:4px 4px 0 0; padding:10px; }
+.informationBlockMessageLoaderIcon{ display:inline-block; vertical-align:middle; width:32px; height:32px; font-size:1.5em; text-align:center; color:#FFFFFF; }
 
-.informationBlockMessageContent{ padding:10px; font-size:14px; font-family:roboto-regular; line-height:18px; }
+.informationBlockMessageLoaderText{ display:inline-block; vertical-align:middle; width:calc(100% - 40px); margin-left:8px; font-size:0.9em; }
 
-.informationBlockMessageDetail{ padding:0 10px 10px 10px; font-size:12px; font-family:roboto-regular; line-height:16px; color:#909090; }
+.informationBlockMessageContent{ width:calc(100% - 90px); margin-right:10px; display:inline-block; vertical-align:middle; }
+
+.informationBlockMessageClose{ width:80px; color:#FFFFFF; padding:4px 0 4px 0; border-radius:4px; font-size:0.9em; display:inline-block; vertical-align:middle; cursor:pointer; border:none; background-color:transparent; }
+
+.informationBlockMessageInfo .informationBlockMessageClose:hover{ background-color:#5073C7; }
+
+.informationBlockMessageError .informationBlockMessageClose:hover{ background-color:#C8423E; }
+
+.informationBlockMessageSuccess .informationBlockMessageClose:hover{ background-color:#4BA74B; }
 
 /****************************************************************************************************/
 /* ERROR BLOCK */
@@ -96,17 +104,13 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .asideBlock{ margin:20px 0 20px 0; transition-duration:0.25s; -o-transition-duration:0.25s; -webkit-transition-duration:0.25s; }
 
-.asideBlockList{  }
+.asideBlockList{ font-family:Arial, Helvetica, sans-serif; }
 
-.asideBlockListElement{ padding:10px 20px 10px 20px; cursor:pointer; width:max-content; display:block; color:rgba(0,0,0,0.65); }
+.asideBlockListElement{ padding:10px 20px 10px 20px; cursor:pointer; width:max-content; display:block; color:rgba(0,0,0,0.65); text-overflow:ellipsis; white-space:nowrap; overflow:hidden; font-size:1.2em; text-decoration:none; }
 
-.asideBlockListElementSelected{ padding:10px 20px 10px 20px; cursor:pointer; width:max-content; color:#90BB2C; display:block; }
+.asideBlockListElementSelected{ padding:10px 20px 10px 20px; cursor:pointer; width:max-content; color:#90BB2C; display:block; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; font-size:1.2em; text-decoration:none; }
 
 .asideBlockListElement:hover{ color:#90BB2C; }
-
-.asideBlockListElementIcon{ display:inline-block; vertical-align:top; font-size:2em; width:48px; height:32px; margin:4px 4px 4px 0; text-align:center; }
-
-.asideBlockListElementValue{ display:inline-block; vertical-align:top; font-family:roboto-regular; font-size:18px; line-height:24px; margin:8px 0 8px 0; width:calc(100% - 52px); text-overflow:ellipsis; white-space:nowrap; overflow:hidden; }
 
 /****************************************************************************************************/
 /* MAIN SECTION */

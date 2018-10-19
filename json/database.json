@@ -72,55 +72,37 @@
 
   "storage":
   {
-    "rights":
+    "account_service_level":
     {
-      "account": "VARCHAR(255) NOT NULL",
-      "service": "VARCHAR(255) NOT NULL",
+      "account_uuid": "VARCHAR(255) NOT NULL",
+      "service_uuid": "VARCHAR(255) NOT NULL",
+      "level": "INT UNSIGNED NOT NULL"
+    },
+
+    "service_levels":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "level": "INT UNSIGNED NOT NULL",
+      "access_service": "BOOLEAN NOT NULL",
+      "comment_files": "BOOLEAN NOT NULL",
       "upload_files": "BOOLEAN NOT NULL",
-      "download_files": "BOOLEAN NOT NULL",
-      "remove_files": "BOOLEAN NOT NULL",
-      "post_comments": "BOOLEAN NOT NULL",
-      "restore_files": "BOOLEAN NOT NULL",
       "create_folders": "BOOLEAN NOT NULL",
       "rename_folders": "BOOLEAN NOT NULL",
-      "remove_folders": "BOOLEAN NOT NULL"
+      "move_files": "BOOLEAN NOT NULL",
+      "download_files": "BOOLEAN NOT NULL",
+      "restore_files": "BOOLEAN NOT NULL",
+      "remove_folders": "BOOLEAN NOT NULL",
+      "remove_files": "BOOLEAN NOT NULL"
     },
 
-    "files":
+    "service_elements":
     {
       "uuid": "VARCHAR(255) NOT NULL",
       "name": "VARCHAR(255) NOT NULL",
-      "ext": "VARCHAR(255) NOT NULL",
       "parent_folder": "VARCHAR(255)",
-      "account": "VARCHAR(255) NOT NULL",
-      "service": "VARCHAR(255) NOT NULL",
-      "deleted": "BOOLEAN NOT NULL"
-    },
-
-    "folders":
-    {
-      "uuid": "VARCHAR(255) NOT NULL",
-      "name": "VARCHAR(255) NOT NULL",
-      "account": "VARCHAR(255) NOT NULL",
-      "service": "VARCHAR(255) NOT NULL",
-      "parent_folder": "VARCHAR(255)",
-      "deleted": "BOOLEAN NOT NULL"
-    },
-
-    "file_logs":
-    {
-      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "type": "INT NOT NULL",
-      "account": "VARCHAR(255) NOT NULL",
-      "file": "VARCHAR(255) NOT NULL",
-      "date": "BIGINT UNSIGNED NOT NULL"
-    },
-
-    "file_comments":
-    {
-      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "log": "BIGINT UNSIGNED NOT NULL",
-      "content": "TEXT(1024) NOT NULL"
+      "service_uuid": "VARCHAR(255) NOT NULL",
+      "is_directory": "BOOLEAN NOT NULL",
+      "is_deleted": "BOOLEAN NOT NULL"
     },
 
     "services":
@@ -136,14 +118,14 @@
       "value": "VARCHAR(255) NOT NULL"
     },
 
-    "authorized_extensions_for_service":
+    "service_extensions":
     {
       "uuid": "VARCHAR(255) NOT NULL",
       "extension_uuid": "VARCHAR(255) NOT NULL",
       "service_uuid": "VARCHAR(255) NOT NULL"
     },
 
-    "admin_rights":
+    "account_admin_level":
     {
       "account": "VARCHAR(255) NOT NULL",
       "level": "INT UNSIGNED NOT NULL"
@@ -155,17 +137,7 @@
       "level": "INT UNSIGNED NOT NULL",
       "create_services": "BOOLEAN NOT NULL",
       "modify_services": "BOOLEAN NOT NULL",
-      "remove_services": "BOOLEAN NOT NULL",
-      "access_service": "BOOLEAN NOT NULL",
-      "comment_files": "BOOLEAN NOT NULL",
-      "upload_files": "BOOLEAN NOT NULL",
-      "create_folders": "BOOLEAN NOT NULL",
-      "rename_folders": "BOOLEAN NOT NULL",
-      "move_files": "BOOLEAN NOT NULL",
-      "download_files": "BOOLEAN NOT NULL",
-      "restore_files": "BOOLEAN NOT NULL",
-      "remove_folders": "BOOLEAN NOT NULL",
-      "remove_files": "BOOLEAN NOT NULL"
+      "remove_services": "BOOLEAN NOT NULL"
     }
   }
 }

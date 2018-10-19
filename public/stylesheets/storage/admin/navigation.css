@@ -2,14 +2,12 @@
 * NAVIGATION BAR                                                                                    *
 ****************************************************************************************************/
 
-.administrationNavigationBar{ border-bottom:1px solid #E0E0E0; font-family:roboto-light; }
+.administrationNavigationBar{ font-family:roboto-light; display:flex; flex-direction:row; flex-wrap:wrap; }
 
-.administrationNavigationBarLinkActive{ text-decoration:none; display:inline-block; vertical-align:top; font-size:16px; line-height:24px; padding:10px; color:#2C2F33; }
+.administrationNavigationBarLinkActive{ text-decoration:none; font-size:1em; padding:10px 0 5px 0; color:#2C2F33; border-bottom:1px solid #E0E0E0; margin:0 20px 0 0; }
 
 .administrationNavigationBarLinkActive:hover{ color:#428BCA; }
 
-.administrationNavigationBarLinkInactive{ display:inline-block; vertical-align:top; font-size:16px; line-height:24px; padding:10px; color:#E0E0E0; }
-
-.administrationNavigationBarLinkSelected{ text-decoration:none; display:inline-block; vertical-align:top; font-size:16px; line-height:24px; padding:10px; color:#428BCA; }
+.administrationNavigationBarLinkSelected{ text-decoration:none; font-size:1em; padding:10px 0 5px 0; color:#428BCA; border-bottom:1px solid #E0E0E0; margin:0 20px 0 0; }
 
 /****************************************************************************************************/

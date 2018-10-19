@@ -9,25 +9,26 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/accountsLevel.css" />
   <body>
-    <% include ../../includes/aside.ejs %><!--
-    --><div class='storageMainBlock'>
-      <div class="mainBlockLocation"><%= strings.storage.locations.admin %></div>
+    <% include ../../../include/informations.ejs %>
+    <% include ../../includes/aside.ejs %>
+    <div class='storageMainBlock'>
       <% include ../../includes/admin/navigation.ejs %>
-      <div class="accountDataBlock">
+      <div class="accountDataBlock" id="accountDataBlock" name="<%= locals.accountToManage.uuid %>">
         <div class="accountDataBlockTitle"><%= strings.storage.admin.accountsLevel.detail.accountDataTitle %></div>
         <div class="accountDataBlockElement"><%= locals.accountToManage.email %></div>
-        <div class="accountDataBlockElement"><%= locals.accountToManage.firstname %></div>
-        <div class="accountDataBlockElement"><%= locals.accountToManage.lastname %></div>
+        <div class="accountDataBlockElement"><%= locals.accountToManage.lastname.charAt(0).toUpperCase() %><%= locals.accountToManage.lastname.slice(1) %></div>
+        <div class="accountDataBlockElement"><%= locals.accountToManage.firstname.charAt(0).toUpperCase() %><%= locals.accountToManage.firstname.slice(1) %></div>
       </div>
       <div class="accountDataBlock">
         <div class="accountDataBlockTitle"><%= strings.storage.admin.accountsLevel.detail.currentLevel %></div>
-        <div class="accountDataBlockElement"><%= locals.accountToManage.level %></div>
+        <div class="accountDataBlockElement" id="currentAccountAdminLevel"><%= locals.accountToManage.level %></div>
       </div>
       <div class="accountDataBlock">
         <div class="accountDataBlockTitle"><%= strings.storage.admin.accountsLevel.detail.selectedLevel %></div>
+        <div class="accountDataBlockInformation"><%= strings.storage.admin.accountsLevel.detail.information %></div>
         <select class="accountDataBlockSelect" id="accountLevelSelect">
           <% for(var level in storageAdminRights){ %>
-            <option><%= level %></option>
+            <% if(level <= locals.accountToManage.level){ %><option value="<%= level %>"><%= level %></option><% } %>
           <% } %>
         </select>
       </div>
@@ -41,24 +42,17 @@
             <div class="accountDataBlockLegendsElementDisabled"></div><div class="accountDataBlockLegendsElementValue">= <%= strings.storage.admin.accountsLevel.detail.rightDisabled %></div>
           </div>
         </div>
-        <ul class="accountDataBlockRightsList">
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.accessService %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.commentFiles %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.uploadFiles %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.createFolders %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.renameFolders %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.moveFiles %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.downloadFiles %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.restoreFiles %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.removeFolders %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.removeFiles %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.createServices %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.modifyServices %></li>
-          <li class="accountDataBlockRightsListDisabled"><%= strings.storage.admin.home.rightsLabels.removeServices %></li>
-        </ul>
+        <% for(var key in locals.storageAdminRights){ %>
+          <ul name="accountDataBlockRightsList" tag="<%= key %>" class="accountDataBlockRightsList">
+            <% for(var item in locals.storageAdminRights[key]){ %>
+              <li class="<% if(locals.storageAdminRights[key][item] == false){ %>accountDataBlockRightsListDisabled<% } else{ %>accountDataBlockRightsListEnabled<% } %>"><%= strings.storage.admin.home.rightsLabels[item] %></li>
+            <% } %>
+          </ul>
+        <% } %>
       </div>
+      <button id="accountLevelSelectionSave" class="accountDataBlockSave"><%= locals.strings.storage.admin.accountsLevel.detail.saveSelectedLevel %></button>
     </div>
-    <script src='/js/jQuery.js'></script>
+    <% include ../../../include/common_scripts.ejs %>
     <script src='/js/storage/exit.js'></script>
     <script src='/js/storage/admin/accountsLevel/accountLevelSelect.js'></script>
   </body>

@@ -3,7 +3,6 @@
 const express               = require('express');
 const errors                = require(`${__root}/json/errors`);
 const commonStrings         = require(`${__root}/json/strings/common`);
-const webContent            = require(`${__root}/json/share/webcontent`);
 const commonNewsGet         = require(`${__root}/functions/common/news/get`);
 const commonAppsGet         = require(`${__root}/functions/common/apps/get`);
 const commonAccessGet       = require(`${__root}/functions/common/access/get`);
@@ -36,7 +35,6 @@ router.get('/', (req, res) =>
         { 
           account: req.app.locals.account, 
           currentLocation: 'apps',
-          webContent: webContent,
           strings: { common: commonStrings }, 
           news: news,
           apps: apps,

@@ -9,9 +9,9 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/accountsLevel.css" />
   <body>
-    <% include ../../includes/aside.ejs %><!--
-    --><div class='storageMainBlock'>
-      <div class="mainBlockLocation"><%= strings.storage.locations.admin %></div>
+    <% include ../../../include/informations.ejs %>
+    <% include ../../includes/aside.ejs %>
+    <div class='storageMainBlock'>
       <% include ../../includes/admin/navigation.ejs %>
       <div class="accountsLevelSection">
         <input type="text" id="searchBar" class="accountsLevelSectionSearch" placeholder="<%= strings.storage.admin.accountsLevel.searchInput %>" />
@@ -35,7 +35,7 @@
         </table>
       </div>
     </div>
-    <script src='/js/jQuery.js'></script>
+    <% include ../../../include/common_scripts.ejs %>
     <script src='/js/storage/exit.js'></script>
     <script src='/js/storage/admin/accountsLevel/searchBar.js'></script>
   </body>

@@ -1,103 +1,17 @@
 /****************************************************************************************************/
 
-.asideMenu{ width:250px; border-right:1px solid #CCC; margin:40px 20px 40px 20px; display:inline-block; vertical-align:top; box-sizing:border-box; }
+.asideMenu{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; margin:0 0 40px 0; font-family:Arial, Helvetica, sans-serif; align-items:center; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.05); }
 
-.asideMenuTitle{ color:#428BCA; padding:20px 10px 20px 10px; text-align:center; border-bottom:1px solid #CCC; }
+.asideMenuTitle{ color:#428BCA; padding:10px; text-align:center; }
 
-.asideMenuTitleText{ font-size:24px; line-height:24px; font-family:roboto-light; }
+.asideMenuTitleText{ font-size:1.5em; }
 
-.asideMenuContent{ padding-bottom:5px; }
+.asideMenuContent{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; margin:0 0 0 20px; }
 
-.asideMenuContentLink{ display:block; padding:10px; cursor:pointer; border-bottom:1px solid #E0E0E0; text-decoration:none; color:#2C2F33; font-family:roboto-light; }
+.asideMenuContentLink, .asideMenuContentLinkSelected{ display:block; padding:10px; cursor:pointer; text-decoration:none; font-size:1.3em; margin:0 20px 0 20px; }
 
-.asideMenuContentLinkSelected{ display:block; padding:10px; cursor:pointer; border-bottom:1px solid #E0E0E0; text-decoration:none; color:#539CDB; font-family:roboto-light; }
+.asideMenuContentLink{ color:#000000; }
 
-.asideMenuContentLink:hover{ color:#428BCA; }
-
-.asideMenuContentLinkIcon{ display:inline-block; vertical-align:top; width:32px; margin:0 10px 0 10px; font-size:24px; line-height:32px; text-align:center; }
-
-.asideMenuContentLinkText{ font-size:20px; line-height:32px; display:inline-block; vertical-align:top; width:calc(100% - 62px); margin-right:10px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; }
-
-/****************************************************************************************************/
-
-@media (max-width: 319.9px)
-{
-  .asideMenuTitle, .asideMenuContentLinkText{ display:none; }
-
-  .asideMenu{ width:40px; margin:0 10px 0 0; }
-
-  .asideMenuContentLinkIcon{ margin:0; }
-
-  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; border:none; }
-}
-
-@media (min-width: 320px) and (max-width: 479.9px)
-{
-  .asideMenuTitle, .asideMenuContentLinkText{ display:none; }
-
-  .asideMenu{ width:40px; margin:0 10px 0 0; }
-
-  .asideMenuContentLinkIcon{ margin:0; }
-
-  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; border:none; }
-}
-
-@media (min-width: 480px) and (max-width: 639.9px)
-{
-  .asideMenuTitle, .asideMenuContentLinkText{ display:none; }
-
-  .asideMenu{ width:40px; margin:0 10px 0 0; }
-
-  .asideMenuContentLinkIcon{ margin:0; }
-
-  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; border:none; }
-}
-
-@media (min-width: 640px) and (max-width: 799.9px)
-{
-  .asideMenuTitle, .asideMenuContentLinkText{ display:none; }
-
-  .asideMenu{ width:40px; margin:0 10px 0 0; }
-
-  .asideMenuContentLinkIcon{ margin:0; }
-
-  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; border:none; }
-}
-
-@media (min-width: 800px) and (max-width: 959.9px)
-{
-  .asideMenuTitle, .asideMenuContentLinkText{ display:none; }
-
-  .asideMenu{ width:40px; margin:0 10px 0 0; }
-
-  .asideMenuContentLinkIcon{ margin:0; }
-
-  .asideMenuContentLink, .asideMenuContentLinkSelected{ padding:10px 4px 10px 4px; border:none; }
-}
-
-@media (min-width: 960px) and (max-width: 1119.9px)
-{
-
-}
-
-@media (min-width: 1120px) and (max-width: 1279.9px)
-{
-
-}
-
-@media (min-width: 1280px) and (max-width: 1439.9px)
-{
-
-}
-
-@media (min-width: 1440px) and (max-width: 1599.9px)
-{
-
-}
-
-@media (min-width: 1600px)
-{
-
-}
+.asideMenuContentLinkSelected, .asideMenuContentLink:hover{ color:#428BCA; }
 
 /****************************************************************************************************/

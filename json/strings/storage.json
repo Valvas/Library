@@ -58,7 +58,19 @@
         "saveSelectedLevel": "Enregistrer",
         "returnToList": "Retour",
         "rightEnabled": "Oui",
-        "rightDisabled": "Non"
+        "rightDisabled": "Non",
+        "information": "Vous pouvez changer le niveau d'administration d'un utilisateur pour un niveau égal ou inférieur au vôtre",
+      
+        "confirmationPopup":
+        {
+          "title": "Confirmation",
+          "level": "Niveau",
+          "message": "Êtes-vous sûr(e) de vouloir appliquer ce niveau d'administration pour cet utilisateur ?",
+          "confirm": "Oui",
+          "cancel": "Non",
+          "sendingTitle": "Enregistrement",
+          "sendingMessage": "Le nouveau niveau d'administration pour ce compte est en cours d'enregistrement. Veuillez patienter"
+        }
       },
       "searchInput": "Rechercher",
       "accountsTable":
@@ -75,16 +87,100 @@
     },
     "services":
     {
-      "create": "Créer un service",
-      "empty": "Aucun service",
+      "updatePage":
+      {
+        "updateBlockTitle": "Modification du service",
+        "updateServiceButton": "Appliquer les modifications",
+
+        "updateConfirmationPopup":
+        {
+          "title": "Confirmation",
+          "message": "Êtes-vous sûr(e) de vouloir modifier ce service ?",
+          "confirm": "Oui",
+          "cancel": "Non"
+        },
+
+        "sendingData":
+        {
+          "title": "Enregistrement",
+          "message": "Enregistrement des modifications en cours. Veuillez patienter"
+        }
+      },
+
+      "listPage":
+      {
+        "socketMessages":
+        {
+          "serviceRemoved":
+          {
+            "title": "Service supprimé",
+            "message": "a été supprimé"
+          },
+
+          "serviceCreated":
+          {
+            "title": "Nouveau service",
+            "message": "a été créé"
+          },
+
+          "serviceUpdated":
+          {
+            "title": "Service modifié",
+            "serviceNameModified": "Le service $1$ a été modifié, il s'appelle à présent $2$",
+            "serviceNameUnmodified": "Le service $1$ a été modifié"
+          }
+        },
+
+        "createServiceBlock":
+        {
+          "title": "Nouveau service",
+          "enabledMessage": "Vous pouvez créer un nouveau service en cliquant sur le lien ci-dessous",
+          "disabledMessage": "Vous n'avez pas les droits requis pour créer un nouveau service",
+          "link": "Cliquez ici pour créer un nouveau service"
+        },
+
+        "serviceBlock":
+        {
+          "fileSize": "Taille maximale des fichiers",
+          "updateServiceBlock":
+          {
+            "enabledMessage": "Vous pouvez modifier ce service en cliquant sur le bouton ci-dessous",
+            "disabledMessage": "Vous n'avez pas le droit de modifier des services",
+            "updateButton": "Modifier"
+          },
+          "removeServiceBlock":
+          {
+            "enabledMessage": "Vous pouvez supprimer ce service en cliquant sur le bouton ci-dessous",
+            "disabledMessage": "Vous n'avez pas le droit de supprimer des services",
+            "removeButton": "Supprimer"
+          }
+        },
+
+        "removeServiceConfirmationPopup":
+        {
+          "title": "Suppression",
+          "message": "Êtes-vous sûr(e) de vouloir supprimer ce service ? (Tous les fichiers associés seront également supprimés)",
+          "confirm": "Oui",
+          "cancel": "Non"
+        },
+
+        "sendingData":
+        {
+          "title": "Suppression",
+          "message": "Suppression du service en cours. Veuillez patienter"
+        }
+      },
+
+      "empty": "Il n'existe aucun service pour le moment",
       "form":
       {
-        "add": "Ajouter un membre",
-        "back": "Retour",
+        "missingParameter": "Un élément est manquant dans la requête",
+
         "extensions":
         {
-          "message": "Cochez les extensions des fichiers autorisés à l'upload",
-          "title": "Extensions autorisées"
+          "message": "En cochant une case vous autorisez les utilisateurs à poster des fichiers avec l'extension correspondante",
+          "title": "Extensions autorisées",
+          "required": "Vous devez cocher au moins une case"
         },
         "format":
         {
@@ -101,17 +197,17 @@
           },
           "name":
           {
-            "help": "(exemple : \"Service Informatique\")",
-            "placeholder": "Nom",
-            "value": "Nom"
+            "help": "Pas de caractères spéciaux comme \"%, #, *, +, etc.\". Exemple de nom correct : \"Service Informatique 2\"",
+            "placeholder": "Nom du service",
+            "value": "Nom du service"
           },
           "size":
           {
-            "help": "Une valeur numérique en Ko ou Mo (limitée à 7 chiffres)",
+            "help": "Une nombre en Ko ou Mo limité à 4 chiffres (1024o = 1Ko, 1024Ko = 1Mo, 1024Mo = 1Go)",
             "options":
             {
-              "0": "Ko",
-              "1": "Mo"
+              "1": "Ko",
+              "2": "Mo"
             },
             "placeholder": "Valeur",
             "value": "Taille maximale des fichiers"
@@ -119,7 +215,21 @@
         },
         "next": "Suivant",
         "send": "Créer ce service",
-        "title": "Création d'un service"
+        "title": "Création d'un service",
+
+        "confirmationPopup":
+        {
+          "title": "Confirmation",
+          "message": "Êtes-vous sûr(e) de vouloir créer ce service ?",
+          "confirm": "Oui",
+          "cancel": "Non"
+        },
+
+        "sendingData":
+        {
+          "title": "Enregistrement",
+          "message": "Enregistrement des données du nouveau service en cours. Veuillez patienter"
+        }
       },
       "info":
       {
@@ -128,144 +238,32 @@
         "members": "Personnes ayant des droits sur ce service",
         "modify": "Modifier",
         "remove": "Supprimer"
-      },
-      "modify":
-      {
-        "popup":
-        {
-          "activeConfirmation": "Cliquer ici pour envoyer cette nouvelle valeur",
-          "cancelButton": "Annuler",
-          "confirmButton": "Envoyer",
-          "currentLabel": "Nom actuel",
-          "currentSize": "Taille actuelle",
-          "inactiveConfirmation": "Veuillez entrer une taille valide avant de pouvoir envoyer",
-          "newLabel": "Nouveau nom",
-          "newLabelPlaceholder": "Entrer un nom",
-          "newSize": "Nouvelle taille"
-        },
-        "maxFileSize": "Taille maximale des fichiers",
-        "minFileSize": "Taille minimale des fichiers",
-        "serviceIdentifier": "Identifiant du service",
-        "serviceLabel": "Nom du service",
-        "title": "Modification du service",
-        "extensionsBlockTitle": "Modification des extensions autorisées",
-        "saveExtensions": "Enregistrer les extensions"
-      },
-      "remove":
-      {
-        "popup":
-        {
-          "message": "Êtes-vous sûr(e) de vouloir supprimer le service",
-          "title": "Supprimer un service",
-          "warning": "Attention : les fichiers liés à ce service seront aussi supprimés"
-        }
       }
+
     },
-    "servicesRights":
+
+    "serviceRights":
     {
-      "accountsBlock":
+      "home":
       {
-        "addSelected": "Ajouter (0)",
-        "close": "Fermer",
-        "empty": "Aucun compte à afficher",
-        "header":
-        {
-          "email": "Adresse email",
-          "firstname": "Prénom",
-          "lastname": "Nom"
-        },
-        "help": "Voici la liste des comptes ayant accès à l'application mais n'ayant pas de droits sur ce service",
-        "searchPlaceholder": "Rechercher un compte",
-        "title": "Liste des comptes"
-      },
-      "accountRightsBlock":
-      {
-        "title": "Droits du compte : ",
-        "remove": "Retirer ce compte du service",
-        "close": "Fermer",
-        "save": "Enregistrer",
-        "list":
-        {
-          "uploadFiles": "Poster des fichiers",
-          "downloadFiles": "Télécharger des fichiers",
-          "removeFiles": "Supprimer des fichiers",
-          "commentFiles": "Poster des commentaires sur les fichiers",
-          "createFolders": "Créer des dossiers",
-          "renameFolders": "Renommer des dossiers",
-          "removeFolders": "Supprimer des dossiers",
-          "restoreFiles": "Restaurer des fichiers depuis la corbeille"
-        },
-        "prompt":
-        {
-          "title": "Attention",
-          "message": "Êtes-vous sûr(e) de vouloir retirer cet utilisateur du service ?",
-          "yes": "Oui",
-          "no": "Non"
-        }
-      },
-      "manageMembers": "Gérer les membres",
-      "members": "Membres",
-      "messages":
-      {
-        "addedToService": "est maintenant membre de ce service",
-        "removedFromService": "n'est plus membre de ce service",
-        "rightsUpdated": "Droits mis à jour sur ce service pour"
-      },
-      "membersBlock":
-      {
-        "rightsButton": "Droits",
-        "empty": "Aucun utilisateur ne possède de droits sur ce service pour le moment",
-        "header":
-        {
-          "add": "Ajouter",
-          "close": "Fermer",
-          "email": "Adresse email",
-          "firstname": "Prénom",
-          "lastname": "Nom"
-        },
-        "hints":
-        {
-          "accountsBlock":
-          {
-            "addOne": "Cliquer ici pour ajouter ce compte",
-            "addSelected": "Cliquer ici pour ajouter les comptes cochés",
-            "searchBar": "Entrer une valeur à rechercher parmi les comptes (adresse email, nom, prénom)",
-            "selectAll": "Cliquer ici pour sélectionner/désélectionner tous les comptes",
-            "selectOne": "Cliquer ici pour sélectionner ce compte"
-          },
-          "addMember":
-          {
-            "true": "Cliquer ici pour ajouter un membre à ce service",
-            "false": "Vous ne possédez pas les droits requis pour ajouter un membre"
-          },
-          "closeMembers": "Cliquer ici pour revenir à la liste des services",
-          "commentFiles": "Commenter des fichiers",
-          "downloadFiles": "Télécharger des fichiers",
-          "modifyRights": "Cliquer ici pour ouvrir la fenêtre de modification des droits",
-          "removeFiles": "Supprimer des fichiers",
-          "revokeAccess":
-          {
-            "true": "Retirer l'accès à ce service pour cet utilisateur",
-            "false": "Vous n'êtes pas autorisé(e) à retirer l'accès à ce service à cet utilisateur"
-          },
-          "update":
-          {
-            "addRight":
-            {
-              "true": "Cliquer ici pour donner ce droit à l'utilisateur pour ce service",
-              "false": "Vous n'êtes pas autorisé(e) à donner des droits aux utilisateurs"
-            },
-            "removeRight":
-            {
-              "true": "Cliquer ici pour retirer ce droit à l'utilisateur pour ce service",
-              "false": "Vous n'êtes pas autorisé(e) à retirer des droits aux utilisateurs"
-            }
-          },
-          "uploadFiles": "Envoyer des fichiers"
-        },
-        "title": "Liste des membres"
-      },
-      "return": "Retour"
+        "returnLink": "Retour",
+
+        "informationBlockTitle": "Informations",
+
+        "informationBlockFirstMessage": "Les droits sur un service sont définis par un niveau, plus le niveau est élevé, plus l'utilisateur possède de droits sur le service en question",
+
+        "informationBlockSecondMessage": "Chaque service est indépendant des autres, ainsi un utilisateur peut posséder des niveaux de droits différents sur chaque service (exemple: niveau 2 sur un service et niveau 4 sur un autre). Par défaut un utilisateur venant de rejoindre un service possède des droits niveau 0",
+
+        "informationBlockThirdMessage": "Vous êtes autorisé(e) à modifier le niveau de droits d'un utilisateur pour chaque service cependant vous ne pouvez pas définir un niveau qui excède le vôtre (exemple: si vous êtes niveau 4 pour un service vous pouvez changer le niveau des autres utilisateurs de 1 à 4 pour ce service)",
+
+        "informationBlockWarning": "Attention: chaque action que vous effectuez ici est enregistrée dans des logs, ceux-ci peuvent être consultés à tout moment par les administrateurs de l'application",
+      
+        "servicesBlockTitle": "Liste des services",
+
+        "servicesBlockLevel": "Votre niveau de droits",
+
+        "servicesBlockAccess": "Accéder"
+      }
     }
   },
 
@@ -284,6 +282,7 @@
     "admin": "Administration",
     "consultation": "Consultation",
     "creation": "Création",
+    "update": "Modification",
     "home": "Accueil",
     "rights": "Droits sur les services",
     "services": "Mes Services"

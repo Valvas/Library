@@ -14,7 +14,7 @@ module.exports.getAccountAdminLevel = (accountUuid, databaseConnection, params, 
   databaseManager.selectQuery(
   {
     databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.adminRights,
+    tableName: params.database.storage.tables.accountAdminLevel,
     args: [ '*' ],
     where: { operator: '=', key: 'account', value: accountUuid }
 
@@ -27,7 +27,7 @@ module.exports.getAccountAdminLevel = (accountUuid, databaseConnection, params, 
     databaseManager.insertQuery(
     {
       databaseName: params.database.storage.label,
-      tableName: params.database.storage.tables.adminRights,
+      tableName: params.database.storage.tables.accountAdminLevel,
       args: { account: accountUuid, level: 0 }
 
     }, databaseConnection, (error, result) =>
@@ -62,22 +62,49 @@ module.exports.getAdminRightsForAllLevels = (databaseConnection, params, callbac
     {
       rightsData[result[x].level] = {};
 
-      rightsData[result[x].level].accessService   = result[x].access_service  === 1;
-      rightsData[result[x].level].commentFiles    = result[x].comment_files   === 1;
-      rightsData[result[x].level].uploadFiles     = result[x].upload_files    === 1;
-      rightsData[result[x].level].createFolders   = result[x].create_folders  === 1;
-      rightsData[result[x].level].renameFolders   = result[x].rename_folders  === 1;
-      rightsData[result[x].level].moveFiles       = result[x].move_files      === 1;
-      rightsData[result[x].level].downloadFiles   = result[x].download_files  === 1;
-      rightsData[result[x].level].restoreFiles    = result[x].restore_files   === 1;
-      rightsData[result[x].level].removeFolders   = result[x].remove_folders  === 1;
-      rightsData[result[x].level].removeFiles     = result[x].remove_files    === 1;
-      rightsData[result[x].level].createServices  = result[x].create_services === 1;
-      rightsData[result[x].level].modifyServices  = result[x].modify_services === 1;
-      rightsData[result[x].level].removeServices  = result[x].remove_services === 1;
+      rightsData[result[x].level].createServices = result[x].create_services === 1;
+      rightsData[result[x].level].modifyServices = result[x].modify_services === 1;
+      rightsData[result[x].level].removeServices = result[x].remove_services === 1;
     }
 
     return callback(null, rightsData);
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.getAdminRightsForProvidedLevel = (adminLevel, databaseConnection, params, callback) =>
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.adminLevels,
+    args: [ '*' ],
+    where: { operator: '=', key: 'level', value: parseInt(adminLevel) }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length === 0) return callback(null, false);
+
+    var rights = [];
+
+    rights.push({ 'accessService': result[0].access_service  === 1 });
+    rights.push({ 'commentFiles': result[0].comment_files  === 1 });
+    rights.push({ 'uploadFiles': result[0].upload_files  === 1 });
+    rights.push({ 'createFolders': result[0].create_folders  === 1 });
+    rights.push({ 'renameFolders': result[0].rename_folders  === 1 });
+    rights.push({ 'moveFiles': result[0].move_files  === 1 });
+    rights.push({ 'downloadFiles': result[0].download_files  === 1 });
+    rights.push({ 'restoreFiles': result[0].restore_files  === 1 });
+    rights.push({ 'removeFolders': result[0].remove_folders  === 1 });
+    rights.push({ 'removeFiles': result[0].remove_files  === 1 });
+    rights.push({ 'createServices': result[0].create_services  === 1 });
+    rights.push({ 'modifyServices': result[0].modify_services  === 1 });
+    rights.push({ 'removeServices': result[0].remove_services  === 1 });
+
+    return callback(null, true, rights);
   });
 }
 
