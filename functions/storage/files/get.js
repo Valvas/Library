@@ -1,33 +1,45 @@
 'use strict'
 
 const fs                        = require('fs');
-const params                    = require(`${__root}/json/params`);
 const constants                 = require(`${__root}/functions/constants`);
 const storageStrings            = require(`${__root}/json/strings/storage`);
-const accountsGet               = require(`${__root}/functions/accounts/get`);
 const commonFormatDate          = require(`${__root}/functions/common/format/date`);
 const commonAccountsGet         = require(`${__root}/functions/common/accounts/get`);
-const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
-
-//To uncomment when updated database manager will be set for all the project
-//const oldDatabaseManager         = require(`${__root}/functions/database/${params.database.dbms}`);
-
-//To remove when updated database manager will be set for all the project
-const oldDatabaseManager           = require(`${__root}/functions/database/MySQLv2`);
-const databaseManager              = require(`${__root}/functions/database/MySQLv3`);
+const databaseManager           = require(`${__root}/functions/database/MySQLv3`);
 
 const storageAppFilesGet = module.exports = {};
 
 /****************************************************************************************************/
 
-storageAppFilesGet.checkIfFileExistsInDatabase = (fileName, fileExt, serviceUuid, folderUuid, databaseConnection, params, callback) =>
+storageAppFilesGet.checkIfFileExistsInDatabase = (fileName, serviceUuid, parentFolder, databaseConnection, params, callback) =>
 {
   databaseManager.selectQuery(
   {
     databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.files,
+    tableName: params.database.storage.tables.serviceElements,
     args: [ '*' ],
-    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: fileName }, 1: { operator: '=', key: 'ext', value: fileExt }, 2: { operator: '=', key: 'service', value: serviceUuid }, 3: { operator: '=', key: 'parent_folder', value: folderUuid == null ? '' : folderUuid } }
+    where: { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: serviceUuid }, 1: { operator: '=', key: 'name', value: fileName }, 2: { operator: '=', key: 'parent_folder', value: parentFolder == null ? '' : parentFolder }, 3: { operator: '=', key: 'is_directory', value: 0 } }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length === 0) return callback(null, false);
+
+    return callback(null, true, result[0]);
+  });
+}
+
+/****************************************************************************************************/
+
+storageAppFilesGet.checkIfFolderExistsInDatabase = (folderUuid, databaseConnection, params, callback) =>
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.serviceElements,
+    args: [ '*' ],
+    where: { condition: 'AND', 0: { operator: '=', key: 'uuid', value: folderUuid }, 1: { operator: '=', key: 'is_directory', value: 1 } }
 
   }, databaseConnection, (error, result) =>
   {
@@ -41,20 +53,20 @@ storageAppFilesGet.checkIfFileExistsInDatabase = (fileName, fileExt, serviceUuid
 
 /****************************************************************************************************/
 
-storageAppFilesGet.checkIfFolderExistsInDatabase = (folderUuid, databaseConnection, params, callback) =>
+storageAppFilesGet.getFolderFromName = (folderName, serviceUuid, databaseConnection, globalParameters, callback) =>
 {
   databaseManager.selectQuery(
   {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.folders,
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElements,
     args: [ '*' ],
-    where: { operator: '=', key: 'uuid', value: folderUuid }
+    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: folderName }, 1: { operator: '=', key: 'is_directory', value: 1 }, 2: { operator: '=', key: 'is_deleted', value: 0 }, 3: { operator: '=', key: 'service_uuid', value: serviceUuid } }
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    if(result.length == 0) return callback(null, false);
+    if(result.length === 0) return callback(null, false);
 
     return callback(null, true, result[0]);
   });
@@ -105,18 +117,16 @@ storageAppFilesGet.getFileFromDatabaseUsingID = (fileID, databaseConnector, call
 
 /****************************************************************************************************/
 
-storageAppFilesGet.getFileFromDatabaseUsingUuid = (fileUuid, databaseConnection, params, callback) =>
+storageAppFilesGet.getFileFromDatabaseUsingUuid = (fileUuid, databaseConnection, globalParameters, callback) =>
 {
-  fileUuid              == undefined ||
-  params                == undefined ||
-  databaseConnection    == undefined ?
-
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
+  if(fileUuid == undefined)           return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'fileUuid' });
+  if(globalParameters == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   databaseManager.selectQuery(
   {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.files,
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElements,
     args: [ '*' ],
     where: { operator: '=', key: 'uuid', value: fileUuid }
 
@@ -124,7 +134,7 @@ storageAppFilesGet.getFileFromDatabaseUsingUuid = (fileUuid, databaseConnection,
   {
     if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    if(result.length == 0) return callback(null, false);
+    if(result.length === 0) return callback(null, false);
 
     return callback(null, true, result[0]);
   });
@@ -163,101 +173,41 @@ storageAppFilesGet.getFileFromDatabaseUsingFullName = (fileName, fileExt, servic
 
 /****************************************************************************************************/
 
-storageAppFilesGet.getFilesFromService = (serviceUuid, folderUuid, databaseConnection, params, callback) =>
+storageAppFilesGet.getFilesFromService = (serviceUuid, folderUuid, databaseConnection, globalParameters, callback) =>
 {
-  var objectWithFiles = {};
+  if(serviceUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(globalParameters == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+  
+  var resultObject = {};
+  resultObject.files = [];
+  resultObject.folders = [];
 
-  objectWithFiles.parentFolder = folderUuid;
+  resultObject.parentFolder = folderUuid;
 
   var queryObject = {};
 
-  queryObject.databaseName = params.database.storage.label;
-  queryObject.tableName = params.database.storage.tables.files;
+  queryObject.databaseName = globalParameters.database.storage.label;
+  queryObject.tableName = globalParameters.database.storage.tables.serviceElements;
   queryObject.args = [ '*' ];
 
-  if(folderUuid != null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service', value: serviceUuid }, 1: { operator: '=', key: 'deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: folderUuid } };
-  if(folderUuid == null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service', value: serviceUuid }, 1: { operator: '=', key: 'deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: '' } };
+  if(folderUuid != null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: serviceUuid }, 1: { operator: '=', key: 'is_deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: folderUuid } };
+  if(folderUuid == null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: serviceUuid }, 1: { operator: '=', key: 'is_deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: '' } };
 
-  browseFiles(queryObject, databaseConnection, (error, files) =>
-  {
-    if(error != null) return callback(error);
-
-    objectWithFiles.files = files;
-
-    queryObject.tableName = params.database.storage.tables.folders;
-
-    browseFolders(queryObject, databaseConnection, (error, folders) =>
-    {
-      if(error != null) return callback(error);
-
-      objectWithFiles.folders = folders;
-
-      return callback(null, objectWithFiles);
-    });
-  });
-}
-
-/****************************************************************************************************/
-
-function browseFiles(queryObject, databaseConnection, callback)
-{
   databaseManager.selectQuery(queryObject, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback(error);
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    if(result.length == 0) return callback(null, []);
+    if(result.length === 0) return callback(null, resultObject);
 
-    var index = 0, files = [];
-
-    var fileBrowser = () =>
+    for(var x = 0; x < result.length; x++)
     {
-      files[index] = {};
-
-      files[index].uuid = result[index].uuid;
-      files[index].name = result[index].name;
-      files[index].extension = result[index].ext;
-      files[index].deleted = (result[index].deleted == 1);
-
-      if(result[index += 1] != undefined) fileBrowser();
-
-      else
-      {
-        return callback(null, files);
-      }
+      result[x].is_directory == true
+      ? resultObject.folders.push({ uuid: result[x].uuid, name: result[x].name })
+      : resultObject.files.push({ uuid: result[x].uuid, name: result[x].name });
     }
 
-    fileBrowser();
-  });
-}
-
-/****************************************************************************************************/
-
-function browseFolders(queryObject, databaseConnection, callback)
-{
-  databaseManager.selectQuery(queryObject, databaseConnection, (error, result) =>
-  {
-    if(error != null) return callback(error);
-
-    if(result.length == 0) return callback(null, []);
-
-    var index = 0, folders = [];
-
-    var folderBrowser = () =>
-    {
-      folders[index] = {};
-
-      folders[index].uuid = result[index].uuid;
-      folders[index].name = result[index].name;
-
-      if(result[index += 1] != undefined) folderBrowser();
-
-      else
-      {
-        return callback(null, folders);
-      }
-    }
-
-    folderBrowser();
+    return callback(null, resultObject);
   });
 }
 
@@ -327,7 +277,7 @@ storageAppFilesGet.getParentFolder = (childUuid, serviceUuid, databaseConnection
 // GET FILE LOGS
 /****************************************************************************************************/
 
-module.exports.getFileLogs = (fileUuid, databaseConnection, params, callback) =>
+function getFileLogs(fileUuid, databaseConnection, params, callback)
 {
   if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
   if(fileUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'fileUuid' });
@@ -444,6 +394,31 @@ function getAccountLinkedToEachLog(fileData, logsData, databaseConnection, param
   }
 
   browseLogs();
+}
+
+/****************************************************************************************************/
+
+storageAppFilesGet.getFolderPath = (folderUuid, currentPath, databaseConnection, globalParameters, callback) =>
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElements,
+    args: [ '*' ],
+    where: { operator: '=', key: 'uuid', value: folderUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    if(result.length === 0) return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
+
+    currentPath.push({ uuid: result[0].uuid, name: result[0].name });
+
+    if(result[0].parent_folder.length === 0) return callback(null, currentPath);
+
+    return storageAppFilesGet.getFolderPath(result[0].parent_folder, currentPath, databaseConnection, globalParameters, callback);
+  });
 }
 
 /****************************************************************************************************/

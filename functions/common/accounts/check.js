@@ -13,7 +13,7 @@ module.exports.checkIfAccountExistsFromCredentials = (emailAddress, uncryptedPas
   if(uncryptedPassword == undefined)  return callback({ status: 406, code: constants.MISSING_DATA_FROM_REQUEST, detail: 'uncryptedPassword' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_FROM_REQUEST, detail: 'databaseConnection' });
 
-  encryption.encryptPassword(uncryptedPassword, (error, encryptedPassword) =>
+  encryption.encryptPassword(uncryptedPassword, params, (error, encryptedPassword) =>
   {
     if(error != null) return callback(error);
 

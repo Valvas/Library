@@ -1,719 +1,144 @@
 /****************************************************************************************************/
-
-.aside{ margin:20px; }
-
-.files{ width:calc(100% - 360px); margin:10px; max-width:1400px; }
-
-.aside .actions{ margin:20px 0 0 0; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); border-radius:4px; background-color:#FFFFFF; }
-
-.aside .actions .selection{ border-bottom:1px solid #F0F0F0; background-color:#FFFFFF; font-family:barlow; line-height:24px; font-size:20px; padding:13px 10px 13px 10px; box-sizing:border-box; }
-
-.aside .actions .content{ padding:10px; }
-
-.aside .actions .content .select{ border:none; border-radius:4px; font-size:16px; line-height:24px; padding:4px; width:200px; margin:0 0 20px 0; background-color:#428BCA; color:#FFFFFF; font-family:barlow; cursor:pointer; }
-
-.aside .actions .content .select:hover{ color:#000000; background-color:#2069A8; }
-
-.aside .actions .content .download .status{ display:inline-block; width:calc(100% - 60px); line-height:24px; font-size:16px; font-family:barlow; }
-
-.aside .actions .content .download .true, .aside .actions .content .remove .true{ color:#86AA6D; }
-
-.aside .actions .content .download .false, .aside .actions .content .remove .false{ color:#D9534F; }
-
-.aside .actions .content .download .disabled{ font-size:20px; line-height:24px; color:#D0D0D0; display:inline-block; vertical-align:top; width:40px; margin:0 10px 0 10px; text-align:center; }
-
-.aside .actions .content .download .enabled{ font-size:20px; line-height:24px; cursor:pointer; color:#46B5D3; display:inline-block; vertical-align:top; width:40px; margin:0 10px 0 10px; text-align:center; }
-
-.aside .actions .content .download .enabled:hover{ color:#2493B1; }
-
-.aside .actions .content .remove{ margin:5px 0 0 0; }
-
-.aside .actions .content .remove .status{ display:inline-block; width:calc(100% - 60px); line-height:24px; font-size:16px; font-family:barlow; }
-
-.aside .actions .content .remove .disabled{ font-size:20px; line-height:24px; color:#D0D0D0; display:inline-block; vertical-align:top; width:40px; margin:0 10px 0 10px; text-align:center; }
-
-.aside .actions .content .remove .enabled{ font-size:20px; line-height:24px; cursor:pointer; color:#D9534F; display:inline-block; vertical-align:top; width:40px; margin:0 10px 0 10px; text-align:center; }
-
-.aside .actions .content .remove .enabled:hover{ color:#B9272A; }
-
-.files .display{ margin:0 0 10px 0; width:100px; display:inline-block; vertical-align:top; }
-
-.files .display .choice{ cursor:pointer; display:inline-block; vertical-align:top; width:20px; font-size:20px; line-height:24px; margin:0 5px 0 0; }
-
-.files .display .choice.true{ color:#428BCA; }
-
-.files .display .choice.false{ color:#D0D0D0; }
-
-.files .display .choice.false:hover{ color:#5CB85C; }
-
-.aside .filters{ margin:20px 0 0 0; box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); border-radius:4px; background-color:#FFFFFF; }
-
-.aside .filters .label{ font-size:20px; line-height:24px; padding:10px; border-bottom:1px solid #F0F0F0; }
-
-.aside .filters .label .left{ font-family:barlow; display:inline-block; width:calc(100% - 35px); }
-
-.aside .filters .label .right{ display:inline-block; vertical-align:top; margin-left:5px; width:30px; text-align:center; }
-
-.aside .filters .label{ font-size:20px; line-height:24px; padding:10px; border-bottom:1px solid #F0F0F0; }
-
-.aside .filters .content{ padding:10px; }
-
-.aside .filters .content .filter{ margin:5px 0 5px 0; }
-
-.aside .filters .content .filter .value{ width:calc(100% - 40px); font-family:barlow; font-size:16px; line-height:24px; display:inline-block; }
-
-.aside .filters .content .filter .checkbox{ display:inline-block; vertical-align:top; margin:0 10px 0 10px; text-align:center; cursor:pointer; height:20px; width:20px; border:1px solid #D0D0D0; }
-
-.aside .info{ box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); border-radius:4px; background-color:#FFFFFF; }
-
-.aside .info .count{ font-family:barlow; font-size:20px; line-height:24px; padding:10px; border-bottom:1px solid #F0F0F0; }
-
-.aside .info .upload{ padding:10px; box-sizing:border-box; }
-
-.uploadFileButton{ cursor:pointer; border:none; border-radius:4px; padding:4px 0 4px 0; font-size:16px; line-height:24px; color:#FFFFFF; background-color:#5CB85C; font-family:barlow; width:calc(100% - 40px); margin:10px 20px 10px 20px; }
-
-.uploadFileButton:hover{ color:#000000; background-color:#3A963A; }
-
-.uploadFileFalse{ font-family:barlow; color:#D9534F; font-size:16px; line-height:24px; }
-
-/* ACTIONS BUTTONS */
-
-.downloadFilesButton{ width:120px; cursor:pointer; border:none; border-radius:4px; padding:4px 8px 4px 8px; height:32px; font-size:16px; font-family:roboto-light; color:#FFFFFF; background-color:#5CB85C; }
-
-.downloadFilesButton:hover{ color:#000000; background-color:#4BA74B; }
-
-.downloadFilesButtonOff{ width:120px; border:none; border-radius:4px; padding:4px 8px 4px 8px; height:32px; font-size:16px; font-family:roboto-light; color:#FFFFFF; background-color:#D0D0D0; }
-
-.removeFilesButton{ width:120px; cursor:pointer; border:none; border-radius:4px; padding:4px 8px 4px 8px; height:32px; font-size:16px; font-family:roboto-light; color:#FFFFFF; background-color:#D9534F; }
-
-.removeFilesButton:hover{ color:#000000; background-color:#C8423E; }
-
-.removeFilesButtonOff{ width:120px; border:none; border-radius:4px; padding:4px 8px 4px 8px; height:32px; font-size:16px; font-family:roboto-light; color:#FFFFFF; background-color:#D0D0D0; }
-
-/* CURRENT FOLDER PATH */
-
-.currentPath{ border:1px solid #E0E0E0; padding:0px; font-size:20px; font-family:barlow; border-radius:4px; }
-
-.currentPathBlock{ display:inline-block; vertical-align:top; background-color:#E5E5FF; padding:5px 20px 5px 20px; border-radius:4px; color:#428BCA; cursor:pointer; margin:0 5px 0 0; }
-
-.currentPathBlockSelected{ display:inline-block; vertical-align:top; background-color:#D4D4FF; padding:5px 20px 5px 20px; border-radius:4px; color:#428BCA; margin:0 5px 0 0; }
-
-.currentPathBlock:hover{ background-color:#D4D4FF; }
-
-.loadingFolderSpinner{ color:#428BCA; margin:20px; text-align:center; }
-
-/* SEARCH BAR */
-
-.searchBar{ width:200px; box-sizing:border-box; border-radius:4px; border:1px solid #E0E0E0; font-size:18px; padding:5px 0 5px 5px; height:32px; font-family:roboto-light; margin:0 10px 10px 0; }
-
-/* NEW FOLDER */
-
-.newFolderButton{ border:none; border-radius:4px; cursor:pointer; background-color:#428BCA; color:#FFFFFF; font-family:roboto-light; padding:4px 8px 4px 8px; width:180px; display:inline-block; vertical-align:top; margin:0 0 10px 0; font-size:16px; height:32px; }
-
-.newFolderButton:hover{ background-color:#317AB9; color:#000000; }
-
-.newFolderButtonOff{ border:none; border-radius:4px; background-color:#D0D0D0; color:#FFFFFF; font-family:roboto-light; padding:4px 8px 4px 8px; width:180px; display:inline-block; vertical-align:top; margin:0 0 10px 0; font-size:16px; height:32px; }
-
-.newFolderInput{ width:calc(100% - 40px); margin:20px; height:32px; font-size:18px; padding:5px 0 5px 5px; font-family:roboto-light; border-radius:4px; border:1px solid #E0E0E0; box-sizing:border-box; }
-
-.newFolderHelpMessage{ font-family:roboto-light; font-size:18px; margin:0 20px 10px 20px; }
-
-.newFolderSendButton{ width:160px; cursor:pointer; border:none; height:32px; box-sizing:border-box; border-radius:4px; font-family:roboto-light; padding:4px 8px 4px 8px; display:inline-block; vertical-align:top; font-size:16px; background-color:#428BCA; color:#FFFFFF; margin:0 0 10px calc(100% - 300px); }
-
-.newFolderSendButton:hover{ background-color:#317AB9; color:#000000; }
-
-.newFolderCancelButton{ width:120px; cursor:pointer; border:none; height:32px; box-sizing:border-box; border-radius:4px; font-family:roboto-light; padding:4px 8px 4px 8px; display:inline-block; vertical-align:top; font-size:16px; background-color:#D9534F; color:#FFFFFF; margin:0 10px 10px 10px; }
-
-.newFolderCancelButton:hover{ background-color:#C8423E; color:#000000; }
-
+/* Main Block */
 /****************************************************************************************************/
 
-@media (max-width: 319px)
-{
-  .aside{ width:calc(100% - 40px); }
-
-  .files{ width:calc(100% - 20px); }
-
-  .aside .filters .label{ cursor:pointer; }
-
-  .aside .filters .label:hover{ color:#428BCA; }
-
-  .aside .filters .content{ display:none; }
-
-  .files .display{ width:100%; display:block; }
-
-  .downloadFilesButton{ width:calc(100% - 20px); margin:10px; }
-
-  .removeFilesButton{ width:calc(100% - 20px); margin:10px; }
-}
-
-@media (min-width: 320px) and (max-width: 479px)
-{
-  .aside{ width:calc(100% - 40px); }
-
-  .files{ width:calc(100% - 20px); }
-
-  .aside .filters .label{ cursor:pointer; }
-
-  .aside .filters .label:hover{ color:#428BCA; }
-
-  .aside .filters .content{ display:none; }
-
-  .searchBar{ display:inline-block; vertical-align:top; }
-
-  .downloadFilesButton{ width:calc(100% - 20px); margin:10px; }
-
-  .removeFilesButton{ width:calc(100% - 20px); margin:10px; }
-}
-
-@media (min-width: 480px) and (max-width: 639px)
-{
-  .aside{ width:calc(100% - 40px); }
-
-  .files{ width:calc(100% - 20px); }
-
-  .aside .filters .label{ cursor:pointer; }
-
-  .aside .filters .label:hover{ color:#428BCA; }
-
-  .aside .filters .content{ display:none; }
-
-  .searchBar{ display:inline-block; vertical-align:top; }
-}
-
-@media (min-width: 640px) and (max-width: 779px)
-{
-  .aside{ width:calc(100% - 40px); }
-
-  .files{ width:calc(100% - 20px); }
-
-  .aside .filters .label{ cursor:pointer; }
-
-  .aside .filters .label:hover{ color:#428BCA; }
-
-  .aside .filters .content{ display:none; }
-
-  .searchBar{ display:inline-block; vertical-align:top; }
-}
-
-@media (min-width: 780px) and (max-width: 959px)
-{
-  .aside{ width:calc(100% - 40px); }
-
-  .files{ width:calc(100% - 20px); }
-
-  .aside .filters .label .right{ display:none; }
-
-  .searchBar{ display:inline-block; vertical-align:top; }
-}
-
-@media (min-width: 960px) and (max-width: 1279px)
-{
-  .aside{ width:300px; display:inline-block; }
-
-  .files{ display:inline-block; vertical-align:top; }
-
-  .aside .filters .label .right{ display:none; }
-
-  .searchBar{ display:inline-block; vertical-align:top; }
-}
-
-@media (min-width: 1280px) and (max-width: 1679px)
-{
-  .aside{ width:300px; display:inline-block; }
-
-  .files{ display:inline-block; vertical-align:top; }
-
-  .aside .filters .label .right{ display:none; }
-
-  .searchBar{ display:inline-block; vertical-align:top; }
-}
-
-@media (min-width: 1680px)
-{
-  .aside{ width:300px; display:inline-block; }
-
-  .files{ display:inline-block; vertical-align:top; }
-
-  .aside .filters .label .right{ display:none; }
-
-  .searchBar{ display:inline-block; vertical-align:top; }
-}
+.storageServiceMainBlock{ color:#000000; max-width:2400px; margin:40px 20px 40px 20px; display:flex; flex-direction:row; }
 
 /****************************************************************************************************/
-
-.storageAppServicesFilesLargeIcon.doc, .storageAppServicesFilesListIcon.doc, .storageAppServicesFilesSmallIcon.doc{ color:#428BCA; }
-.storageAppServicesFilesLargeIcon.ppt, .storageAppServicesFilesListIcon.ppt, .storageAppServicesFilesSmallIcon.ppt{ color:#EBA432; }
-.storageAppServicesFilesLargeIcon.xls, .storageAppServicesFilesListIcon.xls, .storageAppServicesFilesSmallIcon.xls{ color:#86AA6D; }
-.storageAppServicesFilesLargeIcon.png, .storageAppServicesFilesListIcon.png, .storageAppServicesFilesSmallIcon.png{ color:#64ADEC; }
-.storageAppServicesFilesLargeIcon.txt, .storageAppServicesFilesListIcon.txt, .storageAppServicesFilesSmallIcon.txt{ color:#8B9DC3; }
-.storageAppServicesFilesLargeIcon.pdf, .storageAppServicesFilesListIcon.pdf, .storageAppServicesFilesSmallIcon.pdf{ color:#DB494C; }
-.storageAppServicesFilesLargeIcon.zip, .storageAppServicesFilesListIcon.zip, .storageAppServicesFilesSmallIcon.zip{ color:#34393C; }
-.storageAppServicesFilesLargeIcon.default, .storageAppServicesFilesListIcon.default, .storageAppServicesFilesSmallIcon.default{ color:#34393C; }
-
-/* FILES WITH LARGE GRID DISPLAY */
-
-.storageAppServicesFilesLarge{ display:inline-block; vertical-align:top; margin:10px; width:100px; position:relative; }
-
-.storageAppServicesFilesLargeIcon{ text-align:center; font-size:64px; color:#FFFFFF; border-radius:4px; padding:15px 0 5px 0; margin:0 10% 0 10%; height:85px; }
-
-.storageAppServicesFilesLargeName{ font-family:roboto-light; text-align:center; font-size:12px; margin-top:5px; }
-
-.storageAppServicesFilesLargeCheckbox{ width:20px; height:20px; cursor:pointer; position:absolute; top:2px; right:calc(10% + 2px); margin:0; }
-
-/* FILES WITH SMALL GRID DISPLAY */
-
-.storageAppServicesFilesSmall{ display:inline-block; vertical-align:top; margin:10px 10px 10px 10px; width:60px; position:relative; }
-
-.storageAppServicesFilesSmallIcon{ text-align:center; font-size:3em; color:#FFFFFF; border-radius:4px; padding:25px 0 5px 0; width:80%; margin:0 10% 0 10%; }
-
-.storageAppServicesFilesSmallName{ font-family:roboto-light; text-align:center; font-size:12px; margin-top:5px; }
-
-.storageAppServicesFilesSmallCheckbox{ width:20px; height:20px; cursor:pointer; position:absolute; top:2px; right:calc(10% + 2px); margin:0; }
-
-/* FILES WITH LIST DISPLAY */
-
-.storageAppServicesFilesList{ margin:5px 10px 5px 10px; box-sizing:border-box; position:relative; }
-
-.storageAppServicesFilesListIcon{ position:relative; font-size:2em; width:50px; color:#FFFFFF; padding:5px; border-radius:4px; text-align:center; display:inline-block; margin:0 0 0 25px; }
-
-.storageAppServicesFilesListName{ display:inline-block; vertical-align:top; width:calc(100% - 95px); margin:14px 0 0 10px; font-family:roboto-light; font-size:18px; }
-
-.storageAppServicesFilesListCheckbox{ position:absolute; top:calc(50% - 10px); left:0; height:20px; width:20px; cursor:pointer; margin:0; }
-
-/* WHEN HOVERING FILES AND FOLDERS */
-
-.storageAppServicesFilesLarge:hover, .storageAppServicesFilesSmall:hover, .storageAppServicesFilesList:hover, .storageAppServiceFolderLarge:hover, .storageAppServiceFolderSmall:hover, .storageAppServiceFolderList:hover, .storageAppServiceReturnLarge:hover, .storageAppServiceReturnSmall:hover, .storageAppServiceReturnList:hover{ cursor:pointer; background-color:#F5F5FF; }
-
-/* FOLDERS WITH LARGE GRID DISPLAY */
-
-.storageAppServiceFolderLarge{ width:100px; margin:10px; position:relative; display:inline-block; vertical-align:top; }
-
-.storageAppServiceFolderLargeIcon{ text-align:center; font-size:64px; color:#F8D775; border-radius:4px; padding:15px 0 5px 0; margin:0 10% 0 10%; height:85px; }
-
-.storageAppServiceFolderLargeName{ font-size:12px; font-family:roboto-light; text-align:center; margin:5px 0 0 0; }
-
-.storageAppServiceFolderLargeCheckbox{ width:20px; height:20px; position:absolute; top:2px; right:calc(10% + 2px); margin:0; }
-
-/* FOLDERS WITH SMALL GRID DISPLAY */
-
-.storageAppServiceFolderSmall{ width:60px; margin:10px; position:relative; display:inline-block; vertical-align:top; }
-
-.storageAppServiceFolderSmallIcon{ text-align:center; font-size:3em; color:#F8D775; border-radius:4px; padding:25px 0 5px 0; margin:0 10% 0 10%; width:80%; }
-
-.storageAppServiceFolderSmallName{ font-size:12px; font-family:roboto-light; text-align:center; margin:5px 0 0 0; }
-
-.storageAppServiceFolderSmallCheckbox{ width:20px; height:20px; position:absolute; top:2px; right:calc(10% + 2px); margin:0; }
-
-/* FOLDERS WITH LIST DISPLAY */
-
-.storageAppServiceFolderList{ margin:5px 10px 5px 10px; box-sizing:border-box; position:relative; }
-
-.storageAppServiceFolderListIcon{ text-align:center; font-size:2em; color:#F8D775; border-radius:4px; padding:5px; width:50px; display:inline-block; margin:0 0 0 25px; }
-
-.storageAppServiceFolderListName{ display:inline-block; vertical-align:top; width:calc(100% - 95px); margin:14px 0 0 10px; font-family:roboto-light; font-size:18px; }
-
-.storageAppServiceFolderListCheckbox{ position:absolute; top:calc(50% - 10px); left:0; height:20px; width:20px; cursor:pointer; margin:0; }
-
-
-.storageAppServiceReturnLarge{ width:100px; margin:10px; position:relative; display:inline-block; vertical-align:top; }
-
-.storageAppServiceReturnIconLarge{ font-size:48px; position:absolute; top:26px; left:26px; height:48px; width:48px; }
-
-.storageAppServiceReturnBackgroundLarge{ text-align:center; font-size:64px; color:#F8D775; border-radius:4px; padding:15px 0 5px 0; margin:0 10% 0 10%; height:85px; }
-
-.storageAppServiceReturnNameLarge{ font-size:20px; text-align:center; }
-
-
-.storageAppServiceReturnSmall{ width:60px; margin:10px; position:relative; display:inline-block; vertical-align:top; }
-
-.storageAppServiceReturnIconSmall{ font-size:32px; position:absolute; top:36px; left:16px; height:32px; width:32px; }
-
-.storageAppServiceReturnBackgroundSmall{ text-align:center; font-size:3em; color:#F8D775; border-radius:4px; padding:25px 0 5px 0; margin:0 10% 0 10%; width:80%; }
-
-.storageAppServiceReturnNameSmall{ font-size:12px; font-family:roboto-light; text-align:center; margin:5px 0 0 0; }
-
-
-.storageAppServiceReturnList{ margin:5px 10px 5px 10px; box-sizing:border-box; position:relative; }
-
-.storageAppServiceReturnIconList{ position:absolute; top:12px; left:42px; font-size:24px; width:24px; height:24px; }
-
-.storageAppServiceReturnBackgroundList{ text-align:center; font-size:2em; color:#F8D775; border-radius:4px; padding:5px; width:50px; display:inline-block; margin:0 0 0 25px; }
-
-.storageAppServiceReturnNameList{ display:inline-block; vertical-align:top; width:calc(100% - 95px); margin:14px 0 0 10px; font-family:roboto-light; font-size:18px; }
-
+/* Aside Tools */
 /****************************************************************************************************/
 
-.elementDetailBlock{ width:300px; position:absolute; top:0; right:0; bottom:0; border-left:1px solid #D0D0D0; background-color:#FFFFFF; box-shadow:8px 0 8px -10px #000000,-8px 0 8px -10px #000000; }
+.storageServiceMainBlockTools{ margin-right:20px; padding:10px; width:250px; }
 
-.elementDetailBlockTitle{ border-bottom:1px solid #E0E0E0; font-size:20px; font-family:roboto-light; padding:20px; margin:0 0 10px 0; }
+.storageServiceMainBlockToolsServiceName{ font-size:1.2em; padding-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.24); margin-bottom:40px; }
 
-.elementDetailBlockClose{ position:absolute; top:15px; right:10px; font-size:2em; width:32px; height:32px; cursor:pointer; }
 
-.elementDetailBlockClose:hover{ color:#D9534F; }
+.storageServiceMainBlockToolsFilesAndFoldersBlock{ margin:40px 0 20px 0; }
 
-.elementDetailBlockSpinner{ font-size:6em; position:absolute; color:#5CB85C; height:96px; width:96px; top:calc(50% - 48px); left:calc(50% - 48px); }
+.storageServiceMainBlockToolsFilesAndFoldersButton{ outline:none; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); margin-bottom:20px; cursor:pointer; width:100%; border:none; border-radius:20px; background-color:#FFFFFF; font-size:0.8em; font-weight:bold; padding:8px; }
 
-.elementDetailBlockLabel{ font-size:18px; font-family:roboto-light; padding:10px 10px 5px 10px; }
+.storageServiceMainBlockToolsFilesAndFoldersButton:hover{ color:#428BCA; background-color:rgba(0,0,0,0.03); }
 
-.elementDetailBlockValue{ font-size:18px; font-family:roboto-light; padding:5px 10px 10px 10px; }
+.storageServiceMainBlockToolsFilesAndFoldersDisabledMessage{ color:#D9534F; font-size:0.8em; text-align:center; font-weight:bold; margin-bottom:20px; }
 
-.elementDetailBlockRename{ border:none; border-radius:4px; cursor:pointer; padding:4px 8px 4px 8px; width:calc(100% - 40px); margin:10px 20px 10px 20px; font-size:16px; font-family:roboto-light; color:#FFFFFF; box-sizing:border-box; background-color:#5CB85C; }
 
-.elementDetailBlockRename:hover{ color:#000000; background-color:#4BA74B; }
+.storageServiceMainBlockToolsSelectionBlock{ margin:20px 0 40px 0; border-top:1px solid rgba(0,0,0,0.24); }
 
-.elementDetailBlockRenameOff{ border:none; border-radius:4px; padding:4px 8px 4px 8px; width:calc(100% - 40px); margin:10px 20px 10px 20px; font-size:16px; font-family:roboto-light; color:#FFFFFF; box-sizing:border-box; background-color:#E0E0E0; }
+.storageServiceMainBlockToolsSelectionAmount{ display:flex; flex-direction:row; justify-content:space-between; margin:20px 0 20px 0; }
 
-.elementDetailBlockRemove{ border:none; border-radius:4px; padding:4px 8px 4px 8px; width:calc(100% - 40px); margin:10px 20px 10px 20px; font-size:16px; font-family:roboto-light; color:#FFFFFF; box-sizing:border-box; background-color:#E0E0E0; }
+.storageServiceMainBlockToolsSelectionAmountKey{ font-size:0.9em; margin-right:10px; }
 
-.elementDetailBlockEvents{ width:calc(100% - 20px); margin:20px 10px 20px 10px; box-sizing:border-box; border:1px solid #E0E0E0; border-radius:4px; }
+.storageServiceMainBlockToolsSelectionAmountValue{ font-weight:bold; font-size:0.9em; }
 
-.elementDetailBlockEventsTitle{ margin:0 0 10px 0; padding:10px; font-family:roboto-light; font-size:16px; border-bottom:1px solid #E0E0E0; }
+.storageServiceMainBlockToolsSelectionActionsBlock{ margin:20px 0 20px 0; }
 
-.elementDetailBlockEventsContent{ overflow-y:scroll; max-height:300px; }
+.storageServiceMainBlockToolsSelectionActionsDisabled{ color:#D9534F; font-size:0.8em; text-align:center; font-weight:bold; margin-bottom:20px; }
 
-.elementDetailBlockEventsContentElement{ margin:5px 10px 5px 10px; font-size:14px; font-family:roboto-light; }
+.storageServiceMainBlockToolsSelectionActionsButtonDisabled{ color:rgba(0,0,0,0.48); box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); text-align:center; font-size:0.8em; font-weight:bold; padding:8px; border-radius:20px; margin-bottom:20px; }
 
-.elementDetailBlockEventsContentElement.zero{ color:#5CB85C; }
+.storageServiceMainBlockToolsSelectionActionsButtonEnabled{ color:#428BCA; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); text-align:center; font-size:0.8em; font-weight:bold; padding:8px; border-radius:20px; margin-bottom:20px; cursor:pointer; }
 
-.elementDetailBlockEventsContentElement.one{ color:#428BCA; }
+.storageServiceMainBlockToolsSelectionActionsButtonEnabled:hover{ background-color:rgba(0,0,0,0.06); }
 
-.elementDetailBlockEventsContentElement.two{ color:#D9534F; }
 
-.elementDetailBlockEventsContentElement.three{ color:#EBA432; }
+.storageServiceMainBlockToolsFiltersBlock{ margin:40px 0 40px 0; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); }
 
-.elementDetailBlockEventsContentElementComment{ font-size:14px; font-family:roboto-light-italic; padding:5px; background-color:#F5F5FF; color:#000000; border-radius:4px; }
+.storageServiceMainBlockToolsFiltersTitle{ font-size:1em; padding:10px; border-bottom:1px solid rgba(0,0,0,0.24); }
 
-.elementDetailBlockEventsPages{ margin:10px 0 0 0; font-family:roboto-light; border-top:1px solid #E0E0E0; }
+.storageServiceMainBlockToolsFiltersList{ padding:10px; }
 
-.elementDetailBlockEventsPagesElement{ display:inline-block; vertical-align:top; width:20px; padding:5px; text-align:center; font-size:14px; cursor:pointer; }
+.storageServiceMainBlockToolsFiltersListElement{ display:flex; flex-direction:row; justify-content:space-between; align-items:center; margin:5px 0 5px 0; }
 
-.elementDetailBlockEventsPagesElement:hover{ color:#428BCA; }
+.storageServiceMainBlockToolsFiltersListElementLabel{ font-size:0.8em; font-weight:bold; margin-right:10px; }
 
-.elementDetailBlockEventsPagesElementSelected{ display:inline-block; vertical-align:top; width:20px; padding:5px; text-align:center; font-size:14px; color:#428BCA; }
-
-.elementDetailBlockComment{ border:none; border-radius:4px; background-color:#EBA432; color:#FFFFFF; font-family:roboto-light; font-size:16px; padding:4px 8px 4px 8px; width:calc(100% - 40px); margin:20px; cursor:pointer; }
-
-.elementDetailBlockComment:hover{ color:#000000; background-color:#DA9321; }
-
-.elementDetailBlockCommentOff{ border:none; border-radius:4px; padding:4px 8px 4px 8px; width:calc(100% - 40px); margin:10px 20px 10px 20px; font-size:16px; font-family:roboto-light; color:#FFFFFF; box-sizing:border-box; background-color:#E0E0E0; }
+.storageServiceMainBlockToolsFiltersListElementCheckbox{ height:18px; width:18px; margin:0; padding:0; cursor:pointer; }
 
 /****************************************************************************************************/
-
-.commentPopupLabel{ font-size:16px; font-family:roboto-light; margin:10px 10px 5px 10px; }
-
-.commentPopupArea{ resize:none; width:calc(100% - 20px); margin:5px 10px 10px 10px; box-sizing:border-box; border-radius:4px; border:1px solid #E0E0E0; }
-
-.commentPopupHelp{ font-size:16px; font-family:roboto-italic; margin:5px 10px 10px 10px; }
-
-.commentPopupSend{ border:none; border-radius:4px; cursor:pointer; color:#FFFFFF; padding:4px 8px 4px 8px; font-size:16px; font-family:roboto-light; margin:10px 10px 10px calc(100% - 300px); width:200px; background-color:#5CB85C; }
-
-.commentPopupSend:hover{ color:#000000; background-color:#4BA74B; }
-
-.commentPopupCancel{ border:none; border-radius:4px; cursor:pointer; color:#FFFFFF; padding:4px 8px 4px 8px; font-size:16px; font-family:roboto-light; margin:10px 10px 10px 0; width:80px; background-color:#D9534F; }
-
-.commentPopupCancel:hover{ color:#000000; background-color:#C8423E; }
-
+/* Files Section */
 /****************************************************************************************************/
 
-.renameFolderPopupMessage{ font-family:roboto-light; font-size:16px; padding:20px 20px 10px 20px; }
+.storageServiceMainBlockFiles{ margin-left:20px; width:calc(100% - 290px); }
 
-.renameFolderPopupCurrentNameLabel{ font-family:roboto-light; font-size:18px; padding:5px 20px 5px 20px; }
+.storageServiceMainBlockFilesHeader{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
 
-.renameFolderPopupCurrentNameValue{ font-family:roboto-light; font-size:18px; margin:0 20px 10px 20px; border:1px solid #E0E0E0; border-radius:4px; height:32px; padding:6px 0 0 4px; box-sizing:border-box; }
 
-.renameFolderPopupNewNameInput{ font-family:roboto-light; font-size:18px; margin:10px 20px 10px 20px; border:1px solid #E0E0E0; border-radius:4px; height:32px; padding:0 0 0 4px; box-sizing:border-box; width:calc(100% - 40px); }
+.storageServiceMainBlockFilesHeaderSearchBlock{ position:relative; background-color:rgba(0,0,0,0.08); border-radius:20px; height:32px; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
 
-.renameFolderPopupSend{ cursor:pointer; border:none; border-radius:4px; color:#FFFFFF; background-color:#5CB85C; font-family:roboto-light; font-size:16px; padding:4px 8px 4px 8px; width:120px; margin:10px 10px 10px calc(100% - 270px); }
+.storageServiceMainBlockFilesHeaderSearchIcon{ color:rgba(0,0,0,0.72); width:16px; height:16px; margin-left:8px; }
 
-.renameFolderPopupSend:hover{ color:#000000; background-color:#4BA74B; }
+.storageServiceMainBlockFilesHeaderSearchBar{ outline:none; border-radius:20px; height:32px; border:none; background-color:rgba(0,0,0,0); padding:8px; box-sizing:border-box; width:300px; font-size:0.9em; }
 
-.renameFolderPopupCancel{ cursor:pointer; border:none; border-radius:4px; color:#FFFFFF; background-color:#D9534F; font-family:roboto-light; font-size:16px; padding:4px 8px 4px 8px; width:120px; margin:10px 20px 10px 0; }
 
-.renameFolderPopupCancel:hover{ color:#000000; background-color:#C8423E; }
+.storageServiceMainBlockFilesHeaderDisplaySelection{ display:flex; flex-direction:row; margin-left:20px; }
+
+.storageServiceMainBlockFilesHeaderDisplaySelectionElementEnabled, .storageServiceMainBlockFilesHeaderDisplaySelectionElementDisabled{ margin-right:10px; font-size:1.5em; }
+
+.storageServiceMainBlockFilesHeaderDisplaySelectionElementEnabled{ color:#428BCA; }
+
+.storageServiceMainBlockFilesHeaderDisplaySelectionElementDisabled{ color:rgba(0,0,0,0.24); cursor:pointer; }
+
+.storageServiceMainBlockFilesHeaderDisplaySelectionElementDisabled:hover{ color:rgba(0,0,0,0.48); }
+
+
+.storageServiceMainBlockFilesPath{ font-size:1.2em; margin:20px 0 20px 0; border-bottom:1px solid rgba(0,0,0,0.24); padding-bottom:5px; width:100%; display:flex; flex-direction:row; flex-wrap:wrap; justify-content:flex-start; align-items:top; }
+
+.storageServiceMainBlockFilesPathBlock{ margin-right:20px; display:flex; flex-direction:row; align-items:center; }
+
+.storageServiceMainBlockFilesPathBlockLabel{ margin-right:20px; padding:10px; }
+
+.storageServiceMainBlockFilesPathBlockLabel:hover{ background-color:rgba(0,0,0,0.06); cursor:pointer; border-radius:4px; }
+
+.storageServiceMainBlockFilesPathBlockIcon{ font-size:0.8em; color:rgba(0,0,0,0.6); }
+
+.storageServiceMainBlockFilesPathBlockSelected{ margin-right:10px; color:#428BCA; padding:10px; background-color:rgba(0,0,0,0.06); border-radius:4px; }
+
+
+.storageServiceMainBlockCreateFolder{ font-size:0.8em; padding:8px 16px 8px 16px; border-radius:4px; border:none; background-color:#539CDB; color:#FFFFFF; }
+
+.storageServiceMainBlockCreateFolderDisabled{ color:#D9534F; font-size:0.8em; font-weight:bold; margin:10px; }
 
 /****************************************************************************************************/
-
-.servicesUploadFilePopup{ position:absolute; z-index:250; top:80px; margin:0 0 40px 0; border-radius:4px; }
-
-.servicesUploadFilePopup .title{ padding:10px; font-family:barlow; border-radius:4px 4px 0 0; background-color:#428BCA; color:#FFFFFF; line-height:24px; font-size:20px; }
-
-.servicesUploadFilePopup .spinner{ font-size:3em; color:#5CB85C; text-align:center; width:100%; padding:20px 0 20px 0; background-color:#445566; border-radius:4px; }
-
-.servicesUploadFilePopup .notch{ font-size:1.5em; position:absolute; top:10px; right:10px; color:#5CB85C; }
-
-.servicesUploadFilePopup .error{ padding:20px 10px 20px 10px; background-color:#445566; border-radius:4px; }
-
-.servicesUploadFilePopup .error .icon{ width:32px; font-size:1.5em; padding:8px 0 0 0; color:#D9534F; display:inline-block; }
-
-.servicesUploadFilePopup .error .content{ width:calc(100% - 52px); display:inline-block; vertical-align:top; color:#D9534F; font-size:16px; line-height:24px; font-family:barlow; }
-
-.servicesUploadFilePopup .error .detail{ word-break:break-all; color:#D0D0D0; font-family:barlow-italic; font-size:14px; line-height:18px; margin:20px 0 0 0; }
-
-.servicesUploadFilePopup .error .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
-
-.servicesUploadFilePopup .error .button:hover{ color:#000000; background-color:#2069A8; }
-
-.servicesUploadFilePopup .warning{ padding:20px 10px 20px 10px; background-color:#445566; border-radius:0 0 4px 4px; }
-
-.servicesUploadFilePopup .warning .icon{ width:32px; font-size:1.5em; padding:8px 0 0 0; color:#FFCF40; display:inline-block; }
-
-.servicesUploadFilePopup .warning .content{ width:calc(100% - 52px); display:inline-block; vertical-align:top; color:#FFCF40; font-size:14px; line-height:24px; font-family:barlow; }
-
-.servicesUploadFilePopup .warning .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
-
-.servicesUploadFilePopup .warning .button:hover{ color:#000000; background-color:#2069A8; }
-
-.servicesUploadFilePopup .warning .yes{ width:32px; margin:10px 10px 0 calc(50% - 42px); font-size:2em; cursor:pointer; color:#5CB85C; display:inline-block; }
-
-.servicesUploadFilePopup .warning .yes:hover{ color:#3A963A; }
-
-.servicesUploadFilePopup .warning .no{ width:32px; margin:10px calc(50% - 42px) 0 10px; font-size:2em; cursor:pointer; color:#D9534F; display:inline-block; }
-
-.servicesUploadFilePopup .warning .no:hover{ color:#B7312D; }
-
-.servicesUploadFilePopup .content{ padding:10px; background-color:#445566; border-radius:0 0 4px 4px; }
-
-.servicesUploadFilePopup .content .instructions{ font-size:16px; line-height:24px; font-family:barlow; color:#FFFFFF; }
-
-.servicesUploadFilePopup .content .file{ margin:20px 0 20px 0; }
-
-.servicesUploadFilePopup .content .file .label{ background-color:#FFFFFF; border-radius:4px 0 0 4px; display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:0 0 0 5px; vertical-align:top; box-sizing:border-box; cursor:pointer; font-family:barlow; font-size:16px; line-height:30px; width:calc(100% - 80px); }
-
-.servicesUploadFilePopup .content .file .label:hover{ font-weight:bold; }
-
-.servicesUploadFilePopup .content .file .send{ display:inline-block; vertical-align:top; border:none; color:#FFFFFF; border-radius:0 4px 4px 0; font-family:barlow; width:80px; font-size:16px; line-height:28px; }
-
-.servicesUploadFilePopup .content .file .send.active{ background-color:#5CB85C; cursor:pointer; }
-
-.servicesUploadFilePopup .content .file .send.active:hover{ color:#000000; background-color:#3A963A; }
-
-.servicesUploadFilePopup .content .file .send.inactive{ background-color:#D0D0D0; }
-
-.servicesUploadFilePopup .content .file .input{ display:none; }
-
-.servicesUploadFilePopup .content .size{ color:#FFFFFF; font-size:14px; font-family:barlow-italic; line-height:18px; margin:0 0 10px 0; }
-
-.servicesUploadFilePopup .content .ext{ color:#FFFFFF; font-size:14px; font-family:barlow-italic; line-height:18px; margin:0 0 10px 0; }
-
-.servicesUploadFilePopup .content .close{ border:none; margin:10px 0 0 calc(100% - 100px); cursor:pointer; border-radius:4px; line-height:24px; font-size:16px; color:#FFFFFF; font-family:barlow; background-color:#D9534F; padding:4px; width:100px; }
-
-.servicesUploadFilePopup .content .close:hover{ color:#000000; background-color:#B7312D; }
-
-.servicesUploadFilePopup .loaderBackground{ position:absolute; border-radius:0 0 4px 4px; top:44px; right:0; bottom:0; left:0; z-index:40; background-color:#000000; opacity:0.6; }
-
-.servicesUploadFilePopup .loaderSpinner{ position:absolute; font-size:3em; top:calc(calc(50% - 25px) + 22px); left:calc(50% - 25px); width:50px; height:50px; z-index:40; color:#5CB85C; }
-
-.servicesUploadFilePopup .loading{ border-radius:0 0 4px 4px; background-color:#445566; padding:10px; }
-
-.servicesUploadFilePopup .loading .info{ margin:10px 0 0 0; font-size:16px; line-height:24px; font-family:barlow-italic; color:#FFFFFF; }
-
-.servicesUploadFilePopup .loading .info .left{ width:50%; display:inline-block; vertical-align:top; text-align:right; }
-
-.servicesUploadFilePopup .loading .info .right{ width:50%; display:inline-block; vertical-align:top; text-align:left; }
-
-.servicesUploadFilePopup .loading .bar{ position:relative; width:100%; background-color:#E0E0E0; height:20px; border-radius:4px; margin:10px 0 10px 0; }
-
-.servicesUploadFilePopup .loading .bar .progress{ background-color:#7EDA7E; height:20px; border-radius:4px; width:0; }
-
-.servicesUploadFilePopup .loading .bar .status{ position:absolute; color:#317AB9; line-height:20px; z-index:20; top:0; left:0; right:0; bottom:0; font-size:16px; font-family:barlow; text-align:center; }
-
-.servicesUploadFilePopup .loading .cancel{ cursor:pointer; color:#D9534F; font-size:2em; width:32px; margin:20px 0 0 calc(100% - 32px); }
-
-.servicesUploadFilePopup .loading .cancel:hover{ color:#B7312D; }
-
-.servicesUploadFilePopup .success{ padding:20px 10px 20px 10px; background-color:#445566; border-radius:0 0 4px 4px; }
-
-.servicesUploadFilePopup .success .message{ text-align:center; width:100%; color:#5CB85C; padding:0; }
-
-.servicesUploadFilePopup .success .message .icon{ width:32px; font-size:1.5em; display:inline-block; padding:0; }
-
-.servicesUploadFilePopup .success .message .content{ text-align:left; width:calc(100% - 32px); font-size:14px; line-height:24px; display:inline-block; vertical-align:top; font-family:barlow; padding:0; }
-
-.servicesUploadFilePopup .success .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
-
-.servicesUploadFilePopup .success .button:hover{ color:#000000; background-color:#2069A8; }
-
-
-.servicesDownloadFilePopup{ position:absolute; z-index:250; top:80px; margin:0 0 40px 0; border-radius:4px; background-color:#445566; }
-
-.servicesDownloadFilePopup .loading{ color:#5CB85C; font-size:3em; width:60px; margin:0 calc(50% - 30px) 0 calc(50% - 30px); text-align:center; padding:40px 0 40px 0; }
-
-.servicesDownloadFilePopup .title{ background-color:#428BCA; color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow; padding:10px; border-radius:4px 4px 0 0; }
-
-.servicesDownloadFilePopup .bar{ position:relative; width:calc(100% - 20px); background-color:#E0E0E0; height:20px; border-radius:4px; margin:30px 10px 10px 10px; }
-
-.servicesDownloadFilePopup .bar .progress{ background-color:#7EDA7E; height:20px; border-radius:4px; width:0; }
-
-.servicesDownloadFilePopup .bar .status{ position:absolute; color:#317AB9; line-height:20px; z-index:20; top:0; left:0; right:0; bottom:0; font-size:16px; font-family:barlow; text-align:center; }
-
-.servicesDownloadFilePopup .cancel{ cursor:pointer; width:120px; margin:10px 10px 10px calc(100% - 130px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; padding:4px; color:#FFFFFF; background-color:#D9534F; }
-
-.servicesDownloadFilePopup .cancel:hover{ background-color:#B7312D; color:#000000; }
-
-.servicesDownloadFilePopup .error{ padding:10px 10px 10px 10px; }
-
-.servicesDownloadFilePopup .error .icon{ width:32px; font-size:1.5em; color:#D9534F; display:inline-block; margin:20px 0 0 0; padding:0; }
-
-.servicesDownloadFilePopup .error .content{ margin:20px 0 0 0; width:calc(100% - 52px); padding:0; display:inline-block; vertical-align:top; color:#D9534F; font-size:14px; line-height:24px; font-family:barlow; }
-
-.servicesDownloadFilePopup .error .detail{ word-break:break-all; color:#D0D0D0; font-family:barlow-italic; font-size:14px; line-height:18px; margin:20px 0 0 0; }
-
-.servicesDownloadFilePopup .error .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
-
-.servicesDownloadFilePopup .error .button:hover{ color:#000000; background-color:#2069A8; }
-
-.servicesDownloadFilePopup .content{ padding:10px; }
-
-.servicesDownloadFilePopup .content .counter{ color:#FFFFFF; font-family:barlow; font-size:16px; line-height:24px; margin:10px 0 10px 0; }
-
-.servicesDownloadFilePopup .content .cancel{ cursor:pointer; border:none; border-radius:4px; padding:4px; background-color:#D9534F; color:#FFFFFF; font-size:16px; line-height:24px; width:120px; margin:10px 0 0 calc(100% - 120px); }
-
-.servicesDownloadFilePopup .content .cancel:hover{ background-color:#B7312D; color:#000000; }
-
-.servicesDownloadFilePopup .progress{ margin:10px 0 10px 0; }
-
-.servicesDownloadFilePopup .progress .label{ font-size:16px; line-height:24px; margin:0 10px 0 10px; color:#FFFFFF; font-family:barlow; }
-
-.servicesDownloadFilePopup .progress .bar{ position:relative; width:calc(100% - 20px); background-color:#E0E0E0; height:20px; border-radius:4px; margin:10px; }
-
-.servicesDownloadFilePopup .progress .status{ position:absolute; color:#317AB9; line-height:20px; z-index:20; top:0; left:0; right:0; bottom:0; font-size:16px; font-family:barlow; text-align:center; }
-
-.servicesDownloadFilePopup .progress .completed{ background-color:#7EDA7E; height:20px; border-radius:4px; width:0; }
-
-.servicesDownloadFilePopup .message{ text-align:center; width:calc(100% - 20px); color:#5CB85C; padding:20px 10px 10px 10px; }
-
-.servicesDownloadFilePopup .message .icon{ width:32px; font-size:1.5em; display:inline-block; padding:0; }
-
-.servicesDownloadFilePopup .message .content{ text-align:left; width:calc(100% - 32px); font-size:14px; line-height:24px; display:inline-block; vertical-align:top; font-family:barlow; padding:0; }
-
-.servicesDownloadFilePopup .button{ width:80px; padding:4px; margin:10px 0 0 calc(100% - 90px); border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; cursor:pointer; color:#FFFFFF; background-color:#428BCA; }
-
-.servicesDownloadFilePopup .button:hover{ color:#000000; background-color:#2069A8; }
-
-
-.removeFilesPrompt{ position:absolute; z-index:250; top:80px; margin:0 0 40px 0; border-radius:4px; background-color:#445566; }
-
-.removeFilesPrompt .loading{ padding:10px; }
-
-.removeFilesPrompt .loading .spinner{ margin:20px 0 0 0; text-align:center; font-size:3em; color:#5CB85C; }
-
-.removeFilesPrompt .loading .message{ text-align:center; font-size:16px; line-height:24px; color:#FFFFFF; font-family:barlow; margin:0 0 20px 0; }
-
-.removeFilesPrompt .title{ background-color:#428BCA; color:#FFFFFF; font-family:barlow; font-size:20px; line-height:24px; padding:10px; border-radius:4px 4px 0 0; }
-
-.removeFilesPrompt .error{ padding:10px; }
-
-.removeFilesPrompt .error .message{ color:#D9534F; margin:20px 0 20px 0; }
-
-.removeFilesPrompt .error .message .icon{ width:32px; font-size:2em; display:inline-block; }
-
-.removeFilesPrompt .error .message .content{ font-family:barlow; line-height:24px; font-size:14px; padding:4px 0 0 4px; display:inline-block; vertical-align:top; width:calc(100% - 36px); }
-
-.removeFilesPrompt .error .close{ border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#428BCA; cursor:pointer; padding:4px; width:80px; margin:0 0 0 calc(100% - 80px); }
-
-.removeFilesPrompt .error .close:hover{ color:#000000; background-color:#2069A8; }
-
-.removeFilesPrompt .error .detail{ color:#D0D0D0; word-break:break-all; font-size:14px; line-height:18px; font-family:barlow-italic; text-align:justify; margin:20px 0 0 0; }
-
-.removeFilesPrompt .content{ padding:10px; }
-
-.removeFilesPrompt .content .message{ color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow; }
-
-.removeFilesPrompt .content .file{ color:#FFFFFF; font-size:16px; line-height:24px; font-family:barlow-italic; margin:0 0 0 10px; }
-
-.removeFilesPrompt .confirm{ color:#5CB85C; font-size:2em; cursor:pointer; width:32px; display:inline-block; margin:20px 10px 10px calc(50% - 42px); }
-
-.removeFilesPrompt .confirm:hover{ color:#3A963A; }
-
-.removeFilesPrompt .cancel{ color:#D9534F; font-size:2em; cursor:pointer; width:32px; display:inline-block; vertical-align:top; margin:20px calc(50% - 42px) 10px 10px; }
-
-.removeFilesPrompt .cancel:hover{ color:#B7312D; }
-
-.removeFilesPrompt .success{ padding:10px; }
-
-.removeFilesPrompt .success .message{ margin:20px 0 10px 0; color:#5CB85C; }
-
-.removeFilesPrompt .success .message .icon{ width:32px; font-size:2em; display:inline-block; }
-
-.removeFilesPrompt .success .message .content{ font-family:barlow; line-height:24px; font-size:14px; padding:4px 0 0 4px; display:inline-block; vertical-align:top; width:calc(100% - 36px); }
-
-.removeFilesPrompt .success .close{ border:none; border-radius:4px; line-height:24px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#428BCA; cursor:pointer; padding:4px; width:80px; margin:0 0 0 calc(100% - 80px); }
-
-.removeFilesPrompt .success .close:hover{ color:#000000; background-color:#2069A8; }
-
+/* Service Elements */
 /****************************************************************************************************/
 
-@media (max-width: 319px)
-{
-  .servicesUploadFilePopup{ width:95%; left:2.5%; right:2.5%; }
+.serviceElements{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; align-items:top; }
 
-  .servicesDownloadFilePopup{ width:95%; left:2.5%; right:2.5%; }
+.serviceElementsEmpty{ font-size:1.2em; text-align:center; margin:40px; }
 
-  .removeFilesPrompt{ width:95%; left:2.5%; right:2.5%; }
-}
+.serviceElementsFileLargeGrid{ margin:0 10px 20px 0; width:100px; border-radius:4px; cursor:pointer; padding:10px; position:relative; }
 
-@media (min-width: 320px) and (max-width: 479px)
-{
-  .servicesUploadFilePopup{ width:95%; left:2.5%; right:2.5%; }
+.serviceElementsFileLargeGrid:hover{ background-color:rgba(0,0,255,0.06); }
 
-  .servicesDownloadFilePopup{ width:95%; left:2.5%; right:2.5%; }
+.serviceElementsFileLargeGrid .checkbox{ position:absolute; top:5px; right:5px; width:18px; height:18px; cursor:pointer; }
 
-  .removeFilesPrompt{ width:95%; left:2.5%; right:2.5%; }
-}
+.serviceElementsFileLargeGrid .icon{ font-size:5em; text-align:center; }
 
-@media (min-width: 480px) and (max-width: 639px)
-{
-  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+.serviceElementsFileLargeGrid .name{ font-size:0.8em; text-align:center; word-break:break-all; }
 
-  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+.serviceElementsFolder{ color:#EBA432; }
 
-  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
-}
+.serviceElementsFileDefault{ color:#34393C; }
 
-@media (min-width: 640px) and (max-width: 779px)
-{
-  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+.serviceElementsFileArchive{ color:#34393C; }
 
-  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+.serviceElementsFileTxt{ color:#8B9DC3; }
 
-  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
-}
+.serviceElementsFileDoc{ color:#428BCA; }
 
-@media (min-width: 780px) and (max-width: 959px)
-{
-  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+.serviceElementsFileDocx{ color:#428BCA; }
 
-  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+.serviceElementsFilePpt{ color:#EBA432; }
 
-  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
-}
+.serviceElementsFilePptx{ color:#EBA432; }
 
-@media (min-width: 960px) and (max-width: 1279px)
-{
-  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+.serviceElementsFileXls{ color:#86AA6D; }
 
-  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
+.serviceElementsFileXlsx{ color:#86AA6D; }
 
-  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
-}
+.serviceElementsFilePdf{ color:#DB494C; }
 
-@media (min-width: 1280px) and (max-width: 1679px)
-{
-  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
+.serviceElementsFilePng{ color:#64ADEC; }
 
-  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
-
-  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
-}
-
-@media (min-width: 1680px)
-{
-  .servicesUploadFilePopup{ width:400px; left:calc(50% - 200px); }
-
-  .servicesDownloadFilePopup{ width:400px; left:calc(50% - 200px); }
-
-  .removeFilesPrompt{ width:400px; left:calc(50% - 200px); }
-}
+.serviceElementsFileJpg{ color:#64ADEC; }
 
 /****************************************************************************************************/

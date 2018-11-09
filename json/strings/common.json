@@ -22,6 +22,117 @@
     "failure": "Echec"
   },
 
+  "initSection":
+  {
+    "logonPage":
+    {
+      "headerTitle": "Initialisation",
+      "welcomeTitle": "Bienvenue",
+      "welcomeMessage": "Il s'agit de la première fois que l'application est lancée ou alors elle vient d'être mise à jour. Afin d'accéder à la configuration il faut entrer le mot de passe se trouvant dans un fichier nommé \"password\" à la racine du dossier contenant l'application.",
+      "passwordInputPlaceholder": "Entrez le mot de passe",
+      "submitButton": "Connexion"
+    },
+
+    "formPage":
+    {
+      "headerTitle": "Initialisation",
+      "formTitle": "Configuration",
+      "formMessage": "C'est ici que vous choisissez la configuration de l'intranet. Veuillez compléter le formulaire et veiller à mettre des données valides.",
+      "formError": "Champ vide ou format incorrect",
+      "formSubmit": "Envoyer",
+
+      "databaseSection":
+      {
+        "title": "Base de données",
+
+        "addressLabel": "Adresse de la base de données",
+        "addressPlaceholder": "Entrez une adresse IP",
+        "addressHelp": "Entrez ici une adresse IP ou un nom DNS correspondant à l'adresse de votre serveur de bases de données (exemple: 192.168.1.10).",
+
+        "portLabel": "Port de la base de données",
+        "portPlaceholder": "Entrez le port de la base de données",
+        "portHelp": "Entrez ici le port de communication de la base de données (exemple: 3306)",
+
+        "userLabel": "Utilisateur de la base de données",
+        "userPlaceholder": "Entrez le nom d'utilisateur",
+        "userHelp": "Entrez ici un nom d'utilisateur ayant accès en lecture et en écriture à la base de données",
+
+        "passwordLabel": "Mot de passe de l'utilisateur",
+        "passwordPlaceholder": "Entrez le mot de passe",
+        "passwordHelp": "Entrez ici le mot de passe associé à l'utilisateur de la base de données",
+
+        "dbmsLabel": "Gestionnaire de base de données",
+        "dbmsHelp": "Choisissez le type de la base de données"
+      },
+
+      "storageSection":
+      {
+        "title": "Stockage",
+
+        "pathLabel": "Chemin du dossier de stockage",
+        "pathPlaceholder": "Entrez un chemin absolu vers le dossier de stockage",
+        "pathHelp": "Des applications de l'intranet peuvent avoir besoin de stocker des données. Pour cela il faut leur indiquer quel dossier racine utiliser."
+      },
+
+      "transporterSection":
+      {
+        "title": "Transporteur Email",
+
+        "serverLabel": "Adresse du serveur de messagerie",
+        "serverPlaceholder": "Entrez l'adresse du serveur de messagerie",
+        "serverHelp": "Une adresse IP ou un nom DNS correspondant au serveur de messagerie à utiliser.",
+
+        "portLabel": "Port du serveur de messagerie",
+        "portPlaceholder": "Entrez le port du serveur de messagerie",
+        "portHelp": "Le port que votre serveur de messagerie utilise pour l'envoi des emails",
+
+        "addressLabel": "Adresse Email",
+        "addressPlaceholder": "Entrez une adresse email",
+        "addressHelp": "Entrez ici l'adresse email qui sera utilisée pour l'envoi des emails aux utilisateurs de l'intranet",
+
+        "passwordLabel": "Mot de passe",
+        "passwordPlaceholder": "Entrez le mot de passe du compte",
+        "passwordHelp": "Le mot de passe correspondant au compte de messagerie à utiliser",
+
+        "secureLabel": "Chiffrement",
+        "secureHelp": "Le serveur de messagerie utilise-t-il un chiffrement ?"
+      },
+
+      "otherSection":
+      {
+        "title": "Divers",
+
+        "logoutLabel": "Déconnexion automatique",
+        "logoutPlaceholder": "Entrez un nombre de minutes",
+        "logoutHelp": "Entrez le nombre de minutes avant qu'un utilisateur soit automatiquement déconnecté en cas d'inactivité sur une page de l'intranet. Pour désactiver la déconnexion automatique entrez la valeur 0. La valeur maximale est 60 minutes.",
+
+        "portLabel": "Port de l'intranet",
+        "portPlaceholder": "Entrez le port de l'intranet",
+        "portHelp": "Le port que l'intranet doit utiliser pour attendre des connexions (Par défaut le port est 3000, si ce port n'est pas déjà utilisé il est conseillé de laisser la valeur par défaut).",
+
+        "saltLabel": "Conserver le sel de cryptage",
+        "saltHelp": "Il s'agit d'une clé de chiffrement utilisée pour le cryptage des mots de passe. Si vous choisissez de créer un nouveau sel les mots de passe cryptés précédemment ne seront plus reconnus."
+      }
+    },
+
+    "endPage":
+    {
+      "headerTitle": "Initialisation",
+      "returnButton": "Retour au formulaire",
+      "saveButton": "Enregistrer les paramètres",
+      "reloadButton": "Relancer les tests",
+      "savingLoader": "Enregistrement des paramètres en cours. Veuillez patienter",
+      "pendingMessage": "En attente",
+      "loadingMessage": "En cours",
+      "failureMessage": "Une erreur est survenue, veuillez réessayer plus tard",
+      "successMessage": "Succès",
+
+      "databaseTitle": "Vérification de l'accès à la base de données",
+      "storageTitle": "Vérification de l'accès au dossier de stockage",
+      "transporterTitle": "Vérification de la configuration du transporteur d'emails"
+    }
+  },
+
   "root":
   {
     "account":

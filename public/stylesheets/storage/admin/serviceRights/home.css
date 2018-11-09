@@ -2,13 +2,13 @@
 
 .rightsOnServicesHomeReturn{ display:block; margin:40px 0 20px 0; width:max-content; color:#428BCA; cursor:pointer; text-align:center; padding:10px 20px 10px 20px; text-decoration:none; font-size:1em; border:1px solid #CCC; border-radius:4px; }
 
-.rightsOnServicesHomeReturn:hover{ color:#317AB9; }
+.rightsOnServicesHomeReturn:hover{ color:#2069A8; }
 
 /****************************************************************************************************/
 /* INFORMATION BLOCK */
 /****************************************************************************************************/
 
-.rightsOnServicesHomeInformation{ font-family:Arial, Helvetica, sans-serif; box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); border-radius:2px; max-width:500px; width:100%; margin:20px 0 20px 0; }
+.rightsOnServicesHomeInformation{ box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); border-radius:2px; max-width:500px; width:100%; margin:20px 0 20px 0; }
 
 .rightsOnServicesHomeInformationTitle{ font-size:1.2em; border-bottom:1px solid #CCC; padding:20px; }
 
@@ -20,16 +20,20 @@
 /* SERVICE BLOCK */
 /****************************************************************************************************/
 
-.rightsOnServicesHomeServices{ font-family:Arial, Helvetica, sans-serif;  width:100%; margin:40px 0 20px 0; }
+.rightsOnServicesHomeServices{  width:100%; margin:40px 0 20px 0; }
 
 .rightsOnServicesHomeServicesTitle{ font-size:1.2em; padding:0 0 10px 0; border-bottom:1px solid #CCC; }
 
 .rightsOnServicesHomeServicesList{ display:flex; flex-direction:row; justify-content:flex-start; margin:20px 0 20px 0; padding:10px; }
 
-.rightsOnServicesHomeServicesBlock{ box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); border-radius:2px; margin:10px; }
+.rightsOnServicesHomeServicesBlock{ box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); border-radius:2px; margin:10px; max-width:250px; width:calc(100% - 20px); }
 
 .rightsOnServicesHomeServicesBlockTitle{ font-size:1.2em; border-bottom:1px solid #CCC; padding:20px; }
 
-.rightsOnServicesHomeServicesBlockLevel{ font-size:1em; padding:20px; }
+.rightsOnServicesHomeServicesBlockLevelEnabled{ font-size:1em; padding:20px; color:#428BCA; }
 
-.rightsOnServicesHomeServicesBlockAccess{ font-size:1em; background-color:rgba(0,0,0,0.08); border-top:1px solid #CCC; padding:20px; text-align:center; text-decoration:underline; cursor:pointer; }
+.rightsOnServicesHomeServicesBlockLevelDisabled{ font-size:1em; padding:20px; color:#D9534F; }
+
+.rightsOnServicesHomeServicesBlockAccess{ display:block; color:#000000; font-size:1em; background-color:rgba(0,0,0,0.08); border-top:1px solid #CCC; padding:20px; text-align:center; text-decoration:underline; cursor:pointer; }
+
+.rightsOnServicesHomeServicesBlockAccess:hover{ color:#428BCA; }

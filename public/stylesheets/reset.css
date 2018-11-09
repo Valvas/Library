@@ -2,13 +2,13 @@ body{ margin:0; background-color:#445566; }
 
 .main{ background-color:#FFFFFF; box-sizing:border-box; border-radius:4px; width:500px; margin:80px calc(50% - 250px) 80px calc(50% - 250px); padding:0; }
 
-.title{ border-bottom:1px solid #F0F0F0; padding:20px 40px 10px 40px; font-size:20px; line-height:24px; font-family:barlow; margin:0 0 20px 0; }
+.title{ border-bottom:1px solid #F0F0F0; padding:20px 40px 10px 40px; font-size:20px; line-height:24px; margin:0 0 20px 0; }
 
 .icon{ margin:10px 0 10px 40px; padding:8px 0 0 0; border-radius:4px 0 0 4px; background-color:#428BCA; display:inline-block; height:32px; width:64px; text-align:center; color:#F9F9F9; box-sizing:border-box; font-size:16px; }
 
 .input{ margin:10px 40px 10px 0; width:calc(100% - 144px); display:inline-block; vertical-align:top; box-sizing:border-box; height:32px; padding:0 0 0 10px; border:1px solid #DDDDDD; }
 
-.send{ width:120px; padding:4px 0 4px 0; cursor:pointer; border-radius:4px; margin:10px 40px 20px calc(100% - 160px); border:none; background-color:#D9534F; color:#FFFFFF; font-family:barlow; line-height:24px; font-size:16px; }
+.send{ width:120px; padding:4px 0 4px 0; cursor:pointer; border-radius:4px; margin:10px 40px 20px calc(100% - 160px); border:none; background-color:#D9534F; color:#FFFFFF; line-height:24px; font-size:16px; }
 
 .send:hover{ color:#000000; background-color:#B7312D; }
 
@@ -18,13 +18,13 @@ body{ margin:0; background-color:#445566; }
 
 .loader .spinner{ font-size:24px; line-height:32px; text-align:center; padding:20px; color:#5CB85C; }
 
-.loader .message{ font-size:20px; line-height:24px; padding:0 20px 20px 20px; text-align:center; color:#FFFFFF; font-family:barlow; }
+.loader .message{ font-size:20px; line-height:24px; padding:0 20px 20px 20px; text-align:center; color:#FFFFFF; }
 
-.error{ display:none; padding:0 40px 10px 40px; font-size:16px; line-height:24px; color:#FF0F0F; font-family:barlow; }
+.error{ display:none; padding:0 40px 10px 40px; font-size:16px; line-height:24px; color:#FF0F0F; }
 
-.success{ display:none; padding:0 40px 10px 40px; font-size:16px; line-height:24px; color:#5CB85C; font-family:barlow; }
+.success{ display:none; padding:0 40px 10px 40px; font-size:16px; line-height:24px; color:#5CB85C; }
 
-.question{ font-size:16px; line-height:23px; text-decoration:underline; font-style:italic; font-family:Arial; color:#667788; cursor:pointer; display:block; width:max-content; padding:0 0 20px 0; margin:0 40px 0 40px; }
+.question{ font-size:16px; line-height:23px; text-decoration:underline; font-style:italic; color:#667788; cursor:pointer; display:block; width:max-content; padding:0 0 20px 0; margin:0 40px 0 40px; }
 
 .question:hover{ color:#223344; }
 

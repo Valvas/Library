@@ -2,7 +2,9 @@
 
 const fs                = require('fs');
 const express           = require('express');
+const jwt               = require('jsonwebtoken');
 const errors            = require(`${__root}/json/errors`);
+const commonStrings     = require(`${__root}/json/strings/common`);
 const constants         = require(`${__root}/functions/constants`);
 const initStart         = require(`${__root}/functions/init/start`);
 const initFormat        = require(`${__root}/functions/init/format`);
@@ -16,214 +18,166 @@ const router = express.Router();
 
 router.get('/logon', (req, res) =>
 {
-  if(req.app.get('params').ready == false)
-  {
-    req.session.identified == true ? res.redirect('/init/form') : res.render('init/logon');
-  }
-
-  else
-  {
-    res.redirect('/');
-  }
+  if(req.app.get('params').ready) return res.render('block', { message: errors[constants.PAGE_NOT_FOUND], detail: null, link: '/' });
+  
+  if(req.app.locals.hasInitSession) return res.redirect('/init/form');
+  
+  return res.render('init/logon', { strings: { common: commonStrings } });
 });
 
 /****************************************************************************************************/
 
-router.post('/logon', (req, res) =>
+router.put('/logon', (req, res) =>
 {
-  if(req.app.get('params').ready == false)
-  {
-    req.body.password == undefined ? res.status(406).send({ result: false, message: 'Mot de passe manquant dans la requête' }) :
+  if(req.app.get('params').ready) return res.status(404).send({ message: errors[constants.PAGE_NOT_FOUND], detail: null });
 
-    fs.readFile(`${__root}/password`, (err, data) => 
+  if(req.body.password == undefined) return res.status(406).send({ message: 'Mot de passe manquant dans la requête' });
+
+  fs.readFile(`${__root}/password`, (error, data) => 
+  {
+    if(req.body.password != data) return res.status(406).send({ message: 'Le mot de passe est incorrect' });
+
+    jwt.sign({ isAuthenticated: true }, req.app.get('params').tokenSecretKey, (error, token) =>
     {
-      if(req.body.password != data) res.status(406).send({ result: false, message: 'Le mot de passe est incorrect' });
-
-      else
-      {
-        req.session.identified = true;
-        res.status(200).send({ result: true });
-      }
+      if(error != null) return res.status(406).send({ message: error.message, detail: null });
+      
+      return res.status(200).send({ token: token, maxAge: (60 * 60) });
     });
-  }
-
-  else
-  {
-    res.redirect('/');
-  }
+  });
 });
 
 /****************************************************************************************************/
 
 router.get('/form', (req, res) =>
 {
-  if(req.app.get('params').ready == false)
-  {
-    req.session.identified == true ? res.render('init/form', { data: req.app.get('params') }) : res.redirect('/init/logon');
-  }
+  if(req.app.get('params').ready) return res.redirect('/');
 
-  else
-  {
-    res.redirect('/');
-  }
+  if(req.app.locals.hasInitSession == false) return res.redirect('/init/logon');
+
+  return res.render('init/form', { data: req.app.get('params'), strings: { common: commonStrings } });
 });
 
 /****************************************************************************************************/
 
-router.post('/form', (req, res) =>
+router.put('/form', (req, res) =>
 {
-  if(req.app.get('params').ready == false)
-  {
-    req.session.identified != true ? res.redirect('/init/logon') :
+  if(req.app.get('params').ready) return res.status(404).send({ message: errors[constants.PAGE_NOT_FOUND], detail: null });
 
-    initFormat.checkConfigDataFormat(req.body, req.app.get('params'), (error) =>
-    {
-      error == null ? res.status(200).send({ result: true }) : res.status(error.status).send({ result: false, message: error.message });
-    });
-  }
+  if(req.app.locals.hasInitSession == false) return res.status(401).send({ message: errors[constants.AUTHENTICATION_REQUIRED], detail: null });
 
-  else
+  initFormat.checkConfigDataFormat(req.body, req.app.get('params'), (error) =>
   {
-    res.redirect('/');
-  }
+    if(error != null) return res.status(error.status).send({ message: error.message });
+
+    return res.status(200).send({  });
+  });
 });
 
 /****************************************************************************************************/
 
 router.get('/test', (req, res) =>
 {
-  if(req.app.get('params').ready == false)
-  {
-    req.session.identified != true ? res.redirect('/init/logon') : res.render('init/test');
-  }
+  if(req.app.get('params').ready) return res.redirect('/');
 
-  else
-  {
-    res.redirect('/');
-  }
+  if(req.app.locals.hasInitSession == false) return res.redirect('/init/logon');
+
+  return res.render('init/test', { strings: { common: commonStrings } });
 });
 
 /****************************************************************************************************/
 
 router.get('/test/database', (req, res) =>
 {
-  if(req.app.get('params').ready == false)
-  {
-    req.session.identified != true ? res.redirect('/init/logon') :
+  if(req.app.get('params').ready) return res.status(404).send({ message: errors[constants.PAGE_NOT_FOUND], detail: null });
 
-    initDatabase.checkAccessToDatabase(req.app.get('params').database, (error) =>
+  if(req.app.locals.hasInitSession == false) return res.status(401).send({ message: errors[constants.AUTHENTICATION_REQUIRED], detail: null });
+
+  initDatabase.checkAccessToDatabase(req.app.get('params').database, (error) =>
+  {
+    if(error == null)
     {
-      if(error == null)
-      {
-        req.app.get('params').init.servicesStarted.database = true;
-        res.status(200).send({ result: true });
-      }
-    
-      else
-      {
-        req.app.get('params').init.servicesStarted.database = false;
-        res.status(500).send({ result: false, message: error.message });
-      }
-    });
-  }
-
-  else
-  {
-    res.redirect('/');
-  }
+      req.app.get('params').init.servicesStarted.database = true;
+      res.status(200).send({  });
+    }
+  
+    else
+    {
+      req.app.get('params').init.servicesStarted.database = false;
+      res.status(error.status).send({ message: errors[error.code] });
+    }
+  });
 });
 
 /****************************************************************************************************/
 
 router.get('/test/storage', (req, res) =>
 {
-  if(req.app.get('params').ready == false)
-  {
-    req.session.identified != true ? res.redirect('/init/logon') :
+  if(req.app.get('params').ready) return res.status(404).send({ message: errors[constants.PAGE_NOT_FOUND], detail: null });
 
-    initStorage.checkAccessToRootStorage(req.app.get('params'), (error) =>
+  if(req.app.locals.hasInitSession == false) return res.status(401).send({ message: errors[constants.AUTHENTICATION_REQUIRED], detail: null });
+
+  initStorage.checkAccessToRootStorage(req.app.get('params'), (error) =>
+  {
+    if(error == null)
     {
-      if(error == null)
-      {
-        req.app.get('params').init.servicesStarted.storage = true;
-        res.status(200).send({ result: true });
-      }
+      req.app.get('params').init.servicesStarted.storage = true;
+      res.status(200).send({  });
+    }
 
-      else
-      {
-        req.app.get('params').init.servicesStarted.storage = false;
-        res.status(error.status).send({ result: false, message: error.message });
-      }
-    });
-  }
-
-  else
-  {
-    res.redirect('/');
-  }
+    else
+    {
+      req.app.get('params').init.servicesStarted.storage = false;
+      res.status(error.status).send({ result: false, message: error.message });
+    }
+  });
 });
 
 /****************************************************************************************************/
 
 router.get('/test/transporter', (req, res) =>
 {
-  if(req.app.get('params').ready == false)
-  {
-    req.session.identified != true ? res.redirect('/init/logon') :
+  if(req.app.get('params').ready) return res.status(404).send({ message: errors[constants.PAGE_NOT_FOUND], detail: null });
 
-    initTransporter.checkEmailSending(req.app.get('params'), (error) =>
+  if(req.app.locals.hasInitSession == false) return res.status(401).send({ message: errors[constants.AUTHENTICATION_REQUIRED], detail: null });
+
+  initTransporter.checkEmailSending(req.app.get('params'), (error) =>
+  {
+    if(error == null)
     {
-      if(error == null)
-      {
-        req.app.get('params').init.servicesStarted.transporter = true;
-        res.status(200).send({ result: true });
-      }
+      req.app.get('params').init.servicesStarted.transporter = true;
+      res.status(200).send({  });
+    }
 
-      else
-      {
-        req.app.get('params').init.servicesStarted.transporter = false;
-        res.status(error.status).send({ result: false, message: error.message });
-      }
-    });
-  }
-
-  else
-  {
-    res.redirect('/');
-  }
+    else
+    {
+      req.app.get('params').init.servicesStarted.transporter = false;
+      res.status(error.status).send({ result: false, message: error.message });
+    }
+  });
 });
 
 /****************************************************************************************************/
 
 router.get('/end', (req, res) =>
 {
-  if(req.app.get('params').init.requiredServicesToStart.database == true && req.app.get('params').init.servicesStarted.database == false) res.status(200).send({ result: false, message: 'Database connection is required' });
+  if(req.app.get('params').init.requiredServicesToStart.database == true && req.app.get('params').init.servicesStarted.database == false) return res.status(200).send({ result: false, message: 'Database connection is required' });
 
-  else if(req.app.get('params').init.requiredServicesToStart.storage == true && req.app.get('params').init.servicesStarted.storage == false) res.status(200).send({ result: false, message: 'Storage access is required' });
+  if(req.app.get('params').init.requiredServicesToStart.storage == true && req.app.get('params').init.servicesStarted.storage == false) return res.status(200).send({ result: false, message: 'Storage access is required' });
 
-  else if(req.app.get('params').init.requiredServicesToStart.transporter == true && req.app.get('params').init.servicesStarted.transporter == false) res.status(200).send({ result: false, message: 'Email access is required' });
+  if(req.app.get('params').init.requiredServicesToStart.transporter == true && req.app.get('params').init.servicesStarted.transporter == false) return res.status(200).send({ result: false, message: 'Email access is required' });
+
+  var params = req.app.get('params');
+  params.ready = true;
   
-  else
+  fs.writeFile(`${__root}/json/params.json`, JSON.stringify(params), (error) =>
   {
-    setTimeout(() => 
-    { 
-      var params = req.app.get('params');
-      params.ready = true;
-      
-      fs.writeFile(`${__root}/json/params.json`, JSON.stringify(params), (err) =>
-      {
-        if(err) res.status(500).send({ result: false, message: 'Could not write new configuration in file' });
+    if(error) return res.status(500).send({ message: 'Could not write new configuration in file' });
 
-        else
-        {
-          initStart.startApp(req.app, () =>
-          {
-            res.status(200).send({ result: true });
-          });
-        }
-      });  
-    }, 3000);
-  }
+    initStart.startApp(req.app, () =>
+    {
+      res.status(200).send({  });
+    });
+  });
 });
 
 /****************************************************************************************************/

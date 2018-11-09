@@ -1,16 +1,11 @@
 'use strict'
 
-const fs                        = require('fs');
 const uuid                      = require('uuid');
 const errors                    = require(`${__root}/json/errors`);
 const constants                 = require(`${__root}/functions/constants`);
-const foldersCreate             = require(`${__root}/functions/folders/create`);
-const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
-const commonAccountsGet         = require(`${__root}/functions/common/accounts/get`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppFilesRemove     = require(`${__root}/functions/storage/files/remove`);
 const storageAppExtensionsGet   = require(`${__root}/functions/storage/extensions/get`);
-const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
 const databaseManager           = require(`${__root}/functions/database/MySQLv3`);
 
 const commonFoldersCreate       = require(`${__root}/functions/common/folders/create`);
@@ -20,7 +15,7 @@ const commonFoldersRemove       = require(`${__root}/functions/common/folders/re
 /* CREATE SERVICE */
 /****************************************************************************************************/
 
-function createService(serviceName, maxFileSize, authorizedExtensions, accountRights, databaseConnection, params, callback)
+function createService(serviceName, maxFileSize, authorizedExtensions, databaseConnection, params, callback)
 {
   serviceName = serviceName.toLowerCase();
 
@@ -30,9 +25,7 @@ function createService(serviceName, maxFileSize, authorizedExtensions, accountRi
 
   if(authorizedExtensions.length === 0) return callback({ status: 406, code: constants.ONE_EXTENSION_REQUIRED, detail: null });
 
-  if(accountRights.createServices == false) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_CREATE_SERVICES, detail: null });
-
-  storageAppServicesGet.getServiceUsingName(serviceName, databaseConnection, params, (error, serviceExists, serviceData) =>
+  storageAppServicesGet.checkIfServiceExistsFromName(serviceName, databaseConnection, params, (error, serviceExists, serviceData) =>
   {
     if(error != null) return callback(error);
 
@@ -94,7 +87,7 @@ function createServiceAddExtensions(serviceUuid, authorizedExtensions, databaseC
           error != null
           ? createServiceRollback(serviceUuid, databaseConnection, params, errors[constants.SAVING_SERVICE_EXTENSIONS_FAILED], callback)
           : authorizedExtensions[extensionsIterator += 1] != undefined
-            ? extensionBrowser()
+            ? extensionsBrowser()
             : createServiceStorageFolder(serviceUuid, databaseConnection, params, callback);
         });
       }
@@ -132,13 +125,11 @@ function createServiceRollback(serviceUuid, databaseConnection, params, errorDet
 /* REMOVE SERVICE */
 /****************************************************************************************************/
 
-function removeService(serviceUuid, accountRights, databaseConnection, params, callback)
+function removeService(serviceUuid, databaseConnection, params, callback)
 {
   if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'Global parameters are missing from request parameters' });
   if(serviceUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'Service UUID is missing from request parameters' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'Database connection object is missing from request parameters' });
-
-  if(accountRights.removeServices == false) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_REMOVE_SERVICES, detail: null });
 
   var serviceRemoveStats = {}
   serviceRemoveStats.serviceRemovedFromDatabase = false;
@@ -225,7 +216,7 @@ function removeServiceDropAccountsRights(serviceUuid, databaseConnection, params
   databaseManager.deleteQuery(
   {
     databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.accountServiceLevel,
+    tableName: params.database.storage.tables.accountServiceRightsLevel,
     where: { operator: '=', key: 'service_uuid', value: serviceUuid }
 
   }, databaseConnection, (error, result) =>
@@ -276,7 +267,7 @@ function removeServiceFolder(serviceUuid, params, serviceRemoveStats, callback)
 /* UPDATE SERVICE */
 /****************************************************************************************************/
 
-function updateService(serviceUuid, serviceName, maxFileSize, authorizedExtensions, accountRights, databaseConnection, params, callback)
+function updateService(serviceUuid, serviceName, maxFileSize, authorizedExtensions, databaseConnection, params, callback)
 {
   serviceName = serviceName.toLowerCase();
 
@@ -286,9 +277,7 @@ function updateService(serviceUuid, serviceName, maxFileSize, authorizedExtensio
 
   if(authorizedExtensions.length === 0) return callback({ status: 406, code: constants.ONE_EXTENSION_REQUIRED, detail: null });
 
-  if(accountRights.modifyServices == false) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_MODIFY_SERVICES, detail: null });
-
-  storageAppServicesGet.getServiceUsingName(serviceName, databaseConnection, params, (error, serviceExists, serviceData) =>
+  storageAppServicesGet.checkIfServiceExistsFromName(serviceName, databaseConnection, params, (error, serviceExists, serviceData) =>
   {
     if(error != null) return callback(error);
 
@@ -352,7 +341,7 @@ function updateServiceInsertNewExtensions(serviceUuid, serviceName, maxFileSize,
 
         authorizedExtensions[extensionsIterator += 1] == undefined
         ? updateServiceInDatabase(serviceUuid, serviceName, maxFileSize, currentServiceExtensions, databaseConnection, params, callback)
-        : extensionBrowser();
+        : extensionsBrowser();
       });
     });
   }
@@ -428,265 +417,3 @@ module.exports =
   removeService: removeService,
   updateService: updateService
 }
-
-/****************************************************************************************************/
-// ADD ACCOUNTS IN SERVICE FROM AN ARRRAY OF UUIDs
-/****************************************************************************************************/
-
-module.exports.addMembersToService = (serviceUuid, accountUuids, accountId, databaseConnection, params, callback) =>
-{
-  if(params == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
-  if(accountId == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
-  if(serviceUuid == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
-  if(accountUuids == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuids' });
-  if(databaseConnection == undefined) return callback({ status: 404, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
-
-  if(typeof(accountUuids) !== 'object' || accountUuids.length == 0) return callback(null);
-
-  getAccountData(serviceUuid, accountUuids, accountId, databaseConnection, params, (error) =>
-  {
-    return callback(error);
-  });
-}
-
-/****************************************************************************************************/
-
-function getAccountData(serviceUuid, accountUuids, accountId, databaseConnection, params, callback)
-{
-  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
-  {
-    if(error != null) return callback(error);
-
-    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
-
-    checkAccountRights(serviceUuid, accountUuids, accountData, databaseConnection, params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function checkAccountRights(serviceUuid, accountUuids, accountData, databaseConnection, params, callback)
-{
-  storageAppAdminGet.getAccountAdminRights(accountData.id, databaseConnection, params, (error, rights) =>
-  {
-    if(error != null) return callback(error);
-
-    if(rights.update_services_rights === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS, detail: null });
-
-    getServiceData(serviceUuid, accountUuids, accountData, databaseConnection, params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function getServiceData(serviceUuid, accountUuids, accountData, databaseConnection, params, callback)
-{
-  storageAppServicesGet.checkIfServiceExists(serviceUuid, databaseConnection, params, (error, serviceExists, serviceData) =>
-  {
-    if(error != null) return callback(error);
-
-    if(serviceExists == false) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
-
-    browseAccountsToAddToService(serviceUuid, accountUuids, accountData, databaseConnection, params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function browseAccountsToAddToService(serviceUuid, accountUuids, accountData, databaseConnection, params, callback)
-{
-  var index = 0;
-
-  var accountBrowser = () =>
-  {
-    commonAccountsGet.checkIfAccountExistsFromUuid(accountUuids[index], databaseConnection, params, (error, accountExists, accountData) =>
-    {
-      if(error != null) return callback(error);
-
-      if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
-
-      storageAppServicesRights.checkIfAccountHasRightsOnService(accountData.id, serviceUuid, databaseConnection, params, (error, hasRights, accountRights) =>
-      {
-        if(error != null) return callback(error);
-
-        if(hasRights)
-        {
-          if(accountUuids[index += 1] == undefined) return callback(null);
-
-          accountBrowser();
-        }
-
-        else
-        {
-          databaseManager.insertQuery(
-          {
-            databaseName: params.database.storage.label,
-            tableName: params.database.storage.tables.rights,
-            args: { account: accountData.id, service: serviceUuid, upload_files: 0, download_files: 0, remove_files: 0, post_comments: 0, restore_files: 0, create_folders: 0, rename_folders: 0, remove_folders: 0 }
-
-          }, databaseConnection, (error, result) =>
-          {
-            if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-
-            if(accountUuids[index += 1] == undefined) return callback(null);
-
-            accountBrowser();
-          });
-        }
-      });
-    });
-  }
-
-  accountBrowser();
-}
-
-/****************************************************************************************************/
-// REMOVE MEMBERS FROM A SERVICE USING AN ARRAY OF UUIDs
-/****************************************************************************************************/
-
-module.exports.removeMembersFromService = (serviceUuid, accountUuids, accountId, databaseConnection, params, callback) =>
-{
-  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
-  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
-  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
-  if(accountUuids == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuids' });
-  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
-
-  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
-  {
-    if(error != null) return callback(error);
-
-    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
-
-    storageAppAdminGet.getAccountAdminRights(accountId, databaseConnection, params, (error, rights) =>
-    {
-      if(error != null) return callback(error);
-
-      if(rights.update_services_rights === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS, detail: null });
-
-      browseAccountsToRemoveFromService(serviceUuid, accountUuids, databaseConnection, params, (error) =>
-      {
-        return callback(error);
-      });
-    });
-  });
-}
-
-/****************************************************************************************************/
-
-function browseAccountsToRemoveFromService(serviceUuid, accountUuids, databaseConnection, params, callback)
-{
-  var index = 0;
-
-  var browseAccounts = () =>
-  {
-    commonAccountsGet.checkIfAccountExistsFromUuid(accountUuids[index], databaseConnection, params, (error, accountExists, accountData) =>
-    {
-      if(error != null) return callback(error);
-
-      if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
-
-      databaseManager.deleteQuery(
-      {
-        databaseName: params.database.storage.label,
-        tableName: params.database.storage.tables.rights,
-        where: { condition: 'AND', 0: { operator: '=', key: 'account', value: accountData.id }, 1: { operator: '=', key: 'service', value: serviceUuid } }
-  
-      }, databaseConnection, (error, result) =>
-      {
-        if(error != null) return callback({ status: 500, code: Constants.SQL_SERVER_ERROR, detail: error });
-
-        if(accountUuids[index += 1] == undefined) return callback(null);
-
-        browseAccounts();
-      });
-    });
-  }
-
-  if(accountUuids.length === 0) return callback(null);
-
-  browseAccounts();
-}
-
-/****************************************************************************************************/
-// UPDATE ACCOUNT RIGHTS ON SERVICE
-/****************************************************************************************************/
-
-module.exports.updateRightsOnService = (serviceUuid, accountUuid, accountId, rightsObject, databaseConnection, params, callback) =>
-{
-  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
-  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
-  if(accountUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
-  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
-  if(rightsObject == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject' });
-  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
-  if(rightsObject.uploadFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.uploadFiles' });
-  if(rightsObject.removeFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.removeFiles' });
-  if(rightsObject.commentFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.commentFiles' });
-  if(rightsObject.restoreFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.restoreFiles' });
-  if(rightsObject.createFolders == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.createFolders' });
-  if(rightsObject.renameFolders == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.renameFolders' });
-  if(rightsObject.removeFolders == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.removeFolders' });
-  if(rightsObject.downloadFiles == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsObject.downloadFiles' });
-
-  storageAppServicesGet.checkIfServiceExists(serviceUuid, databaseConnection, params, (error, serviceExists, serviceData) =>
-  {
-    if(error != null) return callback(error);
-
-    if(serviceExists == false) return callback({ status: 406, code: constants.SERVICE_NOT_FOUND, detail: null });
-
-    checkRequestSenderRights(serviceUuid, accountUuid, accountId, rightsObject, databaseConnection, params, (error) =>
-    {
-      return callback(error);
-    });
-  });
-}
-
-/****************************************************************************************************/
-
-function checkRequestSenderRights(serviceUuid, accountUuid, accountId, rightsObject, databaseConnection, params, callback)
-{
-  commonAccountsGet.checkIfAccountExistsFromId(accountId, databaseConnection, params, (error, accountExists, accountData) =>
-  {
-    if(error != null) return callback(error);
-
-    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
-
-    storageAppAdminGet.getAccountAdminRights(accountId, databaseConnection, params, (error, rights) =>
-    {
-      if(error != null) return callback(error);
-
-      if(rights.update_services_rights === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_MANAGE_USER_RIGHTS, detail: null });
-
-      updateAccountRights(serviceUuid, accountUuid, rightsObject, databaseConnection, params, callback);
-    });
-  });
-}
-
-/****************************************************************************************************/
-// FUNCTION USED ON SERVICE CREATION
-/****************************************************************************************************/
-
-function createStorageFolder(serviceUuid, params, callback)
-{
-  foldersCreate.createFolder(serviceUuid, `${params.storage.root}/${params.storage.services}`, (error) =>
-  {
-    if(error == null) return callback(null);
-
-    return callback(error);
-  });
-}
-
-/****************************************************************************************************/
-
-function createLogsFolder(serviceUuid, params, callback)
-{
-  foldersCreate.createFolder(serviceUuid, `${params.storage.root}/${params.storage.fileLogs}`, (error) =>
-  {
-    if(error == null) return callback(null);
-
-    return callback(error);
-  });
-}
-
-/****************************************************************************************************/

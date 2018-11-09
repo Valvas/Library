@@ -1,19 +1,20 @@
 'use strict'
 
 const mysql       = require('mysql');
-const errors      = require(`${__root}/json/errors`);
 const constants   = require(`${__root}/functions/constants`);
 
 /****************************************************************************************************/
 
 module.exports.checkAccessToDatabase = (databaseObject, callback) =>
 {
-  if(databaseObject.dbms == 'MySQL')
+  switch(databaseObject.dbms)
   {
-    mysqlDatabase(databaseObject, (error) =>
-    {
-      callback(error);
-    });
+    case 'mysql':
+      mysqlDatabase(databaseObject, (error) => { return callback(error) });
+      break;
+
+    default:
+      return callback({ status: 406, code: constants.DBMS_NOT_FOUND, detail: null });
   }
 }
 
@@ -42,11 +43,11 @@ function mysqlDatabase(databaseObject, callback)
       
         if(databaseCounterRetries < 10 && err) setTimeout(() =>{ databaseConnectionLoop(); }, 1000);
         
-        else if(databaseCounterRetries == 10 && err) callback({ status: 500, message: errors[constants.UNABLE_TO_CONNECT_TO_DATABASE] });
+        else if(databaseCounterRetries === 10 && err) return callback({ status: 500, code: constants.UNABLE_TO_CONNECT_TO_DATABASE });
 
         else
         { 
-          callback(null); 
+          return callback(null); 
         }
       });
     });

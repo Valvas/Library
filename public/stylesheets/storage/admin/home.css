@@ -2,16 +2,8 @@
 
 .rightsBlock{ max-width:600px; width:100%; margin:40px auto 40px 0; }
 
-.rightsBlockLevel{ font-size:1em; margin-bottom:20px; }
+.rightsBlockEnabled{ font-size:1em; margin-bottom:20px; color:#428BCA; }
 
-.rightsBlockContainer{ box-shadow:0 1px 3px 0 rgba(0,0,0,.2), 0 1px 2px 0 rgba(0,0,0,.2); border-radius:2px; }
-
-.rightsBlockInfo{ font-size:0.9em; padding:20px; border-bottom:1px solid #CCC; }
-
-.rightsBlockList{ list-style:none; font-size:1em; margin:0; padding:10px; }
-
-.rightsBlockListEnabled{ padding:10px; color:#428BCA; }
-
-.rightsBlockListDisabled{ padding:10px; opacity:0.6; }
+.rightsBlockDisabled{ font-size:1em; margin-bottom:20px; color:#D9534F; }
 
 /****************************************************************************************************/

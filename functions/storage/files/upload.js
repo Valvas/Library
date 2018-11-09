@@ -1,18 +1,13 @@
 'use strict'
 
-const fs                                  = require('fs');
+const uuid                                = require('uuid');
 const constants                           = require(`${__root}/functions/constants`);
-const filesMove                           = require(`${__root}/functions/files/move`);
-const accountsGet                         = require(`${__root}/functions/accounts/get`);
-const filesRemove                         = require(`${__root}/functions/files/remove`);
 const storageAppFilesGet                  = require(`${__root}/functions/storage/files/get`);
-const storageAppFilesSet                  = require(`${__root}/functions/storage/files/set`);
-const storageAppFilesCreate               = require(`${__root}/functions/storage/files/create`);
-const storageAppFilesRemove               = require(`${__root}/functions/storage/files/remove`);
+const storageAppAdminGet                  = require(`${__root}/functions/storage/admin/get`);
+const commonFilesMove                     = require(`${__root}/functions/common/files/move`);
 const storageAppServicesGet               = require(`${__root}/functions/storage/services/get`);
+const commonFoldersCreate                 = require(`${__root}/functions/common/folders/create`);
 const storageAppServicesRights            = require(`${__root}/functions/storage/services/rights`);
-const storageAppLogsServicesUploadFile    = require(`${__root}/functions/storage/logs/services/addFile`);
-const storageAppLogsServicesRemoveFile    = require(`${__root}/functions/storage/logs/services/removeFile`);
 
 //To uncomment when updated database manager will be set for all the project
 //const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
@@ -24,241 +19,323 @@ const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 // CHECK PARAMETERS FOR CURRENT FILE BEFORE UPLOAD
 /****************************************************************************************************/
 
-module.exports.prepareUpload = (fileName, fileExtension, fileSize, serviceUuid, parentFolderUuid, accountId, databaseConnection, params, callback) =>
+module.exports.prepareUpload = (fileName, fileSize, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback) =>
 {
-  getAccountData(fileName, fileExtension, fileSize, serviceUuid, parentFolderUuid, accountId, databaseConnection, params, (error, fileAlreadyExists, rightToRemove, existingFileUuid) =>
+  storageAppServicesGet.checkIfServiceExistsFromUuid(serviceUuid, databaseConnection, globalParameters, (error, serviceExists, serviceData) =>
   {
     if(error != null) return callback(error);
 
-    return callback(null, fileAlreadyExists, rightToRemove);
-  });
-}
+    if(serviceExists == false) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
 
-/****************************************************************************************************/
-
-function getAccountData(fileName, fileExtension, fileSize, serviceUuid, parentFolderUuid, accountId, databaseConnection, params, callback)
-{
-  accountsGet.getAccountUsingID(accountId, databaseConnection, (error, account) =>
-  {
-    if(error != null) return callback(error);
-
-    getServiceData(fileName, fileExtension, fileSize, serviceUuid, parentFolderUuid, account, databaseConnection, params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function getServiceData(fileName, fileExtension, fileSize, serviceUuid, parentFolderUuid, account, databaseConnection, params, callback)
-{
-  storageAppServicesGet.getServiceUsingUUID(serviceUuid, databaseConnection, (error, service) =>
-  {
-    if(error != null) return callback(error);
-
-    getAccountRightsTowardsCurrentService(fileName, fileExtension, fileSize, service, parentFolderUuid, account, databaseConnection, params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function getAccountRightsTowardsCurrentService(fileName, fileExtension, fileSize, service, parentFolderUuid, account, databaseConnection, params, callback)
-{
-  storageAppServicesRights.getRightsTowardsService(service.uuid, account.id, databaseConnection, params, (error, rights) =>
-  {
-    if(error != null) return callback(error);
-
-    if(rights.upload_files == 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_ADD_FILES, detail: null });
-
-    if(fileSize > service.file_size_limit) return callback({ status: 406, code: constants.FILE_SIZE_EXCEED_MAX_ALLOWED, detail: null });
-
-    checkIfFileExtensionIsAuthorizedForCurrentService(fileName, fileExtension, fileSize, service, parentFolderUuid, account, rights, databaseConnection, params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function checkIfFileExtensionIsAuthorizedForCurrentService(fileName, fileExtension, fileSize, service, parentFolderUuid, account, rights, databaseConnection, params, callback)
-{
-  storageAppServicesGet.getAuthorizedExtensionsForService(service.uuid, databaseConnection, params, (error, serviceExtensions) =>
-  {
-    if(error != null) return callback(error);
-
-    var extensionAuthorized = false;
-
-    for(var x = 0; x < serviceExtensions.length; x++)
-    {
-      if(serviceExtensions[x].value === fileExtension) extensionAuthorized = true;
-    }
-
-    if(extensionAuthorized == false) return callback({ status: 406, code: constants.UNAUTHORIZED_FILE, detail: null });
-
-    checkIfFileExistsInDatabase(fileName, fileExtension, fileSize, service, parentFolderUuid, account, rights, databaseConnection, params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function checkIfFileExistsInDatabase(fileName, fileExtension, fileSize, service, parentFolderUuid, account, rights, databaseConnection, params, callback)
-{
-  storageAppFilesGet.checkIfFileExistsInDatabase(fileName, fileExtension, service.uuid, parentFolderUuid, databaseConnection, params, (error, fileExistsInDatabase, fileDataFromDatabase) =>
-  {
-    if(error != null) return callback(error);
-
-    checkIfFileExistsOnStorage(fileName, fileExtension, service, rights, databaseConnection, params, fileExistsInDatabase, fileDataFromDatabase, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function checkIfFileExistsOnStorage(fileName, fileExtension, service, rights, databaseConnection, params, fileExistsInDatabase, fileDataFromDatabase, callback)
-{
-  if(fileExistsInDatabase)
-  {
-    storageAppFilesGet.checkIfFileExistsOnStorage(fileDataFromDatabase.uuid, fileExtension, service.uuid, params, (error, fileExistsOnStorage, fileDataFromStorage) =>
+    getAccountRightsOnCurrentService(accountUuid, serviceUuid, databaseConnection, globalParameters, (error, rightsLevel, serviceRights) =>
     {
       if(error != null) return callback(error);
 
-      if(fileExistsOnStorage && fileDataFromDatabase.deleted == 0) return callback(null, true, rights.remove == 1, fileDataFromDatabase.uuid);
+      if(serviceRights.uploadFiles > rightsLevel) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_ADD_FILES, detail: null });
 
-      if(fileExistsOnStorage && fileDataFromDatabase.deleted == 1)
+      if(fileSize > serviceData.file_size_limit) return callback({ status: 406, code: constants.FILE_SIZE_EXCEED_MAX_ALLOWED, detail: null });
+
+      if(fileName.length > globalParameters.storage.maxFileNameSize) return callback({ status: 406, code: constants.FILE_NAME_EXCEED_SIZE_LIMIT, detail: globalParameters.storage.maxFileNameSize });
+    
+      storageAppServicesGet.getAuthorizedExtensionsForService(serviceUuid, databaseConnection, globalParameters, (error, authorizedExtensions) =>
       {
-        filesRemove.moveFileToBin(fileDataFromDatabase.uuid, fileExtension, `${params.storage.root}/${params.storage.services}/${service.uuid}`, (error) =>
+        if(error != null) return callback(error);
+
+        var extensionFound = false;
+
+        for(var element in authorizedExtensions)
+        {
+          if(authorizedExtensions[element] === fileName.split('.')[fileName.split('.').length - 1]) extensionFound = true;
+        }
+
+        if(extensionFound == false) return callback({ status: 406, code: constants.UNAUTHORIZED_FILE, detail: null });
+
+        checkIfParentFolderExists(parentFolderUuid, databaseConnection, globalParameters, (error) =>
         {
           if(error != null) return callback(error);
 
-          return callback(null, false);
+          databaseManager.selectQuery(
+          {
+            databaseName: globalParameters.database.storage.label,
+            tableName: globalParameters.database.storage.tables.serviceElements,
+            args: [ '*' ],
+            where: { condition: 'AND', 0: { operator: '=', key: 'name', value: fileName }, 1: { operator: '=', key: 'is_directory', value: 0 }, 2: { operator: '=', key: 'is_deleted', value: 0 }, 3: { operator: '=', key: 'parent_folder', value: parentFolderUuid } }
+
+          }, databaseConnection, (error, result) =>
+          {
+            if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+            if(result.length === 0) return callback(null, false);
+
+            if(serviceRights.removeFiles > rightsLevel) return callback(null, true, false);
+
+            return callback(null, true, true);
+          });
         });
-      }
-
-      if(fileExistsOnStorage == false && fileDataFromDatabase.deleted == 0)
-      {
-        storageAppFilesSet.setFileDeletedInDatabase(fileDataFromDatabase.uuid, databaseConnection, params, (error) =>
-        {
-          if(error != null) return callback(error);
-
-          return callback(null, false);
-        });
-      }
-
-      else
-      {
-        return callback(null, false); 
-      }
+      });
     });
-  }
+  });
+}
 
-  else
+/****************************************************************************************************/
+
+function checkIfParentFolderExists(parentFolderUuid, databaseConnection, globalParameters, callback)
+{
+  if(parentFolderUuid == null) return callback(null);
+
+  storageAppFilesGet.checkIfFolderExistsInDatabase(parentFolderUuid, databaseConnection, globalParameters, (error, folderExists, folderData) =>
   {
-    return callback(null, false);
-  }
+    if(error != null) return callback(error);
+
+    if(folderExists == false) return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
+
+    if(folderData.is_deleted) return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
+
+    return callback(null);
+  });
+}
+
+/****************************************************************************************************/
+
+function getAccountRightsOnCurrentService(accountUuid, serviceUuid, databaseConnection, globalParameters, callback)
+{
+  storageAppServicesRights.getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, globalParameters, (error, rightsLevel) =>
+  {
+    if(error != null) return callback(error);
+
+    storageAppAdminGet.getServiceLevelForEachRight(databaseConnection, globalParameters, (error, serviceRights) =>
+    {
+      if(error != null) return callback(error);
+
+      return callback(null, rightsLevel, serviceRights);
+    });
+  });
 }
 
 /****************************************************************************************************/
 // WHEN A FILE IS UPLOADED TO A SERVICE
 /****************************************************************************************************/
 
-module.exports.uploadFile = (fileName, fileExtension, fileSize, filePath, serviceUuid, parentFolderUuid, accountId, databaseConnection, params, callback) =>
+module.exports.uploadFile = (tmpFilePath, fileName, fileSize, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback) =>
 {
-  fileName              == undefined ||
-  fileExtension         == undefined ||
-  fileSize              == undefined ||
-  filePath              == undefined ||
-  serviceUuid           == undefined ||
-  parentFolderUuid      == undefined ||
-  accountId             == undefined ||
-  databaseConnection    == undefined ||
-  params                == undefined ?
+  if(fileName == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'fileName' });
+  if(fileSize == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'fileSize' });
+  if(tmpFilePath == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'tmpFilePath' });
+  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(accountUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(globalParameters == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
+  if(fileName.length > globalParameters.storage.maxFileNameSize) return callback({ status: 406, code: constants.FILE_NAME_EXCEED_SIZE_LIMIT, detail: globalParameters.storage.maxFileNameSize });
 
-  getAccountData(fileName, fileExtension, fileSize, serviceUuid, parentFolderUuid, accountId, databaseConnection, params, (error, fileAlreadyExists, rightToRemove, existingFileUuid) =>
+  uploadFileCheckIfServiceExists(tmpFilePath, fileName, fileSize, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, (error, fileUuid, serviceRights, accountRightsLevel) =>
+  {
+    return callback(error, fileUuid, serviceRights, accountRightsLevel);
+  });
+}
+
+/****************************************************************************************************/
+
+function uploadFileCheckIfServiceExists(tmpFilePath, fileName, fileSize, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback)
+{
+  storageAppServicesGet.checkIfServiceExistsFromUuid(serviceUuid, databaseConnection, globalParameters, (error, serviceExists, serviceData) =>
   {
     if(error != null) return callback(error);
 
-    storageAppFilesGet.checkIfFolderExistsInDatabase(parentFolderUuid, databaseConnection, params, (error, folderExists, folderData) =>
+    if(serviceExists == false) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
+
+    if(fileSize > serviceData.file_size_limit) return callback({ status: 406, code: constants.FILE_SIZE_EXCEED_MAX_ALLOWED, detail: null });
+
+    commonFoldersCreate.createFolder(serviceData.serviceUuid, `${globalParameters.storage.root}/${globalParameters.storage.services}`, (error) =>
     {
       if(error != null) return callback(error);
 
-      if(folderExists == false && parentFolderUuid !== '') return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
-
-      if(fileAlreadyExists && rightToRemove == false) return callback({ status: 406, code: constants.UNAUTHORIZED_TO_DELETE_FILES, detail: null });
-
-      if(fileAlreadyExists && rightToRemove)
-      {
-        storageAppFilesRemove.removeFiles([ existingFileUuid ], serviceUuid, accountId, databaseConnection, params, (error) =>
-        {
-          if(error != null) return callback(error);
-
-          moveNewFile(filePath, existingFileUuid, fileExtension, serviceUuid, accountId, databaseConnection, params, callback);
-        });
-      }
-
-      else
-      {
-        storageAppFilesGet.checkIfFileExistsInDatabase(fileName, fileExtension, serviceUuid, parentFolderUuid, databaseConnection, params, (error, fileExists, fileData) =>
-        {
-          if(error != null) return callback(error);
-
-          if(fileExists)
-          {
-            moveNewFile(filePath, fileData.uuid, fileExtension, serviceUuid, accountId, databaseConnection, params, callback);
-          }
-
-          else
-          {
-            databaseManager.insertQueryWithUUID(
-            {
-              databaseName: params.database.storage.label,
-              tableName: params.database.storage.tables.files,
-              args: { name: fileName, ext: fileExtension, parent_folder: parentFolderUuid, account: accountId, service: serviceUuid, deleted: 0 }
-
-            }, databaseConnection, (error, result, insertedRowUuid) =>
-            {
-              if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-
-              moveNewFile(filePath, insertedRowUuid, fileExtension, serviceUuid, accountId, databaseConnection, params, callback);
-            });
-          }
-        });
-      }
+      return uploadFileCheckIfExtensionIsAuthorized(tmpFilePath, fileName, serviceData.serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback);
     });
   });
 }
 
 /****************************************************************************************************/
 
-function moveNewFile(filePath, fileUuid, fileExtension, serviceUuid, accountId, databaseConnection, params, callback)
+function uploadFileCheckIfExtensionIsAuthorized(tmpFilePath, fileName, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback)
 {
-  filesMove.moveFile(filePath, `${params.storage.root}/${params.storage.services}/${serviceUuid}`, `${fileUuid}.${fileExtension}`, (error) =>
+  storageAppServicesGet.getAuthorizedExtensionsForService(serviceUuid, databaseConnection, globalParameters, (error, authorizedExtensions) =>
   {
     if(error != null) return callback(error);
 
-    updateFileStatusInDatabase(fileUuid, accountId, serviceUuid, databaseConnection, params, callback);
+    var extensionFound = false;
+
+    for(var element in authorizedExtensions)
+    {
+      if(authorizedExtensions[element] === fileName.split('.')[fileName.split('.').length - 1]) extensionFound = true;
+    }
+
+    if(extensionFound == false) return callback({ status: 406, code: constants.UNAUTHORIZED_FILE, detail: null });
+
+    return uploadFileCheckIfUserHasRightsToUpload(tmpFilePath, fileName, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function updateFileStatusInDatabase(fileUuid, accountId, serviceUuid, databaseConnection, params, callback)
+function uploadFileCheckIfUserHasRightsToUpload(tmpFilePath, fileName, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback)
 {
-  storageAppFilesSet.setFileNotDeletedInDatabase(fileUuid, databaseConnection, params, (error) =>
+  storageAppServicesRights.getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, globalParameters, (error, rightsLevel) =>
   {
     if(error != null) return callback(error);
 
-    updateFileOwnerInDatabase(fileUuid, accountId, serviceUuid, databaseConnection, params, callback);
+    storageAppAdminGet.getServiceLevelForEachRight(databaseConnection, globalParameters, (error, serviceRights) =>
+    {
+      if(error != null) return callback(error);
+
+      if(serviceRights.uploadFiles > rightsLevel) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_ADD_FILES, detail: null });
+    
+      return uploadFileCheckIfParentFolderExists(tmpFilePath, fileName, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, rightsLevel, serviceRights, callback);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-function updateFileOwnerInDatabase(fileUuid, accountId, serviceUuid, databaseConnection, params, callback)
+function uploadFileCheckIfParentFolderExists(tmpFilePath, fileName, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, rightsLevel, serviceRights, callback)
 {
-  storageAppFilesSet.setFileOwner(accountId, fileUuid, databaseConnection, params, (error) =>
+  if(parentFolderUuid == null) return uploadFileCheckIfFileExists(tmpFilePath, fileName, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, rightsLevel, serviceRights, callback);
+
+  storageAppFilesGet.checkIfFolderExistsInDatabase(parentFolderUuid, databaseConnection, globalParameters, (error, folderExists, folderData) =>
   {
     if(error != null) return callback(error);
 
-    storageAppLogsServicesUploadFile.addUploadFileLog(params.fileLogs.upload, accountId, fileUuid, serviceUuid, databaseConnection, params, (error) => {  });
+    if(folderExists == false) return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
 
-    return callback(null, fileUuid);
+    if(folderData.is_deleted) return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
+
+    return uploadFileCheckIfFileExists(tmpFilePath, fileName, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, rightsLevel, serviceRights, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function uploadFileCheckIfFileExists(tmpFilePath, fileName, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, rightsLevel, serviceRights, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElements,
+    args: [ '*' ],
+    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: fileName }, 1: { operator: '=', key: 'is_directory', value: 0 }, 2: { operator: '=', key: 'is_deleted', value: 0 }, 3: { operator: '=', key: 'parent_folder', value: parentFolderUuid } }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    if(result.length > 0 && serviceRights.removeFiles > rightsLevel) return callback({ status: 406, code: constants.FILE_ALREADY_EXISTS, detail: null });
+
+    if(result.length > 0) return uploadFileUpdateOldFileEntryInDatabase(tmpFilePath, fileName, serviceRights, rightsLevel, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, result[0].uuid, callback);
+
+    return uploadFileCreateEntryInDatabase(tmpFilePath, fileName, serviceRights, rightsLevel, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function uploadFileUpdateOldFileEntryInDatabase(tmpFilePath, fileName, serviceRights, accountRightsLevel, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, oldFileUuid, callback)
+{
+  databaseManager.updateQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElements,
+    args: { is_deleted: 1 },
+    where: { operator: '=', key: 'uuid', value: oldFileUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    return uploadFileMoveOldFileToBin(tmpFilePath, fileName, serviceRights, accountRightsLevel, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, oldFileUuid, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function uploadFileMoveOldFileToBin(tmpFilePath, fileName, serviceRights, accountRightsLevel, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, oldFileUuid, callback)
+{
+  commonFilesMove.moveFile(`${globalParameters.storage.root}/${globalParameters.storage.services}/${serviceUuid}/${oldFileUuid}`, `${globalParameters.storage.root}/${globalParameters.storage.bin}/${oldFileUuid}`, (error) =>
+  {
+    if(error != null) return callback(error);
+
+    return uploadFileCreateRemoveLog(tmpFilePath, fileName, serviceRights, accountRightsLevel, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, oldFileUuid, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function uploadFileCreateRemoveLog(tmpFilePath, fileName, serviceRights, accountRightsLevel, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, oldFileUuid, callback)
+{
+  const generatedUuid = uuid.v4();
+
+  databaseManager.insertQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElementsLogs,
+    args: { uuid: generatedUuid, element_uuid: oldFileUuid, account_uuid: accountUuid, date: Date.now(), type: globalParameters.fileLogs.remove }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    return uploadFileCreateEntryInDatabase(tmpFilePath, fileName, serviceRights, accountRightsLevel, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function uploadFileCreateEntryInDatabase(tmpFilePath, fileName, serviceRights, accountRightsLevel, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, callback)
+{
+  const generatedUuid = uuid.v4();
+
+  databaseManager.insertQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElements,
+    args: { uuid: generatedUuid, name: fileName, parent_folder: parentFolderUuid, service_uuid: serviceUuid, is_directory: 0, is_deleted: 0 }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    return uploadFileMoveNewFile(tmpFilePath, generatedUuid, serviceRights, accountRightsLevel, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function uploadFileMoveNewFile(tmpFilePath, fileUuid, serviceRights, accountRightsLevel, serviceUuid, accountUuid, databaseConnection, globalParameters, callback)
+{
+  commonFilesMove.moveFile(`${globalParameters.storage.root}/${globalParameters.storage.tmp}/${tmpFilePath}`, `${globalParameters.storage.root}/${globalParameters.storage.services}/${serviceUuid}/${fileUuid}`, (error) =>
+  {
+    if(error != null) return callback(error);
+
+    return uploadFileCreateUploadLog(fileUuid, accountUuid, serviceRights, accountRightsLevel, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function uploadFileCreateUploadLog(fileUuid, accountUuid, serviceRights, accountRightsLevel, databaseConnection, globalParameters, callback)
+{
+  const generatedUuid = uuid.v4();
+
+  databaseManager.insertQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElementsLogs,
+    args: { uuid: generatedUuid, element_uuid: fileUuid, account_uuid: accountUuid, date: Date.now(), type: globalParameters.fileLogs.upload }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    return callback(null, fileUuid, serviceRights, accountRightsLevel);
   });
 }
 

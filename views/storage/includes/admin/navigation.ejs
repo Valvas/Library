@@ -1,6 +1,8 @@
 <div class='administrationNavigationBar'>
   <a href='/storage/admin' <% if(adminLocation === 'home'){ %>class='administrationNavigationBarLinkSelected'<% } else{ %>class='administrationNavigationBarLinkActive'<% } %>><%= strings.storage.admin.links.home %></a>
-  <a href='/storage/admin/services' <% if(adminLocation === 'services'){ %>class='administrationNavigationBarLinkSelected'<% } else{ %>class='administrationNavigationBarLinkActive'<% } %>><%= strings.storage.admin.links.services %></a>
   <a href='/storage/admin/services-rights' <% if(adminLocation === 'rights'){ %>class='administrationNavigationBarLinkSelected'<% } else{ %>class='administrationNavigationBarLinkActive'<% } %>><%= strings.storage.admin.links.rights %></a>
-  <a href='/storage/admin/account-levels' <% if(adminLocation === 'level'){ %>class='administrationNavigationBarLinkSelected'<% } else{ %>class='administrationNavigationBarLinkActive'<% } %>><%= strings.storage.admin.links.levels %></a>
+  <% if(isAdmin){ %>
+    <a href='/storage/admin/services-management' <% if(adminLocation === 'servicesManagement'){ %>class='administrationNavigationBarLinkSelected'<% } else{ %>class='administrationNavigationBarLinkActive'<% } %>><%= strings.storage.admin.links.services %></a>
+    <a href='/storage/admin/account-admin' <% if(adminLocation === 'accoutnAdmin'){ %>class='administrationNavigationBarLinkSelected'<% } else{ %>class='administrationNavigationBarLinkActive'<% } %>><%= strings.storage.admin.links.levels %></a>
+  <% } %>
 </div>

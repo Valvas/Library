@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <title><%= strings.storage.name %> - <%= strings.storage.locations.admin %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/accountsLevel.css" />
+  <body>
+    <% include ../../include/informations.ejs %>
+    <% include ../includes/aside.ejs %>
+    <div class='storageMainBlock'>
+      <% include ../includes/admin/navigation.ejs %>
+      <div class="accountsLevelSection">
+        <input type="text" id="searchBar" class="accountsLevelSectionSearch" placeholder="<%= strings.storage.admin.accountsLevel.searchInput %>" />
+        <div class="accountsLevelSectionInformation"><%= strings.storage.admin.accountsLevel.information %></div>
+        <ul class="accountsList">
+          <div class="accountsListHeader">
+            <div class="accountsListHeaderEmail"><%= strings.storage.admin.accountsLevel.emailHeader %></div>
+            <div class="accountsListHeaderAdmin"><%= strings.storage.admin.accountsLevel.adminHeader %></div>
+          </div>
+          <div id="accountsList">
+            <% for(var x = 0; x < accountsToManage.length; x++){ %>
+              <div class="accountBlock">
+                <div class="accountBlockEmail"><%= accountsToManage[x].email %></div>
+                <div class="accountBlockInput">
+                  <% if(accountsToManage[x].isAdmin){ %>
+                    <input id="<%= accountsToManage[x].uuid %>" type="checkbox" checked>
+                    <label for="<%= accountsToManage[x].uuid %>"><%= strings.storage.admin.accountsLevel.isAdmin %></label>
+                  <% } else{ %>
+                    <input id="<%= accountsToManage[x].uuid %>" type="checkbox">
+                    <label for="<%= accountsToManage[x].uuid %>"><%= strings.storage.admin.accountsLevel.isNotAdmin %></label>
+                  <% } %>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </ul>
+      </div>
+    </div>
+    <% include ../../include/common_scripts.ejs %>
+    <script src='/js/storage/exit.js'></script>
+    <script src='/js/storage/admin/accountsLevel/searchBar.js'></script>
+    <script src='/js/storage/admin/accountsLevel/updateAdminStatus.js'></script>
+  </body>
+</html>

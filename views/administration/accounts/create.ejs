@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.administrationStrings.aside.menu[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/administration/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <body>
+    <% include ../../include/informations.ejs %>
+    <div class="mainBlock">
+      <% include ../include/header.ejs %>
+      <div class="content">
+        <div class="contentName"><%= strings.administrationStrings.accountsCreate.title %></div>
+        <a href="/administration/accounts" class="returnButton"><%= strings.administrationStrings.accountsCreate.returnButton %></a>
+        <form class="createAccountForm" id="createAccountForm">
+          <div class="formTitle"><%= strings.administrationStrings.accountsCreate.form.title %></div>
+          <div class="formInfo"><%= strings.administrationStrings.accountsCreate.form.info %></div>
+          <div class="formLabel"><%= strings.administrationStrings.accountsCreate.form.emailLabel %></div>
+          <input id="emailInput" type="email" class="formInput" placeholder="<%= strings.administrationStrings.accountsCreate.form.emailPlaceholder %>" required />
+          <div id="emailError" class="formError"><%= strings.administrationStrings.accountsCreate.form.formatError %></div>
+          <div class="formLabel"><%= strings.administrationStrings.accountsCreate.form.lastnameLabel %></div>
+          <input id="lastnameInput" type="text" class="formInput" placeholder="<%= strings.administrationStrings.accountsCreate.form.lastnamePlaceholder %>" required />
+          <div id="lastnameError" class="formError"><%= strings.administrationStrings.accountsCreate.form.formatError %></div>
+          <div class="formLabel"><%= strings.administrationStrings.accountsCreate.form.firstnameLabel %></div>
+          <input id="firstnameInput" type="text" class="formInput" placeholder="<%= strings.administrationStrings.accountsCreate.form.firstnamePlaceholder %>" required />
+          <div id="firstnameError" class="formError"><%= strings.administrationStrings.accountsCreate.form.formatError %></div>
+          <button type="submit" class="formSubmit"><%= strings.administrationStrings.accountsCreate.form.submitButton %></button>
+        </form>
+      </div>
+    </div>
+    <% include ../../include/common_scripts.ejs %>
+    <script src="/js/administration/accounts/create.js"></script>
+  </body>
+</html>

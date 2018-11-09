@@ -1,151 +1,120 @@
 /****************************************************************************************************/
 
-if(document.getElementById('newFolderButton'))
-{
-  document.getElementById('newFolderButton').addEventListener('click', () =>
-  {
-    createNewFolder(document.getElementById('filesBlock').getAttribute('name'));
-  });
-}
+var storageAppStrings = null;
+
+if(document.getElementById('createFolderButton')) document.getElementById('createFolderButton').addEventListener('click', openCreateFolderPopup);
 
 /****************************************************************************************************/
 
-function createNewFolder(currentFolderUuid)
+function openCreateFolderPopup()
 {
-  var spinner       = document.createElement('div');
-  var background    = document.createElement('div');
-  var popup         = document.createElement('div');
-  var popupTitle    = document.createElement('div');
-  var popupMessage  = document.createElement('div');
-  var popupInput    = document.createElement('input');
-  var popupSend     = document.createElement('button');
-  var popupCancel   = document.createElement('button');
+  if(document.getElementById('createFolderBackground')) return;
 
-  spinner           .setAttribute('class', 'storageSpinner');
-  background        .setAttribute('class', 'storageBackground');
-  popup             .setAttribute('class', 'storagePopup');
-  popupTitle        .setAttribute('class', 'storagePopupTitle');
-  popupMessage      .setAttribute('class', 'newFolderHelpMessage');
-  popupInput        .setAttribute('class', 'newFolderInput');
-  popupSend         .setAttribute('class', 'newFolderSendButton');
-  popupCancel       .setAttribute('class', 'newFolderCancelButton');
+  createBackground('createFolderBackground');
 
-  background        .setAttribute('id', 'newFolderBackground');
-  popup             .setAttribute('id', 'newFolderPopup');
-  popupInput        .setAttribute('id', 'newFolderPopupInput');
-
-  popup             .setAttribute('name', currentFolderUuid);
-
-  popupInput        .setAttribute('type', 'text');
-
-  popupInput        .addEventListener('focus', () => { popupInput.removeAttribute('style'); });
-  popupCancel       .addEventListener('click', closeNewFolderPopup);
-  popupSend         .addEventListener('click', () => { sendNewFolder(popupInput.value); });
-
-  spinner           .innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
-
-  document.body     .appendChild(background);
-  document.body     .appendChild(spinner);
-
-  $.ajax(
+  displayLoader('', (loader) =>
   {
-    method: 'GET',
-    dataType: 'json',
-    timeout: 5000,
-    url: '/queries/storage/strings',
-
-    error: (xhr, textStatus, errorThrown) =>
+    getStorageAppStrings((error, strings) =>
     {
-      spinner.remove();
-      background.remove();
+      removeLoader(loader, () => {  });
 
-      xhr.responseJSON != undefined ?
-      displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail) :
-      displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
-    }
+      if(error != null)
+      {
+        displayError(error.message, error.detail, null);
+        removeBackground('createFolderBackground');
+        return;
+      }
 
-  }).done((json) =>
-  {
-    spinner.remove();
+      storageAppStrings = strings;
 
-    popupInput        .setAttribute('placeholder', json.strings.services.newFolder.popupPlaceholder);
+      var popup         = document.createElement('div');
+      var popupButtons  = document.createElement('div');
+      var popupConfirm  = document.createElement('button');
+      var popupCancel   = document.createElement('button');
 
-    popupTitle        .innerText = json.strings.services.newFolder.popupTitle;
-    popupMessage      .innerText = json.strings.services.newFolder.popupHelpMessage;
-    popupSend         .innerText = json.strings.services.newFolder.popupSendButton;
-    popupCancel       .innerText = json.strings.services.newFolder.popupCancelButton;
+      popup             .setAttribute('id', 'createFolderPopup');
 
-    popup             .appendChild(popupTitle);
-    popup             .appendChild(popupInput);
-    popup             .appendChild(popupMessage);
-    popup             .appendChild(popupSend);
-    popup             .appendChild(popupCancel);
+      popup             .setAttribute('class', 'standardPopup');
+      popupButtons      .setAttribute('class', 'createFolderPopupButtons');
+      popupConfirm      .setAttribute('class', 'createFolderPopupConfirm');
+      popupCancel       .setAttribute('class', 'createFolderPopupCancel');
 
-    document.body     .appendChild(popup);
+      popup             .innerHTML += `<div class="standardPopupTitle">${storageAppStrings.services.newFolder.popupTitle}</div>`;
+      popup             .innerHTML += `<div class="createFolderPopupHelp">${storageAppStrings.services.newFolder.popupHelpMessage}</div>`;
+      popup             .innerHTML += `<input id="createFolderName" class="createFolderPopupInput" placeholder="${storageAppStrings.services.newFolder.popupPlaceholder}" type="text" />`;
 
-    popupInput        .focus();
+      popupConfirm      .innerText = storageAppStrings.services.newFolder.popupSendButton;
+      popupCancel       .innerText = storageAppStrings.services.newFolder.popupCancelButton;
+
+      popupCancel       .addEventListener('click', () =>
+      {
+        popup.remove();
+        removeBackground('createFolderBackground');
+      });
+
+      popupConfirm      .addEventListener('click', sendNewFolder);
+
+      popupButtons      .appendChild(popupConfirm);
+      popupButtons      .appendChild(popupCancel);
+      popup             .appendChild(popupButtons);
+      document.body     .appendChild(popup);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-function closeNewFolderPopup()
+function sendNewFolder()
 {
-  if(document.getElementById('newFolderPopup')) document.getElementById('newFolderPopup').remove();
-  if(document.getElementById('newFolderBackground')) document.getElementById('newFolderBackground').remove();
-}
+  if(document.getElementById('serviceUuid') == null) return;
+  if(document.getElementById('currentFolder') == null) return;
+  if(document.getElementById('createFolderName') == null) return;
+  if(document.getElementById('createFolderPopup') == null) return;
 
-/****************************************************************************************************/
+  document.getElementById('createFolderPopup').style.display = 'none';
 
-function sendNewFolder(newFolderName)
-{
-  if(new RegExp('^[a-zA-Z0-9]([ ]?[a-zA-Z0-9]+)*$').test(newFolderName) == false)
+  displayLoader(storageAppStrings.services.newFolder.popupLoader, (loader) =>
   {
-    if(document.getElementById('newFolderPopupInput')) document.getElementById('newFolderPopupInput').style.border = '1px solid #D9534F';
-  }
+    const folderName = document.getElementById('createFolderName').value;
 
-  else
-  {
-    const parentFolderUuid = document.getElementById('newFolderPopup').getAttribute('name');
-    
-    if(document.getElementById('newFolderPopup')) document.getElementById('newFolderPopup').remove();
+    if(new RegExp('^[a-zA-Z0-9]([ ]?[a-zA-Z0-9]+)*$').test(folderName) == false)
+    {
+      removeLoader(loader, () => {  });
 
-    var spinner       = document.createElement('div');
+      displayError(storageAppStrings.services.newFolder.popupFormatError, null, 'createFolderFormatError');
 
-    spinner           .setAttribute('class', 'storageSpinner');
-    spinner           .innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
-    document.body     .appendChild(spinner);
+      document.getElementById('createFolderPopup').removeAttribute('style');
+
+      return;
+    }
 
     $.ajax(
     {
-      method: 'POST',
-      dataType: 'json',
-      timeout: 5000,
-      data: { newFolderName: newFolderName, parentFolderUuid: parentFolderUuid, serviceUuid: document.getElementById('mainBlock').getAttribute('name') },
-      url: '/queries/storage/services/create-new-folder',
-  
+      method: 'POST', dataType: 'json', timeout: 10000, data: { newFolderName: folderName, parentFolderUuid: document.getElementById('currentFolder').hasAttribute('name') ? document.getElementById('currentFolder').getAttribute('name') : '', serviceUuid: document.getElementById('serviceUuid').getAttribute('name') }, url: '/queries/storage/services/create-new-folder',
+      
       error: (xhr, textStatus, errorThrown) =>
       {
-        spinner.remove();
+        removeLoader(loader, () => {  });
 
-        if(document.getElementById('newFolderBackground')) document.getElementById('newFolderBackground').remove();
+        document.getElementById('createFolderPopup').removeAttribute('style');
   
         xhr.responseJSON != undefined ?
-        displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail) :
-        displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
+        displayError(xhr.responseJSON.message, xhr.responseJSON.detail, 'createForlderServerError') :
+        displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null, 'createForlderServerError');
       }
   
-    }).done((json) =>
+    }).done((result) =>
     {
-      spinner.remove();
-        
-      if(document.getElementById('newFolderBackground')) document.getElementById('newFolderBackground').remove();
+      removeLoader(loader, () =>
+      {
+        document.getElementById('createFolderPopup').remove();
 
-      socket.emit('storageAppServicesFolderCreated', json.folderUuid, document.getElementById('mainBlock').getAttribute('name'), parentFolderUuid);
+        removeBackground('createFolderBackground');
 
-      displaySuccessMessage(json.message, null);
+        displaySuccess(result.message, null, null);
+      });
     });
-  }
+  });
 }
 
 /****************************************************************************************************/
@@ -295,13 +264,6 @@ function sendNewFolderName(folderUuid, newFolderName)
       });
     });
   }
-}
-
-/****************************************************************************************************/
-
-function removeFolder(folderUuid)
-{
-
 }
 
 /****************************************************************************************************/

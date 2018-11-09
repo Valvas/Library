@@ -50,7 +50,7 @@ function loadMoreNews(event)
 
   var startTheRequest = () =>
   {
-    displayLoader('Chargement', `Chargement des articles supplémentaires en cours`, null, (loader) =>
+    displayLoader(`Chargement des articles supplémentaires en cours`, (loader) =>
     {
       getNextNewsLoader = loader;
 
@@ -71,8 +71,8 @@ function loadMoreNews(event)
             if(textStatus !== 'abort')
             {
               xhr.responseJSON != undefined
-              ? displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail)
-              : displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+              ? displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null)
+              : displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
             }
           });
         }
@@ -92,7 +92,7 @@ function loadMoreNews(event)
             if(existingArticles[x].hasAttribute('name')) existingArticlesUuids.push(existingArticles[x].getAttribute('name'));
           }
 
-          if(existingArticles.length >= json.newsData.length) displayInfo('Information', 'Tous les articles ont déjà été chargés', null, '0001');
+          if(existingArticles.length >= json.newsData.length) displayInfo('Tous les articles ont déjà été chargés', null, '0001');
 
           else
           {

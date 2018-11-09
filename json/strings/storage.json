@@ -19,25 +19,8 @@
   {
     "home":
     {
-      "myRights": "Vos droits",
-      "myLevel": "Vous avez un compte administrateur niveau",
-      "rightsInfo": "Votre niveau d'administration vous donne les droits suivants",
-      "rightsLabels":
-      {
-        "accessService": "Donner/Retirer l'accès à un service",
-        "commentFiles": "Donner/Retirer le droit de poster des commentaires sur les fichiers",
-        "uploadFiles": "Donner/Retirer le droit de poster des fichiers",
-        "createFolders": "Donner/Retirer le droit de créer des dossiers",
-        "renameFolders": "Donner/Retirer le droit de renommer des dossiers",
-        "moveFiles": "Donner/Retirer le droit de déplacer des fichiers",
-        "downloadFiles": "Donner/Retirer le droit de télécharger des fichiers",
-        "restoreFiles": "Donner/Retirer le droit de restaurer des fichiers",
-        "removeFolders": "Donner/Retirer le droit de supprimer des dossiers",
-        "removeFiles": "Donner/Retirer le droit de supprimer des fichiers",
-        "createServices": "Créer des services",
-        "modifyServices": "Modifier des services",
-        "removeServices": "Supprimer des services"
-      }
+      "isAdmin": "Vous êtes administrateur de l'application",
+      "isNotAdmin": "Vous n'êtes pas administrateur de l'application"
     },
     "links":
     {
@@ -49,41 +32,21 @@
     },
     "accountsLevel":
     {
-      "detail":
+      "confirmationPopup":
       {
-        "accountDataTitle": "Informations du compte",
-        "currentLevel": "Niveau d'administration actuel",
-        "selectedLevel": "Niveau actuellement selectionné",
-        "rightsForSelectedLevel": "Droits associés au niveau selectionné",
-        "saveSelectedLevel": "Enregistrer",
-        "returnToList": "Retour",
-        "rightEnabled": "Oui",
-        "rightDisabled": "Non",
-        "information": "Vous pouvez changer le niveau d'administration d'un utilisateur pour un niveau égal ou inférieur au vôtre",
-      
-        "confirmationPopup":
-        {
-          "title": "Confirmation",
-          "level": "Niveau",
-          "message": "Êtes-vous sûr(e) de vouloir appliquer ce niveau d'administration pour cet utilisateur ?",
-          "confirm": "Oui",
-          "cancel": "Non",
-          "sendingTitle": "Enregistrement",
-          "sendingMessage": "Le nouveau niveau d'administration pour ce compte est en cours d'enregistrement. Veuillez patienter"
-        }
+        "title": "Confirmation",
+        "enabledMessage": "Êtes-vous sûr(e) de vouloir donner les droits d'administration à cet utilisateur ?",
+        "disabledMessage": "Êtes-vous sûr(e) de vouloir retirer les droits d'administration à cet utilisateur ?",
+        "confirm": "Oui",
+        "cancel": "Non",
+        "sendingMessage": "Mise à jour du statut en cours. Veuillez patienter."
       },
+      "information": "En donnant les droits d'administration à un utilisateur vous lui donnez la possibilité de créer, modifier et supprimer des services. Vous lui donnez aussi les droits de modifier les administrateurs d'un service.",
       "searchInput": "Rechercher",
-      "accountsTable":
-      {
-        "header":
-        {
-          "email": "Adresse email",
-          "lastname": "Nom",
-          "firstname": "Prénom",
-          "level": "Niveau d'administration"
-        },
-        "modifyButton": "Modifier"
-      }
+      "emailHeader": "Adresse Email",
+      "adminHeader": "Administrateur",
+      "isAdmin": "Oui",
+      "isNotAdmin": "Non"
     },
     "services":
     {
@@ -252,17 +215,65 @@
 
         "informationBlockFirstMessage": "Les droits sur un service sont définis par un niveau, plus le niveau est élevé, plus l'utilisateur possède de droits sur le service en question",
 
-        "informationBlockSecondMessage": "Chaque service est indépendant des autres, ainsi un utilisateur peut posséder des niveaux de droits différents sur chaque service (exemple: niveau 2 sur un service et niveau 4 sur un autre). Par défaut un utilisateur venant de rejoindre un service possède des droits niveau 0",
+        "informationBlockSecondMessage": "Chaque service est indépendant des autres, ainsi un utilisateur peut posséder des niveaux de droits différents sur chaque service (exemple: niveau 2 sur un service et niveau 4 sur un autre). Par défaut tous les utilisateurs ont un niveau 0 pour chaque service",
 
-        "informationBlockThirdMessage": "Vous êtes autorisé(e) à modifier le niveau de droits d'un utilisateur pour chaque service cependant vous ne pouvez pas définir un niveau qui excède le vôtre (exemple: si vous êtes niveau 4 pour un service vous pouvez changer le niveau des autres utilisateurs de 1 à 4 pour ce service)",
+        "informationBlockThirdMessage": "Vous êtes autorisé(e) à modifier le niveau de droits d'un utilisateur pour chaque service cependant vous ne pouvez pas définir un niveau qui excède le vôtre (exemple: si vous êtes niveau 4 pour un service vous pouvez changer le niveau des autres utilisateurs de 0 à 4 pour ce service). Vous ne pouvez également pas modifier le niveau d'un utilisateur ayant un niveau égal ou supérieur au vôtre",
 
         "informationBlockWarning": "Attention: chaque action que vous effectuez ici est enregistrée dans des logs, ceux-ci peuvent être consultés à tout moment par les administrateurs de l'application",
       
         "servicesBlockTitle": "Liste des services",
 
-        "servicesBlockLevel": "Votre niveau de droits",
+        "isAdminMessage": "Vous êtes administrateur de ce service",
+
+        "isNotAdminMessage": "Vous n'êtes pas administrateur de ce service",
 
         "servicesBlockAccess": "Accéder"
+      },
+
+      "service":
+      {
+        "returnLink": "Retour à la liste des services",
+
+        "informationsBlockTitle": "Informations",
+
+        "informationsBlockMessage": "Un administrateur du service possède tous les droits par défaut. Seul un administrateur de l'application peut retirer les droits d'administration sur un service à un compte.",
+
+        "accountsBlockTitle": "Liste des utilisateurs",
+
+        "accountsBlockHeader": "Adresse Email",
+
+        "accountsBlockListEmpty": "Aucun utilisateur à afficher",
+
+        "accountsBlockSearchPlaceholder": "Rechercher un utilisateur",
+
+        "accountsBlockListUpdateHelp": "Cliquez sur une ligne pour modifier les droits d'un utilisateur sur ce service",
+
+        "serviceRightsUpdatePopup":
+        {
+          "getRightsLevelLoader": "Récupération des données de votre compte en cours. Veuillez patienter",
+          "title": "Modifier les droits du compte",
+          "hasRight": "Oui",
+          "doesNotHaveRight": "Non",
+          "confirm": "Appliquer",
+          "cancel": "Annuler",
+          "rightsLabels":
+          {
+            "isAdmin": "Administrateur du service",
+            "accessService": "Accéder au service",
+            "postComments": "Poster des commentaires sur les fichiers",
+            "uploadFiles": "Poster des fichiers",
+            "createFolders": "Créer des dossiers",
+            "downloadFiles": "Télécharger des fichiers",
+            "moveFiles": "Déplacer des fichiers",
+            "renameFolders": "Renommer des dossiers",
+            "removeFolders": "Supprimer des dossiers",
+            "restoreFiles": "Restaurer des fichiers",
+            "removeFiles": "Supprimer des fichiers"
+          },
+          "confirmationTitle": "Confirmation",
+          "confirmationMessage": "Êtes-vous sûr(e) de vouloir appliquer ces modifications ?",
+          "loaderMessage": "Enregistrement en cours. Veuillez patienter."
+        }
       }
     }
   },
@@ -303,6 +314,78 @@
 
   "services":
   {
+    "listPage":
+    {
+      "blockTitle": "Liste des services",
+      "emptyServicesList": "Il n'existe aucun service pour le moment",
+
+      "serviceBlock":
+      {
+        "amountOfFiles": "Nombre de fichiers",
+        "amountOfFolders": "Nombre de dossiers",
+        "rightsLevel": "Votre niveau de droits",
+        "unauthorizedToAccessService": "Vous n'avez pas le droit d'accéder à ce service",
+        "link": "Accéder au service"
+      }
+    },
+
+    "detailPage":
+    {
+      "uploadFilePopup":
+      {
+        "title": "Envoyer un fichier",
+        "inputInformation": "Cliquez sur la barre ci-dessous pour choisir un fichier à envoyer",
+        "inputPlaceholder": "Aucun fichier choisi",
+        "inputButton": "Choisir un fichier",
+        "authorizedExtensions": "Liste des extensions autorisées",
+        "maxFileSize": "Taille maximale des fichiers",
+        "sendButton": "Envoyer",
+        "cancelButton": "Annuler",
+        "checkingFormat": "Vérification du format du fichier en cours. Veuillez patienter",
+        "replaceFileTitle": "Remplacer",
+        "replaceFileMessage": "Ce fichier existe déjà, voulez-vous le remplacer ?",
+        "replaceFileConfirm": "Oui",
+        "replaceFileCancel": "Non",
+        "hasNoRightToReplaceExistingFile": "Ce fichier existe déjà, cependant vous n'avez pas le droit de supprimer des fichiers pour ce service. Vous ne pouvez donc pas le remplacer."
+      },
+
+      "asideTools":
+      {
+        "uploadFileButton": "Envoyer un fichier",
+        "uploadFileDisabledMessage": "Votre niveau de droits ne vous permet pas d'envoyer des fichiers",
+        "createFolderButton": "Créer un dossier",
+        "createFolderDisabled": "Votre niveau de droits ne vous permet pas de créer des dossiers",
+        "amountOfSelectedFiles": "Fichiers sélectionnés",
+        "unselectAll": "Désélectionner tous les fichiers",
+        "downloadSelection": "Télécharger la sélection",
+        "removeSelection": "Supprimer la sélection",
+        "unauthorizedToDownload": "Votre niveau de droits ne vous permet pas de télécharger des fichiers",
+        "unauthorizedToRemove": "Votre niveau de droits ne vous permet pas de supprimer des fichiers",
+        "filtersTitle": "Filtres"
+      },
+
+      "socket":
+      {
+        "fileUploaded": "Fichier [$1$] ajouté par [$2$]",
+        "folderCreated": "Dossier [$1$] créé par [$2$]"
+      },
+
+      "filesSection":
+      {
+        "header":
+        {
+          "searchBarPlaceholder": "Rechercher un fichier ou un dossier"
+        },
+
+        "rootPath": "Racine du Service",
+
+        "serviceElements":
+        {
+          "emptyFolder": "Aucun dossier ou fichier"
+        }
+      }
+    },
+
     "actions":
     {
       "downloadButton":
@@ -435,20 +518,13 @@
 
     "newFolder":
     {
-      "button":
-      {
-       "label": "Nouveau dossier" ,
-       "titles":
-       {
-         "true": "Cliquez ici pour créer un nouveau dossier",
-         "false": "Vous n'avez pas le droit de créer des dossiers"
-       }
-      },
       "popupTitle": "Création d'un nouveau dossier",
       "popupPlaceholder": "Nom du dossier",
       "popupSendButton": "Créer ce dossier",
       "popupCancelButton": "Annuler",
-      "popupHelpMessage": "Le nom ne peut pas contenir de caractères spéciaux, d'accents et commencer ou terminer par un espace"
+      "popupHelpMessage": "Le nom ne peut pas contenir de caractères spéciaux, d'accents et commencer ou terminer par un espace",
+      "popupLoader": "Création du nouveau dossier en cours. Veuillez patienter",
+      "popupFormatError": "Format du nom incorrect"
     },
 
     "popup":

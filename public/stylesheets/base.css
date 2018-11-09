@@ -1,40 +1,8 @@
 @import url('fonts.css');
-@import url('navigation.css');
 @import url('popup.css');
-@import url('report.css');
 @import url('aside.css');
 
-body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
-
-/****************************************************************************************************/
-/* INFORMATION BLOCK */
-/****************************************************************************************************/
-
-.informationBlock{ position:fixed; top:100px; right:60px; width:400px; z-index:400; font-family:Arial, Helvetica, sans-serif; }
-
-.informationBlockMessageInfo, .informationBlockMessageError, .informationBlockMessageSuccess, .informationBlockMessageLoader{ font-size:0.9em; color:#FFFFFF; padding:20px 10px 20px 10px; width:100%; margin:0 0 20px 0; border-radius:4px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); }
-
-.informationBlockMessageInfo{ background-color:#6184D8; }
-
-.informationBlockMessageError{ background-color:#D9534F; }
-
-.informationBlockMessageSuccess{ background-color:#5CB85C; }
-
-.informationBlockMessageLoader{ background-color:#6184D8; }
-
-.informationBlockMessageLoaderIcon{ display:inline-block; vertical-align:middle; width:32px; height:32px; font-size:1.5em; text-align:center; color:#FFFFFF; }
-
-.informationBlockMessageLoaderText{ display:inline-block; vertical-align:middle; width:calc(100% - 40px); margin-left:8px; font-size:0.9em; }
-
-.informationBlockMessageContent{ width:calc(100% - 90px); margin-right:10px; display:inline-block; vertical-align:middle; }
-
-.informationBlockMessageClose{ width:80px; color:#FFFFFF; padding:4px 0 4px 0; border-radius:4px; font-size:0.9em; display:inline-block; vertical-align:middle; cursor:pointer; border:none; background-color:transparent; }
-
-.informationBlockMessageInfo .informationBlockMessageClose:hover{ background-color:#5073C7; }
-
-.informationBlockMessageError .informationBlockMessageClose:hover{ background-color:#C8423E; }
-
-.informationBlockMessageSuccess .informationBlockMessageClose:hover{ background-color:#4BA74B; }
+body{ margin:0; position:relative; color:rgba(0,0,0,0.65); font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
 
 /****************************************************************************************************/
 /* ERROR BLOCK */
@@ -46,11 +14,11 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .errorBlockTitleIcon{ display:inline-block; vertical-align:top; width:32px; height:32px; font-size:2em; color:#D9534F; }
 
-.errorBlockTitleText{ display:inline-block; vertical-align:top; width:calc(100% - 40px); margin:6px 0 6px 8px; font-size:16px; line-height:20px; font-family:roboto-regular; }
+.errorBlockTitleText{ display:inline-block; vertical-align:top; width:calc(100% - 40px); margin:6px 0 6px 8px; font-size:16px; line-height:20px; }
 
-.errorBlockMessage{ padding:10px; font-size:14px; line-height:18px; font-family:roboto-regular; }
+.errorBlockMessage{ padding:10px; font-size:14px; line-height:18px; }
 
-.errorBlockDetail{ padding:10px; font-size:14px; line-height:18px; font-family:roboto-italic; }
+.errorBlockDetail{ padding:10px; font-size:14px; line-height:18px; }
 
 /****************************************************************************************************/
 /* HEADER BLOCK */
@@ -64,7 +32,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .headerBlockNavigationTitleIcon{ width:80px; height:50px; margin:0 35px 0 35px; }
 
-.headerBlockNavigationTitleValue{ font-size:18px; font-family:roboto-black; text-align:center; color:#EA2A64; line-height:24px; }
+.headerBlockNavigationTitleValue{ font-size:18px; text-align:center; color:#EA2A64; line-height:24px; }
 
 .headerBlockNavigationAccount{ width:calc(100% - 150px); text-align:right; display:inline-block; vertical-align:top; }
 
@@ -74,7 +42,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .headerBlockNavigationAccountMenuListElement:not(:first-child){ border-top:1px solid #E0E0E0; }
 
-.headerBlockNavigationAccountMenuListElement{ display:block; text-decoration:none; color:rgba(0,0,0,0.65); text-align:center; font-size:18px; line-height:24px; font-family:roboto-regular; cursor:pointer; }
+.headerBlockNavigationAccountMenuListElement{ display:block; text-decoration:none; color:rgba(0,0,0,0.65); text-align:center; font-size:18px; line-height:24px; cursor:pointer; }
 
 .headerBlockNavigationAccountMenuListElement:hover .headerBlockNavigationAccountMenuListElementLink{ color:#90BB2C; }
 
@@ -88,7 +56,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .headerBlockNavigationAccountBlockPicture{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
 
-.headerBlockNavigationAccountBlockValue{ width:calc(100% - 74px); display:inline-block; vertical-align:top; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:18px; line-height:24px; margin:25px 10px 25px 0; font-family:roboto-light; text-align:right; }
+.headerBlockNavigationAccountBlockValue{ width:calc(100% - 74px); display:inline-block; vertical-align:top; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:18px; line-height:24px; margin:25px 10px 25px 0; text-align:right; }
 
 .headerBlockCornerBugs{ color:#FFFFFF; padding:10px 0 10px 10px; border-right:10px solid #D9E789; cursor:pointer; display:inline-block; vertical-align:top; }
 
@@ -96,15 +64,13 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .headerBlockCornerBugsIcon{ width:32px; height:32px; font-size:2em; display:inline-block; vertical-align:top; color:#D9534F; margin:0 10px 0 0; }
 
-.headerBlockCornerBugsValue{ display:inline-block; vertical-align:top; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:18px; line-height:24px; margin:4px 12px 4px 4px; font-family:roboto-light; text-align:right; }
+.headerBlockCornerBugsValue{ display:inline-block; vertical-align:top; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:18px; line-height:24px; margin:4px 12px 4px 4px; text-align:right; }
 
 /****************************************************************************************************/
 /* ASIDE BLOCK */
 /****************************************************************************************************/
 
 .asideBlock{ margin:20px 0 20px 0; transition-duration:0.25s; -o-transition-duration:0.25s; -webkit-transition-duration:0.25s; }
-
-.asideBlockList{ font-family:Arial, Helvetica, sans-serif; }
 
 .asideBlockListElement{ padding:10px 20px 10px 20px; cursor:pointer; width:max-content; display:block; color:rgba(0,0,0,0.65); text-overflow:ellipsis; white-space:nowrap; overflow:hidden; font-size:1.2em; text-decoration:none; }
 
@@ -134,7 +100,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .asideNewsDeployIcon{ font-size:2em; padding:10px 0 0 0; text-align:center; }
 
-.asideNewsDeployText{ font-family:roboto-regular; text-align:center; font-size:12px; padding:0 0 10px 0; }
+.asideNewsDeployText{ text-align:center; font-size:12px; padding:0 0 10px 0; }
 
 .asideNewsDeployBlock{ display:none; position:fixed; top:0; bottom:0; left:0; z-index:10; width:250px; background-color:#FFFFFF; border-right:1px solid #D0D0D0; overflow-y:auto; }
 
@@ -144,7 +110,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .asideNewsDeployBlockBackground{ position:fixed; z-index:5; top:0; right:0; bottom:0; left:0; }
 
-.asideNewsDeployBlockTitle{ padding:20px; font-family:roboto-regular; font-size:16px; border-bottom:1px solid #D0D0D0; margin:0 10px 0 10px; }
+.asideNewsDeployBlockTitle{ padding:20px; font-size:16px; border-bottom:1px solid #D0D0D0; margin:0 10px 0 10px; }
 
 .asideNewsDeployBlockList{ margin:40px 10px 10px 10px; }
 
@@ -156,30 +122,28 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .asideNewsDeployBlockListArticleSelected{ margin:10px; border-left:4px solid #90BB2C; background-color:#F0F0FF; border-radius:0 4px 4px 0;}
 
-.asideNewsDeployBlockListArticleDate{ padding:5px; font-size:14px; line-height:18px; font-family:roboto-light; }
+.asideNewsDeployBlockListArticleDate{ padding:5px; font-size:14px; line-height:18px; }
 
-.asideNewsDeployBlockListArticleTitle{ padding:0 4px 16px 4px; font-size:16px; line-height:20px; font-family:roboto-regular; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.asideNewsDeployBlockListArticleTitle{ padding:0 4px 16px 4px; font-size:16px; line-height:20px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 .asideNewsDeployBlockPages{ border-top:1px solid #D0D0D0; padding:10px 0 10px 0; margin:10px; display:flex; flex-direction:row; }
 
-.asideNewsDeployBlockPagesSelected{ color:#70990A; font-family:roboto-regular; font-size:18px; width:12.5%; text-align:center; }
+.asideNewsDeployBlockPagesSelected{ color:#70990A; font-size:18px; width:12.5%; text-align:center; }
 
-.asideNewsDeployBlockPagesEnabled{ color:#000000; font-family:roboto-regular; font-size:18px; width:12.5%; text-align:center; cursor:pointer; }
+.asideNewsDeployBlockPagesEnabled{ color:#000000; font-size:18px; width:12.5%; text-align:center; cursor:pointer; }
 
 .asideNewsDeployBlockPagesEnabled:hover{ color:#70990A; }
 
-.asideNewsDeployBlockPagesDisabled{ color:#C0C0C0; font-family:roboto-regular; font-size:18px; width:12.5%; text-align:center; }
+.asideNewsDeployBlockPagesDisabled{ color:#C0C0C0; font-size:18px; width:12.5%; text-align:center; }
 
-.asideNewsDeployBlockListEmpty{ font-family:roboto-light; font-size:16px; text-align:center; padding:10px; margin:20px 0 20px 0; }
+.asideNewsDeployBlockListEmpty{ font-size:16px; text-align:center; padding:10px; margin:20px 0 20px 0; }
 
-.asideNewsDeployBlockListLoad{ text-align:center; font-family:roboto-regular; font-size:16px; border:1px solid #CCC; border-radius:4px; cursor:pointer; padding:5px; margin:0 10px 10px 10px; width:calc(100% - 20px); box-sizing:border-box; }
+.asideNewsDeployBlockListLoad{ text-align:center; font-size:16px; border:1px solid #CCC; border-radius:4px; cursor:pointer; padding:5px; margin:0 10px 10px 10px; width:calc(100% - 20px); box-sizing:border-box; }
 
 .asideNewsDeployBlockListLoad:hover{ color:#90BB2C; }
 
 
-.asideNewsBlock{  }
-
-.asideNewsBlockTitle{ font-weight:bold; border-bottom:1px solid #D0D0D0; padding:20px; font-size:20px; font-family:roboto-regular; }
+.asideNewsBlockTitle{ font-weight:bold; border-bottom:1px solid #D0D0D0; padding:20px; font-size:20px; }
 
 .asideNewsBlockList{ border-bottom:1px solid #D0D0D0; min-height:360px; max-height:360px; overflow-y:scroll; position:relative; }
 
@@ -191,15 +155,15 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .asideNewsBlockListElement:hover{ border-left:4px solid #90BB2C; background-color:#F0F0FF; }
 
-.asideNewsBlockListElementDate{ padding:5px; font-size:14px; line-height:18px; font-family:roboto-light; }
+.asideNewsBlockListElementDate{ padding:5px; font-size:14px; line-height:18px; }
 
-.asideNewsBlockListElementTitle{ padding:0 4px 16px 4px; font-size:16px; line-height:20px; font-family:roboto-regular; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.asideNewsBlockListElementTitle{ padding:0 4px 16px 4px; font-size:16px; line-height:20px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-.asideNewsBlockListElementResume{ padding:0 5px 5px 5px; font-size:14px; font-family:roboto-italic; }
+.asideNewsBlockListElementResume{ padding:0 5px 5px 5px; font-size:14px; }
 
-.asideNewsBlockListEmpty{ font-family:roboto-light; font-size:16px; text-align:center; padding:10px; margin:20px 0 20px 0; }
+.asideNewsBlockListEmpty{ font-size:16px; text-align:center; padding:10px; margin:20px 0 20px 0; }
 
-.asideNewsBlockListLoad{ text-align:center; font-family:roboto-regular; font-size:16px; border:1px solid #CCC; border-radius:4px; cursor:pointer; padding:5px; margin:0 10px 10px 10px; width:calc(100% - 20px); box-sizing:border-box; }
+.asideNewsBlockListLoad{ text-align:center; font-size:16px; border:1px solid #CCC; border-radius:4px; cursor:pointer; padding:5px; margin:0 10px 10px 10px; width:calc(100% - 20px); box-sizing:border-box; }
 
 .asideNewsBlockListLoad:hover{ color:#90BB2C; }
 
@@ -208,43 +172,41 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .mainNewsBlockArticle{ margin:0 20px 0 0; }
 
-.mainNewsBlockArticleButton{ border:1px solid #CCC; text-decoration:none; cursor:pointer; width:200px; margin:5px 0 5px 0; padding:5px; box-sizing:border-box; text-align:center; color:#6B7279; font-family:roboto-regular; font-size:16px; line-height:16px; display:none; border-radius:4px; }
+.mainNewsBlockArticleButton{ border:1px solid #CCC; text-decoration:none; cursor:pointer; width:200px; margin:5px 0 5px 0; padding:5px; box-sizing:border-box; text-align:center; color:#6B7279; font-size:16px; line-height:16px; display:none; border-radius:4px; }
 
 .mainNewsBlockArticleButton:hover{ color:#90BB2C; }
 
-.mainNewsBlockArticleTitle{ font-size:32px; padding:20px 0 20px 0; font-family:roboto-regular; }
+.mainNewsBlockArticleTitle{ font-size:32px; padding:20px 0 20px 0; }
 
-.mainNewsBlockArticleDate{ text-align:right; color:#6B7279; font-family:roboto-light; font-size:20px; padding:20px 0 20px 0; }
+.mainNewsBlockArticleDate{ text-align:right; color:#6B7279; font-size:20px; padding:20px 0 20px 0; }
 
-.mainNewsBlockArticleContent{ font-family:roboto-light; font-size:18px; line-height:32px; text-align:justify; padding:20px 0 20px 0; color:#000000; }
+.mainNewsBlockArticleContent{ font-size:18px; line-height:32px; text-align:justify; padding:20px 0 20px 0; color:#000000; }
 
-.mainNewsBlockArticleAuthor{ color:#6B7279; font-size:18px; font-family:roboto-italic; text-align:right; padding:20px 0 20px 0; }
+.mainNewsBlockArticleAuthor{ color:#6B7279; font-size:18px; text-align:right; padding:20px 0 20px 0; }
 
 .mainNewsBlockActions{ margin:20px 0 20px calc(100% - 200px); padding:20px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); border-radius:2px; }
 
-.mainNewsBlockActionsDisabled{ width:100%; border:1px solid #CCC; border-radius:4px; padding:5px; font-family:roboto-regular; font-size:16px; line-height:16px; color:#CCC; background-color:#FFFFFF; }
+.mainNewsBlockActionsDisabled{ width:100%; border:1px solid #CCC; border-radius:4px; padding:5px; font-size:16px; line-height:16px; color:#CCC; background-color:#FFFFFF; }
 
-
-.mainNewsBlockEmpty{  }
 
 .mainNewsBlockEmptyIcon{ font-size:8em; text-align:center; color:#90BB2C; }
 
-.mainNewsBlockEmptyMessage{ font-size:32px; text-align:center; font-family:roboto-regular; padding:20px; }
+.mainNewsBlockEmptyMessage{ font-size:32px; text-align:center; padding:20px; }
 
 
 .newsManagementBlock{ box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); border-radius:2px; }
 
-.newsManagementBlockTitle{ color:#444; border-bottom:1px solid #D0D0D0; padding:20px; font-size:20px; font-family:roboto-regular; }
+.newsManagementBlockTitle{ color:#444; border-bottom:1px solid #D0D0D0; padding:20px; font-size:20px; }
 
 .newsManagementBlockContent{ min-height:380px; padding:10px; }
 
-.newsManagementBlockContentButton{ margin:10px 10px 10px calc(100% - 160px); width:150px; display:block; text-align:center; font-size:16px; line-height:16px; font-family:roboto-regular; border:1px solid #CCC; border-radius:2px; padding:5px; text-decoration:none; cursor:pointer; color:#444; }
+.newsManagementBlockContentButton{ margin:10px 10px 10px calc(100% - 160px); width:150px; display:block; text-align:center; font-size:16px; line-height:16px; border:1px solid #CCC; border-radius:2px; padding:5px; text-decoration:none; cursor:pointer; color:#444; }
 
 .newsManagementBlockContentButton:hover{ color:#90BB2C; }
 
-.newsManagementBlockContentMessage{ font-size:14px; font-family:roboto-light; }
+.newsManagementBlockContentMessage{ font-size:14px; }
 
-.newsManagementBlockContentButtonDisabled{ margin:10px 10px 10px calc(100% - 160px); width:150px; display:block; text-align:center; font-size:16px; line-height:16px; font-family:roboto-regular; border:1px solid #CCC; border-radius:2px; padding:5px; text-decoration:none; color:#CCC; }
+.newsManagementBlockContentButtonDisabled{ margin:10px 10px 10px calc(100% - 160px); width:150px; display:block; text-align:center; font-size:16px; line-height:16px; border:1px solid #CCC; border-radius:2px; padding:5px; text-decoration:none; color:#CCC; }
 
 /****************************************************************************************************/
 /* FOOTER */
@@ -252,9 +214,9 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); }
 
 .footerSection{ height:160px; box-sizing:border-box; background-color:#242729; color:#6B7279; padding:25px 10px 25px 10px; box-sizing:border-box; }
 
-.footerTitle{ color:#FFFFFF; font-family:roboto-regular; font-size:20px; padding:10px; }
+.footerTitle{ color:#FFFFFF; font-size:20px; padding:10px; }
 
-.footerContent{ color:#6B7279; font-size:16px; font-family:roboto-light; padding:10px; line-height:20px; }
+.footerContent{ color:#6B7279; font-size:16px; padding:10px; line-height:20px; }
 
 .footerAddress{ display:inline-block; vertical-align:top; width:400px; }
 

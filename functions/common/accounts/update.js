@@ -3,7 +3,6 @@
 const constants           = require(`${__root}/functions/constants`);
 const encryption          = require(`${__root}/functions/encryption`);
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
-const commonEmailSend     = require(`${__root}/functions/common/email/send`);
 const commonAccountsGet   = require(`${__root}/functions/common/accounts/get`);
 
 /****************************************************************************************************/

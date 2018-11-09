@@ -13,19 +13,11 @@
     <div class='storageMainBlock'>
       <% include ../includes/admin/navigation.ejs %>
       <div class="rightsBlock">
-        <div class="rightsBlockLevel"><%= strings.storage.admin.home.myLevel %> <%= storageAdminAccountLevel %></div>
-        <div class="rightsBlockContainer">
-          <div class="rightsBlockInfo"><%= strings.storage.admin.home.rightsInfo %> :</div>
-          <ul class="rightsBlockList">
-            <% for(var right in storageAdminRights[storageAdminAccountLevel]){ %>
-              <% if(storageAdminRights[storageAdminAccountLevel][right]){ %>
-                <li class="rightsBlockListEnabled"><%= strings.storage.admin.home.rightsLabels[right] %></li>
-              <% } else{ %>
-                <li class="rightsBlockListDisabled"><%= strings.storage.admin.home.rightsLabels[right] %></li>
-              <% } %>
-            <% } %>
-          </ul>
-        </div>
+        <% if(isAdmin){ %>
+          <div class="rightsBlockEnabled"><%= strings.storage.admin.home.isAdmin %></div>
+        <% } else{ %>
+          <div class="rightsBlockDisabled"><%= strings.storage.admin.home.isNotAdmin %></div>
+        <% } %>
       </div>
     </div>
     <script src='/js/jQuery.js'></script>

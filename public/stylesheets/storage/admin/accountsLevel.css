@@ -2,85 +2,49 @@
 
 .accountsLevelSection{ margin:20px 0 20px 0; }
 
-.accountsLevelSectionSearch{ width:100%; margin:20px 0 20px 0; max-width:300px; border:1px solid #CCC; border-radius:4px; font-size:1em; font-family:roboto-regular; padding:5px; box-sizing:border-box; }
+.accountsLevelSectionSearch{ width:100%; margin:20px 0 20px 0; max-width:300px; border:1px solid #CCC; border-radius:4px; font-size:1em; padding:5px; box-sizing:border-box; }
 
-.accountsLevelSectionTable{ width:100%; margin:10px 0 10px 0; box-shadow:0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.2); max-height:10px; overflow-y:scroll; padding:0; border-spacing:0; border-collapse:collapse; max-width:1000px; }
+.accountsLevelSectionInformation{ max-width:1000px; text-align:justify; }
 
-.accountsLevelSectionTableRow{ border-bottom:1px solid #CCC; }
 
-.accountsLevelSectionTableRow.header{ background-color:#428BCA; color:#FFFFFF; text-align:left; }
+.accountsList{ box-sizing:border-box; padding:10px; list-style:none; margin:40px 0 40px 0; max-width:600px; border-radius:2px; box-shadow:0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.2); }
 
-.accountsLevelSectionTableColumn{ text-overflow:ellipsis; overflow:hidden; white-space:nowrap; text-align:center; padding:10px; font-family:roboto-light; }
+.accountsListHeader{ font-weight:bold; font-size:1.1em; border-bottom:1px solid rgba(0,0,0,0.24); padding-bottom:10px; margin:10px 10px 20px 10px; display:flex; flex-direction:row; align-items:top; justify-content:space-between; }
 
-.accountsLevelSectionTableColumn.emailColumn{ width:25%; }
+.accountsListHeaderEmail{ margin-right:10px; }
 
-.accountsLevelSectionTableColumn.lastnameColumn{ width:20%; }
+.accountsListHeaderAdmin{ width:150px; text-align:center; }
 
-.accountsLevelSectionTableColumn.firstnameColumn{ width:20%; }
+.accountBlock{ margin:10px 10px 20px 10px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
 
-.accountsLevelSectionTableColumn.levelColumn{ width:20%; }
+.accountBlockEmail{ word-break:break-all; margin-right:10px; }
 
-.accountsLevelSectionTableColumn.buttonColumn{ width:15%; }
+.accountBlockInput{ width:150px; }
 
-.accountsLevelSectionTableColumn.buttonColumn .modifyButton{ text-decoration:underline; cursor:pointer; width:max-content; margin:0 auto 0 auto; display:block; color:rgba(0,0,0,0.65); }
 
-.accountsLevelSectionTableColumn.buttonColumn .modifyButton:hover{ color:#428BCA; }
+.accountBlockInput input{ position:absolute; left:-9999px; }
 
-/****************************************************************************************************/
+.accountBlockInput input + label{ transition-duration:0.5s; -webkit-transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; box-shadow:0 1px 3px 0 rgba(0,0,0,.2), 0 1px 2px 0 rgba(0,0,0,.4); position:relative; color:#FFFFFF; cursor:pointer; width:100%; background-color:#D9534F; display:block; text-align:center; padding:8px 16px 8px 16px; border-radius:20px; box-sizing:border-box; }
 
-.accountDataBlock{ margin:40px auto 40px 0; border:1px solid #CCC; border-radius:4px; max-width:500px; width:100%; }
+.accountBlockInput input:checked + label{ transition-duration:0.5s; -webkit-transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; box-shadow:0 1px 3px 0 rgba(0,0,0,.2), 0 1px 2px 0 rgba(0,0,0,.4); position:relative; color:#FFFFFF; cursor:pointer; width:100%; background-color:#428BCA; display:block; text-align:center; padding:8px 16px 8px 16px; border-radius:20px; box-sizing:border-box; }
 
-.accountDataBlockTitle{ font-size:1.2em; font-family:roboto-regular; padding:10px; border-bottom:1px solid #CCC; }
+.accountBlockInput input + label::before{ transition-duration:0.5s; -webkit-transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; content:''; width:24px; border-radius:100%; box-sizing:border-box; border:3px solid #FFF; position:absolute; top:5px; left:5px; bottom:5px; }
 
-.accountDataBlockElement{ font-family:roboto-regular; font-size:1em; margin:10px 10px 10px 10px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
-
-.accountDataBlockInformation{ font-family:roboto-regular; font-size:1em; margin:10px; }
-
-.accountDataBlockSelect{ width:calc(100% - 40px); margin:20px; max-width:150px; border:1px solid #CCC; border-radius:4px; padding:5px; }
-
-.accountDataBlockRightsList{ list-style:none; padding:10px; margin:0; display:none; }
-
-.accountDataBlockRightsListEnabled, .accountDataBlockRightsListDisabled{ font-family:roboto-regular; font-size:1em; margin:10px 0 10px 0; }
-
-.accountDataBlockRightsListEnabled{ color:#428BCA; }
-
-.accountDataBlockRightsListDisabled{ opacity:0.7; }
-
-.accountDataBlockLegends{ margin:10px; }
-
-.accountDataBlockLegendsElement{ margin:10px 0 0 0; }
-
-.accountDataBlockLegendsElementEnabled, .accountDataBlockLegendsElementDisabled{ display:inline-block; vertical-align:top; border-radius:2px; width:50px; height:24px; }
-
-.accountDataBlockLegendsElementEnabled{ background-color:#428BCA; }
-
-.accountDataBlockLegendsElementDisabled{ background-color:rgba(0,0,0,0.65); opacity:0.7; }
-
-.accountDataBlockLegendsElementValue{ font-family:roboto-regular; font-size:1em; line-height:1em; padding:4px 0 4px 0; display:inline-block; vertical-align:top; width:calc(100% - 60px); margin:0 0 0 10px; }
-
-.accountDataBlockSave{ border:none; border-radius:4px; background-color:#428BCA; color:#FFFFFF; cursor:pointer; padding:10px; width:150px; margin:0 0 20px 0; font-size:1em; font-family:roboto-regular; }
-
-.accountDataBlockSave:hover{ color:#000000; background-color:#317AB9; }
+.accountBlockInput input:checked + label::before{ transition-duration:0.5s; -webkit-transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; content:''; width:24px; border-radius:100%; box-sizing:border-box; border:3px solid #FFF; background-color:#FFFFFF; position:absolute; top:5px; right:5px; left:calc(100% - 29px); bottom:5px; }
 
 /****************************************************************************************************/
 
-.accountAdminLevelConfirmationBackground{ z-index:290; position:fixed; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.8; }
+.accountAdminStatusPopupMessage{ padding:20px; font-size:0.9em; font-weight:bold; }
 
-.accountAdminLevelConfirmationPopup{ font-family:roboto-regular; z-index:300; top:80px; width:500px; margin-bottom:80px; right:calc(50% - 250px); max-width:500px; max-height:calc(100vh - 80px); position:fixed; background-color:#FFFFFF; border-radius:4px; }
+.accountAdminStatusPopupButtons{ display:flex; flex-direction:row; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
 
-.accountAdminLevelConfirmationPopupTitle{ border-radius:4px 4px 0 0; background-color:#428BCA; color:#FFFFFF; font-size:1.2em; padding:10px; }
+.accountAdminStatusPopupConfirm{ margin:0 20px 20px 0; border:none; border-radius:4px; cursor:pointer; color:#FFFFFF; padding:8px 16px 8px 16px; background-color:#428BCA; }
 
-.accountAdminLevelConfirmationPopupMessage{ font-size:1em; margin:10px; }
+.accountAdminStatusPopupCancel{ margin:0 20px 20px 0; border:none; border-radius:4px; cursor:pointer; color:#FFFFFF; padding:8px 16px 8px 16px; background-color:#D9534F; }
 
-.accountAdminLevelConfirmationPopupButtons{ display:flex; flex-direction:row; }
+.accountAdminStatusPopupConfirm:hover{ background-color:#2069A8; }
 
-.accountAdminLevelConfirmationPopupConfirm{ margin:10px 10px 10px auto; width:max-content; padding:10px; cursor:pointer; background-color:#FFFFFF; color:#5CB85C; font-size:1.2em; box-sizing:border-box; }
-
-.accountAdminLevelConfirmationPopupConfirm:hover{ text-decoration:underline; }
-
-.accountAdminLevelConfirmationPopupCancel{ margin:10px auto 10px 10px; width:max-content; padding:10px; cursor:pointer; background-color:#FFFFFF; color:#D9534F; font-size:1.2em; box-sizing:border-box; }
-
-.accountAdminLevelConfirmationPopupCancel:hover{ text-decoration:underline; }
+.accountAdminStatusPopupCancel:hover{ background-color:#B7312D; }
 
 /****************************************************************************************************/
 
@@ -89,8 +53,7 @@
   .accountsLevelSectionTableColumn.emailColumn{ width:70%; }
   .accountsLevelSectionTableColumn.lastnameColumn{ display:none; }
   .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
-  .accountsLevelSectionTableColumn.levelColumn{ display:none; }
-  .accountsLevelSectionTableColumn.buttonColumn{ width:30%; }
+  .accountsLevelSectionTableColumn.adminColumn{ width:30%; }
 
   .accountAdminLevelConfirmationPopup{ top:40px; right:20px; left:20px; margin-bottom:40px; width:calc(100% - 40px); }
 }
@@ -100,8 +63,7 @@
   .accountsLevelSectionTableColumn.emailColumn{ width:70%; }
   .accountsLevelSectionTableColumn.lastnameColumn{ display:none; }
   .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
-  .accountsLevelSectionTableColumn.levelColumn{ display:none; }
-  .accountsLevelSectionTableColumn.buttonColumn{ width:30%; }
+  .accountsLevelSectionTableColumn.adminColumn{ width:30%; }
 
   .accountAdminLevelConfirmationPopup{ top:40px; right:20px; left:20px; margin-bottom:40px; width:calc(100% - 40px); }
 }
@@ -111,37 +73,33 @@
   .accountsLevelSectionTableColumn.emailColumn{ width:70%; }
   .accountsLevelSectionTableColumn.lastnameColumn{ display:none; }
   .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
-  .accountsLevelSectionTableColumn.levelColumn{ display:none; }
-  .accountsLevelSectionTableColumn.buttonColumn{ width:30%; }
+  .accountsLevelSectionTableColumn.adminColumn{ width:30%; }
 
   .accountAdminLevelConfirmationPopup{ top:40px; right:20px; left:20px; margin-bottom:40px; width:calc(100% - 40px); }
 }
 
 @media (min-width: 640px) and (max-width: 779.9px)
 {
-  .accountsLevelSectionTableColumn.emailColumn{ width:50%; }
-  .accountsLevelSectionTableColumn.lastnameColumn{ display:none; }
+  .accountsLevelSectionTableColumn.emailColumn{ width:45%; }
+  .accountsLevelSectionTableColumn.lastnameColumn{ width:35%; }
   .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
-  .accountsLevelSectionTableColumn.levelColumn{ width:30%; }
-  .accountsLevelSectionTableColumn.buttonColumn{ width:20%; }
+  .accountsLevelSectionTableColumn.adminColumn{ width:20%; }
 }
 
 @media (min-width: 780px) and (max-width: 959.9px)
 {
-  .accountsLevelSectionTableColumn.emailColumn{ width:30%; }
-  .accountsLevelSectionTableColumn.lastnameColumn{ width:25%; }
+  .accountsLevelSectionTableColumn.emailColumn{ width:45%; }
+  .accountsLevelSectionTableColumn.lastnameColumn{ width:35%; }
   .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
-  .accountsLevelSectionTableColumn.levelColumn{ width:25%; }
-  .accountsLevelSectionTableColumn.buttonColumn{ width:20%; }
+  .accountsLevelSectionTableColumn.adminColumn{ width:20%; }
 }
 
 @media (min-width: 960px) and (max-width: 1279.9px)
 {
   .accountsLevelSectionTableColumn.emailColumn{ width:30%; }
   .accountsLevelSectionTableColumn.lastnameColumn{ width:25%; }
-  .accountsLevelSectionTableColumn.firstnameColumn{ display:none; }
-  .accountsLevelSectionTableColumn.levelColumn{ width:25%; }
-  .accountsLevelSectionTableColumn.buttonColumn{ width:20%; }
+  .accountsLevelSectionTableColumn.firstnameColumn{ width:25%; }
+  .accountsLevelSectionTableColumn.adminColumn{ width:20%; }
 }
 
 @media (min-width: 1280px) and (max-width: 1679.9px)

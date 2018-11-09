@@ -2,12 +2,9 @@
 
 const express               = require('express');
 const jwt                   = require('jsonwebtoken');
-const params                = require(`${__root}/json/config`);
 const errors                = require(`${__root}/json/errors`);
 const success               = require(`${__root}/json/success`);
 const constants             = require(`${__root}/functions/constants`);
-const accountsReset         = require(`${__root}/functions/accounts/reset`);
-const accountsCreate        = require(`${__root}/functions/accounts/create`);
 const commonAccountsCheck   = require(`${__root}/functions/common/accounts/check`);
 
 const commonTokenGet        = require(`${__root}/functions/common/token/get`);
@@ -60,7 +57,7 @@ router.post('/', (req, res) =>
   
   res.status(406).send({ result: false, message: errors[10009] }) :
 
-  accountsCreate.createAccount(req.body, req.app.get('mysqlConnector'), req.app.get('transporter'), req.app.get('params'), (error) =>
+  accountsCreate.createAccount(req.body, req.app.get('databaseConnectionPool'), req.app.get('transporter'), req.app.get('params'), (error) =>
   {
     error == null ? 
     res.status(201).send({ result: true, message: success[constants.ACCOUNT_SUCCESSFULLY_CREATED] }) : 
@@ -81,7 +78,7 @@ router.put('/reset-password', (req, res) =>
 {
   req.body.email == undefined ? res.status(406).send({ result: false, message: errors[10009] }) :
 
-  accountsReset.resetPassword(req.body.email, req.app.get('mysqlConnector'), req.app.get('transporter'), req.app.get('params'), (error) =>
+  accountsReset.resetPassword(req.body.email, req.app.get('databaseConnectionPool'), req.app.get('transporter'), req.app.get('params'), (error) =>
   {
     error == null ?
     res.status(200).send({ result: true, message: success[constants.NEW_PASSWORD_SENT] }) :
@@ -93,9 +90,7 @@ router.put('/reset-password', (req, res) =>
 
 router.get('/afk-time', (req, res) =>
 {
-  req.session.account == undefined ? 
-  res.status(401).send({ result: false, message: errors[constants.AUTHENTICATION_REQUIRED] }) : 
-  res.status(200).send({ result: true, time: params.inactivity_timeout });
+  
 });
 
 /****************************************************************************************************/

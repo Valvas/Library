@@ -26,14 +26,17 @@ function displayInfo(message, detail, messageTag)
 
   if(messageTag != null) block.setAttribute('tag', messageTag);
 
-  block.innerHTML += `<div class="informationBlockMessageContent">${message}</div>`;
+  detail == null 
+  ? block.innerHTML += `<div class="informationBlockMessageContent">${message}</div>`
+  : block.innerHTML += `<div class="informationBlockMessageContent"><div>${message}</div><div class="informationBlockMessageDetail">${detail}</div></div>`;
+  
   block.innerHTML += `<button onclick="closeDisplayedMessage(this.parentNode)" class="informationBlockMessageClose">FERMER</div>`;
 
   $(block).hide().appendTo(document.getElementById('informationBlock'));
 
   $(block).slideDown(250, () =>
   {
-    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 15000);
+    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 8000);
   });
 }
 
@@ -51,7 +54,11 @@ function displayError(message, detail, messageTag)
 
   if(messageTag != null) block.setAttribute('tag', messageTag);
 
-  block.innerHTML += `<div class="informationBlockMessageContent">${message}</div>`;
+  detail == null 
+  ? block.innerHTML += `<div class="informationBlockMessageContent">${message}</div>`
+  : block.innerHTML += `<div class="informationBlockMessageContent"><div>${message}</div><div class="informationBlockMessageDetail">${detail}</div></div>`;
+
+
   block.innerHTML += `<button onclick="closeDisplayedMessage(this.parentNode)" class="informationBlockMessageClose">FERMER</div>`;
 
   $(block).hide().appendTo(document.getElementById('informationBlock'));
@@ -83,7 +90,7 @@ function displaySuccess(message, detail, messageTag)
 
   $(block).slideDown(250, () =>
   {
-    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 15000);
+    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 8000);
   });
 }
 
@@ -126,6 +133,38 @@ function removeLoader(loaderToRemove, callback)
 function closeDisplayedMessage(block)
 {
   $(block).slideUp(250, () =>{ block.remove(); });
+}
+
+/****************************************************************************************************/
+
+function displayCriticalErrorMessage(errorTitle, errorMessage, errorDetail, errorHelp, errorClose)
+{
+  createBackground('criticalErrorMessageBackground');
+
+  var criticalPopup = document.createElement('div');
+
+  criticalPopup.setAttribute('class', 'criticalPopup');
+
+  criticalPopup.innerHTML += `<div class="criticalPopupTitle">${errorTitle.toUpperCase()}</div>`;
+  criticalPopup.innerHTML += `<div class="criticalPopupMessage">${errorMessage.charAt(0).toUpperCase()}${errorMessage.slice(1)}</div>`;
+  if(errorDetail != null) criticalPopup.innerHTML += `<div class="criticalPopupDetail">${errorDetail.charAt(0).toUpperCase()}${errorDetail.slice(1)}</div>`;
+  if(errorHelp != null) criticalPopup.innerHTML += `<div class="criticalPopupHelp">${errorHelp.charAt(0).toUpperCase()}${errorHelp.slice(1)}</div>`;
+
+  var criticalPopupClose = document.createElement('button');
+
+  criticalPopupClose.setAttribute('class', 'criticalPopupClose');
+
+  criticalPopupClose.innerText = errorClose;
+
+  criticalPopupClose.addEventListener('click', () =>
+  {
+    criticalPopup.remove();
+    removeBackground('criticalErrorMessageBackground');
+  });
+
+  criticalPopup.appendChild(criticalPopupClose);
+
+  document.body.appendChild(criticalPopup);
 }
 
 /****************************************************************************************************/

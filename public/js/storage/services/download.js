@@ -1,15 +1,23 @@
 /****************************************************************************************************/
 
-if(document.getElementById('downloadFilesButton')) document.getElementById('downloadFilesButton').addEventListener('click', downloadSelection);
-
-/****************************************************************************************************/
-
 function downloadSelection(event)
 {
-  var elements = document.getElementById('filesBlock').children;
+  if(document.getElementById('currentFolder') == null) return;
+
+  const currentFolderElements = document.getElementById('currentFolder').children;
 
   var filesToDownload = [];
 
+  for(var x = 0; x < currentFolderElements.length; x++)
+  {
+    if(currentFolderElements[x].children[0].tagName === 'INPUT')
+    {
+      if(currentFolderElements[x].children[0].checked) filesToDownload.push(currentFolderElements[x].getAttribute('name'));
+    }
+  }
+
+  console.log(filesToDownload);
+/*
   for(var x = 0; x < elements.length; x++)
   {
     if(elements[x].hasAttribute('tag') && elements[x].children[2].checked) filesToDownload.push({ uuid: elements[x].getAttribute('id'), name: elements[x].innerText.slice(0, -1) });
@@ -124,7 +132,7 @@ function downloadSelection(event)
 
       browseFilesToDownload(filesToDownload, 0, strings);
     });
-  }
+  }*/
 }
 
 /****************************************************************************************************/

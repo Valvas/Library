@@ -1,15 +1,12 @@
 'use strict'
 
 const constants           = require(`${__root}/functions/constants`);
-const commonAccountsGet   = require(`${__root}/functions/common/accounts/get`);
-
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
-
-const storageAppServicesRights = module.exports = {};
+const storageAppAccessGet = require(`${__root}/functions/storage/access/get`);
 
 /****************************************************************************************************/
 
-storageAppServicesRights.getRightsTowardsServices = (accountUuid, databaseConnection, params, callback) =>
+function getRightsTowardsAllServices(accountUuid, databaseConnection, params, callback)
 {
   if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
   if(accountUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
@@ -18,9 +15,9 @@ storageAppServicesRights.getRightsTowardsServices = (accountUuid, databaseConnec
   databaseManager.selectQuery(
   {
     databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.rights,
+    tableName: params.database.storage.tables.accountServiceLevel,
     args: [ '*' ],
-    where: { operator: '=', key: 'account', value: accountUuid }
+    where: { operator: '=', key: 'account_uuid', value: accountUuid }
 
   }, databaseConnection, (error, rights) =>
   {
@@ -30,28 +27,18 @@ storageAppServicesRights.getRightsTowardsServices = (accountUuid, databaseConnec
 
     var rightsObject = {};
 
-    var browseRights = () =>
+    for(var x = 0; x < rights.length; x++)
     {
-      rightsObject[rights[x].service] = {};
-      rightsObject[rights[x].service].remove      = (rights[x].remove_files == 1);
-      rightsObject[rights[x].service].upload      = (rights[x].upload_files == 1);
-      rightsObject[rights[x].service].comment     = (rights[x].post_comments == 1);
-      rightsObject[rights[x].service].download    = (rights[x].download_files == 1);
-
-      if(rights[x += 1] == undefined) return callback(null, rightsObject);
-      
-      browseRights();
+      rightsObject[rights[x].service_uuid] = rights[x].level;
     }
 
-    if(rights.length == 0) return callback(null, {});
-    
-    browseRights();
+    return callback(null, rightsObject);
   });
 }
 
 /****************************************************************************************************/
 
-storageAppServicesRights.getRightsTowardsService = (serviceUuid, accountUuid, databaseConnection, params, callback) =>
+function getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, params, callback)
 {
   if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
   if(accountUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
@@ -61,81 +48,157 @@ storageAppServicesRights.getRightsTowardsService = (serviceUuid, accountUuid, da
   databaseManager.selectQuery(
   {
     databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.rights,
+    tableName: params.database.storage.tables.serviceRights,
     args: [ '*' ],
-    where:
-    {
-      condition: 'AND',
-      0: { operator: '=', key: 'account', value: accountUuid },
-      1: { operator: '=', key: 'service', value: serviceUuid }
-    }
+    where: { condition: 'AND', 0: { operator: '=', key: 'account_uuid', value: accountUuid }, 1: { operator: '=', key: 'service_uuid', value: serviceUuid } }
+
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error.message });
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    if(result.length == 0) return callback({ status: 406, code: constants.UNAUTHORIZED_TO_ACCESS_SERVICE, detail: null });
+    var serviceRights = {};
 
-    var rightsObject = {};
+    serviceRights.isAdmin       = result.length > 0 ? result[0].is_admin : 0;
+    serviceRights.accessService = result.length > 0 ? result[0].access_service : 0;
+    serviceRights.postComments  = result.length > 0 ? result[0].post_comments : 0;
+    serviceRights.uploadFiles   = result.length > 0 ? result[0].upload_files : 0;
+    serviceRights.createFolders = result.length > 0 ? result[0].create_folders : 0;
+    serviceRights.downloadFiles = result.length > 0 ? result[0].download_files : 0;
+    serviceRights.moveFiles     = result.length > 0 ? result[0].move_files : 0;
+    serviceRights.renameFolders = result.length > 0 ? result[0].rename_folders : 0;
+    serviceRights.removeFolders = result.length > 0 ? result[0].remove_folders : 0;
+    serviceRights.restoreFiles  = result.length > 0 ? result[0].restore_files : 0;
+    serviceRights.removeFiles   = result.length > 0 ? result[0].remove_files : 0;
 
-    rightsObject.service          = result[0].service == 1;
-    rightsObject.removeFiles      = result[0].remove_files == 1;
-    rightsObject.uploadFiles      = result[0].upload_files == 1;
-    rightsObject.commentFiles     = result[0].post_comments == 1;
-    rightsObject.downloadFiles    = result[0].download_files == 1;
-    rightsObject.createFolders    = result[0].create_folders == 1;
-    rightsObject.renameFolders    = result[0].rename_folders == 1;
-    rightsObject.removeFolders    = result[0].remove_folders == 1;
-    rightsObject.restoreFiles     = result[0].restore_files == 1;
+    if(result.length > 0) return callback(null, serviceRights);
 
-    return callback(null, rightsObject);
+    databaseManager.insertQuery(
+    {
+      databaseName: params.database.storage.label,
+      tableName: params.database.storage.tables.serviceRights,
+      args: { is_admin: 0, service_uuid: serviceUuid, account_uuid: accountUuid, access_service : 0, post_comments : 0, upload_files : 0, create_folders : 0, download_files : 0, move_files : 0, rename_folders : 0, remove_folders : 0, restore_files : 0, remove_files : 0 }
+
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+      return callback(null, serviceRights);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-storageAppServicesRights.checkIfAccountHasRightsOnService = (accountId, serviceUuid, databaseConnection, params, callback) =>
+/** Rights on a service are managed by levels. Each level gives defined rights on the service. An acco
+  * unt must have a right level defined for all services. The default level is 0, it gives no rights o
+  * n the service. This function is designed to check if an account has a right level defined for all
+  * services and must create an entry in the database if not.
+*/
+
+function checkAccountRightsOnAllServices(accountUuid, databaseConnection, params, callback)
 {
-  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
-  if(accountId == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountId' });
-  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(accountUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
   databaseManager.selectQuery(
   {
     databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.rights,
+    tableName: params.database.storage.tables.services,
     args: [ '*' ],
-    where: { condition: 'AND', 0: { operator: '=', key: 'account', value: accountId }, 1: { operator: '=', key: 'service', value: serviceUuid } }
-    
+    where: {  }
+
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error.message });
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    if(result.length === 0) return callback(null, false);
+    var index = 0;
 
-    return callback(null, true, result[0]);
-  });
-}
-
-/****************************************************************************************************/
-
-storageAppServicesRights.isAuthorizedToUploadFiles = (serviceID, accountID, databaseConnector, callback) =>
-{
-  serviceID           == undefined ||
-  accountID           == undefined ||
-  databaseConnector   == undefined ?
-
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST }) :
-
-  storageAppServicesRights.getRightsTowardsService(serviceID, accountID, databaseConnector, (error, rights) =>
-  {
-    if(error != null) callback(error);
-
-    else
+    var servicesBrowser = () =>
     {
-      rights.upload_files == 0 ? callback(null, false) : callback(null, true);
+      getRightsTowardsService(result[index].uuid, accountUuid, databaseConnection, params, (error) =>
+      {
+        if(error != null) return callback(error);
+
+        if(result[index += 1] == undefined) return callback(null);
+
+        servicesBrowser();
+      });
     }
+
+    if(result.length === 0) return callback(null);
+
+    servicesBrowser();
+  });
+}
+
+/*****************************************************************************************************/
+
+/** Rights on a service are managed by levels. Each level gives defined rights on the service. An acco
+  * unt must have a right level defined for all services. The default level is 0, it gives no rights o
+  * n the service. This function is designed to check if all the accounts that have access to the appl
+  * ication have rights on the provided service.
+*/
+
+function checkAccountsRightsForProvidedService(serviceUuid, databaseConnection, params, callback)
+{
+  storageAppAccessGet.getAccountsThatHaveAccessToTheApp(databaseConnection, params, (error, accounts) =>
+  {
+    if(error != null) return callback(error);
+
+    if(accounts.length === 0) return callback(null);
+
+    var index = 0;
+
+    var accountsBrowser = () =>
+    {
+      getRightsTowardsService(serviceUuid, accounts[index], databaseConnection, params, (error) =>
+      {
+        if(error != null) return callback(error);
+
+        if(accounts[index += 1] == undefined) return callback(null);
+
+        accountsBrowser();
+      });
+    }
+
+    accountsBrowser();
   });
 }
 
 /****************************************************************************************************/
+
+function updateAccountRightsLevelOnService(accountUuid, serviceUuid, rightsLevel, databaseConnection, globalParameters, callback)
+{
+  if(accountUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(serviceUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(rightsLevel == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsLevel' });
+  if(globalParameters == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  databaseManager.updateQuery(
+  {
+    databaseName: params.database.storage.label,
+    tableName: params.database.storage.tables.accountServiceLevel,
+    args: { level: rightsLevel },
+    where: { condition: 'AND', 0: { operator: '=', key: 'account_uuid', value: accountUuid }, 1: { operator: '=', key: 'service_uuid', value: serviceUuid } }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    return callback(null);
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports =
+{
+  getRightsTowardsService: getRightsTowardsService,
+  getRightsTowardsAllServices: getRightsTowardsAllServices,
+  checkAccountRightsOnAllServices: checkAccountRightsOnAllServices,
+  updateAccountRightsLevelOnService: updateAccountRightsLevelOnService,
+  checkAccountsRightsForProvidedService: checkAccountsRightsForProvidedService
+}
+

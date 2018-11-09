@@ -1,16 +1,16 @@
-.serviceDetailBack{ display:block; width:max-content; font-size:20px; line-height:24px; font-family:barlow; margin:20px; color:#428BCA; }
+.serviceDetailBack{ display:block; width:max-content; font-size:20px; line-height:24px; margin:20px; color:#428BCA; }
 
 .serviceDetailBack:hover{ color:#2069A8; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
 .serviceDetailBlock{ max-width:600px; background-color:#FFFFFF; border:1px solid #D0D0D0; border-radius:4px; margin:20px; }
 
-.serviceDetailBlockTitle{ padding:20px; font-family:barlow; font-size:20px; line-height:24px; border-bottom:1px solid #D0D0D0; }
+.serviceDetailBlockTitle{ padding:20px; font-size:20px; line-height:24px; border-bottom:1px solid #D0D0D0; }
 
-.serviceDetailBlockKey{ font-family:barlow-italic; font-size:16px; line-height:24px; padding:10px 20px 0 20px; }
+.serviceDetailBlockKey{ font-size:16px; line-height:24px; padding:10px 20px 0 20px; }
 
 .serviceDetailBlockValue{ width:calc(100% - 40px); margin:0 20px 0 20px; }
 
-.serviceDetailBlockValueContent{ font-family:barlow; margin:10px 0 20px 0; width:calc(100% - 60px); border-bottom:1px solid #D0D0D0; display:inline-block; vertical-align:top; font-size:18px; line-height:24px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.serviceDetailBlockValueContent{ margin:10px 0 20px 0; width:calc(100% - 60px); border-bottom:1px solid #D0D0D0; display:inline-block; vertical-align:top; font-size:18px; line-height:24px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 .serviceDetailBlockValueLock{ display:inline-block; vertical-align:top; width:30px; text-align:center; margin:10px 15px 0 15px; color:#D9534F; font-size:1.25em; }
 
@@ -21,15 +21,15 @@
 
 .serviceDetailBlockExtensions{ max-width:600px; background-color:#FFFFFF; border:1px solid #D0D0D0; border-radius:4px; margin:20px; }
 
-.serviceDetailBlockExtensionsTitle{ padding:20px; font-family:barlow; font-size:20px; line-height:24px; border-bottom:1px solid #D0D0D0; margin:0 0 10px 0; }
+.serviceDetailBlockExtensionsTitle{ padding:20px; font-size:20px; line-height:24px; border-bottom:1px solid #D0D0D0; margin:0 0 10px 0; }
 
 .serviceDetailBlockExtensionsElement{ margin:10px 20px 10px 20px; display:inline-block; vertical-align:top; width:150px; }
 
 .serviceDetailBlockExtensionsElementCheckbox{ display:inline-block; vertical-align:top; width:20px; height:20px; margin:0; cursor:pointer; }
 
-.serviceDetailBlockExtensionsElementValue{ display:inline-block; vertical-align:top; width:calc(100% - 30px); margin:0 0 0 10px; font-size:1em; font-family:roboto-light; }
+.serviceDetailBlockExtensionsElementValue{ display:inline-block; vertical-align:top; width:calc(100% - 30px); margin:0 0 0 10px; font-size:1em; }
 
-.serviceDetailBlockExtensionsSave{ border:none; border-radius:4px; padding:4px 8px 4px 8px; margin:20px; width:250px; cursor:pointer; font-size:16px; font-family:raleway-light; color:#FFFFFF; background-color:#428BCA; }
+.serviceDetailBlockExtensionsSave{ border:none; border-radius:4px; padding:4px 8px 4px 8px; margin:20px; width:250px; cursor:pointer; font-size:16px; color:#FFFFFF; background-color:#428BCA; }
 
 .serviceDetailBlockExtensionsSave:hover{ color:#000000; background-color:#317AB9; }
 
@@ -38,7 +38,7 @@
 
 .serviceModificationPopup{ position:absolute; z-index:30; width:600px; top:80px; left:calc(50% - 300px); margin:0 0 40px 0; max-width:600px; background-color:#FFFFFF; border-radius:4px; }
 
-.serviceModificationPopupTitle{ font-family:barlow; line-height:24px; font-size:20px; border-bottom:1px solid #F0F0F0; padding:10px; }
+.serviceModificationPopupTitle{ line-height:24px; font-size:20px; border-bottom:1px solid #F0F0F0; padding:10px; }
 
 .serviceModificationPopupContent{ padding:10px; position:relative; }
 
@@ -46,37 +46,37 @@
 
 .serviceModificationPopupError{ padding:10px; }
 
-.serviceModificationPopupErrorMessage{ color:#D9534F; font-family:barlow; line-height:24px; font-size:16px; }
+.serviceModificationPopupErrorMessage{ color:#D9534F; line-height:24px; font-size:16px; }
 
-.serviceModificationPopupErrorClose{ border:none; border-radius:4px; background-color:#428BCA; color:#FFFFFF; font-family:barlow; line-height:24px; font-size:16px; padding:4px 0 4px 0; width:60px; margin:10px 10px 10px calc(100% - 70px); cursor:pointer; }
+.serviceModificationPopupErrorClose{ border:none; border-radius:4px; background-color:#428BCA; color:#FFFFFF; line-height:24px; font-size:16px; padding:4px 0 4px 0; width:60px; margin:10px 10px 10px calc(100% - 70px); cursor:pointer; }
 
 .serviceModificationPopupErrorClose:hover{ color:#000000; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
-.serviceModificationPopupErrorDetail{ color:#D0D0D0; font-family:barlow-italic; line-height:18px; font-size:14px; text-align:justify; }
+.serviceModificationPopupErrorDetail{ color:#D0D0D0; line-height:18px; font-size:14px; text-align:justify; }
 
 .serviceModificationPopupSuccess{ padding:10px; }
 
-.serviceModificationPopupSuccessMessage{ color:#5CB85C; font-family:barlow; line-height:24px; font-size:16px; }
+.serviceModificationPopupSuccessMessage{ color:#5CB85C; line-height:24px; font-size:16px; }
 
-.serviceModificationPopupSuccessClose{ border:none; border-radius:4px; background-color:#428BCA; color:#FFFFFF; font-family:barlow; line-height:24px; font-size:16px; padding:4px 0 4px 0; width:60px; margin:10px 10px 10px calc(100% - 70px); cursor:pointer; }
+.serviceModificationPopupSuccessClose{ border:none; border-radius:4px; background-color:#428BCA; color:#FFFFFF; line-height:24px; font-size:16px; padding:4px 0 4px 0; width:60px; margin:10px 10px 10px calc(100% - 70px); cursor:pointer; }
 
 .serviceModificationPopupSuccessClose:hover{ color:#000000; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
-.serviceModificationPopupSuccessDetail{ color:#D0D0D0; font-family:barlow-italic; line-height:18px; font-size:14px; text-align:justify; }
+.serviceModificationPopupSuccessDetail{ color:#D0D0D0; line-height:18px; font-size:14px; text-align:justify; }
 
-.serviceModificationPopupContentLabel{ font-family:barlow-italic; line-height:24px; font-size:16px; padding:10px 0 5px 0; }
+.serviceModificationPopupContentLabel{ line-height:24px; font-size:16px; padding:10px 0 5px 0; }
 
-.serviceModificationPopupContentValue{ border:1px solid #E0E0E0; box-sizing:border-box; font-family:barlow; font-size:16px; line-height:24px; border-radius:4px; padding:0 0 0 4px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; width:calc(100% - 36px); }
+.serviceModificationPopupContentValue{ border:1px solid #E0E0E0; box-sizing:border-box; font-size:16px; line-height:24px; border-radius:4px; padding:0 0 0 4px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; width:calc(100% - 36px); }
 
-.serviceModificationPopupContentInput{ display:inline-block; border:1px solid #E0E0E0; font-family:barlow; font-size:16px; line-height:24px; border-radius:4px; padding:0 0 0 4px; width:calc(100% - 42px); }
+.serviceModificationPopupContentInput{ display:inline-block; border:1px solid #E0E0E0; font-size:16px; line-height:24px; border-radius:4px; padding:0 0 0 4px; width:calc(100% - 42px); }
 
 .serviceModificationPopupContentInputFalse{ display:inline-block; vertical-align:top; font-size:1.5em; width:24px; height:26px; margin:0 0 0 4px; color:#D9534F; }
 
 .serviceModificationPopupContentInputTrue{ display:inline-block; vertical-align:top; font-size:2em; width:32px; height:32px; margin:0 0 0 4px; color:#5CB85C; }
 
-.serviceModificationPopupContentFileSizeInput{ position:relative; display:inline-block; border:1px solid #E0E0E0; font-family:barlow; font-size:16px; line-height:24px; border-radius:4px; padding:0 0 0 4px; width:calc(100% - 82px); }
+.serviceModificationPopupContentFileSizeInput{ position:relative; display:inline-block; border:1px solid #E0E0E0; font-size:16px; line-height:24px; border-radius:4px; padding:0 0 0 4px; width:calc(100% - 82px); }
 
-.serviceModificationPopupContentFileSizeSelect{ display:inline-block; vertical-align:top; border:1px solid #E0E0E0; font-family:barlow; font-size:16px; line-height:24px; border-radius:4px; padding:0; width:76px; height:26px; }
+.serviceModificationPopupContentFileSizeSelect{ display:inline-block; vertical-align:top; border:1px solid #E0E0E0; font-size:16px; line-height:24px; border-radius:4px; padding:0; width:76px; height:26px; }
 
 .serviceModificationPopupContentFileSizeConfirmActive{ color:#428BCA; font-size:2em; width:32px; height:32px; cursor:pointer; display:inline-block; margin:20px calc(50% - 42px) 10px 10px; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
@@ -88,21 +88,21 @@
 
 .serviceModificationPopupContentFileSizeCancel:hover{ color:#C8423E; }
 
-.serviceModificationPopupContentConfirmInactive{ border:none; border-radius:4px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#D0D0D0; padding:4px 0 4px 0; width:100px; margin:20px 0 10px calc(100% - 210px); -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+.serviceModificationPopupContentConfirmInactive{ border:none; border-radius:4px; font-size:16px; color:#FFFFFF; background-color:#D0D0D0; padding:4px 0 4px 0; width:100px; margin:20px 0 10px calc(100% - 210px); -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
-.serviceModificationPopupContentConfirmActive{ border:none; border-radius:4px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#428BCA; padding:4px 0 4px 0; width:100px; margin:20px 0 10px calc(100% - 210px); cursor:pointer; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
+.serviceModificationPopupContentConfirmActive{ border:none; border-radius:4px; font-size:16px; color:#FFFFFF; background-color:#428BCA; padding:4px 0 4px 0; width:100px; margin:20px 0 10px calc(100% - 210px); cursor:pointer; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
 .serviceModificationPopupContentConfirmActive:hover{ color:#000000; background-color:#317AB9; }
 
-.serviceModificationPopupContentCancel{ border:none; border-radius:4px; font-size:16px; font-family:barlow; color:#FFFFFF; background-color:#D9534F; padding:4px 0 4px 0; width:100px; cursor:pointer; margin:20px 0 10px 10px; }
+.serviceModificationPopupContentCancel{ border:none; border-radius:4px; font-size:16px; color:#FFFFFF; background-color:#D9534F; padding:4px 0 4px 0; width:100px; cursor:pointer; margin:20px 0 10px 10px; }
 
 .serviceModificationPopupContentCancel:hover{ color:#000000; background-color:#C8423E; -webkit-transition-duration:0.5s; transition-duration:0.5s; -moz-transition-duration:0.5s; -o-transition-duration:0.5s; }
 
-.serviceModificationPopupContentHint{ position:absolute; bottom:105px; left:120px; background:#428BCA; border-radius:4px; line-height:18px; font-size:14px; color:#FFFFFF; font-family:barlow-italic; width:max-content; padding:4px 8px 4px 8px; }
+.serviceModificationPopupContentHint{ position:absolute; bottom:105px; left:120px; background:#428BCA; border-radius:4px; line-height:18px; font-size:14px; color:#FFFFFF; width:max-content; padding:4px 8px 4px 8px; }
 
 .serviceModificationPopupContentHint:after{ content:''; position:absolute; bottom:0; left:10%; width:0; height:0; border:10px solid transparent; border-top-color:#428BCA; border-bottom:0; border-left:0; margin-left:-10px; margin-bottom:-10px; }
 
-.serviceModificationPopupContentFileSizeInputHelp{ position:absolute; bottom:110px; left:160px; background:#428BCA; border-radius:4px; line-height:18px; font-size:14px; color:#FFFFFF; font-family:barlow-italic; width:max-content; padding:4px 8px 4px 8px; }
+.serviceModificationPopupContentFileSizeInputHelp{ position:absolute; bottom:110px; left:160px; background:#428BCA; border-radius:4px; line-height:18px; font-size:14px; color:#FFFFFF; width:max-content; padding:4px 8px 4px 8px; }
 
 .serviceModificationPopupContentFileSizeInputHelp:after{ content:''; position:absolute; bottom:0; left:10%; width:0; height:0; border:10px solid transparent; border-top-color:#428BCA; border-bottom:0; border-left:0; margin-left:-10px; margin-bottom:-10px; }
 

@@ -2,7 +2,6 @@
 
 const fs                          = require('fs');
 const constants                   = require(`${__root}/functions/constants`);
-const accountsGet                 = require(`${__root}/functions/accounts/get`);
 const filesCreate                 = require(`${__root}/functions/files/create`);
 const databaseManager             = require(`${__root}/functions/database/MySQLv3`);
 const storageAppFilesGet          = require(`${__root}/functions/storage/files/get`);

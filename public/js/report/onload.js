@@ -1,1 +1,0 @@
-updateReportsList(1);

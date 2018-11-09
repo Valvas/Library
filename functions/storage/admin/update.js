@@ -6,49 +6,93 @@ const storageAppAdminGet    = require(`${__root}/functions/storage/admin/get`);
 const commonAccountsGet     = require(`${__root}/functions/common/accounts/get`);
 
 /****************************************************************************************************/
+// UPDATE ACCOUNT ADMIN STATUS
+/****************************************************************************************************/
 
-module.exports.updateAccountAdminLevel = (updatedAccountUuid, updatedAccountAdminLevel, updatingAccountAdminLevel, databaseConnection, params, callback) =>
+function updateAccountAdminStatus(updatedAccountUuid, updatedAccountAdminStatus, databaseConnection, globalParameters, callback)
 {
-  if(params == undefined)                     return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
+  if(globalParameters == undefined)           return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
   if(updatedAccountUuid == undefined)         return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'updatedAccountUuid' });
   if(databaseConnection == undefined)         return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
-  if(updatedAccountAdminLevel == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'updatedAccountAdminLevel' });
-  if(updatingAccountAdminLevel == undefined)  return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'updatingAccountAdminLevel' });
+  if(updatedAccountAdminStatus == undefined)  return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'updatedAccountAdminStatus' });
 
-  commonAccountsGet.checkIfAccountExistsFromUuid(updatedAccountUuid, databaseConnection, params, (error, accountExists, accountData) =>
+  updateAccountAdminStatusCheckIfUpdatedAccountExists(updatedAccountUuid, updatedAccountAdminStatus, databaseConnection, globalParameters, (error) =>
+  {
+    return callback(error);
+  });
+}
+
+/****************************************************************************************************/
+
+function updateAccountAdminStatusCheckIfUpdatedAccountExists(updatedAccountUuid, updatedAccountAdminStatus, databaseConnection, globalParameters, callback)
+{
+  commonAccountsGet.checkIfAccountExistsFromUuid(updatedAccountUuid, databaseConnection, globalParameters, (error, accountExists, accountData) =>
   {
     if(error != null) return callback(error);
 
     if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
 
-    storageAppAdminGet.getAdminRightsForProvidedLevel(updatedAccountAdminLevel, databaseConnection, params, (error, adminLevelExists, adminLevelData) =>
+    if(updatedAccountAdminStatus) return updateAccountAdminStatusCheckIfAccountHasAlreadyAdminRights(updatedAccountUuid, updatedAccountAdminStatus, databaseConnection, globalParameters, callback);
+
+    return updateAccountAdminStatusRemoveRights(updatedAccountUuid, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function updateAccountAdminStatusCheckIfAccountHasAlreadyAdminRights(updatedAccountUuid, databaseConnection, globalParameters, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.globalAdministration,
+    args: [ '*' ],
+    where: { operator: '=', key: 'account_uuid', value: updatedAccountUuid }
+    
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    if(result.length > 0) return callback(null);
+
+    databaseManager.insertQuery(
     {
-      if(error != null) return callback(error);
-
-      if(adminLevelExists == false) return callback({ status: 406, code: constants.ADMIN_LEVEL_DOES_NOT_EXIST, detail: parseInt(updatedAccountAdminLevel) });
-
-      if(parseInt(updatedAccountAdminLevel) > parseInt(updatingAccountAdminLevel)) return callback({ status: 403, code: constants.ADMIN_LEVEL_TOO_LOW_TO_PERFORM_THIS_REQUEST, detail: null });
+      databaseName: globalParameters.database.storage.label,
+      tableName: globalParameters.database.storage.tables.globalAdministration,
+      args: { account_uuid: updatedAccountUuid }
       
-      storageAppAdminGet.getAccountAdminLevel(updatedAccountUuid, databaseConnection, params, (error, accountRights) =>
-      {
-        if(error != null) return callback(error);
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-        databaseManager.updateQuery(
-        {
-          databaseName: params.database.storage.label,
-          tableName: params.database.storage.tables.accountAdminLevel,
-          args: { level: parseInt(updatedAccountAdminLevel) },
-          where: { operator: '=', key: 'account', value: updatedAccountUuid }
-
-        }, databaseConnection, (error, result) =>
-        {
-          if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-
-          return callback(null);
-        });
-      });
+      return callback(null);
     });
   });
+}
+
+/****************************************************************************************************/
+
+function updateAccountAdminStatusRemoveRights(updatedAccountUuid, databaseConnection, globalParameters, callback)
+{
+  databaseManager.deleteQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.globalAdministration,
+    where: { operator: '=', key: 'account_uuid', value: updatedAccountUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    return callback(null);
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports =
+{
+  updateAccountAdminStatus: updateAccountAdminStatus
 }
 
 /****************************************************************************************************/

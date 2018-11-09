@@ -1,68 +1,66 @@
 /****************************************************************************************************/
 
-if(document.getElementById('selectAll')) document.getElementById('selectAll').addEventListener('click', selectAll);
-if(document.getElementById('unselectAll')) document.getElementById('unselectAll').addEventListener('click', unselectAll);
-
-/****************************************************************************************************/
-
-function selectFile(target)
+function updateSelectedFiles(checkbox)
 {
-  var checked = target.checked;
+  if(document.getElementById('selectedFilesAmount') == null) return;
 
-  var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
+  checkbox.checked
+  ? document.getElementById('selectedFilesAmount').innerText = parseInt(document.getElementById('selectedFilesAmount').innerText) + 1
+  : document.getElementById('selectedFilesAmount').innerText = parseInt(document.getElementById('selectedFilesAmount').innerText) - 1;
 
-  if(checked)
+  if(parseInt(document.getElementById('selectedFilesAmount').innerText) > 0)
   {
-    document.getElementById('actions').children[0].setAttribute('name', parseInt(document.getElementById('actions').children[0].getAttribute('name')) + 1);
-    document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${parseInt(selectedFilesLabelAndCounter[1]) + 1}`;
+    if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').addEventListener('click', downloadSelection);
+
+    if(document.getElementById('unselectAllFiles'))
+    {
+      document.getElementById('unselectAllFiles').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonEnabled');
+      document.getElementById('unselectAllFiles').addEventListener('click', unselectAllFiles);
+    }
+
+    if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonEnabled');
+    if(document.getElementById('removeSelection')) document.getElementById('removeSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonEnabled');
+
+    return;
   }
 
-  else
+  if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').removeEventListener('click', downloadSelection);
+
+  if(document.getElementById('unselectAllFiles'))
   {
-    document.getElementById('actions').children[0].setAttribute('name', parseInt(document.getElementById('actions').children[0].getAttribute('name')) - 1);
-    document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${parseInt(selectedFilesLabelAndCounter[1]) - 1}`;
+    document.getElementById('unselectAllFiles').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
+    document.getElementById('unselectAllFiles').removeEventListener('click', unselectAllFiles);
   }
+
+  if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
+  if(document.getElementById('removeSelection')) document.getElementById('removeSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
 }
 
 /****************************************************************************************************/
 
-function selectAll(event)
+function unselectAllFiles(event)
 {
-  var elements = document.getElementById('filesBlock').children;
-  var selectedElements = 0;
+  if(document.getElementById('currentFolder') == null) return;
+
+  const elements = document.getElementById('currentFolder').children;
 
   for(var x = 0; x < elements.length; x++)
   {
-    if(elements[x].hasAttribute('tag'))
-    {
-      elements[x].children[2].checked = true;
-
-      selectedElements += 1;
-    }
+    if(elements[x].children[0].tagName === 'INPUT') elements[x].children[0].checked = false;
   }
 
-  var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
+  document.getElementById('selectedFilesAmount').innerText = '0';
 
-  document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${selectedElements}`;
-}
+  if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').removeEventListener('click', downloadSelection);
 
-/****************************************************************************************************/
-
-function unselectAll(event)
-{
-  var elements = document.getElementById('filesBlock').children;
-
-  for(var x = 0; x < elements.length; x++)
+  if(document.getElementById('unselectAllFiles'))
   {
-    if(elements[x].hasAttribute('tag'))
-    {
-      elements[x].children[2].checked = false;
-    }
+    document.getElementById('unselectAllFiles').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
+    document.getElementById('unselectAllFiles').removeEventListener('click', unselectAllFiles);
   }
 
-  var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
-
-  document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : 0`;
+  if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
+  if(document.getElementById('removeSelection')) document.getElementById('removeSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
 }
 
 /****************************************************************************************************/

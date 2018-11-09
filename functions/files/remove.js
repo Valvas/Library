@@ -1,7 +1,6 @@
 'use strict'
 
 const fs                      = require('fs');
-const params                  = require(`${__root}/json/params`);
 const constants               = require(`${__root}/functions/constants`);
 
 /****************************************************************************************************/
@@ -36,7 +35,7 @@ module.exports.removeFile = (fileName, filePath, callback) =>
 
 /****************************************************************************************************/
 
-module.exports.moveFileToBin = (fileName, fileExt, filePath, callback) =>
+module.exports.moveFileToBin = (fileName, fileExt, filePath, params, callback) =>
 {
   fileName  == undefined ||
   fileExt   == undefined ||

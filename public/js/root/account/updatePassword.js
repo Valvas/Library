@@ -10,7 +10,7 @@ function openPasswordUpdatePopup(event)
 {
   if(document.getElementById('accountDataUpdatePopup')) return;
 
-  displayLoader('', '', null, (loader) =>
+  displayLoader('', (loader) =>
   {
     $.ajax(
     {
@@ -20,8 +20,8 @@ function openPasswordUpdatePopup(event)
         removeLoader(loader, () =>
         {
           xhr.responseJSON != undefined ?
-          displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-          displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+          displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null) :
+          displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
         });
       }
                           
@@ -92,7 +92,7 @@ function sendNewPasswordToServer(event)
     document.getElementById('accountDataUpdatePopup').style.display = 'none';
     document.getElementById('accountDataUpdateBackground').removeEventListener('click', removePopupAndBackground);
 
-    displayLoader(strings.global.loading, strings.root.account.accountUpdate.passwordSending, null, (loader) =>
+    displayLoader(strings.root.account.accountUpdate.passwordSending, (loader) =>
     {
       $.ajax(
       {
@@ -105,8 +105,8 @@ function sendNewPasswordToServer(event)
             document.getElementById('accountDataUpdateBackground').addEventListener('click', removePopupAndBackground);
 
             xhr.responseJSON != undefined ?
-            displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-            displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+            displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null) :
+            displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
           });
         }
                             
@@ -117,7 +117,7 @@ function sendNewPasswordToServer(event)
           document.getElementById('accountDataUpdatePopup').remove();
           document.getElementById('accountDataUpdateBackground').remove();
 
-          displaySuccess('Succès', 'Votre mot de passe a été modifié', null);
+          displaySuccess('Votre mot de passe a été modifié', null);
         });
       });
     });

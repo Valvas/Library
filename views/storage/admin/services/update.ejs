@@ -13,7 +13,6 @@
     <% include ../../../include/informations.ejs %>
     <% include ../../includes/aside.ejs %>
     <div class='storageMainBlock'>
-      <div class="mainBlockLocation"><%= strings.storage.locations.admin %> / <%= strings.storage.locations.services %> / <%= strings.storage.locations.update %></div>
       <% include ../../includes/admin/navigation.ejs %>
       <div class="serviceCreationForm">
         <div class="serviceCreationFormTitle"><%= strings.storage.admin.services.updatePage.updateBlockTitle %></div>
@@ -52,7 +51,7 @@
           </div>
           <div class="serviceCreationFormButtonsBlock">
             <button class="serviceCreationFormSubmit"><%= strings.storage.admin.services.updatePage.updateServiceButton %></button>
-            <a href="/storage/admin/services" class="serviceCreationFormBack"><%= strings.common.global.cancel %></a>
+            <a href="/storage/admin/services-management" class="serviceCreationFormBack"><%= strings.common.global.cancel %></a>
           </div>
         </form>
       </div>

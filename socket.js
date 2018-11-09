@@ -1,12 +1,7 @@
 'use strict'
 
-const success                     = require(`${__root}/json/success`);
-const constants                   = require(`${__root}/functions/constants`);
 const storageAppStrings           = require(`${__root}/json/strings/storage`);
-const accountsGet                 = require(`${__root}/functions/accounts/get`);
 const storageAppFilesGet          = require(`${__root}/functions/storage/files/get`);
-const commonAccountsGet           = require(`${__root}/functions/common/accounts/get`);
-const storageAppServicesGet       = require(`${__root}/functions/storage/services/get`);
 
 /****************************************************************************************************/
 
@@ -85,11 +80,11 @@ module.exports = (io, app, callback) =>
     {
       storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, app.get('databaseConnectionPool'), app.get('params'), (error, fileExists, fileData) =>
       {
-        if(error == null)
-        {
-          fileData.extension = fileData.ext;
-          io.in(serviceUuid).emit('fileUploaded', fileData, folderUuid);
-        }
+        if(error != null) return;
+
+        if(fileExists == false) return;
+
+        io.in(serviceUuid).emit('fileUploaded', fileData, folderUuid);
       });
     });
 

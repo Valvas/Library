@@ -20,7 +20,7 @@ function openEmailUpdatePopup(event)
 {
   if(document.getElementById('accountDataUpdatePopup')) return;
 
-  displayLoader('', '', null, (loader) =>
+  displayLoader('', (loader) =>
   {
     $.ajax(
     {
@@ -30,8 +30,8 @@ function openEmailUpdatePopup(event)
         removeLoader(loader, () =>
         {
           xhr.responseJSON != undefined ?
-          displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-          displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+          displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null) :
+          displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
         });
       }
                           
@@ -73,7 +73,7 @@ function openLastnameUpdatePopup(event)
 {
   if(document.getElementById('accountDataUpdatePopup')) return;
 
-  displayLoader('', '', null, (loader) =>
+  displayLoader('', (loader) =>
   {
     $.ajax(
     {
@@ -83,8 +83,8 @@ function openLastnameUpdatePopup(event)
         removeLoader(loader, () =>
         {
           xhr.responseJSON != undefined ?
-          displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-          displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+          displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null) :
+          displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
         });
       }
                           
@@ -126,7 +126,7 @@ function openFirstnameUpdatePopup(event)
 {
   if(document.getElementById('accountDataUpdatePopup')) return;
 
-  displayLoader('', '', null, (loader) =>
+  displayLoader('', (loader) =>
   {
     $.ajax(
     {
@@ -136,8 +136,8 @@ function openFirstnameUpdatePopup(event)
         removeLoader(loader, () =>
         {
           xhr.responseJSON != undefined ?
-          displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-          displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+          displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null) :
+          displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
         });
       }
                           
@@ -197,7 +197,7 @@ function sendNewEmailAddressToServer(event)
     document.getElementById('accountDataUpdatePopup').style.display = 'none';
     document.getElementById('accountDataUpdateBackground').removeEventListener('click', removePopupAndBackground);
 
-    displayLoader(strings.global.loading, strings.root.account.accountUpdate.emailSending, null, (loader) =>
+    displayLoader(strings.root.account.accountUpdate.emailSending, (loader) =>
     {
       $.ajax(
       {
@@ -210,8 +210,8 @@ function sendNewEmailAddressToServer(event)
             document.getElementById('accountDataUpdateBackground').addEventListener('click', removePopupAndBackground);
 
             xhr.responseJSON != undefined ?
-            displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-            displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+            displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null) :
+            displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
           });
         }
                             
@@ -226,7 +226,7 @@ function sendNewEmailAddressToServer(event)
 
           if(document.getElementById('headerBlockNavigationAccountBlock')) document.getElementById('headerBlockNavigationAccountBlock').children[0].innerText = emailAddress
 
-          displaySuccess('Succès', 'Votre adresse email a été modifiée', null);
+          displaySuccess('Votre adresse email a été modifiée', null);
         });
       });
     });
@@ -257,7 +257,7 @@ function sendNewLastnameToServer(event)
     document.getElementById('accountDataUpdatePopup').style.display = 'none';
     document.getElementById('accountDataUpdateBackground').removeEventListener('click', removePopupAndBackground);
 
-    displayLoader(strings.global.loading, strings.root.account.accountUpdate.lastnameSending, null, (loader) =>
+    displayLoader(strings.root.account.accountUpdate.lastnameSending, (loader) =>
     {
       $.ajax(
       {
@@ -270,8 +270,8 @@ function sendNewLastnameToServer(event)
             document.getElementById('accountDataUpdateBackground').addEventListener('click', removePopupAndBackground);
 
             xhr.responseJSON != undefined ?
-            displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-            displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+            displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null) :
+            displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
           });
         }
                             
@@ -315,7 +315,7 @@ function sendNewFirstnameToServer(event)
     document.getElementById('accountDataUpdatePopup').style.display = 'none';
     document.getElementById('accountDataUpdateBackground').removeEventListener('click', removePopupAndBackground);
 
-    displayLoader(strings.global.loading, strings.root.account.accountUpdate.firstnameSending, null, (loader) =>
+    displayLoader(strings.root.account.accountUpdate.firstnameSending, (loader) =>
     {
       $.ajax(
       {
@@ -328,8 +328,8 @@ function sendNewFirstnameToServer(event)
             document.getElementById('accountDataUpdateBackground').addEventListener('click', removePopupAndBackground);
 
             xhr.responseJSON != undefined ?
-            displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-            displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+            displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null) :
+            displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
           });
         }
                             
@@ -342,7 +342,7 @@ function sendNewFirstnameToServer(event)
 
           document.getElementById('accountDataFirstname').innerText = firstname;
 
-          displaySuccess('Succès', 'Votre prénom a été modifié', null);
+          displaySuccess('Votre prénom a été modifié', null);
         });
       });
     });

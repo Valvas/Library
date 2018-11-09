@@ -1,15 +1,10 @@
 {
-  "apps":[
-    "storage",
-    "admin",
-    "disease"
-  ],
   "database":{
     "host":"localhost",
     "port":"3306",
     "user":"root",
     "password":"root",
-    "dbms":"MySQL",
+    "dbms":"mysql",
     "administration":{
       "label":"administration",
       "tables":{
@@ -30,39 +25,23 @@
     "storage":{
       "label":"storage",
       "tables":{
-        "accountServiceLevel": "account_service_level",
-        "serviceLevels":"service_levels",
-        "serviceElements": "service_elements",
+        "accountsList":"accounts_list",
+        "serviceRights": "service_rights",
+        "serviceElements":"service_elements",
+        "serviceElementsLogs":"service_elements_logs",
         "services":"services",
         "extensions":"extensions",
         "serviceExtensions":"service_extensions",
-        "accountAdminLevel":"account_admin_level",
-        "adminLevels":"admin_levels"
+        "globalAdministration": "global_administration"
       }
     }
-  },
-  "ext":{
-    "txt":"Texte",
-    "doc":"Word (1997-2003)",
-    "docx":"Word",
-    "pdf":"PDF",
-    "xls":"Excel (1997-2003)",
-    "xlsx":"Excel",
-    "ppt":"Power Point (1997-2003)",
-    "pptx":"Power Point",
-    "mp3":"Audio",
-    "mp4":"Vidéo",
-    "avi":"Vidéo",
-    "png":"Image",
-    "jpg":"Image",
-    "zip":"Archive ZIP",
-    "rar":"Archive RAR"
   },
   "fileLogs":{
     "upload":0,
     "download":1,
     "remove":2,
-    "comment":3
+    "comment":3,
+    "folderCreated":4
   },
   "init":{
     "keepSalt":true,
@@ -75,7 +54,7 @@
     "requiredServicesToStart":{
       "database":true,
       "storage":true,
-      "transporter":false
+      "transporter":true
     },
     "servicesStarted":{
       "database":true,
@@ -93,7 +72,8 @@
     "bin":"STATIC_bin",
     "tmp":"STATIC_tmp",
     "accounts":"STATIC_accounts",
-    "maxFileSize":10737418240
+    "maxFileNameSize":255,
+    "maxFolderNameSize":255
   },
   "transporter":{
     "from":"intranet@groupepei.fr",

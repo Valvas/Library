@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.administrationStrings.aside.menu[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/administration/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <body>
+    <% include ../../include/informations.ejs %>
+    <div class="mainBlock">
+      <% include ../include/header.ejs %>
+      <div class="content">
+        <div class="contentName"><%= strings.administrationStrings.accountsHome.title %></div>
+        <a href="/administration/accounts/create" class="linkButton"><%= strings.administrationStrings.accountsHome.createButton %></a>
+        <div class="accountsContainer">
+          <input type="text" placeholder="<%= strings.administrationStrings.accountsHome.searchAccountPlaceHolder %>" class="accountsSearch" />
+          <div class="accountsList">
+            <div class="accountsHeader">
+              <div class="accountsHeaderEmail"><%= strings.administrationStrings.accountsHome.accountsHeader.email %></div>
+              <div class="accountsHeaderLastname"><%= strings.administrationStrings.accountsHome.accountsHeader.lastname %></div>
+              <div class="accountsHeaderFirstname"><%= strings.administrationStrings.accountsHome.accountsHeader.firstname %></div>
+              <div class="accountsHeaderDelete"><%= strings.administrationStrings.accountsHome.accountsHeader.delete %></div>
+            </div>
+            <div class="accountsBlockOdd">
+              <div class="accountsEmail">test@test.fr</div>
+              <div class="accountsLastname">Doe</div>
+              <div class="accountsFirstname">John</div>
+              <div class="accountsRemove"><i class="icon fas fa-trash-alt"></i></div>
+            </div>
+            <div class="accountsBlockEven">
+              <div class="accountsEmail">test@test.fr</div>
+              <div class="accountsLastname">Doe</div>
+              <div class="accountsFirstname">John</div>
+              <div class="accountsRemove"><i class="icon fas fa-trash-alt"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ../../include/common_scripts.ejs %>
+  </body>
+</html>

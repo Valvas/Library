@@ -1,136 +1,125 @@
 <!DOCTYPE html>
 <html>
-  <title>Library - Configuration</title>
+  <title>PEI - <%= strings.common.initSection.formPage.headerTitle %></title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/init.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <body>
-    <div class='logs' id='logs'>Le formulaire comporte des erreurs</div>
-    <div class='welcome'>
-      <div class='head'>BIENVENUE !</div>
-      <div class='message'>C'est la première fois que le serveur est lancé, vous voici donc sur la page de configuration de l'application. Veuillez suivre les étapes ci-dessous avant de pouvoir commencer.</div>
-      <div class='block'>
-        <div class='title'>Base De Données</div>
-        <div class='description'>Veuillez entrer ici les informations concernant la base de données à utiliser.</div>
-        <div class='field'>
-          <div class='label'>Adresse :</div>
-          <div class='error' id='database-host-error'></div>
-          <input type='text' class='value' placeholder='Adresse' id='database-host' value='<%= data.database.host %>' />
-          <div class='info'>Entrez ici une adresse IP ou un nom DNS correspondant à l'adresse de votre serveur de bases de données (exemple: 192.168.1.10).</div>
+    <% include ../include/informations.ejs %>
+    <div class="initFormBlock">
+      <div class="initFormBlockTitle"><%= strings.common.initSection.formPage.formTitle %></div>
+      <div class="initFormBlockMessage"><%= strings.common.initSection.formPage.formMessage %></div>
+      <form id="initForm">
+        <div class="initFormBlockSection">
+          <div class="initFormBlockSectionTitle"><%= strings.common.initSection.formPage.databaseSection.title %></div>
+          <div class="initFormBlockSectionField">
+            <div id="databaseHostError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.databaseSection.addressLabel %></div>
+            <input id="databaseHost" value="<%= data.database.host %>" type="text" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.databaseSection.addressPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.databaseSection.addressHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div id="databasePortError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.databaseSection.portLabel %></div>
+            <input id="databasePort" value="<%= data.database.port %>" type="text" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.databaseSection.portPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.databaseSection.portHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div id="databaseUserError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.databaseSection.userLabel %></div>
+            <input id="databaseUser" value="<%= data.database.user %>" type="text" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.databaseSection.userPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.databaseSection.userHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div id="databasePassError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.databaseSection.passwordLabel %></div>
+            <input id="databasePass" value="<%= data.database.password %>" type="password" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.databaseSection.passwordPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.databaseSection.passwordHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.databaseSection.dbmsLabel %></div>
+            <select id="databaseDbms" class="initFormBlockSectionInput">
+              <option value="mysql" <% if(data.database.dbms === 'mysql'){ %>selected<% } %>>MySQL</option>
+            </select>
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.databaseSection.dbmsHelp %></div>
+          </div>
         </div>
-        <div class='field'>
-          <div class='label'>Port de la base de données :</div>
-          <div class='error' id='database-port-error'></div>
-          <input type='text' class='value' placeholder='Port de la base de données' id='database-port' value='<%= data.database.port %>' />
-          <div class='info'>Entrez ici le port sur lequel effectuer la connexion à la base de données.</div>
+        <div class="initFormBlockSection">
+          <div class="initFormBlockSectionTitle"><%= strings.common.initSection.formPage.storageSection.title %></div>
+          <div class="initFormBlockSectionField">
+            <div id="storagePathError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.storageSection.pathLabel %></div>
+            <input id="storagePath" value="<%= data.storage.root %>" type="text" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.storageSection.pathPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.storageSection.pathHelp %></div>
+          </div>
         </div>
-        <div class='field'>
-          <div class='label'>Utilisateur :</div>
-          <div class='error' id='database-user-error'></div>
-          <input type='text' class='value' placeholder='Utilisateur' id='database-user' value='<%= data.database.user %>' />
-          <div class='info'>Entrez ici un nom d'utilisateur de la base de données.</div>
+        <div class="initFormBlockSection">
+          <div class="initFormBlockSectionTitle"><%= strings.common.initSection.formPage.transporterSection.title %></div>
+          <div class="initFormBlockSectionField">
+            <div id="transporterHostError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.transporterSection.serverLabel %></div>
+            <input id="transporterHost" value="<%= data.transporter.address %>" type="text" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.transporterSection.serverPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.transporterSection.serverHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div id="transporterPortError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.transporterSection.portLabel %></div>
+            <input id="transporterPort" value="<%= data.transporter.port %>" type="text" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.transporterSection.portPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.transporterSection.portHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div id="transporterUserError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.transporterSection.addressLabel %></div>
+            <input id="transporterUser" value="<%= data.transporter.user %>" type="text" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.transporterSection.addressPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.transporterSection.addressHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div id="transporterPassError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.transporterSection.passwordLabel %></div>
+            <input id="transporterPass" value="<%= data.transporter.password %>" type="password" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.transporterSection.passwordPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.transporterSection.passwordHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.transporterSection.secureLabel %></div>
+            <select id="transporterSecure" class="initFormBlockSectionInput">
+              <option value="true" <% if(data.transporter.secure == true){ %>selected<% } %>>Oui</option>
+              <option value="false" <% if(data.transporter.secure == false){ %>selected<% } %>>Non</option>
+            </select>
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.transporterSection.secureHelp %></div>
+          </div>
         </div>
-        <div class='field'>
-          <div class='label'>Mot de passe :</div>
-          <div class='error' id='database-password-error'></div>
-          <input type='password' class='value' placeholder='Mot de passe' id='database-password' value='<%= data.database.password %>' />
-          <div class='info'>Entrez ici le mot de passe correspondant au compte entré juste au-dessus.</div>
+        <div class="initFormBlockSection">
+          <div class="initFormBlockSectionTitle"><%= strings.common.initSection.formPage.otherSection.title %></div>
+          <div class="initFormBlockSectionField">
+            <div id="otherLogoutError" class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.otherSection.logoutLabel %></div>
+            <input id="otherLogout" min="0" max="60" value="<%= parseInt(data.timeout / 60000) %>" type="number" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.otherSection.logoutPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.otherSection.logoutHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div class="initFormBlockSectionError"><%= strings.common.initSection.formPage.formError %></div>
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.otherSection.portLabel %></div>
+            <input id="otherPort" value="<%= data.port %>" type="text" class="initFormBlockSectionInput" placeholder="<%= strings.common.initSection.formPage.otherSection.portPlaceholder %>" required />
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.otherSection.portHelp %></div>
+          </div>
+          <div class="initFormBlockSectionField">
+            <div class="initFormBlockSectionLabel"><%= strings.common.initSection.formPage.otherSection.saltLabel %></div>
+            <select id="otherSalt" class="initFormBlockSectionInput">
+              <option value="true">Oui</option>
+              <option value="false">Non</option>
+            </select>
+            <div class="initFormBlockSectionHelp"><%= strings.common.initSection.formPage.otherSection.saltHelp %></div>
+          </div>
         </div>
-        <div class='field'>
-          <div class='label'>Gestionnaire de base de données :</div>
-          <div class='error' id='database-manager-error'></div>
-          <select class='value' id='database-manager'>
-            <option value='MySQL' <% if(data.database.dbms == 'MySQL'){ %>selected<% } %>>MySQL</option>
-          </select>
-          <div class='info'>Les technologies gérées par l'application sont listées ci-dessus, choissisez celle de votre serveur de bases de données.</div>
-        </div>
-      </div>
-      <div class='block'>
-        <div class='title'>Stockage</div>
-        <div class='description'>Veuillez entrer ici les informations concernant le stockage des fichiers.</div>
-        <div class='field'>
-          <div class='label'>Dossier racine :</div>
-          <div class='error' id='storage-root-error'></div>
-          <input type='text' class='value' placeholder='Dossier racine' id='storage-root' value='<%= data.storage.root %>' />
-          <div class='info'>Le chemin d'accès au dossier racine du stockage.</div>
-        </div>
-      </div>
-      <div class='block'>
-        <div class='title'>Transporteur E-mail :</div>
-        <div class='description'>Veuillez entrer ici les informations concernant le compte de messagerie chargé d'envoyer les e-mails système.</div>
-        <div class='field'>
-          <div class='label'>Serveur de messagerie :</div>
-          <div class='error' id='transporter-address-error'></div>
-          <input type='text' class='value' placeholder='Serveur de messagerie' id='transporter-address' value='<%= data.transporter.address %>' />
-          <div class='info'>Entrez le nom DNS ou l'adresse IP du serveur de messagerie propriétaire du compte transporteur.</div>
-        </div>
-        <div class='field'>
-          <div class='label'>Port :</div>
-          <div class='error' id='transporter-port-error'></div>
-          <input type='text' class='value' placeholder='Port' id='transporter-port' value='<%= data.transporter.port %>' />
-          <div class='info'>Entrez le port utilisé par le serveur pour les messages sortants.</div>
-        </div>
-        <div class='field'>
-          <div class='label'>Sécurisé :</div>
-          <div class='error' id='transporter-secure-error'></div>
-          <select class='value' id='transporter-secure'>
-            <option value='true' <% if(data.transporter.secure == true){ %>selected<% } %>>Oui</option>
-            <option value='false' <% if(data.transporter.secure == false){ %>selected<% } %>>Non</option>
-          </select>
-          <div class='info'>Entrez le port utilisé par le serveur pour les messages sortants.</div>
-        </div>
-        <div class='field'>
-          <div class='label'>Adresse de messagerie :</div>
-          <div class='error' id='transporter-user-error'></div>
-          <input type='text' class='value' placeholder='Adresse' id='transporter-user' value='<%= data.transporter.user %>' />
-          <div class='info'>Entrez l'adresse de messagerie du compte.</div>
-        </div>
-        <div class='field'>
-          <div class='label'>Mot de passe :</div>
-          <div class='error' id='transporter-password-error'></div>
-          <input type='password' class='value' placeholder='Mot de passe' id='transporter-password' value='<%= data.transporter.password %>' />
-          <div class='info'>Entrez le mot de passe associé à l'adresse de messagerie.</div>
-        </div>
-      </div>
-      <div class='block'>
-        <div class='title'>Divers</div>
-        <div class='description'>Retrouvez ici des configurations diverses.</div>
-        <div class='field'>
-          <div class='label'>Déconnexion automatique :</div>
-          <div class='error' id='other-timeout-error'></div>
-          <input type='text' class='value' placeholder='Minutes' id='other-timeout' value='<%= parseInt(data.timeout / 60000) %>' />
-          <div class='info'>Entrez une valeur en minutes. En cas d'inactivité les utilisateurs seront automatiquement déconnectés.</div>
-        </div>
-        <div class='field'>
-          <div class='label'>Sel de cryptage :</div>
-          <div class='error' id='other-salt-error'></div>
-          <select class='value' id='other-salt'>
-            <option value='true' <% if(data.init.keepSalt == true){ %>selected<% } %>>Conserver le sel précédent</option>
-            <option value='false' <% if(data.init.keepSalt == false){ %>selected<% } %>>Générer un nouveau sel</option>
-          </select>
-          <div class='info'>Le sel de cryptage est utilisé pour le cryptage de certaines données telles que les mots de passe. Attention : en cas de génération d'un nouveau sel, les données cryptées avec le précédent ne seraient plus utilisables (si aucun précédent sel n'existe un nouveau sera généré par défaut).</div>
-        </div>
-        <div class='field'>
-          <div class='label'>Port de l'application :</div>
-          <div class='error' id='other-port-error'></div>
-          <input type='text' class='value' placeholder='Port' id='other-port' value='<%= data.port %>' />
-          <div class='info'>Entrez le port sur lequel l'application doit fonctionner. Le port par défaut est 3000, laissez vide pour l'utiliser.</div>
-        </div>
-        <div class='field'>
-          <div class='label'>Environnement :</div>
-          <div class='error' id='other-environment-error'></div>
-          <select class='value' id='other-environment'>
-            <option value='dev'>Développement</option>
-            <option value='test'>Test</option>
-            <option value='prod'>Production</option>
-          </select>
-          <div class='info'>L'environnement permet de définir quels modules seront chargés en fonction de leur utilité.</div>
-        </div>
-      </div>
-      <button id='submit' class='send'>Envoyer</button>
+        <button class="initFormSubmit"><%= strings.common.initSection.formPage.formSubmit %></button>
+      </form>
     </div>
-    <script src='/js/jQuery.js'></script>
-    <script src='/js/init/check.js'></script>
-    <script src='/js/init/onload.js'></script>
+    <script src="/js/jQuery.js"></script>
+    <script src='/js/common/background.js'></script>
+    <script src='/js/common/informations.js'></script>
+    <script src="/js/init/check.js"></script>
   </body>
 </html>

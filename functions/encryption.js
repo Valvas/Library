@@ -1,12 +1,11 @@
 'use strict';
 
 const bcrypt            = require('bcrypt');
-const params            = require(`${__root}/json/params`);
 const constants         = require(`${__root}/functions/constants`);
 
 /****************************************************************************************************/
 
-module.exports.encryptPassword = (password, callback) =>
+module.exports.encryptPassword = (password, params, callback) =>
 {
   bcrypt.hash(password, params.salt, (error, result) =>
   {
@@ -16,7 +15,7 @@ module.exports.encryptPassword = (password, callback) =>
 
 /****************************************************************************************************/
 
-module.exports.getRandomPassword = (callback) =>
+module.exports.getRandomPassword = (params, callback) =>
 {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -45,14 +44,12 @@ module.exports.getInitPassword = (callback) =>
 
   var password = '', x = 0;
 
-  var loop = () =>
+  for(var x = 0; x < 32; x++)
   {
     password += characters.charAt(Math.floor(Math.random() * characters.length));
-
-    (x += 1) < 32 ? loop() : callback(null, password);
   }
 
-  loop();
+  return callback(null, password);
 }
 
 /****************************************************************************************************/

@@ -1,277 +1,195 @@
-function checkDataForm()
+/****************************************************************************************************/
+
+if(document.getElementById('initForm')) document.getElementById('initForm').addEventListener('submit', checkForm);
+
+/****************************************************************************************************/
+
+function checkForm(event)
 {
-  var checkFilledFields = true;
-  
-  /*****************************************************************************************************
-  DATABASE
-  *****************************************************************************************************/
+  event.preventDefault();
 
-  if(document.getElementById('database-host').value.length == 0)
+  var errorMessages = document.getElementsByClassName('initFormBlockSectionError');
+
+  for(var x = 0; x < errorMessages.length; x++) errorMessages[x].removeAttribute('style');
+
+  if(document.getElementById('databaseHost') == null) return;
+  if(document.getElementById('databasePort') == null) return;
+  if(document.getElementById('databaseUser') == null) return;
+  if(document.getElementById('databasePass') == null) return;
+  if(document.getElementById('databaseDbms') == null) return;
+
+  if(document.getElementById('storagePath') == null) return;
+
+  if(document.getElementById('transporterHost') == null) return;
+  if(document.getElementById('transporterPort') == null) return;
+  if(document.getElementById('transporterUser') == null) return;
+  if(document.getElementById('transporterPass') == null) return;
+  if(document.getElementById('transporterSecure') == null) return;
+
+  if(document.getElementById('otherLogout') == null) return;
+  if(document.getElementById('otherPort') == null) return;
+  if(document.getElementById('otherSalt') == null) return;
+
+  /****************************************************************************************************/
+  // DATABASE
+  /****************************************************************************************************/
+
+  if(new RegExp("^((2[0-5][0-5]|[0-1]?[0-9]?[0-9])\.){3}(2[0-5][0-5]|[0-1]?[0-9]?[0-9])$|^([a-zA-Z0-9]+)(\.[a-zA-Z0-9]+)*$").test(document.getElementById('databaseHost').value) == false)
   {
-    checkFilledFields = false;
-    document.getElementById('database-host-error').innerText = 'Veuillez renseigner ce champ';
+    document.getElementById('databaseHostError').style.display = 'block';
+
+    return;
   }
 
-  else if(document.getElementById('database-host').value.match(/\s/) != null)
+  if(new RegExp("^[1-9][0-9]*$").test(document.getElementById('databasePort').value) == false)
   {
-    checkFilledFields = false;
-    document.getElementById('database-host-error').innerText = 'Espaces non-autorisés';
+    document.getElementById('databasePortError').style.display = 'block';
+
+    return;
   }
 
-  else{ document.getElementById('database-host-error').innerText = ''; }
+  if(document.getElementById('databaseUser').value.length === 0)
+  {
+    document.getElementById('databaseUserError').style.display = 'block';
+
+    return;
+  }
+
+  if(document.getElementById('databasePass').value.length === 0)
+  {
+    document.getElementById('databasePassError').style.display = 'block';
+
+    return;
+  }
+
+  /****************************************************************************************************/
+  // STORAGE
+  /****************************************************************************************************/
+
+  if(document.getElementById('storagePath').value.length === 0)
+  {
+    document.getElementById('storagePathError').style.display = 'block';
+
+    return;
+  }
+
+  /****************************************************************************************************/
+  // TRANSPORTER
+  /****************************************************************************************************/
+
+  if(new RegExp("^((2[0-5][0-5]|[0-1]?[0-9]?[0-9])\.){3}(2[0-5][0-5]|[0-1]?[0-9]?[0-9])$|^([a-zA-Z0-9]+)(\.[a-zA-Z0-9]+)*$").test(document.getElementById('transporterHost').value) == false)
+  {
+    document.getElementById('transporterHostError').style.display = 'block';
+
+    return;
+  }
+
+  if(new RegExp("^[1-9][0-9]*$").test(document.getElementById('transporterPort').value) == false)
+  {
+    document.getElementById('transporterPortError').style.display = 'block';
+
+    return;
+  }
+
+  if(document.getElementById('transporterUser').value.length === 0)
+  {
+    document.getElementById('transporterUserError').style.display = 'block';
+
+    return;
+  }
+
+  if(document.getElementById('transporterPass').value.length === 0)
+  {
+    document.getElementById('transporterPassError').style.display = 'block';
+
+    return;
+  }
+
+  /****************************************************************************************************/
+  // OTHER
+  /****************************************************************************************************/
+
+  if(document.getElementById('otherLogout').value < 0 || document.getElementById('otherLogout').value > 60)
+  {
+    document.getElementById('otherLogoutError').style.display = 'block';
+
+    return;
+  }
+
+  if(new RegExp("^[1-9][0-9]*$").test(document.getElementById('otherPort').value) == false)
+  {
+    document.getElementById('otherPortError').style.display = 'block';
+
+    return;
+  }
 
   /****************************************************************************************************/
 
-  if(document.getElementById('database-port').value.length == 0)
+  if(document.getElementById('databaseHost') == null) return;
+  if(document.getElementById('databasePort') == null) return;
+  if(document.getElementById('databaseUser') == null) return;
+  if(document.getElementById('databasePass') == null) return;
+  if(document.getElementById('databaseDbms') == null) return;
+
+  if(document.getElementById('storagePath') == null) return;
+
+  if(document.getElementById('transporterHost') == null) return;
+  if(document.getElementById('transporterPort') == null) return;
+  if(document.getElementById('transporterUser') == null) return;
+  if(document.getElementById('transporterPass') == null) return;
+  if(document.getElementById('transporterSecure') == null) return;
+
+  if(document.getElementById('otherLogout') == null) return;
+  if(document.getElementById('otherPort') == null) return;
+  if(document.getElementById('otherSalt') == null) return;
+
+  var formData = {};
+
+  formData.other = {};
+  formData.storage = {};
+  formData.database = {};
+  formData.transporter = {};
+
+  formData.database.port        = document.getElementById('databasePort').value;
+  formData.database.user        = document.getElementById('databaseUser').value;
+  formData.database.host        = document.getElementById('databaseHost').value;
+  formData.database.manager     = document.getElementById('databaseDbms').value;
+  formData.database.password    = document.getElementById('databasePass').value;
+
+  formData.storage.root         = document.getElementById('storagePath').value;
+
+  formData.transporter.port     = document.getElementById('transporterPort').value;
+  formData.transporter.user     = document.getElementById('transporterUser').value;
+  formData.transporter.address  = document.getElementById('transporterHost').value;
+  formData.transporter.password = document.getElementById('transporterPass').value;
+  formData.transporter.secure   = document.getElementById('transporterSecure').value;
+
+  formData.other.port           = document.getElementById('otherPort').value;
+  formData.other.salt           = document.getElementById('otherSalt').value;
+  formData.other.timeout        = document.getElementById('otherLogout').value;
+
+  createBackground('initFormBackground');
+
+  displayLoader('', (loader) =>
   {
-    checkFilledFields = false;
-    document.getElementById('database-port-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('database-port').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('database-port-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('database-port-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('database-user').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('database-user-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('database-user').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('database-user-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('database-user-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('database-password').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('database-password-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else{ document.getElementById('database-password-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('database-manager').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('database-manager-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else{ document.getElementById('database-manager-error').innerText = ''; }
-
-  /*****************************************************************************************************
-  STORAGE
-  *****************************************************************************************************/
-
-  if(document.getElementById('storage-root').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('storage-root-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('storage-root').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('storage-root-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('storage-root-error').innerText = ''; }
-
-  /*****************************************************************************************************
-  EMAIL
-  *****************************************************************************************************/
-
-  if(document.getElementById('transporter-address').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('transporter-address-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('transporter-address').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('transporter-address-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('transporter-address-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('transporter-port').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('transporter-port-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('transporter-port').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('transporter-port-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('transporter-port-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('transporter-secure').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('transporter-secure-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else{ document.getElementById('transporter-secure-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('transporter-user').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('transporter-user-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('transporter-user').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('transporter-user-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('transporter-user-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('transporter-password').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('transporter-password-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('transporter-password').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('transporter-password-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('transporter-password-error').innerText = ''; }
-
-  /*****************************************************************************************************
-  OTHER
-  *****************************************************************************************************/
-
-  if(document.getElementById('other-timeout').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('other-timeout-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else if(document.getElementById('other-timeout').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('other-timeout-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('other-timeout-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('other-salt').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('other-salt-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else{ document.getElementById('other-salt-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('other-port').value.match(/\s/) != null)
-  {
-    checkFilledFields = false;
-    document.getElementById('other-port-error').innerText = 'Espaces non-autorisés';
-  }
-
-  else{ document.getElementById('other-port-error').innerText = ''; }
-
-  /****************************************************************************************************/
-
-  if(document.getElementById('other-environment').value.length == 0)
-  {
-    checkFilledFields = false;
-    document.getElementById('other-environment-error').innerText = 'Veuillez renseigner ce champ';
-  }
-
-  else{ document.getElementById('other-environment-error').innerText = ''; }
-
-  /****************************************************************************************************/
-  /****************************************************************************************************/
-
-  if(checkFilledFields == false)
-  {
-    document.getElementById('logs').removeAttribute('style');
-
-    setTimeout(() => { document.getElementById('logs').style.display = 'none'; }, 3000);
-  }
-
-  else
-  {
-    var formData = {};
-
-    formData.other = {};
-    formData.storage = {};
-    formData.database = {};
-    formData.transporter = {};
-
-    formData.database.port        = document.getElementById('database-port').value;
-    formData.database.user        = document.getElementById('database-user').value;
-    formData.database.host        = document.getElementById('database-host').value;
-    formData.database.manager     = document.getElementById('database-manager').value;
-    formData.database.password    = document.getElementById('database-password').value;
-
-    formData.storage.root         = document.getElementById('storage-root').value;
-
-    formData.transporter.port     = document.getElementById('transporter-port').value;
-    formData.transporter.user     = document.getElementById('transporter-user').value;
-    formData.transporter.secure   = document.getElementById('transporter-secure').value;
-    formData.transporter.address  = document.getElementById('transporter-address').value;
-    formData.transporter.password = document.getElementById('transporter-password').value;
-
-    formData.other.port           = document.getElementById('other-port').value;
-    formData.other.salt           = document.getElementById('other-salt').value;
-    formData.other.timeout        = document.getElementById('other-timeout').value;
-    formData.other.environment    = document.getElementById('other-environment').value;
-
     $.ajax(
     {
-      type: 'POST', timeout: 2000, processData: false, data: JSON.stringify(formData), contentType: 'application/json; charset=utf-8', dataType: 'JSON', url: '/init/form', success: () => {},
+      type: 'PUT', timeout: 5000, processData: false, data: JSON.stringify(formData), contentType: 'application/json; charset=utf-8', dataType: 'JSON', url: '/init/form', success: () => {},
       error: (xhr, status, error) =>
-      { 
-        document.getElementById('logs').innerText = xhr.responseJSON.message;
-        document.getElementById('logs').removeAttribute('style');
+      {
+        removeBackground('initFormBackground');
 
-        setTimeout(() => 
-        { 
-          document.getElementById('logs').style.display = 'none';
-          document.getElementById('logs').innerText = 'Le formulaire comporte des erreurs';
-        }, 3000);
+        removeLoader(loader, () =>
+        {
+          xhr.responseJSON != undefined
+          ? displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null)
+          : displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
+        });
       }
                       
     }).done((json) => 
     {
       location = '/init/test';
     });
-  }
-
-  /****************************************************************************************************/
+  });
 }

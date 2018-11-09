@@ -1,6 +1,5 @@
 'use strict'
 
-const params              = require(`${__root}/json/params`);
 const constants           = require(`${__root}/functions/constants`);
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 const storageAppFilesGet  = require(`${__root}/functions/storage/files/get`);

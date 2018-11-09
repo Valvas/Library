@@ -1,6 +1,5 @@
 'use strict'
 
-const params            = require(__root + '/json/params');
 const constants         = require(__root + '/functions/constants');
 const commonFormatEmail = require(__root + '/functions/common/format/email');
 

@@ -3,3 +3,35 @@
 /****************************************************************************************************/
 
 .commonBackground{ position:fixed; top:0; right:0; bottom:0; left:0; z-index:290; background-color:rgba(0,0,0,0.2); }
+
+/****************************************************************************************************/
+/* INFORMATION BLOCK */
+/****************************************************************************************************/
+
+.informationBlock{ position:fixed; top:100px; right:60px; width:400px; z-index:400; }
+
+.informationBlockMessageInfo, .informationBlockMessageError, .informationBlockMessageSuccess, .informationBlockMessageLoader{ font-size:0.9em; color:#FFFFFF; padding:20px 10px 20px 10px; width:100%; margin:0 0 20px 0; border-radius:4px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:row; align-items:center; }
+
+.informationBlockMessageInfo{ background-color:#6184D8; }
+
+.informationBlockMessageError{ background-color:#D9534F; }
+
+.informationBlockMessageSuccess{ background-color:#5CB85C; }
+
+.informationBlockMessageLoader{ background-color:#6184D8; }
+
+.informationBlockMessageLoaderIcon{ width:32px; font-size:1.5em; text-align:center; color:#FFFFFF; }
+
+.informationBlockMessageLoaderText{ width:calc(100% - 40px); margin-left:8px; font-size:0.9em; }
+
+.informationBlockMessageContent{ width:calc(100% - 90px); margin-right:10px; }
+
+.informationBlockMessageDetail{ font-size:0.8em; font-weight:bold; margin-top:10px; text-align:justify; }
+
+.informationBlockMessageClose{ width:80px; color:#FFFFFF; padding:4px 0 4px 0; border-radius:4px; font-size:0.9em; vertical-align:middle; cursor:pointer; border:none; background-color:transparent; }
+
+.informationBlockMessageInfo .informationBlockMessageClose:hover{ background-color:#5073C7; }
+
+.informationBlockMessageError .informationBlockMessageClose:hover{ background-color:#C8423E; }
+
+.informationBlockMessageSuccess .informationBlockMessageClose:hover{ background-color:#4BA74B; }

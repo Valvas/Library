@@ -50,7 +50,7 @@ function newsSelected(newsUuid)
 
   if(document.getElementById('mainNewsBlockArticle') && document.getElementById('mainNewsBlockArticle').getAttribute('name') !== newsUuid)
   {
-    displayLoader('Chargement', `Le chargement de l'article est en cours`, null, (loader) =>
+    displayLoader(`Le chargement de l'article est en cours`, (loader) =>
     {
       currentRequest = $.ajax(
       {

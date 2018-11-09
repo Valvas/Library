@@ -14,24 +14,18 @@
     <% include ../../includes/aside.ejs %>
     <div class="storageMainBlock">
       <% include ../../includes/admin/navigation.ejs %>
-      <a href="/storage/admin" class="rightsOnServicesHomeReturn"><%= strings.storage.admin.serviceRights.home.returnLink %></a>
-      <div class="rightsOnServicesHomeInformation">
-        <div class="rightsOnServicesHomeInformationTitle"><%= strings.storage.admin.serviceRights.home.informationBlockTitle %></div>
-        <ul>
-          <li class="rightsOnServicesHomeInformationMessage"><%= strings.storage.admin.serviceRights.home.informationBlockFirstMessage %></li>
-          <li class="rightsOnServicesHomeInformationMessage"><%= strings.storage.admin.serviceRights.home.informationBlockSecondMessage %></li>
-          <li class="rightsOnServicesHomeInformationMessage"><%= strings.storage.admin.serviceRights.home.informationBlockThirdMessage %></li>
-        </ul>
-        <div class="rightsOnServicesHomeInformationWarning"><%= strings.storage.admin.serviceRights.home.informationBlockWarning %></div>
-      </div>
       <div class="rightsOnServicesHomeServices">
         <div class="rightsOnServicesHomeServicesTitle"><%= strings.storage.admin.serviceRights.home.servicesBlockTitle %></div>
         <div class="rightsOnServicesHomeServicesList">
           <% for(var service in services){ %>
             <div class="rightsOnServicesHomeServicesBlock">
               <div class="rightsOnServicesHomeServicesBlockTitle"><%= services[service].name %></div>
-              <div class="rightsOnServicesHomeServicesBlockLevel"><%= strings.storage.admin.serviceRights.home.servicesBlockLevel %> : 0</div>
-              <div class="rightsOnServicesHomeServicesBlockAccess"><%= strings.storage.admin.serviceRights.home.servicesBlockAccess %></div>
+              <% if(isAdmin || services[service].admin){ %>
+                <div class="rightsOnServicesHomeServicesBlockLevelEnabled"><%= strings.storage.admin.serviceRights.home.isAdminMessage %></div>
+                <a href="/storage/admin/services-rights/<%= service %>" class="rightsOnServicesHomeServicesBlockAccess"><%= strings.storage.admin.serviceRights.home.servicesBlockAccess %></a>
+              <% } else{ %>
+                <div class="rightsOnServicesHomeServicesBlockLevelDisabled"><%= strings.storage.admin.serviceRights.home.isNotAdminMessage %></div>
+              <% } %>
             </div>
           <% } %>
         </div>

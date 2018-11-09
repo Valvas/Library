@@ -1,6 +1,5 @@
 'use strict'
 
-const fs                = require('fs');
 const errors            = require(`${__root}/json/errors`);
 const constants         = require(`${__root}/functions/constants`);
 
@@ -30,10 +29,9 @@ module.exports.checkConfigDataFormat = (object, params, callback) =>
 
   object.other.port           == undefined ||
   object.other.salt           == undefined ||
-  object.other.timeout        == undefined ||
-  object.other.environment    == undefined ?
+  object.other.timeout        == undefined ?
 
-  callback({ status: 406, message: `${errors[constants.MISSING_DATA_IN_REQUEST].charAt(0).toUpperCase()}${errors[constants.MISSING_DATA_IN_REQUEST].slice(1)}` }) :
+  callback({ status: 406, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
 
   checkAppTimeout(object.other.timeout, params, (newTimeout) =>
   {
@@ -43,50 +41,37 @@ module.exports.checkConfigDataFormat = (object, params, callback) =>
     {
       object.other.port = newPort;
 
-      checkEnvironment(object.other.environment, params, (newEnvironment) =>
-      {
-        object.other.environment = newEnvironment;
+      params.database.host        = object.database.host;
+      params.database.port        = object.database.port;
+      params.database.user        = object.database.user;
+      params.database.dbms        = object.database.manager;
+      params.database.password    = object.database.password;
 
-        params.database.host        = object.database.host;
-        params.database.port        = object.database.port;
-        params.database.user        = object.database.user;
-        params.database.dbms        = object.database.manager;
-        params.database.password    = object.database.password;
+      params.storage.root         = object.storage.root;
 
-        params.storage.root         = object.storage.root;
+      params.transporter.user     = object.transporter.user;
+      params.transporter.port     = object.transporter.port;
+      params.transporter.secure   = object.transporter.secure == 'true' ? true : false;
+      params.transporter.address  = object.transporter.address;
+      params.transporter.password = object.transporter.password;
 
-        params.transporter.user     = object.transporter.user;
-        params.transporter.port     = object.transporter.port;
-        params.transporter.secure   = object.transporter.secure == 'true' ? true : false;
-        params.transporter.address  = object.transporter.address;
-        params.transporter.password = object.transporter.password;
+      params.timeout              = object.other.timeout;
+      params.port                 = object.other.port;
+      params.init.keepSalt        = object.other.salt == 'true' ? true : false;
 
-        params.timeout              = object.other.timeout;
-        params.port                 = object.other.port;
-        params.init.keepSalt        = object.other.salt == 'true' ? true : false;
-
-        callback(null);
-      });
+      return callback(null);
     });
   });
 }
 
 /****************************************************************************************************/
 
-function checkStorageFileMaxSize(fileSize, params, callback)
-{
-  if(parseInt(fileSize) * 1024 < params.init.minFileSize) callback(params.init.minFileSize);
-  else if(parseInt(fileSize) * 1024 > params.init.maxFileSize) callback(params.init.maxFileSize);
-  else{ callback(parseInt(fileSize) * 1024); }
-}
-
-/****************************************************************************************************/
-
 function checkAppTimeout(timeout, params, callback)
 {
-  if(parseInt(timeout) * 60000 < params.init.minTimeout) callback(params.init.minTimeout);
-  else if(parseInt(timeout) * 60000 > params.init.maxTimeout) callback(params.init.maxTimeout);
-  else{ callback(parseInt(timeout) * 60000); }
+  if(parseInt(timeout) * 60000 < params.init.minTimeout) return callback(params.init.minTimeout);
+  if(parseInt(timeout) * 60000 > params.init.maxTimeout) return callback(params.init.maxTimeout);
+
+  return callback(parseInt(timeout) * 60000);
 }
 
 /****************************************************************************************************/
@@ -96,13 +81,6 @@ function checkAppPort(port, params, callback)
   if(parseInt(port) < 0) callback(params.init.defaultPort);
   else if(parseInt(port) > 65535) callback(params.init.defaultPort);
   else{ callback(parseInt(port)); }
-}
-
-/****************************************************************************************************/
-
-function checkEnvironment(environment, params, callback)
-{
-  environment == 'dev' || environment == 'test' || environment == 'prod' ? callback(environment) : callback(params.init.defaultEnvironment);
 }
 
 /****************************************************************************************************/

@@ -21,11 +21,6 @@
 
   "intranet":
   {
-    "access":
-    {
-      "account": "VARCHAR(255) NOT NULL",
-      "app": "VARCHAR(255) NOT NULL"
-    },
     "accounts":
     {
       "uuid": "VARCHAR(255) NOT NULL",
@@ -34,12 +29,13 @@
       "firstname": "VARCHAR(255) NOT NULL",
       "password": "VARCHAR(255) NOT NULL",
       "suspended": "BOOLEAN NOT NULL",
-      "picture": "MEDIUMTEXT"
+      "picture": "MEDIUMTEXT NOT NULL"
     },
     "apps":
     {
       "uuid": "VARCHAR(255) NOT NULL",
-      "name": "VARCHAR(255) NOT NULL"
+      "name": "VARCHAR(255) NOT NULL",
+      "picture": "MEDIUMTEXT NOT NULL"
     },
     "errors":
     {
@@ -72,27 +68,34 @@
 
   "storage":
   {
-    "account_service_level":
-    {
-      "account_uuid": "VARCHAR(255) NOT NULL",
-      "service_uuid": "VARCHAR(255) NOT NULL",
-      "level": "INT UNSIGNED NOT NULL"
-    },
-
-    "service_levels":
+    "accounts_list":
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "level": "INT UNSIGNED NOT NULL",
+      "account_uuid": "VARCHAR(255) NOT NULL"
+    },
+
+    "service_rights":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "is_admin": "BOOLEAN NOT NULL",
+      "service_uuid": "VARCHAR(255) NOT NULL",
+      "account_uuid": "VARCHAR(255) NOT NULL",
       "access_service": "BOOLEAN NOT NULL",
-      "comment_files": "BOOLEAN NOT NULL",
+      "post_comments": "BOOLEAN NOT NULL",
       "upload_files": "BOOLEAN NOT NULL",
       "create_folders": "BOOLEAN NOT NULL",
-      "rename_folders": "BOOLEAN NOT NULL",
-      "move_files": "BOOLEAN NOT NULL",
       "download_files": "BOOLEAN NOT NULL",
-      "restore_files": "BOOLEAN NOT NULL",
+      "move_files": "BOOLEAN NOT NULL",
+      "rename_folders": "BOOLEAN NOT NULL",
       "remove_folders": "BOOLEAN NOT NULL",
+      "restore_files": "BOOLEAN NOT NULL",
       "remove_files": "BOOLEAN NOT NULL"
+    },
+
+    "global_administration":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "account_uuid": "VARCHAR(255) NOT NULL"
     },
 
     "service_elements":
@@ -103,6 +106,16 @@
       "service_uuid": "VARCHAR(255) NOT NULL",
       "is_directory": "BOOLEAN NOT NULL",
       "is_deleted": "BOOLEAN NOT NULL"
+    },
+
+    "service_elements_logs":
+    {
+      "uuid": "VARCHAR(255) NOT NULL",
+      "element_uuid": "VARCHAR(255) NOT NULL",
+      "account_uuid": "VARCHAR(255) NOT NULL",
+      "date": "BIGINT UNSIGNED NOT NULL",
+      "type": "INT UNSIGNED NOT NULL",
+      "comment": "TEXT(1024)"
     },
 
     "services":
@@ -123,21 +136,6 @@
       "uuid": "VARCHAR(255) NOT NULL",
       "extension_uuid": "VARCHAR(255) NOT NULL",
       "service_uuid": "VARCHAR(255) NOT NULL"
-    },
-
-    "account_admin_level":
-    {
-      "account": "VARCHAR(255) NOT NULL",
-      "level": "INT UNSIGNED NOT NULL"
-    },
-
-    "admin_levels":
-    {
-      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "level": "INT UNSIGNED NOT NULL",
-      "create_services": "BOOLEAN NOT NULL",
-      "modify_services": "BOOLEAN NOT NULL",
-      "remove_services": "BOOLEAN NOT NULL"
     }
   }
 }

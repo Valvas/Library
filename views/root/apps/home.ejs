@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/apps/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <body>
@@ -18,10 +17,10 @@
       --><div class="centerColumn">
         <div id="appBlocks">
           <% for(var x = 0; x < locals.apps.length; x++){ %>
-            <% if(locals.access.includes(locals.apps[x].uuid)){ %>
+            <% if(locals.apps[x].hasAccess){ %>
               <a class="appBlock" href="/<%= locals.apps[x].name %>">
                 <div class="appBlockPictureContainer">
-                  <img class="appBlockPicture" src=""/>
+                  <img class="appBlockPicture" src="data:image/png;base64,<%= locals.apps[x].picture %>"/>
                 </div>
                 <div class="appBlockName"><%= locals.strings.common.apps[locals.apps[x].name] %></div>
                 <div class="appBlockAccess"><%= strings.common.root.apps.accessApp %></div>
@@ -33,7 +32,7 @@
             <% } else{ %>
               <div class="appBlockNoAccess">
                 <div class="appBlockNoAccessPictureContainer">
-                  <img class="appBlockNoAccessPicture" src="<%= locals.webContent.appsPictures[locals.apps[x].name] %>"/>
+                  <img class="appBlockNoAccessPicture" src="data:image/png;base64,<%= locals.apps[x].picture %>"/>
                 </div>
                 <div class="appBlockNoAccessName"><%= locals.strings.common.apps[locals.apps[x].name] %></div>
                 <div class="appBlockNoAccessMessage"><%= strings.common.root.apps.noAccess %></div>
@@ -51,6 +50,7 @@
     </div>
     <% include ../include/footer.ejs %>
     <% include ../include/scripts.ejs %>
+    <% include ../../include/common_scripts.ejs %>
     <script src='/js/root/news/selectNewsExternal.js'></script>
   </body>
 </html>

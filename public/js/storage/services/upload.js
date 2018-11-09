@@ -1,362 +1,297 @@
 /****************************************************************************************************/
 
-if(document.getElementById('upload')) document.getElementById('upload').addEventListener('click', openUploadPopup);
+if(document.getElementById('uploadFileButton')) document.getElementById('uploadFileButton').addEventListener('click', getUploadParameters);
 
 /****************************************************************************************************/
 
-function openUploadPopup(event)
+function getUploadParameters()
 {
-  var background    = document.createElement('div');
-  var box           = document.createElement('div');
-  var spinner       = document.createElement('div');
+  if(document.getElementById('uploadFileBackground')) return;
 
-  background        .setAttribute('id', 'uploadFileBackground');
-  box               .setAttribute('id', 'uploadFileBox');
+  if(document.getElementById('serviceUuid') == null) return;
 
-  background        .setAttribute('class', 'storageBackground');
-  box               .setAttribute('class', 'servicesUploadFilePopup');
-  spinner           .setAttribute('class', 'spinner');
+  createBackground('uploadFileBackground');
 
-  spinner           .innerHTML = `<i class='fas fa-circle-notch fa-spin'></i>`;
-
-  background        .style.display = 'block';
-
-  box               .appendChild(spinner);
-  document.body     .appendChild(background);
-  document.body     .appendChild(box);
-
-  $.ajax(
+  displayLoader('', (loader) =>
   {
-    method: 'POST',
-    dataType: 'json',
-    data: { serviceUuid: document.getElementById('mainBlock').getAttribute('name') },
-    timeout: 5000,
-    url: '/queries/storage/services/get-file-upload-parameters',
-
-    error: (xhr, textStatus, errorThrown) =>
+    $.ajax(
     {
-      spinner.remove();
+      method: 'PUT', dataType: 'json', data: { serviceUuid: document.getElementById('serviceUuid').getAttribute('name') }, timeout: 5000, url: '/queries/storage/services/get-file-upload-parameters',
+      error: (xhr, textStatus, errorThrown) =>
+      {
+        removeLoader(loader, () =>
+        {
+          removeBackground('uploadFileBackground');
 
-      xhr.responseJSON != undefined ?
-      displayUploadPopupError(xhr.responseJSON.message, xhr.responseJSON.detail) :
-      displayUploadPopupError('Une erreur est survenue, veuillez réessayer plus tard', null);
-    }
-
-  }).done((json) =>
-  {
-    spinner.remove();
-
-    var title           = document.createElement('div');
-    var content         = document.createElement('div');
-    var instructions    = document.createElement('div'); 
-    var file            = document.createElement('div');
-    var size            = document.createElement('div');
-    var ext             = document.createElement('div');
-    var label           = document.createElement('label');
-    var input           = document.createElement('input');
-    var send            = document.createElement('button');
-    var close           = document.createElement('button');
-
-    input               .setAttribute('type', 'file');
-    input               .setAttribute('id', 'uploadFileInput');
-    label               .setAttribute('id', 'uploadFileLabel');
-    send                .setAttribute('id', 'uploadFileSend');
-    size                .setAttribute('id', 'uploadFileSize');
-    ext                 .setAttribute('id', 'uploadFileExt');
-    content             .setAttribute('id', 'uploadFileContent');
-    label               .setAttribute('for', 'uploadFileInput');
-    size                .setAttribute('tag', parseInt(json.size));
-    ext                 .setAttribute('tag', json.ext.join());
-
-    title               .setAttribute('class', 'title');
-    content             .setAttribute('class', 'content');
-    instructions        .setAttribute('class', 'instructions');
-    file                .setAttribute('class', 'file');
-    label               .setAttribute('class', 'label');
-    send                .setAttribute('class', 'send inactive');
-    input               .setAttribute('class', 'input');
-    size                .setAttribute('class', 'size');
-    ext                 .setAttribute('class', 'ext');
-    close               .setAttribute('class', 'close');
-
-    close               .addEventListener('click', closeUploadFilePopup);
-    input               .addEventListener('change', changeLabelValue);
-
-    title               .innerText = json.strings.storage.services.popup.upload.title;
-    instructions        .innerText = json.strings.storage.services.popup.upload.choice;
-    label               .innerText = json.strings.storage.services.popup.upload.placeholder;
-    send                .innerText = json.strings.storage.services.popup.upload.send;
-    ext                 .innerText = json.strings.storage.services.popup.upload.ext + ' : ' + json.ext.join();
-    close               .innerText = json.strings.storage.services.popup.upload.close;
-
-    if(parseInt(json.size) < 1048576)
+          textStatus === 'timeout'
+          ? displayCriticalErrorMessage('Erreur', 'Temps de réponse dépassé', `Le serveur doit fournir des informations sur les critères de validation d'un fichier à l'envoi pour ce service (taille maximale des fichiers et extensions autorisées). La récupération de ces données depuis le serveur a échoué.`, `Cette erreur est survenue car l'échange entre le serveur et votre navigateur prenait trop de temps. Ce problème peut arriver si le serveur est dans l'incapacité de traiter votre demande dans les temps ou alors si vous rencontrez un problème de connexion. Veuillez vous assurer que votre connexion est stable et réessayer plus tard.`, 'Fermer')
+          : xhr.responseJSON != undefined
+            ? displayCriticalErrorMessage(xhr.responseJSON.errorTitle, xhr.responseJSON.errorMessage, xhr.responseJSON.errorDetail, xhr.responseJSON.errorHelp, xhr.responseJSON.errorClose)
+            : displayCriticalErrorMessage('Erreur', textStatus, `Le serveur doit fournir des informations sur les critères de validation d'un fichier à l'envoi pour ce service (taille maximale des fichiers et extensions autorisées). La récupération de ces données depuis le serveur a échoué.`, `Le problème semble lié au serveur. Vous ne pouvez pas régler ce problème vous-même cependant vous devriez le signaler pour qu'il puisse être résolu au plus vite.`, 'Fermer');
+        });
+      }
+    }).done((result) =>
     {
-      size              .innerText = json.strings.storage.services.popup.upload.size + ' : ' + parseInt(json.size / 1024) + 'Ko';
-    }
-
-    else if(parseInt(json.size) < 1073741824)
-    {
-      size              .innerText = json.strings.storage.services.popup.upload.size + ' : ' + parseInt(json.size / 1024 / 1024) + 'Mo';
-    }
-
-    else
-    {
-      size              .innerText = json.strings.storage.services.popup.upload.size + ' : ' + parseInt(json.size / 1024 / 1024 / 1024) + 'Go';
-    }
-
-    file                .appendChild(label);
-    file                .appendChild(send);
-    file                .appendChild(input);
-    content             .appendChild(instructions);
-    content             .appendChild(file);
-    content             .appendChild(size);
-    content             .appendChild(ext);
-    content             .appendChild(close);
-    box                 .appendChild(title);
-    box                 .appendChild(content);
+      removeLoader(loader, () =>
+      {
+        openUploadFilePopup(result.storageAppStrings, result.uploadParameters);
+      });
+    });
   });
 }
 
 /****************************************************************************************************/
 
-function closeUploadFilePopup(event)
+function openUploadFilePopup(storageAppStrings, uploadParameters)
 {
-  if(document.getElementById('uploadFileBox')) document.getElementById('uploadFileBox').remove();
-  if(document.getElementById('uploadFileBackground')) document.getElementById('uploadFileBackground').remove();
+  var popup             = document.createElement('div');
+  var popupTitle        = document.createElement('div');
+  var popupContent      = document.createElement('div');
+  var popupError        = document.createElement('div');
+  var popupHelp         = document.createElement('div');
+  var popupInput        = document.createElement('input');
+  var popupLabel        = document.createElement('div');
+  var popupSize         = document.createElement('div');
+  var popupExtensions   = document.createElement('div');
+  var popupButtons      = document.createElement('div');
+  var popupClose        = document.createElement('button');
+  var popupSend         = document.createElement('button');
+
+  popup                 .setAttribute('id', 'uploadFilePopup');
+  popupSend             .setAttribute('id', 'uploadFilePopupSend');
+  popupContent          .setAttribute('id', 'uploadFilePopupContent');
+  popupInput            .setAttribute('id', 'uploadFilePopupInput');
+  popupLabel            .setAttribute('id', 'uploadFilePopupFileName');
+  popupError            .setAttribute('id', 'uploadFilePopupErrorMessage');
+
+  popup                 .setAttribute('class', 'uploadFilePopup');
+  popupTitle            .setAttribute('class', 'uploadFilePopupTitle');
+  popupError            .setAttribute('class', 'uploadFilePopupError');
+  popupHelp             .setAttribute('class', 'uploadFilePopupInformation');
+  popupInput            .setAttribute('class', 'uploadFilePopupInput');
+  popupLabel            .setAttribute('class', 'uploadFilePopupInputLabel');
+  popupExtensions       .setAttribute('class', 'uploadFilePopupExtensions');
+  popupSize             .setAttribute('class', 'uploadFilePopupSize');
+  popupButtons          .setAttribute('class', 'uploadFilePopupButtons');
+  popupClose            .setAttribute('class', 'uploadFilePopupCancel');
+  popupSend             .setAttribute('class', 'uploadFilePopupSend');
+
+  popupInput            .setAttribute('type', 'file');
+
+  popupTitle            .innerText = storageAppStrings.services.detailPage.uploadFilePopup.title;
+  popupHelp             .innerText = storageAppStrings.services.detailPage.uploadFilePopup.inputInformation;
+  popupLabel            .innerText = storageAppStrings.services.detailPage.uploadFilePopup.inputPlaceholder;
+  popupClose            .innerText = storageAppStrings.services.detailPage.uploadFilePopup.cancelButton;
+  popupSend             .innerText = storageAppStrings.services.detailPage.uploadFilePopup.sendButton;
+
+  popupExtensions       .innerHTML += `<div class="uploadFilePopupExtensionsLabel">${storageAppStrings.services.detailPage.uploadFilePopup.authorizedExtensions} :</div>`;
+  popupExtensions       .innerHTML += `<div class="uploadFilePopupExtensionsValues">${Object.values(uploadParameters.authorizedExtensions)}</div>`;
+
+  popupSize             .innerHTML += `<div class="uploadFilePopupSizelabel">${storageAppStrings.services.detailPage.uploadFilePopup.maxFileSize} :</div>`;
+
+  uploadParameters.serviceData.maxFileSize / 1024 / 1024 / 1024 >= 1
+
+  ? popupSize.innerHTML += `<div class="uploadFilePopupSizeValue">${(uploadParameters.serviceData.maxFileSize / 1024 / 1024 / 1024).toFixed(2)} Go`
+  : uploadParameters.serviceData.maxFileSize / 1024 / 1024 >= 1
+
+  ? popupSize.innerHTML += `<div class="uploadFilePopupSizeValue">${(uploadParameters.serviceData.maxFileSize / 1024 / 1024).toFixed(2)} Mo`
+  : uploadParameters.serviceData.maxFileSize / 1024 >= 1
+
+  ? popupSize.innerHTML += `<div class="uploadFilePopupSizeValue">${(uploadParameters.serviceData.maxFileSize / 1024).toFixed(2)} Ko`
+  : popupSize.innerHTML += `<div class="uploadFilePopupSizeValue">${uploadParameters.serviceData.maxFileSize} o`;
+
+  popupInput            .addEventListener('change', () => { checkBeforeUpload(storageAppStrings) });
+  popupLabel            .addEventListener('click', () => { popupInput.click() });
+  popupClose            .addEventListener('click', closeUploadFilePopup);
+  popupSend             .addEventListener('click', () => { uploadFile(storageAppStrings) });
+
+  popupButtons          .appendChild(popupSend);
+  popupButtons          .appendChild(popupClose);
+  popupContent          .appendChild(popupError);
+  popupContent          .appendChild(popupHelp);
+  popupContent          .appendChild(popupInput);
+  popupContent          .appendChild(popupLabel);
+  popupContent          .appendChild(popupSize);
+  popupContent          .appendChild(popupExtensions);
+  popupContent          .appendChild(popupButtons);
+  popup                 .appendChild(popupTitle);
+  popup                 .appendChild(popupContent);
+  document.body         .appendChild(popup);
 }
 
 /****************************************************************************************************/
 
-function closeUploadPopupError(event)
+function closeUploadFilePopup()
 {
-  if(document.getElementById('uploadFileBox')) document.getElementById('uploadFileBox').remove();
-  if(document.getElementById('uploadFileBackground')) document.getElementById('uploadFileBackground').remove();
+  if(document.getElementById('uploadFilePopup')) document.getElementById('uploadFilePopup').remove();
+  removeBackground('uploadFileBackground');
 }
 
 /****************************************************************************************************/
 
-function changeLabelValue(event)
+function checkBeforeUpload(storageAppStrings)
 {
-  document.getElementById('uploadFileSend').removeEventListener('click', checkBeforeUpload);
-  document.getElementById('uploadFileSend').setAttribute('class', 'send inactive');
-  document.getElementById('uploadFileLabel').innerText = event.target.files[0].name;
-  document.getElementById('uploadFileSize').removeAttribute('style');
-  document.getElementById('uploadFileExt').removeAttribute('style');
-  document.getElementById('uploadFileLabel').removeAttribute('style');
+  if(document.getElementById('uploadFilePopupSend') == null) return;
+  if(document.getElementById('uploadFilePopupInput') == null) return;
+  if(document.getElementById('uploadFilePopupContent') == null) return;
+  if(document.getElementById('uploadFilePopupFileName') == null) return;
+  if(document.getElementById('uploadFilePopupErrorMessage') == null) return;
 
-  var check = true;
-  
-  if(event.target.files[0].size > parseInt(document.getElementById('uploadFileSize').getAttribute('tag')))
+  document.getElementById('uploadFilePopup').style.display = 'none';
+  document.getElementById('uploadFilePopupSend').removeAttribute('style');
+  document.getElementById('uploadFilePopupErrorMessage').removeAttribute('style');
+
+  const filePath = document.getElementById('uploadFilePopupInput').value;
+  const fileName = filePath.split('\\')[filePath.split('\\').length - 1];
+
+  document.getElementById('uploadFilePopupFileName').innerText = fileName;
+
+  displayLoader(storageAppStrings.services.detailPage.uploadFilePopup.checkingFormat, (loader) =>
   {
-    check = false;
-    document.getElementById('uploadFileSize').style.color = '#D9534F';
-    document.getElementById('uploadFileLabel').style.color = '#D9534F';
-  }
-
-  if(event.target.files[0].name.split('.').length < 2 || document.getElementById('uploadFileExt').getAttribute('tag').split(',').includes(event.target.files[0].name.split('.')[1]) == false)
-  {
-    check = false;
-    document.getElementById('uploadFileExt').style.color = '#D9534F';
-    document.getElementById('uploadFileLabel').style.color = '#D9534F';
-  }
-
-  if(check)
-  {
-    document.getElementById('uploadFileSend').setAttribute('class', 'send active');
-    document.getElementById('uploadFileSend').addEventListener('click', checkBeforeUpload);
-  }
-}
-
-/****************************************************************************************************/
-
-function checkBeforeUpload(event)
-{
-  var background          = document.createElement('div');
-  var spinner             = document.createElement('div');
-
-  background              .setAttribute('class', 'loaderBackground');
-  spinner                 .setAttribute('class', 'loaderSpinner');
-
-  background              .setAttribute('id', 'uploadFileLoaderBackground');
-
-  spinner                 .innerHTML = `<i class='fas fa-circle-notch fa-spin'></i>`;
-
-  document.getElementById('uploadFileBox').appendChild(background);
-  document.getElementById('uploadFileBox').appendChild(spinner);
-
-  var xhr   = new XMLHttpRequest();
-  var data  = new FormData();
-
-  data.append('service', document.getElementById('mainBlock').getAttribute('name'));
-  data.append('currentFolder', document.getElementById('filesBlock').getAttribute('name'));
-  data.append('file', JSON.stringify({ 'name': document.getElementById('uploadFileInput').files[0].name, 'size': document.getElementById('uploadFileInput').files[0].size }));
-
-  xhr.responseType = 'json';
-
-  xhr.timeout = 10000;
-
-  xhr.open('POST', '/queries/storage/services/prepare-upload', true);
-
-  xhr.send(data);
-
-  xhr.ontimeout = () =>
-  {
-    spinner.remove();
-    background.remove();
-
-    displayUploadPopupError('La requête a expiré, veuillez réessayer plus tard', null);
-  }
-
-  xhr.onload = () =>
-  {
-    spinner.remove();
-    background.remove();
-
-    document.getElementById('uploadFileContent').style.display = 'none';
-
-    if(xhr.status == 500 || xhr.status == 406 || xhr.status == 404 || xhr.status == 403 || xhr.status == 401)
+    $.ajax(
     {
-      displayUploadPopupError(xhr.response.message, xhr.response.detail);
-    }
-
-    else
-    {
-      if(xhr.response.fileExists)
+      method: 'PUT', dataType: 'json', data: { serviceUuid: document.getElementById('serviceUuid').getAttribute('name'), currentFolder: document.getElementById('currentFolder').getAttribute('name'), fileName: fileName, fileSize: document.getElementById('uploadFilePopupInput').files[0].size }, timeout: 5000, url: '/queries/storage/services/prepare-upload',
+      error: (xhr, textStatus, errorThrown) =>
       {
-        var warning       = document.createElement('div');
-        var icon          = document.createElement('div');
-        var content       = document.createElement('div');
-
-        warning           .setAttribute('id', 'uploadFileWarning');
-
-        warning           .setAttribute('class', 'warning');
-        icon              .setAttribute('class', 'icon');
-        content           .setAttribute('class', 'content');
-
-        icon              .innerHTML = `<i class='fas fa-exclamation-triangle'></i>`;
-
-        warning           .appendChild(icon);
-        warning           .appendChild(content);
-        
-        if(xhr.response.rightToRemove == false)
+        removeLoader(loader, () =>
         {
-          content           .innerText = xhr.response.strings.storage.services.popup.upload.replace.unauthorized;
+          document.getElementById('uploadFilePopup').removeAttribute('style');
 
-          var button      = document.createElement('button');
+          xhr.responseJSON == undefined
+          ? displayError('Temps de réponse dépassé', null, 'uploadPopupError')
+          : displayError(xhr.responseJSON.message, xhr.responseJSON.detail, 'uploadPopupError');
+        });
+      }
+    }).done((result) =>
+    {
+      removeLoader(loader, () =>
+      {
+        if(result.fileAlreadyExists)
+        {
+          if(result.hasTheRightToRemove == false)
+          {
+            document.getElementById('uploadFilePopup').removeAttribute('style');
 
-          button          .innerText = 'OK';
-          button          .setAttribute('class', 'button');
-          button          .addEventListener('click', closeUploadPopupError);
+            displayError(storageAppStrings.services.detailPage.uploadFilePopup.hasNoRightToReplaceExistingFile, null, 'uploadPopupError');
+            return;
+          }
 
-          warning         .appendChild(button);
+          return displayReplaceFilePopup(storageAppStrings)
         }
 
-        else
-        {
-          content           .innerText = xhr.response.strings.storage.services.popup.upload.replace.authorized;
-
-          var yes         = document.createElement('div');
-          var no          = document.createElement('div');
-
-          no              .innerHTML = `<i class='fas fa-times-circle'></i>`;
-          yes             .innerHTML = `<i class='fas fa-check-circle'></i>`;
-
-          no              .setAttribute('class', 'no');
-          yes             .setAttribute('class', 'yes');
-          no              .addEventListener('click', clickOnReplaceNo);
-          yes             .addEventListener('click', clickOnReplaceYes);
-
-          warning         .appendChild(yes);
-          warning         .appendChild(no);
-        }
-
-        document.getElementById('uploadFileBox').appendChild(warning);
-      }
-
-      else
-      {
-        uploadFile();
-      }
-    }
-  }
-}
-
-/****************************************************************************************************/
-
-function uploadFile()
-{
-  document.getElementById('uploadFileContent').style.display = 'none';
-
-  var xhr   = new XMLHttpRequest();
-  var data  = new FormData();
-
-  xhr.responseType = 'json';
-
-  data.append('service', document.getElementById('mainBlock').getAttribute('name'));
-  data.append('currentFolder', document.getElementById('filesBlock').getAttribute('name'));
-  data.append('file', document.getElementById('uploadFileInput').files[0]);
-
-  var loader          = document.createElement('div');
-  var sizeInfo        = document.createElement('div');
-  var progressBar     = document.createElement('div');
-  var loadedPart      = document.createElement('div');
-  var statusMessage   = document.createElement('div');
-  var cancelButton    = document.createElement('div');
-
-  loader              .setAttribute('id', 'uploadFileProgressBar');
-  
-  loader              .setAttribute('class', 'loading');
-  sizeInfo            .setAttribute('class', 'info');
-  progressBar         .setAttribute('class', 'bar');
-  loadedPart          .setAttribute('class', 'progress');
-  statusMessage       .setAttribute('class', 'status');
-  cancelButton        .setAttribute('class', 'cancel');
-
-  statusMessage       .innerText = '0%';
-  sizeInfo            .innerText = '.../...';
-
-  loadedPart          .style.width = '0%';
-
-  cancelButton        .innerHTML = `<i class='fas fa-times-circle'></i>`;
-
-  progressBar         .appendChild(loadedPart);
-  progressBar         .appendChild(statusMessage);
-  loader              .appendChild(sizeInfo);
-  loader              .appendChild(progressBar);
-  loader              .appendChild(cancelButton);
-
-  document.getElementById('uploadFileBox').appendChild(loader);
-
-  cancelButton.addEventListener('click', (event) => 
-  { 
-    xhr               .abort();
-    loader            .remove();
-
-    document.getElementById('uploadFileContent').removeAttribute('style');
+        document.getElementById('uploadFilePopup').removeAttribute('style');
+        document.getElementById('uploadFilePopupSend').style.display = 'block';
+      });
+    });
   });
+}
+
+/****************************************************************************************************/
+
+function displayReplaceFilePopup(storageAppStrings)
+{
+  var replacePopup          = document.createElement('div');
+  var replacePopupButtons   = document.createElement('div');
+  var replacePopupConfirm   = document.createElement('button');
+  var replacePopupCancel    = document.createElement('button');
+
+  replacePopup              .setAttribute('class', 'standardPopup');
+  replacePopupButtons       .setAttribute('class', 'replaceFilePopupButtons');
+  replacePopupConfirm       .setAttribute('class', 'replaceFilePopupConfirm');
+  replacePopupCancel        .setAttribute('class', 'replaceFilePopupCancel');
+
+  replacePopup              .innerHTML += `<div class="standardPopupTitle">${storageAppStrings.services.detailPage.uploadFilePopup.replaceFileTitle}</div>`;
+  replacePopup              .innerHTML += `<div class="standardPopupMessage">${storageAppStrings.services.detailPage.uploadFilePopup.replaceFileMessage}</div>`;
+
+  replacePopupConfirm       .innerText = storageAppStrings.services.detailPage.uploadFilePopup.replaceFileConfirm;
+  replacePopupCancel        .innerText = storageAppStrings.services.detailPage.uploadFilePopup.replaceFileCancel;
+
+  replacePopupConfirm       .addEventListener('click', () =>
+  {
+    replacePopup.remove();
+    uploadFile(storageAppStrings);
+  });
+  
+  replacePopupCancel        .addEventListener('click', () =>
+  {
+    replacePopup.remove();
+    document.getElementById('uploadFilePopupInput').value = '';
+    document.getElementById('uploadFilePopupFileName').innerText = storageAppStrings.services.detailPage.uploadFilePopup.inputPlaceholder;
+    document.getElementById('uploadFilePopup').removeAttribute('style');
+  });
+
+  replacePopupButtons       .appendChild(replacePopupConfirm);
+  replacePopupButtons       .appendChild(replacePopupCancel);
+  replacePopup              .appendChild(replacePopupButtons);
+  document.body             .appendChild(replacePopup);
+}
+
+/****************************************************************************************************/
+
+function uploadFile(storageAppStrings)
+{
+  var xhr   = new XMLHttpRequest();
+  var data  = new FormData();
+
+  xhr.responseType = 'json';
+
+  data.append('service', document.getElementById('serviceUuid').getAttribute('name'));
+  data.append('currentFolder', document.getElementById('currentFolder').getAttribute('name'));
+  data.append('file', document.getElementById('uploadFilePopupInput').files[0]);
+
+  document.getElementById('uploadFilePopupContent').style.display = 'none';
+  document.getElementById('uploadFilePopup').removeAttribute('style');
+
+  var progressBlock                 = document.createElement('div');
+  var progressBlockStatus           = document.createElement('div');
+  var progressBlockStatusCog        = document.createElement('div');
+  var progressBlockStatusBar        = document.createElement('div');
+  var progressBlockStatusBarFill    = document.createElement('div');
+  var progressBlockStatusBarValue   = document.createElement('div');
+  var progressBlockCancel           = document.createElement('button');
+
+  progressBlock               .setAttribute('class', 'uploadFilePopupProgressBlock');
+  progressBlockStatus         .setAttribute('class', 'uploadFilePopupProgressBlockStatus');
+  progressBlockStatusCog      .setAttribute('class', 'uploadFilePopupProgressBlockStatusCog');
+  progressBlockStatusBar      .setAttribute('class', 'uploadFilePopupProgressBlockStatusBar');
+  progressBlockStatusBarFill  .setAttribute('class', 'uploadFilePopupProgressBlockStatusBarFill');
+  progressBlockStatusBarValue .setAttribute('class', 'uploadFilePopupProgressBlockStatusBarValue');
+  progressBlockCancel         .setAttribute('class', 'uploadFilePopupProgressBlockCancel');
+
+  progressBlockStatusCog      .innerHTML = `<i class="fas fa-cog fa-spin"></i>`;
+  progressBlockStatusBarValue .innerText = '0 %';
+  progressBlockCancel         .innerText = storageAppStrings.services.detailPage.uploadFilePopup.cancelButton;
+
+  progressBlockCancel         .addEventListener('click', () =>
+  {
+    xhr.abort();
+    progressBlock.remove();
+    document.getElementById('uploadFilePopupContent').removeAttribute('style');
+  });
+
+  progressBlockStatusBar      .appendChild(progressBlockStatusBarFill);
+  progressBlockStatusBar      .appendChild(progressBlockStatusBarValue);
+  progressBlockStatus         .appendChild(progressBlockStatusCog);
+  progressBlockStatus         .appendChild(progressBlockStatusBar);
+  progressBlock               .appendChild(progressBlockStatus);
+  progressBlock               .appendChild(progressBlockCancel);
+
+  document.getElementById('uploadFilePopup').appendChild(progressBlock);
 
   xhr.upload.addEventListener('progress', (event) => 
   {
     if(event.lengthComputable) 
     {
       var percentComplete = ((event.loaded / event.total) * 100).toFixed(2);
-
-      if(parseInt(event.total) / 1024 / 1024 / 1024 / 1024 > 1) sizeInfo.innerHTML = `<div class='left'>${(event.loaded / 1024 / 1024 / 1024).toFixed(2)}</div><div class='right'>/ ${(event.total / 1024 / 1024 / 1024).toFixed(2)} Go</div>`;
-      else if(parseInt(event.total) / 1024 / 1024 / 1024 > 1) sizeInfo.innerHTML = `<div class='left'>${(event.loaded / 1024 / 1024).toFixed(2)}</div><div class='right'>/ ${(event.total / 1024 / 1024).toFixed(2)} Mo</div>`;
-      else if(parseInt(event.total) / 1024 / 1024 > 1) sizeInfo.innerHTML = `<div class='left'>${(event.loaded / 1024).toFixed(2)}</div><div class='right'>/ ${(event.total / 1024).toFixed(2)} Ko</div>`;
-      else
-      {
-        sizeInfo.innerHTML = `<div class='left'>${event.loaded}</div><div class='right'>/ ${event.total} o</div>`;
-      }
       
-      statusMessage.innerText = `${percentComplete}%`;
+      progressBlockStatusBarValue.innerText = `${percentComplete} %`;
 
-      loadedPart.style.width = `${percentComplete}%`;
+      progressBlockStatusBarFill.style.width = `${percentComplete}%`;
     }
 
     else 
     {
-      statusMessage.innerText = '?';
+      progressBlockStatusBarValue.innerText = '?';
     }
   }, false);
 
@@ -366,105 +301,31 @@ function uploadFile()
 
   xhr.ontimeout = () =>
   {
-    loader.remove();
+    progressBlock.remove();
+    document.getElementById('uploadFilePopupContent').removeAttribute('style');
 
-    displayUploadPopupError('La requête a expiré, veuillez réessayer plus tard', null);
+    displayError('La requête a expiré, veuillez réessayer plus tard', null, null);
   }
 
   xhr.onload = () =>
   {
-    loader.remove();
-
-    if(xhr.status == 200)
+    if(xhr.status === 200)
     {
-      var success     = document.createElement('div');
-      var message     = document.createElement('div');
-      var icon        = document.createElement('div');
-      var content     = document.createElement('div');
-      var button      = document.createElement('button');
+      document.getElementById('uploadFilePopup').remove();
 
-      success         .setAttribute('class', 'success');
-      message         .setAttribute('class', 'message');
-      icon            .setAttribute('class', 'icon');
-      content         .setAttribute('class', 'content');
-      button          .setAttribute('class', 'button');
-      
-      icon            .innerHTML = `<i class='far fa-check-circle'></i>`;
-      content         .innerText = xhr.response.message;
-      button          .innerText = 'OK';
+      removeBackground('uploadFileBackground');
 
-      button          .addEventListener('click', closeUploadFilePopup);
-
-      message         .appendChild(icon);
-      message         .appendChild(content);
-      success         .appendChild(message);
-      success         .appendChild(button);
-
-      document.getElementById('uploadFileBox').appendChild(success);
-
-      socket.emit('storageAppServicesfileUploaded', xhr.response.fileUuid, document.getElementById('mainBlock').getAttribute('name'), document.getElementById('currentPath').children[document.getElementById('currentPath').children.length - 1].getAttribute('name'));
+      displaySuccess(xhr.response.message);
     }
 
     else
     {
-      displayUploadPopupError(xhr.response.message, xhr.response.detail);
+      progressBlock.remove();
+      document.getElementById('uploadFilePopupContent').removeAttribute('style');
+
+      displayError(xhr.response.message, xhr.response.detail, null);
     }
   }
-}
-
-/****************************************************************************************************/
-
-function clickOnReplaceYes(event)
-{
-  document.getElementById('uploadFileWarning').remove();
-
-  uploadFile();
-}
-
-/****************************************************************************************************/
-
-function clickOnReplaceNo(event)
-{
-  document.getElementById('uploadFileWarning').remove();
-  document.getElementById('uploadFileContent').removeAttribute('style');
-}
-
-/****************************************************************************************************/
-
-function displayUploadPopupError(message, detail)
-{
-  if(document.getElementById('uploadFileContent')) document.getElementById('uploadFileContent').style.display = 'none';
-
-  var error     = document.createElement('div');
-  var icon      = document.createElement('div');
-  var content   = document.createElement('div');
-  var button    = document.createElement('button');
-
-  error         .setAttribute('class', 'error');
-  icon          .setAttribute('class', 'icon');
-  content       .setAttribute('class', 'content');
-  button        .setAttribute('class', 'button');
-
-  button        .addEventListener('click', closeUploadPopupError);
-
-  icon          .innerHTML = `<i class='far fa-times-circle'></i>`;
-  content       .innerText = message;
-  button        .innerText = 'OK';
-
-  error         .appendChild(icon);
-  error         .appendChild(content);
-  error         .appendChild(button);
-
-  if(detail != null)
-  {
-    var detailBlock   = document.createElement('div');
-
-    detailBlock       .setAttribute('class', 'detail');
-    detailBlock       .innerText = detail;
-    error             .appendChild(detailBlock);
-  }
-
-  document.getElementById('uploadFileBox').appendChild(error);
 }
 
 /****************************************************************************************************/

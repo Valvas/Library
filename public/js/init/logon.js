@@ -1,19 +1,28 @@
-document.getElementById('send').addEventListener('click', sendData);
+/****************************************************************************************************/
+
+if(document.getElementById('initLogonForm')) document.getElementById('initLogonForm').addEventListener('submit', sendData);
+
+/****************************************************************************************************/
 
 function sendData(event)
 {
-  if(document.getElementById('password').value.length == 0) document.getElementById('fail').innerText = 'Veuillez entrer un mot de passe';
+  event.preventDefault();
 
-  else
+  if(document.getElementById('password') == null) return;
+
+  if(document.getElementById('password').value.length === 0) return document.getElementById('fail').innerText = 'Veuillez entrer un mot de passe';
+
+  $.ajax(
   {
-    $.ajax(
-    {
-      type: 'POST', timeout: 2000, dataType: 'JSON', data: { password: document.getElementById('password').value }, url: '/init/logon', success: () => {},
-      error: (xhr, status, error) => { document.getElementById('fail').innerText = xhr.responseJSON.message; }
-                    
-    }).done((json) =>
-    { 
-      location = '/init/form';
-    });
-  }
+    type: 'PUT', timeout: 5000, dataType: 'JSON', data: { password: document.getElementById('password').value }, url: '/init/logon', success: () => {},
+    error: (xhr, status, error) => { document.getElementById('fail').innerText = xhr.responseJSON.message; }
+                  
+  }).done((json) =>
+  {
+    document.cookie = 'peiinit=' + json.token + '; max-age=' + json.maxAge;
+
+    location = '/init/form';
+  });
 }
+
+/****************************************************************************************************/

@@ -1,5 +1,114 @@
 /****************************************************************************************************/
 
+function browseFolder(folderUuid)
+{
+  if(document.getElementById('serviceUuid') == null) return;
+  if(document.getElementById('currentFolder') == null) return;
+  if(document.getElementById('currentPathLocation') == null) return;
+
+  createBackground('browsingFolder');
+
+  displayLoader('', (loader) =>
+  {
+    $.ajax(
+    {
+      method: 'PUT', dataType: 'json', data: { serviceUuid: document.getElementById('serviceUuid').getAttribute('name'), folderUuid: folderUuid == null ? null : folderUuid }, timeout: 10000, url: '/queries/storage/services/get-folder-content',
+
+      error: (xhr, textStatus, errorThrown) =>
+      {
+        removeLoader(loader, () => {  });
+
+        removeBackground('browsingFolder');
+
+        xhr.responseJSON != undefined ?
+        displayError(xhr.responseJSON.message, xhr.responseJSON.detail, 'browseFolderError') :
+        displayError('Une erreur est survenue, veuillez réessayer plus tard', null, 'browseFolderError');
+      }
+
+    }).done((result) =>
+    {
+      unselectAllFiles();
+
+      console.log(result);
+
+      document.getElementById('currentPathLocation').innerHTML = '';
+
+      if(result.folderPath.length === 0)
+      {
+        document.getElementById('currentPathLocation').innerHTML = `<div class="storageServiceMainBlockFilesPathBlockSelected">${result.storageAppStrings.services.detailPage.filesSection.rootPath}</div>`;
+      }
+
+      else
+      {
+        document.getElementById('currentPathLocation').innerHTML += `<div onclick="browseFolder(null)" class="storageServiceMainBlockFilesPathBlock"><div class="storageServiceMainBlockFilesPathBlockLabel">${result.storageAppStrings.services.detailPage.filesSection.rootPath}</div><div class="storageServiceMainBlockFilesPathBlockIcon"><i class="fas fa-chevron-right"></i></div></div>`;
+
+        for(var x = 0; x < result.folderPath.length; x++)
+        {
+          (x + 1) === result.folderPath.length
+          ? document.getElementById('currentPathLocation').innerHTML += `<div class="storageServiceMainBlockFilesPathBlockSelected">${result.folderPath[x].name}</div>`
+          : document.getElementById('currentPathLocation').innerHTML += `<div onclick="browseFolder('${result.folderPath[x].uuid}')" class="storageServiceMainBlockFilesPathBlock"><div class="storageServiceMainBlockFilesPathBlockLabel">${result.folderPath[x].name}</div><div class="storageServiceMainBlockFilesPathBlockIcon"><i class="fas fa-chevron-right"></i></div></div>`;
+        }
+      }
+
+      document.getElementById('currentFolder').removeAttribute('name');
+
+      if(result.parentFolder != undefined) document.getElementById('currentFolder').setAttribute('name', result.parentFolder.uuid);
+
+      document.getElementById('currentFolder').innerHTML = '';
+
+      const folders = result.elements.folders, files = result.elements.files;
+
+      for(var x = 0; x < folders.length; x++)
+      {
+        var displayClass = null;
+
+        if(document.getElementById('selectedDisplay').getAttribute('name') === 'largeGrid') displayClass = 'serviceElementsFileLargeGrid';
+        if(document.getElementById('selectedDisplay').getAttribute('name') === 'smallGrid') displayClass = 'serviceElementsFileSmallGrid';
+        if(document.getElementById('selectedDisplay').getAttribute('name') === 'list') displayClass = 'serviceElementsFileList';
+
+        document.getElementById('currentFolder').innerHTML += `<div ondblclick="browseFolder('${folders[x].uuid}')" class="${displayClass}" name="${folders[x].uuid}"><div class="icon serviceElementsFolder"><i class="far fa-folder-open"></i></div><div class="name">${folders[x].name}</div></div>`;
+      }
+
+      for(var x = 0; x < files.length; x++)
+      {
+        var display = null, input = false, icon = null;
+
+        if(document.getElementById('selectedDisplay').getAttribute('name') === 'largeGrid') display = 'serviceElementsFileLargeGrid';
+        if(document.getElementById('selectedDisplay').getAttribute('name') === 'smallGrid') display = 'serviceElementsFileSmallGrid';
+        if(document.getElementById('selectedDisplay').getAttribute('name') === 'list') display = 'serviceElementsFileList';
+
+        if(result.serviceRights.downloadFiles <= result.accountRightsLevel || result.serviceRights.removeFiles <= result.accountRightsLevel) input = true;
+
+        switch(files[x].name.split('.')[files[x].name.split('.').length - 1])
+        {
+          case 'zip': icon = `<div class="icon serviceElementsFileArchive"><i class="far fa-file-archive"></i></div>`; break;
+          case 'txt': icon = `<div class="icon serviceElementsFileTxt"><i class="far fa-file-alt"></i></div>`; break;
+          case 'doc': icon = `<div class="icon serviceElementsFileDoc"><i class="far fa-file-word"></i></div>`; break;
+          case 'docx': icon = `<div class="icon serviceElementsFileDocx"><i class="far fa-file-word"></i></div>`; break;
+          case 'ppt': icon = `<div class="icon serviceElementsFilePpt"><i class="far fa-file-powerpoint"></i></div>`; break;
+          case 'pptx': icon = `<div class="icon serviceElementsFilePptx"><i class="far fa-file-powerpoint"></i></div>`; break;
+          case 'xls': icon = `<div class="icon serviceElementsFileXls"><i class="far fa-file-excel"></i></div>`; break;
+          case 'xlsx': icon = `<div class="icon serviceElementsFileXlsx"><i class="far fa-file-excel"></i></div>`; break;
+          case 'pdf': icon = `<div class="icon serviceElementsFilePdf"><i class="far fa-file-pdf"></i></div>`; break;
+          case 'png': icon = `<div class="icon serviceElementsFilePng"><i class="far fa-file-image"></i></div>`; break;
+          case 'jpg': icon = `<div class="icon serviceElementsFileJpg"><i class="far fa-file-image"></i></div>`; break;
+          default: icon = `<div class="icon serviceElementsFileDefault"><i class="far fa-file"></i></div>`; break;
+        }
+
+        input
+        ? document.getElementById('currentFolder').innerHTML += `<div class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${files[x].name}</div></div>`
+        : document.getElementById('currentFolder').innerHTML += `<div class="${display}">${icon}<div class="name">${files[x].name}</div></div>`;
+      }
+      
+      removeLoader(loader, () => {  });
+
+      removeBackground('browsingFolder');
+    });
+  });
+}
+
+/****************************************************************************************************/
+
 var clickCount = 0;
 
 function checkSingleOrDoubleClick(folderUuid)
@@ -62,7 +171,7 @@ function browseToFolder(folderUuid)
     {
       method: 'PUT',
       dataType: 'json',
-      data: { serviceUuid: document.getElementById('mainBlock').getAttribute('name'), folderUuid: folderUuid },
+      data: { folderUuid: folderUuid },
       timeout: 5000,
       url: '/queries/storage/services/get-folder-content',
 

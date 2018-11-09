@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <title><%= strings.storage.name %> - <%= strings.storage.locations.admin %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/navigation.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/admin/serviceRights/service.css" />
+  <body>
+    <% include ../../../include/informations.ejs %>
+    <% include ../../includes/aside.ejs %>
+    <div class="storageMainBlock">
+      <% include ../../includes/admin/navigation.ejs %>
+      <a href="/storage/admin/services-rights" class="rightsOnServicesDetailReturn"><%= strings.storage.admin.serviceRights.service.returnLink %></a>
+      <div class="storageAdminServicesRightsDetailInformationsBlock">
+        <div class="storageAdminServicesRightsDetailInformationsBlockTitle"><%= strings.storage.admin.serviceRights.service.informationsBlockTitle %></div>
+        <div class="storageAdminServicesRightsDetailInformationsBlockMessage"><%= strings.storage.admin.serviceRights.service.informationsBlockMessage %></div>
+      </div>
+      <div id="serviceUuid" name="<%= serviceData.serviceUuid %>" class="storageAdminServicesRightsDetailServiceName"><%= serviceData.serviceName.charAt(0).toUpperCase() %><%= serviceData.serviceName.slice(1).toLowerCase() %></div>
+      <input id="searchBar" class="storageAdminServicesRightsDetailAccountsBlockSearch" type="text" placeholder="<%= strings.storage.admin.serviceRights.service.accountsBlockSearchPlaceholder %>" />
+      <div class="storageAdminServicesRightsDetailAccountsBlockHelp"><%= strings.storage.admin.serviceRights.service.accountsBlockListUpdateHelp %></div>
+      <div class="storageAdminServicesRightsDetailAccountsBlock">
+        <div class="storageAdminServicesRightsDetailAccountsBlockListHeader"><%= strings.storage.admin.serviceRights.service.accountsBlockHeader %></div>
+        <div id="accountsList" class="storageAdminServicesRightsDetailAccountsBlockList">
+          <% for(var x = 0; x < accountsToManage.length; x++){ %>
+            <div name="<%= accountsToManage[x].uuid %>" class="storageAdminServicesRightsDetailAccountsBlockListAccount"><%= accountsToManage[x].email %></div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% include ../../../include/common_scripts.ejs %>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/storage/exit.js"></script>
+    <script src="/js/storage/admin/servicesRights/search.js"></script>
+    <script src="/js/storage/admin/servicesRights/update.js"></script>
+  </body>
+</html>

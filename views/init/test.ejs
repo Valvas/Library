@@ -1,29 +1,46 @@
 <!DOCTYPE html>
 <html>
-  <title>Library - Configuration</title>
+  <title>PEI - <%= strings.common.initSection.endPage.headerTitle %></title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/init.css" />
-  <body class='body'>
-    <div id='container'>
-      <button id='back' class='back'>Retour</button>
-      <div class='warnings' id='warnings'></div>
-      <div id='database' class='waiting'>
-        <div class='title'>Vérification de l'accès à la base de données</div>
-        <div class='process' id='database-process'><i class='far fa-clock'></i></div><div class='status'>En attente...</div>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <body>
+    <% include ../include/informations.ejs %>
+    <div class="initEndBlock">
+      <button id="reloadButton" class="initEndBlockReloadButton"><%= strings.common.initSection.endPage.reloadButton %></button>
+      <div id="databaseBlock" class="initTestWaiting">
+        <div class="initTestTitle"><%= strings.common.initSection.endPage.databaseTitle %></div>
+        <div class="initTestLoading" id="databaseLoading">
+          <i class="initTestLoadingIcon far fa-clock"></i>
+          <div class="initTestLoadingMessage"><%= strings.common.initSection.endPage.pendingMessage %></div>
+        </div>
       </div>
-      <div id='storage' class='waiting'>
-        <div class='title'>Vérification de l'accès au dossier de stockage</div>
-        <div class='process' id='storage-process'><i class='far fa-clock'></i></div><div class='status'>En attente...</div>
+      <div id="storageBlock" class="initTestWaiting">
+        <div class="initTestTitle"><%= strings.common.initSection.endPage.storageTitle %></div>
+        <div class="initTestLoading" id="databaseLoading">
+          <i class="initTestLoadingIcon far fa-clock"></i>
+          <div class="initTestLoadingMessage"><%= strings.common.initSection.endPage.pendingMessage %></div>
+        </div>
       </div>
-      <div id='transporter' class='waiting'>
-        <div class='title'>Test de l'envoi des e-mails</div>
-        <div class='process' id='transporter-process'><i class='far fa-clock'></i></div><div class='status'>En attente...</div>
+      <div id="transporterBlock" class="initTestWaiting">
+        <div class="initTestTitle"><%= strings.common.initSection.endPage.transporterTitle %></div>
+        <div class="initTestLoading" id="databaseLoading">
+          <i class="initTestLoadingIcon far fa-clock"></i>
+          <div class="initTestLoadingMessage"><%= strings.common.initSection.endPage.pendingMessage %></div>
+        </div>
       </div>
-      <button id='end' name='false' class='end inactive'>Terminer</button>
+      <div class="initEndBlockButtons">
+        <button id="saveButton" class="initEndBlockSaveButton"><%= strings.common.initSection.endPage.saveButton %></button> 
+        <a href="/init/form" class="initEndBlockReturnButton"><%= strings.common.initSection.endPage.returnButton %></a>
+      </div>
     </div>
-    <script src='/js/jQuery.js'></script>
-    <script src='/js/fontawesome.js'></script>
-    <script src='/js/init/test.js'></script>
+    <script src="/js/jQuery.js"></script>
+    <script src="/js/common/strings.js"></script>
+    <script src="/js/common/background.js"></script>
+    <script src="/js/common/informations.js"></script>
+    <script src="/js/init/test.js"></script>
   </body>
 </html>

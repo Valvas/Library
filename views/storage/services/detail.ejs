@@ -4,111 +4,203 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/detail.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/uploadFilePopup.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/createFolderPopup.css" />
   <body>
+    <% include ../../include/informations.ejs %>
     <% include ../includes/aside.ejs %>
-      <div class="informationsBlock" id="storageInformationsBlock"></div>
-      <div class='storageMainBlock' id='mainBlock' name="<%= service.uuid %>">
-        <% if(error != null){ %>
-          <div class='mainBlockLocation'><%= strings.storage.locations.services %></div>
-          <div class='storageErrorBlock'>
-            <div class='storageErrorBlockIcon'><i class='fas fa-exclamation-circle'></i></div><div class='storageErrorBlockMessage'><%= error.message %></div>
+    <div class="storageServiceMainBlock" id="serviceUuid" name="<%= serviceData.serviceUuid %>">
+      <div class="storageServiceMainBlockTools">
+        <div class="storageServiceMainBlockToolsServiceName"><%= serviceData.serviceName.toUpperCase() %></div>
+        <div class="storageServiceMainBlockToolsFilesAndFoldersBlock">
+          <% if(serviceRights.uploadFiles || isAdmin || serviceRights.isAdmin){ %>
+            <button id="uploadFileButton" class="storageServiceMainBlockToolsFilesAndFoldersButton"><%= strings.storage.services.detailPage.asideTools.uploadFileButton %></button>
+          <% } else{ %>
+            <div class="storageServiceMainBlockToolsFilesAndFoldersDisabledMessage"><%= strings.storage.services.detailPage.asideTools.uploadFileDisabledMessage %></div>
+          <% } %>
+          <% if(serviceRights.createFolders || isAdmin || serviceRights.isAdmin){ %>
+            <button id="createFolderButton" class="storageServiceMainBlockToolsFilesAndFoldersButton"><%= strings.storage.services.detailPage.asideTools.createFolderButton %></button>
+          <% } else{ %>
+            <div class="storageServiceMainBlockToolsFilesAndFoldersDisabledMessage"><%= strings.storage.services.detailPage.asideTools.createFolderDisabled %></div>
+          <% } %>
+        </div>
+        <div class="storageServiceMainBlockToolsSelectionBlock">
+          <div class="storageServiceMainBlockToolsSelectionAmount">
+            <div class="storageServiceMainBlockToolsSelectionAmountKey"><%= strings.storage.services.detailPage.asideTools.amountOfSelectedFiles %></div>
+            <div class="storageServiceMainBlockToolsSelectionAmountValue" id="selectedFilesAmount">0</div>
           </div>
-        <% } else{ %>
-          <div class='mainBlockLocation'><%= strings.storage.locations.services %> / <%= service.name %></div>
-          <div class='aside'>
-            <div class='info'>
-              <div class='upload'>
-                <% if(rights.uploadFiles == true){ %>
-                  <button id='upload' class="uploadFileButton"><%= strings.storage.services.info.upload.true %></button>
-                <% } else{ %>
-                  <div class="uploadFileFalse"><%= strings.storage.services.info.upload.false %></div>
-                <% } %>
-              </div>
-            </div>
-            <div class='actions' id='actions'>
-              <div class='selection' name='0'><%= strings.storage.services.selected %> : 0</div>
-              <div class='content'>
-                <button class='select' id='selectAll'><%= strings.storage.services.info.selectAll %></button>
-                <button class='select' id='unselectAll'><%= strings.storage.services.info.unselectAll %></button>
-                <% if(rights.downloadFiles == true){ %>
-                  <button id="downloadFilesButton" class="downloadFilesButton" title="<%= strings.storage.services.actions.downloadButton.titles.true %>"><%= strings.storage.services.actions.downloadButton.label %></button>
-                <% } else{ %>
-                  <button class="downloadFilesButtonOff" title="<%= strings.storage.services.actions.downloadButton.titles.false %>"><%= strings.storage.services.actions.downloadButton.label %></button>
-                <% } %>
-                <% if(rights.removeFiles == true){ %>
-                  <button id="removeFilesButton" class="removeFilesButton" title="<%= strings.storage.services.actions.removeButton.titles.true %>"><%= strings.storage.services.actions.removeButton.label %></button>
-                <% } else{ %>
-                  <button class="removeFilesButtonOff" title="<%= strings.storage.services.actions.removeButton.titles.false %>"><%= strings.storage.services.actions.removeButton.label %></button>
-                <% } %>
-              </div>
-            </div>
-            <div class='filters'>
-              <div class='label'><div class='left'><%= strings.storage.services.filters.label %></div><div class='right'><i class='fas fa-angle-down'></i></div></div>
-              <div class='content'>
-                <div class='filter'><div class='value'><%= strings.storage.services.filters.values.doc %></div><input type='checkbox' name='filter' class='checkbox' value='doc' checked /></div>
-                <div class='filter'><div class='value'><%= strings.storage.services.filters.values.xls %></div><input type='checkbox' name='filter' class='checkbox' value='xls' checked /></div>
-                <div class='filter'><div class='value'><%= strings.storage.services.filters.values.ppt %></div><input type='checkbox' name='filter' class='checkbox' value='ppt' checked /></div>
-                <div class='filter'><div class='value'><%= strings.storage.services.filters.values.pdf %></div><input type='checkbox' name='filter' class='checkbox' value='pdf' checked /></div>
-                <div class='filter'><div class='value'><%= strings.storage.services.filters.values.txt %></div><input type='checkbox' name='filter' class='checkbox' value='txt' checked /></div>
-                <div class='filter'><div class='value'><%= strings.storage.services.filters.values.png %></div><input type='checkbox' name='filter' class='checkbox' value='png' checked /></div>
-                <div class='filter'><div class='value'><%= strings.storage.services.filters.values.archive %></div><input type='checkbox' name='filter' class='checkbox' value='zip' checked /></div>
-                <div class='filter'><div class='value'><%= strings.storage.services.filters.values.default %></div><input type='checkbox' name='filter' class='checkbox' value='default' checked /></div>
-              </div>
-            </div>
-          </div><!--
-          --><div class='files'>
-            <div class='display' id='display'>
-              <div name='large' tag='true' id="selectedDisplay" class='choice true'><i class='fas fa-th-large'></i></div>
-              <div name='small' tag='false' class='choice false'><i class='fas fa-th'></i></div>
-              <div name='list' tag='false' class='choice false'><i class='fas fa-th-list'></i></div>
-            </div>
-            <input class="searchBar" type="text" placeholder="<%= strings.storage.services.searchPlaceholder %>" />
-            <% if(rights.createFolders == true){ %>
-              <button id="newFolderButton" class="newFolderButton" title="<%= strings.storage.services.newFolder.button.titles.true %>"><%= strings.storage.services.newFolder.button.label %></button>
+          <div class="storageServiceMainBlockToolsSelectionActionsBlock">
+            <div id="unselectAllFiles" class="storageServiceMainBlockToolsSelectionActionsButtonDisabled"><%= strings.storage.services.detailPage.asideTools.unselectAll %></div>
+            <% if(serviceRights.downloadFiles || isAdmin || serviceRights.isAdmin){ %>
+              <div id="downloadSelection" class="storageServiceMainBlockToolsSelectionActionsButtonDisabled"><%= strings.storage.services.detailPage.asideTools.downloadSelection %></div>
             <% } else{ %>
-              <button class="newFolderButtonOff" title="<%= strings.storage.services.newFolder.button.titles.false %>"><%= strings.storage.services.newFolder.button.label %></button>
+              <div class="storageServiceMainBlockToolsSelectionActionsDisabled"><%= strings.storage.services.detailPage.asideTools.unauthorizedToDownload %></div>
             <% } %>
-            <div class="currentPath" id="currentPath">
-              <div name="" class="currentPathBlockSelected">/</div>
-            </div>
-            <div id='filesBlock' name=''>
-              <% elements.folders.forEach((folder) =>
-              { %>
-                <div class="storageAppServiceFolderLarge" id="<%= folder.uuid %>" onclick="checkSingleOrDoubleClick('<%= folder.uuid %>')">
-                  <div class="storageAppServiceFolderLargeIcon"><i class="fas fa-folder-open fa-rotate-90"></i></div><!--
-                  --><div class="storageAppServiceFolderLargeName"><%= folder.name %></div>
-                </div>
-              <% }) %>
-              <% elements.files.forEach((file) =>
-              {
-                switch(file.extension)
-                { 
-                  case 'doc': %><div class='storageAppServicesFilesLarge' tag='doc' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon doc'><i class="far fa-file-word"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'docx': %><div class='storageAppServicesFilesLarge' tag='doc' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon doc'><i class="far fa-file-word"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'ppt': %><div class='storageAppServicesFilesLarge' tag='ppt' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon ppt'><i class="far fa-file-powerpoint"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'pptx': %><div class='storageAppServicesFilesLarge' tag='ppt' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon ppt'><i class="far fa-file-powerpoint"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'xls': %><div class='storageAppServicesFilesLarge' tag='xls' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon xls'><i class="far fa-file-excel"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'xlsx': %><div class='storageAppServicesFilesLarge' tag='xls' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon xls'><i class="far fa-file-excel"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'pdf': %><div class='storageAppServicesFilesLarge' tag='pdf' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon pdf'><i class="far fa-file-pdf"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'txt': %><div class='storageAppServicesFilesLarge' tag='txt' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon txt'><i class="far fa-file-alt"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'png': %><div class='storageAppServicesFilesLarge' tag='png' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon png'><i class="far fa-file-image"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'jpg': %><div class='storageAppServicesFilesLarge' tag='png' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon jpg'><i class="far fa-file-image"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'zip': %><div class='storageAppServicesFilesLarge' tag='zip' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon zip'><i class="far fa-file-archive"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% case 'rar': %><div class='storageAppServicesFilesLarge' tag='zip' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon zip'><i class="far fa-file-archive"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                  <% default: %><div class='storageAppServicesFilesLarge' tag='default' id='<%= file.uuid %>'><div class='storageAppServicesFilesLargeIcon default'><i class="far fa-file"></i></div><div class='storageAppServicesFilesLargeName'><%= file.name %>.<%= file.extension %></div><% if((rights.downloadFiles == true || rights.removeFiles == true) && file.deleted == 0){ %><input type='checkbox' class='storageAppServicesFilesLargeCheckbox' onchange='selectFile(this)' /><% } %></div><% break %>
-                <% } 
-              }) %>
-            </div>
+            <% if(serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+              <div id="removeSelection" class="storageServiceMainBlockToolsSelectionActionsButtonDisabled"><%= strings.storage.services.detailPage.asideTools.removeSelection %></div>
+            <% } else{ %>
+              <div class="storageServiceMainBlockToolsSelectionActionsDisabled"><%= strings.storage.services.detailPage.asideTools.unauthorizedToRemove %></div>
+            <% } %>
           </div>
-        <% } %>
+        </div>
+        <div class="storageServiceMainBlockToolsFiltersBlock">
+          <div class="storageServiceMainBlockToolsFiltersTitle"><%= strings.storage.services.detailPage.asideTools.filtersTitle %></div>
+          <div class="storageServiceMainBlockToolsFiltersList">
+            <% for(var element in allExtensions){ %>
+              <div class="storageServiceMainBlockToolsFiltersListElement">
+                <div class="storageServiceMainBlockToolsFiltersListElementLabel"><%= allExtensions[element].toUpperCase() %></div>
+                <input class="storageServiceMainBlockToolsFiltersListElementCheckbox" type="checkbox" checked />
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <div class="storageServiceMainBlockFiles">
+        <div class="storageServiceMainBlockFilesHeader">
+          <div class="storageServiceMainBlockFilesHeaderSearchBlock">
+            <div class="storageServiceMainBlockFilesHeaderSearchIcon"><i class="fas fa-search"></i></div>
+            <input type="text" placeholder="<%= strings.storage.services.detailPage.filesSection.header.searchBarPlaceholder %>" class="storageServiceMainBlockFilesHeaderSearchBar" />
+          </div>
+          <div class="storageServiceMainBlockFilesHeaderDisplaySelection">
+            <div id="selectedDisplay" name="largeGrid" class="storageServiceMainBlockFilesHeaderDisplaySelectionElementEnabled"><i class="fas fa-th-large"></i></div>
+            <div name="smallGrid" class="storageServiceMainBlockFilesHeaderDisplaySelectionElementDisabled"><i class="fas fa-th"></i></div>
+            <div name="list" class="storageServiceMainBlockFilesHeaderDisplaySelectionElementDisabled"><i class="fas fa-th-list"></i></div>
+          </div>
+        </div>
+        <div id="currentPathLocation" class="storageServiceMainBlockFilesPath">
+          <div class="storageServiceMainBlockFilesPathBlockSelected"><%= strings.storage.services.detailPage.filesSection.rootPath %></div>
+        </div>
+        <div class="serviceElements" id="currentFolder">
+          <% if(serviceFilesAndFolders.files.length === 0 && serviceFilesAndFolders.folders.length === 0){ %>
+            <div class="serviceElementsEmpty"><%= strings.storage.services.detailPage.filesSection.serviceElements.emptyFolder %></div>
+          <% } else{ %>
+            <% serviceFilesAndFolders.folders.forEach((folder) => { %>
+              <div ondblclick="browseFolder('<%= folder.uuid %>')" class="serviceElementsFileLargeGrid" name="<%= folder.uuid %>">
+                <div class="icon serviceElementsFolder"><i class="far fa-folder-open"></i></div>
+                <div class="name"><%= folder.name %></div>
+              </div>
+            <% }); %>
+            <% serviceFilesAndFolders.files.forEach((file) => { %>
+              <% switch(file.name.split('.')[file.name.split('.').length - 1]){
+                case 'zip': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFileArchive"><i class="far fa-file-archive"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'txt': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFileTxt"><i class="far fa-file-alt"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'doc': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFileDoc"><i class="far fa-file-word"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'docx': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFileDocx"><i class="far fa-file-word"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'ppt': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFilePpt"><i class="far fa-file-powerpoint"></i></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'pptx': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFilePptx"><i class="far fa-file-powerpoint"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'xls': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFileXls"><i class="far fa-file-excel"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'xlsx': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFileXlsx"><i class="far fa-file-excel"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'pdf': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFilePdf"><i class="far fa-file-pdf"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'png': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFilePng"><i class="far fa-file-image"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                case 'jpg': %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFileJpg"><i class="far fa-file-image"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break;
+                default: %>
+                  <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
+                    <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+                      <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                    <% } %>
+                    <div class="icon serviceElementsFileDefault"><i class="far fa-file"></i></div>
+                    <div class="name"><%= file.name %></div>
+                  </div>
+                <% break; %>
+              <% } %>
+            <% }); %>
+          <% } %>
+        </div>
+      </div>
     </div>
-    <script src='/js/jQuery.js'></script>
-    <script src='/js/jQueryUI.js'></script>
-    <script src='/js/functions.js'></script>
-    <script src='/js/afk.js'></script>
+    <% include ../../include/common_scripts.ejs %>
     <script src='/socket.io/socket.io.js'></script>
     <script src='/js/storage/messages.js'></script>
     <script src='/js/storage/services/upload.js'></script>

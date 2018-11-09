@@ -1,6 +1,5 @@
 'use strict'
 
-const fs          = require('fs');
 const nodemailer  = require('nodemailer');
 const errors      = require(`${__root}/json/errors`);
 const constants   = require(`${__root}/functions/constants`);

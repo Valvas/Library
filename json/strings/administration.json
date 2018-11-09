@@ -1,0 +1,58 @@
+{
+  "aside":
+  {
+    "appName": "Administration",
+    "menu":
+    {
+      "home": "Accueil",
+      "accounts": "Gestion des comptes",
+      "access": "Gestion des accès",
+      "exit": "Quitter"
+    }
+  },
+
+  "homePage":
+  {
+    "title": "Accueil"
+  },
+
+  "accountsHome":
+  {
+    "title": "Gestion des comptes",
+    "createButton": "Créer un compte",
+    "searchAccountPlaceHolder": "Rechercher un compte",
+    "accountsHeader":
+    {
+      "email": "Adresse Email",
+      "lastname": "Nom",
+      "firstname": "Prénom",
+      "delete": "Supprimer"
+    }
+  },
+
+  "accountsCreate":
+  {
+    "title": "Créer un compte",
+    "returnButton": "Retour",
+    "form":
+    {
+      "title": "Formulaire",
+      "info": "Une fois le compte créé, un email avec le mot de passe est envoyé à l'adresse email du compte.",
+      "formatError": "Format incorrect.",
+      "emailLabel": "Adresse Email",
+      "emailPlaceholder": "Entrez une adresse email",
+      "lastnameLabel": "Nom de Famille",
+      "lastnamePlaceholder": "Entrez le nom de famille de la personne",
+      "firstnameLabel": "Prénom",
+      "firstnamePlaceholder": "Entrez le prénom de la personne",
+      "submitButton": "Créer le compte"
+    },
+    "confirmationPopup":
+    {
+      "title": "Confirmation",
+      "message": "Êtes-vous sûr(e) de vouloir créer ce compte ?",
+      "confirm": "Créer le compte",
+      "cancel": "Annuler la création"
+    }
+  }
+}

@@ -1,6 +1,9 @@
 'use strict'
 
-const storageAppFilesGet  = require(`${__root}/functions/storage/files/get`);
+const uuid                      = require('uuid');
+const storageAppFilesGet        = require(`${__root}/functions/storage/files/get`);
+const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`);
+const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
 
 const constants           = require(`${__root}/functions/constants`);
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
@@ -36,114 +39,131 @@ module.exports.createFileInDatabase = (fileName, fileExtension, parentFolder, ac
 // CREATE A NEW FOLDER FOR A SERVICE
 /****************************************************************************************************/
 
-module.exports.createNewFolder = (newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback) =>
+module.exports.createFolder = (newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback) =>
 {
-  newFolderName         == undefined || typeof(newFolderName)     !== 'string' ||
-  parentFolderUuid      == undefined || typeof(parentFolderUuid)  !== 'string' ||
-  serviceUuid           == undefined || typeof(serviceUuid)       !== 'string' ||
-  databaseConnection    == undefined ||
-  params                == undefined ?
+  if(accountUuid == undefined)          return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(serviceUuid == undefined)          return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(newFolderName == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'newFolderName' });
+  if(globalParameters == undefined)     return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
+  if(databaseConnection == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
+  if(newFolderName.length > globalParameters.storage.maxFolderNameSize) return callback({ status: 406, code: constants.NEW_FOLDER_NAME_BAD_FORMAT, detail: null });
 
-  checkNewFolderName(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, (error, newFolderUuid) =>
+  if(new RegExp('^[a-zA-Z0-9]([ ]?[a-zA-Z0-9]+)*$').test(newFolderName) == false) return callback({ status: 406, code: constants.NEW_FOLDER_NAME_BAD_FORMAT, detail: null });
+
+  createFolderCheckIfServiceExists(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, (error, newFolderUuid) =>
   {
-    if(error != null) return callback(error);
-
-    return callback(null, newFolderUuid);
+    return callback(error, newFolderUuid);
   });
 }
 
 /****************************************************************************************************/
 
-function checkNewFolderName(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback)
-{
-  if(new RegExp('^[a-zA-Z0-9]([ ]?[a-zA-Z0-9]+)*$').test(newFolderName) == false) return callback({ status: 406, code: constants.NEW_FOLDER_NAME_BAD_FORMAT, detail: null });
-
-  checkIfServiceExists(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
-}
-
-/****************************************************************************************************/
-
-function checkIfServiceExists(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback)
+function createFolderCheckIfServiceExists(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback)
 {
   databaseManager.selectQuery(
   {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.services,
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.services,
     args: [ '*' ],
     where: { operator: '=', key: 'uuid', value: serviceUuid }
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
     if(result.length === 0) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
 
-    checkIfParentFolderExists(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
+    return createFolderCheckAccountRights(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function checkIfParentFolderExists(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback)
+function createFolderCheckAccountRights(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback)
 {
-  if(parentFolderUuid.length === 0) checkIfFolderNameIsAvailable(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
-
-  else
+  storageAppAdminGet.getServiceLevelForEachRight(databaseConnection, globalParameters, (error, serviceRights) =>
   {
-    storageAppFilesGet.checkIfFolderExistsInDatabase(parentFolderUuid, databaseConnection, params, (error, folderExists, folderData) =>
+    if(error != null) return callback(error);
+
+    storageAppServicesRights.getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, globalParameters, (error, accountRightsLevel) =>
     {
       if(error != null) return callback(error);
 
-      if(folderExists == false) return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
-
-      if(folderData.service !== serviceUuid) return callback({ status: 406, code: constants.FOLDER_NOT_PART_OF_PROVIDED_SERVICE, detail: null });
-
-      checkIfFolderNameIsAvailable(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
+      if(serviceRights.createFolders > accountRightsLevel) return callback({ status: 403, code: constants.SERVICE_RIGHTS_LEVEL_TOO_LOW_TO_PERFORM_THIS_REQUEST, detail: null });
+    
+      return createFolderCheckIfParentFolderExists(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
     });
-  }
-}
-
-/****************************************************************************************************/
-
-function checkIfFolderNameIsAvailable(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback)
-{
-  databaseManager.selectQuery(
-  {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.folders,
-    args: [ '*' ],
-    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: newFolderName }, 1: { operator: '=', key: 'service', value: serviceUuid }, 2: { operator: '=', key: 'parent_folder', value: parentFolderUuid } }
-
-  }, databaseConnection, (error, result) =>
-  {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-
-    for(var x = 0; x < result.length; x++)
-    {
-      if(newFolderName === result[x].name) return callback({ status: 406, code: constants.FOLDER_NAME_NOT_AVAILABLE, detail: null });
-    }
-
-    createNewFolderInTheDatabase(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function createNewFolderInTheDatabase(newFolderName, parentFolderUuid, serviceUuid, accountId, databaseConnection, params, callback)
+function createFolderCheckIfParentFolderExists(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback)
 {
-  databaseManager.insertQueryWithUUID(
-  {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.folders,
-    args: { name: newFolderName, account: accountId, service: serviceUuid, parent_folder: parentFolderUuid, deleted: 0 }
+  if(parentFolderUuid == null) return createFolderCheckIfFolderNameIsAvailable(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
 
-  }, databaseConnection, (error, result, insertedUuid) =>
+  storageAppFilesGet.checkIfFolderExistsInDatabase(parentFolderUuid, databaseConnection, globalParameters, (error, folderExists, folderData) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    if(error != null) return callback(error);
 
-    return callback(null, insertedUuid);
+    if(folderExists == false) return callback({ status: 404, code: constants.PARENT_FOLDER_NOT_FOUND, detail: null });
+
+    return createFolderCheckIfFolderNameIsAvailable(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function createFolderCheckIfFolderNameIsAvailable(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback)
+{
+  storageAppFilesGet.getFolderFromName(newFolderName, serviceUuid, databaseConnection, globalParameters, (error, folderExists, folderData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(folderExists) return callback({ status: 406, code: constants.FOLDER_NAME_NOT_AVAILABLE, detail: null });
+
+    return createFolderAddInDatabase(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function createFolderAddInDatabase(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback)
+{
+  const generatedUuid = uuid.v4();
+
+  databaseManager.insertQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElements,
+    args: { uuid: generatedUuid, name: newFolderName, parent_folder: parentFolderUuid == null ? '' : parentFolderUuid, service_uuid: serviceUuid, is_directory: 1, is_deleted: 0 }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    return createFolderCreateLog(generatedUuid, accountUuid, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function createFolderCreateLog(folderUuid, accountUuid, databaseConnection, globalParameters, callback)
+{
+  const generatedUuid = uuid.v4();
+
+  databaseManager.insertQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElementsLogs,
+    args: { uuid: generatedUuid, element_uuid: folderUuid, account_uuid: accountUuid, date: Date.now(), type: globalParameters.fileLogs.folderCreated }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    return callback(null, folderUuid);
   });
 }
 

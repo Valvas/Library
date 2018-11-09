@@ -9,7 +9,6 @@ const express           = require('express');
 const bodyParser        = require('body-parser');
 const favicon           = require('serve-favicon');
 const cookieParser      = require('cookie-parser');
-const session           = require('express-session');
 
 var app = express();
 
@@ -39,14 +38,6 @@ module.exports = (callback) =>
 
     app.use(favicon(path.join(__dirname,'public', 'pictures', 'logo.ico')));
     
-    app.use(session(
-    {
-      secret: 'sdgdsfgd7ugdq87dfsd8glqgOkoh56hhqshoOHU9870jfoqo7y',
-      resave: false,
-      saveUninitialized: false,
-      cookie: { maxAge: 86400000 }
-    }));
-    
     const initLauncher = require(`${__root}/functions/init/start`);
     
     if(params.ready == false)
@@ -65,11 +56,11 @@ module.exports = (callback) =>
     
     else
     {
-      initLauncher.startApp(app, (errorObjectOrNull) =>
+      initLauncher.startApp(app, (error) =>
       {
-        if(errorObjectOrNull != null)
+        if(error != null)
         {
-          console.log(`[ERROR] - ${errorObjectOrNull.message}`);
+          console.log(`[ERROR] - ${error.message}`);
           process.exit(1);
         }
 

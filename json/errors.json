@@ -119,5 +119,15 @@
   "10118": "Echec de la création du nouveau service",
   "10119": "Echec de la création du nouveau service (celui-ci a été partiellement créé et un retour arrière n'a pas réussi, veuillez signaler ce problème à un administrateur et ne pas utiliser ce service)",
   "10120": "Echec de la suppression du service",
-  "10121": "Une erreur s'est produite lors du déplacement d'un fichier"
+  "10121": "Une erreur s'est produite lors du déplacement d'un fichier",
+  "10122": "Une requête dans la base de données a échoué",
+  "10123": "Niveau de droits trop faibles sur ce service pour effectuer cette requête",
+  "10124": "Le compte pour lequel vous voulez modifier les droits n'a pas accès à l'application concernée",
+  "10125": "Vous ne pouvez pas modifier les droits d'un compte sur un service dont ses droits sont égaux ou supérieurs au vôtres",
+  "10126": "Aucune extension n'a été trouvée",
+  "10127": "Aucune extension autorisée trouvée pour ce service",
+  "10128": "La page que vous recherchez n'existe pas ou n'existe plus",
+  "10129": "Le gestionnaire de base de données n'est pas pris en charge. Veuillez en choisir un autre",
+  "10130": "Le dossier parent est introuvable",
+  "10131": "Vous n'êtes pas administrateur de cette application. Vous ne pouvez pas accéder à cette page."
 }

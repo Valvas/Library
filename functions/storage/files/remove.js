@@ -1,8 +1,6 @@
 'use strict'
 
-const params                              = require(`${__root}/json/params`);
 const constants                           = require(`${__root}/functions/constants`);
-const accountsGet                         = require(`${__root}/functions/accounts/get`);
 const filesRemove                         = require(`${__root}/functions/files/remove`);
 const databaseManager                     = require(`${__root}/functions/database/MySQLv3`);
 const storageAppFilesGet                  = require(`${__root}/functions/storage/files/get`);
@@ -119,7 +117,7 @@ module.exports.removeFileFromService = (fileUuid, serviceUuid, databaseConnectio
   {
     databaseName: params.database.storage.label,
     tableName: params.database.storage.tables.serviceElements,
-    args: { is_deleted: 1, parent_folder: null },
+    args: { is_deleted: 1 },
     where: { operator: '=', key: 'uuid', value: fileUuid }
 
   }, databaseConnection, (error) =>

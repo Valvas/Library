@@ -88,7 +88,7 @@ function displayConfirmationPopup()
 
 function sendNewArticle()
 {
-  displayLoader('Enregistrement', `Enregistrement de l'article en cours`, null, (loader) =>
+  displayLoader(`Enregistrement de l'article en cours`, (loader) =>
   {
     $.ajax(
     {
@@ -103,8 +103,8 @@ function sendNewArticle()
         removeLoader(loader, () =>
         {
           xhr.responseJSON != undefined ?
-          displayError('Erreur', xhr.responseJSON.message, xhr.responseJSON.detail) :
-          displayError('Erreur', 'Une erreur est survenue, veuillez réessayer plus tard', null);
+          displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null) :
+          displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
         });
       }
   
@@ -112,7 +112,7 @@ function sendNewArticle()
     {
       removeLoader(loader, () =>
       {
-        displaySuccess('Enregistrement', 'Le nouvel article a été ajouté avec succès');
+        displaySuccess('Le nouvel article a été ajouté avec succès', null, null);
         document.getElementById('createArticleContainer').children[0].innerHTML = '';
         document.getElementById('createArticleBlockTitleInput').value = '';
       });
