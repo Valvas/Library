@@ -51,6 +51,8 @@ function sendFormData(event)
     {
       if(error != null)
       {
+        removeBackground('createAccountBackground');
+        
         displayError(error.message, error.detail, 'createFormError');
         return;
       }
@@ -73,16 +75,18 @@ function openConfirmationPopup(loader)
 
   popup       .setAttribute('id', 'createAccountPopup');
 
-  popup       .setAttribute('class', 'createAccountPopup');
-  buttons     .setAttribute('class', 'createAccountPopupButtons');
-  confirm     .setAttribute('class', 'createAccountPopupSave');
-  cancel      .setAttribute('class', 'createAccountPopupCancel');
+  popup       .setAttribute('class', 'confirmationAccountPopup');
+  buttons     .setAttribute('class', 'confirmationAccountPopupButtons');
+  confirm     .setAttribute('class', 'confirmationAccountPopupSave');
+  cancel      .setAttribute('class', 'confirmationAccountPopupCancel');
 
-  popup       .innerHTML += `<div class="createAccountPopupTitle">${administrationAppStrings.accountsCreate.confirmationPopup.title}</div>`;
-  popup       .innerHTML += `<div class="createAccountPopupMessage">${administrationAppStrings.accountsCreate.confirmationPopup.message}</div>`;
+  popup       .innerHTML += `<div class="confirmationAccountPopupTitle">${administrationAppStrings.accountsCreate.confirmationPopup.title}</div>`;
+  popup       .innerHTML += `<div class="confirmationAccountPopupMessage">${administrationAppStrings.accountsCreate.confirmationPopup.message}</div>`;
 
   confirm     .innerText = administrationAppStrings.accountsCreate.confirmationPopup.confirm;
   cancel      .innerText = administrationAppStrings.accountsCreate.confirmationPopup.cancel;
+
+  confirm     .addEventListener('click', sendAccountDataToServer);
 
   cancel      .addEventListener('click', () =>
   {
@@ -97,6 +101,48 @@ function openConfirmationPopup(loader)
   document.body.appendChild(popup);
 
   removeLoader(loader, () => {  });
+}
+
+/****************************************************************************************************/
+
+function sendAccountDataToServer()
+{
+  if(document.getElementById('emailInput') == null) return;
+  if(document.getElementById('lastnameInput') == null) return;
+  if(document.getElementById('firstnameInput') == null) return;
+
+  const accountEmail      = document.getElementById('emailInput').value.toLowerCase();
+  const accountLastname   = document.getElementById('lastnameInput').value.toLowerCase();
+  const accountFirstname  = document.getElementById('firstnameInput').value.toLowerCase();
+
+  if(document.getElementById('createAccountPopup')) document.getElementById('createAccountPopup').remove();
+
+  displayLoader(administrationAppStrings.accountsCreate.savingLoaderMessage, (loader) =>
+  {
+    $.ajax(
+    {
+      method: 'POST', dataType: 'json', timeout: 120000, data: { accountEmail: accountEmail, accountLastname: accountLastname, accountFirstname: accountFirstname }, url: '/queries/administration/accounts/create-account',
+
+      error: (xhr, textStatus, errorThrown) =>
+      {
+        removeLoader(loader, () => {  });
+
+        removeBackground('createAccountBackground');
+
+        xhr.responseJSON != undefined
+        ? displayError(xhr.responseJSON.message, xhr.responseJSON.detail, 'createAccountError')
+        : displayError('Une erreur est survenue, veuillez réessayer plus tard', null, 'createAccountError');
+      }
+
+    }).done((result) =>
+    {
+      removeLoader(loader, () => {  });
+
+      removeBackground('createAccountBackground');
+
+      displaySuccess(result.message, null, 'createAccountSuccess');
+    });
+  });
 }
 
 /****************************************************************************************************/

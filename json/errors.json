@@ -94,7 +94,7 @@
   "10093": "Le format du nom du dossier est incorrect",
   "10094": "Ce nom de dossier n'est pas disponible",
   "10095": "Format du commentaire incorrect",
-  "10096": "Une application est introuvable dans la base de données",
+  "10096": "Application introuvable dans la base de données",
   "10097": "Article introuvable",
   "10098": "Le format du titre de l'article est incorrect",
   "10099": "Le format du contenu de l'article est incorrect",
@@ -129,5 +129,6 @@
   "10128": "La page que vous recherchez n'existe pas ou n'existe plus",
   "10129": "Le gestionnaire de base de données n'est pas pris en charge. Veuillez en choisir un autre",
   "10130": "Le dossier parent est introuvable",
-  "10131": "Vous n'êtes pas administrateur de cette application. Vous ne pouvez pas accéder à cette page."
+  "10131": "Vous n'êtes pas administrateur de cette application. Vous ne pouvez pas accéder à cette page.",
+  "10132": "Compte créé avec succès, cependant une erreur est survenue pendant l'envoi de l'email avec le mot de passe. Afin de se connecter l'utilisateur doit demander l'envoi d'un nouveau mot de passe par email depuis la page de connexion"
 }

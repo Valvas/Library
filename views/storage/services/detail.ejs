@@ -9,6 +9,8 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/detail.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/uploadFilePopup.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/removeFilesPopup.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/downloadFilePopup.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/createFolderPopup.css" />
   <body>
     <% include ../../include/informations.ejs %>
@@ -49,11 +51,11 @@
         </div>
         <div class="storageServiceMainBlockToolsFiltersBlock">
           <div class="storageServiceMainBlockToolsFiltersTitle"><%= strings.storage.services.detailPage.asideTools.filtersTitle %></div>
-          <div class="storageServiceMainBlockToolsFiltersList">
+          <div class="storageServiceMainBlockToolsFiltersList" id="filtersList">
             <% for(var element in allExtensions){ %>
               <div class="storageServiceMainBlockToolsFiltersListElement">
                 <div class="storageServiceMainBlockToolsFiltersListElementLabel"><%= allExtensions[element].toUpperCase() %></div>
-                <input class="storageServiceMainBlockToolsFiltersListElementCheckbox" type="checkbox" checked />
+                <input class="storageServiceMainBlockToolsFiltersListElementCheckbox" value="<%= allExtensions[element] %>" type="checkbox" checked />
               </div>
             <% } %>
           </div>

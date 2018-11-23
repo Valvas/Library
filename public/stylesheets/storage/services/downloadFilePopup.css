@@ -1,0 +1,25 @@
+/****************************************************************************************************/
+
+.downloadFilePopupTitle{ padding:20px; border-bottom:1px solid #CCC; }
+
+.downloadFilePopupContent{ padding:20px; }
+
+.downloadFilePopupCounter{ margin-bottom:20px; }
+
+
+.downloadFilePopupProgress{ margin:20px 0 20px 0; }
+
+.downloadFilePopupProgressTitle{ margin-bottom:10px; }
+
+.downloadFilePopupProgressBar{ width:100%; border-radius:20px; border:1px solid rgba(0,0,0,0.24); position:relative; overflow:hidden; }
+
+.downloadFilePopupProgressBarLabel{ position:relative; text-align:center; z-index:1; font-weight:bold; font-size:1.2em; padding:4px 0 4px 0; }
+
+.downloadFilePopupProgressBarStatus{ position:absolute; z-index:0; top:0; left:0; bottom:0; width:0; background-color:#64ADEC; }
+
+
+.downloadFilePopupCancel{ padding:8px; width:150px; border:1px solid #CCC; border-radius:4px; background-color:#FFFFFF; color:#D9534F; cursor:pointer; margin:10px 0 10px calc(100% - 150px); font-size:1em; }
+
+.downloadFilePopupCancel:hover{ background-color:rgba(0,0,0,0.06); }
+
+/****************************************************************************************************/

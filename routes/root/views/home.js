@@ -13,18 +13,15 @@ router.get('/', (req, res) =>
 {
   commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news) =>
   {
-    if(error != null) res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
-
-    else
+    if(error != null) return res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
+    
+    res.render('root/home',
     {
-      res.render('root/home',
-      {
-        account: req.app.locals.account,
-        currentLocation: 'home',
-        strings: { common: commonStrings },
-        news: news
-      });
-    }
+      account: req.app.locals.account,
+      currentLocation: 'home',
+      strings: { common: commonStrings },
+      news: news
+    });
   });
 });
 

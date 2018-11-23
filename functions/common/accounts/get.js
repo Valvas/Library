@@ -54,3 +54,34 @@ module.exports.checkIfAccountExistsFromEmail = (accountEmail, databaseConnection
 }
 
 /****************************************************************************************************/
+
+module.exports.getAllAccounts = (databaseConnection, globalParameters, callback) =>
+{
+  if(globalParameters == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
+  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
+
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.accounts,
+    args: [ 'uuid', 'email', 'lastname', 'firstname', 'suspended', 'is_admin' ],
+    where: {  }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length === 0) return callback(null, []);
+
+    var accounts = [];
+
+    for(var x = 0; x < result.length; x++)
+    {
+      accounts.push({ uuid: result[x].uuid, email: result[x].email, lastname: result[x].lastname, firstname: result[x].firstname, suspended: result[x].suspended === 1, admin: result[x].is_admin === 1 });
+    }
+
+    return callback(null, accounts);
+  });
+}
+
+/****************************************************************************************************/

@@ -11,6 +11,7 @@ function updateSelectedFiles(checkbox)
   if(parseInt(document.getElementById('selectedFilesAmount').innerText) > 0)
   {
     if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').addEventListener('click', downloadSelection);
+    if(document.getElementById('removeSelection')) document.getElementById('removeSelection').addEventListener('click', removeSelection);
 
     if(document.getElementById('unselectAllFiles'))
     {
@@ -25,6 +26,7 @@ function updateSelectedFiles(checkbox)
   }
 
   if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').removeEventListener('click', downloadSelection);
+  if(document.getElementById('removeSelection')) document.getElementById('removeSelection').removeEventListener('click', removeSelection);
 
   if(document.getElementById('unselectAllFiles'))
   {
@@ -52,6 +54,7 @@ function unselectAllFiles(event)
   document.getElementById('selectedFilesAmount').innerText = '0';
 
   if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').removeEventListener('click', downloadSelection);
+  if(document.getElementById('removeSelection')) document.getElementById('removeSelection').removeEventListener('click', removeSelection);
 
   if(document.getElementById('unselectAllFiles'))
   {

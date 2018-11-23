@@ -31,10 +31,33 @@ body{ margin:0; height:100%; font-family:-apple-system, BlinkMacSystemFont, 'Seg
 .returnButton:hover{ background-color:#B7312D; }
 
 /****************************************************************************************************/
+
+.confirmationAccountPopup{ border-radius:4px; position:fixed; z-index:300; top:80px; left:calc(50% - 300px); width:600px; background-color:#FFFFFF; overflow:hidden; }
+
+.confirmationAccountPopupTitle{ background-color:rgba(0,0,0,0.9); color:#FFFFFF; font-size:1.2em; padding:20px; }
+
+.confirmationAccountPopupMessage{ padding:20px; }
+
+.confirmationAccountPopupButtons{ display:flex; flex-direction:row; flex-wrap:wrap; justify-content:flex-end; margin-top:20px; }
+
+.confirmationAccountPopupSave{ font-size:1em; margin:0 20px 20px 0; padding:8px 32px 8px 32px; color:#FFFFFF; cursor:pointer; border-radius:4px; background-color:#6184D8; border:none; }
+
+.confirmationAccountPopupSave:hover{ background-color:#4062B6; }
+
+.confirmationAccountPopupCancel{ font-size:1em; margin:0 20px 20px 0; padding:8px 32px 8px 32px; color:#FFFFFF; cursor:pointer; border-radius:4px; background-color:#D9534F; border:none; }
+
+.confirmationAccountPopupCancel:hover{ background-color:#B7312D; }
+
+@media (max-width: 639.9px)
+{
+  .confirmationAccountPopup{ top:40px; left:20px; width:calc(100% - 40px); }
+}
+
+/****************************************************************************************************/
 /* Accounts List */
 /****************************************************************************************************/
 
-.accountsContainer{ width:calc(100% - 40px); margin:20px; max-width:1000px; border-radius:2px; }
+.accountsContainer{ width:calc(100% - 40px); margin:20px; max-width:1000px; }
 
 .accountsSearch{ width:calc(100% - 40px); margin:20px 0 20px 0; max-width:500px; box-sizing:border-box; padding:8px; border:1px solid rgba(0,0,0,0.24); border-radius:4px; }
 
@@ -44,15 +67,21 @@ body{ margin:0; height:100%; font-family:-apple-system, BlinkMacSystemFont, 'Seg
 
 .accountsBlockOdd, .accountsBlockEven{ color:rgba(0,0,0,0.6); font-size:1em; overflow:hidden; display:flex; padding:10px; border-radius:4px; flex-direction:row; align-items:center; justify-content:space-between; }
 
+.accountsBlockOdd.accessVersion:hover, .accountsBlockEven.accessVersion:hover{ cursor:pointer; background-color:rgba(0,0,255,0.12); }
+
 .accountsBlockEven{ background-color:rgba(0,0,0,0.06); }
 
 .accountsHeaderEmail, .accountsEmail{ width:30%; padding-right:10px; }
 
-.accountsHeaderLastname, .accountsLastname{ width:30%; padding-right:10px; }
+.accountsHeaderLastname, .accountsLastname{ width:25%; padding-right:10px; }
 
-.accountsHeaderFirstname, .accountsFirstname{ width:30%; padding-right:10px; }
+.accountsHeaderFirstname, .accountsFirstname{ width:25%; padding-right:10px; }
 
-.accountsHeaderDelete, .accountsRemove{ width:10%; padding-right:10px; text-align:right; }
+.accountsHeaderSuspend, .accountsSuspend{ width:10%; padding-right:10px; text-align:center; }
+
+.accountsSuspend input{ width:18px; height:18px; cursor:pointer; }
+
+.accountsHeaderDelete, .accountsRemove{ width:10%; padding-right:10px; text-align:center; }
 
 .accountsRemove .icon{ color:#D9534F; font-size:1.5em; cursor:pointer; }
 
@@ -78,24 +107,40 @@ body{ margin:0; height:100%; font-family:-apple-system, BlinkMacSystemFont, 'Seg
 
 .formSubmit:hover{ background-color:#4062B6; }
 
+/****************************************************************************************************/
+/* Access Home */
+/****************************************************************************************************/
 
-.createAccountPopup{ border-radius:4px; position:fixed; z-index:300; top:80px; left:calc(50% - 300px); width:600px; background-color:#FFFFFF; overflow:hidden; }
+.accessHomeHelpMessage{ font-size:1em; margin:20px 0 20px 0; }
 
-.createAccountPopupTitle{ background-color:rgba(0,0,0,0.9); color:#FFFFFF; font-size:1.2em; padding:20px; }
+/****************************************************************************************************/
+/* Access Detail */
+/****************************************************************************************************/
 
-.createAccountPopupMessage{ padding:20px; }
+.accessContainer{ width:calc(100% - 40px); margin:20px; max-width:1000px; }
 
-.createAccountPopupButtons{ display:flex; flex-direction:row; flex-wrap:wrap; justify-content:flex-end; margin-top:20px; }
+.accessDetailReturn{ display:block; width:max-content; margin:20px 0 20px 0; text-decoration:none; border-radius:4px; background-color:#D9534F; color:#FFFFFF; font-size:1em; padding:8px 16px 8px 16px; cursor:pointer; }
 
-.createAccountPopupSave{ font-size:1em; margin:0 20px 20px 0; padding:8px 32px 8px 32px; color:#FFFFFF; cursor:pointer; border-radius:4px; background-color:#6184D8; border:none; }
+.accessDetailReturn:hover{ background-color:#B7312D; }
 
-.createAccountPopupSave:hover{ background-color:#4062B6; }
+.accessDetailAccount{ margin:40px 0 40px 0; border:1px solid rgba(0,0,0,0.24); border-radius:2px; max-width:700px; }
 
-.createAccountPopupCancel{ font-size:1em; margin:0 20px 20px 0; padding:8px 32px 8px 32px; color:#FFFFFF; cursor:pointer; border-radius:4px; background-color:#D9534F; border:none; }
+.accessDetailAccountBlock{ margin:20px; display:flex; flex-direction:row; justify-content:space-between; flex-wrap:wrap; align-items:center; }
 
-.createAccountPopupCancel:hover{ background-color:#B7312D; }
+.accessDetailAccountBlockLabel{ font-weight:bold; margin-right:20px; }
 
-@media (max-width: 639.9px)
-{
-  .createAccountPopup{ top:40px; left:20px; width:calc(100% - 40px); }
-}
+.accessDetailHelpMessage{ margin:20px 0 10px 0; }
+
+.accessDetailRightsBlock{ margin:20px 0 40px 0; box-shadow:0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.2); border-radius:0 0 4px 4px; background-color:#FFFFFF; }
+
+.accessDetailRightsBlockHeader{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; background-color:rgba(0,0,0,0.9); color:#FFFFFF; border-radius:4px 4px 0 0; padding:10px; }
+
+.accessDetailRightsBlockHeaderApp, .accessDetailRightsBlockListAppLabel{ width:calc(100% - 140px); margin-right:20px; }
+
+.accessDetailRightsBlockListAppOdd, .accessDetailRightsBlockListAppEven{ padding:10px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+
+.accessDetailRightsBlockListAppEven{ background-color:rgba(0,0,0,0.06); }
+
+.accessDetailRightsBlockListAppValue{ margin-right:10px; font-size:1em; }
+
+.accessDetailRightsBlockListAppValue input{ width:18px; height:18px; cursor:pointer; }

@@ -367,7 +367,8 @@
       "socket":
       {
         "fileUploaded": "Fichier [$1$] ajouté par [$2$]",
-        "folderCreated": "Dossier [$1$] créé par [$2$]"
+        "folderCreated": "Dossier [$1$] créé par [$2$]",
+        "fileRemoved": "Le fichier [$1$] a été supprimé"
       },
 
       "filesSection":
@@ -548,7 +549,9 @@
       {
         "done": "Fichiers supprimés avec succès",
         "message": "Êtes-vous sûr(e) de vouloir supprimer ces fichiers ?",
-        "pending": "Suppression en cours...",
+        "confirm": "Oui",
+        "cancel": "Annuler",
+        "pending": "Suppression en cours. Veuillez patienter",
         "title": "Supprimer des fichiers"
       },
 

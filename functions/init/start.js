@@ -48,27 +48,31 @@ module.exports.startInit = (app, callback) =>
 
 module.exports.startApp = (app, callback) =>
 {
-  const root                        = require(`${__root}/routes/root`);
-  const homeViews                   = require(`${__root}/routes/root/views/home`);
-  const appsViews                   = require(`${__root}/routes/root/views/apps`);
-  const newsViews                   = require(`${__root}/routes/root/views/news`);
-  const accountViews                = require(`${__root}/routes/root/views/account`);
+  const root                          = require(`${__root}/routes/root`);
+  const homeViews                     = require(`${__root}/routes/root/views/home`);
+  const appsViews                     = require(`${__root}/routes/root/views/apps`);
+  const newsViews                     = require(`${__root}/routes/root/views/news`);
+  const accountViews                  = require(`${__root}/routes/root/views/account`);
 
-  const rootQueriesNews             = require(`${__root}/routes/root/queries/news`);
-  const rootQueriesAccount          = require(`${__root}/routes/root/queries/account`);
+  const rootQueriesNews               = require(`${__root}/routes/root/queries/news`);
+  const rootQueriesAccount            = require(`${__root}/routes/root/queries/account`);
 
-  const diseaseViewsRoot            = require(`${__root}/routes/disease/views/root`);
+  const diseaseViewsRoot              = require(`${__root}/routes/disease/views/root`);
 
-  const administrationViewsHome     = require(`${__root}/routes/administration/views/home`);
-  const administrationViewsAccounts = require(`${__root}/routes/administration/views/accounts`);
+  const administrationViewsHome       = require(`${__root}/routes/administration/views/home`);
+  const administrationViewsAccess     = require(`${__root}/routes/administration/views/access`);
+  const administrationViewsAccounts   = require(`${__root}/routes/administration/views/accounts`);
 
-  const storageViewsHome            = require(`${__root}/routes/storage/views/home`);
-  const storageViewsAdmin           = require(`${__root}/routes/storage/views/admin`);
-  const storageViewsServices        = require(`${__root}/routes/storage/views/services`);
+  const administrationQueriesAccess   = require(`${__root}/routes/administration/queries/access`);
+  const administrationQueriesAccounts = require(`${__root}/routes/administration/queries/accounts`);
 
-  const storageQueriesAdmin         = require(`${__root}/routes/storage/queries/admin`);
-  const storageQueriesStrings       = require(`${__root}/routes/storage/queries/strings`);
-  const storageQueriesServices      = require(`${__root}/routes/storage/queries/services`);
+  const storageViewsHome              = require(`${__root}/routes/storage/views/home`);
+  const storageViewsAdmin             = require(`${__root}/routes/storage/views/admin`);
+  const storageViewsServices          = require(`${__root}/routes/storage/views/services`);
+
+  const storageQueriesAdmin           = require(`${__root}/routes/storage/queries/admin`);
+  const storageQueriesStrings         = require(`${__root}/routes/storage/queries/strings`);
+  const storageQueriesServices        = require(`${__root}/routes/storage/queries/services`);
 
   const params = app.get('params');
 
@@ -84,7 +88,11 @@ module.exports.startApp = (app, callback) =>
   app.use('/queries/root/account', auth, rootQueriesAccount);
 
   app.use('/administration', auth, administrationViewsHome);
+  app.use('/administration/access', auth, administrationViewsAccess);
   app.use('/administration/accounts', auth, administrationViewsAccounts);
+
+  app.use('/queries/administration/access', auth, administrationQueriesAccess);
+  app.use('/queries/administration/accounts', auth, administrationQueriesAccounts);
 
   app.use('/storage', auth, storageAppAccess, storageViewsHome);
   app.use('/storage/admin', auth, storageAppAccess, storageAppAdminAccess, storageViewsAdmin);

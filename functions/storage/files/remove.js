@@ -11,17 +11,16 @@ const storageAppLogsRemoveFile            = require(`${__root}/functions/storage
 
 /****************************************************************************************************/
 
-module.exports.removeFiles = (filesToRemove, serviceUuid, accountID, databaseConnection, params, callback) =>
+module.exports.removeFiles = (filesToRemove, serviceUuid, accountUuid, isGlobalAdmin, databaseConnection, globalParameters, callback) =>
 {
-  filesToRemove         == undefined ||
-  serviceUuid           == undefined ||
-  accountID             == undefined ||
-  databaseConnection    == undefined ||
-  params                == undefined ?
+  if(accountUuid == undefined)          return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(serviceUuid == undefined)          return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
+  if(filesToRemove == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'filesToRemove' });
+  if(isGlobalAdmin == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'isGlobalAdmin' });
+  if(globalParameters == undefined)     return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
+  if(databaseConnection == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
-  callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
-
-  getAccountData(filesToRemove, serviceUuid, accountID, databaseConnection, params, (error) =>
+  checkAccountRights(filesToRemove, serviceUuid, accountUuid, isGlobalAdmin, databaseConnection, globalParameters, (error) =>
   {
     return callback(error);
   });
@@ -29,39 +28,27 @@ module.exports.removeFiles = (filesToRemove, serviceUuid, accountID, databaseCon
 
 /****************************************************************************************************/
 
-function getAccountData(filesToRemove, serviceUuid, accountID, databaseConnection, params, callback)
+function checkAccountRights(filesToRemove, serviceUuid, accountUuid, isGlobalAdmin, databaseConnection, globalParameters, callback)
 {
-  accountsGet.getAccountUsingID(accountID, databaseConnection, (error, account) =>
+  storageAppServicesRights.getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, globalParameters, (error, serviceRights) =>
   {
     if(error != null) return callback(error);
 
-    checkAccountRights(filesToRemove, serviceUuid, account, databaseConnection, params, callback);
+    if(serviceRights.removeFiles == false && serviceRights.isAdmin == false && isGlobalAdmin == false) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_DELETE_FILES, detail: null });
+
+    browseFilesToRemove(filesToRemove, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function checkAccountRights(filesToRemove, serviceUuid, account, databaseConnection, params, callback)
-{
-  storageAppServicesRights.getRightsTowardsService(serviceUuid, account.id, databaseConnection, params, (error, accountRights) =>
-  {
-    if(error != null) return callback(error);
-
-    if(accountRights.remove == 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_DELETE_FILES, detail: null });
-
-    browseFilesToRemove(filesToRemove, serviceUuid, account, databaseConnection, params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function browseFilesToRemove(filesToRemove, serviceUuid, account, databaseConnection, params, callback)
+function browseFilesToRemove(filesToRemove, serviceUuid, accountUuid, databaseConnection, globalParameters, callback)
 {
   var index = 0;
 
   var fileBrowser = () =>
   {
-    storageAppFilesGet.getFileFromDatabaseUsingUuid(filesToRemove[index], databaseConnection, params, (error, fileExists, fileData) =>
+    storageAppFilesGet.getFileFromDatabaseUsingUuid(filesToRemove[index], databaseConnection, globalParameters, (error, fileExists, fileData) =>
     {
       if(error != null) return callback(error);
 
@@ -69,27 +56,31 @@ function browseFilesToRemove(filesToRemove, serviceUuid, account, databaseConnec
       {
         if(filesToRemove[index += 1] == undefined) return callback(null);
 
-        fileBrowser();
+        return fileBrowser();
       }
 
-      else
+      storageAppLogsRemoveFile.addRemoveFileLog(accountUuid, filesToRemove[index], databaseConnection, globalParameters, (error) => {  });
+
+      commonFilesMove.moveFile(`${globalParameters.storage.root}/${globalParameters.storage.services}/${serviceUuid}/${filesToRemove[index]}`, `${globalParameters.storage.root}/${globalParameters.storage.bin}/${filesToRemove[index]}`, (error) =>
       {
-        storageAppLogsRemoveFile.addRemoveFileLog(params.fileLogs.remove, account.id, filesToRemove[index], serviceUuid, databaseConnection, params, (error) => {  });
+        if(error != null) return callback(error);
 
-        filesRemove.moveFileToBin(fileData.uuid, fileData.ext, `${params.storage.root}/${params.storage.services}/${serviceUuid}`, (error) =>
+        databaseManager.updateQuery(
         {
-          if(error != null) return callback(error);
+          databaseName: globalParameters.database.storage.label,
+          tableName: globalParameters.database.storage.tables.serviceElements,
+          args: { is_deleted: 1 },
+          where: { operator: '=', key: 'uuid', value: filesToRemove[index] }
+      
+        }, databaseConnection, (error, result) =>
+        {
+          if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-          storageAppFilesSet.setFileDeletedInDatabase(fileData.uuid, databaseConnection, params, (error) =>
-          {
-            if(error != null) return callback(error);
+          if(filesToRemove[index += 1] == undefined) return callback(null);
 
-            if(filesToRemove[index += 1] == undefined) return callback(null);
-
-            fileBrowser();
-          });
+          return fileBrowser();
         });
-      }
+      });
     });
   }
 

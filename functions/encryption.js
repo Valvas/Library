@@ -29,7 +29,7 @@ module.exports.getRandomPassword = (params, callback) =>
       
     bcrypt.hash(password, params.salt, (error, result) =>
     {
-      error != undefined ? callback({ status: 500, code: constants.ENCRYPTION_FAILED }) : callback(null, { clear: password, encrypted: result });
+      error != undefined ? callback({ status: 500, code: constants.ENCRYPTION_FAILED, detail: error }) : callback(null, { clear: password, encrypted: result });
     });
   }
 

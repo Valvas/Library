@@ -26,8 +26,20 @@
       "email": "Adresse Email",
       "lastname": "Nom",
       "firstname": "Prénom",
+      "suspended": "Bloqué",
       "delete": "Supprimer"
-    }
+    },
+    "suspendAccountPopup":
+    {
+      "title": "Confirmation",
+      "suspendMessage": "Êtes-vous sûr(e) de vouloir suspendre ce compte ? Le compte utilisateur ne sera pas supprimé mais celui-ci ne pourra plus se connecter à l'intranet.",
+      "unSuspendMessage": "Êtes-vous sûr(e) de vouloir rétablir l'accès ce compte ? L'utilisateur sera de nouveau en mesure d'accéder à l'intranet.",
+      "suspendConfirm": "Suspendre le compte",
+      "unSuspendConfirm": "Rétablir le compte",
+      "cancel": "Annuler"
+    },
+    "suspendAccountSavingMessage": "Suspension du compte en cours. Veuillez patienter",
+    "unSuspendAccountSavingMessage": "Rétablissement du compte en cours. Veuillez patienter"
   },
 
   "accountsCreate":
@@ -53,6 +65,59 @@
       "message": "Êtes-vous sûr(e) de vouloir créer ce compte ?",
       "confirm": "Créer le compte",
       "cancel": "Annuler la création"
+    },
+    "savingLoaderMessage": "Création du nouveau compte en cours. Veuillez patienter"
+  },
+
+  "accessHome":
+  {
+    "title": "Gestion des accès aux applications",
+    "searchAccountPlaceHolder": "Rechercher un compte",
+    "helpMessage": "Cliquez sur une ligne dans le tableau pour aller à la gestion des accès pour le compte sélectionné",
+    "accountsHeader":
+    {
+      "email": "Adresse Email",
+      "lastname": "Nom",
+      "firstname": "Prénom",
+      "update": "Modifier les accès"
     }
+  },
+
+  "accessDetail":
+  {
+    "title": "Gestion des accès pour un compte",
+    "return": "Retour à la liste des comptes",
+    "searchAppPlaceHolder": "Rechercher une application",
+    "helpMessage": "En cochant une case vous donnez le droit à l'utilisateur d'accéder à l'application correspondante",
+    "accountBlock":
+    {
+      "emailLabel": "Adresse Email",
+      "lastnameLabel": "Nom",
+      "firstnameLabel": "Prénom"
+    },
+    "rightsBlockHeader":
+    {
+      "app": "Nom de l'application",
+      "checkbox": "Accès autorisé"
+    },
+    "updateAccessPopup":
+    {
+      "title": "Confirmation",
+      "addAccessMessage": "Êtes-vous sûr(e) de vouloir donner accès à cette application pour cet utilisateur ?",
+      "removeAccessMessage": "Êtes-vous sûr(e) de vouloir retirer l'accès à cette application pour cet utilisateur ?",
+      "addAccessConfirm": "Donner l'accès",
+      "removeAccessConfirm": "Retirer l'accès",
+      "cancel": "Annuler"
+    },
+    "addAccessSavingMessage": "Ajout de l'accès en cours. Veuillez patienter",
+    "removeAccessSavingMessage": "Suppression de l'accès en cours. Veuillez patienter"
+  },
+
+  "exitPopup":
+  {
+    "title": "Quitter l'application",
+    "message": "Êtes-vous sûr(e) de vouloir quitter cette application et retourner à l'accueil de l'intranet ?",
+    "confirm": "Quitter",
+    "cancel": "Rester"
   }
 }

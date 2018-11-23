@@ -27,14 +27,15 @@ function sendDataForm(event)
     {
       $.ajax(
       {
-        type: 'PUT', timeout: 5000, dataType: 'JSON', data: { 'email': document.getElementById('email').value }, url: '/reset-password', success: () => {},
+        type: 'PUT', timeout: 120000, dataType: 'JSON', data: { 'email': document.getElementById('email').value }, url: '/reset-password', success: () => {},
         error: (xhr, status, error) => 
         {
           document.getElementById('background').removeAttribute('style');
           document.getElementById('main').removeAttribute('style');
-  
-          if(status == 'timeout') document.getElementById('error').innerText = 'Le serveur a mis trop de temps à répondre...';
-          else{ document.getElementById('error').innerText = xhr.responseJSON.message; }
+
+          xhr.responseJSON != undefined
+          ? document.getElementById('error').innerText = xhr.responseJSON.message
+          : document.getElementById('error').innerText = 'Une erreur est survenue, veuillez réessayer plus tard';
 
           document.getElementById('error').style.display = 'block';
         } 

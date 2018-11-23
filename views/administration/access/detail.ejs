@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.administrationStrings.aside.menu[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/administration/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <body>
+    <% include ../../include/informations.ejs %>
+    <div class="mainBlock">
+      <% include ../include/header.ejs %>
+      <div class="content">
+        <div class="contentName"><%= strings.administrationStrings.accessDetail.title %></div>
+        <div class="accessContainer" id="accountUuid" name="<%= accountToUpdate.uuid %>">
+          <a class="accessDetailReturn" href="/administration/access"><%= strings.administrationStrings.accessDetail.return %></a>
+          <div class="accessDetailAccount">
+            <div class="accessDetailAccountBlock">
+              <div class="accessDetailAccountBlockLabel"><%= strings.administrationStrings.accessDetail.accountBlock.emailLabel %> :</div>
+              <div class="accessDetailAccountBlockValue"><%= accountToUpdate.email %></div>
+            </div>
+            <div class="accessDetailAccountBlock">
+              <div class="accessDetailAccountBlockLabel"><%= strings.administrationStrings.accessDetail.accountBlock.lastnameLabel %> :</div>
+              <div class="accessDetailAccountBlockValue"><%= accountToUpdate.lastname.charAt(0).toUpperCase() %><%= accountToUpdate.lastname.slice(1).toLowerCase() %></div>
+            </div>
+            <div class="accessDetailAccountBlock">
+              <div class="accessDetailAccountBlockLabel"><%= strings.administrationStrings.accessDetail.accountBlock.firstnameLabel %> :</div>
+              <div class="accessDetailAccountBlockValue"><%= accountToUpdate.firstname.charAt(0).toUpperCase() %><%= accountToUpdate.firstname.slice(1).toLowerCase() %></div>
+            </div>
+          </div>
+          <input type="text" id="appSearch" class="accountsSearch" placeholder="<%= strings.administrationStrings.accessDetail.searchAppPlaceHolder %>" />
+          <div class="accessDetailHelpMessage"><%= strings.administrationStrings.accessDetail.helpMessage %></div>
+          <div class="accessDetailRightsBlock">
+            <div class="accessDetailRightsBlockHeader">
+              <div class="accessDetailRightsBlockHeaderApp"><%= strings.administrationStrings.accessDetail.rightsBlockHeader.app %></div>
+              <div class="accessDetailRightsBlockHeaderCheckbox"><%= strings.administrationStrings.accessDetail.rightsBlockHeader.checkbox %></div>
+            </div>
+            <div class="accessDetailRightsBlockList">
+              <% for(var x = 0; x < accountAccess.length; x++){ %>
+                <div id="<%= accountAccess[x].name %>" name="appBlock" class="<% if(x % 2 === 0){ %>accessDetailRightsBlockListAppOdd<% } else{ %>accessDetailRightsBlockListAppEven<% } %>">
+                  <div class="accessDetailRightsBlockListAppLabel"><%= strings.commonStrings.apps[accountAccess[x].name] %></div>
+                  <div class="accessDetailRightsBlockListAppValue"><input class="accessDetailRightsBlockListAppCheckbox" type="checkbox" <% if(accountAccess[x].hasAccess){ %>checked<% } %> /></div>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ../../include/common_scripts.ejs %>
+    <script src="/js/administration/access/searchApps.js"></script>
+    <script src="/js/administration/access/updateAccess.js"></script>
+    <script src="/js/administration/exit.js"></script>
+  </body>
+</html>

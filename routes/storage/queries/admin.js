@@ -7,6 +7,7 @@ const constants                 = require(`${__root}/functions/constants`);
 const commonAppStrings          = require(`${__root}/json/strings/common`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
 const storageAppAccessGet       = require(`${__root}/functions/storage/access/get`);
+const commonAccountsGet         = require(`${__root}/functions/common/accounts/get`);
 const storageAppAdminUpdate     = require(`${__root}/functions/storage/admin/update`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppAdminServices   = require(`${__root}/functions/storage/admin/services`);
@@ -98,7 +99,7 @@ router.put('/update-admin-status', (req, res) =>
 });
 
 /****************************************************************************************************/
-// UPDATE ACCOUNT RIGHTS LEVEL ON A SERVICE
+// UPDATE ACCOUNT RIGHTS ON A SERVICE
 /****************************************************************************************************/
 
 router.put('/update-account-service-rights', (req, res) =>
@@ -107,44 +108,39 @@ router.put('/update-account-service-rights', (req, res) =>
   if(req.body.accountUuid == undefined)         return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'accountUuid' });
   if(req.body.serviceRights == undefined)       return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceRights' });
 
-  const serviceRights = JSON.parse(req.body.serviceRights);
+  const serviceRightsUpdate = JSON.parse(req.body.serviceRights);
 
-  console.log(serviceRights);
-  /*
+  for(var right in serviceRightsUpdate) serviceRightsUpdate[right] = serviceRightsUpdate[right] ? 1 : 0;
+
+  if(req.app.locals.isAdmin == false) return res.status(403).send({ message: errors[constants.USER_IS_NOT_ADMIN], detail: null });
+
   storageAppServicesGet.checkIfServiceExistsFromUuid(req.body.serviceUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceExists, serviceData) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
     if(serviceExists == false) return res.status(404).send({ message: errors[constants.SERVICE_NOT_FOUND], detail: null });
 
-    storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rightsLevelOnService) =>
+    storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceRights) =>
     {
       if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-      if(rightsLevelOnService < req.body.selectedRightsLevel) return res.status(403).send({ message: errors[constants.SERVICE_RIGHTS_LEVEL_TOO_LOW_TO_PERFORM_THIS_REQUEST], detail: null });
-
-      storageAppAccessGet.checkIfAccountHasAccessToTheApp(req.body.accountUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, hasAccess) =>
+      if(serviceRights.isAdmin == false && req.app.locals.isAdmin == false) return res.status(403).send({ message: errors[constants.USER_IS_NOT_ADMIN], detail: null });
+    
+      commonAccountsGet.checkIfAccountExistsFromUuid(req.body.accountUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountExists, accountData) =>
       {
         if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-        if(hasAccess == false) return res.status(406).send({ message: errors[constants.ACCOUNT_TO_UPDATE_HAS_NO_ACCESS_TO_THE_APPLICATION], detail: null });
-
-        storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, req.body.accountUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountToUpdateRightsLevelOnService) =>
+        if(accountExists == false) return res.status(404).send({ message: errors[constants.ACCOUNT_NOT_FOUND], detail: null });
+      
+        storageAppServicesRights.updateAccountRightsOnService(req.body.accountUuid, req.body.serviceUuid, serviceRightsUpdate, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
         {
           if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-          if(accountToUpdateRightsLevelOnService >= rightsLevelOnService) return res.status(403).send({ message: errors[constants.CANNOT_MODIFY_RIGHTS_ON_SERVICE_FOR_AN_ACCOUNT_WITH_HIGHER_RIGHTS], detail: null });
-
-          storageAppServicesRights.updateAccountRightsLevelOnService(req.body.accountUuid, req.body.serviceUuid, req.body.selectedRightsLevel, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
-          {
-            if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-            return res.status(200).send({ message: success[constants.ACCOUNT_RIGHTS_SUCCESSFULLY_UPDATED] });
-          });
+          return res.status(200).send({ message: success[constants.RIGHTS_ON_SERVICE_SUCCESSFULLY_UPDATED] });
         });
       });
     });
-  });*/
+  });
 });
 
 /****************************************************************************************************/

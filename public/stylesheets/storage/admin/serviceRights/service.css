@@ -54,6 +54,8 @@
 
 .updateServiceRightsPopupCancel:hover{ background-color:#B7312D; }
 
+.updateServiceRightsPopupCheckbox{ width:18px; height:18px; cursor:pointer; }
+
 
 .updateServiceRightsPopupRightBlock{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; margin:20px 10px 20px 10px; }
 

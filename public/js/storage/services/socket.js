@@ -11,9 +11,19 @@ socket.on('connect', () =>
 
 /****************************************************************************************************/
 
-socket.on('fileUploaded', (file, folderUuid, serviceRights, accountRightsLevel, accountData, storageAppStrings) =>
+socket.on('fileUploaded', (file, oldFileUuid, folderUuid, isGlobalAdmin, serviceRights, accountData, storageAppStrings) =>
 {
   if(document.getElementById('currentFolder') == null) return;
+
+  if(oldFileUuid != null)
+  {
+    var currentFolderFiles = document.getElementById('currentFolder').children;
+
+    for(var x = 0; x < currentFolderFiles.length; x++)
+    {
+      if(currentFolderFiles[x].getAttribute('name') === oldFileUuid) currentFolderFiles[x].remove();
+    }
+  }
 
   if(folderUuid == null && document.getElementById('currentFolder').hasAttribute('name')) return;
 
@@ -25,7 +35,7 @@ socket.on('fileUploaded', (file, folderUuid, serviceRights, accountRightsLevel, 
   if(document.getElementById('selectedDisplay').getAttribute('name') === 'smallGrid') display = 'serviceElementsFileSmallGrid';
   if(document.getElementById('selectedDisplay').getAttribute('name') === 'list') display = 'serviceElementsFileList';
 
-  if(serviceRights.downloadFiles <= accountRightsLevel || serviceRights.removeFiles <= accountRightsLevel) input = true;
+  if(serviceRights.downloadFiles || serviceRights.removeFiles || isGlobalAdmin || serviceRights.isAdmin) input = true;
 
   switch(file.name.split('.')[file.name.split('.').length - 1])
   {
@@ -44,8 +54,8 @@ socket.on('fileUploaded', (file, folderUuid, serviceRights, accountRightsLevel, 
   }
 
   input
-  ? document.getElementById('currentFolder').innerHTML += `<div class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
-  : document.getElementById('currentFolder').innerHTML += `<div class="${display}">${icon}<div class="name">${file.name}</div></div>`;
+  ? document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
+  : document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}">${icon}<div class="name">${file.name}</div></div>`;
 
   var message = storageAppStrings.services.detailPage.socket.fileUploaded;
 
@@ -57,9 +67,29 @@ socket.on('fileUploaded', (file, folderUuid, serviceRights, accountRightsLevel, 
 
 /****************************************************************************************************/
 
-socket.on('fileRemoved', (fileUuid) =>
+socket.on('fileRemoved', (fileUuid, storageAppStrings) =>
 {
-  
+  const elements = document.getElementById('currentFolder').children;
+
+  for(var x = 0; x < elements.length; x++)
+  {
+    if(elements[x].getAttribute('name') === fileUuid)
+    {
+      const fileName = elements[x].children.length === 3
+      ? elements[x].children[2].innerText
+      : elements[x].children[1].innerText;
+
+      displayInfo(storageAppStrings.services.detailPage.socket.fileRemoved.replace('[$1$]', fileName), null, null);
+
+      if(elements[x].children[0].tagName === 'INPUT')
+      {
+        elements[x].children[0].checked = false;
+        updateSelectedFiles(elements[x].children[0]);
+      }
+
+      elements[x].remove();
+    }
+  }
 });
 
 /****************************************************************************************************/

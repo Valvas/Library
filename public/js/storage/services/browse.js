@@ -29,8 +29,6 @@ function browseFolder(folderUuid)
     {
       unselectAllFiles();
 
-      console.log(result);
-
       document.getElementById('currentPathLocation').innerHTML = '';
 
       if(result.folderPath.length === 0)
@@ -77,7 +75,7 @@ function browseFolder(folderUuid)
         if(document.getElementById('selectedDisplay').getAttribute('name') === 'smallGrid') display = 'serviceElementsFileSmallGrid';
         if(document.getElementById('selectedDisplay').getAttribute('name') === 'list') display = 'serviceElementsFileList';
 
-        if(result.serviceRights.downloadFiles <= result.accountRightsLevel || result.serviceRights.removeFiles <= result.accountRightsLevel) input = true;
+        if(result.serviceRights.downloadFiles || result.serviceRights.removeFiles || result.serviceRights.isAdmin || result.isGlobalAdmin) input = true;
 
         switch(files[x].name.split('.')[files[x].name.split('.').length - 1])
         {
@@ -96,8 +94,8 @@ function browseFolder(folderUuid)
         }
 
         input
-        ? document.getElementById('currentFolder').innerHTML += `<div class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${files[x].name}</div></div>`
-        : document.getElementById('currentFolder').innerHTML += `<div class="${display}">${icon}<div class="name">${files[x].name}</div></div>`;
+        ? document.getElementById('currentFolder').innerHTML += `<div name="${files[x].uuid}" class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${files[x].name}</div></div>`
+        : document.getElementById('currentFolder').innerHTML += `<div name="${files[x].uuid}" class="${display}">${icon}<div class="name">${files[x].name}</div></div>`;
       }
       
       removeLoader(loader, () => {  });

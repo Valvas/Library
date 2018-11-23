@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/administration/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
   <body>
     <% include ../../include/informations.ejs %>
     <div class="mainBlock">
@@ -13,30 +14,32 @@
         <div class="contentName"><%= strings.administrationStrings.accountsHome.title %></div>
         <a href="/administration/accounts/create" class="linkButton"><%= strings.administrationStrings.accountsHome.createButton %></a>
         <div class="accountsContainer">
-          <input type="text" placeholder="<%= strings.administrationStrings.accountsHome.searchAccountPlaceHolder %>" class="accountsSearch" />
+          <input type="text" id="accountSearch" placeholder="<%= strings.administrationStrings.accountsHome.searchAccountPlaceHolder %>" class="accountsSearch" />
           <div class="accountsList">
             <div class="accountsHeader">
               <div class="accountsHeaderEmail"><%= strings.administrationStrings.accountsHome.accountsHeader.email %></div>
               <div class="accountsHeaderLastname"><%= strings.administrationStrings.accountsHome.accountsHeader.lastname %></div>
               <div class="accountsHeaderFirstname"><%= strings.administrationStrings.accountsHome.accountsHeader.firstname %></div>
+              <div class="accountsHeaderSuspend"><%= strings.administrationStrings.accountsHome.accountsHeader.suspended %></div>
               <div class="accountsHeaderDelete"><%= strings.administrationStrings.accountsHome.accountsHeader.delete %></div>
             </div>
-            <div class="accountsBlockOdd">
-              <div class="accountsEmail">test@test.fr</div>
-              <div class="accountsLastname">Doe</div>
-              <div class="accountsFirstname">John</div>
-              <div class="accountsRemove"><i class="icon fas fa-trash-alt"></i></div>
-            </div>
-            <div class="accountsBlockEven">
-              <div class="accountsEmail">test@test.fr</div>
-              <div class="accountsLastname">Doe</div>
-              <div class="accountsFirstname">John</div>
-              <div class="accountsRemove"><i class="icon fas fa-trash-alt"></i></div>
-            </div>
+            <% for(var x = 0; x < accounts.length; x++){ %>
+              <div class="<% if(x % 2 === 0){ %>accountsBlockOdd<% } else{ %>accountsBlockEven<% } %>" name="accountBlock" id="<%= accounts[x].uuid %>">
+                <div class="accountsEmail"><%= accounts[x].email %></div>
+                <div class="accountsLastname"><%= accounts[x].lastname.charAt(0).toUpperCase() %><%= accounts[x].lastname.slice(1).toLowerCase() %></div>
+                <div class="accountsFirstname"><%= accounts[x].firstname.charAt(0).toUpperCase() %><%= accounts[x].firstname.slice(1).toLowerCase() %></div>
+                <div class="accountsSuspend"><input name="suspendCheckbox" type="checkbox" <% if(accounts[x].suspended){ %>checked<% } %>/></div>
+                <div class="accountsRemove"><i class="icon fas fa-trash-alt"></i></div>
+              </div>
+            <% } %>
           </div>
         </div>
       </div>
     </div>
     <% include ../../include/common_scripts.ejs %>
+    <script src="/js/administration/accounts/search.js"></script>
+    <script src="/js/administration/accounts/remove.js"></script>
+    <script src="/js/administration/accounts/suspend.js"></script>
+    <script src="/js/administration/exit.js"></script>
   </body>
 </html>

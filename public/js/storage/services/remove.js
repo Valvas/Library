@@ -1,33 +1,91 @@
 /****************************************************************************************************/
 
-if(document.getElementById('removeFilesButton')) document.getElementById('removeFilesButton').addEventListener('click', removeSelection);
-
-/****************************************************************************************************/
-
 function removeSelection(event)
 {
-  if(document.getElementById('removePromptBackground') == null)
+  if(document.getElementById('currentFolder') == null) return;
+
+  const currentFolderElements = document.getElementById('currentFolder').children;
+
+  var filesToRemove = [];
+
+  for(var x = 0; x < currentFolderElements.length; x++)
   {
-    var elements = document.getElementById('filesBlock').children;
-
-    var filesToRemove = [];
-
-    for(var x = 0; x < elements.length; x++)
+    if(currentFolderElements[x].children[0].tagName === 'INPUT')
     {
-      if(elements[x].hasAttribute('tag'))
-      {
-        if(elements[x].children[2] && elements[x].children[2].checked) filesToRemove.push({ uuid: elements[x].getAttribute('id'), name: elements[x].children[1].innerText });
-      }
+      if(currentFolderElements[x].children[0].checked) filesToRemove.push({ uuid: currentFolderElements[x].getAttribute('name'), name: currentFolderElements[x].children[2].innerText });
     }
-
-    if(filesToRemove.length > 0) openConfirmationPrompt(filesToRemove);
   }
+
+  openConfirmationPrompt(filesToRemove);
 }
 
 /****************************************************************************************************/
 
 function openConfirmationPrompt(filesToRemove)
 {
+  if(filesToRemove.length === 0) return;
+
+  createBackground('removeFilesPopupBackground');
+
+  displayLoader('', (loader) =>
+  {
+    getStorageAppStrings((error, strings) =>
+    {
+      removeLoader(loader, () => {  });
+
+      if(error != null)
+      {
+        removeBackground('removeFilesPopupBackground');
+
+        displayError(error.message, error.detail, null);
+
+        return;
+      }
+
+      var popup     = document.createElement('div');
+      var content   = document.createElement('div');
+      var buttons   = document.createElement('div');
+      var confirm   = document.createElement('button');
+      var cancel    = document.createElement('button');
+
+      popup         .setAttribute('id', 'removeFilesPopup');
+
+      popup         .setAttribute('class', 'standardPopup');
+      content       .setAttribute('class', 'standardPopupContent');
+      buttons       .setAttribute('class', 'removeFilesPopupButtons');
+      confirm       .setAttribute('class', 'removeFilesPopupConfirm');
+      cancel        .setAttribute('class', 'removeFilesPopupCancel');
+
+      confirm       .addEventListener('click', () =>
+      {
+        confirmSuppression(filesToRemove, strings);
+      });
+
+      cancel        .addEventListener('click', () =>
+      {
+        popup.remove();
+        removeBackground('removeFilesPopupBackground');
+      });
+
+      popup         .innerHTML += `<div class="standardPopupTitle">${strings.services.popup.remove.title}</div>`;
+      content       .innerHTML += `<div class="removeFilesPopupMessage">${strings.services.popup.remove.message}</div>`;
+
+      confirm       .innerText = strings.services.popup.remove.confirm;
+      cancel        .innerText = strings.services.popup.remove.cancel;
+
+      for(var x = 0; x < filesToRemove.length; x++)
+      {
+        content.innerHTML += `<div class="removeFilesPopupFileName">${filesToRemove[x].name}</div>`;
+      }
+
+      buttons       .appendChild(confirm);
+      buttons       .appendChild(cancel);
+      content       .appendChild(buttons);
+      popup         .appendChild(content);
+      document.body .appendChild(popup);
+    });
+  });
+  /*
   var background      = document.createElement('div');
   var spinner         = document.createElement('div');
   var prompt          = document.createElement('div');
@@ -101,72 +159,49 @@ function openConfirmationPrompt(filesToRemove)
     }
 
     document.body       .appendChild(prompt);
-  });
-}
-
-/****************************************************************************************************/
-
-function closeConfirmationPrompt(event)
-{
-  if(document.getElementById('removePromptBackground')) document.getElementById('removePromptBackground').remove();
-  if(document.getElementById('removePrompt')) document.getElementById('removePrompt').remove();
+  });*/
 }
 
 /****************************************************************************************************/
 
 function confirmSuppression(filesToRemove, strings)
 {
-  if(document.getElementById('removePromptContent')) document.getElementById('removePromptContent').remove();
-  if(document.getElementById('removePromptConfirm')) document.getElementById('removePromptConfirm').remove();
-  if(document.getElementById('removePromptCancel')) document.getElementById('removePromptCancel').remove();
+  if(document.getElementById('removeFilesPopup') == null) return;
 
-  var loading         = document.createElement('div');
-  var spinner         = document.createElement('div');
-  var message         = document.createElement('div');
+  document.getElementById('removeFilesPopup').style.display = 'none';
 
-  loading             .setAttribute('class', 'loading');
-  spinner             .setAttribute('class', 'spinner');
-  message             .setAttribute('class', 'message');
-
-  spinner             .innerHTML = `<i class='fas fa-circle-notch fa-spin'></i>`;
-  message             .innerText = strings.services.popup.remove.pending;
-
-  loading             .appendChild(spinner);
-  loading             .appendChild(message);
-
-  document.getElementById('removePrompt').appendChild(loading);
-
-  var filesUuid = [];
-
-  for(var x = 0; x < filesToRemove.length; x++)
+  displayLoader(strings.services.popup.remove.pending, (loader) =>
   {
-    filesUuid.push(filesToRemove[x].uuid);
-  }
+    var filesUuid = [];
 
-  $.ajax(
-  {
-    method: 'DELETE',
-    dataType: 'json',
-    timeout: 5000,
-    data: { filesToRemove: JSON.stringify(filesUuid), serviceUuid: document.getElementById('mainBlock').getAttribute('name') },
-    url: '/queries/storage/services/remove-files',
-
-    error: (xhr, textStatus, errorThrown) =>
+    for(var x = 0; x < filesToRemove.length; x++)
     {
-      if(document.getElementById('removePrompt')) document.getElementById('removePrompt').remove();
-      if(document.getElementById('removePromptBackground')) document.getElementById('removePromptBackground').remove();
-
-      xhr.responseJSON != undefined ?
-      displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail) :
-      displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
+      filesUuid.push(filesToRemove[x].uuid);
     }
-  }).done((json) =>
-  {
-    if(document.getElementById('removePrompt')) document.getElementById('removePrompt').remove();
-    if(document.getElementById('removePromptBackground')) document.getElementById('removePromptBackground').remove();
 
-    displaySuccessMessage(strings.services.popup.remove.done, null);
+    $.ajax(
+    {
+      method: 'DELETE', dataType: 'json', timeout: 10000, data: { filesToRemove: JSON.stringify(filesUuid), serviceUuid: document.getElementById('serviceUuid').getAttribute('name') }, url: '/queries/storage/services/remove-files',
 
-    for(var x = 0; x < filesUuid.length; x++) socket.emit('storageAppServicesFileRemoved', filesUuid[x], document.getElementById('mainBlock').getAttribute('name'));
+      error: (xhr, textStatus, errorThrown) =>
+      {
+        removeLoader(loader, () => {  });
+
+        document.getElementById('removeFilesPopup').removeAttribute('style');
+
+        xhr.responseJSON != undefined
+        ? displayError(xhr.responseJSON.message, xhr.responseJSON.detail, null)
+        : displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
+      }
+
+    }).done((result) =>
+    {
+      removeLoader(loader, () => {  });
+
+      removeBackground('removeFilesPopupBackground');
+      document.getElementById('removeFilesPopup').remove();
+
+      displaySuccess(result.message, null, null);
+    });
   });
 }

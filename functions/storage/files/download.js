@@ -8,45 +8,47 @@ const storageAppLogsServicesDownloadFile  = require(`${__root}/functions/storage
 
 /****************************************************************************************************/
 
-module.exports.downloadFile = (fileUuid, serviceUuid, accountId, databaseConnection, params, callback) =>
+module.exports.downloadFile = (fileUuid, serviceUuid, accountUuid, isGlobalAdmin, databaseConnection, params, callback) =>
 {
-  if(fileUuid == undefined || serviceUuid == undefined || accountId == undefined || databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
+  if(fileUuid == undefined || serviceUuid == undefined || accountUuid == undefined || isGlobalAdmin == undefined || databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null });
 
-  checkIfServiceExists(fileUuid, serviceUuid, accountId, databaseConnection, params, (error, filePath) =>
+  checkIfServiceExists(fileUuid, serviceUuid, accountUuid, isGlobalAdmin, databaseConnection, params, (error, filePath, fileName) =>
   {
-    return callback(error, filePath);
+    return callback(error, filePath, fileName);
   });
 }
 
 /****************************************************************************************************/
 
-function checkIfServiceExists(fileUuid, serviceUuid, accountId, databaseConnection, params, callback)
+function checkIfServiceExists(fileUuid, serviceUuid, accountUuid, isGlobalAdmin, databaseConnection, params, callback)
 {
-  storageAppServicesGet.getServiceUsingUUID(serviceUuid, databaseConnection, (error, serviceData) =>
-  {
-    if(error != null) return callback(error);
-
-    checkUserRightsTowardsCurrentService(fileUuid, serviceUuid, accountId, databaseConnection, params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function checkUserRightsTowardsCurrentService(fileUuid, serviceUuid, accountId, databaseConnection, params, callback)
-{
-  storageAppServicesRights.getRightsTowardsService(serviceUuid, accountId, databaseConnection, params, (error, accountRights) =>
+  storageAppServicesGet.checkIfServiceExistsFromUuid(serviceUuid, databaseConnection, params, (error, serviceExists, serviceData) =>
   {
     if(error != null) return callback(error);
 
-    if(accountRights.download_files === 0) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_DOWNLOAD_FILES, detail: null });
+    if(serviceExists == false) return callback({ status: 404, code: constants.SERVICE_NOT_FOUND, detail: null });
 
-    getFileFromDatabase(fileUuid, serviceUuid, accountId, databaseConnection, params, callback);
+    checkUserRightsTowardsCurrentService(fileUuid, serviceUuid, accountUuid, isGlobalAdmin, databaseConnection, params, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function getFileFromDatabase(fileUuid, serviceUuid, accountId, databaseConnection, params, callback)
+function checkUserRightsTowardsCurrentService(fileUuid, serviceUuid, accountUuid, isGlobalAdmin, databaseConnection, params, callback)
+{
+  storageAppServicesRights.getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, params, (error, serviceRights) =>
+  {
+    if(error != null) return callback(error);
+
+    if(serviceRights.downloadFiles == false && serviceRights.isAdmin == false && isGlobalAdmin == false) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_DOWNLOAD_FILES, detail: null });
+
+    getFileFromDatabase(fileUuid, serviceUuid, accountUuid, databaseConnection, params, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function getFileFromDatabase(fileUuid, serviceUuid, accountUuid, databaseConnection, params, callback)
 {
   storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, databaseConnection, params, (error, fileExists, fileData) =>
   {
@@ -54,25 +56,25 @@ function getFileFromDatabase(fileUuid, serviceUuid, accountId, databaseConnectio
 
     if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND, detail: 'database' });
 
-    if(fileData.deleted === 1) return callback({ status: 404, code: constants.FILE_HAS_BEEN_DELETED, detail: null });
+    if(fileData.is_deleted === 1) return callback({ status: 404, code: constants.FILE_HAS_BEEN_DELETED, detail: null });
 
-    getFileFromStorage(fileData, serviceUuid, accountId, databaseConnection, params, callback);
+    getFileFromStorage(fileData, serviceUuid, accountUuid, databaseConnection, params, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function getFileFromStorage(fileData, serviceUuid, accountId, databaseConnection, params, callback)
+function getFileFromStorage(fileData, serviceUuid, accountUuid, databaseConnection, params, callback)
 {
-  storageAppFilesGet.checkIfFileExistsOnStorage(fileData.uuid, fileData.ext, serviceUuid, params, (error, fileExists, fileStats) =>
+  storageAppFilesGet.checkIfFileExistsOnStorage(fileData.uuid, serviceUuid, params, (error, fileExists, fileStats) =>
   {
     if(error != null) return callback(error);
 
     if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND, detail: 'storage' });
 
-    storageAppLogsServicesDownloadFile.addDownloadFileLog(params.fileLogs.download, accountId, fileData.uuid, serviceUuid, databaseConnection, params, (error) => {  });
+    storageAppLogsServicesDownloadFile.addDownloadFileLog(accountUuid, fileData.uuid, databaseConnection, params, (error) => {  });
 
-    return callback(null, `${params.storage.root}/${params.storage.services}/${serviceUuid}/${fileData.uuid}.${fileData.ext}`);
+    return callback(null, `${params.storage.root}/${params.storage.services}/${serviceUuid}/${fileData.uuid}`, fileData.name);
   });
 }
 

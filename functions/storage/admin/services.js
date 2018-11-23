@@ -216,7 +216,7 @@ function removeServiceDropAccountsRights(serviceUuid, databaseConnection, params
   databaseManager.deleteQuery(
   {
     databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.accountServiceRightsLevel,
+    tableName: params.database.storage.tables.serviceRights,
     where: { operator: '=', key: 'service_uuid', value: serviceUuid }
 
   }, databaseConnection, (error, result) =>

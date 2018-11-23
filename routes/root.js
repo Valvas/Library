@@ -5,7 +5,9 @@ const jwt                   = require('jsonwebtoken');
 const errors                = require(`${__root}/json/errors`);
 const success               = require(`${__root}/json/success`);
 const constants             = require(`${__root}/functions/constants`);
+const commonAccountsGet     = require(`${__root}/functions/common/accounts/get`);
 const commonAccountsCheck   = require(`${__root}/functions/common/accounts/check`);
+const commonAccountsUpdate  = require(`${__root}/functions/common/accounts/update`);
 
 const commonTokenGet        = require(`${__root}/functions/common/token/get`);
 const commonTokenCheck      = require(`${__root}/functions/common/token/check`);
@@ -76,13 +78,20 @@ router.get('/reset-password', (req, res) =>
 
 router.put('/reset-password', (req, res) =>
 {
-  req.body.email == undefined ? res.status(406).send({ result: false, message: errors[10009] }) :
+  if(req.body.email == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'emailAddress' });
 
-  accountsReset.resetPassword(req.body.email, req.app.get('databaseConnectionPool'), req.app.get('transporter'), req.app.get('params'), (error) =>
+  commonAccountsGet.checkIfAccountExistsFromEmail(req.body.email, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountExists, accountData) =>
   {
-    error == null ?
-    res.status(200).send({ result: true, message: success[constants.NEW_PASSWORD_SENT] }) :
-    res.status(error.status).send({ result: false, message: errors[error.code] });
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    if(accountExists == false) return res.status(200).send({ message: success[constants.NEW_PASSWORD_SENT] });
+
+    commonAccountsUpdate.resetPassword(accountData.uuid, req.body.email, req.app.get('databaseConnectionPool'), req.app.get('transporter'), req.app.get('params'), (error) =>
+    {
+      if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+      return res.status(200).send({ message: success[constants.NEW_PASSWORD_SENT] });
+    });
   });
 });
 
@@ -91,6 +100,13 @@ router.put('/reset-password', (req, res) =>
 router.get('/afk-time', (req, res) =>
 {
   
+});
+
+/****************************************************************************************************/
+
+router.get('/template', (req, res) =>
+{
+  res.render('template');
 });
 
 /****************************************************************************************************/

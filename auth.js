@@ -27,7 +27,19 @@ module.exports = (req, res, next) =>
 
         if(accountExists == false) return res.render('block', { message: errors[constants.ACCOUNT_NOT_FOUND], detail: null, link: req.headers.referer });
 
-        req.app.locals.account = accountData;
+        if(accountData.suspended) return res.render('block', { message: errors[constants.ACCOUNT_SUSPENDED], detail: null, link: '/' });
+
+        var accountObject = {};
+
+        accountObject.uuid = accountData.uuid;
+        accountObject.email = accountData.email;
+        accountObject.isAdmin = accountData.is_admin === 1;
+        accountObject.picture = accountData.picture;
+        accountObject.lastname = accountData.lastname;
+        accountObject.firstname = accountData.firstname;
+        accountObject.suspended = accountData.suspended === 1;
+
+        req.app.locals.account = accountObject;
 
         next();
       });

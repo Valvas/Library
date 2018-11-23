@@ -65,7 +65,7 @@ function displayError(message, detail, messageTag)
 
   $(block).slideDown(250, () =>
   {
-    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 15000);
+    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 60000);
   });
 }
 

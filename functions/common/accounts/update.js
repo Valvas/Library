@@ -1,8 +1,10 @@
 'use strict'
 
+const commonStrings       = require(`${__root}/json/strings/common`);
 const constants           = require(`${__root}/functions/constants`);
 const encryption          = require(`${__root}/functions/encryption`);
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
+const commonEmailSend     = require(`${__root}/functions/common/email/send`);
 const commonAccountsGet   = require(`${__root}/functions/common/accounts/get`);
 
 /****************************************************************************************************/
@@ -149,6 +151,71 @@ module.exports.updatePassword = (currentPassword, newPassword, confirmationPassw
 
           return callback(null);
         });
+      });
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.updateSuspensionStatus = (accountUuid, isToBeSuspended, databaseConnection, globalParameters, callback) =>
+{
+  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, globalParameters, (error, accountExists, accountData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    databaseManager.updateQuery(
+    {
+      databaseName: globalParameters.database.root.label,
+      tableName: globalParameters.database.root.tables.accounts,
+      args: { suspended: isToBeSuspended ? 1 : 0 },
+      where: { operator: '=', key: 'uuid', value: accountUuid }
+  
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+  
+      return callback(null);
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.resetPassword = (accountUuid, accountEmail, databaseConnection, emailTransporter, globalParameters, callback) =>
+{
+  encryption.getRandomPassword(globalParameters, (error, passwords) =>
+  {
+    if(error != null) return callback(error);
+
+    databaseManager.updateQuery(
+    {
+      databaseName: globalParameters.database.root.label,
+      tableName: globalParameters.database.root.tables.accounts,
+      args: { password: passwords.encrypted },
+      where: { operator: '=', key: 'uuid', value: accountUuid }
+
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+      var emailContent = commonStrings.emailTemplates.resetAccountPassword.content;
+
+      emailContent = emailContent.replace('[$clearPassword$]', passwords.clear);
+
+      var emailObject =
+      {
+        templateFolder: 'resetPassword',
+        receiver: accountEmail,
+        object: commonStrings.emailTemplates.resetAccountPassword.object,
+        content: emailContent
+      };
+
+      commonEmailSend.sendEmail(emailObject, emailTransporter, globalParameters, (error) =>
+      {
+        return callback(error);
       });
     });
   });

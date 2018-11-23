@@ -1,5 +1,17 @@
 /****************************************************************************************************/
 
+if(document.getElementById('filtersList'))
+{
+  const filters = document.getElementById('filtersList').children;
+
+  for(var x = 0; x < filters.length; x++)
+  {
+    filters[x].children[1].addEventListener('change', applyFilter);
+  }
+}
+
+/****************************************************************************************************/
+
 var filters = document.getElementsByName('filter');
 
 for(var i = 0; i < filters.length; i++)
@@ -11,29 +23,23 @@ for(var i = 0; i < filters.length; i++)
 
 function applyFilter(event)
 {
-  var files = document.getElementById('filesBlock').children;
+  if(document.getElementById('currentFolder') == null) return;
 
-  for(var i = 0; i < files.length; i++)
+  const currentFiles = document.getElementById('currentFolder').children;
+
+  for(var x = 0; x < currentFiles.length; x++)
   {
-    if(files[i].hasAttribute('tag') && files[i].getAttribute('tag') === event.target.getAttribute('value'))
+    var index = 1;
+
+    if(currentFiles[x].children.length > 2) index += 1;
+
+    if(currentFiles[x].children[index].innerText.split('.').length === 2)
     {
-      if(event.target.checked == false)
+      if(currentFiles[x].children[index].innerText.split('.')[1] === event.target.value)
       {
-        files[i].style.display = 'none';
-
-        if(files[i].children[2].checked)
-        {
-          files[i].children[2].checked = false;
-
-          var selectedFilesLabelAndCounter = document.getElementById('actions').children[0].innerText.split(':');
-
-          document.getElementById('actions').children[0].innerText = `${selectedFilesLabelAndCounter[0]} : ${parseInt(selectedFilesLabelAndCounter[1]) - 1}`;
-        }
-      }
-      
-      else
-      {
-        files[i].removeAttribute('style');
+        event.target.checked
+        ? currentFiles[x].removeAttribute('style')
+        : currentFiles[x].style.display = 'none';
       }
     }
   }

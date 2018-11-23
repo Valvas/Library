@@ -82,20 +82,23 @@ function openUpdatePopup(accountUuid, strings, result)
   cancel        .setAttribute('class', 'updateServiceRightsPopupCancel');
 
   popup         .setAttribute('id', 'updateServiceRightsPopup');
+  rights        .setAttribute('id', 'updateServiceRightsList');
 
   popup         .innerHTML += `<div class="updateServiceRightsPopupTitle">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.title}</div>`;
   
   result.requestedAccountServiceRights.isAdmin
-  ? popup       .innerHTML += `<div class="updateServiceRightsPopupAdminBlock"><div class="updateServiceRightsPopupRightBlock"><div class="updateServiceRightsPopupRightName">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.rightsLabels.isAdmin}</div><div class="updateServiceRightsPopupRightInput"><input type="checkbox" id="isAdmin" class="input"><label class="label" for="isAdmin">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.hasRight}</label></div></div></div>`
-  : popup       .innerHTML += `<div class="updateServiceRightsPopupAdminBlock"><div class="updateServiceRightsPopupRightBlock"><div class="updateServiceRightsPopupRightName">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.rightsLabels.isAdmin}</div><div class="updateServiceRightsPopupRightInput"><input type="checkbox" id="isAdmin" class="input"><label class="label" for="isAdmin">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.doesNotHaveRight}</label></div></div></div>`;
+  ? popup       .innerHTML += `<div class="updateServiceRightsPopupAdminBlock"><div class="updateServiceRightsPopupRightBlock"><div class="updateServiceRightsPopupRightName">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.rightsLabels.isAdmin}</div><div class="updateServiceRightsPopupRightInput"><input type="checkbox" onchange="isSetToAdmin(false, '${strings.admin.serviceRights.service.serviceRightsUpdatePopup.hasRight}', '${strings.admin.serviceRights.service.serviceRightsUpdatePopup.doesNotHaveRight}')" id="isAdmin" class="input" checked><label id="adminInputLabel" class="label" for="isAdmin">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.hasRight}</label></div></div></div>`
+  : popup       .innerHTML += `<div class="updateServiceRightsPopupAdminBlock"><div class="updateServiceRightsPopupRightBlock"><div class="updateServiceRightsPopupRightName">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.rightsLabels.isAdmin}</div><div class="updateServiceRightsPopupRightInput"><input type="checkbox" onchange="isSetToAdmin(true, '${strings.admin.serviceRights.service.serviceRightsUpdatePopup.hasRight}', '${strings.admin.serviceRights.service.serviceRightsUpdatePopup.doesNotHaveRight}')" id="isAdmin" class="input"><label id="adminInputLabel" class="label" for="isAdmin">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.doesNotHaveRight}</label></div></div></div>`;
 
   for(var right in result.requestedAccountServiceRights)
   {
     if(right !== 'isAdmin')
     {
       result.requestedAccountServiceRights[right]
-      ? rights.innerHTML += `<div class="updateServiceRightsPopupRightBlock"><div class="updateServiceRightsPopupRightName">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.rightsLabels[right]}</div><div class="updateServiceRightsPopupRightInput"><input type="checkbox" id="${right}" class="input"><label class="label" for="${right}">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.hasRight}</label></div></div>`
-      : rights.innerHTML += `<div class="updateServiceRightsPopupRightBlock"><div class="updateServiceRightsPopupRightName">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.rightsLabels[right]}</div><div class="updateServiceRightsPopupRightInput"><input type="checkbox" id="${right}" class="input"><label class="label" for="${right}">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.doesNotHaveRight}</label></div></div>`;
+      ? result.requestedAccountServiceRights.isAdmin
+        ? rights.innerHTML += `<div class="updateServiceRightsPopupRightBlock"><div class="updateServiceRightsPopupRightName">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.rightsLabels[right]}</div><input class="updateServiceRightsPopupCheckbox" type="checkbox" id="${right}" checked disabled="true"></div>`
+        : rights.innerHTML += `<div class="updateServiceRightsPopupRightBlock"><div class="updateServiceRightsPopupRightName">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.rightsLabels[right]}</div><input class="updateServiceRightsPopupCheckbox" type="checkbox" id="${right}" checked></div>` 
+      : rights.innerHTML += `<div class="updateServiceRightsPopupRightBlock"><div class="updateServiceRightsPopupRightName">${strings.admin.serviceRights.service.serviceRightsUpdatePopup.rightsLabels[right]}</div><input class="updateServiceRightsPopupCheckbox" type="checkbox" id="${right}"></div>`;
     }
   }
 
@@ -221,6 +224,37 @@ function sendDataToServer(accountUuid, strings)
       });
     });
   });
+}
+
+/****************************************************************************************************/
+
+function isSetToAdmin(checked, isCheckedMessage, isNotCheckedMessage)
+{
+  if(document.getElementById('isAdmin') == null) return;
+  if(document.getElementById('adminInputLabel') == null) return;
+
+  checked
+  ? document.getElementById('adminInputLabel').innerText = isCheckedMessage
+  : document.getElementById('adminInputLabel').innerText = isNotCheckedMessage;
+
+  checked
+  ? document.getElementById('isAdmin').setAttribute('onchange', `isSetToAdmin(false, '${isCheckedMessage}', '${isNotCheckedMessage}')`)
+  : document.getElementById('isAdmin').setAttribute('onchange', `isSetToAdmin(true, '${isCheckedMessage}', '${isNotCheckedMessage}')`);
+
+  if(document.getElementById('updateServiceRightsList') == null) return;
+
+  var rights = document.getElementById('updateServiceRightsList').children;
+
+  for(var x = 0; x < rights.length; x++)
+  {
+    checked
+    ? rights[x].children[1].disabled = true
+    : rights[x].children[1].disabled = false;
+
+    checked
+    ? rights[x].children[1].checked = true
+    : rights[x].children[1].checked = false;
+  }
 }
 
 /****************************************************************************************************/

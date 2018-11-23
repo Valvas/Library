@@ -74,9 +74,9 @@ storageAppFilesGet.getFolderFromName = (folderName, serviceUuid, databaseConnect
 
 /****************************************************************************************************/
 
-storageAppFilesGet.checkIfFileExistsOnStorage = (fileUuid, fileExt, serviceUuid, params, callback) =>
+storageAppFilesGet.checkIfFileExistsOnStorage = (fileUuid, serviceUuid, params, callback) =>
 {
-  fs.stat(`${params.storage.root}/${params.storage.services}/${serviceUuid}/${fileUuid}.${fileExt}`, (error, stats) =>
+  fs.stat(`${params.storage.root}/${params.storage.services}/${serviceUuid}/${fileUuid}`, (error, stats) =>
   {
     if(error && error.code != 'ENOENT') return callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.message });
 

@@ -168,26 +168,56 @@ function checkAccountsRightsForProvidedService(serviceUuid, databaseConnection, 
 
 /****************************************************************************************************/
 
-function updateAccountRightsLevelOnService(accountUuid, serviceUuid, rightsLevel, databaseConnection, globalParameters, callback)
+function updateAccountRightsOnService(accountUuid, serviceUuid, rights, databaseConnection, globalParameters, callback)
 {
+  if(rights == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rights' });
   if(accountUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
   if(serviceUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
-  if(rightsLevel == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'rightsLevel' });
   if(globalParameters == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
 
-  databaseManager.updateQuery(
+  databaseManager.selectQuery(
   {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.accountServiceLevel,
-    args: { level: rightsLevel },
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceRights,
+    args: [ '*' ],
     where: { condition: 'AND', 0: { operator: '=', key: 'account_uuid', value: accountUuid }, 1: { operator: '=', key: 'service_uuid', value: serviceUuid } }
 
   }, databaseConnection, (error, result) =>
   {
     if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    return callback(null);
+    if(result.length === 0)
+    {
+      databaseManager.insertQuery(
+      {
+        databaseName: globalParameters.database.storage.label,
+        tableName: globalParameters.database.storage.tables.serviceRights,
+        args: { service_uuid: serviceUuid, account_uuid: accountUuid, is_admin: rights.isAdmin, access_service: rights.accessService, post_comments: rights.postComments, upload_files: rights.uploadFiles, create_folders: rights.createFolders, download_files: rights.downloadFiles, move_files: rights.moveFiles, rename_folders: rights.renameFolders, remove_folders: rights.removeFolders, restore_files: rights.restoreFiles, remove_files: rights.removeFiles }
+      }, databaseConnection, (error, result) =>
+      {
+        if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+        return callback(null);
+      });
+    }
+
+    else
+    {
+      databaseManager.updateQuery(
+      {
+        databaseName: globalParameters.database.storage.label,
+        tableName: globalParameters.database.storage.tables.serviceRights,
+        args: { is_admin: rights.isAdmin, access_service: rights.accessService, post_comments: rights.postComments, upload_files: rights.uploadFiles, create_folders: rights.createFolders, download_files: rights.downloadFiles, move_files: rights.moveFiles, rename_folders: rights.renameFolders, remove_folders: rights.removeFolders, restore_files: rights.restoreFiles, remove_files: rights.removeFiles },
+        where: { condition: 'AND', 0: { operator: '=', key: 'account_uuid', value: accountUuid }, 1: { operator: '=', key: 'service_uuid', value: serviceUuid } }
+
+      }, databaseConnection, (error, result) =>
+      {
+        if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+        return callback(null);
+      });
+    }
   });
 }
 
@@ -197,8 +227,8 @@ module.exports =
 {
   getRightsTowardsService: getRightsTowardsService,
   getRightsTowardsAllServices: getRightsTowardsAllServices,
+  updateAccountRightsOnService: updateAccountRightsOnService,
   checkAccountRightsOnAllServices: checkAccountRightsOnAllServices,
-  updateAccountRightsLevelOnService: updateAccountRightsLevelOnService,
   checkAccountsRightsForProvidedService: checkAccountsRightsForProvidedService
 }
 

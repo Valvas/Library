@@ -32,5 +32,11 @@
   "20031": "Compte(s) retiré(s) avec succès du service",
   "20032": "Extensions mises à jour",
   "20033": "Statut d'administration mis à jour pour ce compte",
-  "20034": "Service mis à jour avec succès"
+  "20034": "Service mis à jour avec succès",
+  "20035": "Droits sur le service mis à jour avec succès",
+  "20036": "Fichiers supprimés avec succès",
+  "20037": "Compte suspendu avec succès",
+  "20038": "Compte réhabilité avec succès",
+  "20039": "Droits d'accès à l'application ajoutés avec succès",
+  "20040": "Droits d'accès à l'application retirés avec succès"
 }

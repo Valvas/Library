@@ -76,26 +76,20 @@ router.put('/get-account-rights-for-service', (req, res) =>
 
 /****************************************************************************************************/
 
-router.post('/download-file', (req, res) =>
+router.put('/download-file', (req, res) =>
 {
   var form = new formidable.IncomingForm();
 
   form.parse(req, (err, fields) =>
   {
-    if(err) res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
+    if(err) return res.status(500).send({ result: false, message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: err.message });
 
-    else
+    storageAppFilesDownload.downloadFile(fields.fileUuid, fields.serviceUuid, req.app.locals.account.uuid, req.app.locals.isAdmin, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filePath, fileName) =>
     {
-      storageAppFilesDownload.downloadFile(fields.fileUuid, fields.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filePath) =>
-      {
-        if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+      if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-        else
-        {
-          res.download(filePath, fields.fileUuid);
-        }
-      });
-    }
+      return res.download(filePath, fileName);
+    });
   });
 });
 
@@ -129,7 +123,7 @@ router.put('/prepare-upload', (req, res) =>
   if(req.body.serviceUuid == undefined)   return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: `L'UUID du service est manquant dans la requête` });
   if(req.body.currentFolder == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: `Le dossier courant est manquant dans la requête` });
 
-  storageAppFilesUpload.prepareUpload(req.body.fileName, req.body.fileSize, req.body.serviceUuid, req.body.currentFolder.length === 0 ? null : req.body.currentFolder, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileAlreadyExists, hasTheRightToRemove) =>
+  storageAppFilesUpload.prepareUpload(req.body.fileName, req.body.fileSize, req.body.serviceUuid, req.body.currentFolder.length === 0 ? null : req.body.currentFolder, req.app.locals.account.uuid, req.app.locals.isAdmin, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileAlreadyExists, hasTheRightToRemove) =>
   {
     if(error != null) return res.status(406).send({ message: errors[error.code], errorDetail: error.detail });
 
@@ -151,7 +145,7 @@ router.post('/upload-file', (req, res) =>
 
     const currentFileName = files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1];
 
-    storageAppFilesUpload.uploadFile(currentFileName, files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].size, fields.service, fields.currentFolder === 'null' ? null : fields.currentFolder, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileUuid, serviceRights, accountRightsLevel) =>
+    storageAppFilesUpload.uploadFile(currentFileName, files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].size, fields.service, fields.currentFolder === 'null' ? null : fields.currentFolder, req.app.locals.account.uuid, req.app.locals.isAdmin, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileUuid, serviceRights, oldFileUuid) =>
     {
       if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -161,7 +155,7 @@ router.post('/upload-file', (req, res) =>
 
         if(fileExists == false) return res.status(404).send({ message: errors[constants.FILE_NOT_FOUND], detail: null });
 
-        req.app.get('io').in(fields.service).emit('fileUploaded', fileData, fields.currentFolder === 'null' ? null : fields.currentFolder, serviceRights, accountRightsLevel, req.app.locals.account, storageAppStrings);
+        req.app.get('io').in(fields.service).emit('fileUploaded', fileData, oldFileUuid, fields.currentFolder === 'null' ? null : fields.currentFolder, req.app.locals.isAdmin, serviceRights, req.app.locals.account, storageAppStrings);
 
         return res.status(200).send({ message: success[constants.FILE_SENT_SUCCESSFULLY] });
       });
@@ -205,22 +199,21 @@ router.post('/remove-service', (req, res) =>
 
 router.delete('/remove-files', (req, res) =>
 {
-  if(req.body.filesToRemove == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'filesToRemove' });
+  if(req.body.filesToRemove == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'filesToRemove' });
 
-  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'filesToRemove' });
+  if(req.body.serviceUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'filesToRemove' });
 
-  else
+  storageAppFilesRemove.removeFiles(JSON.parse(req.body.filesToRemove), req.body.serviceUuid, req.app.locals.account.uuid, req.app.locals.isAdmin, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
-    storageAppFilesRemove.removeFiles(JSON.parse(req.body.filesToRemove), req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
-    {
-      if(error != null) res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
+    if(error != null) return res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
 
-      else
-      {
-        res.status(200).send({  });
-      }
-    });
-  }
+    for(var x = 0; x < JSON.parse(req.body.filesToRemove).length; x++)
+    {
+      req.app.get('io').in(req.body.serviceUuid).emit('fileRemoved', JSON.parse(req.body.filesToRemove)[x], storageAppStrings);
+    }
+
+    res.status(200).send({ message: success[constants.FILES_SUCCESSFULLY_REMOVED] });
+  });
 });
 
 /****************************************************************************************************/
@@ -256,26 +249,21 @@ router.put('/get-folder-content', (req, res) =>
 
     if(folderExists == false && req.body.folderUuid.length > 0) return res.status(404).send({ message: errors[constants.FOLDER_NOT_FOUND], detail: null });
 
-    storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountRightsLevel) =>
+    storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceRights) =>
     {
       if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-      storageAppAdminGet.getServiceLevelForEachRight(req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceRights) =>
+      storageAppFilesGet.getFilesFromService(req.body.serviceUuid, req.body.folderUuid.length === 0 ? null : req.body.folderUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filesAndFolders) =>
       {
         if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-        storageAppFilesGet.getFilesFromService(req.body.serviceUuid, req.body.folderUuid.length === 0 ? null : req.body.folderUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, filesAndFolders) =>
+        if(req.body.folderUuid.length === 0) return res.status(200).send({ elements: filesAndFolders, parentFolder: folderData, folderPath: [], storageAppStrings: storageAppStrings, serviceRights: serviceRights, isGlobalAdmin: req.app.locals.isAdmin });
+      
+        storageAppFilesGet.getFolderPath(req.body.folderUuid, [], req.app.get('databaseConnectionPool'), req.app.get('params'), (error, folderPath) =>
         {
           if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-          if(req.body.folderUuid.length === 0) return res.status(200).send({ elements: filesAndFolders, parentFolder: folderData, folderPath: [], storageAppStrings: storageAppStrings, serviceRights: serviceRights, accountRightsLevel: accountRightsLevel });
-        
-          storageAppFilesGet.getFolderPath(req.body.folderUuid, [], req.app.get('databaseConnectionPool'), req.app.get('params'), (error, folderPath) =>
-          {
-            if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-            return res.status(200).send({ elements: filesAndFolders, parentFolder: folderData, folderPath: folderPath.reverse(), storageAppStrings: storageAppStrings, serviceRights: serviceRights, accountRightsLevel: accountRightsLevel });
-          });
+          return res.status(200).send({ elements: filesAndFolders, parentFolder: folderData, folderPath: folderPath.reverse(), storageAppStrings: storageAppStrings, serviceRights: serviceRights, isGlobalAdmin: req.app.locals.isAdmin });
         });
       });
     });

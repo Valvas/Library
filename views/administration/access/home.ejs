@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.administrationStrings.aside.menu[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/administration/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <body>
+    <% include ../../include/informations.ejs %>
+    <div class="mainBlock">
+      <% include ../include/header.ejs %>
+      <div class="content">
+        <div class="contentName"><%= strings.administrationStrings.accessHome.title %></div>
+        <div class="accountsContainer">
+          <input type="text" id="accountSearch" placeholder="<%= strings.administrationStrings.accessHome.searchAccountPlaceHolder %>" class="accountsSearch" />
+          <div class="accessHomeHelpMessage"><%= strings.administrationStrings.accessHome.helpMessage %></div>
+          <div class="accountsList">
+            <div class="accountsHeader">
+              <div class="accountsHeaderEmail"><%= strings.administrationStrings.accessHome.accountsHeader.email %></div>
+              <div class="accountsHeaderLastname"><%= strings.administrationStrings.accessHome.accountsHeader.lastname %></div>
+              <div class="accountsHeaderFirstname"><%= strings.administrationStrings.accessHome.accountsHeader.firstname %></div>
+            </div>
+            <% for(var x = 0; x < accounts.length; x++){ %>
+              <div class="<% if(x % 2 === 0){ %>accountsBlockOdd<% } else{ %>accountsBlockEven<% } %> accessVersion" name="accountBlock" id="<%= accounts[x].uuid %>">
+                <div class="accountsEmail"><%= accounts[x].email %></div>
+                <div class="accountsLastname"><%= accounts[x].lastname.charAt(0).toUpperCase() %><%= accounts[x].lastname.slice(1).toLowerCase() %></div>
+                <div class="accountsFirstname"><%= accounts[x].firstname.charAt(0).toUpperCase() %><%= accounts[x].firstname.slice(1).toLowerCase() %></div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ../../include/common_scripts.ejs %>
+    <script src="/js/administration/access/search.js"></script>
+    <script src="/js/administration/access/link.js"></script>
+    <script src="/js/administration/exit.js"></script>
+  </body>
+</html>
