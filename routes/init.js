@@ -33,9 +33,9 @@ router.put('/logon', (req, res) =>
 
   if(req.body.password == undefined) return res.status(406).send({ message: 'Mot de passe manquant dans la requête' });
 
-  fs.readFile(`${__root}/password`, (error, data) => 
+  fs.readFile(`${__root}/password`, 'utf8', (error, data) => 
   {
-    if(req.body.password != data) return res.status(406).send({ message: 'Le mot de passe est incorrect' });
+    if(req.body.password !== data) return res.status(406).send({ message: 'Le mot de passe est incorrect' });
 
     jwt.sign({ isAuthenticated: true }, req.app.get('params').tokenSecretKey, (error, token) =>
     {

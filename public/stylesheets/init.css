@@ -17,6 +17,8 @@ body{ margin:0; font-family:Arial, Helvetica, sans-serif; }
 
 .initLogonForm{ padding:20px; }
 
+.initLogonFormPassword{ color:#D9534F; margin-bottom:10px; font-size:1em; }
+
 .initLogonFormInput{ width:100%; padding:8px; border:1px solid rgba(0,0,0,0.24); box-sizing:border-box; border-radius:4px; font-size:1em; }
 
 .initLogonFormSubmit{ border:none; border-radius:4px; padding:8px 16px 8px 16px; font-size:1em; width:150px; background-color:#428BCA; color:#FFFFFF; cursor:pointer; margin:20px 20px 20px calc(100% - 150px); }
