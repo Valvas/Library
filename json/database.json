@@ -29,7 +29,8 @@
       "firstname": "VARCHAR(255) NOT NULL",
       "password": "VARCHAR(255) NOT NULL",
       "suspended": "BOOLEAN NOT NULL",
-      "picture": "MEDIUMTEXT NOT NULL"
+      "picture": "MEDIUMTEXT NOT NULL",
+      "is_admin": "BOOLEAN NOT NULL"
     },
     "apps":
     {
