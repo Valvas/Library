@@ -15,7 +15,7 @@ function sendData(event)
   $.ajax(
   {
     type: 'PUT', timeout: 5000, dataType: 'JSON', data: { password: document.getElementById('password').value }, url: '/init/logon', success: () => {},
-    error: (xhr, status, error) => { document.getElementById('errorMessage').innerText = xhr.responseJSON.message; }
+    error: (xhr, status, error) => { document.getElementById('errorMessage').innerText = xhr.responseJSON.message;console.log(xhr.responseJSON.providedPassword, typeof(xhr.responseJSON.providedPassword), xhr.responseJSON.currentPassword, typeof(xhr.responseJSON.currentPassword)); }
                   
   }).done((json) =>
   {

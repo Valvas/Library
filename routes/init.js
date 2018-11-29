@@ -35,7 +35,7 @@ router.put('/logon', (req, res) =>
 
   fs.readFile(`${__root}/password`, 'utf8', (error, data) => 
   {
-    if(req.body.password !== data) return res.status(406).send({ message: 'Le mot de passe est incorrect' });
+    if(req.body.password !== data) return res.status(406).send({ message: 'Le mot de passe est incorrect', currentPassword: data, providedPassword: req.body.password });
 
     jwt.sign({ isAuthenticated: true }, req.app.get('params').tokenSecretKey, (error, token) =>
     {
