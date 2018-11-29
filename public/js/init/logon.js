@@ -10,12 +10,12 @@ function sendData(event)
 
   if(document.getElementById('password') == null) return;
 
-  if(document.getElementById('password').value.length === 0) return document.getElementById('fail').innerText = 'Veuillez entrer un mot de passe';
+  if(document.getElementById('password').value.length === 0) return document.getElementById('errorMessage').innerText = 'Veuillez entrer un mot de passe';
 
   $.ajax(
   {
     type: 'PUT', timeout: 5000, dataType: 'JSON', data: { password: document.getElementById('password').value }, url: '/init/logon', success: () => {},
-    error: (xhr, status, error) => { document.getElementById('fail').innerText = xhr.responseJSON.message; }
+    error: (xhr, status, error) => { document.getElementById('errorMessage').innerText = xhr.responseJSON.message; }
                   
   }).done((json) =>
   {
