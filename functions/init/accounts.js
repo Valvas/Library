@@ -32,11 +32,11 @@ module.exports.createAdminAccounts = (databaseConnection, globalParameters, emai
 
 function createAdminAccountsCheckIfExists(accountData, databaseConnection, globalParameters, emailTransporter, callback)
 {
-  commonAccountsGet.checkIfAccountExistsFromEmail(accountData.email, databaseConnection, globalParameters, (error, accountExists, accountData) =>
+  commonAccountsGet.checkIfAccountExistsFromEmail(accountData.email, databaseConnection, globalParameters, (error, accountExists, existingAccountData) =>
   {
     if(error != null) return callback(error);
 
-    if(accountExists) return createAdminAccountsUpdateAdminStatus(accountData.uuid, databaseConnection, globalParameters, callback);
+    if(accountExists) return createAdminAccountsUpdateAdminStatus(existingAccountData.uuid, databaseConnection, globalParameters, callback);
 
     return createAdminAccountsInsertIntoDatabase(accountData, databaseConnection, globalParameters, emailTransporter, callback);
   });
@@ -48,7 +48,7 @@ function createAdminAccountsInsertIntoDatabase(accountData, databaseConnection, 
 {
   commonAccountsCreate.createAccount(accountData.email, accountData.lastname, accountData.firstname, databaseConnection, globalParameters, emailTransporter, (error, accountUuid) =>
   {
-    if(error != null) return callback(error);
+    if(error != null) return callback(null);
 
     return createAdminAccountsUpdateAdminStatus(accountUuid, databaseConnection, globalParameters, callback);
   });
