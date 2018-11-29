@@ -50,6 +50,7 @@ module.exports.getLastNewsFromIndex = (startIndex, endIndex, databaseConnection,
 
           resultsToKeep[x].timestamp  = stringifyTimestamp;
           resultsToKeep[x].author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : '??????????';
+          resultsToKeep[x].authorUuid = accountExists ? accountData.uuid : null;
 
           if(resultsToKeep[x += 1] == undefined) return callback(null, resultsToKeep);
 
@@ -134,6 +135,7 @@ module.exports.getNewsData = (newsUuid, databaseConnection, params, callback) =>
         newsData.content    = result[0].content;
         newsData.timestamp  = stringifyTimestamp;
         newsData.author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : '??????????';
+        newsData.authorUuid = accountExists ? accountData.uuid : null;
 
         return callback(null, true, newsData);
       });
@@ -180,6 +182,7 @@ module.exports.getAllNewsData = (databaseConnection, params, callback) =>
           newsData[index].content    = result[index].content;
           newsData[index].timestamp  = stringifyTimestamp;
           newsData[index].author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : '??????????';
+          newsData[index].authorUuid = accountExists ? accountData.uuid : null;
 
           if(result[index += 1] == undefined) return callback(null, newsData);
 

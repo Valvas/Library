@@ -31,7 +31,7 @@ socket.on('serviceRemoved', (serviceUuid, storageAppStrings) =>
 
 /****************************************************************************************************/
 
-socket.on('serviceCreated', (serviceData, storageAppStrings, accountAdminRights) =>
+socket.on('serviceCreated', (serviceData, storageAppStrings) =>
 {
   if(document.getElementById('servicesList') == null) return;
 

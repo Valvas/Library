@@ -384,6 +384,15 @@
         {
           "emptyFolder": "Aucun dossier ou fichier"
         }
+      },
+
+      "fileAsideLogs":
+      {
+        "close": "Fermer",
+        "title": "Détail et logs du fichier",
+        "name": "Fichier",
+        "logsTitle": "Liste des actions",
+        "commentButton": "Ajouter un commentaire"
       }
     },
 

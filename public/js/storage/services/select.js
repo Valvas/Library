@@ -15,12 +15,12 @@ function updateSelectedFiles(checkbox)
 
     if(document.getElementById('unselectAllFiles'))
     {
-      document.getElementById('unselectAllFiles').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonEnabled');
+      document.getElementById('unselectAllFiles').setAttribute('class', 'serviceUnselectFiles');
       document.getElementById('unselectAllFiles').addEventListener('click', unselectAllFiles);
     }
 
-    if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonEnabled');
-    if(document.getElementById('removeSelection')) document.getElementById('removeSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonEnabled');
+    if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').setAttribute('class', 'serviceDownloadFiles');
+    if(document.getElementById('removeSelection')) document.getElementById('removeSelection').setAttribute('class', 'serviceRemoveFiles');
 
     return;
   }
@@ -30,12 +30,12 @@ function updateSelectedFiles(checkbox)
 
   if(document.getElementById('unselectAllFiles'))
   {
-    document.getElementById('unselectAllFiles').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
+    document.getElementById('unselectAllFiles').setAttribute('class', 'serviceUnselectFilesDisabled');
     document.getElementById('unselectAllFiles').removeEventListener('click', unselectAllFiles);
   }
 
-  if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
-  if(document.getElementById('removeSelection')) document.getElementById('removeSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
+  if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').setAttribute('class', 'serviceDownloadFilesDisabled');
+  if(document.getElementById('removeSelection')) document.getElementById('removeSelection').setAttribute('class', 'serviceRemoveFilesDisabled');
 }
 
 /****************************************************************************************************/
@@ -58,12 +58,12 @@ function unselectAllFiles(event)
 
   if(document.getElementById('unselectAllFiles'))
   {
-    document.getElementById('unselectAllFiles').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
+    document.getElementById('unselectAllFiles').setAttribute('class', 'serviceUnselectFilesDisabled');
     document.getElementById('unselectAllFiles').removeEventListener('click', unselectAllFiles);
   }
 
-  if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
-  if(document.getElementById('removeSelection')) document.getElementById('removeSelection').setAttribute('class', 'storageServiceMainBlockToolsSelectionActionsButtonDisabled');
+  if(document.getElementById('downloadSelection')) document.getElementById('downloadSelection').setAttribute('class', 'serviceDownloadFilesDisabled');
+  if(document.getElementById('removeSelection')) document.getElementById('removeSelection').setAttribute('class', 'serviceRemoveFilesDisabled');
 }
 
 /****************************************************************************************************/

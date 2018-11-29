@@ -128,13 +128,13 @@ module.exports.updatePassword = (currentPassword, newPassword, confirmationPassw
 
     if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
 
-    encryption.encryptPassword(currentPassword, (error, encryptedCurrentPassword) =>
+    encryption.encryptPassword(currentPassword, params, (error, encryptedCurrentPassword) =>
     {
       if(error != null) return callback(error);
 
       if(accountData.password !== encryptedCurrentPassword) return callback({ status: 406, code: constants.INCORRECT_CURRENT_PASSWORD, detail: null });
 
-      encryption.encryptPassword(newPassword, (error, encryptedNewPassword) =>
+      encryption.encryptPassword(newPassword, params, (error, encryptedNewPassword) =>
       {
         if(error != null) return callback(error);
 
@@ -184,6 +184,32 @@ module.exports.updateSuspensionStatus = (accountUuid, isToBeSuspended, databaseC
 
 /****************************************************************************************************/
 
+module.exports.updateAdminStatus = (accountUuid, isToBeAdmin, databaseConnection, globalParameters, callback) =>
+{
+  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, globalParameters, (error, accountExists, accountData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    databaseManager.updateQuery(
+    {
+      databaseName: globalParameters.database.root.label,
+      tableName: globalParameters.database.root.tables.accounts,
+      args: { is_admin: isToBeAdmin ? 1 : 0 },
+      where: { operator: '=', key: 'uuid', value: accountUuid }
+  
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+  
+      return callback(null);
+    });
+  });
+}
+
+/****************************************************************************************************/
+
 module.exports.resetPassword = (accountUuid, accountEmail, databaseConnection, emailTransporter, globalParameters, callback) =>
 {
   encryption.getRandomPassword(globalParameters, (error, passwords) =>
@@ -201,22 +227,44 @@ module.exports.resetPassword = (accountUuid, accountEmail, databaseConnection, e
     {
       if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-      var emailContent = commonStrings.emailTemplates.resetAccountPassword.content;
-
-      emailContent = emailContent.replace('[$clearPassword$]', passwords.clear);
-
       var emailObject =
       {
-        templateFolder: 'resetPassword',
+        template: 'resetPassword',
         receiver: accountEmail,
-        object: commonStrings.emailTemplates.resetAccountPassword.object,
-        content: emailContent
+        subject: commonStrings.emailTemplates.resetAccountPassword,
+        locals: { clearPassword: passwords.clear }
       };
 
-      commonEmailSend.sendEmail(emailObject, emailTransporter, globalParameters, (error) =>
+      commonEmailSend.sendTemplateEmail(emailObject, emailTransporter, globalParameters, (error) =>
       {
         return callback(error);
       });
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.updatePicture = (base64Picture, accountUuid, databaseConnection, globalParameters, callback) =>
+{
+  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, globalParameters, (error, accountExists, accountData) =>
+  {
+    if(error != null) return callback(error);
+
+    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+    databaseManager.updateQuery(
+    {
+      databaseName: globalParameters.database.root.label,
+      tableName: globalParameters.database.root.tables.accounts,
+      args: { picture: base64Picture },
+      where: { operator: '=', key: 'uuid', value: accountUuid }
+  
+    }, databaseConnection, (error, result) =>
+    {
+      if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+  
+      return callback(null);
     });
   });
 }

@@ -26,6 +26,7 @@
       "email": "Adresse Email",
       "lastname": "Nom",
       "firstname": "Prénom",
+      "admin": "Administrateur",
       "suspended": "Bloqué",
       "delete": "Supprimer"
     },
@@ -38,8 +39,19 @@
       "unSuspendConfirm": "Rétablir le compte",
       "cancel": "Annuler"
     },
+    "updateAccountAdminStatusPopup":
+    {
+      "title": "Confirmation",
+      "setAdminMessage": "Êtes-vous sûr(e) de vouloir donner les droits d'administration à ce compte ?",
+      "unsetAdminMessage": "Êtes-vous sûr(e) de vouloir retirer les droits d'administration à ce compte ?",
+      "setAdminConfirm": "Donner les droits",
+      "unsetAdminConfirm": "Retirer les droits",
+      "cancel": "Annuler"
+    },
     "suspendAccountSavingMessage": "Suspension du compte en cours. Veuillez patienter",
-    "unSuspendAccountSavingMessage": "Rétablissement du compte en cours. Veuillez patienter"
+    "unSuspendAccountSavingMessage": "Rétablissement du compte en cours. Veuillez patienter",
+    "setAdminAccountSavingMessage": "Attribution des droits d'administration en cours. Veuillez patienter",
+    "unsetAdminAccountSavingMessage": "Retrait des droits d'administration en cours. Veuillez patienter"
   },
 
   "accountsCreate":

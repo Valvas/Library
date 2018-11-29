@@ -25,6 +25,10 @@ function applyFilter(event)
 {
   if(document.getElementById('currentFolder') == null) return;
 
+  var searchedValue = '';
+
+  if(document.getElementById('filesAndFoldersSearchBar')) searchedValue = document.getElementById('filesAndFoldersSearchBar').value;
+
   const currentFiles = document.getElementById('currentFolder').children;
 
   for(var x = 0; x < currentFiles.length; x++)
@@ -38,7 +42,9 @@ function applyFilter(event)
       if(currentFiles[x].children[index].innerText.split('.')[1] === event.target.value)
       {
         event.target.checked
-        ? currentFiles[x].removeAttribute('style')
+        ? currentFiles[x].children[index].innerText.includes(searchedValue)
+          ? currentFiles[x].removeAttribute('style')
+          : currentFiles[x].style.display = 'none'
         : currentFiles[x].style.display = 'none';
       }
     }

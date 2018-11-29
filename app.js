@@ -14,6 +14,8 @@ var app = express();
 
 module.exports = (callback) =>
 {
+  process.env.NODE_ENV = 'production';
+  
   fs.readFile('./json/params.json', (error, data) =>
   {
     if(error)
@@ -32,9 +34,9 @@ module.exports = (callback) =>
     
     app.use(morgan('dev'));
     app.use(cookieParser());
-    app.use(bodyParser.json());
     app.use(express.static(`${__root}/public`));
-    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json({ limit: 5242880 }));
+    app.use(bodyParser.urlencoded({ extended: false, limit: 5242880 }));
 
     app.use(favicon(path.join(__dirname,'public', 'pictures', 'logo.ico')));
     

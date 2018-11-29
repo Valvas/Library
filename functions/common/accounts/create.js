@@ -10,7 +10,7 @@ const commonAccountsGet   = require(`${__root}/functions/common/accounts/get`);
 
 /****************************************************************************************************/
 
-module.exports.createAccount = (accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, mailTransporter, callback) =>
+module.exports.createAccount = (accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, emailTransporter, callback) =>
 {
   if(new RegExp('^[a-zA-Z][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$').test(accountEmail) == false)
   {
@@ -27,7 +27,7 @@ module.exports.createAccount = (accountEmail, accountLastname, accountFirstname,
     return callback({ status: 406, code: constants.WRONG_FIRSTNAME_FORMAT, detail: null });
   }
 
-  createAccountCheckIfEmailAddressIsAvailable(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, mailTransporter, (error) =>
+  createAccountCheckIfEmailAddressIsAvailable(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, emailTransporter, (error) =>
   {
     return callback(error);
   });
@@ -35,7 +35,7 @@ module.exports.createAccount = (accountEmail, accountLastname, accountFirstname,
 
 /****************************************************************************************************/
 
-function createAccountCheckIfEmailAddressIsAvailable(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, mailTransporter, callback)
+function createAccountCheckIfEmailAddressIsAvailable(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, emailTransporter, callback)
 {
   commonAccountsGet.checkIfAccountExistsFromEmail(accountEmail, databaseConnection, globalParameters, (error, accountExists, accountData) =>
   {
@@ -43,25 +43,25 @@ function createAccountCheckIfEmailAddressIsAvailable(accountEmail, accountLastna
 
     if(accountExists) return callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE, detail: null });
 
-    return createAccountGetClearAndEncryptedPassword(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, mailTransporter, callback);
+    return createAccountGetClearAndEncryptedPassword(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, emailTransporter, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function createAccountGetClearAndEncryptedPassword(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, mailTransporter, callback)
+function createAccountGetClearAndEncryptedPassword(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, emailTransporter, callback)
 {
   encryption.getRandomPassword(globalParameters, (error, passwords) =>
   {
     if(error != null) return callback(error);
 
-    return createAccountInsertInDatabase(accountEmail, accountLastname, accountFirstname, passwords.clear, passwords.encrypted, databaseConnection, globalParameters, mailTransporter, callback);
+    return createAccountInsertInDatabase(accountEmail, accountLastname, accountFirstname, passwords.clear, passwords.encrypted, databaseConnection, globalParameters, emailTransporter, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function createAccountInsertInDatabase(accountEmail, accountLastname, accountFirstname, clearPassword, encryptedPassword, databaseConnection, globalParameters, mailTransporter, callback)
+function createAccountInsertInDatabase(accountEmail, accountLastname, accountFirstname, clearPassword, encryptedPassword, databaseConnection, globalParameters, emailTransporter, callback)
 {
   const generatedUuid = uuid.v4();
 
@@ -75,13 +75,13 @@ function createAccountInsertInDatabase(accountEmail, accountLastname, accountFir
   {
     if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    return createAccountAddRightsInDatabase(generatedUuid, accountEmail, clearPassword, databaseConnection, globalParameters, mailTransporter, callback);
+    return createAccountAddRightsInDatabase(generatedUuid, accountEmail, clearPassword, databaseConnection, globalParameters, emailTransporter, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function createAccountAddRightsInDatabase(accountUuid, accountEmail, clearPassword, databaseConnection, globalParameters, mailTransporter, callback)
+function createAccountAddRightsInDatabase(accountUuid, accountEmail, clearPassword, databaseConnection, globalParameters, emailTransporter, callback)
 {
   databaseManager.insertQuery(
   {
@@ -93,29 +93,27 @@ function createAccountAddRightsInDatabase(accountUuid, accountEmail, clearPasswo
   {
     if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    return createAccountSendPassword(accountEmail, clearPassword, globalParameters, mailTransporter, callback);
+    return createAccountSendPassword(accountEmail, clearPassword, globalParameters, emailTransporter, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function createAccountSendPassword(accountEmail, clearPassword, globalParameters, mailTransporter, callback)
+function createAccountSendPassword(accountEmail, clearPassword, globalParameters, emailTransporter, callback)
 {
-  var emailContent = commonStrings.emailTemplates.createAccountSendPassword.content;
-
-  emailContent = emailContent.replace('[$emailAddress$]', accountEmail);
-  emailContent = emailContent.replace('[$clearPassword$]', clearPassword);
-
   var emailObject =
   {
+    template: 'accountCreated',
     receiver: accountEmail,
-    object: commonStrings.emailTemplates.createAccountSendPassword.object,
-    content: emailContent
-  }
+    subject: commonStrings.emailTemplates.accountCreated,
+    locals: { emailAddress: accountEmail, clearPassword: clearPassword }
+  };
 
-  commonEmailSend.sendEmail(emailObject, mailTransporter, globalParameters, (error) =>
+  commonEmailSend.sendTemplateEmail(emailObject, emailTransporter, globalParameters, (error) =>
   {
-    return callback({ status: 500, code: constants.ACCOUNT_CREATED_WITHOUT_SENDING_PASSWORD_EMAIL, detail: null });
+    if(error != null) return callback({ status: 500, code: constants.ACCOUNT_CREATED_WITHOUT_SENDING_PASSWORD_EMAIL, detail: null });
+
+    return callback(null);
   });
 }
 

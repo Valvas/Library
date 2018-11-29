@@ -11,72 +11,74 @@ var router = express.Router();
 
 router.put('/update-email-address', (req, res) =>
 {
-  if(req.body.emailAddress == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'emailAddress' });
+  if(req.body.emailAddress == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'emailAddress' });
 
-  else
+  commonAccountsUpdate.updateEmailAddress(req.body.emailAddress, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
-    commonAccountsUpdate.updateEmailAddress(req.body.emailAddress, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
-    {
-      error != null
-      ? res.status(error.status).send({ message: errors[error.code], detail: error.detail })
-      : res.status(200).send({  });
-    }); 
-  }
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    
+    return res.status(200).send({  });
+  });
 });
 
 /****************************************************************************************************/
 
 router.put('/update-lastname', (req, res) =>
 {
-  if(req.body.lastname == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'lastname' });
+  if(req.body.lastname == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'lastname' });
 
-  else
+  commonAccountsUpdate.updateLastname(req.body.lastname, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
-    commonAccountsUpdate.updateLastname(req.body.lastname, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
-    {
-      error != null
-      ? res.status(error.status).send({ message: errors[error.code], detail: error.detail })
-      : res.status(200).send({  });
-    }); 
-  }
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({  });
+  });
 });
 
 /****************************************************************************************************/
 
 router.put('/update-firstname', (req, res) =>
 {
-  if(req.body.firstname == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'firstname' });
+  if(req.body.firstname == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'firstname' });
 
-  else
+  commonAccountsUpdate.updateFirstname(req.body.firstname, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
-    commonAccountsUpdate.updateFirstname(req.body.firstname, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
-    {
-      error != null
-      ? res.status(error.status).send({ message: errors[error.code], detail: error.detail })
-      : res.status(200).send({  });
-    }); 
-  }
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({  });
+  });
 });
 
 /****************************************************************************************************/
 
 router.put('/update-password', (req, res) =>
 {
-  if(req.body.oldPassword == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'oldPassword' });
+  if(req.body.oldPassword == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'oldPassword' });
 
-  else if(req.body.newPassword == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newPassword' });
+  if(req.body.newPassword == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newPassword' });
 
-  else if(req.body.confirmationPassword == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'confirmationPassword' });
+  if(req.body.confirmationPassword == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'confirmationPassword' });
 
-  else
+  commonAccountsUpdate.updatePassword(req.body.oldPassword, req.body.newPassword, req.body.confirmationPassword, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
-    commonAccountsUpdate.updatePassword(req.body.oldPassword, req.body.newPassword, req.body.confirmationPassword, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
-    {
-      error != null
-      ? res.status(error.status).send({ message: errors[error.code], detail: error.detail })
-      : res.status(200).send({  });
-    }); 
-  }
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({  });
+  });
+});
+
+/****************************************************************************************************/
+
+router.put('/update-picture', (req, res) =>
+{
+  if(req.body.picture == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'picture' });
+
+  commonAccountsUpdate.updatePicture(req.body.picture, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({  });
+  });
 });
 
 /****************************************************************************************************/

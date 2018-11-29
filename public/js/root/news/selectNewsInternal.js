@@ -81,8 +81,6 @@ function newsSelected(newsUuid)
 
         for(var x = 0; x < articles.length; x++)
         {
-          const currentArticleUuid = articles[x].getAttribute('name');
-
           if(articles[x].getAttribute('class') === 'asideNewsBlockListElement' && articles[x].getAttribute('name') === json.newsData.uuid)
           {
             articles[x].setAttribute('class', 'asideNewsBlockListElementSelected');

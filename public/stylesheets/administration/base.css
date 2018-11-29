@@ -73,13 +73,15 @@ body{ margin:0; height:100%; font-family:-apple-system, BlinkMacSystemFont, 'Seg
 
 .accountsHeaderEmail, .accountsEmail{ width:30%; padding-right:10px; }
 
-.accountsHeaderLastname, .accountsLastname{ width:25%; padding-right:10px; }
+.accountsHeaderLastname, .accountsLastname{ width:20%; padding-right:10px; }
 
-.accountsHeaderFirstname, .accountsFirstname{ width:25%; padding-right:10px; }
+.accountsHeaderFirstname, .accountsFirstname{ width:20%; padding-right:10px; }
 
 .accountsHeaderSuspend, .accountsSuspend{ width:10%; padding-right:10px; text-align:center; }
 
-.accountsSuspend input{ width:18px; height:18px; cursor:pointer; }
+.accountsHeaderAdmin, .accountsAdmin{ width:10%; padding-right:10px; text-align:center; }
+
+.accountsAdmin input, .accountsSuspend input{ width:18px; height:18px; cursor:pointer; }
 
 .accountsHeaderDelete, .accountsRemove{ width:10%; padding-right:10px; text-align:center; }
 

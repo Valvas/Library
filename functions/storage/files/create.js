@@ -82,15 +82,17 @@ function createFolderCheckIfServiceExists(newFolderName, parentFolderUuid, servi
 
 function createFolderCheckAccountRights(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback)
 {
-  storageAppAdminGet.getServiceLevelForEachRight(databaseConnection, globalParameters, (error, serviceRights) =>
+  storageAppAdminGet.checkIfAccountIsAdmin(accountUuid, databaseConnection, globalParameters, (error, isAdmin) =>
   {
     if(error != null) return callback(error);
 
-    storageAppServicesRights.getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, globalParameters, (error, accountRightsLevel) =>
+    if(isAdmin) return createFolderCheckIfParentFolderExists(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
+
+    storageAppServicesRights.getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, globalParameters, (error, serviceRights) =>
     {
       if(error != null) return callback(error);
-
-      if(serviceRights.createFolders > accountRightsLevel) return callback({ status: 403, code: constants.SERVICE_RIGHTS_LEVEL_TOO_LOW_TO_PERFORM_THIS_REQUEST, detail: null });
+      
+      if(serviceRights.createFolders == false && serviceRights.isAdmin == false) return callback({ status: 403, code: constants.SERVICE_RIGHTS_LEVEL_TOO_LOW_TO_PERFORM_THIS_REQUEST, detail: null });
     
       return createFolderCheckIfParentFolderExists(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
     });
@@ -121,7 +123,9 @@ function createFolderCheckIfFolderNameIsAvailable(newFolderName, parentFolderUui
   {
     if(error != null) return callback(error);
 
-    if(folderExists) return callback({ status: 406, code: constants.FOLDER_NAME_NOT_AVAILABLE, detail: null });
+    if(folderExists && folderData.parent_folder === parentFolderUuid) return callback({ status: 406, code: constants.FOLDER_NAME_NOT_AVAILABLE, detail: null });
+
+    if(folderExists && folderData.parent_folder.length === 0 && parentFolderUuid == null) return callback({ status: 406, code: constants.FOLDER_NAME_NOT_AVAILABLE, detail: null });
 
     return createFolderAddInDatabase(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
   });

@@ -11,64 +11,96 @@ socket.on('connect', () =>
 
 /****************************************************************************************************/
 
-socket.on('fileUploaded', (file, oldFileUuid, folderUuid, isGlobalAdmin, serviceRights, accountData, storageAppStrings) =>
+socket.on('fileUploaded', (file, oldFileUuid, folderUuid, accountData, storageAppStrings) =>
 {
   if(document.getElementById('currentFolder') == null) return;
 
-  if(oldFileUuid != null)
+  $.ajax(
   {
-    var currentFolderFiles = document.getElementById('currentFolder').children;
+    method: 'PUT', dataType: 'json', data: { serviceUuid: document.getElementById('serviceUuid').getAttribute('name') }, timeout: 5000, url: '/queries/storage/services/get-account-rights-towards-service',
 
-    for(var x = 0; x < currentFolderFiles.length; x++)
+    error: (xhr, textStatus, errorThrown) => { return }
+
+  }).done((result) =>
+  {
+    const isAppAdmin    = result.isAppAdmin;
+    const serviceRights = result.serviceRights;
+
+    if(oldFileUuid != null)
     {
-      if(currentFolderFiles[x].getAttribute('name') === oldFileUuid) currentFolderFiles[x].remove();
+      var currentFolderFiles = document.getElementById('currentFolder').children;
+
+      for(var x = 0; x < currentFolderFiles.length; x++)
+      {
+        if(currentFolderFiles[x].getAttribute('name') === oldFileUuid) currentFolderFiles[x].remove();
+      }
     }
-  }
 
-  if(folderUuid == null && document.getElementById('currentFolder').hasAttribute('name')) return;
+    if(folderUuid == null && document.getElementById('currentFolder').hasAttribute('name')) return;
 
-  if(folderUuid !== document.getElementById('currentFolder').getAttribute('name')) return;
+    if(folderUuid !== document.getElementById('currentFolder').getAttribute('name')) return;
 
-  var display = null, input = false, icon = null;
+    var display = null, input = false, icon = null, searched = false;
 
-  if(document.getElementById('selectedDisplay').getAttribute('name') === 'largeGrid') display = 'serviceElementsFileLargeGrid';
-  if(document.getElementById('selectedDisplay').getAttribute('name') === 'smallGrid') display = 'serviceElementsFileSmallGrid';
-  if(document.getElementById('selectedDisplay').getAttribute('name') === 'list') display = 'serviceElementsFileList';
+    if(document.getElementById('selectedDisplay').getAttribute('name') === 'largeGrid') display = 'serviceElementsFileLargeGrid';
+    if(document.getElementById('selectedDisplay').getAttribute('name') === 'smallGrid') display = 'serviceElementsFileSmallGrid';
+    if(document.getElementById('selectedDisplay').getAttribute('name') === 'list') display = 'serviceElementsFileList';
 
-  if(serviceRights.downloadFiles || serviceRights.removeFiles || isGlobalAdmin || serviceRights.isAdmin) input = true;
+    if(serviceRights.downloadFiles || serviceRights.removeFiles || isAppAdmin || serviceRights.isAdmin) input = true;
 
-  switch(file.name.split('.')[file.name.split('.').length - 1])
-  {
-    case 'zip': icon = `<div class="icon serviceElementsFileArchive"><i class="far fa-file-archive"></i></div>`; break;
-    case 'txt': icon = `<div class="icon serviceElementsFileTxt"><i class="far fa-file-alt"></i></div>`; break;
-    case 'doc': icon = `<div class="icon serviceElementsFileDoc"><i class="far fa-file-word"></i></div>`; break;
-    case 'docx': icon = `<div class="icon serviceElementsFileDocx"><i class="far fa-file-word"></i></div>`; break;
-    case 'ppt': icon = `<div class="icon serviceElementsFilePpt"><i class="far fa-file-powerpoint"></i></div>`; break;
-    case 'pptx': icon = `<div class="icon serviceElementsFilePptx"><i class="far fa-file-powerpoint"></i></div>`; break;
-    case 'xls': icon = `<div class="icon serviceElementsFileXls"><i class="far fa-file-excel"></i></div>`; break;
-    case 'xlsx': icon = `<div class="icon serviceElementsFileXlsx"><i class="far fa-file-excel"></i></div>`; break;
-    case 'pdf': icon = `<div class="icon serviceElementsFilePdf"><i class="far fa-file-pdf"></i></div>`; break;
-    case 'png': icon = `<div class="icon serviceElementsFilePng"><i class="far fa-file-image"></i></div>`; break;
-    case 'jpg': icon = `<div class="icon serviceElementsFileJpg"><i class="far fa-file-image"></i></div>`; break;
-    default: icon = `<div class="icon serviceElementsFileDefault"><i class="far fa-file"></i></div>`; break;
-  }
+    switch(file.name.split('.')[file.name.split('.').length - 1])
+    {
+      case 'zip': icon = `<div class="icon serviceElementsFileArchive"><i class="far fa-file-archive"></i></div>`; break;
+      case 'txt': icon = `<div class="icon serviceElementsFileTxt"><i class="far fa-file-alt"></i></div>`; break;
+      case 'doc': icon = `<div class="icon serviceElementsFileDoc"><i class="far fa-file-word"></i></div>`; break;
+      case 'docx': icon = `<div class="icon serviceElementsFileDocx"><i class="far fa-file-word"></i></div>`; break;
+      case 'ppt': icon = `<div class="icon serviceElementsFilePpt"><i class="far fa-file-powerpoint"></i></div>`; break;
+      case 'pptx': icon = `<div class="icon serviceElementsFilePptx"><i class="far fa-file-powerpoint"></i></div>`; break;
+      case 'xls': icon = `<div class="icon serviceElementsFileXls"><i class="far fa-file-excel"></i></div>`; break;
+      case 'xlsx': icon = `<div class="icon serviceElementsFileXlsx"><i class="far fa-file-excel"></i></div>`; break;
+      case 'pdf': icon = `<div class="icon serviceElementsFilePdf"><i class="far fa-file-pdf"></i></div>`; break;
+      case 'png': icon = `<div class="icon serviceElementsFilePng"><i class="far fa-file-image"></i></div>`; break;
+      case 'jpg': icon = `<div class="icon serviceElementsFileJpg"><i class="far fa-file-image"></i></div>`; break;
+      default: icon = `<div class="icon serviceElementsFileDefault"><i class="far fa-file"></i></div>`; break;
+    }
 
-  input
-  ? document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
-  : document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}">${icon}<div class="name">${file.name}</div></div>`;
+    if(document.getElementById('filesAndFoldersSearchBar'))
+    {
+      if(document.getElementById('filesAndFoldersSearchBar').value.length === 0 || file.name.includes(document.getElementById('filesAndFoldersSearchBar').value)) searched = true;
+    }
 
-  var message = storageAppStrings.services.detailPage.socket.fileUploaded;
+    input
+    ? searched
+      ? document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
+      : document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}" style="display:none"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
+    : searched
+      ? document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}">${icon}<div class="name">${file.name}</div></div>`
+      : document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}" style="display:none">${icon}<div class="name">${file.name}</div></div>`;
 
-  message = message.replace('[$1$]', `<b>${file.name}</b>`);
-  message = message.replace('[$2$]', `<b>${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.charAt(0).toUpperCase()}${accountData.lastname.slice(1).toLowerCase()}</b>`);
+    var message = storageAppStrings.services.detailPage.socket.fileUploaded;
 
-  displayInfo(message, null, null);
+    message = message.replace('[$1$]', `<b>${file.name}</b>`);
+    message = message.replace('[$2$]', `<b>${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.charAt(0).toUpperCase()}${accountData.lastname.slice(1).toLowerCase()}</b>`);
+
+    displayInfo(message, null, null);
+
+    addEventListenersOnFilesForDetail();
+  });
 });
 
 /****************************************************************************************************/
 
 socket.on('fileRemoved', (fileUuid, storageAppStrings) =>
 {
+  if(document.getElementById('fileDetailAside'))
+  {
+    if(document.getElementById('fileDetailAside').getAttribute('name') === fileUuid)
+    {
+      document.getElementById('fileDetailAside').remove();
+      document.getElementById('fileDetailBackground').remove();
+    }
+  }
+  
   const elements = document.getElementById('currentFolder').children;
 
   for(var x = 0; x < elements.length; x++)
@@ -83,8 +115,11 @@ socket.on('fileRemoved', (fileUuid, storageAppStrings) =>
 
       if(elements[x].children[0].tagName === 'INPUT')
       {
-        elements[x].children[0].checked = false;
-        updateSelectedFiles(elements[x].children[0]);
+        if(elements[x].children[0].checked)
+        {
+          elements[x].children[0].checked = false;
+          updateSelectedFiles(elements[x].children[0]);
+        }
       }
 
       elements[x].remove();
@@ -96,7 +131,40 @@ socket.on('fileRemoved', (fileUuid, storageAppStrings) =>
 
 socket.on('updateFileLogs', (fileUuid, fileLogs) =>
 {
+  if(document.getElementById('fileDetailAside') == null) return;
+
+  if(document.getElementById('fileDetailAside').getAttribute('name') !== fileUuid) return;
   
+  if(document.getElementById('fileDetailAsideLogsList') == null) return;
+
+  const currentLogs = document.getElementById('fileDetailAsideLogsList').children;
+
+  const currentLogsUuids = [];
+
+  for(var x = 0; x < currentLogs.length; x++) currentLogsUuids.push(currentLogs[x].getAttribute('name'));
+
+  for(var x = 0; x < fileLogs.length; x++)
+  {
+    if(currentLogsUuids.includes(fileLogs[x].uuid)) continue;
+
+    var logBlock = document.createElement('div');
+
+    logBlock.innerHTML += `<div>${fileLogs[x].date}</div>`;
+    logBlock.innerHTML += `<div>${fileLogs[x].message}</div>`;
+
+    switch(fileLogs[x].type)
+    {
+      case 0:
+        logBlock.setAttribute('class', 'fileLogUpload');
+      break;
+
+      case 1:
+        logBlock.setAttribute('class', 'fileLogDownload');
+      break;
+    }
+
+    document.getElementById('fileDetailAsideLogsList').insertBefore(logBlock, document.getElementById('fileDetailAsideLogsList').children[0]);
+  }
 });
 
 /****************************************************************************************************/

@@ -9,14 +9,14 @@ const commonAccountsGet     = require(`${__root}/functions/common/accounts/get`)
 // UPDATE ACCOUNT ADMIN STATUS
 /****************************************************************************************************/
 
-function updateAccountAdminStatus(updatedAccountUuid, updatedAccountAdminStatus, databaseConnection, globalParameters, callback)
+function updateAccountAdminStatus(accountUuid, updateToAdmin, databaseConnection, globalParameters, callback)
 {
+  if(accountUuid == undefined)                return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'accountUuid' });
+  if(updateToAdmin == undefined)              return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'updateToAdmin' });
   if(globalParameters == undefined)           return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
-  if(updatedAccountUuid == undefined)         return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'updatedAccountUuid' });
   if(databaseConnection == undefined)         return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
-  if(updatedAccountAdminStatus == undefined)  return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'updatedAccountAdminStatus' });
 
-  updateAccountAdminStatusCheckIfUpdatedAccountExists(updatedAccountUuid, updatedAccountAdminStatus, databaseConnection, globalParameters, (error) =>
+  updateAccountAdminStatusCheckIfUpdatedAccountExists(accountUuid, updateToAdmin, databaseConnection, globalParameters, (error) =>
   {
     return callback(error);
   });
@@ -24,30 +24,30 @@ function updateAccountAdminStatus(updatedAccountUuid, updatedAccountAdminStatus,
 
 /****************************************************************************************************/
 
-function updateAccountAdminStatusCheckIfUpdatedAccountExists(updatedAccountUuid, updatedAccountAdminStatus, databaseConnection, globalParameters, callback)
+function updateAccountAdminStatusCheckIfUpdatedAccountExists(accountUuid, updateToAdmin, databaseConnection, globalParameters, callback)
 {
-  commonAccountsGet.checkIfAccountExistsFromUuid(updatedAccountUuid, databaseConnection, globalParameters, (error, accountExists, accountData) =>
+  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, globalParameters, (error, accountExists, accountData) =>
   {
     if(error != null) return callback(error);
 
     if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
 
-    if(updatedAccountAdminStatus) return updateAccountAdminStatusCheckIfAccountHasAlreadyAdminRights(updatedAccountUuid, updatedAccountAdminStatus, databaseConnection, globalParameters, callback);
+    if( updateToAdmin) return updateAccountAdminStatusCheckIfAccountHasAlreadyAdminRights(accountUuid, databaseConnection, globalParameters, callback);
 
-    return updateAccountAdminStatusRemoveRights(updatedAccountUuid, databaseConnection, globalParameters, callback);
+    return updateAccountAdminStatusRemoveRights(accountUuid, databaseConnection, globalParameters, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function updateAccountAdminStatusCheckIfAccountHasAlreadyAdminRights(updatedAccountUuid, databaseConnection, globalParameters, callback)
+function updateAccountAdminStatusCheckIfAccountHasAlreadyAdminRights(accountUuid, databaseConnection, globalParameters, callback)
 {
   databaseManager.selectQuery(
   {
     databaseName: globalParameters.database.storage.label,
     tableName: globalParameters.database.storage.tables.globalAdministration,
     args: [ '*' ],
-    where: { operator: '=', key: 'account_uuid', value: updatedAccountUuid }
+    where: { operator: '=', key: 'account_uuid', value: accountUuid }
     
   }, databaseConnection, (error, result) =>
   {
@@ -59,7 +59,7 @@ function updateAccountAdminStatusCheckIfAccountHasAlreadyAdminRights(updatedAcco
     {
       databaseName: globalParameters.database.storage.label,
       tableName: globalParameters.database.storage.tables.globalAdministration,
-      args: { account_uuid: updatedAccountUuid }
+      args: { account_uuid: accountUuid }
       
     }, databaseConnection, (error, result) =>
     {
@@ -72,13 +72,13 @@ function updateAccountAdminStatusCheckIfAccountHasAlreadyAdminRights(updatedAcco
 
 /****************************************************************************************************/
 
-function updateAccountAdminStatusRemoveRights(updatedAccountUuid, databaseConnection, globalParameters, callback)
+function updateAccountAdminStatusRemoveRights(accountUuid, databaseConnection, globalParameters, callback)
 {
   databaseManager.deleteQuery(
   {
     databaseName: globalParameters.database.storage.label,
     tableName: globalParameters.database.storage.tables.globalAdministration,
-    where: { operator: '=', key: 'account_uuid', value: updatedAccountUuid }
+    where: { operator: '=', key: 'account_uuid', value: accountUuid }
 
   }, databaseConnection, (error, result) =>
   {

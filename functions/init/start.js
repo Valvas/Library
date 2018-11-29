@@ -53,6 +53,7 @@ module.exports.startApp = (app, callback) =>
   const appsViews                     = require(`${__root}/routes/root/views/apps`);
   const newsViews                     = require(`${__root}/routes/root/views/news`);
   const accountViews                  = require(`${__root}/routes/root/views/account`);
+  const directoryViews                = require(`${__root}/routes/root/views/directory`);
 
   const rootQueriesNews               = require(`${__root}/routes/root/queries/news`);
   const rootQueriesAccount            = require(`${__root}/routes/root/queries/account`);
@@ -81,6 +82,7 @@ module.exports.startApp = (app, callback) =>
   app.use('/apps', auth, appsViews);
   app.use('/news', auth, newsViews);
   app.use('/account', auth, accountViews);
+  app.use('/directory', auth, directoryViews);
 
   app.use('/queries/strings', auth, stringsQueries);
 

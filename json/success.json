@@ -38,5 +38,7 @@
   "20037": "Compte suspendu avec succès",
   "20038": "Compte réhabilité avec succès",
   "20039": "Droits d'accès à l'application ajoutés avec succès",
-  "20040": "Droits d'accès à l'application retirés avec succès"
+  "20040": "Droits d'accès à l'application retirés avec succès",
+  "20041": "Droits d'administration attribués avec succès",
+  "20042": "Droits d'administration retirés avec succès"
 }

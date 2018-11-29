@@ -84,7 +84,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); font-family:-apple-sy
 
 .mainBlock{ min-height:calc(100vh - 332px); max-width:1560px; margin:60px calc(50% - 780px) 60px calc(50% - 780px); }
 
-.startColumn{ display:inline-block; vertical-align:top; width:300px; margin:0 60px 0 0; box-sizing:border-box; border-right:1px solid #E0E0E0; padding:0 20px 0 0; }
+.startColumn{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; vertical-align:top; width:300px; margin:0 60px 0 0; box-sizing:border-box; border-right:1px solid #E0E0E0; padding:0 20px 0 0; }
 
 .centerColumn{ display:inline-block; vertical-align:top; max-width:800px; width:calc(100% - 720px); }
 

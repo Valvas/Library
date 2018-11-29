@@ -101,6 +101,8 @@ function browseFolder(folderUuid)
       removeLoader(loader, () => {  });
 
       removeBackground('browsingFolder');
+
+      addEventListenersOnFilesForDetail();
     });
   });
 }

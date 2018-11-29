@@ -284,7 +284,7 @@ function sendNewLastnameToServer(event)
 
           document.getElementById('accountDataLastname').innerText = lastname;
 
-          displaySuccess('Succès', 'Votre nom a été modifié', null);
+          displaySuccess('Votre nom a été modifié', null);
         });
       });
     });

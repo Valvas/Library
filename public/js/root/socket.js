@@ -68,7 +68,38 @@ socket.on('newsCreated', (newsData) =>
     document.getElementById('asideNewsDeployBlockList').insertBefore(deployNewsBlock, document.getElementById('asideNewsDeployBlockList').children[0]);
   }
 
-  displayInfo('Information', 'Un nouvel article a été ajouté', null);
+  if(document.getElementById('mainNewsBlockEmpty'))
+  {
+    $.ajax(
+    {
+      method: 'GET', dataType: 'json', timeout: 5000, url: '/queries/root/news/get-rights-on-articles',
+  
+      error: (xhr, textStatus, errorThrown) => { return }
+  
+    }).done((result) =>
+    {
+      const container = document.getElementById('mainNewsBlockEmpty').parentNode;
+
+      document.getElementById('mainNewsBlockEmpty').remove();
+
+      var article = document.createElement('div');
+
+      article.setAttribute('name', newsData.uuid);
+      article.setAttribute('id', 'mainNewsBlockArticle');
+      article.setAttribute('class', 'mainNewsBlockArticle');
+
+      article.innerHTML += `<div class="mainNewsBlockArticleDate">${newsData.timestamp}</div>`;
+      article.innerHTML += `<div class="mainNewsBlockArticleTitle">${newsData.title}</div>`;
+      article.innerHTML += `<div class="mainNewsBlockArticleContent">${newsData.content}</div>`;
+      article.innerHTML += `<div class="mainNewsBlockArticleAuthor">${newsData.author}</div>`;
+
+      container.appendChild(article);
+
+      document.getElementById('asideNewsBlockList').children[0].setAttribute('class', 'asideNewsBlockListElementSelected');
+    });
+  }
+
+  displayInfo('Un nouvel article a été ajouté', null);
 });
 
 /****************************************************************************************************/

@@ -12,44 +12,33 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/removeFilesPopup.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/downloadFilePopup.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/createFolderPopup.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/fileDetailAside.css" />
   <body>
     <% include ../../include/informations.ejs %>
     <% include ../includes/aside.ejs %>
     <div class="storageServiceMainBlock" id="serviceUuid" name="<%= serviceData.serviceUuid %>">
-      <div class="storageServiceMainBlockTools">
-        <div class="storageServiceMainBlockToolsServiceName"><%= serviceData.serviceName.toUpperCase() %></div>
-        <div class="storageServiceMainBlockToolsFilesAndFoldersBlock">
+      <div class="serviceDetailTools">
+        <div class="serviceName"><%= serviceData.serviceName.toUpperCase() %></div>
+        <div class="serviceActions">
           <% if(serviceRights.uploadFiles || isAdmin || serviceRights.isAdmin){ %>
-            <button id="uploadFileButton" class="storageServiceMainBlockToolsFilesAndFoldersButton"><%= strings.storage.services.detailPage.asideTools.uploadFileButton %></button>
-          <% } else{ %>
-            <div class="storageServiceMainBlockToolsFilesAndFoldersDisabledMessage"><%= strings.storage.services.detailPage.asideTools.uploadFileDisabledMessage %></div>
+            <button id="uploadFileButton" class="serviceUploadFile"><%= strings.storage.services.detailPage.asideTools.uploadFileButton %></button>
           <% } %>
           <% if(serviceRights.createFolders || isAdmin || serviceRights.isAdmin){ %>
-            <button id="createFolderButton" class="storageServiceMainBlockToolsFilesAndFoldersButton"><%= strings.storage.services.detailPage.asideTools.createFolderButton %></button>
-          <% } else{ %>
-            <div class="storageServiceMainBlockToolsFilesAndFoldersDisabledMessage"><%= strings.storage.services.detailPage.asideTools.createFolderDisabled %></div>
+            <button id="createFolderButton" class="serviceCreateFolder"><%= strings.storage.services.detailPage.asideTools.createFolderButton %></button>
+          <% } %>
+          <div id="unselectAllFiles" class="serviceUnselectFilesDisabled"><%= strings.storage.services.detailPage.asideTools.unselectAll %></div>
+          <% if(serviceRights.downloadFiles || isAdmin || serviceRights.isAdmin){ %>
+            <div id="downloadSelection" class="serviceDownloadFilesDisabled"><%= strings.storage.services.detailPage.asideTools.downloadSelection %></div>
+          <% } %>
+          <% if(serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
+            <div id="removeSelection" class="serviceRemoveFilesDisabled"><%= strings.storage.services.detailPage.asideTools.removeSelection %></div>
           <% } %>
         </div>
-        <div class="storageServiceMainBlockToolsSelectionBlock">
-          <div class="storageServiceMainBlockToolsSelectionAmount">
-            <div class="storageServiceMainBlockToolsSelectionAmountKey"><%= strings.storage.services.detailPage.asideTools.amountOfSelectedFiles %></div>
-            <div class="storageServiceMainBlockToolsSelectionAmountValue" id="selectedFilesAmount">0</div>
-          </div>
-          <div class="storageServiceMainBlockToolsSelectionActionsBlock">
-            <div id="unselectAllFiles" class="storageServiceMainBlockToolsSelectionActionsButtonDisabled"><%= strings.storage.services.detailPage.asideTools.unselectAll %></div>
-            <% if(serviceRights.downloadFiles || isAdmin || serviceRights.isAdmin){ %>
-              <div id="downloadSelection" class="storageServiceMainBlockToolsSelectionActionsButtonDisabled"><%= strings.storage.services.detailPage.asideTools.downloadSelection %></div>
-            <% } else{ %>
-              <div class="storageServiceMainBlockToolsSelectionActionsDisabled"><%= strings.storage.services.detailPage.asideTools.unauthorizedToDownload %></div>
-            <% } %>
-            <% if(serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-              <div id="removeSelection" class="storageServiceMainBlockToolsSelectionActionsButtonDisabled"><%= strings.storage.services.detailPage.asideTools.removeSelection %></div>
-            <% } else{ %>
-              <div class="storageServiceMainBlockToolsSelectionActionsDisabled"><%= strings.storage.services.detailPage.asideTools.unauthorizedToRemove %></div>
-            <% } %>
-          </div>
+        <div class="storageServiceMainBlockToolsSelectionAmount">
+          <div class="storageServiceMainBlockToolsSelectionAmountKey"><%= strings.storage.services.detailPage.asideTools.amountOfSelectedFiles %></div>
+          <div class="storageServiceMainBlockToolsSelectionAmountValue" id="selectedFilesAmount">0</div>
         </div>
-        <div class="storageServiceMainBlockToolsFiltersBlock">
+        <!--<div class="storageServiceMainBlockToolsFiltersBlock">
           <div class="storageServiceMainBlockToolsFiltersTitle"><%= strings.storage.services.detailPage.asideTools.filtersTitle %></div>
           <div class="storageServiceMainBlockToolsFiltersList" id="filtersList">
             <% for(var element in allExtensions){ %>
@@ -59,15 +48,15 @@
               </div>
             <% } %>
           </div>
-        </div>
+        </div>-->
       </div>
       <div class="storageServiceMainBlockFiles">
         <div class="storageServiceMainBlockFilesHeader">
           <div class="storageServiceMainBlockFilesHeaderSearchBlock">
             <div class="storageServiceMainBlockFilesHeaderSearchIcon"><i class="fas fa-search"></i></div>
-            <input type="text" placeholder="<%= strings.storage.services.detailPage.filesSection.header.searchBarPlaceholder %>" class="storageServiceMainBlockFilesHeaderSearchBar" />
+            <input type="text" placeholder="<%= strings.storage.services.detailPage.filesSection.header.searchBarPlaceholder %>" id="filesAndFoldersSearchBar" class="storageServiceMainBlockFilesHeaderSearchBar" />
           </div>
-          <div class="storageServiceMainBlockFilesHeaderDisplaySelection">
+          <div class="storageServiceMainBlockFilesHeaderDisplaySelection" id="displays">
             <div id="selectedDisplay" name="largeGrid" class="storageServiceMainBlockFilesHeaderDisplaySelectionElementEnabled"><i class="fas fa-th-large"></i></div>
             <div name="smallGrid" class="storageServiceMainBlockFilesHeaderDisplaySelectionElementDisabled"><i class="fas fa-th"></i></div>
             <div name="list" class="storageServiceMainBlockFilesHeaderDisplaySelectionElementDisabled"><i class="fas fa-th-list"></i></div>
@@ -204,9 +193,9 @@
     </div>
     <% include ../../include/common_scripts.ejs %>
     <script src='/socket.io/socket.io.js'></script>
-    <script src='/js/storage/messages.js'></script>
     <script src='/js/storage/services/upload.js'></script>
     <script src='/js/storage/services/select.js'></script>
+    <script src='/js/storage/services/search.js'></script>
     <script src='/js/storage/services/display.js'></script>
     <script src='/js/storage/services/browse.js'></script>
     <script src='/js/storage/services/folder.js'></script>

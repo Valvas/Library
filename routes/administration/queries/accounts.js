@@ -48,4 +48,23 @@ router.put('/update-account-suspension-status', (req, res) =>
 
 /****************************************************************************************************/
 
+router.put('/update-account-admin-status', (req, res) =>
+{
+  if(req.body.accountUuid == undefined) return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'accountUuid' });
+  if(req.body.isToBeAdmin == undefined) return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'isToBeAdmin' });
+
+  if(req.app.locals.account.isAdmin == false) return res.status(403).send({ message: errors[constants.USER_IS_NOT_ADMIN], detail: null });
+
+  if(req.body.isToBeAdmin !== 'true' && req.body.isToBeAdmin !== 'false') return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'isToBeSuspended' });
+
+  commonAccountsUpdate.updateAdminStatus(req.body.accountUuid, req.body.isToBeAdmin === 'true', req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({ message: req.body.isToBeAdmin === 'true' ? success[constants.ACCOUNT_SUCCESSFULLY_SET_ADMIN] : success[constants.ACCOUNT_SUCCESSFULLY_UNSET_ADMIN] });
+  });
+});
+
+/****************************************************************************************************/
+
 module.exports = router;

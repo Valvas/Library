@@ -2,43 +2,49 @@
 /* Main Block */
 /****************************************************************************************************/
 
-.storageServiceMainBlock{ color:#000000; max-width:2400px; margin:40px 20px 40px 20px; display:flex; flex-direction:row; }
+.storageServiceMainBlock{ color:#000000; max-width:2400px; margin:40px; }
 
 /****************************************************************************************************/
-/* Aside Tools */
+/* Tools */
 /****************************************************************************************************/
 
-.storageServiceMainBlockTools{ margin-right:20px; padding:10px; width:250px; }
-
-.storageServiceMainBlockToolsServiceName{ font-size:1.2em; padding-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.24); margin-bottom:40px; }
+.serviceName{ font-size:1.1em; padding-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.24); margin-bottom:20px; width:100%; }
 
 
-.storageServiceMainBlockToolsFilesAndFoldersBlock{ margin:40px 0 20px 0; }
+.serviceActions{ margin:20px 0 10px 0; display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; }
 
-.storageServiceMainBlockToolsFilesAndFoldersButton{ outline:none; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); margin-bottom:20px; cursor:pointer; width:100%; border:none; border-radius:20px; background-color:#FFFFFF; font-size:0.8em; font-weight:bold; padding:8px; }
+.serviceUploadFile{ outline:none; margin-right:10px; margin-bottom:10px; border-radius:20px; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); cursor:pointer; border:none; background-color:#FFFFFF; font-size:0.8em; font-weight:bold; padding:8px 16px 8px 16px; }
 
-.storageServiceMainBlockToolsFilesAndFoldersButton:hover{ color:#428BCA; background-color:rgba(0,0,0,0.03); }
+.serviceUploadFile:hover{ color:#428BCA; background-color:rgba(0,0,0,0.03); }
 
-.storageServiceMainBlockToolsFilesAndFoldersDisabledMessage{ color:#D9534F; font-size:0.8em; text-align:center; font-weight:bold; margin-bottom:20px; }
+.serviceCreateFolder{ outline:none; margin-right:10px; margin-bottom:10px; border-radius:20px; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); cursor:pointer; border:none; background-color:#FFFFFF; font-size:0.8em; font-weight:bold; padding:8px 16px 8px 16px; }
+
+.serviceCreateFolder:hover{ color:#428BCA; background-color:rgba(0,0,0,0.03); }
+
+.serviceUnselectFiles{ margin-right:10px; margin-bottom:10px; border-radius:20px; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); cursor:pointer; border:none; background-color:#FFFFFF; font-size:0.8em; font-weight:bold; padding:8px 16px 8px 16px; }
+
+.serviceUnselectFilesDisabled{ margin-right:10px; margin-bottom:10px; color:rgba(0,0,0,0.48); box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); text-align:center; font-size:0.8em; font-weight:bold; border-radius:20px; padding:8px 16px 8px 16px; width:max-content; }
+
+.serviceUnselectFiles:hover{ color:#428BCA; background-color:rgba(0,0,0,0.03); }
+
+.serviceDownloadFiles{ margin-right:10px; margin-bottom:10px; border-radius:20px; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); cursor:pointer; border:none; background-color:#FFFFFF; font-size:0.8em; font-weight:bold; padding:8px 16px 8px 16px; }
+
+.serviceDownloadFilesDisabled{ margin-right:10px; margin-bottom:10px; color:rgba(0,0,0,0.48); box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); text-align:center; font-size:0.8em; font-weight:bold; border-radius:20px; padding:8px 16px 8px 16px; width:max-content; }
+
+.serviceDownloadFiles:hover{ color:#428BCA; background-color:rgba(0,0,0,0.03); }
+
+.serviceRemoveFiles{ margin-right:10px; margin-bottom:10px; border-radius:20px; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); cursor:pointer; border:none; background-color:#FFFFFF; font-size:0.8em; font-weight:bold; padding:8px 16px 8px 16px; }
+
+.serviceRemoveFilesDisabled{ margin-right:10px; margin-bottom:10px; color:rgba(0,0,0,0.48); box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); text-align:center; font-size:0.8em; font-weight:bold; border-radius:20px; padding:8px 16px 8px 16px; width:max-content; }
+
+.serviceRemoveFiles:hover{ color:#D9534F; background-color:rgba(0,0,0,0.03); }
 
 
-.storageServiceMainBlockToolsSelectionBlock{ margin:20px 0 40px 0; border-top:1px solid rgba(0,0,0,0.24); }
-
-.storageServiceMainBlockToolsSelectionAmount{ display:flex; flex-direction:row; justify-content:space-between; margin:20px 0 20px 0; }
+.storageServiceMainBlockToolsSelectionAmount{ display:flex; flex-direction:row; justify-content:flex-start; margin:0 0 20px 0; }
 
 .storageServiceMainBlockToolsSelectionAmountKey{ font-size:0.9em; margin-right:10px; }
 
 .storageServiceMainBlockToolsSelectionAmountValue{ font-weight:bold; font-size:0.9em; }
-
-.storageServiceMainBlockToolsSelectionActionsBlock{ margin:20px 0 20px 0; }
-
-.storageServiceMainBlockToolsSelectionActionsDisabled{ color:#D9534F; font-size:0.8em; text-align:center; font-weight:bold; margin-bottom:20px; }
-
-.storageServiceMainBlockToolsSelectionActionsButtonDisabled{ color:rgba(0,0,0,0.48); box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); text-align:center; font-size:0.8em; font-weight:bold; padding:8px; border-radius:20px; margin-bottom:20px; }
-
-.storageServiceMainBlockToolsSelectionActionsButtonEnabled{ color:#428BCA; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); text-align:center; font-size:0.8em; font-weight:bold; padding:8px; border-radius:20px; margin-bottom:20px; cursor:pointer; }
-
-.storageServiceMainBlockToolsSelectionActionsButtonEnabled:hover{ background-color:rgba(0,0,0,0.06); }
 
 
 .storageServiceMainBlockToolsFiltersBlock{ margin:40px 0 40px 0; box-shadow:0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.1); }
@@ -57,19 +63,19 @@
 /* Files Section */
 /****************************************************************************************************/
 
-.storageServiceMainBlockFiles{ margin-left:20px; width:calc(100% - 290px); }
+.storageServiceMainBlockFiles{ width:100%; max-width:1920px; }
 
-.storageServiceMainBlockFilesHeader{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
+.storageServiceMainBlockFilesHeader{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; flex-wrap:wrap; width:100%; }
 
 
-.storageServiceMainBlockFilesHeaderSearchBlock{ position:relative; background-color:rgba(0,0,0,0.08); border-radius:20px; height:32px; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
+.storageServiceMainBlockFilesHeaderSearchBlock{ max-width:100%; margin-right:20px; position:relative; background-color:rgba(0,0,0,0.12); border-radius:20px; height:32px; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
 
-.storageServiceMainBlockFilesHeaderSearchIcon{ color:rgba(0,0,0,0.72); width:16px; height:16px; margin-left:8px; }
+.storageServiceMainBlockFilesHeaderSearchIcon{ color:rgba(0,0,0,0.72); width:24px; height:24px; margin-left:8px; }
 
 .storageServiceMainBlockFilesHeaderSearchBar{ outline:none; border-radius:20px; height:32px; border:none; background-color:rgba(0,0,0,0); padding:8px; box-sizing:border-box; width:300px; font-size:0.9em; }
 
 
-.storageServiceMainBlockFilesHeaderDisplaySelection{ display:flex; flex-direction:row; margin-left:20px; }
+.storageServiceMainBlockFilesHeaderDisplaySelection{ display:flex; flex-direction:row; }
 
 .storageServiceMainBlockFilesHeaderDisplaySelectionElementEnabled, .storageServiceMainBlockFilesHeaderDisplaySelectionElementDisabled{ margin-right:10px; font-size:1.5em; }
 
@@ -101,19 +107,43 @@
 /* Service Elements */
 /****************************************************************************************************/
 
-.serviceElements{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; align-items:top; }
+.serviceElements{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; align-items:top; position:relative; }
 
 .serviceElementsEmpty{ font-size:1.2em; text-align:center; margin:40px; }
 
-.serviceElementsFileLargeGrid{ margin:0 10px 20px 0; width:100px; border-radius:4px; cursor:pointer; padding:10px; position:relative; }
 
-.serviceElementsFileLargeGrid:hover{ background-color:rgba(0,0,255,0.06); }
+.serviceElementsFileLargeGrid{ width:100px; border-radius:4px; cursor:pointer; padding:10px; position:relative; }
+
+.serviceElementsFileLargeGrid:hover{ background-color:rgba(0,0,255,0.12); }
 
 .serviceElementsFileLargeGrid .checkbox{ position:absolute; top:5px; right:5px; width:18px; height:18px; cursor:pointer; }
 
-.serviceElementsFileLargeGrid .icon{ font-size:5em; text-align:center; }
+.serviceElementsFileLargeGrid .icon{ text-align:center; font-size:4em; }
 
-.serviceElementsFileLargeGrid .name{ font-size:0.8em; text-align:center; word-break:break-all; }
+.serviceElementsFileLargeGrid .name{ font-size:0.9em; text-align:center; word-break:break-all; }
+
+
+.serviceElementsFileSmallGrid{ width:50px; border-radius:4px; cursor:pointer; padding:10px; position:relative; }
+
+.serviceElementsFileSmallGrid:hover{ background-color:rgba(0,0,255,0.12); }
+
+.serviceElementsFileSmallGrid .checkbox{ position:absolute; top:5px; right:5px; width:16px; height:16px; cursor:pointer; }
+
+.serviceElementsFileSmallGrid .icon{ text-align:center; font-size:3em; }
+
+.serviceElementsFileSmallGrid .name{ font-size:0.8em; text-align:center; word-break:break-all; }
+
+
+.serviceElementsFileList{ width:100%; cursor:pointer; padding:10px; position:relative; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; border-radius:4px; }
+
+.serviceElementsFileList:hover{ background-color:rgba(0,0,255,0.12); }
+
+.serviceElementsFileList .checkbox{ width:16px; height:16px; cursor:pointer; margin-right:10px; }
+
+.serviceElementsFileList .icon{ text-align:center; font-size:1.5em; margin-right:10px; }
+
+.serviceElementsFileList .name{ font-size:1em; text-align:left; word-break:break-all; }
+
 
 .serviceElementsFolder{ color:#EBA432; }
 

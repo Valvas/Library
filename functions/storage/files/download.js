@@ -54,7 +54,7 @@ function getFileFromDatabase(fileUuid, serviceUuid, accountUuid, databaseConnect
   {
     if(error != null) return callback(error);
 
-    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND, detail: 'database' });
+    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND_IN_DATABASE, detail: 'database' });
 
     if(fileData.is_deleted === 1) return callback({ status: 404, code: constants.FILE_HAS_BEEN_DELETED, detail: null });
 
@@ -70,7 +70,7 @@ function getFileFromStorage(fileData, serviceUuid, accountUuid, databaseConnecti
   {
     if(error != null) return callback(error);
 
-    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND, detail: 'storage' });
+    if(fileExists == false) return callback({ status: 404, code: constants.FILE_NOT_FOUND_ON_DISK, detail: 'storage' });
 
     storageAppLogsServicesDownloadFile.addDownloadFileLog(accountUuid, fileData.uuid, databaseConnection, params, (error) => {  });
 

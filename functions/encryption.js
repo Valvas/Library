@@ -9,7 +9,9 @@ module.exports.encryptPassword = (password, params, callback) =>
 {
   bcrypt.hash(password, params.salt, (error, result) =>
   {
-    error != undefined ? callback({status: 500, code: constants.ENCRYPTION_FAILED }) : callback(null, result);
+    if(error) return callback({status: 500, code: constants.ENCRYPTION_FAILED });
+    
+    return callback(null, result);
   });
 }
 

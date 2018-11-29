@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/account/base.css" />
   <body>
@@ -23,8 +24,8 @@
           </div>
         <% } else{ %>
           <div class="accountDataPictureBlock">
-            <div class="accountDataPictureBlockCircle"><img class="accountDataPictureBlockAvatar" src="data:image/png;base64,<%= locals.account.picture %>" /></div>
-            <div class="accountDataPictureBlockUpdate"><%= strings.common.root.account.accountPictureBlockUpdate %></div>
+            <div class="accountDataPictureBlockCircle"><img id="accountDataPicture" class="accountDataPictureBlockAvatar" src="<%= locals.account.picture %>" /></div>
+            <div class="accountDataPictureBlockUpdate" id="accountDataUpdatePicture"><%= strings.common.root.account.accountPictureBlockUpdate %></div>
           </div>
           <div class="accountDataBlock">
             <div class="accountDataBlockValue" id="accountDataEmail"><%= locals.account.email %></div>
@@ -45,8 +46,8 @@
       </div>
     </div>
     <% include ../include/footer.ejs %>
-    <% include ../include/scripts.ejs %>
     <% include ../../include/common_scripts.ejs %>
+    <% include ../include/scripts.ejs %>
     <script src='/js/root/news/selectNewsExternal.js'></script>
     <script src='/js/root/account/updateData.js'></script>
     <script src='/js/root/account/updatePassword.js'></script>

@@ -1,8 +1,57 @@
 /****************************************************************************************************/
 
+var storageAppStrings = null;
+
+/****************************************************************************************************/
+
+function prepareCommentPopup(fileUuid)
+{
+  if(document.getElementById('addCommentOnFileBackground')) return;
+
+  createBackground('addCommentOnFileBackground');
+
+  displayLoader('', (loader) =>
+  {
+    if(storageAppStrings != null)
+    {
+      removeLoader(loader, () => {  });
+      
+      return openCommentPopup(fileUuid);
+    }
+
+    getStorageAppStrings((error, strings) =>
+    {
+      removeLoader(loader, () => {  });
+
+      if(error != null)
+      {
+        removeBackground('addCommentOnFileBackground');
+
+        return displayError(error.message, error.detail, 'addCommentOnFileError');
+      }
+
+      return openCommentPopup(fileUuid);
+    });
+  });
+}
+
+/****************************************************************************************************/
+
 function openCommentPopup(fileUuid)
 {
-  var background    = document.createElement('div');
+  var popup = document.createElement('div');
+
+  popup.setAttribute('name', fileUuid);
+  popup.setAttribute('class', 'addCommentOnFilePopup');
+
+  popup.innerHTML += `<div class="addCommentOnFilePopupTitle">Title</div>`;
+  popup.innerHTML += `<div class="addCommentOnFilePopupHelp">Help message</div>`;
+  popup.innerHTML += `<textarea class="addCommentOnFilePopupInput">Comment content</textarea>`;
+
+  document.body.appendChild(popup);
+}
+
+  /*var background    = document.createElement('div');
   var spinner       = document.createElement('div');
 
   background        .setAttribute('class', 'storageBackground');
@@ -111,8 +160,7 @@ function openCommentPopup(fileUuid)
         popupInput.focus();
       }
     });
-  });
-}
+  });*/
 
 /****************************************************************************************************/
 

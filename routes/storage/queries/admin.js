@@ -4,9 +4,7 @@ const express                   = require('express');
 const errors                    = require(`${__root}/json/errors`);
 const success                   = require(`${__root}/json/success`);
 const constants                 = require(`${__root}/functions/constants`);
-const commonAppStrings          = require(`${__root}/json/strings/common`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
-const storageAppAccessGet       = require(`${__root}/functions/storage/access/get`);
 const commonAccountsGet         = require(`${__root}/functions/common/accounts/get`);
 const storageAppAdminUpdate     = require(`${__root}/functions/storage/admin/update`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
@@ -111,8 +109,6 @@ router.put('/update-account-service-rights', (req, res) =>
   const serviceRightsUpdate = JSON.parse(req.body.serviceRights);
 
   for(var right in serviceRightsUpdate) serviceRightsUpdate[right] = serviceRightsUpdate[right] ? 1 : 0;
-
-  if(req.app.locals.isAdmin == false) return res.status(403).send({ message: errors[constants.USER_IS_NOT_ADMIN], detail: null });
 
   storageAppServicesGet.checkIfServiceExistsFromUuid(req.body.serviceUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceExists, serviceData) =>
   {

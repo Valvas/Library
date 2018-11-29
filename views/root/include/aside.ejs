@@ -4,6 +4,7 @@
     <a class="<% if(currentLocation === 'apps'){ %>asideBlockListElementSelected<% } else{ %>asideBlockListElement<% } %>" href="/apps"><%= strings.common.locations.apps %></a>
     <a class="<% if(currentLocation === 'news'){ %>asideBlockListElementSelected<% } else{ %>asideBlockListElement<% } %>" href="/news"><%= strings.common.locations.news %></a>
     <a class="<% if(currentLocation === 'account'){ %>asideBlockListElementSelected<% } else{ %>asideBlockListElement<% } %>" href="/account"><%= strings.common.locations.account %></a>
+    <a class="<% if(currentLocation === 'directory'){ %>asideBlockListElementSelected<% } else{ %>asideBlockListElement<% } %>" href="/directory"><%= strings.common.locations.directory %></a>
     <% if(account.isAdmin){ %><a class="asideBlockListElement" href="/administration"><%= strings.common.locations.admin %></a><% } %>
   </div>
 </aside>

@@ -20,6 +20,7 @@
               <div class="accountsHeaderEmail"><%= strings.administrationStrings.accountsHome.accountsHeader.email %></div>
               <div class="accountsHeaderLastname"><%= strings.administrationStrings.accountsHome.accountsHeader.lastname %></div>
               <div class="accountsHeaderFirstname"><%= strings.administrationStrings.accountsHome.accountsHeader.firstname %></div>
+              <div class="accountsHeaderAdmin"><%= strings.administrationStrings.accountsHome.accountsHeader.admin %></div>
               <div class="accountsHeaderSuspend"><%= strings.administrationStrings.accountsHome.accountsHeader.suspended %></div>
               <div class="accountsHeaderDelete"><%= strings.administrationStrings.accountsHome.accountsHeader.delete %></div>
             </div>
@@ -28,6 +29,7 @@
                 <div class="accountsEmail"><%= accounts[x].email %></div>
                 <div class="accountsLastname"><%= accounts[x].lastname.charAt(0).toUpperCase() %><%= accounts[x].lastname.slice(1).toLowerCase() %></div>
                 <div class="accountsFirstname"><%= accounts[x].firstname.charAt(0).toUpperCase() %><%= accounts[x].firstname.slice(1).toLowerCase() %></div>
+                <div class="accountsAdmin"><input name="adminCheckbox" type="checkbox" <% if(accounts[x].admin){ %>checked<% } %>/></div>
                 <div class="accountsSuspend"><input name="suspendCheckbox" type="checkbox" <% if(accounts[x].suspended){ %>checked<% } %>/></div>
                 <div class="accountsRemove"><i class="icon fas fa-trash-alt"></i></div>
               </div>
@@ -40,6 +42,7 @@
     <script src="/js/administration/accounts/search.js"></script>
     <script src="/js/administration/accounts/remove.js"></script>
     <script src="/js/administration/accounts/suspend.js"></script>
+    <script src="/js/administration/accounts/admin.js"></script>
     <script src="/js/administration/exit.js"></script>
   </body>
 </html>

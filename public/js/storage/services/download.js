@@ -130,13 +130,15 @@ function browseFilesToDownload(filesToDownload, index, strings)
 
     reader = new FileReader();
 
+    const currentFileName = filesToDownload[index].name;
+
     reader.addEventListener('loadend', (event) => 
     {
       const text = event.srcElement.result;
 
       const json = JSON.parse(text);
 
-      displayError(json.message, filesToDownload[index].name, null);
+      displayError(json.message, currentFileName, null);
     });
     
     reader.readAsText(currentXhrRequest.response);

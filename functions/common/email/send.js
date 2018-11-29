@@ -3,7 +3,7 @@
 const constants         = require(__root + '/functions/constants');
 const commonFormatEmail = require(__root + '/functions/common/format/email');
 
-const EmailTemplate     = require('email-templates');
+const emailTemplate     = require('email-templates');
 
 /****************************************************************************************************/
 
@@ -45,6 +45,43 @@ module.exports.sendEmail = (emailObject, transporter, globalParameters, callback
 
       return callback(null);
     });
+  });
+}
+
+/****************************************************************************************************/
+
+module.exports.sendTemplateEmail = (emailObject, transporter, globalParameters, callback) =>
+{
+  const email = new emailTemplate(
+  {
+    transport: transporter,
+    views: 
+    {
+      options: 
+      {
+        extension: 'ejs'
+      }
+    }
+  });
+  
+  email.send(
+  {
+    template: `${__root}/templates/${emailObject.template}`,
+    message: 
+    {
+      from: globalParameters.transporter.from,
+      subject: emailObject.subject,
+      to: emailObject.receiver
+    },
+    locals: emailObject.locals
+  })
+  .then(() =>
+  {
+    return callback(null);
+  })
+  .catch(() =>
+  {
+    return callback({ status: 500, code: constants.COULD_NOT_SEND_EMAIL, detail: null });
   });
 }
 
