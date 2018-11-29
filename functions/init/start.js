@@ -5,6 +5,7 @@ const mysql               = require('mysql');
 const nodemailer          = require('nodemailer');
 const auth                = require(`${__root}/auth`);
 const initAuthentication  = require(`${__root}/initAuthentication`);
+const appsInit            = require(`${__root}/functions/init/apps`);
 const encryption          = require(`${__root}/functions/encryption`);
 const initFolder          = require(`${__root}/functions/init/folders`);
 const database            = require(`${__root}/functions/database/init`);
@@ -146,11 +147,21 @@ module.exports.startApp = (app, callback) =>
     {
       accountsInit.createAdminAccounts(pool, app.get('params'), transporter, (error) =>
       {
-        if(error == null) return callback();
-
-        console.log(error);
+        if(error != null)
+        {
+          console.log(error);
         
-        process.exit(1);
+          process.exit(1);
+        }
+
+        appsInit.createApps(pool, app.get('params'), (error) =>
+        {
+          if(error == null) return callback();
+
+          console.log(error);
+        
+          process.exit(1);
+        });
       });
     });
   });

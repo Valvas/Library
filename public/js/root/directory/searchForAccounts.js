@@ -18,7 +18,6 @@ function searchForAccounts(event)
 
     if(currentAccounts[x].children[1].children[0].innerText.toLowerCase().includes(event.target.value.toLowerCase())) isToBeDisplayed = true;
     if(currentAccounts[x].children[1].children[1].innerText.toLowerCase().includes(event.target.value.toLowerCase())) isToBeDisplayed = true;
-    if(currentAccounts[x].children[1].children[2].innerText.toLowerCase().includes(event.target.value.toLowerCase())) isToBeDisplayed = true;
 
     isToBeDisplayed
     ? currentAccounts[x].removeAttribute('style')

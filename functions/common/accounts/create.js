@@ -105,7 +105,7 @@ function createAccountSendPassword(accountUuid, accountEmail, clearPassword, glo
   {
     template: 'accountCreated',
     receiver: accountEmail,
-    subject: commonStrings.emailTemplates.accountCreated,
+    subject: commonStrings.emailTemplates.createAccountPassword,
     locals: { emailAddress: accountEmail, clearPassword: clearPassword }
   };
 

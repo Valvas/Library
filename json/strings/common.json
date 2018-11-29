@@ -218,7 +218,7 @@
 
   "emailTemplates":
   {
-    "createAccountSendPassword": "Votre compte sur le portail des applications PEI",
+    "createAccountPassword": "Votre compte sur le portail des applications PEI",
     "resetAccountPassword": "Votre mot de passe sur le portail des applications PEI"
   }
 }

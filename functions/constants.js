@@ -134,6 +134,7 @@ const DBMS_NOT_FOUND                                                            
 const PARENT_FOLDER_NOT_FOUND                                                     = 10130;
 const IS_NOT_APP_ADMIN                                                            = 10131;
 const ACCOUNT_CREATED_WITHOUT_SENDING_PASSWORD_EMAIL                              = 10132;
+const APP_PICTURE_NOT_FOUND                                                       = 10133;
 
 /******************************************************************************************
 SUCCESS
@@ -320,6 +321,7 @@ module.exports =
   PARENT_FOLDER_NOT_FOUND: PARENT_FOLDER_NOT_FOUND,
   IS_NOT_APP_ADMIN: IS_NOT_APP_ADMIN,
   ACCOUNT_CREATED_WITHOUT_SENDING_PASSWORD_EMAIL: ACCOUNT_CREATED_WITHOUT_SENDING_PASSWORD_EMAIL,
+  APP_PICTURE_NOT_FOUND: APP_PICTURE_NOT_FOUND,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

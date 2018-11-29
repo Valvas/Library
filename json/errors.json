@@ -130,5 +130,6 @@
   "10129": "Le gestionnaire de base de données n'est pas pris en charge. Veuillez en choisir un autre",
   "10130": "Le dossier parent est introuvable",
   "10131": "Vous n'êtes pas administrateur de cette application. Vous ne pouvez pas accéder à cette page.",
-  "10132": "Compte créé avec succès, cependant une erreur est survenue pendant l'envoi de l'email avec le mot de passe. Afin de se connecter l'utilisateur doit demander l'envoi d'un nouveau mot de passe par email depuis la page de connexion"
+  "10132": "Compte créé avec succès, cependant une erreur est survenue pendant l'envoi de l'email avec le mot de passe. Afin de se connecter l'utilisateur doit demander l'envoi d'un nouveau mot de passe par email depuis la page de connexion",
+  "10133": "L'image de l'application est introuvable"
 }
