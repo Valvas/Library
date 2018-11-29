@@ -27,9 +27,9 @@ module.exports.createAccount = (accountEmail, accountLastname, accountFirstname,
     return callback({ status: 406, code: constants.WRONG_FIRSTNAME_FORMAT, detail: null });
   }
 
-  createAccountCheckIfEmailAddressIsAvailable(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, emailTransporter, (error) =>
+  createAccountCheckIfEmailAddressIsAvailable(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, emailTransporter, (error, accountUuid) =>
   {
-    return callback(error);
+    return callback(error, accountUuid);
   });
 }
 
@@ -93,13 +93,13 @@ function createAccountAddRightsInDatabase(accountUuid, accountEmail, clearPasswo
   {
     if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    return createAccountSendPassword(accountEmail, clearPassword, globalParameters, emailTransporter, callback);
+    return createAccountSendPassword(accountUuid, accountEmail, clearPassword, globalParameters, emailTransporter, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function createAccountSendPassword(accountEmail, clearPassword, globalParameters, emailTransporter, callback)
+function createAccountSendPassword(accountUuid, accountEmail, clearPassword, globalParameters, emailTransporter, callback)
 {
   var emailObject =
   {
@@ -113,7 +113,7 @@ function createAccountSendPassword(accountEmail, clearPassword, globalParameters
   {
     if(error != null) return callback({ status: 500, code: constants.ACCOUNT_CREATED_WITHOUT_SENDING_PASSWORD_EMAIL, detail: null });
 
-    return callback(null);
+    return callback(null, accountUuid);
   });
 }
 

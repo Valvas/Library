@@ -8,6 +8,7 @@ const initAuthentication  = require(`${__root}/initAuthentication`);
 const encryption          = require(`${__root}/functions/encryption`);
 const initFolder          = require(`${__root}/functions/init/folders`);
 const database            = require(`${__root}/functions/database/init`);
+const accountsInit        = require(`${__root}/functions/init/accounts`);
 
 const stringsQueries      = require(`${__root}/routes/strings`);
 
@@ -143,14 +144,14 @@ module.exports.startApp = (app, callback) =>
   { 
     initFolder.createAppFolders(params, (error) =>
     {
-      if(error == null) callback();
-      
-      else
+      accountsInit.createAdminAccounts(pool, app.get('params'), transporter, (error) =>
       {
+        if(error == null) return callback();
+
         console.log(error);
         
         process.exit(1);
-      }
+      });
     });
   });
 }

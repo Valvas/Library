@@ -1,16 +1,18 @@
 'use strict';
 
-const fs                = require('fs');
-const express           = require('express');
-const jwt               = require('jsonwebtoken');
-const errors            = require(`${__root}/json/errors`);
-const commonStrings     = require(`${__root}/json/strings/common`);
-const constants         = require(`${__root}/functions/constants`);
-const initStart         = require(`${__root}/functions/init/start`);
-const initFormat        = require(`${__root}/functions/init/format`);
-const initStorage       = require(`${__root}/functions/init/storage`);
-const initDatabase      = require(`${__root}/functions/init/database`);
-const initTransporter   = require(`${__root}/functions/init/transporter`);
+const fs                    = require('fs');
+const express               = require('express');
+const jwt                   = require('jsonwebtoken');
+const errors                = require(`${__root}/json/errors`);
+const commonStrings         = require(`${__root}/json/strings/common`);
+const constants             = require(`${__root}/functions/constants`);
+const initStart             = require(`${__root}/functions/init/start`);
+const initFormat            = require(`${__root}/functions/init/format`);
+const initStorage           = require(`${__root}/functions/init/storage`);
+const initDatabase          = require(`${__root}/functions/init/database`);
+const initTransporter       = require(`${__root}/functions/init/transporter`);
+const commonAccountsCreate  = require(`${__root}/functions/common/accounts/create`);
+const commonAccountsUpdate  = require(`${__root}/functions/common/accounts/update`);
 
 const router = express.Router();
 

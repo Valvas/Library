@@ -10,6 +10,8 @@ function sendData(event)
 
   if(document.getElementById('password') == null) return;
 
+  document.getElementById('errorMessage').innerText = '';
+
   if(document.getElementById('password').value.length === 0) return document.getElementById('errorMessage').innerText = 'Veuillez entrer un mot de passe';
 
   $.ajax(

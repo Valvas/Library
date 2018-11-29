@@ -9,7 +9,7 @@
 
 .standardPopupTitle{ padding:20px; border-radius:4px 4px 0 0; border-bottom:1px solid #CCC; margin:0 0 20px 0; font-size:1.2em; }
 
-.standardPopupMessage{ padding:10px 20px 10px 20px; font-size:1em; }
+.standardPopupMessage{ padding:10px 20px 10px 20px; font-size:1em; text-align:justify; }
 
 .standardPopupSelect{ width:calc(100% - 40px); margin:20px; font-size:0.9em; padding:4px; cursor:pointer; border:1px solid #CCC; border-radius:4px; }
 
