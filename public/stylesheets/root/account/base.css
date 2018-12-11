@@ -55,3 +55,11 @@
 .accountDataUpdateFormSubmit:hover{ color:#90BB2C; }
 
 .accountDataUpdateError{ color:#D9534F; font-size:16px; line-height:20px; margin:0 0 10px 0; }
+
+.accountDataRulesBlock{ border-radius:4px; background-color:rgba(0,0,0,0.06); padding:10px; margin:10px; width: calc(100% - 40px); }
+
+.accountDataRulesElement{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+
+.accountDataRulesElementKey{ font-size:1em; margin-right:10px; font-style:italic; }
+
+.accountDataRulesElementValue{ font-size:1.1em; font-weight:bold; }

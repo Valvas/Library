@@ -65,6 +65,7 @@ module.exports.startApp = (app, callback) =>
   const administrationViewsHome       = require(`${__root}/routes/administration/views/home`);
   const administrationViewsAccess     = require(`${__root}/routes/administration/views/access`);
   const administrationViewsAccounts   = require(`${__root}/routes/administration/views/accounts`);
+  const administrationViewsConfig     = require(`${__root}/routes/administration/views/configuration`);
 
   const administrationQueriesAccess   = require(`${__root}/routes/administration/queries/access`);
   const administrationQueriesAccounts = require(`${__root}/routes/administration/queries/accounts`);
@@ -94,6 +95,7 @@ module.exports.startApp = (app, callback) =>
   app.use('/administration', auth, administrationViewsHome);
   app.use('/administration/access', auth, administrationViewsAccess);
   app.use('/administration/accounts', auth, administrationViewsAccounts);
+  app.use('/administration/configuration', auth, administrationViewsConfig);
 
   app.use('/queries/administration/access', auth, administrationQueriesAccess);
   app.use('/queries/administration/accounts', auth, administrationQueriesAccounts);
@@ -110,7 +112,7 @@ module.exports.startApp = (app, callback) =>
 
   app.use((req, res, next) =>
   {
-    res.render('block', { message: `La page recherchée n'existe pas`, detail: null, link: req.headers.referer });
+    res.render('block', { message: `La page recherchée n'existe pas`, detail: null, link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url ? '/' : req.headers.referer });
   });
 
   const pool = mysql.createPool(

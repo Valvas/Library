@@ -107,9 +107,14 @@
 /* Service Elements */
 /****************************************************************************************************/
 
-.serviceElements{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; align-items:top; position:relative; }
+.serviceElements{ flex-wrap:wrap; position:relative; }
 
 .serviceElementsEmpty{ font-size:1.2em; text-align:center; margin:40px; }
+
+
+.serviceFolders{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; align-items:start; position:relative; }
+
+.serviceFiles{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; align-items:start; position:relative; }
 
 
 .serviceElementsFileLargeGrid{ width:100px; border-radius:4px; cursor:pointer; padding:10px; position:relative; }
@@ -170,5 +175,50 @@
 .serviceElementsFilePng{ color:#64ADEC; }
 
 .serviceElementsFileJpg{ color:#64ADEC; }
+
+/****************************************************************************************************/
+/* Folder Menu */
+/****************************************************************************************************/
+
+.folderMenuBackground{ position:absolute; min-height:800px; top:0; right:0; bottom:0; left:0; z-index:190; background-color:rgba(0,0,0,0.3); }
+
+.folderMenu{ position:absolute; display:flex; justify-content:flex-start; flex-direction:column; top:10px; margin-bottom:10px; left:10px; border-radius:4px; width:250px; max-width:calc(100% - 20px); margin-right:20px; z-index:200; background-color:#FFFFFF; }
+
+.folderMenuTitle{ border-bottom:1px solid #CCC; padding:10px; font-size:1.2em; }
+
+.folderMenuLoader{ text-align:center; padding:20px 0 20px 0; color:#64ADEC; font-size:2em; }
+
+.folderMenuRenameButton{ border:1px solid #CCC; border-radius:4px; padding:8px; width:calc(100% - 40px); margin:20px 20px 0 20px; cursor:pointer; font-size:0.9em; background-color:#FFFFFF; }
+
+.folderMenuRenameButton:hover{ color:#428BCA; background-color:rgba(0,0,0,0.06); }
+
+.folderMenuRemoveButton{ border:1px solid #CCC; border-radius:4px; padding:8px; width:calc(100% - 40px); margin:20px 20px 0 20px; cursor:pointer; font-size:0.9em; background-color:#FFFFFF; }
+
+.folderMenuRemoveButton:hover{ color:#DB494C; background-color:rgba(0,0,0,0.06); }
+
+.folderMenuDisabledButton{ padding:8px; margin:10px 20px 10px 20px; border:1px solid #CCC; color:#AAA; cursor:default; background-color:#FFFFFF; border-radius:4px; font-size:0.9em; text-align:center; }
+
+.folderMenuUnauthorizedMessage{ color:#DB494C; font-size:0.9em; margin:10px 20px 10px 20px; text-align:center; }
+
+.folderMenuCloseContainer{ margin-top:10px; border-top:1px solid #CCC; }
+
+.folderMenuClose{ margin:20px; width:calc(100% - 40px); border:1px solid #CCC; background-color:#FFFFFF; cursor:pointer; font-size:0.9em; border-radius:4px; padding:8px; }
+
+.folderMenuClose:hover{ color:#428BCA; background-color:rgba(0,0,0,0.06); }
+
+
+.folderMenuRenamePopupError{ color:#DB494C; margin:10px 20px 10px 20px; font-size:0.9em; display:none; }
+
+.folderMenuRenamePopupInput{ margin:10px 20px 10px 20px; border:1px solid #CCC; border-radius:4px; padding:8px; width:calc(100% - 40px); box-sizing:border-box; }
+
+.folderMenuRenamePopupButtons{ margin:10px 0 20px 20px; display:flex; flex-direction:row; justify-content:flex-end; }
+
+.folderMenuRenamePopupConfirm{ margin-right:20px; border:none; border-radius:4px; color:#FFFFFF; cursor:pointer; padding:8px 16px 8px 16px; background-color:#64ADEC; }
+
+.folderMenuRenamePopupConfirm:hover{ color:#000000; }
+
+.folderMenuRenamePopupCancel{ margin-right:20px; border:none; border-radius:4px; color:#FFFFFF; cursor:pointer; padding:8px 16px 8px 16px; background-color:#D9534F; }
+
+.folderMenuRenamePopupCancel:hover{ color:#000000; }
 
 /****************************************************************************************************/

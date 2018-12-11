@@ -54,42 +54,42 @@ function changeDisplay(event)
 
 function setListDisplay()
 {
-  if(document.getElementById('currentFolder') == null) return;
+  if(document.getElementById('filesContainer') == null) return;
+  if(document.getElementById('foldersContainer') == null) return;
 
-  const elements = document.getElementById('currentFolder').children;
+  const files = document.getElementById('filesContainer').children;
+  const folders = document.getElementById('foldersContainer').children;
 
-  for(var x = 0; x < elements.length; x++)
-  {
-    if(elements[x].hasAttribute('id') == false) elements[x].setAttribute('class', 'serviceElementsFileList');
-  }
+  for(var x = 0; x < files.length; x++) files[x].setAttribute('class', 'serviceElementsFileList');
+  for(var x = 0; x < folders.length; x++) folders[x].setAttribute('class', 'serviceElementsFileList');
 }
 
 /****************************************************************************************************/
 
 function setSmallGridDisplay()
 {
-  if(document.getElementById('currentFolder') == null) return;
+  if(document.getElementById('filesContainer') == null) return;
+  if(document.getElementById('foldersContainer') == null) return;
 
-  const elements = document.getElementById('currentFolder').children;
+  const files = document.getElementById('filesContainer').children;
+  const folders = document.getElementById('foldersContainer').children;
 
-  for(var x = 0; x < elements.length; x++)
-  {
-    if(elements[x].hasAttribute('id') == false) elements[x].setAttribute('class', 'serviceElementsFileSmallGrid');
-  }
+  for(var x = 0; x < files.length; x++) files[x].setAttribute('class', 'serviceElementsFileSmallGrid');
+  for(var x = 0; x < folders.length; x++) folders[x].setAttribute('class', 'serviceElementsFileSmallGrid');
 }
 
 /****************************************************************************************************/
 
 function setLargeGridDisplay()
 {
-  if(document.getElementById('currentFolder') == null) return;
+  if(document.getElementById('filesContainer') == null) return;
+  if(document.getElementById('foldersContainer') == null) return;
 
-  const elements = document.getElementById('currentFolder').children;
+  const files = document.getElementById('filesContainer').children;
+  const folders = document.getElementById('foldersContainer').children;
 
-  for(var x = 0; x < elements.length; x++)
-  {
-    if(elements[x].hasAttribute('id') == false) elements[x].setAttribute('class', 'serviceElementsFileLargeGrid');
-  }
+  for(var x = 0; x < files.length; x++) files[x].setAttribute('class', 'serviceElementsFileLargeGrid');
+  for(var x = 0; x < folders.length; x++) folders[x].setAttribute('class', 'serviceElementsFileLargeGrid');
 }
 
 /****************************************************************************************************/

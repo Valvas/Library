@@ -7,12 +7,12 @@ const success                   = require(`${__root}/json/success`);
 const constants                 = require(`${__root}/functions/constants`);
 const storageAppStrings         = require(`${__root}/json/strings/storage`);
 const storageAppFilesGet        = require(`${__root}/functions/storage/files/get`);
-const storageAppFilesSet        = require(`${__root}/functions/storage/files/set`);
 const storageAppFilesCreate     = require(`${__root}/functions/storage/files/create`);
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`);
 const storageAppFilesUpload     = require(`${__root}/functions/storage/files/upload`);
 const storageAppFilesRemove     = require(`${__root}/functions/storage/files/remove`);
 const storageAppFilesComment    = require(`${__root}/functions/storage/files/comment`);
+const storageAppFoldersUpdate   = require(`${__root}/functions/storage/folders/update`);
 const storageAppFilesDownload   = require(`${__root}/functions/storage/files/download`);
 const storageAppAdminServices   = require(`${__root}/functions/storage/admin/services`);
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
@@ -290,24 +290,17 @@ router.post('/create-new-folder', (req, res) =>
 
 router.put('/update-folder-name', (req, res) =>
 {
-  if(req.body.folderUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'folderUuid' });
+  if(req.body.folderUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'folderUuid' });
+  if(req.body.newFolderName == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newFolderName' });
 
-  else if(req.body.newFolderName == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newFolderName' });
-
-  else if(req.body.serviceUuid == undefined) res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
-
-  else
+  storageAppFoldersUpdate.updateFolderName(req.body.newFolderName, req.body.folderUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceUuid) =>
   {
-    storageAppFilesSet.setNewFolderName(req.body.folderUuid, req.body.newFolderName, req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
-    {
-      if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-      else
-      {
-        res.status(200).send({ message: success[constants.FOLDER_NAME_UPDATED] });
-      }
-    });
-  }
+    req.app.get('io').in(serviceUuid).emit('folderNameUpdated', req.body.folderUuid, req.body.newFolderName, storageAppStrings);
+
+    return res.status(200).send({ message: success[constants.FOLDER_NAME_UPDATED] });
+  });
 });
 
 /****************************************************************************************************/

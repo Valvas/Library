@@ -6,20 +6,29 @@ if(document.getElementById('filesAndFoldersSearchBar')) document.getElementById(
 
 function searchForFilesAndFolders(event)
 {
-  const currentFiles = document.getElementById('currentFolder').children;
+  const currentFiles = document.getElementById('filesContainer').children;
+  const currentFolders = document.getElementById('foldersContainer').children;
+
+  for(var x = 0; x < currentFolders.length; x++)
+  {
+    var index = 1;
+
+    if(currentFolders[x].children.length > 2) index += 1;
+
+    currentFolders[x].children[index].innerText.includes(event.target.value)
+    ? currentFolders[x].removeAttribute('style')
+    : currentFolders[x].style.display = 'none';
+  }
 
   for(var x = 0; x < currentFiles.length; x++)
   {
-    if(currentFiles[x].hasAttribute('id') == false)
-    {
-      var index = 1;
+    var index = 1;
 
-      if(currentFiles[x].children.length > 2) index += 1;
+    if(currentFiles[x].children.length > 2) index += 1;
 
-      currentFiles[x].children[index].innerText.includes(event.target.value)
-      ? currentFiles[x].removeAttribute('style')
-      : currentFiles[x].style.display = 'none';
-    }
+    currentFiles[x].children[index].innerText.includes(event.target.value)
+    ? currentFiles[x].removeAttribute('style')
+    : currentFiles[x].style.display = 'none';
   }
 }
 

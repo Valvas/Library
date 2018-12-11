@@ -28,7 +28,7 @@ socket.on('fileUploaded', (file, oldFileUuid, folderUuid, accountData, storageAp
 
     if(oldFileUuid != null)
     {
-      var currentFolderFiles = document.getElementById('currentFolder').children;
+      var currentFolderFiles = document.getElementById('filesContainer').children;
 
       for(var x = 0; x < currentFolderFiles.length; x++)
       {
@@ -71,11 +71,11 @@ socket.on('fileUploaded', (file, oldFileUuid, folderUuid, accountData, storageAp
 
     input
     ? searched
-      ? document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
-      : document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}" style="display:none"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
+      ? document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
+      : document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}" style="display:none"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
     : searched
-      ? document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}">${icon}<div class="name">${file.name}</div></div>`
-      : document.getElementById('currentFolder').innerHTML += `<div name="${file.uuid}" class="${display}" style="display:none">${icon}<div class="name">${file.name}</div></div>`;
+      ? document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}">${icon}<div class="name">${file.name}</div></div>`
+      : document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}" style="display:none">${icon}<div class="name">${file.name}</div></div>`;
 
     var message = storageAppStrings.services.detailPage.socket.fileUploaded;
 
@@ -101,28 +101,28 @@ socket.on('fileRemoved', (fileUuid, storageAppStrings) =>
     }
   }
   
-  const elements = document.getElementById('currentFolder').children;
+  const serviceFiles = document.getElementById('filesContainer').children;
 
-  for(var x = 0; x < elements.length; x++)
+  for(var x = 0; x < serviceFiles.length; x++)
   {
-    if(elements[x].getAttribute('name') === fileUuid)
+    if(serviceFiles[x].getAttribute('name') === fileUuid)
     {
-      const fileName = elements[x].children.length === 3
-      ? elements[x].children[2].innerText
-      : elements[x].children[1].innerText;
+      const fileName = serviceFiles[x].children.length === 3
+      ? serviceFiles[x].children[2].innerText
+      : serviceFiles[x].children[1].innerText;
 
       displayInfo(storageAppStrings.services.detailPage.socket.fileRemoved.replace('[$1$]', fileName), null, null);
 
-      if(elements[x].children[0].tagName === 'INPUT')
+      if(serviceFiles[x].children[0].tagName === 'INPUT')
       {
-        if(elements[x].children[0].checked)
+        if(serviceFiles[x].children[0].checked)
         {
-          elements[x].children[0].checked = false;
-          updateSelectedFiles(elements[x].children[0]);
+          serviceFiles[x].children[0].checked = false;
+          updateSelectedFiles(serviceFiles[x].children[0]);
         }
       }
 
-      elements[x].remove();
+      serviceFiles[x].remove();
     }
   }
 });
@@ -172,6 +172,7 @@ socket.on('updateFileLogs', (fileUuid, fileLogs) =>
 socket.on('folderCreated', (folderData, parentFolderUuid, accountData, storageAppStrings) =>
 {
   if(document.getElementById('currentFolder') == null) return;
+  if(document.getElementById('foldersContainer') == null) return;
 
   if(parentFolderUuid == null && document.getElementById('currentFolder').hasAttribute('name')) return;
 
@@ -188,7 +189,7 @@ socket.on('folderCreated', (folderData, parentFolderUuid, accountData, storageAp
 
   folderBlock.innerHTML += `<div class="icon serviceElementsFolder"><i class="far fa-folder-open"></i></div><div class="name">${folderData.name}</div>`;
 
-  document.getElementById('currentFolder').insertBefore(folderBlock, document.getElementById('currentFolder').children[0]);
+  document.getElementById('foldersContainer').insertBefore(folderBlock, document.getElementById('foldersContainer').children[0]);
 
   var message = storageAppStrings.services.detailPage.socket.folderCreated;
 
@@ -200,9 +201,42 @@ socket.on('folderCreated', (folderData, parentFolderUuid, accountData, storageAp
 
 /****************************************************************************************************/
 
-socket.on('folderNameUpdated', (folderUuid, newFolderName) =>
+socket.on('folderNameUpdated', (folderUuid, newFolderName, storageAppStrings) =>
 {
-  
+  if(document.getElementById('foldersContainer'))
+  {
+    const folders = document.getElementById('foldersContainer').children;
+
+    for(var x = 0; x < folders.length; x++)
+    {
+      if(folders[x].getAttribute('name') === folderUuid)
+      {
+
+        var message = storageAppStrings.services.detailPage.socket.folderRenamed;
+
+        message = message.replace('[$1$]', `<b>${folders[x].children[1].innerText}</b>`);
+        message = message.replace('[$2$]', `<b>${newFolderName}</b>`);
+
+        folders[x].children[1].innerText = newFolderName;
+
+        displayInfo(message, null, null);
+      }
+    }
+  }
+
+  if(document.getElementById('folderMenu'))
+  {
+    if(document.getElementById('folderMenu').getAttribute('name') === folderUuid) document.getElementById('folderMenu').children[0].innerText = newFolderName;
+  }
+
+  if(document.getElementById('currentPathLocation') == null) return;
+
+  const pathElements = document.getElementById('currentPathLocation').children;
+
+  for(var x = 0; x < pathElements.length; x++)
+  {
+    if(pathElements[x].getAttribute('name') === folderUuid) pathElements[x].innerText = newFolderName;
+  }
 });
 
 /****************************************************************************************************/

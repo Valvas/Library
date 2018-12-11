@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.administrationStrings.aside.menu[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/administration/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <body>
+    <% include ../../include/informations.ejs %>
+    <div class="mainBlock">
+      <% include ../include/header.ejs %>
+      <div class="content">
+        <div class="contentName"><%= strings.administrationStrings.configurationPage.title %></div>
+        <% include ../include/configNavBar.ejs %>
+        <div class="configMainBlock">
+          <div class="configElementBlock">
+            <div class="configElementBlockTitle"><%= strings.administrationStrings.configurationPage.generalSection.inactivityTitle %></div>
+            <div class="configElementBlockMessage"><%= strings.administrationStrings.configurationPage.generalSection.inactivityMessage %></div>
+            <input class="configElementBlockInput" type="number" min="0" max="60" placeholder="<%= strings.administrationStrings.configurationPage.generalSection.inactivityHint %>" value="<%= parseInt(globalConfiguration.timeout / 60000) %>" />
+            <button class="configElementBlockSave"><%= strings.administrationStrings.configurationPage.generalSection.inactivitySave %></button>
+          </div>
+          <div class="configElementBlock">
+            <div class="configElementBlockTitle"><%= strings.administrationStrings.configurationPage.generalSection.passwordRulesTitle %></div>
+            <div class="configElementBlockMessage"><%= strings.administrationStrings.configurationPage.generalSection.passwordRulesMessage %></div>
+            <div class="configElementBlockPasswordRule">
+              <div class="configElementBlockPasswordRuleLabel"><%= strings.administrationStrings.configurationPage.generalSection.passwordRulesMinLengthLabel %></div>
+              <input class="configElementBlockPasswordRuleValue" type="number" min="4" max="64" value="<%= globalConfiguration.passwordRules.minLength %>" />
+            </div>
+            <div class="configElementBlockPasswordRule">
+              <div class="configElementBlockPasswordRuleLabel"><%= strings.administrationStrings.configurationPage.generalSection.passwordRulesMaxLengthLabel %></div>
+              <input class="configElementBlockPasswordRuleValue" type="number" min="4" max="64" value="<%= globalConfiguration.passwordRules.maxLength %>" />
+            </div>
+            <div class="configElementBlockPasswordRule">
+              <div class="configElementBlockPasswordRuleLabel"><%= strings.administrationStrings.configurationPage.generalSection.passwordRulesGeneratedLength %></div>
+              <input class="configElementBlockPasswordRuleValue" type="number" min="4" max="64" value="<%= globalConfiguration.passwordRules.generatedLength %>" />
+            </div>
+            <div class="configElementBlockPasswordRule">
+              <div class="configElementBlockPasswordRuleLabel"><%= strings.administrationStrings.configurationPage.generalSection.passwordRulesMaxUpperCaseLabel %></div>
+              <input class="configElementBlockPasswordRuleValue" type="number" min="0" max="64" value="<%= globalConfiguration.passwordRules.minUpperCases %>" />
+            </div>
+            <div class="configElementBlockPasswordRule">
+              <div class="configElementBlockPasswordRuleLabel"><%= strings.administrationStrings.configurationPage.generalSection.passwordRulesMaxDigitsLabel %></div>
+              <input class="configElementBlockPasswordRuleValue" type="number" min="0" max="64" value="<%= globalConfiguration.passwordRules.minDigits %>" />
+            </div>
+            <div class="configElementBlockPasswordRule">
+              <div class="configElementBlockPasswordRuleLabel"><%= strings.administrationStrings.configurationPage.generalSection.passwordRulesMaxSpecialLabel %></div>
+              <input class="configElementBlockPasswordRuleValue" type="number" min="0" max="64" value="<%= globalConfiguration.passwordRules.minSpecial %>" />
+            </div>
+            <button class="configElementBlockSave"><%= strings.administrationStrings.configurationPage.generalSection.passwordRulesSave %></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ../../include/common_scripts.ejs %>
+    <script src="/js/administration/exit.js"></script>
+  </body>
+</html>

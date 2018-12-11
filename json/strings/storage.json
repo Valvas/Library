@@ -368,7 +368,8 @@
       {
         "fileUploaded": "Fichier [$1$] ajouté par [$2$]",
         "folderCreated": "Dossier [$1$] créé par [$2$]",
-        "fileRemoved": "Le fichier [$1$] a été supprimé"
+        "fileRemoved": "Le fichier [$1$] a été supprimé",
+        "folderRenamed": "Le dossier [$1$] a été renommé en [$2$]"
       },
 
       "filesSection":
@@ -393,6 +394,40 @@
         "name": "Fichier",
         "logsTitle": "Liste des actions",
         "commentButton": "Ajouter un commentaire"
+      },
+
+      "commentPopup":
+      {
+        "title": "Ajouter un commentaire",
+        "help": "Veuillez faire attention aux espaces en début et en fin de commentaire ainsi qu'aux espaces consécutifs.",
+        "formatError": "Le format de ce commentaire est incorrect (attentions aux espaces)",
+        "placeholder": "Contenu de votre commentaire",
+        "confirm": "Envoyer ce commentaire",
+        "cancel": "Annuler"
+      },
+
+      "folderMenu":
+      {
+        "close": "Fermer",
+        "rename": "Renommer ce dossier",
+        "remove": "Supprimer ce dossier",
+        "unauthorizedToRename": "Vous n'êtes pas autorisé(e) à renommer des dossiers pour ce service",
+        "unauthorizedToRemove": "Vous n'êtes pas autorisé(e) à supprimer des dossiers pour ce service",
+
+        "renamePopup":
+        {
+          "title": "Renommer ce dossier",
+          "message": "Veuillez entrer le nouveau nom du dossier. Vous ne pouvez utiliser que des lettres et des chiffres pour le nom (pas de caractères spéciaux).",
+          "error": "Le format de ce nom est incorrect",
+          "placeholder": "Entrez le nouveau nom du dossier",
+          "confirm": "Enregistrer ce nom",
+          "cancel": "Annuler",
+          "confirmationTitle": "Confirmation",
+          "confirmationMessage": "Êtes-vous sûr(e) de vouloir renommer ce dossier ?",
+          "confirmationSend": "Oui",
+          "confirmationBack": "Non",
+          "savingLoader": "Renommage du dossier en cours. Veuillez patienter..."
+        }
       }
     },
 

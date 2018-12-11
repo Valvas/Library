@@ -20,7 +20,8 @@
     "cancel": "Annuler",
     "loading": "Chargement",
     "success": "Succès",
-    "failure": "Echec"
+    "failure": "Echec",
+    "close": "Fermer"
   },
 
   "initSection":
@@ -185,7 +186,17 @@
         "passwordFormatError": "Le format du nouveau mot de passe est incorrect",
         "passwordDusplicateError": "Le nouveau mot de passe et sa confirmation ne correspondent pas",
         "passwordOldMismatch": "Le mot de passe actuel est incorrect",
-        "passwordSending": "Enregistrement du nouveau mot de passe en cours"
+        "passwordSending": "Enregistrement du nouveau mot de passe en cours",
+
+        "passwordRules":
+        {
+          "minLength": "Taille minimale du mot de passe",
+          "maxLength": "Taille maximale du mot de passe",
+          "lowercasesRequired": "Nombre de lettres minuscules requises",
+          "uppercasesRequired": "Nombre de lettres capitales requises",
+          "digitsRequired": "Nombre de chiffres requis",
+          "specialsRequired": "Nombre de caractères spéciaux requis"
+        }
       }
     },
 

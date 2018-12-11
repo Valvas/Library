@@ -1,11 +1,12 @@
 'use strict'
 
-const commonStrings       = require(`${__root}/json/strings/common`);
-const constants           = require(`${__root}/functions/constants`);
-const encryption          = require(`${__root}/functions/encryption`);
-const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
-const commonEmailSend     = require(`${__root}/functions/common/email/send`);
-const commonAccountsGet   = require(`${__root}/functions/common/accounts/get`);
+const commonStrings         = require(`${__root}/json/strings/common`);
+const constants             = require(`${__root}/functions/constants`);
+const encryption            = require(`${__root}/functions/encryption`);
+const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
+const commonEmailSend       = require(`${__root}/functions/common/email/send`);
+const commonAccountsGet     = require(`${__root}/functions/common/accounts/get`);
+const commonFormatPassword  = require(`${__root}/functions/common/format/password`);
 
 /****************************************************************************************************/
 
@@ -36,22 +37,15 @@ module.exports.updateEmailAddress = (newEmailAddress, accountUuid, databaseConne
 
     if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
 
-    const currentAccountData = accountData;
-
     commonAccountsGet.checkIfAccountExistsFromEmail(newEmailAddress, databaseConnection, params, (error, accountExists, accountData) =>
     {
       if(error != null) return callback(error);
 
-      if(accountExists == false) updateEmailAddressQuery();
+      if(accountExists == false) return updateEmailAddressQuery();
 
-      else
-      {
-        const foundAccountData = accountData;
+      if(accountData.uuid === accountUuid) return callback({ status: 406, code: constants.SAME_EMAIL_ADDRESS, detail: null });
 
-        if(foundAccountData.uuid === accountUuid) return callback({ status: 406, code: constants.SAME_EMAIL_ADDRESS, detail: null });
-
-        return callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE, detail: null });
-      }      
+      return callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE, detail: null });    
     });
   });
 }
@@ -118,38 +112,41 @@ module.exports.updatePassword = (currentPassword, newPassword, confirmationPassw
 {
   if(currentPassword.length === 0) return callback({ status: 406, code: constants.INCORRECT_CURRENT_PASSWORD, detail: null });
 
-  if(new RegExp('^[a-zA-Z0-9]{8,64}$').test(newPassword) == false) return callback({ status: 406, code: constants.INCORRECT_PASSWORD_FORMAT, detail: null });
-
   if(newPassword !== confirmationPassword) return callback({ status: 406, code: constants.NEW_PASSWORD_AND_CONFIRMATION_MISMATCH, detail: null });
 
-  commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, params, (error, accountExists, accountData) =>
+  commonFormatPassword.checkPasswordFormat(newPassword, params, (error) =>
   {
     if(error != null) return callback(error);
 
-    if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
-
-    encryption.encryptPassword(currentPassword, params, (error, encryptedCurrentPassword) =>
+    commonAccountsGet.checkIfAccountExistsFromUuid(accountUuid, databaseConnection, params, (error, accountExists, accountData) =>
     {
       if(error != null) return callback(error);
 
-      if(accountData.password !== encryptedCurrentPassword) return callback({ status: 406, code: constants.INCORRECT_CURRENT_PASSWORD, detail: null });
+      if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
 
-      encryption.encryptPassword(newPassword, params, (error, encryptedNewPassword) =>
+      encryption.encryptPassword(currentPassword, params, (error, encryptedCurrentPassword) =>
       {
         if(error != null) return callback(error);
 
-        databaseManager.updateQuery(
-        {
-          databaseName: params.database.root.label,
-          tableName: params.database.root.tables.accounts,
-          args: { password: encryptedNewPassword },
-          where: { operator: '=', key: 'uuid', value: accountUuid }
+        if(accountData.password !== encryptedCurrentPassword) return callback({ status: 406, code: constants.INCORRECT_CURRENT_PASSWORD, detail: null });
 
-        }, databaseConnection, (error, result) =>
+        encryption.encryptPassword(newPassword, params, (error, encryptedNewPassword) =>
         {
-          if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+          if(error != null) return callback(error);
 
-          return callback(null);
+          databaseManager.updateQuery(
+          {
+            databaseName: params.database.root.label,
+            tableName: params.database.root.tables.accounts,
+            args: { password: encryptedNewPassword },
+            where: { operator: '=', key: 'uuid', value: accountUuid }
+
+          }, databaseConnection, (error, result) =>
+          {
+            if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+            return callback(null);
+          });
         });
       });
     });
@@ -212,7 +209,7 @@ module.exports.updateAdminStatus = (accountUuid, isToBeAdmin, databaseConnection
 
 module.exports.resetPassword = (accountUuid, accountEmail, databaseConnection, emailTransporter, globalParameters, callback) =>
 {
-  encryption.getRandomPassword(globalParameters, (error, passwords) =>
+  encryption.generateRandomPassword(globalParameters, (error, clearPassword, encryptedPassword) =>
   {
     if(error != null) return callback(error);
 
@@ -220,7 +217,7 @@ module.exports.resetPassword = (accountUuid, accountEmail, databaseConnection, e
     {
       databaseName: globalParameters.database.root.label,
       tableName: globalParameters.database.root.tables.accounts,
-      args: { password: passwords.encrypted },
+      args: { password: encryptedPassword },
       where: { operator: '=', key: 'uuid', value: accountUuid }
 
     }, databaseConnection, (error, result) =>
@@ -232,7 +229,7 @@ module.exports.resetPassword = (accountUuid, accountEmail, databaseConnection, e
         template: 'resetPassword',
         receiver: accountEmail,
         subject: commonStrings.emailTemplates.resetAccountPassword,
-        locals: { clearPassword: passwords.clear }
+        locals: { clearPassword: clearPassword }
       };
 
       commonEmailSend.sendTemplateEmail(emailObject, emailTransporter, globalParameters, (error) =>

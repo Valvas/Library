@@ -83,4 +83,11 @@ router.put('/update-picture', (req, res) =>
 
 /****************************************************************************************************/
 
+router.get('/get-password-rules', (req, res) =>
+{
+  res.status(200).send({ passwordRules: req.app.get('params').passwordRules });
+});
+
+/****************************************************************************************************/
+
 module.exports = router;

@@ -46,7 +46,17 @@
 
 .addCommentOnFilePopupHelp{ padding:20px; }
 
+.addCommentOnFilePopupError{ padding:20px 20px 0 20px; color:#D9534F; font-size:0.9em; display:none; }
+
 .addCommentOnFilePopupInput{ width:calc(100% - 40px); margin:20px; resize:none; height:300px; font-size:1em; padding:10px; box-sizing:border-box; background-color:#FFFFFF; border-radius:4px; border:1px solid rgba(0,0,0,0.24); }
+
+.addCommentOnFileButtons{ display:flex; flex-direction:row; justify-content:flex-end; margin:10px 0 20px 20px; }
+
+.addCommentOnFileSave{ margin-right:10px; border:none; border-radius:4px; padding:8px 16px 8px 16px; cursor:pointer; color:#FFFFFF; background-color:#64ADEC; }
+
+.addCommentOnFileCancel{ margin-right:10px; border:none; border-radius:4px; padding:8px 16px 8px 16px; cursor:pointer; color:#FFFFFF; background-color:#D9534F; }
+
+.addCommentOnFileSave:hover, .addCommentOnFileCancel:hover{ color:#000000; }
 
 /****************************************************************************************************/
 

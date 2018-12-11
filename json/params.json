@@ -1,1 +1,97 @@
-{"database":{"host":"localhost","port":"3306","user":"root","password":"root","dbms":"mysql","administration":{"label":"administration","tables":{"rights":"rights"}},"root":{"label":"intranet","tables":{"news":"news","apps":"apps","accounts":"accounts","errors":"errors","rights":"rights"}},"storage":{"label":"storage","tables":{"accountsList":"accounts_list","serviceRights":"service_rights","serviceElements":"service_elements","serviceElementsLogs":"service_elements_logs","services":"services","extensions":"extensions","serviceExtensions":"service_extensions","globalAdministration":"global_administration"}}},"fileLogs":{"fileUploaded":0,"fileDownloaded":1,"fileRemoved":2,"fileCommented":3,"folderCreated":4},"init":{"keepSalt":true,"minFileSize":1024,"maxFileSize":10484711424,"minTimeout":60000,"maxTimeout":86400000,"defaultPort":3000,"defaultEnvironment":"dev","requiredServicesToStart":{"database":true,"storage":true,"transporter":true},"servicesStarted":{"database":true,"storage":true,"transporter":true}},"ready":false,"salt":"$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e","tokenSecretKey":"qgdsq65qsegf6qezgr46","storage":{"root":"C:\\Users\\dev\\Desktop\\removal","services":"STATIC_services","fileLogs":"STATIC_file_logs","bin":"STATIC_bin","tmp":"STATIC_tmp","accounts":"STATIC_accounts","maxFileNameSize":255,"maxFolderNameSize":255},"transporter":{"from":"Intranet PEI <intranet@groupepei.fr>","port":"25","secure":false,"user":"intranet@groupepei.fr","password":"MQXd2Tc2","address":"192.168.1.21"},"timeout":600000,"port":3000}
+{
+  "database":{
+    "host":"localhost",
+    "port":"3306",
+    "user":"root",
+    "password":"root",
+    "dbms":"mysql",
+    "administration":{
+      "label":"administration",
+      "tables":{
+        "rights":"rights"
+      }
+    },
+    "root":{
+      "label":"intranet",
+      "tables":{
+        "news":"news",
+        "apps":"apps",
+        "accounts":"accounts",
+        "errors":"errors",
+        "rights":"rights"
+      }
+    },
+    "storage":{
+      "label":"storage",
+      "tables":{
+        "accountsList":"accounts_list",
+        "serviceRights":"service_rights",
+        "serviceElements":"service_elements",
+        "serviceElementsLogs":"service_elements_logs",
+        "services":"services",
+        "extensions":"extensions",
+        "serviceExtensions":"service_extensions",
+        "globalAdministration":"global_administration"
+      }
+    }
+  },
+  "passwordRules":
+  {
+    "minLength": 8,
+    "maxLength": 64,
+    "generatedLength": 8,
+    "minUpperCases": 2,
+    "minLowerCases": 2,
+    "minDigits": 2,
+    "minSpecial": 0
+  },
+  "fileLogs":{
+    "fileUploaded":0,
+    "fileDownloaded":1,
+    "fileRemoved":2,
+    "fileCommented":3,
+    "folderCreated":4
+  },
+  "init":{
+    "keepSalt":true,
+    "minFileSize":1024,
+    "maxFileSize":10484711424,
+    "minTimeout":60000,
+    "maxTimeout":86400000,
+    "defaultPort":3000,
+    "defaultEnvironment":"dev",
+    "requiredServicesToStart":{
+      "database":true,
+      "storage":true,
+      "transporter":true
+    },
+    "servicesStarted":{
+      "database":true,
+      "storage":true,
+      "transporter":true
+    }
+  },
+  "ready":true,
+  "salt":"$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
+  "tokenSecretKey":"qgdsq65qsegf6qezgr46",
+  "storage":{
+    "root":"C:\\Users\\dev\\Desktop\\removal",
+    "services":"STATIC_services",
+    "fileLogs":"STATIC_file_logs",
+    "bin":"STATIC_bin",
+    "tmp":"STATIC_tmp",
+    "accounts":"STATIC_accounts",
+    "maxFileNameSize":255,
+    "maxFolderNameSize":255
+  },
+  "transporter":{
+    "from":"Intranet PEI <intranet@groupepei.fr>",
+    "port":"25",
+    "secure":false,
+    "user":"intranet@groupepei.fr",
+    "password":"MQXd2Tc2",
+    "address":"192.168.1.21"
+  },
+  "timeout":600000,
+  "port":3000
+}

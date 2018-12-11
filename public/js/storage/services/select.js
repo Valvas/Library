@@ -42,9 +42,9 @@ function updateSelectedFiles(checkbox)
 
 function unselectAllFiles(event)
 {
-  if(document.getElementById('currentFolder') == null) return;
+  if(document.getElementById('filesContainer') == null) return;
 
-  const elements = document.getElementById('currentFolder').children;
+  const elements = document.getElementById('filesContainer').children;
 
   for(var x = 0; x < elements.length; x++)
   {

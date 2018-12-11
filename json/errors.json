@@ -131,5 +131,8 @@
   "10130": "Le dossier parent est introuvable",
   "10131": "Vous n'êtes pas administrateur de cette application. Vous ne pouvez pas accéder à cette page.",
   "10132": "Compte créé avec succès, cependant une erreur est survenue pendant l'envoi de l'email avec le mot de passe. Afin de se connecter l'utilisateur doit demander l'envoi d'un nouveau mot de passe par email depuis la page de connexion",
-  "10133": "L'image de l'application est introuvable"
+  "10133": "L'image de l'application est introuvable",
+  "10134": "La longueur des mots de passe générés aléatoirement ne permet pas de respecter les restrictions sur le format des mots de passe",
+  "10135": "Le mot de passe ne respecte pas les critères imposés",
+  "10136": "Vous n'êtes pas autorisé(e) à renommer des dossiers pour ce service"
 }

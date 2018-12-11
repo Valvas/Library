@@ -7,13 +7,44 @@
       "home": "Accueil",
       "accounts": "Gestion des comptes",
       "access": "Gestion des accès",
+      "config": "Réglages",
       "exit": "Quitter"
     }
+  },
+
+  "configurationNavigationBar":
+  {
+    "database": "Base de données",
+    "transporter": "Transporteur",
+    "storage": "Stockage",
+    "general": "Paramètres généraux"
   },
 
   "homePage":
   {
     "title": "Accueil"
+  },
+
+  "configurationPage":
+  {
+    "title": "Réglages",
+    "generalSection":
+    {
+      "inactivityTitle": "Déconnexion automatique",
+      "inactivityMessage": "Entrez le nombre de minutes avant qu'un utilisateur soit automatiquement déconnecté en cas d'inactivité sur une page (entrez 0 pour désactiver la déconnexion automatique, maximum 60 minutes)",
+      "inactivityHint": "Entrez un nombre de minutes",
+      "inactivitySave": "Enregistrer",
+
+      "passwordRulesTitle": "Règles des mots de passe",
+      "passwordRulesMessage": "Ces règles sont appliquées lorsqu'un utilisateur veut changer le mot de passe de son compte et à la génération des mots de passe aléatoires",
+      "passwordRulesMinLengthLabel": "Taille minimale des mots de passe",
+      "passwordRulesMaxLengthLabel": "Taille maximale des mots de passe",
+      "passwordRulesGeneratedLength": "Taille des mots de passe générés automatiquement",
+      "passwordRulesMaxUpperCaseLabel": "Nombre minimum de lettres capitales",
+      "passwordRulesMaxDigitsLabel": "Nombre minimum de chiffres",
+      "passwordRulesMaxSpecialLabel": "Nombre minimum de caractères spéciaux",
+      "passwordRulesSave": "Enregistrer"
+    }
   },
 
   "accountsHome":

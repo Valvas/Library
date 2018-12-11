@@ -4,14 +4,25 @@ var storageAppStrings = null;
 
 function addEventListenersOnFilesForDetail()
 {
-  const currentFiles = document.getElementById('currentFolder').children;
+  const currentFiles = document.getElementById('filesContainer').children;
 
   for(var x = 0; x < currentFiles.length; x++)
   {
-    if(currentFiles[x].hasAttribute('ondblclick') == false)
+    const currentFile = currentFiles[x];
+
+    currentFile.addEventListener('contextmenu', openFileDetail);
+
+    currentFile.addEventListener('click', () =>
     {
-      currentFiles[x].addEventListener('click', openFileDetail);
-    }
+      if(currentFile.children[0].tagName === 'INPUT')
+      {
+        currentFile.children[0].checked
+        ? currentFile.children[0].checked = false
+        : currentFile.children[0].checked = true;
+
+        updateSelectedFiles(currentFile.children[0]);
+      }
+    });
   }
 }
 
@@ -21,7 +32,7 @@ addEventListenersOnFilesForDetail();
 
 function openFileDetail(event)
 {
-  if(event.target.tagName === 'INPUT') return;
+  event.preventDefault();
 
   if(document.getElementById('currentFolder') == null) return;
 
@@ -112,7 +123,7 @@ function fillFileDetail(result)
 
   document.getElementById('fileDetailAside').innerHTML += `<div class="fileDetailAsideTitle">${storageAppStrings.services.detailPage.fileAsideLogs.title}</div>`;
   document.getElementById('fileDetailAside').innerHTML += `<div class="fileDetailAsideNameContainer"><div class="fileDetailAsideNameLabel">${storageAppStrings.services.detailPage.fileAsideLogs.name} :</div><div class="fileDetailAsideNameValue">${result.fileData.name}</div></div>`;
-  document.getElementById('fileDetailAside').innerHTML += `<button onclick="prepareCommentPopup('${result.fileData.uuid}')" class="fileDetailAsideComment">${storageAppStrings.services.detailPage.fileAsideLogs.commentButton}</button>`;
+  document.getElementById('fileDetailAside').innerHTML += `<button onclick="commentFileGetStrings('${result.fileData.uuid}')" class="fileDetailAsideComment">${storageAppStrings.services.detailPage.fileAsideLogs.commentButton}</button>`;
 
   logs.innerHTML += `<div class="fileDetailAsideLogsTitle">${storageAppStrings.services.detailPage.fileAsideLogs.logsTitle}</div>`;
 
@@ -135,237 +146,6 @@ function fillFileDetail(result)
   document.getElementById('fileDetailAside').appendChild(logs);
 
   document.getElementById('fileDetailAside').insertBefore(close, document.getElementById('fileDetailAside').children[0]);
-}
-
-/****************************************************************************************************
-
-function openFileDetail(event)
-{
-  if(event.target.type !== 'checkbox')
-  {
-    var fileBlock = event.target;
-
-    while(fileBlock.hasAttribute('id') == false)
-    {
-      fileBlock = fileBlock.parentElement;
-    }
-
-    const fileUuid = fileBlock.getAttribute('id');
-
-    if((document.getElementById('elementDetailBlock') == null) || (document.getElementById('elementDetailBlock') && document.getElementById('elementDetailBlock').getAttribute('name') !== fileUuid))
-    {
-      if(document.getElementById('elementDetailBlock')) document.getElementById(document.getElementById('elementDetailBlock').getAttribute('name')).removeAttribute('style');
-
-      closeDetailBlock();
-
-      document.getElementById(fileUuid).style.backgroundColor = '#E5E5FF';
-
-      var elementDetailBlock                = document.createElement('div');
-      var elementDetailBlockTitle           = document.createElement('div');
-      var elementDetailBlockClose           = document.createElement('div');
-      var elementDetailBlockSpinner         = document.createElement('div');
-      var elementDetailBlockNameLabel       = document.createElement('div');
-      var elementDetailBlockNameValue       = document.createElement('div');
-      var elementDetailBlockEvents          = document.createElement('div');
-      var elementDetailBlockEventsTitle     = document.createElement('div');
-      var elementDetailBlockEventsContent   = document.createElement('div');
-      var elementDetailBlockEventsPages     = document.createElement('div');
-      var elementDetailBlockComment         = document.createElement('button');
-
-      elementDetailBlock                .setAttribute('id', 'elementDetailBlock');
-      elementDetailBlock                .setAttribute('name', fileUuid);
-
-      elementDetailBlockEventsContent   .setAttribute('id', 'elementDetailBlockEventsContent');
-      elementDetailBlockEventsPages     .setAttribute('id', 'elementDetailBlockEventsPages');
-      
-      elementDetailBlock                .setAttribute('class', 'elementDetailBlock');
-      elementDetailBlockClose           .setAttribute('class', 'elementDetailBlockClose');
-      elementDetailBlockTitle           .setAttribute('class', 'elementDetailBlockTitle');
-      elementDetailBlockSpinner         .setAttribute('class', 'elementDetailBlockSpinner');
-      elementDetailBlockNameLabel       .setAttribute('class', 'elementDetailBlockLabel');
-      elementDetailBlockNameValue       .setAttribute('class', 'elementDetailBlockValue');
-      elementDetailBlockEvents          .setAttribute('class', 'elementDetailBlockEvents');
-      elementDetailBlockEventsTitle     .setAttribute('class', 'elementDetailBlockEventsTitle');
-      elementDetailBlockEventsContent   .setAttribute('class', 'elementDetailBlockEventsContent');
-      elementDetailBlockEventsPages     .setAttribute('class', 'elementDetailBlockEventsPages');
-
-      elementDetailBlockSpinner         .innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
-      elementDetailBlockClose           .innerHTML = '<i class="fas fa-arrow-right"></i>';
-
-      elementDetailBlockClose           .addEventListener('click', closeDetailBlock);
-
-      elementDetailBlock                .appendChild(elementDetailBlockClose);
-      elementDetailBlock                .appendChild(elementDetailBlockSpinner);
-
-      $(elementDetailBlock).hide().appendTo(document.getElementById('mainBlock'));
-
-      $(elementDetailBlock).toggle('slide', { direction: 'right' }, 200);
-
-      $.ajax(
-      {
-        method: 'GET',
-        dataType: 'json',
-        timeout: 5000,
-        url: '/queries/storage/strings',
-    
-        error: (xhr, textStatus, errorThrown) =>
-        {
-          closeDetailBlock();
-
-          document.getElementById(fileUuid).removeAttribute('style');
-    
-          xhr.responseJSON != undefined
-          ? displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail)
-          : displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
-        }
-    
-      }).done((json) =>
-      {
-        const strings = json.strings;
-
-        $.ajax(
-        {
-          method: 'PUT',
-          dataType: 'json',
-          timeout: 5000,
-          data: { fileUuid: fileUuid },
-          url: '/queries/storage/services/get-file-logs',
-      
-          error: (xhr, textStatus, errorThrown) =>
-          {
-            closeDetailBlock();
-  
-            document.getElementById(fileUuid).removeAttribute('style');
-      
-            xhr.responseJSON != undefined
-            ? displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail)
-            : displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
-          }
-      
-        }).done((json) =>
-        {
-          const fileLogs = json.fileLogs;
-          
-          $.ajax(
-          {
-            method: 'PUT',
-            dataType: 'json',
-            timeout: 5000,
-            data: { serviceUuid: document.getElementById('mainBlock').getAttribute('name') },
-            url: '/queries/storage/services/get-rights-for-service',
-        
-            error: (xhr, textStatus, errorThrown) =>
-            {
-              closeDetailBlock();
-      
-              document.getElementById(folderUuid).removeAttribute('style');
-      
-              xhr.responseJSON != undefined
-              ? displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail)
-              : displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
-            }
-        
-          }).done((json) =>
-          {
-            const rights = json.rights;
-
-            for(var x = 0; x < Math.ceil(fileLogs.length / 8); x++)
-            {
-              if(x >= 8) break;
-
-              var elementDetailBlockEventsPagesElement = document.createElement('div');
-
-              x == 0
-              ? elementDetailBlockEventsPagesElement.setAttribute('class', 'elementDetailBlockEventsPagesElementSelected')
-              : elementDetailBlockEventsPagesElement.setAttribute('class', 'elementDetailBlockEventsPagesElement');
-
-              elementDetailBlockEventsPagesElement.innerText = (x + 1);
-
-              elementDetailBlockEventsPagesElement.setAttribute('tag', x);
-
-              if(x !== 0) elementDetailBlockEventsPagesElement.addEventListener('click', switchEventsPage);
-
-              elementDetailBlockEventsPages.appendChild(elementDetailBlockEventsPagesElement);
-            }
-
-            for(var x = 0; x < fileLogs.length; x++)
-            {
-              var eventDetail           = document.createElement('div');
-              var eventDetailDate       = document.createElement('div');
-              var eventDetailMessage    = document.createElement('div');
-
-              eventDetail               .setAttribute('tag', Math.floor(x / 8));
-
-              eventDetailDate           .innerText = `[${fileLogs[fileLogs.length - (x + 1)].date}]`;
-              eventDetailMessage        .innerText = fileLogs[fileLogs.length - (x + 1)].message;
-
-              switch(fileLogs[fileLogs.length - (x + 1)].type)
-              {
-                case 0: eventDetail.setAttribute('class', 'elementDetailBlockEventsContentElement zero'); break;
-                case 1: eventDetail.setAttribute('class', 'elementDetailBlockEventsContentElement one'); break;
-                case 2: eventDetail.setAttribute('class', 'elementDetailBlockEventsContentElement two'); break;
-                case 3:
-                
-                  eventDetail.setAttribute('class', 'elementDetailBlockEventsContentElement three');
-
-                  var eventDetailComment = document.createElement('div');
-
-                  eventDetailComment.setAttribute('class', 'elementDetailBlockEventsContentElementComment');
-
-                  eventDetailComment.innerText = fileLogs[fileLogs.length - (x + 1)].comment;
-
-                  eventDetail.appendChild(eventDetailComment);
-                  
-                break;
-              }
-
-              eventDetail               .insertBefore(eventDetailDate, eventDetail.children[0]);
-              eventDetail               .insertBefore(eventDetailMessage, eventDetail.children[1]);
-
-              if(x >= 8) eventDetail.style.display = 'none';
-
-              elementDetailBlockEventsContent.appendChild(eventDetail);
-            }
-
-            elementDetailBlockSpinner.remove();
-
-            elementDetailBlockTitle         .innerText = strings.services.fileDetail.title;
-            elementDetailBlockNameLabel     .innerText = strings.services.fileDetail.fileName;
-            elementDetailBlockNameValue     .innerText = document.getElementById(fileUuid).innerText;
-            elementDetailBlockEventsTitle   .innerText = strings.services.fileDetail.events;
-            elementDetailBlockComment       .innerText = strings.services.fileDetail.commentButton.label;
-
-            rights.commentFiles
-            ? elementDetailBlockComment.setAttribute('title', strings.services.fileDetail.commentButton.titles.true)
-            : elementDetailBlockComment.setAttribute('title', strings.services.fileDetail.commentButton.titles.false);
-
-            rights.commentFiles
-            ? elementDetailBlockComment.setAttribute('class', 'elementDetailBlockComment')
-            : elementDetailBlockComment.setAttribute('class', 'elementDetailBlockCommentOff');
-
-            if(rights.commentFiles) elementDetailBlockComment.addEventListener('click', () => { openCommentPopup(fileUuid); });
-
-            elementDetailBlockEvents        .appendChild(elementDetailBlockEventsTitle);
-            elementDetailBlockEvents        .appendChild(elementDetailBlockEventsContent);
-            elementDetailBlockEvents        .appendChild(elementDetailBlockEventsPages);
-
-            elementDetailBlock              .appendChild(elementDetailBlockTitle);
-            elementDetailBlock              .appendChild(elementDetailBlockNameLabel);
-            elementDetailBlock              .appendChild(elementDetailBlockNameValue);
-            elementDetailBlock              .appendChild(elementDetailBlockEvents);
-            elementDetailBlock              .appendChild(elementDetailBlockComment);
-          });
-        });
-      });
-    }
-
-    else
-    {
-      document.getElementById(document.getElementById('elementDetailBlock').getAttribute('name')).removeAttribute('style');
-
-      closeDetailBlock();
-    }
-  }
 }
 
 /****************************************************************************************************/

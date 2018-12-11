@@ -2,17 +2,17 @@
 
 function removeSelection(event)
 {
-  if(document.getElementById('currentFolder') == null) return;
+  if(document.getElementById('filesContainer') == null) return;
 
-  const currentFolderElements = document.getElementById('currentFolder').children;
+  const currentFiles = document.getElementById('filesContainer').children;
 
   var filesToRemove = [];
 
-  for(var x = 0; x < currentFolderElements.length; x++)
+  for(var x = 0; x < currentFiles.length; x++)
   {
-    if(currentFolderElements[x].children[0].tagName === 'INPUT')
+    if(currentFiles[x].children[0].tagName === 'INPUT')
     {
-      if(currentFolderElements[x].children[0].checked) filesToRemove.push({ uuid: currentFolderElements[x].getAttribute('name'), name: currentFolderElements[x].children[2].innerText });
+      if(currentFiles[x].children[0].checked) filesToRemove.push({ uuid: currentFiles[x].getAttribute('name'), name: currentFiles[x].children[2].innerText });
     }
   }
 

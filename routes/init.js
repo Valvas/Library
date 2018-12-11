@@ -11,8 +11,6 @@ const initFormat            = require(`${__root}/functions/init/format`);
 const initStorage           = require(`${__root}/functions/init/storage`);
 const initDatabase          = require(`${__root}/functions/init/database`);
 const initTransporter       = require(`${__root}/functions/init/transporter`);
-const commonAccountsCreate  = require(`${__root}/functions/common/accounts/create`);
-const commonAccountsUpdate  = require(`${__root}/functions/common/accounts/update`);
 
 const router = express.Router();
 
@@ -20,7 +18,7 @@ const router = express.Router();
 
 router.get('/logon', (req, res) =>
 {
-  if(req.app.get('params').ready) return res.render('block', { message: errors[constants.PAGE_NOT_FOUND], detail: null, link: '/' });
+  if(req.app.get('params').ready) return res.render('block', { message: errors[constants.PAGE_NOT_FOUND], detail: null, link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url ? '/' : req.headers.referer });
   
   if(req.app.locals.hasInitSession) return res.redirect('/init/form');
   
@@ -52,7 +50,7 @@ router.put('/logon', (req, res) =>
 
 router.get('/form', (req, res) =>
 {
-  if(req.app.get('params').ready) return res.redirect('/');
+  if(req.app.get('params').ready) return res.render('block', { message: errors[constants.PAGE_NOT_FOUND], detail: null, link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url ? '/' : req.headers.referer });
 
   if(req.app.locals.hasInitSession == false) return res.redirect('/init/logon');
 
@@ -79,7 +77,7 @@ router.put('/form', (req, res) =>
 
 router.get('/test', (req, res) =>
 {
-  if(req.app.get('params').ready) return res.redirect('/');
+  if(req.app.get('params').ready) return res.render('block', { message: errors[constants.PAGE_NOT_FOUND], detail: null, link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url ? '/' : req.headers.referer });
 
   if(req.app.locals.hasInitSession == false) return res.redirect('/init/logon');
 
@@ -162,6 +160,10 @@ router.get('/test/transporter', (req, res) =>
 
 router.get('/end', (req, res) =>
 {
+  if(req.app.get('params').ready) return res.status(404).send({ message: errors[constants.PAGE_NOT_FOUND], detail: null });
+
+  if(req.app.locals.hasInitSession == false) return res.status(401).send({ message: errors[constants.AUTHENTICATION_REQUIRED], detail: null });
+
   if(req.app.get('params').init.requiredServicesToStart.database == true && req.app.get('params').init.servicesStarted.database == false) return res.status(200).send({ result: false, message: 'Database connection is required' });
 
   if(req.app.get('params').init.requiredServicesToStart.storage == true && req.app.get('params').init.servicesStarted.storage == false) return res.status(200).send({ result: false, message: 'Storage access is required' });

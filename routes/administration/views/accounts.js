@@ -25,7 +25,7 @@ router.get('/', (req, res) =>
       strings: { administrationStrings: administrationAppStrings },
       accounts: accounts
     });
-  })
+  });
 });
 
 /****************************************************************************************************/

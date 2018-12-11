@@ -51,11 +51,11 @@ function createAccountCheckIfEmailAddressIsAvailable(accountEmail, accountLastna
 
 function createAccountGetClearAndEncryptedPassword(accountEmail, accountLastname, accountFirstname, databaseConnection, globalParameters, emailTransporter, callback)
 {
-  encryption.getRandomPassword(globalParameters, (error, passwords) =>
+  encryption.generateRandomPassword(globalParameters, (error, clearPassword, encryptedPassword) =>
   {
     if(error != null) return callback(error);
 
-    return createAccountInsertInDatabase(accountEmail, accountLastname, accountFirstname, passwords.clear, passwords.encrypted, databaseConnection, globalParameters, emailTransporter, callback);
+    return createAccountInsertInDatabase(accountEmail, accountLastname, accountFirstname, clearPassword, encryptedPassword, databaseConnection, globalParameters, emailTransporter, callback);
   });
 }
 
