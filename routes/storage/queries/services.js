@@ -191,9 +191,9 @@ router.delete('/remove-files', (req, res) =>
 
   if(req.body.serviceUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'filesToRemove' });
 
-  storageAppFilesRemove.removeFiles(JSON.parse(req.body.filesToRemove), req.body.serviceUuid, req.app.locals.account.uuid, req.app.locals.isAdmin, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  storageAppFilesRemove.removeFilesFromService(JSON.parse(req.body.filesToRemove), req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
-    if(error != null) return res.status(error.status).send({ result: false, message: errors[error.code], detail: error.detail });
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
     for(var x = 0; x < JSON.parse(req.body.filesToRemove).length; x++)
     {

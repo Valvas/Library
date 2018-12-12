@@ -71,8 +71,8 @@ socket.on('fileUploaded', (file, oldFileUuid, folderUuid, accountData, storageAp
 
     input
     ? searched
-      ? document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
-      : document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}" style="display:none"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
+      ? document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}"><input class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
+      : document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}" style="display:none"><input class="checkbox" type="checkbox" />${icon}<div class="name">${file.name}</div></div>`
     : searched
       ? document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}">${icon}<div class="name">${file.name}</div></div>`
       : document.getElementById('filesContainer').innerHTML += `<div name="${file.uuid}" class="${display}" style="display:none">${icon}<div class="name">${file.name}</div></div>`;

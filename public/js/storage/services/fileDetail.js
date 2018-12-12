@@ -12,10 +12,12 @@ function addEventListenersOnFilesForDetail()
 
     currentFile.addEventListener('contextmenu', openFileDetail);
 
-    currentFile.addEventListener('click', () =>
+    currentFile.addEventListener('click', (event) =>
     {
       if(currentFile.children[0].tagName === 'INPUT')
       {
+        if(event.target.tagName === 'INPUT') return updateSelectedFiles(currentFile.children[0]);
+
         currentFile.children[0].checked
         ? currentFile.children[0].checked = false
         : currentFile.children[0].checked = true;

@@ -83,7 +83,7 @@
                   case 'zip': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFileArchive"><i class="far fa-file-archive"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -92,7 +92,7 @@
                   case 'txt': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFileTxt"><i class="far fa-file-alt"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -101,7 +101,7 @@
                   case 'doc': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFileDoc"><i class="far fa-file-word"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -110,7 +110,7 @@
                   case 'docx': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFileDocx"><i class="far fa-file-word"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -119,7 +119,7 @@
                   case 'ppt': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFilePpt"><i class="far fa-file-powerpoint"></i></i></div>
                       <div class="name"><%= file.name %></div>
@@ -128,7 +128,7 @@
                   case 'pptx': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFilePptx"><i class="far fa-file-powerpoint"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -137,7 +137,7 @@
                   case 'xls': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFileXls"><i class="far fa-file-excel"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -146,7 +146,7 @@
                   case 'xlsx': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFileXlsx"><i class="far fa-file-excel"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -155,7 +155,7 @@
                   case 'pdf': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFilePdf"><i class="far fa-file-pdf"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -164,7 +164,7 @@
                   case 'png': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFilePng"><i class="far fa-file-image"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -173,7 +173,7 @@
                   case 'jpg': %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFileJpg"><i class="far fa-file-image"></i></div>
                       <div class="name"><%= file.name %></div>
@@ -182,7 +182,7 @@
                   default: %>
                     <div name="<%= file.uuid %>" class="serviceElementsFileLargeGrid">
                       <% if(serviceRights.downloadFiles || serviceRights.removeFiles || isAdmin || serviceRights.isAdmin){ %>
-                        <input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" />
                       <% } %>
                       <div class="icon serviceElementsFileDefault"><i class="far fa-file"></i></div>
                       <div class="name"><%= file.name %></div>
