@@ -129,7 +129,7 @@ router.post('/upload-file', (req, res) =>
   {
     if(Object.keys(files)[0] == undefined || fields.service == undefined  || fields.currentFolder == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null });
 
-    const currentFileName = files[Object.keys(files)[0]].path.split('\\').length > 0
+    const currentFileName = files[Object.keys(files)[0]].path.split('\\').length > 1
     ? files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1]
     : files[Object.keys(files)[0]].path.split('/')[files[Object.keys(files)[0]].path.split('/').length - 1];
 
