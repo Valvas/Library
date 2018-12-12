@@ -8,7 +8,7 @@ for(var x = 0; x < accounts.length; x++)
 {
   const currentAccountUuid = accounts[x].getAttribute('id');
 
-  accounts[x].children[4].children[0].addEventListener('click', () => { launchRemoveAccountProcess(currentAccountUuid) });
+  accounts[x].children[5].children[0].addEventListener('click', () => { launchRemoveAccountProcess(currentAccountUuid) });
 }
 
 /****************************************************************************************************/

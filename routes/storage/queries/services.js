@@ -129,7 +129,9 @@ router.post('/upload-file', (req, res) =>
   {
     if(Object.keys(files)[0] == undefined || fields.service == undefined  || fields.currentFolder == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null });
 
-    const currentFileName = files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1];
+    const currentFileName = files[Object.keys(files)[0]].path.split('\\').length > 0
+    ? files[Object.keys(files)[0]].path.split('\\')[files[Object.keys(files)[0]].path.split('\\').length - 1]
+    : files[Object.keys(files)[0]].path.split('/')[files[Object.keys(files)[0]].path.split('/').length - 1];
 
     storageAppFilesUpload.uploadFile(currentFileName, files[Object.keys(files)[0]].name, files[Object.keys(files)[0]].size, fields.service, fields.currentFolder === 'null' ? null : fields.currentFolder, req.app.locals.account.uuid, req.app.locals.isAdmin, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileUuid, serviceRights, oldFileUuid) =>
     {
