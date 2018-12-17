@@ -50,7 +50,8 @@
     "fileDownloaded":1,
     "fileRemoved":2,
     "fileCommented":3,
-    "folderCreated":4
+    "fileCommentRemoved":4,
+    "folderCreated":5
   },
   "init":{
     "keepSalt":true,

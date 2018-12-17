@@ -90,7 +90,11 @@
       "rename_folders": "BOOLEAN NOT NULL",
       "remove_folders": "BOOLEAN NOT NULL",
       "restore_files": "BOOLEAN NOT NULL",
-      "remove_files": "BOOLEAN NOT NULL"
+      "remove_files": "BOOLEAN NOT NULL",
+      "edit_own_comments_on_files": "BOOLEAN NOT NULL",
+      "edit_all_comments_on_files": "BOOLEAN NOT NULL",
+      "remove_own_comments_on_files": "BOOLEAN NOT NULL",
+      "remove_all_comments_on_files": "BOOLEAN NOT NULL"
     },
 
     "global_administration":

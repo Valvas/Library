@@ -179,22 +179,30 @@ function sendDataToServer(accountUuid, strings)
   if(document.getElementById('downloadFiles') == null) return;
   if(document.getElementById('renameFolders') == null) return;
   if(document.getElementById('removeFolders') == null) return;
+  if(document.getElementById('editOwnCommentsOnFile') == null) return;
+  if(document.getElementById('editAllCommentsOnFile') == null) return;
+  if(document.getElementById('removeOwnCommentsOnFile') == null) return;
+  if(document.getElementById('removeAllCommentsOnFile') == null) return;
 
   document.getElementById('updateServiceRightsConfirmationPopup').remove();
 
   var rights = {};
 
-  rights.isAdmin        = document.getElementById('isAdmin').checked;
-  rights.moveFiles      = document.getElementById('moveFiles').checked;
-  rights.uploadFiles    = document.getElementById('uploadFiles').checked;
-  rights.removeFiles    = document.getElementById('removeFiles').checked;
-  rights.postComments   = document.getElementById('postComments').checked;
-  rights.restoreFiles   = document.getElementById('restoreFiles').checked;
-  rights.accessService  = document.getElementById('accessService').checked;
-  rights.createFolders  = document.getElementById('createFolders').checked;
-  rights.downloadFiles  = document.getElementById('downloadFiles').checked;
-  rights.renameFolders  = document.getElementById('renameFolders').checked;
-  rights.removeFolders  = document.getElementById('removeFolders').checked;
+  rights.isAdmin                  = document.getElementById('isAdmin').checked;
+  rights.moveFiles                = document.getElementById('moveFiles').checked;
+  rights.uploadFiles              = document.getElementById('uploadFiles').checked;
+  rights.removeFiles              = document.getElementById('removeFiles').checked;
+  rights.postComments             = document.getElementById('postComments').checked;
+  rights.restoreFiles             = document.getElementById('restoreFiles').checked;
+  rights.accessService            = document.getElementById('accessService').checked;
+  rights.createFolders            = document.getElementById('createFolders').checked;
+  rights.downloadFiles            = document.getElementById('downloadFiles').checked;
+  rights.renameFolders            = document.getElementById('renameFolders').checked;
+  rights.removeFolders            = document.getElementById('removeFolders').checked;
+  rights.editOwnCommentsOnFile    = document.getElementById('editOwnCommentsOnFile').checked;
+  rights.editAllCommentsOnFile    = document.getElementById('editAllCommentsOnFile').checked;
+  rights.removeOwnCommentsOnFile  = document.getElementById('removeOwnCommentsOnFile').checked;
+  rights.removeAllCommentsOnFile  = document.getElementById('removeAllCommentsOnFile').checked;
 
   displayLoader(strings.admin.serviceRights.service.serviceRightsUpdatePopup.loaderMessage, (loader) =>
   {

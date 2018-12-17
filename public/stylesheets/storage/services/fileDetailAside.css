@@ -38,6 +38,20 @@
 
 .fileLogRemove{ border-left:5px solid #D9534F; margin-bottom:10px; padding:10px; background-color:rgba(0,0,0,0.09); }
 
+.fileLogComment{ border-left:5px solid #EBA432; margin-bottom:10px; padding:10px; background-color:rgba(0,0,0,0.09); }
+
+.fileLogCommentRemoved{ padding:10px; border-radius:4px; margin:5px; background-color:#FFFFFF; border:1px solid rgba(0,0,0,0.24); font-size:0.9em; color:#D9534F; }
+
+.fileLogCommentContent{ padding:10px; border-radius:4px; margin:5px; background-color:#FFFFFF; border:1px solid rgba(0,0,0,0.24); font-size:0.9em; font-style:italic; }
+
+.fileLogCommentButtons{ display:flex; flex-direction:row; justify-content:flex-end; margin:15px 5px 0 5px; flex-wrap:wrap; }
+
+.fileLogCommentButtonsEdit{ margin:0 0 0 10px; background-color:#64ADEC; border-radius:4px; color:#FFFFFF; padding:4px 8px 4px 8px; font-size:0.9em; cursor:pointer; }
+
+.fileLogCommentButtonsDelete{ margin:0 0 0 10px; background-color:#D9534F; border-radius:4px; color:#FFFFFF; padding:4px 8px 4px 8px; font-size:0.9em; cursor:pointer; }
+
+.fileLogCommentButtonsEdit:hover, .fileLogCommentButtonsDelete:hover{ color:#000000; }
+
 /****************************************************************************************************/
 
 .addCommentOnFilePopup{ position:absolute; z-index:300; top:80px; width:800px; left:calc(50% - 400px); background-color:#FFFFFF; border-radius:4px; }

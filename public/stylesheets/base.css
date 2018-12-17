@@ -1,6 +1,5 @@
 @import url('fonts.css');
 @import url('popup.css');
-@import url('aside.css');
 
 body{ margin:0; position:relative; color:rgba(0,0,0,0.65); font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
 
@@ -72,9 +71,9 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); font-family:-apple-sy
 
 .asideBlock{ margin:20px 0 20px 0; transition-duration:0.25s; -o-transition-duration:0.25s; -webkit-transition-duration:0.25s; }
 
-.asideBlockListElement{ padding:10px 20px 10px 20px; cursor:pointer; width:max-content; display:block; color:rgba(0,0,0,0.65); text-overflow:ellipsis; white-space:nowrap; overflow:hidden; font-size:1.2em; text-decoration:none; }
+.asideBlockListElement{ padding:10px 20px 10px 20px; cursor:pointer; width:max-content; max-width:calc(100% - 40px); display:block; color:rgba(0,0,0,0.65); word-break:break-all; font-size:1.2em; text-decoration:none; }
 
-.asideBlockListElementSelected{ padding:10px 20px 10px 20px; cursor:pointer; width:max-content; color:#90BB2C; display:block; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; font-size:1.2em; text-decoration:none; }
+.asideBlockListElementSelected{ padding:10px 20px 10px 20px; cursor:pointer; width:max-content; max-width:calc(100% - 40px); color:#90BB2C; display:block; word-break:break-all; font-size:1.2em; text-decoration:none; }
 
 .asideBlockListElement:hover{ color:#90BB2C; }
 
@@ -82,19 +81,19 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); font-family:-apple-sy
 /* MAIN SECTION */
 /****************************************************************************************************/
 
-.mainBlock{ min-height:calc(100vh - 332px); max-width:1560px; margin:60px calc(50% - 780px) 60px calc(50% - 780px); }
+.mainBlock{ min-height:calc(100vh - 332px); max-width:1560px; margin:60px calc(50% - 780px) 60px calc(50% - 780px); display:flex; flex-direction:row; justify-content:flex-start; align-items:flex-start; }
 
-.startColumn{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; vertical-align:top; width:300px; margin:0 60px 0 0; box-sizing:border-box; border-right:1px solid #E0E0E0; padding:0 20px 0 0; }
+.startColumn{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:300px; margin:0 60px 0 0; box-sizing:border-box; border-right:1px solid #E0E0E0; padding:0 20px 0 0; }
 
-.centerColumn{ display:inline-block; vertical-align:top; max-width:800px; width:calc(100% - 720px); }
+.centerColumn{ max-width:800px; width:calc(100% - 720px); }
 
-.endColumn{ display:inline-block; vertical-align:top; width:300px; margin:0 0 0 60px; }
+.endColumn{ width:300px; margin:0 0 0 60px; }
 
 /****************************************************************************************************/
 /* NEWS SECTION */
 /****************************************************************************************************/
 
-.asideNewsDeploy{ background-color:#90BB2C; border-radius:0 4px 4px 0; cursor:pointer; }
+.asideNewsDeploy{ background-color:#90BB2C; border-radius:0 4px 4px 0; cursor:pointer; max-width:80px; }
 
 .asideNewsDeploy:hover{ background-color:#B2DD4E; }
 
@@ -235,7 +234,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); font-family:-apple-sy
 
   .headerBlockNavigation{ width:calc(100% - 40px); margin:0 20px 10px 20px; }
 
-  .startColumn{ width:80px; margin:0 20px 0 0; }
+  .startColumn{ width:160px; margin:0 20px 0 0; }
 
   .centerColumn{ width:calc(100% - 100px); }
   
@@ -262,7 +261,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); font-family:-apple-sy
 
   .headerBlockNavigation{ width:calc(100% - 40px); margin:0 20px 10px 20px; }
 
-  .startColumn{ width:80px; margin:0 20px 0 0; }
+  .startColumn{ width:160px; margin:0 20px 0 0; }
 
   .centerColumn{ width:calc(100% - 100px); }
   
@@ -289,7 +288,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); font-family:-apple-sy
 
   .headerBlockNavigation{ width:calc(100% - 40px); margin:0 20px 10px 20px; }
 
-  .startColumn{ width:80px; margin:0 20px 0 0; }
+  .startColumn{ width:160px; margin:0 20px 0 0; }
 
   .centerColumn{ width:calc(100% - 100px); }
   
@@ -316,7 +315,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); font-family:-apple-sy
 
   .headerBlockNavigation{ width:calc(100% - 40px); margin:0 20px 10px 20px; }
 
-  .startColumn{ width:80px; margin:0 20px 0 0; }
+  .startColumn{ width:180px; margin:0 20px 0 0; }
 
   .centerColumn{ width:calc(100% - 100px); }
   

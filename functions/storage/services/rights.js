@@ -58,17 +58,21 @@ function getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, p
 
     var serviceRights = {};
 
-    serviceRights.isAdmin       = result.length > 0 ? result[0].is_admin : 0;
-    serviceRights.accessService = result.length > 0 ? result[0].access_service : 0;
-    serviceRights.postComments  = result.length > 0 ? result[0].post_comments : 0;
-    serviceRights.uploadFiles   = result.length > 0 ? result[0].upload_files : 0;
-    serviceRights.createFolders = result.length > 0 ? result[0].create_folders : 0;
-    serviceRights.downloadFiles = result.length > 0 ? result[0].download_files : 0;
-    serviceRights.moveFiles     = result.length > 0 ? result[0].move_files : 0;
-    serviceRights.renameFolders = result.length > 0 ? result[0].rename_folders : 0;
-    serviceRights.removeFolders = result.length > 0 ? result[0].remove_folders : 0;
-    serviceRights.restoreFiles  = result.length > 0 ? result[0].restore_files : 0;
-    serviceRights.removeFiles   = result.length > 0 ? result[0].remove_files : 0;
+    serviceRights.isAdmin                   = result.length > 0 ? result[0].is_admin : 0;
+    serviceRights.accessService             = result.length > 0 ? result[0].access_service : 0;
+    serviceRights.postComments              = result.length > 0 ? result[0].post_comments : 0;
+    serviceRights.uploadFiles               = result.length > 0 ? result[0].upload_files : 0;
+    serviceRights.createFolders             = result.length > 0 ? result[0].create_folders : 0;
+    serviceRights.downloadFiles             = result.length > 0 ? result[0].download_files : 0;
+    serviceRights.moveFiles                 = result.length > 0 ? result[0].move_files : 0;
+    serviceRights.renameFolders             = result.length > 0 ? result[0].rename_folders : 0;
+    serviceRights.removeFolders             = result.length > 0 ? result[0].remove_folders : 0;
+    serviceRights.restoreFiles              = result.length > 0 ? result[0].restore_files : 0;
+    serviceRights.removeFiles               = result.length > 0 ? result[0].remove_files : 0;
+    serviceRights.editOwnCommentsOnFile     = result.length > 0 ? result[0].edit_own_comments_on_files : 0;
+    serviceRights.editAllCommentsOnFile     = result.length > 0 ? result[0].edit_all_comments_on_files : 0;
+    serviceRights.removeOwnCommentsOnFile   = result.length > 0 ? result[0].remove_own_comments_on_files : 0;
+    serviceRights.removeAllCommentsOnFile   = result.length > 0 ? result[0].remove_all_comments_on_files : 0;
 
     if(result.length > 0) return callback(null, serviceRights);
 
@@ -76,7 +80,7 @@ function getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, p
     {
       databaseName: params.database.storage.label,
       tableName: params.database.storage.tables.serviceRights,
-      args: { is_admin: 0, service_uuid: serviceUuid, account_uuid: accountUuid, access_service : 0, post_comments : 0, upload_files : 0, create_folders : 0, download_files : 0, move_files : 0, rename_folders : 0, remove_folders : 0, restore_files : 0, remove_files : 0 }
+      args: { is_admin: 0, service_uuid: serviceUuid, account_uuid: accountUuid, access_service : 0, post_comments : 0, upload_files : 0, create_folders : 0, download_files : 0, move_files : 0, rename_folders : 0, remove_folders : 0, restore_files : 0, remove_files : 0, edit_own_comments_on_files: 0, edit_all_comments_on_files: 0, remove_own_comments_on_files: 0, remove_all_comments_on_files: 0 }
 
     }, databaseConnection, (error, result) =>
     {
@@ -193,7 +197,7 @@ function updateAccountRightsOnService(accountUuid, serviceUuid, rights, database
       {
         databaseName: globalParameters.database.storage.label,
         tableName: globalParameters.database.storage.tables.serviceRights,
-        args: { service_uuid: serviceUuid, account_uuid: accountUuid, is_admin: rights.isAdmin, access_service: rights.accessService, post_comments: rights.postComments, upload_files: rights.uploadFiles, create_folders: rights.createFolders, download_files: rights.downloadFiles, move_files: rights.moveFiles, rename_folders: rights.renameFolders, remove_folders: rights.removeFolders, restore_files: rights.restoreFiles, remove_files: rights.removeFiles }
+        args: { service_uuid: serviceUuid, account_uuid: accountUuid, is_admin: rights.isAdmin, access_service: rights.accessService, post_comments: rights.postComments, upload_files: rights.uploadFiles, create_folders: rights.createFolders, download_files: rights.downloadFiles, move_files: rights.moveFiles, rename_folders: rights.renameFolders, remove_folders: rights.removeFolders, restore_files: rights.restoreFiles, remove_files: rights.removeFiles, edit_own_comments_on_files: rights.editOwnCommentsOnFile, edit_all_comments_on_files: rights.editAllCommentsOnFile, remove_own_comments_on_files: rights.removeOwnCommentsOnFile, remove_all_comments_on_files: rights.removeAllCommentsOnFile }
       }, databaseConnection, (error, result) =>
       {
         if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
@@ -208,7 +212,7 @@ function updateAccountRightsOnService(accountUuid, serviceUuid, rights, database
       {
         databaseName: globalParameters.database.storage.label,
         tableName: globalParameters.database.storage.tables.serviceRights,
-        args: { is_admin: rights.isAdmin, access_service: rights.accessService, post_comments: rights.postComments, upload_files: rights.uploadFiles, create_folders: rights.createFolders, download_files: rights.downloadFiles, move_files: rights.moveFiles, rename_folders: rights.renameFolders, remove_folders: rights.removeFolders, restore_files: rights.restoreFiles, remove_files: rights.removeFiles },
+        args: { is_admin: rights.isAdmin, access_service: rights.accessService, post_comments: rights.postComments, upload_files: rights.uploadFiles, create_folders: rights.createFolders, download_files: rights.downloadFiles, move_files: rights.moveFiles, rename_folders: rights.renameFolders, remove_folders: rights.removeFolders, restore_files: rights.restoreFiles, remove_files: rights.removeFiles, edit_own_comments_on_files: rights.editOwnCommentsOnFile, edit_all_comments_on_files: rights.editAllCommentsOnFile, remove_own_comments_on_files: rights.removeOwnCommentsOnFile, remove_all_comments_on_files: rights.removeAllCommentsOnFile },
         where: { condition: 'AND', 0: { operator: '=', key: 'account_uuid', value: accountUuid }, 1: { operator: '=', key: 'service_uuid', value: serviceUuid } }
 
       }, databaseConnection, (error, result) =>

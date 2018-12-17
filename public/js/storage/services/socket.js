@@ -111,7 +111,7 @@ socket.on('fileRemoved', (fileUuid, storageAppStrings) =>
       ? serviceFiles[x].children[2].innerText
       : serviceFiles[x].children[1].innerText;
 
-      displayInfo(storageAppStrings.services.detailPage.socket.fileRemoved.replace('[$1$]', fileName), null, null);
+      displayInfo(storageAppStrings.services.detailPage.socket.fileRemoved.replace('[$1$]', `<b>${fileName}</b>`), null, null);
 
       if(serviceFiles[x].children[0].tagName === 'INPUT')
       {
@@ -129,7 +129,7 @@ socket.on('fileRemoved', (fileUuid, storageAppStrings) =>
 
 /****************************************************************************************************/
 
-socket.on('updateFileLogs', (fileUuid, fileLogs) =>
+socket.on('updateFileLogs', (fileUuid, accountUuid, isAppAdmin, accountRightsOnService, fileLogs, storageAppStrings) =>
 {
   if(document.getElementById('fileDetailAside') == null) return;
 
@@ -152,6 +152,8 @@ socket.on('updateFileLogs', (fileUuid, fileLogs) =>
     logBlock.innerHTML += `<div>${fileLogs[x].date}</div>`;
     logBlock.innerHTML += `<div>${fileLogs[x].message}</div>`;
 
+    logBlock.setAttribute('name', fileLogs[x].uuid);
+
     switch(fileLogs[x].type)
     {
       case 0:
@@ -160,6 +162,26 @@ socket.on('updateFileLogs', (fileUuid, fileLogs) =>
 
       case 1:
         logBlock.setAttribute('class', 'fileLogDownload');
+      break;
+
+      case 3:
+        logBlock.setAttribute('class', 'fileLogComment');
+
+        var showEditButton = isAppAdmin || accountRightsOnService.isAdmin || accountRightsOnService.editAllCommentsOnFile || ((fileLogs[x].account === accountUuid) && accountRightsOnService.editOwnCommentsOnFile);
+        var showDeleteButton = isAppAdmin || accountRightsOnService.isAdmin || accountRightsOnService.removeAllCommentsOnFile || ((fileLogs[x].account === accountUuid) && accountRightsOnService.removeOwnCommentsOnFile);
+
+        (showEditButton && showDeleteButton)
+        ? logBlock.innerHTML += `<div class="fileLogCommentContent">${fileLogs[x].comment}</div><div class="fileLogCommentButtons"><div onclick="updateCommentGetStrings('${fileLogs[x].uuid}')" class="fileLogCommentButtonsEdit">${storageAppStrings.services.detailPage.fileAsideLogs.editComment}</div><div onclick="removeCommentGetStrings('${fileLogs[x].uuid}')" class="fileLogCommentButtonsDelete">${storageAppStrings.services.detailPage.fileAsideLogs.removeComment}</div></div>`
+        : showEditButton
+          ? logBlock.innerHTML += `<div class="fileLogCommentContent">${fileLogs[x].comment}</div><div class="fileLogCommentButtons"><div onclick="updateCommentGetStrings('${fileLogs[x].uuid}')" class="fileLogCommentButtonsEdit">${storageAppStrings.services.detailPage.fileAsideLogs.editComment}</div></div>`
+          : showDeleteButton
+            ? logBlock.innerHTML += `<div class="fileLogCommentContent">${fileLogs[x].comment}</div><div class="fileLogCommentButtons"><div onclick="removeCommentGetStrings('${fileLogs[x].uuid}')" class="fileLogCommentButtonsDelete">${storageAppStrings.services.detailPage.fileAsideLogs.removeComment}</div></div>`
+            : logBlock.innerHTML += `<div class="fileLogCommentContent">${fileLogs[x].comment}</div>`;
+      break;
+
+      case 4:
+        logBlock.setAttribute('class', 'fileLogComment');
+        list.innerHTML += `<div class="fileLogCommentRemoved">${storageAppStrings.services.fileDetail.logs.removedCommentMessage}</div>`;
       break;
     }
 
@@ -188,6 +210,9 @@ socket.on('folderCreated', (folderData, parentFolderUuid, accountData, storageAp
   folderBlock.setAttribute('ondblclick', `browseFolder("${folderData.uuid}")`);
 
   folderBlock.innerHTML += `<div class="icon serviceElementsFolder"><i class="far fa-folder-open"></i></div><div class="name">${folderData.name}</div>`;
+
+  folderBlock.addEventListener('contextmenu', openFolderMenu);
+  folderBlock.addEventListener('dblclick', () => { browseFolder(folderData.uuid) });
 
   document.getElementById('foldersContainer').insertBefore(folderBlock, document.getElementById('foldersContainer').children[0]);
 
@@ -236,6 +261,38 @@ socket.on('folderNameUpdated', (folderUuid, newFolderName, storageAppStrings) =>
   for(var x = 0; x < pathElements.length; x++)
   {
     if(pathElements[x].getAttribute('name') === folderUuid) pathElements[x].innerText = newFolderName;
+  }
+});
+
+/****************************************************************************************************/
+
+socket.on('fileCommentRemoved', (commentUuid, storageAppStrings) =>
+{
+  if(document.getElementById('fileDetailAsideLogsList') == null) return;
+
+  const fileLogs = document.getElementById('fileDetailAsideLogsList').children;
+
+  for(var x = 0; x < fileLogs.length; x++)
+  {
+    if(fileLogs[x].getAttribute('name') === commentUuid)
+    {
+      fileLogs[x].innerHTML = `<div>${fileLogs[x].children[0].innerText}</div><div>${fileLogs[x].children[1].innerText}</div>`;
+      fileLogs[x].innerHTML += `<div class="fileLogCommentRemoved">${storageAppStrings.services.fileDetail.logs.removedCommentMessage}</div>`;
+    }
+  }
+});
+
+/****************************************************************************************************/
+
+socket.on('fileCommentUpdated', (commentUuid, newCommentContent) =>
+{
+  if(document.getElementById('fileDetailAsideLogsList') == null) return;
+
+  const fileLogs = document.getElementById('fileDetailAsideLogsList').children;
+
+  for(var x = 0; x < fileLogs.length; x++)
+  {
+    if(fileLogs[x].getAttribute('name') === commentUuid) fileLogs[x].children[2].innerText = newCommentContent;
   }
 });
 

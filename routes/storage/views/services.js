@@ -4,7 +4,6 @@ const express                   = require('express')
 const errors                    = require(`${__root}/json/errors`)
 const commonAppStrings          = require(`${__root}/json/strings/common`)
 const storageAppStrings         = require(`${__root}/json/strings/storage`)
-const storageAppAdminGet        = require(`${__root}/functions/storage/admin/get`)
 const storageAppServicesGet     = require(`${__root}/functions/storage/services/get`)
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`)
 

@@ -2,19 +2,13 @@
 
 const uuid                                = require('uuid');
 const constants                           = require(`${__root}/functions/constants`);
+const databaseManager                     = require(`${__root}/functions/database/MySQLv3`);
 const storageAppFilesGet                  = require(`${__root}/functions/storage/files/get`);
 const commonFilesMove                     = require(`${__root}/functions/common/files/move`);
 const storageAppServicesGet               = require(`${__root}/functions/storage/services/get`);
 const commonFoldersCreate                 = require(`${__root}/functions/common/folders/create`);
+const storageAppLogsServices              = require(`${__root}/functions/storage/logs/services`);
 const storageAppServicesRights            = require(`${__root}/functions/storage/services/rights`);
-const storageAppLogsServicesUploadFile    = require(`${__root}/functions/storage/logs/services/addFile`);
-const storageAppLogsServicesRemoveFile    = require(`${__root}/functions/storage/logs/services/removeFile`);
-
-//To uncomment when updated database manager will be set for all the project
-//const databaseManager     = require(`${__root}/functions/database/${params.database.dbms}`);
-
-//To remove when updated database manager will be set for all the project
-const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 /****************************************************************************************************/
 // CHECK PARAMETERS FOR CURRENT FILE BEFORE UPLOAD
@@ -276,7 +270,7 @@ function uploadFileMoveOldFileToBin(tmpFilePath, fileName, serviceRights, servic
 
 function uploadFileCreateRemoveLog(tmpFilePath, fileName, serviceRights, serviceUuid, parentFolderUuid, accountUuid, databaseConnection, globalParameters, oldFileUuid, callback)
 {
-  storageAppLogsServicesRemoveFile.addRemoveFileLog(accountUuid, oldFileUuid, databaseConnection, globalParameters, (error) =>
+  storageAppLogsServices.addRemoveFileLog(accountUuid, oldFileUuid, databaseConnection, globalParameters, (error) =>
   {
     if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
@@ -320,7 +314,7 @@ function uploadFileMoveNewFile(tmpFilePath, fileUuid, serviceRights, serviceUuid
 
 function uploadFileCreateUploadLog(fileUuid, accountUuid, serviceRights, databaseConnection, globalParameters, oldFileUuid, callback)
 {
-  storageAppLogsServicesUploadFile.addUploadFileLog(accountUuid, fileUuid, databaseConnection, globalParameters, (error) =>
+  storageAppLogsServices.addUploadFileLog(accountUuid, fileUuid, databaseConnection, globalParameters, (error) =>
   {
     if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 

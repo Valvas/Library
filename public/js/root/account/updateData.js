@@ -282,7 +282,7 @@ function sendNewLastnameToServer(event)
           document.getElementById('accountDataUpdatePopup').remove();
           document.getElementById('accountDataUpdateBackground').remove();
 
-          document.getElementById('accountDataLastname').innerText = lastname;
+          document.getElementById('accountDataLastname').innerText = `${lastname.charAt(0).toUpperCase()}${lastname.slice(1).toLowerCase()}`;
 
           displaySuccess('Votre nom a été modifié', null);
         });
@@ -340,7 +340,7 @@ function sendNewFirstnameToServer(event)
           document.getElementById('accountDataUpdatePopup').remove();
           document.getElementById('accountDataUpdateBackground').remove();
 
-          document.getElementById('accountDataFirstname').innerText = firstname;
+          document.getElementById('accountDataFirstname').innerText = `${firstname.charAt(0).toUpperCase()}${firstname.slice(1).toLowerCase()}`;
 
           displaySuccess('Votre prénom a été modifié', null);
         });

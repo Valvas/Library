@@ -268,7 +268,11 @@
             "renameFolders": "Renommer des dossiers",
             "removeFolders": "Supprimer des dossiers",
             "restoreFiles": "Restaurer des fichiers",
-            "removeFiles": "Supprimer des fichiers"
+            "removeFiles": "Supprimer des fichiers",
+            "editOwnCommentsOnFile": "Modifier ses commentaires sur les fichiers",
+            "editAllCommentsOnFile": "Modifier les commentaires sur les fichiers",
+            "removeOwnCommentsOnFile": "Supprimer ses commentaires sur les fichiers",
+            "removeAllCommentsOnFile": "Supprimer les commentaires sur les fichiers"
           },
           "confirmationTitle": "Confirmation",
           "confirmationMessage": "Êtes-vous sûr(e) de vouloir appliquer ces modifications ?",
@@ -393,17 +397,38 @@
         "title": "Détail et logs du fichier",
         "name": "Fichier",
         "logsTitle": "Liste des actions",
-        "commentButton": "Ajouter un commentaire"
+        "commentButton": "Ajouter un commentaire",
+        "editComment": "Modifier",
+        "removeComment": "Supprimer",
+
+        "removeCommentPopup":
+        {
+          "title": "Confirmation",
+          "message": "Êtes-vous sûr(e) de vouloir supprimer ce commentaire ?",
+          "confirm": "Oui",
+          "cancel": "Annuler",
+          "saving": "Suppression du commentaire en cours. Veuillez patienter..."
+        }
       },
 
       "commentPopup":
       {
         "title": "Ajouter un commentaire",
+        "update": "Modifier ce commentaire",
         "help": "Veuillez faire attention aux espaces en début et en fin de commentaire ainsi qu'aux espaces consécutifs.",
         "formatError": "Le format de ce commentaire est incorrect (attentions aux espaces)",
         "placeholder": "Contenu de votre commentaire",
-        "confirm": "Envoyer ce commentaire",
-        "cancel": "Annuler"
+        "confirm": "Enregistrer le commentaire",
+        "cancel": "Annuler",
+        "confirmationPopup":
+        {
+          "title": "Confirmation",
+          "message": "Êtes-vous sûr(e) de vouloir poster ce commentaire ?",
+          "updateMessage": "Êtes-vous sûr(e) de vouloir modifier ce commentaire ?",
+          "confirm": "Oui",
+          "cancel": "Annuler"
+        },
+        "savingMessage": "Enregistrement du commentaire en cours. Veuillez patienter..."
       },
 
       "folderMenu":
@@ -493,7 +518,8 @@
         "removed": "Fichier supprimé par",
         "restored": "Fichier restauré par",
         "commented": "Commentaire de",
-        "downloaded": "Fichier téléchargé par"
+        "downloaded": "Fichier téléchargé par",
+        "removedCommentMessage": "Commentaire supprimé"
       }
     },
 

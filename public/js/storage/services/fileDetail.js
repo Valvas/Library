@@ -66,7 +66,7 @@ function openFileDetail(event)
 
   $.ajax(
   {
-    method: 'PUT', dataType: 'json', timeout: 10000, data: { fileUuid: target.getAttribute('name') }, url: '/queries/storage/services/get-file-logs',
+    method: 'PUT', dataType: 'json', timeout: 10000, data: { serviceUuid: document.getElementById('serviceUuid').getAttribute('name'), fileUuid: target.getAttribute('name') }, url: '/queries/storage/services/get-file-logs',
 
     error: (xhr, textStatus, errorThrown) =>
     {
@@ -140,6 +140,23 @@ function fillFileDetail(result)
       case 1:
         list.innerHTML += `<div name="${result.fileLogs[x].uuid}" class="fileLogDownload"><div>${result.fileLogs[x].date}</div><div>${result.fileLogs[x].message}</div></div>`;
       break;
+
+      case 3:
+        var showEditButton = result.isAppAdmin || result.accountRightsOnService.isAdmin || result.accountRightsOnService.editAllCommentsOnFile || ((result.fileLogs[x].account === result.accountData.uuid) && result.accountRightsOnService.editOwnCommentsOnFile);
+        var showDeleteButton = result.isAppAdmin || result.accountRightsOnService.isAdmin || result.accountRightsOnService.removeAllCommentsOnFile || ((result.fileLogs[x].account === result.accountData.uuid) && result.accountRightsOnService.removeOwnCommentsOnFile);
+
+        (showEditButton && showDeleteButton)
+        ? list.innerHTML += `<div name="${result.fileLogs[x].uuid}" class="fileLogComment"><div>${result.fileLogs[x].date}</div><div>${result.fileLogs[x].message}</div><div class="fileLogCommentContent">${result.fileLogs[x].comment}</div><div class="fileLogCommentButtons"><div onclick="updateCommentGetStrings('${result.fileLogs[x].uuid}')" class="fileLogCommentButtonsEdit">${storageAppStrings.services.detailPage.fileAsideLogs.editComment}</div><div onclick="removeCommentGetStrings('${result.fileLogs[x].uuid}')" class="fileLogCommentButtonsDelete">${storageAppStrings.services.detailPage.fileAsideLogs.removeComment}</div></div></div>`
+        : showEditButton
+          ? list.innerHTML += `<div name="${result.fileLogs[x].uuid}" class="fileLogComment"><div>${result.fileLogs[x].date}</div><div>${result.fileLogs[x].message}</div><div class="fileLogCommentContent">${result.fileLogs[x].comment}</div><div class="fileLogCommentButtons"><div onclick="updateCommentGetStrings('${result.fileLogs[x].uuid}')" class="fileLogCommentButtonsEdit">${storageAppStrings.services.detailPage.fileAsideLogs.editComment}</div></div></div>`
+          : showDeleteButton
+            ? list.innerHTML += `<div name="${result.fileLogs[x].uuid}" class="fileLogComment"><div>${result.fileLogs[x].date}</div><div>${result.fileLogs[x].message}</div><div class="fileLogCommentContent">${result.fileLogs[x].comment}</div><div class="fileLogCommentButtons"><div onclick="removeCommentGetStrings('${result.fileLogs[x].uuid}')" class="fileLogCommentButtonsDelete">${storageAppStrings.services.detailPage.fileAsideLogs.removeComment}</div></div></div>`
+            : list.innerHTML += `<div name="${result.fileLogs[x].uuid}" class="fileLogComment"><div>${result.fileLogs[x].date}</div><div>${result.fileLogs[x].message}</div><div class="fileLogCommentContent">${result.fileLogs[x].comment}</div></div>`;
+      break;
+
+      case 4:
+        list.innerHTML += `<div name="${result.fileLogs[x].uuid}" class="fileLogComment"><div>${result.fileLogs[x].date}</div><div>${result.fileLogs[x].message}</div><div class="fileLogCommentRemoved">${storageAppStrings.services.fileDetail.logs.removedCommentMessage}</div></div>`;
+      break;
     }
   }
 
@@ -148,203 +165,6 @@ function fillFileDetail(result)
   document.getElementById('fileDetailAside').appendChild(logs);
 
   document.getElementById('fileDetailAside').insertBefore(close, document.getElementById('fileDetailAside').children[0]);
-}
-
-/****************************************************************************************************/
-
-function openFolderDetail(folderUuid)
-{
-  var elementDetailBlock                = document.createElement('div');
-  var elementDetailBlockTitle           = document.createElement('div');
-  var elementDetailBlockClose           = document.createElement('div');
-  var elementDetailBlockSpinner         = document.createElement('div');
-  var elementDetailBlockNameLabel       = document.createElement('div');
-  var elementDetailBlockNameValue       = document.createElement('div');
-  var elementDetailBlockContentLabel    = document.createElement('div');
-  var elementDetailBlockContentFiles    = document.createElement('div');
-  var elementDetailBlockContentFolders  = document.createElement('div');
-  var elementDetailBlockRenameButton    = document.createElement('button');
-  var elementDetailBlockRemoveButton    = document.createElement('button');
-
-  elementDetailBlock                .setAttribute('id', 'elementDetailBlock');
-  elementDetailBlock                .setAttribute('name', folderUuid);
-  
-  elementDetailBlock                .setAttribute('class', 'elementDetailBlock');
-  elementDetailBlockClose           .setAttribute('class', 'elementDetailBlockClose');
-  elementDetailBlockTitle           .setAttribute('class', 'elementDetailBlockTitle');
-  elementDetailBlockSpinner         .setAttribute('class', 'elementDetailBlockSpinner');
-  elementDetailBlockNameLabel       .setAttribute('class', 'elementDetailBlockLabel');
-  elementDetailBlockNameValue       .setAttribute('class', 'elementDetailBlockValue');
-  elementDetailBlockContentLabel    .setAttribute('class', 'elementDetailBlockLabel');
-  elementDetailBlockContentFiles    .setAttribute('class', 'elementDetailBlockValue');
-  elementDetailBlockContentFolders  .setAttribute('class', 'elementDetailBlockValue');
-  elementDetailBlockRemoveButton    .setAttribute('class', 'elementDetailBlockRemove');
-
-  elementDetailBlockRenameButton    .addEventListener('click', () => { renameFolder(folderUuid, document.getElementById(folderUuid).innerText); });
-
-  elementDetailBlockSpinner         .innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
-  elementDetailBlockClose           .innerHTML = '<i class="fas fa-arrow-right"></i>';
-
-  elementDetailBlockClose           .addEventListener('click', closeDetailBlock);
-
-  elementDetailBlock                .appendChild(elementDetailBlockClose);
-  elementDetailBlock                .appendChild(elementDetailBlockSpinner);
-
-  $(elementDetailBlock).hide().appendTo(document.getElementById('mainBlock'));
-
-  $(elementDetailBlock).toggle('slide', { direction: 'right' }, 200);
-
-  $.ajax(
-  {
-    method: 'GET',
-    dataType: 'json',
-    timeout: 5000,
-    url: '/queries/storage/strings',
-
-    error: (xhr, textStatus, errorThrown) =>
-    {
-      closeDetailBlock();
-
-      document.getElementById(folderUuid).removeAttribute('style');
-
-      xhr.responseJSON != undefined
-      ? displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail)
-      : displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
-    }
-
-  }).done((json) =>
-  {
-    const strings = json.strings;
-
-    $.ajax(
-    {
-      method: 'PUT',
-      dataType: 'json',
-      timeout: 5000,
-      data: { serviceUuid: document.getElementById('mainBlock').getAttribute('name') },
-      url: '/queries/storage/services/get-rights-for-service',
-  
-      error: (xhr, textStatus, errorThrown) =>
-      {
-        closeDetailBlock();
-
-        document.getElementById(folderUuid).removeAttribute('style');
-
-        xhr.responseJSON != undefined
-        ? displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail)
-        : displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
-      }
-  
-    }).done((json) =>
-    {
-      const rights = json.rights;
-
-      $.ajax(
-      {
-        method: 'PUT',
-        dataType: 'json',
-        data: { folderUuid: folderUuid, serviceUuid: document.getElementById('mainBlock').getAttribute('name') },
-        timeout: 5000,
-        url: '/queries/storage/services/get-folder-content',
-    
-        error: (xhr, textStatus, errorThrown) =>
-        {
-          closeDetailBlock();
-    
-          xhr.responseJSON != undefined
-          ? displayErrorMessage(xhr.responseJSON.message, xhr.responseJSON.detail)
-          : displayErrorMessage('Une erreur est survenue, veuillez réessayer plus tard', null);
-        }
-    
-      }).done((json) =>
-      {
-        elementDetailBlockSpinner.remove();
-  
-        elementDetailBlockTitle           .innerText = strings.services.folderDetail.title;
-        elementDetailBlockNameLabel       .innerText = strings.services.folderDetail.folderName;
-        elementDetailBlockNameValue       .innerText = document.getElementById(folderUuid).innerText;
-        elementDetailBlockContentLabel    .innerText = strings.services.folderDetail.folderContent;
-        elementDetailBlockContentFiles    .innerText = `- ${json.result.files.length} ${strings.services.folderDetail.files}`;
-        elementDetailBlockContentFolders  .innerText = `- ${json.result.folders.length} ${strings.services.folderDetail.folders}`;
-        elementDetailBlockRenameButton    .innerText = strings.services.folderDetail.renameButton.label;
-        elementDetailBlockRemoveButton    .innerText = strings.services.folderDetail.removeButton.label;
-
-        rights.renameFolders
-        ? elementDetailBlockRenameButton.setAttribute('class', 'elementDetailBlockRename')
-        : elementDetailBlockRenameButton.setAttribute('class', 'elementDetailBlockRenameOff');
-
-        rights.renameFolders
-        ? elementDetailBlockRenameButton.setAttribute('title', strings.services.folderDetail.renameButton.titles.true)
-        : elementDetailBlockRenameButton.setAttribute('title', strings.services.folderDetail.renameButton.titles.false);
-  
-        rights.removeFolders
-        ? elementDetailBlockRemoveButton.setAttribute('title', strings.services.folderDetail.removeButton.titles.true)
-        : elementDetailBlockRemoveButton.setAttribute('title', strings.services.folderDetail.removeButton.titles.false);
-    
-        elementDetailBlock                .appendChild(elementDetailBlockTitle);
-        elementDetailBlock                .appendChild(elementDetailBlockNameLabel);
-        elementDetailBlock                .appendChild(elementDetailBlockNameValue);
-        elementDetailBlock                .appendChild(elementDetailBlockContentLabel);
-        elementDetailBlock                .appendChild(elementDetailBlockContentFiles);
-        elementDetailBlock                .appendChild(elementDetailBlockContentFolders);
-        elementDetailBlock                .appendChild(elementDetailBlockRenameButton);
-        elementDetailBlock                .appendChild(elementDetailBlockRemoveButton);
-      });
-    });
-  });
-}
-
-/****************************************************************************************************/
-
-function closeDetailBlock()
-{
-  if(document.getElementById('elementDetailBlock'))
-  {
-    document.getElementById(document.getElementById('elementDetailBlock').getAttribute('name')).removeAttribute('style');
-
-    $(document.getElementById('elementDetailBlock')).toggle('slide', { direction: 'right' }, 200, () => { if(document.getElementById('elementDetailBlock')) document.getElementById('elementDetailBlock').remove(); });
-  }
-}
-
-/****************************************************************************************************/
-
-function switchEventsPage(event)
-{
-  const pageTag     = parseInt(event.target.getAttribute('tag'));
-  var events        = document.getElementById('elementDetailBlockEventsContent').children;
-
-  document.getElementById('elementDetailBlockEventsPages').innerHTML = '';
-
-  var startPage = null, endPage = null;
-
-  startPage = (pageTag - 4) > 0 ? (pageTag - 4) : 0;
-  endPage = Math.ceil(events.length / 8) > (startPage + 7) ? (startPage + 7) : Math.ceil(events.length / 8);
-
-  event.target.removeEventListener('click', switchEventsPage);
-
-  for(var x = startPage; x < endPage; x++)
-  {
-    var pageSelector = document.createElement('div');
-
-    pageSelector.innerText = (x + 1);
-
-    x === pageTag
-    ? pageSelector.setAttribute('class', 'elementDetailBlockEventsPagesElementSelected')
-    : pageSelector.setAttribute('class', 'elementDetailBlockEventsPagesElement');
-
-    if(x !== pageTag) pageSelector.addEventListener('click', switchEventsPage);
-
-    pageSelector.setAttribute('tag', x);
-
-    document.getElementById('elementDetailBlockEventsPages').appendChild(pageSelector);
-  }
-
-  for(var x = 0; x < events.length; x++)
-  {
-    events[x].getAttribute('tag') == pageTag
-    ? events[x].removeAttribute('style')
-    : events[x].style.display = 'none';
-  }
 }
 
 /****************************************************************************************************/

@@ -288,6 +288,7 @@ function getAccountLinkedToEachLog(fileData, logsData, databaseConnection, globa
         case 1: message = `${storageStrings.services.fileDetail.logs.downloaded} ${accountName}`; break;
         case 2: message = `${storageStrings.services.fileDetail.logs.removed} ${accountName}`; break;
         case 3: message = `${storageStrings.services.fileDetail.logs.commented} ${accountName}`; break;
+        case 4: message = `${storageStrings.services.fileDetail.logs.commented} ${accountName}`; break;
       }
 
       commonFormatDate.getStringifyDateFromTimestamp(logsData[index].date, (error, stringifyTimestamp) =>
@@ -298,8 +299,9 @@ function getAccountLinkedToEachLog(fileData, logsData, databaseConnection, globa
         preparedLogs[index].message = message;
         preparedLogs[index].type = logsData[index].type;
         preparedLogs[index].uuid = logsData[index].uuid;
+        preparedLogs[index].account = logsData[index].account_uuid;
 
-        if(logsData[index].type === 3) preparedLogs[index].comment = logsData.comment;
+        if(logsData[index].type === 3) preparedLogs[index].comment = logsData[index].comment;
 
         if(logsData[index += 1] == undefined) return callback(null, fileData, preparedLogs);
 

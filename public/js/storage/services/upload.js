@@ -137,11 +137,22 @@ function checkBeforeUpload(storageAppStrings)
   if(document.getElementById('uploadFilePopupFileName') == null) return;
   if(document.getElementById('uploadFilePopupErrorMessage') == null) return;
 
+  if(document.getElementById('uploadFilePopupInput').value.length === 0)
+  {
+    document.getElementById('uploadFilePopupFileName').innerText = storageAppStrings.services.detailPage.uploadFilePopup.inputPlaceholder;
+
+    document.getElementById('uploadFilePopupSend').removeAttribute('style');
+    document.getElementById('uploadFilePopupErrorMessage').removeAttribute('style');
+
+    return;
+  }
+
   document.getElementById('uploadFilePopup').style.display = 'none';
   document.getElementById('uploadFilePopupSend').removeAttribute('style');
   document.getElementById('uploadFilePopupErrorMessage').removeAttribute('style');
 
   const filePath = document.getElementById('uploadFilePopupInput').value;
+
   const fileName = filePath.split('\\')[filePath.split('\\').length - 1];
 
   document.getElementById('uploadFilePopupFileName').innerText = fileName;

@@ -174,19 +174,16 @@ function removeServiceDirectories(serviceUuid, serviceFiles, databaseConnection,
 
 function removeServiceMoveFilesToBin(serviceUuid, serviceFiles, filesIterator, databaseConnection, params, serviceRemoveStats, callback)
 {
-  if(serviceFiles[filesIterator] == undefined) removeServiceDropExtensions(serviceUuid, databaseConnection, params, serviceRemoveStats, callback);
+  if(serviceFiles[filesIterator] == undefined) return removeServiceDropExtensions(serviceUuid, databaseConnection, params, serviceRemoveStats, callback);
 
-  else
+  storageAppFilesRemove.removeFileFromService(serviceFiles[filesIterator].uuid, serviceUuid, databaseConnection, params, (error) =>
   {
-    storageAppFilesRemove.removeFileFromService(serviceFiles[filesIterator].uuid, serviceUuid, databaseConnection, params, (error) =>
-    {
-      if(error != null) return callback({ status: 500, code: constants.REMOVE_SERVICE_FAILED, detail: error.detail }, serviceRemoveStats);
-    
-      serviceRemoveStats.serviceFilesMovedToBin += 1;
+    if(error != null) return callback({ status: 500, code: constants.REMOVE_SERVICE_FAILED, detail: error.detail }, serviceRemoveStats);
+  
+    serviceRemoveStats.serviceFilesMovedToBin += 1;
 
-      removeServiceMoveFilesToBin(serviceUuid, serviceFiles, (filesIterator + 1), databaseConnection, params, serviceRemoveStats, callback);
-    });
-  }
+    return removeServiceMoveFilesToBin(serviceUuid, serviceFiles, (filesIterator + 1), databaseConnection, params, serviceRemoveStats, callback);
+  });
 }
 
 /****************************************************************************************************/
