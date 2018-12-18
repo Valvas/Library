@@ -97,7 +97,8 @@ module.exports.getAllAccountsWidthPictures = (databaseConnection, globalParamete
     databaseName: globalParameters.database.root.label,
     tableName: globalParameters.database.root.tables.accounts,
     args: [ '*' ],
-    where: {  }
+    where: {  },
+    order: [ { column: 'lastname', asc: true } ]
 
   }, databaseConnection, (error, result) =>
   {
