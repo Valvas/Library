@@ -113,13 +113,6 @@ module.exports.getAllAccountsWidthPictures = (databaseConnection, globalParamete
       accounts.push({ uuid: result[x].uuid, email: result[x].email, lastname: result[x].lastname, firstname: result[x].firstname, suspended: result[x].suspended === 1, admin: result[x].is_admin === 1, picture: result[x].picture });
     }
 
-    accounts.sort((a, b) =>
-    {
-      if(a.lastname.localeCompare(b, 'fr', {ignorePunctuation: true}) < 0) return -1;
-      if(a.lastname.localeCompare(b, 'fr', {ignorePunctuation: true}) > 0) return 1;
-      return 0;
-    });
-
     return callback(null, accounts);
   });
 }
