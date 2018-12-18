@@ -140,6 +140,8 @@ function sendAccountDataToServer()
 
       removeBackground('createAccountBackground');
 
+      document.getElementById('createAccountForm').reset();
+
       displaySuccess(result.message, null, 'createAccountSuccess');
     });
   });

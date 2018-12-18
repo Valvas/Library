@@ -26,9 +26,16 @@ function searchForFilesAndFolders(event)
 
     if(currentFiles[x].children.length > 2) index += 1;
 
-    currentFiles[x].children[index].innerText.includes(event.target.value)
-    ? currentFiles[x].removeAttribute('style')
-    : currentFiles[x].style.display = 'none';
+    if(currentFiles[x].children[index].innerText.includes(event.target.value))
+    {
+      currentFiles[x].removeAttribute('style');
+
+      continue;
+    }
+
+    currentFiles[x].style.display = 'none';
+
+    if(currentFiles[x].children[0].tagName === 'INPUT' && currentFiles[x].children[0].checked) currentFiles[x].children[0].click();
   }
 }
 
