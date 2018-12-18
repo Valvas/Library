@@ -2,12 +2,6 @@
 
 var storageAppStrings = null;
 
-var clickedCounter = 0;
-
-var selectedFolder = null;
-
-var currentTimeout = null;
-
 if(document.getElementById('foldersContainer')) addEventListenersOnFolders();
 
 function addEventListenersOnFolders()
@@ -25,44 +19,16 @@ function addEventListenersOnFolders()
 
 /****************************************************************************************************/
 
-function manageClickEventsOnFolders(currentFolderUuid)
-{
-  if(currentFolderUuid !== selectedFolder)
-  {
-    selectedFolder = currentFolderUuid;
-
-    clickedCounter = 1;
-
-    clearTimeout(currentTimeout);
-  }
-
-  else
-  {
-    clickedCounter += 1;
-
-    if(clickedCounter === 2)
-    {
-      clickedCounter = 0;
-
-      browseFolder(currentFolderUuid);
-    }
-  }
-
-  currentTimeout = setTimeout(() =>
-  {
-    if(clickedCounter === 1) openFolderDetail(currentFolderUuid);
-
-    clickedCounter = 0;
-  }, 250);
-}
-
-/****************************************************************************************************/
-
 function browseFolder(folderUuid)
 {
   if(document.getElementById('serviceUuid') == null) return;
   if(document.getElementById('currentFolder') == null) return;
   if(document.getElementById('currentPathLocation') == null) return;
+
+  if(document.getElementById('folderMenu')) document.getElementById('folderMenu').remove();
+  if(document.getElementById('fileDetailAside')) document.getElementById('fileDetailAside').remove();
+  if(document.getElementById('folderMenuBackground')) document.getElementById('folderMenuBackground').remove();
+  if(document.getElementById('fileDetailBackground')) document.getElementById('fileDetailBackground').remove();
 
   createBackground('browsingFolder');
 
@@ -262,8 +228,8 @@ function fillFolderMenu(accountRightsOnService, selectedFolder)
 
   const selectedFolderUuid = selectedFolder.getAttribute('name');
 
-  const hasTheRightToRename = accountRightsOnService.isAppAdmin == true || accountRightsOnService.serviceRights.isAdmin == true || accountRightsOnService.renameFolders == true;
-  const hasTheRightToRemove = accountRightsOnService.isAppAdmin == true || accountRightsOnService.serviceRights.isAdmin == true || accountRightsOnService.removeFolders == true;
+  const hasTheRightToRename = accountRightsOnService.isAppAdmin == true || accountRightsOnService.serviceRights.isAdmin == true || accountRightsOnService.serviceRights.renameFolders == true;
+  const hasTheRightToRemove = accountRightsOnService.isAppAdmin == true || accountRightsOnService.serviceRights.isAdmin == true || accountRightsOnService.serviceRights.removeFolders == true;
 
   document.getElementById('folderMenu').innerHTML = `<div class="folderMenuTitle">${selectedFolder.children[1].innerText}</div>`;
 

@@ -40,9 +40,9 @@
     "minLength": 8,
     "maxLength": 64,
     "generatedLength": 8,
-    "minUpperCases": 2,
-    "minLowerCases": 2,
-    "minDigits": 2,
+    "minUpperCases": 1,
+    "minLowerCases": 1,
+    "minDigits": 1,
     "minSpecial": 0
   },
   "fileLogs":{

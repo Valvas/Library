@@ -172,12 +172,30 @@ module.exports.selectQuery = (queryObject, databaseConnection, callback) =>
     {
       sqlQuery += `${queryObject.where.key} ${queryObject.where.operator} "${queryObject.where.value}"`;
 
-      databaseConnection.query(sqlQuery, (error, result) =>
+      if(queryObject.order != undefined)
       {
-        if(error) return callback(error.message);
+        getOrder(queryObject.order, (order) =>
+        {
+          sqlQuery += order;
 
-        return callback(null, result);
-      });
+          databaseConnection.query(sqlQuery, (error, result) =>
+          {
+            if(error) return callback(error.message);
+
+            return callback(null, result);
+          });
+        });
+      }
+
+      else
+      {
+        databaseConnection.query(sqlQuery, (error, result) =>
+        {
+          if(error) return callback(error.message);
+
+          return callback(null, result);
+        });
+      }
     }
 
     else
@@ -185,6 +203,42 @@ module.exports.selectQuery = (queryObject, databaseConnection, callback) =>
       getCondition(queryObject.where, (result) =>
       {
         sqlQuery += result;
+
+        if(queryObject.order != undefined)
+        {
+          getOrder(queryObject.order, (order) =>
+          {
+            sqlQuery += order;
+
+            databaseConnection.query(sqlQuery, (error, result) =>
+            {
+              if(error) return callback(error.message);
+
+              return callback(null, result);
+            });
+          });
+        }
+
+        else
+        {
+          databaseConnection.query(sqlQuery, (error, result) =>
+          {
+            if(error) return callback(error.message);
+
+            return callback(null, result);
+          });
+        }
+      });
+    }
+  }
+
+  else
+  {
+    if(queryObject.order != undefined)
+    {
+      getOrder(queryObject.order, (order) =>
+      {
+        sqlQuery += order;
 
         databaseConnection.query(sqlQuery, (error, result) =>
         {
@@ -194,16 +248,16 @@ module.exports.selectQuery = (queryObject, databaseConnection, callback) =>
         });
       });
     }
-  }
 
-  else
-  {
-    databaseConnection.query(sqlQuery, (error, result) =>
+    else
     {
-      if(error) return callback(error.message);
+      databaseConnection.query(sqlQuery, (error, result) =>
+      {
+        if(error) return callback(error.message);
 
-      return callback(null, result);
-    });
+        return callback(null, result);
+      });
+    }
   }
 }
 
@@ -348,6 +402,22 @@ function getCondition(object, callback)
   }
 
   browseConditionChildren(object[x]);
+}
+
+/****************************************************************************************************/
+
+function getOrder(array, callback)
+{
+  var result = [];
+
+  for(var x = 0; x < array.length; x++)
+  {
+    array[x].asc
+    ? result.push(`${array[x].column} ASC`)
+    : result.push(`${array[x].column} DESC`);
+  }
+
+  return callback(` ORDER BY ${result.join()}`);
 }
 
 /****************************************************************************************************/

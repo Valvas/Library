@@ -373,7 +373,9 @@
         "fileUploaded": "Fichier [$1$] ajouté par [$2$]",
         "folderCreated": "Dossier [$1$] créé par [$2$]",
         "fileRemoved": "Le fichier [$1$] a été supprimé",
-        "folderRenamed": "Le dossier [$1$] a été renommé en [$2$]"
+        "folderRenamed": "Le dossier [$1$] a été renommé en [$2$]",
+        "folderRemovedIn": "Ce dossier vient d'être supprimé, vous avez été ramené à la racine du service.",
+        "folderRemovedOut": "Le dossier [$1$] a été supprimé ainsi que son contenu."
       },
 
       "filesSection":
@@ -452,6 +454,16 @@
           "confirmationSend": "Oui",
           "confirmationBack": "Non",
           "savingLoader": "Renommage du dossier en cours. Veuillez patienter..."
+        },
+
+        "removePopup":
+        {
+          "title": "Supprimer ce dossier",
+          "message": "Êtes-vous sûr(e) de vouloir supprimer ce dossier ?",
+          "warning": "Attention : tous les dossiers et fichiers enfants de ce dossier seront également supprimés.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler",
+          "removeLoader": "Suppression du dossier en cours. Veuillez patienter..."
         }
       }
     },

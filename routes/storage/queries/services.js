@@ -14,6 +14,7 @@ const storageAppFilesUpload     = require(`${__root}/functions/storage/files/upl
 const storageAppFilesRemove     = require(`${__root}/functions/storage/files/remove`);
 const storageAppLogsServices    = require(`${__root}/functions/storage/logs/services`);
 const storageAppFoldersUpdate   = require(`${__root}/functions/storage/folders/update`);
+const storageAppFoldersRemove   = require(`${__root}/functions/storage/folders/remove`);
 const storageAppFilesDownload   = require(`${__root}/functions/storage/files/download`);
 const storageAppAdminServices   = require(`${__root}/functions/storage/admin/services`);
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
@@ -383,6 +384,24 @@ router.put('/update-file-comment', (req, res) =>
     req.app.get('io').in(req.body.serviceUuid).emit('fileCommentUpdated', req.body.commentUuid, req.body.newCommentContent);
 
     return res.status(200).send({ message: success[constants.FILE_COMMENT_SUCCESSFULLY_UPDATED] });
+  });
+});
+
+/****************************************************************************************************/
+
+router.delete('/remove-folder', (req, res) =>
+{
+  if(req.body.folderUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'folderUuid' });
+  
+  if(req.body.serviceUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+
+  storageAppFoldersRemove.removeFolder(req.body.folderUuid, req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, removedFolders) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    for(var x = 0; x < removedFolders.length; x++) req.app.get('io').in(req.body.serviceUuid).emit('folderRemoved', removedFolders[x], storageAppStrings);
+
+    return res.status(200).send({ message: success[constants.FOLDER_SUCCESSFULLY_REMOVED] });
   });
 });
 

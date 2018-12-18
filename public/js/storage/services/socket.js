@@ -226,6 +226,48 @@ socket.on('folderCreated', (folderData, parentFolderUuid, accountData, storageAp
 
 /****************************************************************************************************/
 
+socket.on('folderRemoved', (folderUuid, storageAppStrings) =>
+{
+  if(document.getElementById('currentFolder') == null) return;
+
+  if(document.getElementById('folderMenu'))
+  {
+    if(document.getElementById('folderMenu').getAttribute('name') === folderUuid)
+    {
+      document.getElementById('folderMenu').remove();
+      document.getElementById('folderMenuBackground').remove();
+    }
+  }
+
+  if(document.getElementById('currentFolder').getAttribute('name') === folderUuid)
+  {
+    browseFolder(null);
+
+    displayInfo(storageAppStrings.services.detailPage.socket.folderRemovedIn, null, null);
+  }
+
+  else
+  {
+    const folders = document.getElementById('foldersContainer').children;
+
+    for(var x = 0; x < folders.length; x++)
+    {
+      if(folders[x].getAttribute('name') === folderUuid)
+      {
+        var message = storageAppStrings.services.detailPage.socket.folderRemovedOut;
+
+        message = message.replace('[$1$]', `<b>${folders[x].children[1].innerText}</b>`);
+
+        displayInfo(message, null, null);
+
+        folders[x].remove();
+      }
+    }
+  }
+});
+
+/****************************************************************************************************/
+
 socket.on('folderNameUpdated', (folderUuid, newFolderName, storageAppStrings) =>
 {
   if(document.getElementById('foldersContainer'))

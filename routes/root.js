@@ -4,6 +4,7 @@ const express               = require('express');
 const jwt                   = require('jsonwebtoken');
 const errors                = require(`${__root}/json/errors`);
 const success               = require(`${__root}/json/success`);
+const commonStrings         = require(`${__root}/json/strings/common`);
 const constants             = require(`${__root}/functions/constants`);
 const commonAccountsGet     = require(`${__root}/functions/common/accounts/get`);
 const commonAccountsCheck   = require(`${__root}/functions/common/accounts/check`);
@@ -20,12 +21,12 @@ router.get('/', (req, res) =>
 {
   commonTokenGet.getAuthTokenFromHeaders(req.headers.cookie, (error, token) =>
   {
-    error != null ? res.render('root/index') :
+    error != null ? res.render('root/index', { currentLocation: 'logon', strings: { common: commonStrings } }) :
 
     commonTokenCheck.checkIfTokenIsValid(token, req.app.get('params'), (error, decodedToken) =>
     {
       error != null
-      ? res.render('root/index')
+      ? res.render('root/index', { currentLocation: 'logon', strings: { common: commonStrings } })
       : res.redirect('/home');
     });
   });
@@ -37,17 +38,14 @@ router.put('/', (req, res) =>
 {
   commonAccountsCheck.checkIfAccountExistsFromCredentials(req.body.emailAddress, req.body.uncryptedPassword, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountData) =>
   {
-    if(error != null) res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-    else
+    jwt.sign({ uuid: accountData.uuid }, req.app.get('params').tokenSecretKey, (error, token) =>
     {
-      jwt.sign({ uuid: accountData.uuid }, req.app.get('params').tokenSecretKey, (error, token) =>
-      {
-        error != null
-        ? res.status(406).send({ message: error.message, detail: null })
-        : res.status(200).send({ token: token, maxAge: (60 * 60 * 24) });
-      });
-    }
+      error != null
+      ? res.status(406).send({ message: error.message, detail: null })
+      : res.status(200).send({ token: token, maxAge: (60 * 60 * 24) });
+    });
   });
 });
 

@@ -11,7 +11,8 @@
     "news": "Nouvelles",
     "account": "Mon Compte",
     "admin": "Administration",
-    "directory": "Annuaire"
+    "directory": "Annuaire",
+    "logon": "Connexion"
   },
 
   "global":

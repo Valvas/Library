@@ -1,18 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <title><%= strings.storage.name %> - <%= strings.storage.locations.home %></title>
+  <title><%= strings.storage.name %> - <%= strings.storage.locations.services %></title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/storage/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/storage/services/list.css" />
   <body>
     <% include includes/aside.ejs %>
-    <div class='storageMainBlock'>
+    <div class="storageMainBlock">
+      <div class="servicesListSection">
+        <div class="servicesListSectionTitle"><%= strings.storage.services.listPage.blockTitle %></div>
+        <% if(Object.keys(services).length === 0){ %>
+          <div class="servicesListSectionEmpty"><%= strings.storage.services.listPage.emptyServicesList %></div>
+        <% } else{ %>
+          <div class="serviceBlocksList">
+            <% for(var service in services){ %>
+              <div class="serviceBlocksListElement">
+                <div class="serviceBlocksListElementName"><%= services[service].name.charAt(0).toUpperCase() %><%= services[service].name.slice(1).toLowerCase() %></div>
+                <div class="serviceBlocksListElementContent">
+                  <div class="serviceBlocksListElementInformation">
+                    <div class="serviceBlocksListElementInformationKey"><%= strings.storage.services.listPage.serviceBlock.amountOfFiles %></div>
+                    <div class="serviceBlocksListElementInformationValue"><%= services[service].amountOfFiles %></div>
+                  </div>
+                  <div class="serviceBlocksListElementInformation">
+                    <div class="serviceBlocksListElementInformationKey"><%= strings.storage.services.listPage.serviceBlock.amountOfFolders %></div>
+                    <div class="serviceBlocksListElementInformationValue"><%= services[service].amountOfFolders %></div>
+                  </div>
+                </div>
+                <div class="serviceBlocksListElementAccessBlock">
+                  <% if(services[service].hasAccess){ %>
+                    <a href="/storage/services/<%= service %>" class="serviceBlocksListElementAccessBlockLink"><%= strings.storage.services.listPage.serviceBlock.link %></a>
+                  <% } else{ %>
+                    <div class="serviceBlocksListElementAccessBlockUnauthorized"><%= strings.storage.services.listPage.serviceBlock.unauthorizedToAccessService %></div>
+                  <% } %>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
     </div>
     <% include ../include/common_scripts.ejs %>
     <script src='/js/jQuery.js'></script>
-    <script src='/js/functions.js'></script>
     <script src='/js/storage/exit.js'></script>
   </body>
 </html>

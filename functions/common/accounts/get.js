@@ -65,7 +65,8 @@ module.exports.getAllAccounts = (databaseConnection, globalParameters, callback)
     databaseName: globalParameters.database.root.label,
     tableName: globalParameters.database.root.tables.accounts,
     args: [ 'uuid', 'email', 'lastname', 'firstname', 'suspended', 'is_admin' ],
-    where: {  }
+    where: {  },
+    order: [ { column: 'lastname', asc: true } ]
 
   }, databaseConnection, (error, result) =>
   {

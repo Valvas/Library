@@ -112,7 +112,7 @@ module.exports.startApp = (app, callback) =>
 
   app.use((req, res, next) =>
   {
-    res.render('block', { message: `La page recherchée n'existe pas`, detail: null, link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url ? '/' : req.headers.referer });
+    res.render('block', { message: `La page recherchée n'existe pas`, detail: null, link: req.headers.referer == undefined ? '/' : req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url ? '/' : req.headers.referer });
   });
 
   const pool = mysql.createPool(
