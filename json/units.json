@@ -1,0 +1,28 @@
+{
+  "0":
+  {
+    "name": "Tous",
+    "root": true,
+    "children":
+    {
+      "0":
+      {
+        "name": "PEI",
+        "root": false,
+        "children":
+        {
+          "0":
+          {
+            "name": "Siège",
+            "root": false
+          },
+          "1":
+          {
+            "name": "Province",
+            "root": false
+          }
+        }
+      }
+    }
+  }
+}

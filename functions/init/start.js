@@ -4,8 +4,10 @@ const fs                  = require('fs');
 const mysql               = require('mysql');
 const nodemailer          = require('nodemailer');
 const auth                = require(`${__root}/auth`);
+const units               = require(`${__root}/json/units`);
 const initAuthentication  = require(`${__root}/initAuthentication`);
 const appsInit            = require(`${__root}/functions/init/apps`);
+const unitsInit           = require(`${__root}/functions/init/units`);
 const encryption          = require(`${__root}/functions/encryption`);
 const initFolder          = require(`${__root}/functions/init/folders`);
 const database            = require(`${__root}/functions/database/init`);
@@ -156,13 +158,23 @@ module.exports.startApp = (app, callback) =>
           process.exit(1);
         }
 
-        appsInit.createApps(pool, app.get('params'), (error) =>
+        unitsInit.createUnits(units, pool, app.get('params'), (error) =>
         {
-          if(error == null) return callback();
+          if(error != null)
+          {
+            console.log(error);
+          
+            process.exit(1);
+          }
 
-          console.log(error);
-        
-          process.exit(1);
+          appsInit.createApps(pool, app.get('params'), (error) =>
+          {
+            if(error == null) return callback();
+
+            console.log(error);
+          
+            process.exit(1);
+          });
         });
       });
     });

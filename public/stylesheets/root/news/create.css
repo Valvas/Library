@@ -2,11 +2,13 @@
 /* CREATE ARTICLE BLOCK */
 /****************************************************************************************************/
 
-.createArticleBlockHeader{ font-size:32px; border-bottom:1px solid #D0D0D0; padding:10px; }
+.createArticleBlock{ width:90%; background-color:#FFFFFF; padding:20px; border-radius:4px; }
 
-.createArticleBlockTitleLabel{ font-size:24px; padding:20px 0 5px 0; }
+.createArticleBlockHeader{ font-size:1.4em; padding-bottom:20px; margin-bottom:40px; border-bottom:1px solid #CCC; }
 
-.createArticleBlockTitleInput{ border:1px solid #D0D0D0; padding:10px; width:100%; margin:5px 0 20px 0; font-size:16px; line-height:20px; box-sizing:border-box; }
+.createArticleBlockTitleLabel{ font-size:18px; padding:20px 0 5px 0; }
+
+.createArticleBlockTitleInput{ border:1px solid #D0D0D0; border-radius:4px; padding:8px; width:100%; margin:5px 0 20px 0; font-size:16px; box-sizing:border-box; }
 
 .createArticleSendButton{ border-radius:4px; border:1px solid #CCC; margin:20px 0 20px calc(100% - 150px); width:150px; padding:5px; cursor:pointer; }
 

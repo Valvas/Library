@@ -1,6 +1,6 @@
 /****************************************************************************************************/
 
-var toolbarOptions = [['bold', 'italic', 'underline'], [{ 'color': [] }]];
+var toolbarOptions = [['bold', 'italic', 'underline'], [{ 'color': [] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }]];
 
 var editor = new Quill('#createArticleContainer', 
 {

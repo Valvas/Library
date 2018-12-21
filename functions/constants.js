@@ -141,6 +141,7 @@ const UNAUTHORIZED_TO_RENAME_FOLDERS_FOR_THIS_SERVICE                           
 const UNAUTHORIZED_TO_REMOVE_THIS_COMMENT                                         = 10137;
 const UNAUTHORIZED_TO_UPDATE_THIS_COMMENT                                         = 10138;
 const UNAUTHORIZED_TO_REMOVE_FOLDERS                                              = 10139;
+const DEFAULT_UNIT_NOT_FOUND                                                      = 10140;
 
 /******************************************************************************************
 SUCCESS
@@ -337,6 +338,7 @@ module.exports =
   UNAUTHORIZED_TO_REMOVE_THIS_COMMENT: UNAUTHORIZED_TO_REMOVE_THIS_COMMENT,
   UNAUTHORIZED_TO_UPDATE_THIS_COMMENT: UNAUTHORIZED_TO_UPDATE_THIS_COMMENT,
   UNAUTHORIZED_TO_REMOVE_FOLDERS: UNAUTHORIZED_TO_REMOVE_FOLDERS,
+  DEFAULT_UNIT_NOT_FOUND: DEFAULT_UNIT_NOT_FOUND,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

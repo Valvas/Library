@@ -1,6 +1,9 @@
 /****************************************************************************************************/
 
-.directoryBlock{ padding:20px; }
+.directoryBlock{ padding:40px; background-color:#FFFFFF; border-radius:4px; width:90%; box-sizing:border-box; }
+
+
+.directorySearchContainer{ border-bottom:1px solid #CCC; }
 
 .directoryBlockSearch{ width:100%; max-width:400px; margin:0 0 40px 0; position:relative; background-color:rgba(0,0,0,0.06); border-radius:20px; height:32px; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
 
@@ -26,5 +29,36 @@
 .directoryAccountBlockData{ margin-left:10px; border-bottom:1px solid rgba(0,0,0,0.24); width:calc(100% - 58px); }
 
 .directoryAccountBlockDataEmail{ font-weight:bold; }
+
+/****************************************************************************************************/
+
+.directoryUnitsContainer{ margin:20px 0 20px 0; border:1px solid #CCC; border-radius:4px; }
+
+.directoryUnitsContainerSelected{ cursor:pointer; background-color:rgba(0,0,0,0.06); padding:20px; border-radius:4px; display:flex; flex-direction:row; flex-wrap:wrap; justify-content:space-between; align-items:center; }
+
+.directoryUnitsContainerSelected:hover{ background-color:rgba(0,255,0,0.12); }
+
+.directoryUnitsContainerSelectedKey{ margin-right:10px; }
+
+.directoryUnitsContainerSelectedValue{ text-decoration:underline; }
+
+.directoryUnitsList{ padding:20px; }
+
+
+.directoryUnit{ list-style:none; user-select:none; padding-left:30px; margin:0; }
+
+.directoryUnitHidden{ display:none; }
+
+.directoryUnitHidden .directoryUnitValue .directoryUnitValueIcon{ transform:rotate(90deg); }
+
+.directoryUnitValue{ display:flex; flex-direction:row; align-items:center; cursor:pointer; width:max-content; }
+
+.directoryUnitValueSelected{ color:#90BB2C; display:flex; flex-direction:row; align-items:center; cursor:pointer; width:max-content; }
+
+.directoryUnitValueIcon{ font-size:1.2em; margin-right:10px; }
+
+.directoryUnitValueLabel{ font-size:1.1em; font-weight:bold; }
+
+.directoryUnitValue:hover{ color:#90BB2C; }
 
 /****************************************************************************************************/

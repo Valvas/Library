@@ -14,10 +14,17 @@ function searchForAccounts(event)
 
   for(var x = 0; x < currentAccounts.length; x++)
   {
+    const accountTags = currentAccounts[x].getAttribute('tag').split(',');
+
     var isToBeDisplayed = false;
 
     if(currentAccounts[x].children[1].children[0].innerText.toLowerCase().includes(event.target.value.toLowerCase())) isToBeDisplayed = true;
     if(currentAccounts[x].children[1].children[1].innerText.toLowerCase().includes(event.target.value.toLowerCase())) isToBeDisplayed = true;
+
+    if(tagToDisplay != null)
+    {
+      if(accountTags.includes(tagToDisplay) == false) isToBeDisplayed = false;
+    }
 
     isToBeDisplayed
     ? currentAccounts[x].removeAttribute('style')

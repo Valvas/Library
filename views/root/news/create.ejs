@@ -9,33 +9,28 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/news/create.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <body>
-    <% include ../include/header.ejs %>
     <% include ../../include/informations.ejs %>
-    <div class="mainBlock">
-      <div class="startColumn">
-        <% include ../include/aside.ejs %>
-        <% include ../include/news.ejs %>
-      </div><!--
-      --><div class="centerColumn">
-        <div class="createArticleBlock">
-          <div class="createArticleBlockHeader"><%= strings.common.root.news.create.header %></div>
-          <div class="createArticleBlockTitleLabel"><%= strings.common.root.news.create.titleLabel %></div>
-          <input type="text" class="createArticleBlockTitleInput" id="createArticleBlockTitleInput" required />
-          <div id="createArticleContainer"></div>
-        </div>
-        <button class="createArticleSendButton" id="createArticleSendButton">Créer l'article</button>
-      </div><!--
-      --><div class="endColumn">
-        <div class="newsManagementBlock">
-          <div class="newsManagementBlockTitle">Gestion</div>
-          <div class="newsManagementBlockContent">
-            <div class="newsManagementBlockContentMessage">Cliquez sur le bouton en-dessous pour annuler la création de l'article et revenir en arrière</div>
-            <a href="/news" class="newsManagementBlockContentButton">Retour</a>
+    <div class="mainSection">
+      <div class="subSection">
+        <% include ../include/header.ejs %>
+        <div class="contentSection">
+          <div class="asideColumn">
+            <% include ../include/aside.ejs %>
+            <% include ../include/news.ejs %>
+          </div>
+          <div class="centerColumn">
+            <div class="createArticleBlock">
+              <div class="createArticleBlockHeader"><%= strings.common.root.news.create.header %></div>
+              <div class="createArticleBlockTitleLabel"><%= strings.common.root.news.create.titleLabel %></div>
+              <input type="text" class="createArticleBlockTitleInput" id="createArticleBlockTitleInput" required />
+              <div id="createArticleContainer"></div>
+              <button class="createArticleSendButton" id="createArticleSendButton">Créer l'article</button>
+            </div>
           </div>
         </div>
       </div>
+      <% include ../include/footer.ejs %>
     </div>
-    <% include ../include/footer.ejs %>
     <% include ../../include/common_scripts.ejs %>
     <% include ../include/scripts.ejs %>
     <script src='/js/quill.js'></script>

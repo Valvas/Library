@@ -1,14 +1,20 @@
 /****************************************************************************************************/
+
+.accountSection{ background-color:#FFFFFF; width:90%; padding:40px; box-sizing:border-box; border-radius:4px; display:flex; flex-direction:column; }
+
+.accountSectionTitle{ padding-bottom:20px; border-bottom:1px solid #CCC; font-size:1.4em; }
+
+/****************************************************************************************************/
 /* ERROR BLOCK */
 /****************************************************************************************************/
 
-.accountDataErrorBlock{ border-radius:2px; box-shadow:0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08); max-width:400px; margin:20px; padding:0 0 20px 0; }
+.accountDataErrorBlock{ margin:40px 20px 40px 20px; }
 
-.accountDataErrorBlockTitle{ border-bottom:1px solid #CCC; padding:20px; font-size:1.5em; margin:0 0 10px 0; }
+.accountDataErrorBlockTitle{ font-size:1.2em; margin-bottom:20px; }
 
-.accountDataErrorBlockMessage{ font-size:1em; color:#D9534F; padding:20px;}
+.accountDataErrorBlockMessage{ font-size:1em; color:#D9534F; }
 
-.accountDataErrorBlockReload{ font-size:0.8em; color:#444; display:block; width:max-content; margin:0 20px 0 auto; text-decoration:underline; }
+.accountDataErrorBlockReload{ font-size:0.9em; color:#444; display:block; width:max-content; margin:0 20px 0 auto; text-decoration:underline; }
 
 .accountDataErrorBlockReload:hover{ color:#888; }
 
@@ -16,7 +22,7 @@
 /* PICTURE BLOCK */
 /****************************************************************************************************/
 
-.accountDataPictureBlock{ position:relative; }
+.accountDataPictureBlock{ position:relative; margin:40px calc(50% - 64px) 20px calc(50% - 64px); }
 
 .accountDataPictureBlockCircle{ width:128px; height:128px; font-size:2em; display:inline-block; vertical-align:top; border-radius:50%; margin:10px 10px 10px 0; border:3px solid #90BB2C; overflow:hidden; position:relative; }
 
@@ -30,15 +36,19 @@
 /* ACCOUNT DATA BLOCK */
 /****************************************************************************************************/
 
-.accountDataBlock{ margin:10px 10px 20px 10px; }
+.accountData{ display:flex; flex-direction:row; justify-content:center; }
 
-.accountDataBlockValue{ font-size:16px; line-height:20px; color:#555; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; margin:20px 10px 10px 10px; }
+.accountDataContainer{ max-width:600px; width:100%; }
 
-.accountDataBlockUpdate{ color:#555; text-decoration:underline; font-size:14px; width:max-content; margin:0 10px 10px auto; cursor:pointer; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.accountDataBlock{ margin:40px 0 40px 0; display:flex; flex-direction:row; flex-wrap:wrap; justify-content:space-between; align-items:center; }
+
+.accountDataBlockValue{ font-size:16px; color:#555; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; margin-right:20px; }
+
+.accountDataBlockUpdate{ color:#555; text-decoration:underline; font-size:16px; width:max-content; cursor:pointer; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
 
 .accountDataBlockUpdate:hover{ color:#90BB2C; }
 
-.accountPasswordUpdate{ background-color:#FFFFFF; border:1px solid #CCC; border-radius:2px; color:#555; font-size:14px; line-height:18px; padding:5px; width:max-content; cursor:pointer; margin:40px auto 40px 10px; }
+.accountPasswordUpdate{ background-color:#FFFFFF; border:1px solid #CCC; border-radius:2px; color:#555; font-size:14px; line-height:18px; padding:5px; width:250px; max-width:100%; cursor:pointer; margin-top:40px; }
 
 .accountPasswordUpdate:hover{ color:#90BB2C; }
 

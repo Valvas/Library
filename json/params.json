@@ -18,7 +18,9 @@
         "apps":"apps",
         "accounts":"accounts",
         "errors":"errors",
-        "rights":"rights"
+        "rights":"rights",
+        "units": "units",
+        "unitsMembers": "units_members"
       }
     },
     "storage":{
@@ -72,7 +74,7 @@
       "transporter":true
     }
   },
-  "ready":false,
+  "ready":true,
   "salt":"$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
   "tokenSecretKey":"qgdsq65qsegf6qezgr46",
   "storage":{

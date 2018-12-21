@@ -64,6 +64,19 @@
       "update_own_articles": "BOOLEAN NOT NULL",
       "remove_articles": "BOOLEAN NOT NULL",
       "remove_own_articles": "BOOLEAN NOT NULL"
+    },
+    "units":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "name": "VARCHAR(255) NOT NULL",
+      "is_root": "BOOLEAN NOT NULL",
+      "parent_unit": "BIGINT UNSIGNED"
+    },
+    "units_members":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "unit_id": "BIGINT UNSIGNED NOT NULL",
+      "account_uuid": "VARCHAR(255) NOT NULL"
     }
   },
 

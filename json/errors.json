@@ -137,5 +137,6 @@
   "10136": "Vous n'êtes pas autorisé(e) à renommer des dossiers pour ce service",
   "10137": "Vous n'êtes pas autorisé(e) à supprimer ce commentaire",
   "10138": "Vous n'êtes pas autorisé(e) à modifier ce commentaire",
-  "10139": "Vous n'êtes pas autorisé(e) à supprimer des dossiers"
+  "10139": "Vous n'êtes pas autorisé(e) à supprimer des dossiers",
+  "10140": "Le groupe utilisateurs par défaut n'a pas été trouvé"
 }

@@ -8,42 +8,58 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/directory/base.css" />
   <body>
-    <% include ../include/header.ejs %>
     <% include ../../include/informations.ejs %>
-    <div class="mainBlock">
-      <div class="startColumn">
-        <% include ../include/aside.ejs %>
-        <% include ../include/news.ejs %>
-      </div><!--
-      --><div class="centerColumn">
-        <div class="directoryBlock">
-          <div class="directoryBlockSearch">
-            <div class="directoryBlockSearchIcon"><i class="fas fa-search"></i></div>
-            <input id="directorySearchForAccounts" placeholder="<%= strings.common.root.directory.searchBarPlaceholder %>" class="directoryBlockSearchBar" type="text" />
+    <div class="mainSection">
+      <div class="subSection">
+        <% include ../include/header.ejs %>
+        <div class="contentSection">
+          <div class="asideColumn">
+            <% include ../include/aside.ejs %>
+            <% include ../include/news.ejs %>
           </div>
-          <div id="accountsEmpty" class="directoryBlockEmpty"><%= strings.common.root.directory.emptySearch %></div>
-          <div id="accountsList">
-            <% for(var x = 0; x < accounts.length; x++){ %>
-              <div class="directoryAccountBlock">
-                <div class="directoryAccountBlockPicture">
-                  <div class="directoryAccountBlockPictureCircle"><img class="directoryAccountBlockPictureAvatar" src="<%= accounts[x].picture %>" /></div>
-                </div>
-                <div class="directoryAccountBlockData">
-                  <div class="directoryAccountBlockDataEmail"><%= accounts[x].email %></div>
-                  <div><%= accounts[x].lastname.toUpperCase() %> <%= accounts[x].firstname.charAt(0).toUpperCase() %><%= accounts[x].firstname.slice(1).toLowerCase() %></div>
+          <div class="centerColumn">
+            <div class="directoryBlock">
+              <div class="directorySearchContainer">
+                <div class="directoryBlockSearch">
+                  <div class="directoryBlockSearchIcon"><i class="fas fa-search"></i></div>
+                  <input id="directorySearchForAccounts" placeholder="<%= strings.common.root.directory.searchBarPlaceholder %>" class="directoryBlockSearchBar" type="text" />
                 </div>
               </div>
-            <% } %>
+              <div class="directoryUnitsContainer">
+                <div class="directoryUnitsContainerSelected">
+                  <div class="directoryUnitsContainerSelectedKey">Groupe sélectionné :</div>
+                  <div class="directoryUnitsContainerSelectedValue">Tous</div>
+                </div>
+                <div class="directoryUnitsList" id="directoryUnitsList">
+                  <ul class="directoryUnit">
+                    <%- unitsHtml %>
+                  </ul>
+                </div>
+              </div>
+              <div id="accountsEmpty" class="directoryBlockEmpty"><%= strings.common.root.directory.emptySearch %></div>
+              <div id="accountsList">
+                <% for(var x = 0; x < accounts.length; x++){ %>
+                  <div class="directoryAccountBlock" tag="0,00,000">
+                    <div class="directoryAccountBlockPicture">
+                      <div class="directoryAccountBlockPictureCircle"><img class="directoryAccountBlockPictureAvatar" src="<%= accounts[x].picture %>" /></div>
+                    </div>
+                    <div class="directoryAccountBlockData">
+                      <div class="directoryAccountBlockDataEmail"><%= accounts[x].email %></div>
+                      <div><%= accounts[x].lastname.toUpperCase() %> <%= accounts[x].firstname.charAt(0).toUpperCase() %><%= accounts[x].firstname.slice(1).toLowerCase() %></div>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+            </div>
           </div>
         </div>
-      </div><!--
-      --><div class="endColumn">
       </div>
+      <% include ../include/footer.ejs %>
     </div>
-    <% include ../include/footer.ejs %>
     <% include ../../include/common_scripts.ejs %>
     <% include ../include/scripts.ejs %>
     <script src='/js/root/news/selectNewsExternal.js'></script>
     <script src='/js/root/directory/searchForAccounts.js'></script>
+    <script src='/js/root/directory/manageUnitSelection.js'></script>
   </body>
 </html>
