@@ -65,10 +65,12 @@ module.exports.startApp = (app, callback) =>
   const diseaseViewsRoot              = require(`${__root}/routes/disease/views/root`);
 
   const administrationViewsHome       = require(`${__root}/routes/administration/views/home`);
+  const administrationViewsUnits      = require(`${__root}/routes/administration/views/units`);
   const administrationViewsAccess     = require(`${__root}/routes/administration/views/access`);
   const administrationViewsAccounts   = require(`${__root}/routes/administration/views/accounts`);
   const administrationViewsConfig     = require(`${__root}/routes/administration/views/configuration`);
 
+  const administrationQueriesUnits    = require(`${__root}/routes/administration/queries/units`);
   const administrationQueriesAccess   = require(`${__root}/routes/administration/queries/access`);
   const administrationQueriesAccounts = require(`${__root}/routes/administration/queries/accounts`);
 
@@ -95,10 +97,12 @@ module.exports.startApp = (app, callback) =>
   app.use('/queries/root/account', auth, rootQueriesAccount);
 
   app.use('/administration', auth, administrationViewsHome);
+  app.use('/administration/units', auth, administrationViewsUnits);
   app.use('/administration/access', auth, administrationViewsAccess);
   app.use('/administration/accounts', auth, administrationViewsAccounts);
   app.use('/administration/configuration', auth, administrationViewsConfig);
 
+  app.use('/queries/administration/units', auth, administrationQueriesUnits);
   app.use('/queries/administration/access', auth, administrationQueriesAccess);
   app.use('/queries/administration/accounts', auth, administrationQueriesAccounts);
 

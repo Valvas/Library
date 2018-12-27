@@ -5,7 +5,6 @@ const errors                      = require(`${__root}/json/errors`);
 const constants                   = require(`${__root}/functions/constants`);
 const commonUnitsGet              = require(`${__root}/functions/common/units/get`);
 const administrationAppStrings    = require(`${__root}/json/strings/administration`);
-const commonAccountsGet           = require(`${__root}/functions/common/accounts/get`);
 
 var router = express.Router();
 
@@ -15,16 +14,17 @@ router.get('/', (req, res) =>
 {
   if(req.app.locals.account.isAdmin == false) return res.render('block', { message: errors[constants.USER_IS_NOT_ADMIN], detail: null, link: '/' });
 
-  commonAccountsGet.getAllAccounts(req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accounts) =>
+  commonUnitsGet.getUnits(req.app.get('databaseConnectionPool'), req.app.get('params'), (error, units) =>
   {
     if(error != null) return res.render('block', { message: errors[error.code], detail: error.detail, link: '/administration' });
 
-    res.render('administration/accounts/home',
+    res.render('administration/units/home',
     {
       account: req.app.locals.account,
-      currentLocation: 'accounts',
+      currentLocation: 'units',
+      currentConfigTab: 'home',
       strings: { administrationStrings: administrationAppStrings },
-      accounts: accounts
+      units: units
     });
   });
 });
@@ -39,10 +39,11 @@ router.get('/create', (req, res) =>
   {
     if(error != null) return res.render('block', { message: errors[error.code], detail: error.detail, link: '/administration' });
 
-    res.render('administration/accounts/create',
+    res.render('administration/units/create',
     {
       account: req.app.locals.account,
-      currentLocation: 'accounts',
+      currentLocation: 'units',
+      currentConfigTab: 'create',
       strings: { administrationStrings: administrationAppStrings },
       units: units
     });

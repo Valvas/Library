@@ -28,7 +28,7 @@
               <div class="directoryUnitsContainer">
                 <div class="directoryUnitsContainerSelected">
                   <div class="directoryUnitsContainerSelectedKey">Groupe sélectionné :</div>
-                  <div class="directoryUnitsContainerSelectedValue">Tous</div>
+                  <div class="directoryUnitsContainerSelectedValue" id="selectedUnitValue">Tous</div>
                 </div>
                 <div class="directoryUnitsList" id="directoryUnitsList">
                   <ul class="directoryUnit">
@@ -39,7 +39,7 @@
               <div id="accountsEmpty" class="directoryBlockEmpty"><%= strings.common.root.directory.emptySearch %></div>
               <div id="accountsList">
                 <% for(var x = 0; x < accounts.length; x++){ %>
-                  <div class="directoryAccountBlock" tag="0,00,000">
+                  <div name="<%= accounts[x].uuid %>" class="directoryAccountBlock" tag="<%= accounts[x].unitTags.join() %>">
                     <div class="directoryAccountBlockPicture">
                       <div class="directoryAccountBlockPictureCircle"><img class="directoryAccountBlockPictureAvatar" src="<%= accounts[x].picture %>" /></div>
                     </div>
@@ -61,5 +61,6 @@
     <script src='/js/root/news/selectNewsExternal.js'></script>
     <script src='/js/root/directory/searchForAccounts.js'></script>
     <script src='/js/root/directory/manageUnitSelection.js'></script>
+    <script src='/js/root/directory/manageClickOnAccount.js'></script>
   </body>
 </html>

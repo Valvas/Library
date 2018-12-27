@@ -224,7 +224,19 @@
     "directory":
     {
       "searchBarPlaceholder": "Rechercher un utilisateur",
-      "emptySearch": "Aucun utilisateur à afficher"
+      "emptySearch": "Aucun utilisateur à afficher",
+
+      "accountDetail":
+      {
+        "title": "Détail du compte",
+        "returnButton": "Retour à l'annuaire",
+
+        "emailLabel": "Adresse Email",
+        "lastnameLabel": "Nom",
+        "firstnameLabel": "Prénom",
+        "phoneLabel": "Téléphone",
+        "unitLabel": "Groupe"
+      }
     }
   },
 

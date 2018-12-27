@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.common.locations[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/directory/base.css" />
+  <body>
+    <% include ../../include/informations.ejs %>
+    <div class="mainSection">
+      <div class="subSection">
+        <% include ../include/header.ejs %>
+        <div class="contentSection">
+          <div class="asideColumn">
+            <% include ../include/aside.ejs %>
+            <% include ../include/news.ejs %>
+          </div>
+          <div class="centerColumn">
+            <div class="directoryBlock">
+              <div class="directoryBlockAccountTitle"><%= strings.common.locations.directory %> - <%= strings.common.root.directory.accountDetail.title %></div>
+              <a class="directoryBlockAccountReturn" href="/directory"><%= strings.common.root.directory.accountDetail.returnButton %></a>
+              <div class="directoryBlockAccount">
+                <div class="directoryBlockAccountPictureContainer">
+                  <div class="directoryBlockAccountPicture">
+                    <div class="directoryBlockAccountPictureCircle"><img class="directoryBlockAccountPictureAvatar" src="<%= locals.accountData.picture %>" /></div>
+                  </div>
+                </div>
+                <div class="directoryBlockAccountData">
+                  <div class="directoryBlockAccountDataContainer">
+                    <div class="directoryBlockAccountDataBlock">
+                      <div class="directoryBlockAccountDataBlockKey"><%= strings.common.root.directory.accountDetail.emailLabel %> :</div>
+                      <div class="directoryBlockAccountDataBlockValue"><%= locals.accountData.email %></div>
+                    </div>
+                    <div class="directoryBlockAccountDataBlock">
+                      <div class="directoryBlockAccountDataBlockKey"><%= strings.common.root.directory.accountDetail.lastnameLabel %> :</div>
+                      <div class="directoryBlockAccountDataBlockValue"><%= locals.accountData.lastname.charAt(0).toUpperCase() %><%= locals.accountData.lastname.slice(1).toLowerCase() %></div>
+                    </div>
+                    <div class="directoryBlockAccountDataBlock">
+                      <div class="directoryBlockAccountDataBlockKey"><%= strings.common.root.directory.accountDetail.firstnameLabel %> :</div>
+                      <div class="directoryBlockAccountDataBlockValue"><%= locals.accountData.firstname.charAt(0).toUpperCase() %><%= locals.accountData.firstname.slice(1).toLowerCase() %></div>
+                    </div>
+                    <div class="directoryBlockAccountDataBlock">
+                      <div class="directoryBlockAccountDataBlockKey"><%= strings.common.root.directory.accountDetail.phoneLabel %> :</div>
+                      <div class="directoryBlockAccountDataBlockValue">N/A</div>
+                    </div>
+                    <div class="directoryBlockAccountDataBlock">
+                      <div class="directoryBlockAccountDataBlockKey"><%= strings.common.root.directory.accountDetail.unitLabel %> :</div>
+                      <div class="directoryBlockAccountDataBlockValue"><%= locals.accountData.unit.name %></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% include ../include/footer.ejs %>
+    </div>
+    <% include ../../include/common_scripts.ejs %>
+    <% include ../include/scripts.ejs %>
+    <script src='/js/root/news/selectNewsExternal.js'></script>
+  </body>
+</html>

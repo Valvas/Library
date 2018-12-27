@@ -186,3 +186,46 @@ body{ margin:0; height:100%; font-family:-apple-system, BlinkMacSystemFont, 'Seg
 .configElementBlockPasswordRuleValue{ padding:8px; border-radius:4px; border:1px solid rgba(0,0,0,0.24); }
 
 /****************************************************************************************************/
+/* Units */
+/****************************************************************************************************/
+
+.unitsMainBlock{ margin:40px 20px 40px 20px; }
+
+
+.unitsListHeader{ display:flex; flex-direction:row; }
+
+.unitsListHeaderColumn{ flex-basis:25%; }
+
+.unitsListElement{ display:flex; flex-direction:row; }
+
+.unitsListElementColumn{ flex-basis:25%; }
+
+
+.unitsCreateForm{ border-radius:4px; background-color:#FFFFFF; max-width:400px; overflow:hidden; }
+
+.unitsCreateFormTitle{ background-color:rgba(0,0,0,0.9); color:#FFFFFF; font-size:1.2em; padding:20px; }
+
+.unitsCreateFormLabel{ font-size:1em; margin:20px 20px 5px 20px; }
+
+.unitsCreateFormError{ color:#D9534F; font-size:0.9em; margin:5px 20px 5px 20px; display:none; }
+
+.unitsCreateFormInput{ margin:0 20px 0 20px; width:calc(100% - 40px); border-radius:4px; box-sizing:border-box; padding:8px; border:1px solid rgba(0,0,0,0.24); }
+
+.unitsCreateFormHelp{ margin:5px 20px 0 20px; font-size:0.9em; font-style:italic; }
+
+.unitsCreateFormSubmit{ width:180px; border-radius:4px; border:none; background-color:#6184D8; color:#FFFFFF; font-size:1em; padding:8px 16px 8px 16px; margin:20px 20px 20px calc(100% - 200px); cursor:pointer; }
+
+.unitsCreateFormSubmit:hover{ background-color:#4062B6; }
+
+
+.unitsPopupButtons{ display:flex; flex-direction:row; flex-wrap:wrap; justify-content:flex-end; margin:0 0 20px 20px; }
+
+.unitsPopupButtonsConfirm{ margin-right:20px; margin-top:20px; color:#FFFFFF; border-radius:4px; border:none; cursor:pointer; padding:8px 16px 8px 16px; font-size:1em; background-color:#6184D8; }
+
+.unitsPopupButtonsConfirm:hover{ background-color:#4062B6; }
+
+.unitsPopupButtonsCancel{ margin-right:20px; margin-top:20px; color:#FFFFFF; border-radius:4px; border:none; cursor:pointer; padding:8px 16px 8px 16px; font-size:1em; background-color:#D9534F; }
+
+.unitsPopupButtonsCancel:hover{ background-color:#B7312D; }
+
+/****************************************************************************************************/

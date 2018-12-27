@@ -12,6 +12,7 @@ function sendFormData(event)
 
   if(document.getElementById('createAccountBackground')) return;
 
+  if(document.getElementById('unitInput') == null) return;
   if(document.getElementById('emailInput') == null) return;
   if(document.getElementById('emailError') == null) return;
   if(document.getElementById('lastnameInput') == null) return;
@@ -40,6 +41,8 @@ function sendFormData(event)
     document.getElementById('firstnameError').style.display = 'block';
     return;
   }
+
+  if(document.getElementById('unitInput').value.length === 0) return;
 
   createBackground('createAccountBackground');
 
@@ -107,10 +110,12 @@ function openConfirmationPopup(loader)
 
 function sendAccountDataToServer()
 {
+  if(document.getElementById('unitInput') == null) return;
   if(document.getElementById('emailInput') == null) return;
   if(document.getElementById('lastnameInput') == null) return;
   if(document.getElementById('firstnameInput') == null) return;
 
+  const unitId            = parseInt(document.getElementById('unitInput').value);
   const accountEmail      = document.getElementById('emailInput').value.toLowerCase();
   const accountLastname   = document.getElementById('lastnameInput').value.toLowerCase();
   const accountFirstname  = document.getElementById('firstnameInput').value.toLowerCase();
@@ -121,7 +126,7 @@ function sendAccountDataToServer()
   {
     $.ajax(
     {
-      method: 'POST', dataType: 'json', timeout: 120000, data: { accountEmail: accountEmail, accountLastname: accountLastname, accountFirstname: accountFirstname }, url: '/queries/administration/accounts/create-account',
+      method: 'POST', dataType: 'json', timeout: 120000, data: { accountEmail: accountEmail, accountLastname: accountLastname, accountFirstname: accountFirstname, unitId: unitId }, url: '/queries/administration/accounts/create-account',
 
       error: (xhr, textStatus, errorThrown) =>
       {

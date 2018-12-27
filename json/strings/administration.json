@@ -7,6 +7,7 @@
       "home": "Accueil",
       "accounts": "Gestion des comptes",
       "access": "Gestion des accès",
+      "units": "Gestion des groupes",
       "config": "Réglages",
       "exit": "Quitter"
     }
@@ -18,6 +19,12 @@
     "transporter": "Transporteur",
     "storage": "Stockage",
     "general": "Paramètres généraux"
+  },
+
+  "unitsNavigationBar":
+  {
+    "home": "Liste des groupes",
+    "create": "Créer un groupe"
   },
 
   "homePage":
@@ -100,6 +107,8 @@
       "lastnamePlaceholder": "Entrez le nom de famille de la personne",
       "firstnameLabel": "Prénom",
       "firstnamePlaceholder": "Entrez le prénom de la personne",
+      "unitLabel": "Groupe",
+      "unitPlaceholder": "Choisissez un groupe",
       "submitButton": "Créer le compte"
     },
     "confirmationPopup":
@@ -154,6 +163,58 @@
     },
     "addAccessSavingMessage": "Ajout de l'accès en cours. Veuillez patienter",
     "removeAccessSavingMessage": "Suppression de l'accès en cours. Veuillez patienter"
+  },
+  
+  "unitsHome":
+  {
+    "title": "Gestion des groupes",
+
+    "listHeader":
+    {
+      "id": "Identifiant",
+      "name": "Nom du groupe",
+      "parent": "Groupe parent",
+      "actions": "Actions"
+    },
+
+    "updateUnitParentPopup":
+    {
+      "title": "Confirmation",
+      "message": "Êtes-vous sûr(e) de vouloir faire de ce groupe un enfant du groupe [$1$] ?",
+      "confirm": "Oui",
+      "cancel": "Annuler",
+      "loader": "Mise à jour du parent en cours. Veuillez patienter..."
+    },
+
+    "rootUnit": "Non modifiable",
+    "renameButton": "Renommer ce groupe",
+    "removeButton": "Supprimer ce groupe"
+  },
+
+  "unitsCreate":
+  {
+    "title": "Gestion des groupes",
+    "savingLoaderMessage": "Création du groupe en cours. Veuillez patienter...",
+
+    "form":
+    {
+      "formTitle": "Créer un groupe",
+      "nameLabel": "Nom du groupe",
+      "nameFormatError": "Le format du nom est incorrect",
+      "namePlaceholder": "Entrez le nom du groupe",
+      "nameHelp": "Le nom ne peut contenir que des lettres. Les espaces sont autorisés",
+      "parentLabel": "Groupe parent",
+      "parentPlaceholder": "Choisissez le groupe parent",
+      "submitButton": "Créer ce groupe"
+    },
+
+    "confirmationPopup":
+    {
+      "title": "Confirmation",
+      "message": "Êtes-vous sûr(e) de vouloir créer ce groupe ?",
+      "confirm": "Oui",
+      "cancel": "Annuler"
+    }
   },
 
   "exitPopup":

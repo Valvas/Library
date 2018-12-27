@@ -21,8 +21,6 @@ router.get('/', (req, res) =>
     {
       if(error != null) return res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
-      unitsTree = [ 'Tous', [ 'PEI', [ 'Siège', [ 'Commercial', 'RH' ], 'Province', [ 'Brest', 'Lille', 'Bordeaux', 'Toulouse' ] ] ] ]
-
       var browseUnits = (currentUnit, tag, callback) =>
       {
         var resultArray = [];
@@ -89,8 +87,7 @@ router.get('/', (req, res) =>
 
       browseUnits(unitsTree, '0', (unitsHtml) =>
       {
-        //getAccountsTree
-        commonAccountsGet.getAllAccountsWidthPictures(req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accounts) =>
+        commonAccountsGet.getAccountsWithUnit(req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accounts) =>
         {
           if(error != null) return res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
@@ -103,6 +100,39 @@ router.get('/', (req, res) =>
             accounts: accounts,
             unitsHtml: unitsHtml.join('\n')
           });
+        });
+      });
+    });
+  });
+});
+
+/****************************************************************************************************/
+
+router.get('/:accountUuid', (req, res) =>
+{
+  commonAccountsGet.checkIfAccountExistsFromUuid(req.params.accountUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountExists, accountData) =>
+  {
+    if(error != null) return res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
+
+    if(accountExists == false) return res.render('block', { message: errors[ConstantSourceNode.ACCOUNT_NOT_FOUND], detail: null, link: req.headers.referer });
+
+    commonUnitsGet.getAccountUnit(req.params.accountUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountUnit) =>
+    {
+      if(error != null) return res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
+
+      accountData.unit = accountUnit;
+
+      commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, news) =>
+      {
+        if(error != null) return res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
+
+        res.render('root/directory/account',
+        {
+          account: req.app.locals.account,
+          currentLocation: 'directory',
+          strings: { common: commonStrings },
+          news: news,
+          accountData: accountData
         });
       });
     });

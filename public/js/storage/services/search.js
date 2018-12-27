@@ -15,7 +15,7 @@ function searchForFilesAndFolders(event)
 
     if(currentFolders[x].children.length > 2) index += 1;
 
-    currentFolders[x].children[index].innerText.includes(event.target.value)
+    currentFolders[x].children[index].innerText.toLowerCase().includes(event.target.value.toLowerCase())
     ? currentFolders[x].removeAttribute('style')
     : currentFolders[x].style.display = 'none';
   }
@@ -26,7 +26,7 @@ function searchForFilesAndFolders(event)
 
     if(currentFiles[x].children.length > 2) index += 1;
 
-    if(currentFiles[x].children[index].innerText.includes(event.target.value))
+    if(currentFiles[x].children[index].innerText.toLowerCase().includes(event.target.value.toLowerCase()))
     {
       currentFiles[x].removeAttribute('style');
 

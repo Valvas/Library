@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.administrationStrings.aside.menu[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/administration/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/popup.css" />
+  <body>
+    <% include ../../include/informations.ejs %>
+    <div class="mainBlock">
+      <% include ../include/header.ejs %>
+      <div class="content">
+        <div class="contentName"><%= strings.administrationStrings.unitsCreate.title %></div>
+        <% include ../include/unitsNavBar.ejs %>
+        <div class="unitsMainBlock">
+          <form class="unitsCreateForm" id="createUnitForm">
+            <div class="unitsCreateFormTitle"><%= strings.administrationStrings.unitsCreate.form.formTitle %></div>
+            <div class="unitsCreateFormLabel"><%= strings.administrationStrings.unitsCreate.form.nameLabel %></div>
+            <div class="unitsCreateFormError" id="createUnitNameError"><%= strings.administrationStrings.unitsCreate.form.nameFormatError %></div>
+            <input class="unitsCreateFormInput" placeholder="<%= strings.administrationStrings.unitsCreate.form.namePlaceholder %>" type="text" id="createUnitNameInput" required />
+            <div class="unitsCreateFormHelp"><%= strings.administrationStrings.unitsCreate.form.nameHelp %></div>
+            <div class="unitsCreateFormLabel"><%= strings.administrationStrings.unitsCreate.form.parentLabel %></div>
+            <select class="unitsCreateFormInput" id="createUnitParentInput" required>
+              <option value=""><%= strings.administrationStrings.unitsCreate.form.parentPlaceholder %></option>
+              <% for(var x = 0; x < units.length; x++){ %>
+                <option value="<%= units[x].unitId %>"><%= units[x].unitName %></option>
+              <% } %>
+            </select>
+            <button class="unitsCreateFormSubmit" type="submit"><%= strings.administrationStrings.unitsCreate.form.submitButton %></button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <% include ../../include/common_scripts.ejs %>
+    <script src="/js/administration/exit.js"></script>
+    <script src="/js/administration/units/createUnit.js"></script>
+  </body>
+</html>

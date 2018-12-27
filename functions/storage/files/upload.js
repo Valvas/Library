@@ -102,7 +102,7 @@ function prepareUploadCheckIfFileAlreadyExists(fileName, parentFolderUuid, accou
     databaseName: globalParameters.database.storage.label,
     tableName: globalParameters.database.storage.tables.serviceElements,
     args: [ '*' ],
-    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: fileName }, 1: { operator: '=', key: 'is_directory', value: 0 }, 2: { operator: '=', key: 'is_deleted', value: 0 }, 3: { operator: '=', key: 'parent_folder', value: parentFolderUuid == null ? '' : parentFolderUuid } }
+    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: fileName }, 1: { operator: '=', key: 'is_directory', value: 0 }, 2: { operator: '=', key: 'is_deleted', value: 0 }, 3: { operator: '=', key: 'parent_folder', value: parentFolderUuid == null ? '' : parentFolderUuid }, 4: { operator: '=', key: 'service_uuid', value: serviceUuid } }
 
   }, databaseConnection, (error, result) =>
   {
@@ -221,7 +221,7 @@ function uploadFileCheckIfFileExists(tmpFilePath, fileName, serviceUuid, parentF
     databaseName: globalParameters.database.storage.label,
     tableName: globalParameters.database.storage.tables.serviceElements,
     args: [ '*' ],
-    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: fileName }, 1: { operator: '=', key: 'is_directory', value: 0 }, 2: { operator: '=', key: 'is_deleted', value: 0 }, 3: { operator: '=', key: 'parent_folder', value: parentFolderUuid == null ? '' : parentFolderUuid } }
+    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: fileName }, 1: { operator: '=', key: 'is_directory', value: 0 }, 2: { operator: '=', key: 'is_deleted', value: 0 }, 3: { operator: '=', key: 'parent_folder', value: parentFolderUuid == null ? '' : parentFolderUuid }, 4: { operator: '=', key: 'service_uuid', value: serviceUuid } }
 
   }, databaseConnection, (error, result) =>
   {

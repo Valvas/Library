@@ -13,13 +13,14 @@ var router = express.Router();
 
 router.post('/create-account', (req, res) =>
 {
+  if(req.body.unitId == undefined)            return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'unitId' });
   if(req.body.accountEmail == undefined)      return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'accountEmail' });
   if(req.body.accountLastname == undefined)   return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'accountLastname' });
   if(req.body.accountFirstname == undefined)  return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'accountFirstname' });
 
   if(req.app.locals.account.isAdmin == false) return res.status(403).send({ message: errors[constants.USER_IS_NOT_ADMIN], detail: null });
 
-  commonAccountsCreate.createAccount(req.body.accountEmail, req.body.accountLastname, req.body.accountFirstname, req.app.get('databaseConnectionPool'), req.app.get('params'), req.app.get('transporter'), (error) =>
+  commonAccountsCreate.createAccount(req.body.accountEmail, req.body.accountLastname, req.body.accountFirstname, req.body.unitId, req.app.get('databaseConnectionPool'), req.app.get('params'), req.app.get('transporter'), (error) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 

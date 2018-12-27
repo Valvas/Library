@@ -25,6 +25,13 @@
           <div class="formLabel"><%= strings.administrationStrings.accountsCreate.form.firstnameLabel %></div>
           <input id="firstnameInput" type="text" class="formInput" placeholder="<%= strings.administrationStrings.accountsCreate.form.firstnamePlaceholder %>" required />
           <div id="firstnameError" class="formError"><%= strings.administrationStrings.accountsCreate.form.formatError %></div>
+          <div class="formLabel"><%= strings.administrationStrings.accountsCreate.form.unitLabel %></div>
+          <select id="unitInput" class="formInput" required>
+            <option value=""><%= strings.administrationStrings.accountsCreate.form.unitPlaceholder %></option>
+            <% for(var x = 0; x < units.length; x++){ %>
+              <option value="<%= units[x].unitId %>"><%= units[x].unitName %></option>
+            <% } %>
+          </select>
           <button type="submit" class="formSubmit"><%= strings.administrationStrings.accountsCreate.form.submitButton %></button>
         </form>
       </div>

@@ -8,8 +8,18 @@ function deployUnit()
 {
   if(document.getElementById('directoryUnitsList') == null) return;
 
-  const target = event.target.hasAttribute('onclick') ? event.target : event.target.parentNode;
-  selectedLi = target.tagName === 'SPAN' ? target.parentNode : target;
+  var target = event.target.hasAttribute('onclick') ? event.target : event.target.parentNode;
+
+  while(target.tagName === 'SPAN')
+  {
+    target = target.parentNode;
+  }
+
+  selectedLi = target;
+
+  const selectedUnitName = selectedLi.hasAttribute('onclick') ? selectedLi.innerText : selectedLi.children[0].children[1].innerText;
+
+  if(document.getElementById('selectedUnitValue')) document.getElementById('selectedUnitValue').innerText = selectedUnitName;
 
   if(document.getElementById('selectedList'))
   {
@@ -31,7 +41,7 @@ function deployUnit()
   array = [];
   tagToDisplay = null;
 
-  browseList(currentUnit, (result) =>
+  browseList(currentUnit, false, () =>
   {
     displayAndHideLists(currentUnit, () =>
     {
@@ -42,27 +52,25 @@ function deployUnit()
 
 /****************************************************************************************************/
 
-function browseList(currentElement, callback)
+function browseList(currentElement, isToBeDisplayed, callback)
 {
   if(currentElement.children.length > 0)
   {
-    array.push(currentElement);
-
     if(currentElement === selectedLi) tagToDisplay = currentElement.children[0].getAttribute('tag');
-    
-    var index = 0;
+
+    var index = 0, hasBeenFound = false;
 
     var loop = () =>
     {
-      browseList(currentElement.children[1].children[index], (result) =>
+      browseList(currentElement.children[1].children[index], false, (result) =>
       {
-        if(result == false) array.pop();
+        if(result) hasBeenFound = true;
 
-        if(result) return callback();
-        
         if(currentElement.children[1].children[index += 1] != undefined) return loop();
 
-        return callback(currentElement === selectedLi);
+        if(currentElement === selectedLi || hasBeenFound) array.push(currentElement);
+
+        return callback(currentElement === selectedLi || hasBeenFound);
       });
     }
 
@@ -71,9 +79,9 @@ function browseList(currentElement, callback)
 
   else
   {
-    array.push(currentElement);
-
     if(currentElement === selectedLi) tagToDisplay = currentElement.getAttribute('tag');
+
+    if(currentElement === selectedLi || isToBeDisplayed) array.push(currentElement);
 
     return callback(currentElement === selectedLi);
   }

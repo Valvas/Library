@@ -2,6 +2,7 @@
 
 const constants           = require(`${__root}/functions/constants`);
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
+const commonUnitsGet      = require(`${__root}/functions/common/units/get`);
 
 /****************************************************************************************************/
 
@@ -87,7 +88,7 @@ function getAllAccounts(databaseConnection, globalParameters, callback)
 
 /****************************************************************************************************/
 
-function getAllAccountsWidthPictures(databaseConnection, globalParameters, callback)
+function getAllAccountsWithPictures(databaseConnection, globalParameters, callback)
 {
   if(globalParameters == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
@@ -118,8 +119,10 @@ function getAllAccountsWidthPictures(databaseConnection, globalParameters, callb
 }
 
 /****************************************************************************************************/
+/* GET ALL ACCOUNTS IN A TREE */
+/****************************************************************************************************/
 
-function getAccountsTree(databaseConnection, globalParameters, callback)
+function getAccountsWithUnit(databaseConnection, globalParameters, callback)
 {
   if(globalParameters == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
@@ -133,50 +136,106 @@ function getAccountsTree(databaseConnection, globalParameters, callback)
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
     if(result.length === 0) return callback({ status: 404, code: constants.DEFAULT_UNIT_NOT_FOUND, detail: null });
 
-    getAccountsTreeFromProvidedUnit(result[0].id, [], databaseConnection, globalParameters, (error, accountsTree) =>
+    const defaultUnit = result[0].id;
+
+    getAccountsWithUnitBuildUnitsTree(defaultUnit, databaseConnection, globalParameters, (error, accounts) =>
     {
-      return callback(error, accountsTree);
+      return callback(error, accounts);
     });
   });
 }
 
 /****************************************************************************************************/
 
-function getAccountsTreeFromProvidedUnit(unitId, accountsTree, databaseConnection, globalParameters, callback)
+function getAccountsWithUnitBuildUnitsTree(defaultUnit, databaseConnection, globalParameters, callback)
+{
+  var unitsTree = {};
+
+  unitsTree[defaultUnit] = '0';
+
+  getAccountsWithUnitGetUnitChildren(unitsTree, defaultUnit, '0', databaseConnection, globalParameters, (error, unitsTree) =>
+  {
+    if(error != null) return callback(error);
+
+    getAllAccountsWithPictures(databaseConnection, globalParameters, (error, accounts) =>
+    {
+      if(error != null) return callback(error);
+
+      return getAccountsWithUnitBrowseAccounts(accounts, defaultUnit, unitsTree, databaseConnection, globalParameters, callback);
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function getAccountsWithUnitGetUnitChildren(unitsTree, currentUnit, unitTag, databaseConnection, globalParameters, callback)
 {
   databaseManager.selectQuery(
   {
     databaseName: globalParameters.database.root.label,
-    tableName: globalParameters.database.root.tables.unitsMembers,
+    tableName: globalParameters.database.root.tables.units,
     args: [ '*' ],
-    where: { operator: '=', key: 'unit_id', value: unitId }
+    where: { operator: '=', key: 'parent_unit', value: currentUnit }
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    for(var x = 0; x < result.length; x++) accountsTree.push({ accountUuid: result[x].account_uuid });
-    
-    getAccountsTreeBrowseUnitChildren(unitId, accountsTree, databaseConnection, globalParameters, (error, accountsToAdd) =>
+    if(result.length === 0) return callback(null, unitsTree);
+
+    var index = 0;
+
+    var browseUnitChildren = () =>
     {
-      if(error != null) return callback(error);
+      getAccountsWithUnitGetUnitChildren(unitsTree, result[index].id, `${unitTag}${index}`, databaseConnection, globalParameters, (error) =>
+      {
+        if(error != null) return callback(error);
 
-      accountsTree.push(accountsToAdd);
+        unitsTree[result[index].id] = `${unitTag}${index}`;
 
-      return callback(null, accountsTree);
-    });
+        if(result[index += 1] == undefined) return callback(null, unitsTree);
+
+        browseUnitChildren();
+      });
+    }
+
+    browseUnitChildren();
   });
 }
 
 /****************************************************************************************************/
 
-function getAccountsTreeBrowseUnitChildren(unitId, accountsTree, databaseConnection, globalParameters, callback)
+function getAccountsWithUnitBrowseAccounts(accounts, defaultUnit, unitsTree, databaseConnection, globalParameters, callback)
 {
+  var index = 0;
 
+  var browseAccounts = () =>
+  {
+    commonUnitsGet.getAccountUnit(accounts[index].uuid, databaseConnection, globalParameters, (error, unitData) =>
+    {
+      if(error != null) return callback(error);
+
+      var accountUnit = unitsTree[unitData.id];
+
+      accounts[index].unitTags = [];
+
+      while(accountUnit.length > 0)
+      {
+        accounts[index].unitTags.push(accountUnit);
+        accountUnit = accountUnit.slice(0, -1);
+      }
+
+      if(accounts[index += 1] == undefined) return callback(null, accounts);
+
+      browseAccounts();
+    });
+  }
+
+  browseAccounts();
 }
 
 /****************************************************************************************************/
@@ -184,8 +243,8 @@ function getAccountsTreeBrowseUnitChildren(unitId, accountsTree, databaseConnect
 module.exports =
 {
   getAllAccounts: getAllAccounts,
-  getAccountsTree: getAccountsTree,
-  getAllAccountsWidthPictures: getAllAccountsWidthPictures,
+  getAccountsWithUnit: getAccountsWithUnit,
+  getAllAccountsWithPictures: getAllAccountsWithPictures,
   checkIfAccountExistsFromUuid: checkIfAccountExistsFromUuid,
   checkIfAccountExistsFromEmail: checkIfAccountExistsFromEmail
 }
