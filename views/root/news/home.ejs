@@ -42,7 +42,7 @@
                         <div class="mainNewsBlockArticle" name="<%= news[x].uuid %>" id="mainNewsBlockArticle">
                           <div class="mainNewsBlockArticleActions">
                             <% if(locals.account.isAdmin || locals.intranetRights.update_articles || (locals.intranetRights.update_own_articles && locals.account.uuid === news[x].author)){ %>
-                              <button class="mainNewsBlockArticleActionsUpdate"">Modifier cet article</button>
+                              <button class="mainNewsBlockArticleActionsUpdate" onclick="updateArticle()">Modifier cet article</button>
                             <% } %>
                             <% if(locals.account.isAdmin || locals.intranetRights.remove_articles || (locals.intranetRights.remove_own_articles && locals.account.uuid === news[x].author)){ %>
                               <button class="mainNewsBlockArticleActionsRemove" onclick="removeArticle()">Supprimer cet article</button>
