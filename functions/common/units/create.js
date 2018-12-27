@@ -10,7 +10,7 @@ const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 function createUnit(unitName, unitParent, databaseConnection, globalParameters, callback)
 {
-  if(new RegExp('^[a-zéàèâêîôûäëïöüñ]+(( )?[a-zéàèâêîôûäëïöüñ]+)*$').test(unitName.toLowerCase()) == false)
+  if(new RegExp(`^[a-zéàèâêîôûäëïöüñ]+((')?([a-zéàèâêîôûäëïöüñ]+))*(( )?[a-zéàèâêîôûäëïöüñ]+)*((')?([a-zéàèâêîôûäëïöüñ]+))*$`).test(unitName.toLowerCase()) == false)
   {
     return callback({ status: 406, code: constants.INCORRECT_UNIT_NAME_FORMAT, detail: null });
   }

@@ -16,7 +16,7 @@ function createUnit(event)
 
   document.getElementById('createUnitNameError').removeAttribute('style');
 
-  if(new RegExp('^[a-zéàèâêîôûäëïöüñ]+(( )?[a-zéàèâêîôûäëïöüñ]+)*$').test(document.getElementById('createUnitNameInput').value.toLowerCase()) == false)
+  if(new RegExp(`^[a-zéàèâêîôûäëïöüñ]+((')?([a-zéàèâêîôûäëïöüñ]+))*(( )?[a-zéàèâêîôûäëïöüñ]+)*((')?([a-zéàèâêîôûäëïöüñ]+))*$`).test(document.getElementById('createUnitNameInput').value.toLowerCase()) == false)
   {
     return document.getElementById('createUnitNameError').style.display = 'block';
   }
