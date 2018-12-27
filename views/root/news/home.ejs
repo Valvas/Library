@@ -23,6 +23,14 @@
                 <% if(news.length > 0){ %>
                   <% if(locals.newsSelected == false || locals.newsSelected == null){ %>
                     <div class="mainNewsBlockArticle" name="<%= news[0].uuid %>" id="mainNewsBlockArticle">
+                      <div class="mainNewsBlockArticleActions">
+                        <% if(locals.account.isAdmin || locals.intranetRights.update_articles || (locals.intranetRights.update_own_articles && locals.account.uuid === news[0].author)){ %>
+                          <button class="mainNewsBlockArticleActionsUpdate" onclick="updateArticle()">Modifier cet article</button>
+                        <% } %>
+                        <% if(locals.account.isAdmin || locals.intranetRights.remove_articles || (locals.intranetRights.remove_own_articles && locals.account.uuid === news[0].author)){ %>
+                          <button class="mainNewsBlockArticleActionsRemove" onclick="removeArticle()">Supprimer cet article</button>
+                        <% } %>
+                      </div>
                       <div class="mainNewsBlockArticleDate"><%= news[0].timestamp %></div>
                       <div class="mainNewsBlockArticleTitle"><%= news[0].title %></div>
                       <div class="mainNewsBlockArticleContent"><%- news[0].content %></div>
@@ -32,6 +40,14 @@
                     <% for(var x = 0; x < news.length; x++){ %>
                       <% if(news[x].uuid === locals.newsSelected){ %>
                         <div class="mainNewsBlockArticle" name="<%= news[x].uuid %>" id="mainNewsBlockArticle">
+                          <div class="mainNewsBlockArticleActions">
+                            <% if(locals.account.isAdmin || locals.intranetRights.update_articles || (locals.intranetRights.update_own_articles && locals.account.uuid === news[x].author)){ %>
+                              <button class="mainNewsBlockArticleActionsUpdate"">Modifier cet article</button>
+                            <% } %>
+                            <% if(locals.account.isAdmin || locals.intranetRights.remove_articles || (locals.intranetRights.remove_own_articles && locals.account.uuid === news[x].author)){ %>
+                              <button class="mainNewsBlockArticleActionsRemove" onclick="removeArticle()">Supprimer cet article</button>
+                            <% } %>
+                          </div>
                           <div class="mainNewsBlockArticleDate"><%= news[x].timestamp %></div>
                           <div class="mainNewsBlockArticleTitle"><%= news[x].title %></div>
                           <div class="mainNewsBlockArticleContent"><%- news[x].content %></div>
@@ -41,9 +57,11 @@
                     <% } %>
                   <% } %>
                 <% } else{ %>
-                  <div class="mainNewsBlockEmpty" id="mainNewsBlockEmpty">
-                    <div class="mainNewsBlockEmptyIcon"><i class="far fa-paper-plane"></i></div>
-                    <div class="mainNewsBlockEmptyMessage">Aucun article pour le moment</div>
+                  <div class="mainNewsBlockArticle" id="mainNewsBlockArticle">
+                    <div class="mainNewsBlockEmpty" id="mainNewsBlockEmpty">
+                      <div class="mainNewsBlockEmptyIcon"><i class="far fa-paper-plane"></i></div>
+                      <div class="mainNewsBlockEmptyMessage">Aucun article pour le moment</div>
+                    </div>
                   </div>
                 <% } %>
               </div>
@@ -56,5 +74,7 @@
     <% include ../../include/common_scripts.ejs %>
     <% include ../include/scripts.ejs %>
     <script src='/js/root/news/selectNewsInternal.js'></script>
+    <script src='/js/root/news/updateArticle.js'></script>
+    <script src='/js/root/news/removeArticle.js'></script>
   </body>
 </html>

@@ -145,6 +145,8 @@ const DEFAULT_UNIT_NOT_FOUND                                                    
 const UNIT_NOT_FOUND                                                              = 10141;
 const UNIT_CANNOT_BE_CHILD_OF_ITS_OWN_CHILDREN                                    = 10142;
 const INCORRECT_UNIT_NAME_FORMAT                                                  = 10143;
+const UNAUTHORIZED_TO_REMOVE_THIS_ARTICLE                                         = 10144;
+const UNAUTHORIZED_TO_UPDATE_THIS_ARTICLE                                         = 10145;
 
 /******************************************************************************************
 SUCCESS
@@ -197,6 +199,9 @@ const FILE_COMMENT_SUCCESSFULLY_UPDATED                                         
 const FOLDER_SUCCESSFULLY_REMOVED                                                 = 20045;
 const UNIT_PARENT_SUCCESSFULLY_UPDATED                                            = 20046;
 const UNIT_SUCCESSFULLY_CREATED                                                   = 20047;
+const UNIT_MEMBER_SUCCESSFULLY_ADDED                                              = 20048;
+const ARTICLE_SUCCESSFULLY_REMOVED                                                = 20049;
+const ARTICLE_SUCCESSFULLY_UPDATED                                                = 20050;
 
 /******************************************************************************************
 EXPORTS
@@ -347,6 +352,8 @@ module.exports =
   UNIT_NOT_FOUND: UNIT_NOT_FOUND,
   UNIT_CANNOT_BE_CHILD_OF_ITS_OWN_CHILDREN: UNIT_CANNOT_BE_CHILD_OF_ITS_OWN_CHILDREN,
   INCORRECT_UNIT_NAME_FORMAT: INCORRECT_UNIT_NAME_FORMAT,
+  UNAUTHORIZED_TO_REMOVE_THIS_ARTICLE: UNAUTHORIZED_TO_REMOVE_THIS_ARTICLE,
+  UNAUTHORIZED_TO_UPDATE_THIS_ARTICLE: UNAUTHORIZED_TO_UPDATE_THIS_ARTICLE,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,
@@ -394,5 +401,8 @@ module.exports =
   FILE_COMMENT_SUCCESSFULLY_UPDATED: FILE_COMMENT_SUCCESSFULLY_UPDATED,
   FOLDER_SUCCESSFULLY_REMOVED: FOLDER_SUCCESSFULLY_REMOVED,
   UNIT_PARENT_SUCCESSFULLY_UPDATED: UNIT_PARENT_SUCCESSFULLY_UPDATED,
-  UNIT_SUCCESSFULLY_CREATED: UNIT_SUCCESSFULLY_CREATED
+  UNIT_SUCCESSFULLY_CREATED: UNIT_SUCCESSFULLY_CREATED,
+  UNIT_MEMBER_SUCCESSFULLY_ADDED: UNIT_MEMBER_SUCCESSFULLY_ADDED,
+  ARTICLE_SUCCESSFULLY_REMOVED: ARTICLE_SUCCESSFULLY_REMOVED,
+  ARTICLE_SUCCESSFULLY_UPDATED: ARTICLE_SUCCESSFULLY_UPDATED
 }

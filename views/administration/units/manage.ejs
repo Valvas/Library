@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - <%= strings.administrationStrings.aside.menu[currentLocation] %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/administration/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/popup.css" />
+  <body>
+    <% include ../../include/informations.ejs %>
+    <div class="mainBlock">
+      <% include ../include/header.ejs %>
+      <div class="content">
+        <div class="contentName"><%= strings.administrationStrings.unitsCreate.title %></div>
+        <% include ../include/unitsNavBar.ejs %>
+        <div class="unitsMainBlock">
+          <div id="accountsList" class="unitsManageBlock">
+            <% for(var x = 0; x < accounts.length; x++){ %>
+              <div id="<%= accounts[x].uuid %>" class="unitsManageAccount">
+                <div class="unitsManageAccountEmail"><%= accounts[x].email %></div>
+                <select onchange="updateAccountUnit()" class="unitsManageAccountInput" name="<%= accounts[x].unit.unitId %>">
+                  <% for(var z = 0; z < units.length; z++){ %>
+                    <% if(units[z].unitId === accounts[x].unit.unitId){ %>
+                      <option value="<%= units[z].unitId %>" selected><%= units[z].unitName %></option>
+                    <% } else{ %>
+                      <option value="<%= units[z].unitId %>"><%= units[z].unitName %></option>
+                    <% } %>
+                  <% } %>
+                </select>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ../../include/common_scripts.ejs %>
+    <script src="/js/administration/exit.js"></script>
+    <script src="/js/administration/units/updateAccountUnit.js"></script>
+  </body>
+</html>

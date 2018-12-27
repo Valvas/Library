@@ -119,7 +119,7 @@ function browseFolder(folderUuid)
         }
 
         input
-        ? document.getElementById('filesContainer').innerHTML += `<div name="${files[x].uuid}" class="${display}"><input onclick="updateSelectedFiles(this)" class="checkbox" type="checkbox" />${icon}<div class="name">${files[x].name}</div></div>`
+        ? document.getElementById('filesContainer').innerHTML += `<div name="${files[x].uuid}" class="${display}"><input class="checkbox" type="checkbox" />${icon}<div class="name">${files[x].name}</div></div>`
         : document.getElementById('filesContainer').innerHTML += `<div name="${files[x].uuid}" class="${display}">${icon}<div class="name">${files[x].name}</div></div>`;
       }
       

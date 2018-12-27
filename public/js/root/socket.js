@@ -82,24 +82,116 @@ socket.on('newsCreated', (newsData) =>
 
       document.getElementById('mainNewsBlockEmpty').remove();
 
-      var article = document.createElement('div');
+      var article = document.getElementById('mainNewsBlockArticle');
 
       article.setAttribute('name', newsData.uuid);
-      article.setAttribute('id', 'mainNewsBlockArticle');
-      article.setAttribute('class', 'mainNewsBlockArticle');
 
+      var buttonsBlock = '<div class="mainNewsBlockArticleActions">';
+
+      buttonsBlock += result.accountData.isAdmin || result.accountRights.update_articles || (result.accountRights.update_own_articles && result.newsData.author === result.accountData.uuid)
+      ? `<button onclick="updateArticle()" class="mainNewsBlockArticleActionsUpdate">${result.commonStrings.root.news.updateArticleButton}</button>`
+      : `<button class="mainNewsBlockArticleActionsDisabled">${result.commonStrings.root.news.updateArticleButton}</button>`;
+
+      buttonsBlock += result.accountData.isAdmin || result.accountRights.remove_articles || (result.accountRights.remove_own_articles && result.newsData.author === result.accountData.uuid)
+      ? `<button onclick="removeArticle()" class="mainNewsBlockArticleActionsRemove">${result.commonStrings.root.news.removeArticleButton}</button>`
+      : `<button class="mainNewsBlockArticleActionsDisabled">${result.commonStrings.root.news.removeArticleButton}</button>`;
+
+      buttonsBlock += '</div>';
+
+      article.innerHTML = buttonsBlock;
       article.innerHTML += `<div class="mainNewsBlockArticleDate">${newsData.timestamp}</div>`;
       article.innerHTML += `<div class="mainNewsBlockArticleTitle">${newsData.title}</div>`;
       article.innerHTML += `<div class="mainNewsBlockArticleContent">${newsData.content}</div>`;
       article.innerHTML += `<div class="mainNewsBlockArticleAuthor">${newsData.author}</div>`;
-
-      container.appendChild(article);
 
       document.getElementById('asideNewsBlockList').children[0].setAttribute('class', 'asideNewsBlockListElementSelected');
     });
   }
 
   displayInfo('Un nouvel article a été ajouté', null);
+});
+
+/****************************************************************************************************/
+// WHEN AN ARTICLE IS UPDATED
+/****************************************************************************************************/
+
+socket.on('articleUpdated', (articleData, commonStrings) =>
+{
+  if(document.getElementById('mainNewsBlockArticle'))
+  {
+    if(document.getElementById('mainNewsBlockArticle').getAttribute('name') === articleData.articleUuid)
+    {
+      document.getElementById('mainNewsBlockArticle').children[2].innerText = articleData.articleTitle;
+      document.getElementById('mainNewsBlockArticle').children[3].innerHTML = articleData.articleContent;
+    }
+  }
+
+  if(document.getElementById('asideNewsBlockList'))
+  {
+    const currentArticles = document.getElementById('asideNewsBlockList').children;
+
+    for(var x = 0; x < currentArticles.length; x++)
+    {
+      if(currentArticles[x].getAttribute('name') === articleData.articleUuid) currentArticles[x].children[1].innerText = articleData.articleTitle;
+    }
+  }
+
+  if(document.getElementById('asideNewsDeployBlockList'))
+  {
+    const currentArticles = document.getElementById('asideNewsDeployBlockList').children;
+
+    for(var x = 0; x < currentArticles.length; x++)
+    {
+      if(currentArticles[x].getAttribute('name') === articleData.articleUuid) currentArticles[x].children[1].innerText = articleData.articleTitle;
+    }
+  }
+
+  displayInfo(commonStrings.root.news.socket.updatedArticleMessage, null, 'updatedArticleSocket');
+});
+
+/****************************************************************************************************/
+// WHEN AN ARTICLE IS REMOVED
+/****************************************************************************************************/
+
+socket.on('removedArticle', (articleUuid, commonStrings) =>
+{
+  if(document.getElementById('asideNewsBlockList'))
+  {
+    const currentArticles = document.getElementById('asideNewsBlockList').children;
+
+    for(var x = 0; x < currentArticles.length; x++)
+    {
+      if(currentArticles[x].getAttribute('name') === articleUuid) currentArticles[x].remove();
+    }
+  }
+
+  if(document.getElementById('asideNewsDeployBlockList'))
+  {
+    const currentArticles = document.getElementById('asideNewsDeployBlockList').children;
+
+    for(var x = 0; x < currentArticles.length; x++)
+    {
+      if(currentArticles[x].getAttribute('name') === articleUuid) currentArticles[x].remove();
+    }
+  }
+
+  if(document.getElementById('mainNewsBlockArticle'))
+  {
+    if(document.getElementById('mainNewsBlockArticle').getAttribute('name') === articleUuid)
+    {
+      document.getElementById('mainNewsBlockArticle').removeAttribute('name');
+      document.getElementById('mainNewsBlockArticle').innerHTML = '';
+
+      document.getElementById('asideNewsBlockList').children.length > 1
+      ? newsSelected(document.getElementById('asideNewsBlockList').children[0].getAttribute('name'))
+      : document.getElementById('mainNewsBlockArticle').innerHTML = `<div class="mainNewsBlockEmpty" id="mainNewsBlockEmpty"><div class="mainNewsBlockEmptyIcon"><i class="far fa-paper-plane"></i></div><div class="mainNewsBlockEmptyMessage">${commonStrings.root.news.emptyArticles}</div></div>`;
+    }
+  }
+
+  if(document.getElementById('asideNewsBlockList').children.length === 1) document.getElementById('asideNewsBlockList').innerHTML = `<div id="asideNewsBlockListEmpty" class="asideNewsBlockListEmpty">${commonStrings.root.news.emptyArticles}</div>`;
+  if(document.getElementById('asideNewsDeployBlockList').children.length === 1) document.getElementById('asideNewsDeployBlockList').innerHTML = `<div id="asideNewsDeployBlockListEmpty" class="asideNewsBlockListEmpty">${commonStrings.root.news.emptyArticles}</div>`;
+
+  displayInfo(commonStrings.root.news.socket.removedArticleMessage, null, 'removedArticleSocket');
 });
 
 /****************************************************************************************************/

@@ -141,5 +141,7 @@
   "10140": "Le groupe utilisateurs par défaut n'a pas été trouvé",
   "10141": "Ce groupe est introuvable",
   "10142": "Un groupe ne peut pas être enfant de l'un de ses propres enfants",
-  "10143": "Format du nom du groupe incorrect"
+  "10143": "Format du nom du groupe incorrect",
+  "10144": "Vous n'êtes pas autorisé(e) à supprimer cet article",
+  "10145": "Vous n'êtes pas autorisé(e) à modifier cet article"
 }

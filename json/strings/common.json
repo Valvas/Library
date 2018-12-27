@@ -214,10 +214,37 @@
 
     "news":
     {
+      "emptyArticles": "Aucun article pour le moment",
+
+      "updateArticleButton": "Modifier cet article",
+      "removeArticleButton": "Supprimer cet article",
+
       "create":
       {
         "header": "Créer un nouvel article",
         "titleLabel": "Titre de l'article"
+      },
+
+      "update":
+      {
+        "header": "Modifier cet article",
+        "titleLabel": "Titre de l'article",
+        "submitButton": "Enregistrer"
+      },
+
+      "removeArticlePopup":
+      {
+        "title": "Suppression d'article",
+        "message": "Êtes-vous sûr(e) de vouloir supprimer cet article ?",
+        "confirm": "Oui",
+        "cancel": "Annuler",
+        "loader": "Suppression de l'article en cours. Veuillez patienter..."
+      },
+
+      "socket":
+      {
+        "updatedArticleMessage": "Un article a été modifié",
+        "removedArticleMessage": "Un article a été supprimé"
       }
     },
 

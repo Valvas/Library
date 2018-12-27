@@ -24,7 +24,8 @@
   "unitsNavigationBar":
   {
     "home": "Liste des groupes",
-    "create": "Créer un groupe"
+    "create": "Créer un groupe",
+    "manage": "Gestion des membres"
   },
 
   "homePage":
@@ -214,6 +215,18 @@
       "message": "Êtes-vous sûr(e) de vouloir créer ce groupe ?",
       "confirm": "Oui",
       "cancel": "Annuler"
+    }
+  },
+
+  "unitsManage":
+  {
+    "updateAccountUnitPopup":
+    {
+      "title": "Confirmation",
+      "message": "Êtes-vous sûr(e) de vouloir déplacer cet utilisateur dans le groupe [$1$] ?",
+      "confirm": "Oui",
+      "cancel": "Annuler",
+      "loader": "Mise à jour du compte en cours. Veuillez patienter..." 
     }
   },
 

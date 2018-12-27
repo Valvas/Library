@@ -97,10 +97,26 @@ function newsSelected(newsUuid)
         document.getElementById('mainNewsBlockArticle').scrollIntoView({ behavior: 'smooth' });
 
         document.getElementById('mainNewsBlockArticle').setAttribute('name', json.newsData.uuid);
-        document.getElementById('mainNewsBlockArticle').children[0].innerText = json.newsData.timestamp;
-        document.getElementById('mainNewsBlockArticle').children[1].innerText = json.newsData.title;
-        document.getElementById('mainNewsBlockArticle').children[2].innerHTML = json.newsData.content;
-        document.getElementById('mainNewsBlockArticle').children[3].innerText = json.newsData.author;
+
+        document.getElementById('mainNewsBlockArticle').innerHTML = '';
+
+        var buttonsBlock = '<div class="mainNewsBlockArticleActions">';
+
+        buttonsBlock += json.accountData.isAdmin || json.accountRights.update_articles || (json.accountRights.update_own_articles && json.newsData.author === json.accountData.uuid)
+        ? `<button onclick="updateArticle()" class="mainNewsBlockArticleActionsUpdate">${json.commonStrings.root.news.updateArticleButton}</button>`
+        : `<button class="mainNewsBlockArticleActionsDisabled">${json.commonStrings.root.news.updateArticleButton}</button>`;
+
+        buttonsBlock += json.accountData.isAdmin || json.accountRights.remove_articles || (json.accountRights.remove_own_articles && json.newsData.author === json.accountData.uuid)
+        ? `<button onclick="removeArticle()" class="mainNewsBlockArticleActionsRemove">${json.commonStrings.root.news.removeArticleButton}</button>`
+        : `<button class="mainNewsBlockArticleActionsDisabled">${json.commonStrings.root.news.removeArticleButton}</button>`;
+
+        buttonsBlock += '</div>';
+
+        document.getElementById('mainNewsBlockArticle').innerHTML += buttonsBlock;
+        document.getElementById('mainNewsBlockArticle').innerHTML += `<div class="mainNewsBlockArticleDate">${json.newsData.timestamp}</div>`;
+        document.getElementById('mainNewsBlockArticle').innerHTML += `<div class="mainNewsBlockArticleTitle">${json.newsData.title}</div>`;
+        document.getElementById('mainNewsBlockArticle').innerHTML += `<div class="mainNewsBlockArticleContent">${json.newsData.content}</div>`;
+        document.getElementById('mainNewsBlockArticle').innerHTML += `<div class="mainNewsBlockArticleAuthor">${json.newsData.author}</div>`;
       });
     });
   }
