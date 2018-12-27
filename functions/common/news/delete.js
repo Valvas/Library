@@ -41,7 +41,7 @@ function removeArticleGetAccountRights(articleData, accountUuid, databaseConnect
 
     if(rightsExist == false) return callback({ status: 404, code: constants.INTRANET_RIGHTS_NOT_FOUND, detail: null });
 
-    if(rightsData.remove_articles || (rightsData.remove_own_articles && articleData.author === accountUuid)) return removeArticleFromDatabase(articleData.uuid, databaseConnection, globalParameters, callback);
+    if(rightsData.remove_articles || (rightsData.remove_own_articles && articleData.authorUuid === accountUuid)) return removeArticleFromDatabase(articleData.uuid, databaseConnection, globalParameters, callback);
     
     return callback({ status: 403, code: constants.UNAUTHORIZED_TO_REMOVE_THIS_ARTICLE, detail: null });
   });

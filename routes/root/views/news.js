@@ -77,7 +77,7 @@ router.get('/update/:articleUuid', (req, res) =>
 
         if(rightsExist == false) return res.render('block', { message: errors[constants.INTRANET_RIGHTS_NOT_FOUND], detail: null, link: req.headers.referer });
 
-        if(rightsData.update_articles == false && req.app.locals.account.isAdmin == false && (rightsData.update_own_articles == false || articleData.author !== req.app.locals.account.uuid)) return res.render('block', { message: errors[constants.UNAUTHORIZED_TO_UPDATE_THIS_ARTICLE], detail: null, link: '/' });
+        if(rightsData.update_articles == false && req.app.locals.account.isAdmin == false && (rightsData.update_own_articles == false || articleData.authorUuid !== req.app.locals.account.uuid)) return res.render('block', { message: errors[constants.UNAUTHORIZED_TO_UPDATE_THIS_ARTICLE], detail: null, link: '/' });
 
         res.render('root/news/update', { account: req.app.locals.account, currentLocation: 'news', strings: { common: commonStrings }, news: news, articleData: articleData });
       });

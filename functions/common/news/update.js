@@ -45,7 +45,7 @@ function updateArticleCheckAccountRights(articleData, articleTitle, articleConte
 
     if(rightsExist == false) return callback({ status: 404, code: constants.INTRANET_RIGHTS_NOT_FOUND, detail: null });
 
-    if(accountRights.update_articles || (accountRights.update_own_articles && accountData.uuid === articleData.author)) return updateArticleInsertInDatabase(articleData, articleTitle, articleContent, databaseConnection, globalParameters, callback);
+    if(accountRights.update_articles || (accountRights.update_own_articles && accountData.uuid === articleData.authorUuid)) return updateArticleInsertInDatabase(articleData, articleTitle, articleContent, databaseConnection, globalParameters, callback);
 
     return callback({ status: 403, code: constants.UNAUTHORIZED_TO_UPDATE_THIS_ARTICLE, detail: null });
   });
