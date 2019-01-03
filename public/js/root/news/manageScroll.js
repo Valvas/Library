@@ -92,6 +92,9 @@ function loadMoreNews(event)
             if(existingArticles[x].hasAttribute('name')) existingArticlesUuids.push(existingArticles[x].getAttribute('name'));
           }
 
+          document.getElementById('asideNewsBlockListLoad').removeAttribute('style');
+          document.getElementById('asideNewsDeployBlockListLoad').removeAttribute('style');
+          
           if(existingArticlesUuids.length >= json.newsData.length) return displayInfo('Tous les articles ont déjà été chargés', null, '0001');
 
           for(var x = 0; x < json.newsData.length; x++)
@@ -116,9 +119,6 @@ function loadMoreNews(event)
           }
 
           applyNewsSelectionListeners();
-
-          document.getElementById('asideNewsBlockListLoad').removeAttribute('style');
-          document.getElementById('asideNewsDeployBlockListLoad').removeAttribute('style');
         });
       });
     });
