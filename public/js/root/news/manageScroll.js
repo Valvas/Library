@@ -92,31 +92,30 @@ function loadMoreNews(event)
             if(existingArticles[x].hasAttribute('name')) existingArticlesUuids.push(existingArticles[x].getAttribute('name'));
           }
 
-          if(existingArticles.length >= json.newsData.length) displayInfo('Tous les articles ont déjà été chargés', null, '0001');
+          if(existingArticlesUuids.length >= json.newsData.length) return displayInfo('Tous les articles ont déjà été chargés', null, '0001');
 
-          else
+          for(var x = 0; x < json.newsData.length; x++)
           {
-            for(var x = 0; x < json.newsData.length; x++)
+            if(existingArticlesUuids.includes(json.newsData[x].uuid) == false)
             {
-              if(existingArticlesUuids.includes(json.newsData[x].uuid) == false)
-              {
-                var asideNewsBlock = document.createElement('div');
-                var deployNewsBlock = document.createElement('div');
+              var asideNewsBlock = document.createElement('div');
+              var deployNewsBlock = document.createElement('div');
 
-                asideNewsBlock.setAttribute('name', json.newsData[x].uuid);
-                deployNewsBlock.setAttribute('name', json.newsData[x].uuid);
+              asideNewsBlock.setAttribute('name', json.newsData[x].uuid);
+              deployNewsBlock.setAttribute('name', json.newsData[x].uuid);
 
-                asideNewsBlock.setAttribute('class', 'asideNewsBlockListElement');
-                deployNewsBlock.setAttribute('class', 'asideNewsDeployBlockListArticle');
+              asideNewsBlock.setAttribute('class', 'asideNewsBlockListElement');
+              deployNewsBlock.setAttribute('class', 'asideNewsDeployBlockListArticle');
 
-                asideNewsBlock.innerHTML = `<div class="asideNewsBlockListElementDate">${json.newsData[x].timestamp}</div><div class="asideNewsBlockListElementTitle">${json.newsData[x].title}</div>`;
-                deployNewsBlock.innerHTML = `<div class="asideNewsDeployBlockListArticleDate">${json.newsData[x].timestamp}</div><div class="asideNewsDeployBlockListArticleTitle">${json.newsData[x].title}</div>`;
+              asideNewsBlock.innerHTML = `<div class="asideNewsBlockListElementDate">${json.newsData[x].timestamp}</div><div class="asideNewsBlockListElementTitle">${json.newsData[x].title}</div>`;
+              deployNewsBlock.innerHTML = `<div class="asideNewsDeployBlockListArticleDate">${json.newsData[x].timestamp}</div><div class="asideNewsDeployBlockListArticleTitle">${json.newsData[x].title}</div>`;
 
-                document.getElementById('asideNewsBlockList').insertBefore(asideNewsBlock, document.getElementById('asideNewsBlockList').children[x]);
-                document.getElementById('asideNewsDeployBlockList').insertBefore(deployNewsBlock, document.getElementById('asideNewsDeployBlockList').children[x]);
-              }
+              document.getElementById('asideNewsBlockList').insertBefore(asideNewsBlock, document.getElementById('asideNewsBlockList').children[x]);
+              document.getElementById('asideNewsDeployBlockList').insertBefore(deployNewsBlock, document.getElementById('asideNewsDeployBlockList').children[x]);
             }
           }
+
+          applyNewsSelectionListeners();
 
           document.getElementById('asideNewsBlockListLoad').removeAttribute('style');
           document.getElementById('asideNewsDeployBlockListLoad').removeAttribute('style');
