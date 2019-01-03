@@ -102,13 +102,13 @@ function newsSelected(newsUuid)
 
         var buttonsBlock = '<div class="mainNewsBlockArticleActions">';
 
-        buttonsBlock += json.accountData.isAdmin || json.accountRights.update_articles || (json.accountRights.update_own_articles && json.newsData.author === json.accountData.uuid)
-        ? `<button onclick="updateArticle()" class="mainNewsBlockArticleActionsUpdate">${json.commonStrings.root.news.updateArticleButton}</button>`
-        : `<button class="mainNewsBlockArticleActionsDisabled">${json.commonStrings.root.news.updateArticleButton}</button>`;
+        buttonsBlock += json.accountData.isAdmin || json.accountRights.update_articles || (json.accountRights.update_own_articles && json.newsData.authorUuid === json.accountData.uuid)
+        ? `<button onclick="updateArticle()" class="mainNewsBlockArticleActionsUpdate">${json.commonStrings.root.news.homePage.updateArticleButton}</button>`
+        : `<button class="mainNewsBlockArticleActionsDisabled">${json.commonStrings.root.news.homePage.updateArticleButton}</button>`;
 
-        buttonsBlock += json.accountData.isAdmin || json.accountRights.remove_articles || (json.accountRights.remove_own_articles && json.newsData.author === json.accountData.uuid)
-        ? `<button onclick="removeArticle()" class="mainNewsBlockArticleActionsRemove">${json.commonStrings.root.news.removeArticleButton}</button>`
-        : `<button class="mainNewsBlockArticleActionsDisabled">${json.commonStrings.root.news.removeArticleButton}</button>`;
+        buttonsBlock += json.accountData.isAdmin || json.accountRights.remove_articles || (json.accountRights.remove_own_articles && json.newsData.authorUuid === json.accountData.uuid)
+        ? `<button onclick="removeArticle()" class="mainNewsBlockArticleActionsRemove">${json.commonStrings.root.news.homePage.removeArticleButton}</button>`
+        : `<button class="mainNewsBlockArticleActionsDisabled">${json.commonStrings.root.news.homePage.removeArticleButton}</button>`;
 
         buttonsBlock += '</div>';
 
@@ -117,9 +117,80 @@ function newsSelected(newsUuid)
         document.getElementById('mainNewsBlockArticle').innerHTML += `<div class="mainNewsBlockArticleTitle">${json.newsData.title}</div>`;
         document.getElementById('mainNewsBlockArticle').innerHTML += `<div class="mainNewsBlockArticleContent">${json.newsData.content}</div>`;
         document.getElementById('mainNewsBlockArticle').innerHTML += `<div class="mainNewsBlockArticleAuthor">${json.newsData.author}</div>`;
+
+        var commentsSection   = document.createElement('div');
+        var postSection       = document.createElement('div');
+        var commentsContainer = document.createElement('div');
+
+        commentsSection     .setAttribute('id', 'mainNewsBlockComments');
+        commentsContainer   .setAttribute('id', 'commentsList');
+        commentsSection     .setAttribute('class', 'mainNewsBlockComments');
+        postSection         .setAttribute('class', 'mainNewsBlockCommentsPostSection');
+        commentsContainer   .setAttribute('class', 'mainNewsBlockCommentsContainer');
+
+        postSection.innerHTML += `<button onclick="addCommentOnArticle(null)" class="mainNewsBlockCommentsPostButton">${json.commonStrings.root.news.commentsSection.postCommentButton}</button>`;
+
+        commentsContainer.innerHTML += json.newsData.comments.length === 0
+        ? `<div id="mainNewsBlockCommentsEmptyStack" class="mainNewsBlockCommentsEmptyStack">${json.commonStrings.root.news.commentsSection.emptyCommentsStack}</div>`
+        : `<div id="mainNewsBlockCommentsEmptyStack" class="mainNewsBlockCommentsEmptyStack" style="display:none">${json.commonStrings.root.news.commentsSection.emptyCommentsStack}</div>`;
+
+        buildCommentsSection(json.newsData.comments, json.accountData, json.accountRights, json.commonStrings, (result) =>
+        {
+          if(result != null) commentsContainer.innerHTML += result;
+
+          commentsSection     .appendChild(postSection);
+          commentsSection     .appendChild(commentsContainer);
+
+          document.getElementById('mainNewsBlockArticle').appendChild(commentsSection);
+        });
       });
     });
   }
+}
+
+/****************************************************************************************************/
+
+function buildCommentsSection(currentComments, accountData, accountRights, commonStrings, callback)
+{
+  var resultArray = [], index = 0;
+
+  var browse = () =>
+  {
+    resultArray.push(`<div name="${currentComments[index].commentUuid}" class="mainNewsBlockCommentsElement">`);
+    resultArray.push(`<div class="mainNewsBlockCommentsElementHeader">${currentComments[index].commentDate} - ${currentComments[index].commentAuthor}</div>`);
+    resultArray.push(`<div class="mainNewsBlockCommentsElementContent">`);
+    resultArray.push(`<div class="mainNewsBlockCommentsElementMessage">${currentComments[index].commentContent}</div>`);
+
+    buildCommentsSection(currentComments[index].commentChildren, accountData, accountRights, commonStrings, (result) =>
+    {
+      if(result != null) resultArray.push(result);
+
+      resultArray.push(`</div>`);
+      resultArray.push(`<div class="mainNewsBlockCommentsElementActions">`);
+
+      currentComments[index].commentRemoved
+      ? resultArray.push(`<div class="mainNewsBlockCommentsElementActionsButtonDisabled">${commonStrings.root.news.commentsSection.answerComment}</div>`)
+      : resultArray.push(`<div onclick="addCommentOnArticle('${currentComments[index].commentUuid}')" class="mainNewsBlockCommentsElementActionsButton">${commonStrings.root.news.commentsSection.answerComment}</div>`);
+
+      (accountData.isAdmin || accountRights.update_article_comments || (accountRights.update_article_own_comments && currentComments[index].commentAuthorUuid === accountData.uuid)) && currentComments[index].commentRemoved == false
+      ? resultArray.push(`<div onclick="updateCommentOnArticle('${currentComments[index].commentUuid}')" class="mainNewsBlockCommentsElementActionsButton">${commonStrings.root.news.commentsSection.updateComment}</div>`)
+      : resultArray.push(`<div class="mainNewsBlockCommentsElementActionsButtonDisabled">${commonStrings.root.news.commentsSection.updateComment}</div>`);
+
+      (accountData.isAdmin || accountRights.remove_article_comments || (accountRights.remove_article_own_comments && currentComments[index].commentAuthorUuid === accountData.uuid)) && currentComments[index].commentRemoved == false
+      ? resultArray.push(`<div onclick="removeCommentOnArticle('${currentComments[index].commentUuid}')" class="mainNewsBlockCommentsElementActionsButton">${commonStrings.root.news.commentsSection.removeComment}</div>`)
+      : resultArray.push(`<div class="mainNewsBlockCommentsElementActionsButtonDisabled">${commonStrings.root.news.commentsSection.removeComment}</div>`);
+
+      resultArray.push(`</div></div>`);
+
+      if(currentComments[index += 1] == undefined) return callback(resultArray.join(''));
+
+      browse();
+    });
+  }
+
+  currentComments.length === 0
+  ? callback(null)
+  : browse();
 }
 
 /****************************************************************************************************/

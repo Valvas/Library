@@ -58,6 +58,18 @@
 
 .accountDataUpdateForm{ padding:20px; }
 
+.accountDataUpdateFormRowBlock{ display:flex; flex-direction:row; justify-content:space-around; align-items:center; }
+
+.accountDataUpdateFormIndicativeInput{ border-radius:4px; padding:8px; border:1px solid rgba(0,0,0,0.24); width:100%; box-sizing:border-box; height:35px; }
+
+.accountDataUpdateFormIndicativeChildBlock{ flex-grow:1; margin:0 0 0 10px; }
+
+.accountDataUpdateFormIndicativePlus{ margin-right:5px; font-size:1.25em; }
+
+.accountDataUpdateFormIndicativeSubmit{ background-color:#EEE; color:#555; font-size:16px; line-height:20px; padding:6px; width:150px; margin:20px 0 0 calc(100% - 150px); border:1px solid #CCC; cursor:pointer; border-radius:2px; }
+
+.accountDataUpdateFormIndicativeSubmit:hover{ color:#90BB2C; }
+
 .accountDataUpdateFormInput{ width:100%; border:1px solid #CCC; border-radius:2px; padding:6px; font-size:16px; line-height:20px; box-sizing:border-box; margin:0 0 20px 0; }
 
 .accountDataUpdateFormSubmit{ background-color:#EEE; color:#555; font-size:16px; line-height:20px; padding:6px; width:150px; max-width:100%; margin:10px 0 10px auto; border:1px solid #CCC; cursor:pointer; border-radius:2px; }

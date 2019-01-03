@@ -45,6 +45,14 @@
                       <div class="accountDataBlockValue" id="accountDataFirstname"><%= locals.account.firstname.charAt(0).toUpperCase() %><%= locals.account.firstname.slice(1).toLowerCase() %></div>
                       <div class="accountDataBlockUpdate" id="accountDataUpdateFirstname"><%= strings.common.root.account.firstnameBlockUpdate %></div>
                     </div>
+                    <div class="accountDataBlock">
+                      <% if(locals.account.contactNumber == null){ %>
+                        <div class="accountDataBlockValue" id="accountDataContactNumber">N/A</div>
+                      <% } else{ %>
+                        <div class="accountDataBlockValue" id="accountDataContactNumber">+<%= locals.account.contactNumber %></div>
+                      <% } %>
+                      <div class="accountDataBlockUpdate" id="accountDataUpdateContactNumber"><%= strings.common.root.account.contactNumberBlockUpdate %></div>
+                    </div>
                   </div>
                 </div>
                 <div class="accountData">

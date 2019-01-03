@@ -10,6 +10,7 @@ const commonRightsGet       = require(`${__root}/functions/common/rights/get`);
 const commonNewsCreate      = require(`${__root}/functions/common/news/create`);
 const commonNewsDelete      = require(`${__root}/functions/common/news/delete`);
 const commonNewsUpdate      = require(`${__root}/functions/common/news/update`);
+const commonNewsComment     = require(`${__root}/functions/common/news/comment`);
 
 var router = express.Router();
 
@@ -102,7 +103,7 @@ router.post('/create-article', (req, res) =>
 
       commonNewsGet.getNewsData(createdNewsUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsExists, newsData) =>
       {
-        if(error == null && newsExists) req.app.get('io').in('rootNewsGroup').emit('newsCreated', newsData);
+        if(error == null && newsExists) req.app.get('io').in('rootNewsGroup').emit('newsCreated', newsData, commonAppStrings);
       });
 
       res.status(201).send({  });
@@ -173,6 +174,78 @@ router.get('/get-rights-on-articles', (req, res) =>
     if(rightsExist == false) return res.status(404).send({ message: errors[constants.INTRANET_RIGHTS_NOT_FOUND], detail: null });
 
     return res.status(200).send({ accountRights: accountRights, accountData: req.app.locals.account, commonStrings: commonAppStrings });
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/add-comment-on-article', (req, res) =>
+{
+  if(req.body.articleUuid == undefined)     return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'articleUuid' });
+  if(req.body.commentParent == undefined)   return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentParent' });
+  if(req.body.commentContent == undefined)  return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentContent' });
+
+  commonNewsComment.addCommentOnArticle(req.body.articleUuid, req.body.commentContent, req.body.commentParent.length === 0 ? null : req.body.commentParent, req.app.locals.account, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, commentData) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    commonRightsGet.checkIfRightsExistsForAccount(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rightsExist, rightsData) =>
+    {
+      if(error == null && rightsExist) req.app.get('io').in('rootNewsGroup').emit('commentPostedOnArticle', commentData, req.body.articleUuid, req.app.locals.account, rightsData, commonAppStrings);
+    });
+
+    res.status(201).send({ message: success[constants.ARTICLE_COMMENT_CREATED_SUCCESSFULLY] });
+  });
+});
+
+/****************************************************************************************************/
+
+router.put('/update-comment-on-article', (req, res) =>
+{
+  if(req.body.commentUuid == undefined)     return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentUuid' });
+  if(req.body.articleUuid == undefined)     return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'articleUuid' });
+  if(req.body.commentContent == undefined)  return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentContent' });
+
+  commonNewsComment.updateComment(req.body.commentUuid, req.body.commentContent, req.app.locals.account, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    req.app.get('io').in('rootNewsGroup').emit('commentUpdatedOnArticle', req.body.commentUuid, req.body.commentContent, req.body.articleUuid, commonAppStrings);
+
+    res.status(201).send({ message: success[constants.ARTICLE_COMMENT_UPDATED_SUCCESSFULLY] });
+  });
+});
+
+/****************************************************************************************************/
+
+router.delete('/remove-comment-on-article', (req, res) =>
+{
+  if(req.body.articleUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'articleUuid' });
+  if(req.body.commentUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentUuid' });
+
+  commonNewsComment.removeComment(req.body.commentUuid, req.app.locals.account, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    req.app.get('io').in('rootNewsGroup').emit('commentRemovedOnArticle', req.body.commentUuid, req.body.articleUuid, commonAppStrings);
+
+    res.status(201).send({ message: success[constants.ARTICLE_COMMENT_REMOVED_SUCCESSFULLY] });
+  });
+});
+
+/****************************************************************************************************/
+
+router.put('/get-comment-data', (req, res) =>
+{
+  if(req.body.commentUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentUuid' });
+
+  commonNewsComment.checkIfCommentExists(req.body.commentUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, commentExists, commentData) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    if(commentExists == false) return res.status(404).send({ message: errors[constants.ARTICLE_COMMENT_NOT_FOUND], detail: null });
+
+    return res.status(200).send({ commentData: commentData });
   });
 });
 

@@ -155,6 +155,8 @@
 
       "firstnameBlockUpdate": "Modifier mon prénom",
 
+      "contactNumberBlockUpdate": "Modifier mon numéro de contact",
+
       "passwordBlockUpdate": "Modifier mon mot de passe",
 
       "accountUpdate":
@@ -178,6 +180,13 @@
         "firstnameFormatError": "Le format de ce prénom est incorrect",
         "firstnameDuplicateError": "Ce prénom est identique au précédent",
         "firstnameSending": "Enregistrement du nouveau prénom en cours",
+
+        "contactNumberLabel": "Nouveau numéro de contact",
+        "contactNumberFormatError": "Format de l'indicatif ou du numéro incorrect. Veuillez n'entrer que des chiffres.",
+        "contactNumberIndicativeLabel": "Indicatif",
+        "contactNumberContentLabel": "Numéro",
+        "contactNumberSending": "Enregistrement du nouveau numéro de contact en cours",
+        "contactNumberUpdated": "Votre numéro de contact a été mis à jour avec succès",
 
         "passwordLabel": "Nouveau mot de passe",
         "passwordInputOld": "Mot de passe actuel",
@@ -214,10 +223,47 @@
 
     "news":
     {
-      "emptyArticles": "Aucun article pour le moment",
+      "articleCommentRemovedContent": "Commentaire supprimé",
+      "retrieveCommentDataFromServer": "Récupération des données du commentaire en cours. Veuillez patienter...",
+      
+      "homePage":
+      {
+        "createArticleSection":
+        {
+          "createArticleButton": "Créer un article",
+          "createArticleDisabled": "Vous n'êtes pas autorisé(e) à créer un article"
+        },
 
-      "updateArticleButton": "Modifier cet article",
-      "removeArticleButton": "Supprimer cet article",
+        "updateArticleButton": "Modifier cet article",
+        "removeArticleButton": "Supprimer cet article",
+
+        "emptyArticles": "Aucun article pour le moment",
+
+        "commentPopup":
+        {
+          "addCommentTitle": "Ajouter un commentaire",
+          "replyCommentTitle": "Répondre à un commentaire",
+          "updateCommentTitle": "Modifier un commentaire",
+          "emptyComment": "Veuillez entrer un commentaire",
+          "sendButton": "Enregistrer le commentaire",
+          "cancelButton": "Annuler",
+          "confirmationTitle": "Confirmation",
+          "confirmationMessage": "Êtes-vous sûr(e) de vouloir poster ce commentaire ?",
+          "updateConfirmationMessage": "Êtes-vous sûr(e) de vouloir modifier ce commentaire ?",
+          "confirmationSend": "Oui",
+          "confirmationCancel": "Annuler",
+          "commentSavingMessage": "Enregistrement du commentaire en cours. Veuillez patienter..."
+        },
+
+        "removeComment":
+        {
+          "confirmationTitle": "Supprimer un commentaire",
+          "confirmationMessage": "Êtes-vous sûr(e) de vouloir supprimer ce commentaire (le contenu du commentaire ne sera plus affiché, les réponses à ce commentaire seront conservées) ?",
+          "confirmButton": "Oui",
+          "cancelButton": "Annuler",
+          "loadingMessage": "Suppression du commentaire en cours. Veuillez patienter..."
+        }
+      },
 
       "create":
       {
@@ -230,6 +276,15 @@
         "header": "Modifier cet article",
         "titleLabel": "Titre de l'article",
         "submitButton": "Enregistrer"
+      },
+
+      "commentsSection":
+      {
+        "postCommentButton": "Ajouter un commentaire",
+        "emptyCommentsStack": "Aucun commentaire",
+        "answerComment": "Répondre",
+        "updateComment": "Modifier",
+        "removeComment": "Supprimer"
       },
 
       "removeArticlePopup":

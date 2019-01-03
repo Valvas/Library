@@ -4,6 +4,7 @@ const constants           = require(`${__root}/functions/constants`);
 const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 const commonFormatDate    = require(`${__root}/functions/common/format/date`);
 const commonAccountsGet   = require(`${__root}/functions/common/accounts/get`);
+const commonNewsComment   = require(`${__root}/functions/common/news/comment`);
 
 /****************************************************************************************************/
 
@@ -33,7 +34,7 @@ module.exports.getLastNewsFromIndex = (startIndex, endIndex, databaseConnection,
 
     for(var x = startIndex; x < endIndex; x++)
     {
-      if(result[x] != undefined) resultsToKeep.push({ uuid: result[x].uuid, title: result[x].title, content: result[x].content, timestamp: result[x].timestamp, author: result[x].author })
+      if(result[x] != undefined) resultsToKeep.push({ uuid: result[x].uuid, title: result[x].title, content: result[x].content, timestamp: result[x].timestamp, author: result[x].author, comments: [] })
     }
 
     var x = 0;
@@ -52,9 +53,16 @@ module.exports.getLastNewsFromIndex = (startIndex, endIndex, databaseConnection,
           resultsToKeep[x].author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : '??????????';
           resultsToKeep[x].authorUuid = accountExists ? accountData.uuid : null;
 
-          if(resultsToKeep[x += 1] == undefined) return callback(null, resultsToKeep);
+          commonNewsComment.getArticleComments(resultsToKeep[x].uuid, databaseConnection, params, (error, articleComments) =>
+          {
+            if(error != null) return callback(error);
 
-          resultBrowser();
+            resultsToKeep[x].comments = articleComments;
+
+            if(resultsToKeep[x += 1] == undefined) return callback(null, resultsToKeep);
+
+            resultBrowser();
+          });
         });
       });
     }
@@ -134,10 +142,18 @@ module.exports.getNewsData = (newsUuid, databaseConnection, params, callback) =>
         newsData.title      = result[0].title;
         newsData.content    = result[0].content;
         newsData.timestamp  = stringifyTimestamp;
+        newsData.comments   = [];
         newsData.author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : '??????????';
         newsData.authorUuid = accountExists ? accountData.uuid : null;
 
-        return callback(null, true, newsData);
+        commonNewsComment.getArticleComments(result[0].uuid, databaseConnection, params, (error, articleComments) =>
+        {
+          if(error != null) return callback(error);
+
+          newsData.comments = articleComments;
+
+          return callback(null, true, newsData);
+        });
       });
     });
   });

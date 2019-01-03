@@ -20,7 +20,8 @@
         "errors":"errors",
         "rights":"rights",
         "units": "units",
-        "unitsMembers": "units_members"
+        "unitsMembers": "units_members",
+        "newsComments": "news_comments"
       }
     },
     "storage":{

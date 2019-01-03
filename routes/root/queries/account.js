@@ -51,6 +51,20 @@ router.put('/update-firstname', (req, res) =>
 
 /****************************************************************************************************/
 
+router.put('/update-contact-number', (req, res) =>
+{
+  if(req.body.number == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'number' });
+
+  commonAccountsUpdate.updateContactNumber(req.body.number, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({  });
+  });
+});
+
+/****************************************************************************************************/
+
 router.put('/update-password', (req, res) =>
 {
   if(req.body.oldPassword == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'oldPassword' });

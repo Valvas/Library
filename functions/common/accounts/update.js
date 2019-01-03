@@ -108,6 +108,27 @@ module.exports.updateFirstname = (newFirstname, accountUuid, databaseConnection,
 
 /****************************************************************************************************/
 
+module.exports.updateContactNumber = (newContactNumber, accountUuid, databaseConnection, globalParameters, callback) =>
+{
+  if(new RegExp('^[0-9]+$').test(newContactNumber) == false) return callback({ status: 406, code: constants.WRONG_CONTACT_NUMBER_FORMAT, detail: null });
+
+  databaseManager.updateQuery(
+  {
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.accounts,
+    args: { contact_number: newContactNumber },
+    where: { operator: '=', key: 'uuid', value: accountUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    return callback(null);
+  });
+}
+
+/****************************************************************************************************/
+
 module.exports.updatePassword = (currentPassword, newPassword, confirmationPassword, accountUuid, databaseConnection, params, callback) =>
 {
   if(currentPassword.length === 0) return callback({ status: 406, code: constants.INCORRECT_CURRENT_PASSWORD, detail: null });

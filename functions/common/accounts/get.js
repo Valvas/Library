@@ -79,7 +79,7 @@ function getAllAccounts(databaseConnection, globalParameters, callback)
 
     for(var x = 0; x < result.length; x++)
     {
-      accounts.push({ uuid: result[x].uuid, email: result[x].email, lastname: result[x].lastname, firstname: result[x].firstname, suspended: result[x].suspended === 1, admin: result[x].is_admin === 1 });
+      accounts.push({ uuid: result[x].uuid, email: result[x].email, lastname: result[x].lastname, firstname: result[x].firstname, suspended: result[x].suspended === 1, admin: result[x].is_admin === 1, contactNumber: result[x].contact_number });
     }
 
     return callback(null, accounts);
@@ -111,7 +111,7 @@ function getAllAccountsWithPictures(databaseConnection, globalParameters, callba
 
     for(var x = 0; x < result.length; x++)
     {
-      accounts.push({ uuid: result[x].uuid, email: result[x].email, lastname: result[x].lastname, firstname: result[x].firstname, suspended: result[x].suspended === 1, admin: result[x].is_admin === 1, picture: result[x].picture });
+      accounts.push({ uuid: result[x].uuid, email: result[x].email, lastname: result[x].lastname, firstname: result[x].firstname, suspended: result[x].suspended === 1, admin: result[x].is_admin === 1, picture: result[x].picture, contactNumber: result[x].contact_number });
     }
 
     return callback(null, accounts);

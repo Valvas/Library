@@ -143,5 +143,11 @@
   "10142": "Un groupe ne peut pas être enfant de l'un de ses propres enfants",
   "10143": "Format du nom du groupe incorrect",
   "10144": "Vous n'êtes pas autorisé(e) à supprimer cet article",
-  "10145": "Vous n'êtes pas autorisé(e) à modifier cet article"
+  "10145": "Vous n'êtes pas autorisé(e) à modifier cet article",
+  "10146": "Le format de ce commentaire est incorrect",
+  "10147": "Le commentaire parent est introuvable",
+  "10148": "Le format du numéro de contact est incorrect",
+  "10149": "Le commentaire est introuvable",
+  "10150": "Vous n'êtes pas autorisé(e) à supprimer ce commentaire",
+  "10151": "Vous n'êtes pas autorisé(e) à modifier ce commentaire"
 }

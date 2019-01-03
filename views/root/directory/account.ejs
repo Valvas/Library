@@ -43,7 +43,11 @@
                     </div>
                     <div class="directoryBlockAccountDataBlock">
                       <div class="directoryBlockAccountDataBlockKey"><%= strings.common.root.directory.accountDetail.phoneLabel %> :</div>
-                      <div class="directoryBlockAccountDataBlockValue">N/A</div>
+                      <% if(locals.accountData.contact_number == null){ %>
+                        <div class="directoryBlockAccountDataBlockValue">N/A</div>
+                      <% } else{ %>
+                        <div class="directoryBlockAccountDataBlockValue">+<%= locals.accountData.contact_number %></div>
+                      <% } %>
                     </div>
                     <div class="directoryBlockAccountDataBlock">
                       <div class="directoryBlockAccountDataBlockKey"><%= strings.common.root.directory.accountDetail.unitLabel %> :</div>

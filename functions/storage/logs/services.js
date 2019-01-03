@@ -79,7 +79,7 @@ function addCommentFileLogInsertInDatabase(fileComment, fileUuid, accountUuid, s
   {
     databaseName: globalParameters.database.storage.label,
     tableName: globalParameters.database.storage.tables.serviceElementsLogs,
-    args: { uuid: generatedUuid, element_uuid: fileUuid, type: globalParameters.fileLogs.fileCommented, account_uuid: accountUuid, date: Date.now(), comment: fileComment }
+    args: { uuid: generatedUuid, element_uuid: fileUuid, type: globalParameters.fileLogs.fileCommented, account_uuid: accountUuid, date: Date.now(), comment: fileComment.replace(/\"/g, '\\"') }
 
   }, databaseConnection, (error, result) =>
   {

@@ -38,6 +38,7 @@ module.exports = (req, res, next) =>
         accountObject.lastname = accountData.lastname;
         accountObject.firstname = accountData.firstname;
         accountObject.suspended = accountData.suspended === 1;
+        accountObject.contactNumber = accountData.contact_number;
 
         req.app.locals.account = accountObject;
 
