@@ -39,15 +39,17 @@
               <div id="accountsEmpty" class="directoryBlockEmpty"><%= strings.common.root.directory.emptySearch %></div>
               <div id="accountsList">
                 <% for(var x = 0; x < accounts.length; x++){ %>
-                  <div name="<%= accounts[x].uuid %>" class="directoryAccountBlock" tag="<%= accounts[x].unitTags.join() %>">
-                    <div class="directoryAccountBlockPicture">
-                      <div class="directoryAccountBlockPictureCircle"><img class="directoryAccountBlockPictureAvatar" src="<%= accounts[x].picture %>" /></div>
+                  <% if(accounts[x].suspended == false){ %>
+                    <div name="<%= accounts[x].uuid %>" class="directoryAccountBlock" tag="<%= accounts[x].unitTags.join() %>">
+                      <div class="directoryAccountBlockPicture">
+                        <div class="directoryAccountBlockPictureCircle"><img class="directoryAccountBlockPictureAvatar" src="<%= accounts[x].picture %>" /></div>
+                      </div>
+                      <div class="directoryAccountBlockData">
+                        <div class="directoryAccountBlockDataEmail"><%= accounts[x].email %></div>
+                        <div><%= accounts[x].lastname.toUpperCase() %> <%= accounts[x].firstname.charAt(0).toUpperCase() %><%= accounts[x].firstname.slice(1).toLowerCase() %></div>
+                      </div>
                     </div>
-                    <div class="directoryAccountBlockData">
-                      <div class="directoryAccountBlockDataEmail"><%= accounts[x].email %></div>
-                      <div><%= accounts[x].lastname.toUpperCase() %> <%= accounts[x].firstname.charAt(0).toUpperCase() %><%= accounts[x].firstname.slice(1).toLowerCase() %></div>
-                    </div>
-                  </div>
+                  <% } %>
                 <% } %>
               </div>
             </div>

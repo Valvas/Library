@@ -36,6 +36,15 @@
         "serviceExtensions":"service_extensions",
         "globalAdministration":"global_administration"
       }
+    },
+    "chat":{
+      "label": "intranet_chat",
+      "tables":{
+        "message": "message",
+        "conversation": "conversation",
+        "participant": "participant",
+        "status": "status"
+      }
     }
   },
   "passwordRules":

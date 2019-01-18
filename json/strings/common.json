@@ -1,4 +1,35 @@
 {
+  "messenger":
+  {
+    "headerTitle": "Messagerie",
+    "genericErrorMessage": "Une erreur est survenue, sa cause n'a pas été determinée, veuillez réessayer plus tard",
+    "closeButton": "Fermer",
+    "returnButton": "Retour",
+
+    "startNewConversation":
+    {
+      "title": "Nouvelle conversation",
+      "returnButton": "Retour",
+      "informationMessage": "Choisissez un utilisateur avec qui débuter une conversation",
+      "searchInputPlaceholder": "Rechercher un utilisateur",
+      "emptySearchResults": "Aucun utilisateur à afficher avec cette recherche",
+      "retrieveAccountsLoaderMessage": "Récupération des utilisateurs en cours",
+      "retrieveAccountsError": "Une erreur est survenue pendant la récupération des utilisateurs",
+      "noAccounts": "Aucun utilisateur avec qui débuter une conversation",
+      "accountToStartConversationWith": "Commencer une conversation avec",
+      "sendButton": "Envoyer ce message",
+      "emptyMessageError": "Ce message ne peut pas être vide. Veuillez ajouter du contenu",
+      "sendingMessageLoader": "Message en cours d'envoi. Veuillez patienter..."
+    },
+
+    "conversationBlock":
+    {
+      "textareaPlaceholder": "Envoyer un message",
+      "emptyMessage": "Veuillez entrer un message à envoyer",
+      "sendButton": "Envoyer"
+    }
+  },
+
   "apps":
   {
     "storage": "Partage Fichiers PEI"

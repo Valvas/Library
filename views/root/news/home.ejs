@@ -125,7 +125,7 @@
                                       <div class="mainNewsBlockCommentsElementActionsButtonDisabled"><%= strings.common.root.news.commentsSection.answerComment %></div>
                                     <% } %>
                                     <% if((locals.account.isAdmin || locals.intranetRights.update_article_comments || (locals.intranetRights.update_article_own_comments && news[x].comments[z].commentAuthorUuid === locals.account.uuid)) && news[x].comments[z].commentRemoved == false){ %>
-                                      <div onclick="uploadCommentOnArticle('<%= news[x].comments[z].commentUuid %>')" class="mainNewsBlockCommentsElementActionsButton"><%= strings.common.root.news.commentsSection.updateComment %></div>
+                                      <div onclick="updateCommentOnArticle('<%= news[x].comments[z].commentUuid %>')" class="mainNewsBlockCommentsElementActionsButton"><%= strings.common.root.news.commentsSection.updateComment %></div>
                                     <% } else{ %>
                                       <div class="mainNewsBlockCommentsElementActionsButtonDisabled"><%= strings.common.root.news.commentsSection.updateComment %></div>
                                     <% } %>

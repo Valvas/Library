@@ -18,6 +18,9 @@ module.exports = (io, app, callback) =>
     socket.on('storageAppAdminServiceDetailJoin', (serviceName) => { socket.join('admin' + serviceName); });
     socket.on('storageAppAdminServicesRightsJoin', () => { socket.join('adminServicesRights'); });
 
+    socket.on('messengerJoinConversation', (conversationUuid) => { socket.join(conversationUuid) });
+    socket.on('messengerAwaitingNewConversationsJoin', () => { socket.join('messengerAwaitingNewConversations') });
+
     /****************************************************************************************************/
     // EVENTS FOR NEWS ON ROOT APP
     /****************************************************************************************************/

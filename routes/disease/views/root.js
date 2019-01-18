@@ -10,7 +10,7 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  res.render('disease/home', { account: req.session.account, strings: diseaseStrings });
+  res.render('disease/home', { account: req.app.locals.account, strings: diseaseStrings });
 });
 
 /****************************************************************************************************/

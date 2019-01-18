@@ -20,7 +20,8 @@ router.get('/', (req, res) =>
       account: req.app.locals.account,
       currentLocation: 'home',
       strings: { common: commonStrings },
-      news: news
+      news: news,
+      conversationsData: req.app.locals.conversationsData
     });
   });
 });

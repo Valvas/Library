@@ -88,7 +88,7 @@ function sendNewPictureToServer(event)
     return;
   }
 
-  if(newPictureName.split('.')[1].toLowerCase() !== 'png' && newPictureName.split('.')[1].toLowerCase() !== 'jpg')
+  if(newPictureName.split('.')[1].toLowerCase() !== 'png' && newPictureName.split('.')[1].toLowerCase() !== 'jpg' && newPictureName.split('.')[1].toLowerCase() !== 'jpeg')
   {
     var error     = document.createElement('div');
     error         .setAttribute('id', 'accountDataUpdateError');

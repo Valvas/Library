@@ -149,5 +149,11 @@
   "10148": "Le format du numéro de contact est incorrect",
   "10149": "Le commentaire est introuvable",
   "10150": "Vous n'êtes pas autorisé(e) à supprimer ce commentaire",
-  "10151": "Vous n'êtes pas autorisé(e) à modifier ce commentaire"
+  "10151": "Vous n'êtes pas autorisé(e) à modifier ce commentaire",
+  "10152": "Cette conversation est introuvable",
+  "10153": "Vous n'êtes pas membre de cette conversation",
+  "10154": "Aucun participant pour cette conversation",
+  "10155": "Cette conversation existe déjà, elle ne peut donc pas être créée",
+  "10156": "Aucun participant trouvé pour cette conversation",
+  "10157": "Vous n'avez pas accès à cette conversation"
 }

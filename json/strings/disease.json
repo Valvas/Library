@@ -1,6 +1,21 @@
 {
+  "navigationBar":
+  {
+    "title": "Gestion des AT",
+    "accountMenu":
+    {
+      "account": "Mon Compte",
+      "logout": "Déconnexion"
+    },
+    "menu":
+    {
+      
+    },
+    "exit": "Quitter"
+  },
+
   "home":
   {
-    "title": "%TITLE% - Accueil"
+    "title": "Gestion des AT - Accueil"
   }
 }

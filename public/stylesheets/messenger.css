@@ -1,0 +1,167 @@
+/****************************************************************************************************/
+
+.messengerSection{ display:flex; box-sizing:border-box; flex-direction:column; position:fixed; z-index:100; bottom:0; width:300px; right:40px; background-color:#FFFFFF; border-radius:2px 2px 0 0; border-top:1px solid #CCC; border-right:1px solid #CCC; border-left:1px solid #CCC; box-shadow:0 0 0 1px rgba(0,0,0,.1), 0 4px 6px rgba(0,0,0,.2); }
+
+
+.messengerSectionHeader{ padding:10px; display:flex; flex-direction:row; justify-content:space-between; cursor:pointer; user-select:none; align-items:center; }
+
+.messengerSectionHeaderAside{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
+
+.messengerSectionHeaderStatus{ width:10px; height:10px; border-radius:50%; background-color:#469A1F; margin-right:10px; }
+
+.messengerSectionHeaderTitle{ font-weight:bold; }
+
+.messengerSectionHeaderCounter{ color:#D9534F; border-radius:50%; font-weight:bold; }
+
+
+.messengerHidden{ display:none; border-top:1px solid rgba(0,0,0,0.24); position:relative; }
+
+.messengerLoader{ background-color:#FFFFFF; padding:20px 10px 20px 10px; position:absolute; top:0; right:0; bottom:0; left:0; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
+
+.messengerLoaderIcon{ font-size:1.5em; margin-right:10px; }
+
+.messengerError{ background-color:#FFFFFF; padding:20px 10px 20px 10px; position:absolute; top:0; right:0; bottom:0; left:0; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+
+.messengerErrorMessage{ color:#D9534F; font-size:0.9em; font-weight:bold; text-align:center; width:100%; }
+
+.messengerErrorClose{ border:1px solid #D9534F; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#D9534F; background-color:#FFFFFF; cursor:pointer; margin-top:20px; }
+
+.messengerErrorClose:hover{ color:#A6201C; border:1px solid #A6201C; background-color:rgba(255,0,0,0.4); }
+
+.messengerInfo{ background-color:#FFFFFF; padding:20px 10px 20px 10px; position:absolute; top:0; right:0; bottom:0; left:0; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+
+.messengerInfoMessage{ color:#5593DC; font-size:0.9em; font-weight:bold; text-align:center; width:100%; }
+
+.messengerInfoClose{ border:1px solid #5593DC; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#5593DC; background-color:#FFFFFF; cursor:pointer; margin-top:20px; }
+
+.messengerInfoClose:hover{ color:#3371BA; border:1px solid #3371BA; background-color:rgba(0,0,255,0.2); }
+
+
+.messengerCreateConversation{ display:none; }
+
+.messengerCreateConversationPickAccount{ display:flex; flex-direction:column; justify-content:flex-start; max-height:600px; height:80vh; }
+
+.messengerCreateConversationHeader{ padding:10px; border-bottom:1px solid rgba(0,0,0,0.36); }
+
+.messengerCreateConversationReturn{ border:none; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#FFFFFF; background-color:#D9534F; cursor:pointer; width:100px; margin:0 0 0 calc(100% - 100px); }
+
+.messengerCreateConversationReturn:hover{ background-color:#A6201C; }
+
+.messengerCreateConversationMessage{ font-size:0.9em; text-align:justify; margin:5px 0 5px 0; }
+
+.messengerCreateConversationSearch{ border:1px solid rgba(0,0,0,0.24); padding:4px 8px 4px 8px; width:100%; box-sizing:border-box; }
+
+.messengerCreateConversationContent{ border-top:1px solid rgba(0,0,0,0.24); margin-top:10px; height:100%; }
+
+.messengerCreateConversationEmpty{ margin:20px 10px 20px 10px; font-size:0.9em; text-align:center; }
+
+.messengerCreateConversationAccounts{ list-style:none; padding:0; margin:0; overflow-y:auto; }
+
+.messengerCreateConversationAccountsElement{ padding:10px; cursor:pointer; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
+
+.messengerCreateConversationAccountsElement:hover{ background-color:rgba(0,0,0,0.06); }
+
+.messengerCreateConversationAccountsElementCircle{ min-height:32px; min-width:32px; width:32px; height:32px; border-radius:50%; border:1px solid rgba(0,0,0,0.8); overflow:hidden; position:relative; }
+
+.messengerCreateConversationAccountsElementPicture{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.messengerCreateConversationAccountsElementName{ margin-left:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:bold; }
+
+
+.messengerCreateConversationFirstMessage{ display:flex; flex-direction:column; justify-content:flex-start; max-height:600px; height:80vh; }
+
+.messengerCreateConversationFirstMessageCancel{ border:none; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#FFFFFF; background-color:#D9534F; cursor:pointer; width:100px; margin:10px 10px 10px calc(100% - 110px); }
+
+.messengerCreateConversationFirstMessageHeader{ display:flex; flex-direction:row; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+
+.messengerCreateConversationFirstMessageHeaderLabel{ font-size:0.9em; margin:10px 0 10px 10px; }
+
+.messengerCreateConversationFirstMessageHeaderValue{ font-size:0.9em; font-weight:bold; margin:0 10px 10px 10px; }
+
+.messengerCreateConversationFirstMessageCancel:hover{ background-color:#A6201C; }
+
+.messengerCreateConversationFirstMessageInput{ overflow-y:auto; height:120px; width:calc(100% - 20px); border-radius:4px; border:1px solid rgba(0,0,0,0.24); box-sizing:border-box; padding:8px; margin:0 10px 10px 10px; }
+
+.messengerCreateConversationFirstMessageSend{ width:120px; margin:0 calc(50% - 60px) 10px calc(50% - 60px); border:none; border-radius:4px; cursor:pointer; padding:4px 8px 4px 8px; box-sizing:border-box; color:#FFFFFF; background-color:#66A4ED; }
+
+.messengerCreateConversationFirstMessageSend:hover{ background-color:#3371BA; }
+
+
+.messengerHome{ max-height:600px; height:80vh; }
+
+.messengerHomeTools{ padding:10px; border-bottom:1px solid rgba(0,0,0,0.24); }
+
+.messengerHomeToolsStart{ margin:10px 0 10px 0; }
+
+.messengerHomeToolsStartButton{ border:none; border-radius:4px; background-color:#66A4ED; color:#FFFFFF; padding:4px 8px 4px 8px; width:100%; box-sizing:border-box; cursor:pointer; }
+
+.messengerHomeToolsStartButton:hover{ background-color:#5593DC; }
+
+
+.messengerHomeList{ list-style:none; padding:0; margin:0; overflow-y:auto; }
+
+.messengerHomeListElement{ display:flex; flex-direction:row; align-items:flex-start; cursor:pointer; user-select:none; padding:10px 0 10px 0; }
+
+.messengerHomeListElement:hover{ background-color:rgba(0,0,0,0.06); }
+
+.messengerHomeListElementPicture{ width:50px; height:50px; margin-left:10px; }
+
+.messengerHomeListElementPictureCircle{ width:100%; height:100%; box-sizing:border-box; border-radius:50%; border:1px solid rgba(0,0,0,0.8); overflow:hidden; position:relative; }
+
+.messengerHomeListElementPictureContent{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.messengerHomeListElementAside{ height:50px; box-sizing:border-box; display:flex; flex-direction:column; padding-bottom:10px; margin:0 10px 0 10px; width:calc(100% - 80px); border-bottom:1px solid rgba(0,0,0,0.24); }
+
+.messengerHomeListElementAsideReceiver{ font-size:1em; font-weight:bold; }
+
+.messengerHomeListElementAsidePreview{ font-size:0.8em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+
+.messengerConversationsContainer{ background-color:#FFFFFF; display:none; max-height:600px; height:80vh; }
+
+.messengerConversation{ display:none; height:100%; flex-direction:column; justify-content:flex-start; }
+
+.messengerConversationHeader{ border-bottom:1px solid rgba(0,0,0,0.24); padding:10px; }
+
+.messengerConversationHeaderReturn{ border:1px solid #D9534F; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#D9534F; background-color:#FFFFFF; cursor:pointer; width:100px; margin:0 0 0 calc(100% - 100px); }
+
+.messengerConversationHeaderReturn:hover{ color:#A6201C; border:1px solid #A6201C; background-color:rgba(255,0,0,0.4); }
+
+.messengerConversationHeaderReceiver{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
+
+.messengerConversationHeaderReceiverCircle{ min-height:32px; min-width:32px; width:32px; height:32px; border-radius:50%; border:1px solid rgba(0,0,0,0.8); overflow:hidden; position:relative; }
+
+.messengerConversationHeaderReceiverPicture{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.messengerConversationHeaderReceiverName{ font-size:0.9em; font-weight:bold; margin-left:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+
+.messengerConversationList{ overflow-y:auto; list-style:none; padding:0 10px 0 10px; margin:0; flex-grow:2; }
+
+.messengerConversationListMessage{ margin:10px 0 10px 0; }
+
+.messengerConversationListMessageRight{ padding:10px; background-color:#5593DC; color:#FFFFFF; border-radius:8px; margin-left:40px; }
+
+.messengerConversationListMessageLeft{ padding:10px; background-color:rgba(0,0,0,0.16); border-radius:8px; margin-right:40px; }
+
+.messengerConversationListMessageDate{ font-size:0.8em; margin-bottom:5px; }
+
+
+.messengerConversationActionsInput{ border-left:none; border-right:none; border-top:1px solid rgba(0,0,0,0.32); outline:none; border-bottom:1px solid rgba(0,0,0,0.32); padding:5px; width:100%; resize:none; box-sizing:border-box; height:80px; overflow-y:auto; }
+
+.messengerConversationActionsEmpty{ color:#D9534F; font-size:0.8em; font-weight:bold; margin:5px 10px 5px 10px; display:none; }
+
+.messengerConversationActionsSender{ padding:10px; display:flex; flex-direction:row; justify-content:flex-end; }
+
+.messengerConversationActionsSenderButton{ font-size:1em; padding:4px 8px 4px 8px; cursor:pointer; border:1px solid #4482CB; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#4482CB; background-color:#FFFFFF; cursor:pointer; }
+
+.messengerConversationActionsSenderButton:hover{ color:#2260A9; border:1px solid #2260A9; background-color:rgba(0,0,255,0.2); }
+
+.messengerConversationActionsLoader{ font-size:1.5em; display:none; }
+
+/****************************************************************************************************/
+
+@media (max-width: 379.9px)
+{
+  .messengerSection{ width:calc(100% - 40px); right:20px; }
+}

@@ -38,6 +38,25 @@
 /****************************************************************************************************/
 /****************************************************************************************************/
 
+.logoutBackground{ display:flex; z-index:300; flex-direction:column; align-items:center; justify-content:center; position:fixed; top:0; right:0; bottom:0; left:0; background-color:rgba(0,0,0,0.6); }
+
+.logoutPopup{ width:400px; margin:40px calc(50% - 200px) 40px calc(50% - 200px); background-color:rgba(255,255,255,0.8); border-radius:4px; color:rgba(0,0,0,0.6); }
+
+.logoutPopupTitle{ font-size:1.2em; padding:20px; border-bottom:1px solid rgba(0,0,0,0.6); font-weight:bold; }
+
+.logoutPopupMessage{ padding:20px; text-align:center; }
+
+.logoutPopupButtons{ display:flex; flex-direction:row; align-items:flex-start; justify-content:flex-end; margin:20px 0 20px 20px; }
+
+.logoutPopupConfirm{ border:none; margin-right:20px; font-size:1em; background-color:rgba(0,0,0,0); cursor:pointer; border-radius:4px; padding:8px 16px 8px 16px; color:#6184D8; }
+
+.logoutPopupCancel{ border:none; margin-right:20px; font-size:1em; background-color:rgba(0,0,0,0); cursor:pointer; border-radius:4px; padding:8px 16px 8px 16px; color:#D9534F; }
+
+.logoutPopupConfirm:hover, .logoutPopupCancel:hover{ background-color:rgba(0,0,0,0.12); }
+
+/****************************************************************************************************/
+/****************************************************************************************************/
+
 @media (max-width: 319.9px)
 {
   .standardPopup{ width:calc(100% - 40px); top:20px; right:20px; left:20px; }
