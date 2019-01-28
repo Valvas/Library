@@ -46,7 +46,7 @@ function openConversation(conversationUuid)
 
   const conversations = document.getElementById('messengerConversationsContainer').children;
 
-  const conversationHeaders = document.getElementById('messengerHome').children[1].children;
+  const conversationHeaders = document.getElementById('messengerHome').children[2].children;
 
   for(var x = 0; x < conversationHeaders.length; x++)
   {

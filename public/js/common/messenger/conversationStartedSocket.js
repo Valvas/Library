@@ -57,10 +57,9 @@ socket.on('conversationStarted', (conversationUuid) =>
     
     if(accountData.uuid !== conversationData.conversationMessages[0].authorUuid) newConversationBlock.innerHTML += `<div class="messengerHomeListElementCounter">1</div>`;
 
-    document.getElementById('messengerHome').children[1].insertBefore(newConversationBlock, document.getElementById('messengerHome').getElementsByTagName('ul')[0].children[0]);
+    document.getElementById('messengerHome').children[2].insertBefore(newConversationBlock, document.getElementById('messengerHome').getElementsByTagName('ul')[0].children[0]);
   
     if(document.getElementById(conversationUuid)) return;
-
     
     var newConversationContent  = document.createElement('div');
     var newConversationHeader   = document.createElement('div');

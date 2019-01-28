@@ -18,7 +18,7 @@ socket.on('messagePosted', (conversationUuid) =>
     }
 
   }).done((result) =>
-  {
+  {console.log(result);
     const conversationMessages = result.conversationData.conversationMessages;
 
     const conversations = document.getElementById('messengerConversationsContainer').children;
@@ -55,13 +55,12 @@ socket.on('messagePosted', (conversationUuid) =>
     if(document.getElementById('messengerHidden') == null) return;
     if(document.getElementById('messengerHome') == null) return;
 
-
     if(document.getElementById('messengerHidden').style.display !== 'block' || (document.getElementById('messengerHidden').style.display === 'block' && currentConversation.style.display !== 'flex'))
     {
       if(document.getElementById('unreadMessagesCounter')) document.getElementById('unreadMessagesCounter').innerText = parseInt(document.getElementById('unreadMessagesCounter').innerText) + 1;
     }
 
-    const conversationsList = document.getElementById('messengerHome').children[1].children;
+    const conversationsList = document.getElementById('messengerHome').children[2].children;
 
     for(var x = 0; x < conversationsList.length; x++)
     {
