@@ -165,7 +165,7 @@ function addMessageToConversationAddParticipants(messageContent, conversationUui
     {
       databaseName: globalParameters.database.chat.label,
       tableName: globalParameters.database.chat.tables.participant,
-      args: { conversation: conversationUuid, account: participants[index], removed: 0, messages: participants[index] === accountUuid ? 0 : 1 }
+      args: { conversation: conversationUuid, account: participants[index], removed: 0, messages: 0 }
   
     }, databaseConnection, (error) =>
     {
@@ -196,7 +196,49 @@ function addMessageToConversationInsertIntoDatabase(messageContent, conversation
   {
     if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    return callback(null, conversationUuid);
+    return addMessageToConversationUpdateParticipantsMessagesCounter(conversationUuid, accountUuid, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function addMessageToConversationUpdateParticipantsMessagesCounter(conversationUuid, accountUuid, databaseConnection, globalParameters, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.chat.label,
+    tableName: globalParameters.database.chat.tables.participant,
+    args: [ '*' ],
+    where: { condition: 'AND', 0: { operator: '=', key: 'conversation', value: conversationUuid }, 1: { operator: '!=', key: 'account', value: accountUuid } }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    if(result.length === 0) return callback({ status: 404, code: constants.NO_PARTICIPANTS_FOUND_FOR_THIS_CONVERSATION, detail: null });
+
+    var index = 0;
+
+    var browseParticipants = () =>
+    {
+      databaseManager.updateQuery(
+      {
+        databaseName: globalParameters.database.chat.label,
+        tableName: globalParameters.database.chat.tables.participant,
+        args: { messages: (result[index].messages + 1) },
+        where: { condition: 'AND', 0: { operator: '=', key: 'conversation', value: conversationUuid }, 1: { operator: '=', key: 'account', value: result[index].account } }
+    
+      }, databaseConnection, (error) =>
+      {
+        if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    
+        if(result[index += 1] == undefined) return callback(null, conversationUuid);
+
+        browseParticipants();
+      });
+    }
+
+    browseParticipants();
   });
 }
 

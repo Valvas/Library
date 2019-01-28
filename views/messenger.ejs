@@ -2,10 +2,12 @@
   <div class="messengerSection" id="messengerSection">
     <div class="messengerSectionHeader" id="messengerSectionHeader" onclick="displayMessengerBlock()">
       <div class="messengerSectionHeaderAside">
-        <div class="messengerSectionHeaderStatus"></div>
+        <div id="messengerStatus" class="messengerSectionHeaderStatus"></div>
         <div class="messengerSectionHeaderTitle"><%= strings.common.messenger.headerTitle %></div>
       </div>
-      <div class="messengerSectionHeaderCounter">0</div>
+      <% var counter = 0; %>
+      <% for(var x = 0; x < conversationsData.length; x++) counter += conversationsData[x].newMessages %>
+      <div class="messengerSectionHeaderCounter" id="unreadMessagesCounter"><%= counter %></div>
     </div>
     <div class="messengerHidden" id="messengerHidden">
       <div class="messengerCreateConversation" id="messengerCreateConversation">
@@ -18,6 +20,11 @@
         </div>
       </div>
       <div class="messengerHome" id="messengerHome">
+        <div class="messengerStatus" id="messengerStatus">
+          <select class="messengerStatusList">
+            <option>En ligne</option>
+          </select>
+        </div>
         <div class="messengerHomeTools">
           <div class="messengerHomeToolsStart">
             <button onclick="createNewConversation()" class="messengerHomeToolsStartButton"><%= strings.common.messenger.startNewConversation.title %></button>
@@ -36,6 +43,9 @@
                 <div class="messengerHomeListElementAsideReceiver"><%= currentAccount.accountFirstname.charAt(0).toUpperCase() %><%= currentAccount.accountFirstname.slice(1).toLowerCase() %> <%= currentAccount.accountLastname.charAt(0).toUpperCase() %><%= currentAccount.accountLastname.slice(1).toLowerCase() %></div>
                 <div class="messengerHomeListElementAsidePreview"><%= conversationsData[x].messages[conversationsData[x].messages.length - 1].authorName %> : <%= conversationsData[x].messages[conversationsData[x].messages.length - 1].messageContent %></div>
               </div>
+              <% if(conversationsData[x].newMessages > 0){ %>
+                <div class="messengerHomeListElementCounter"><%= conversationsData[x].newMessages %></div>
+              <% } %>
             </li>
           <% } %>
         </ul>
@@ -53,7 +63,6 @@
               </div>
             </div>
             <ul class="messengerConversationList">
-              <% var currentAccount = null %>
               <% for(var y = 0; y < conversationsData[x].messages.length; y++){ %>
                 <li class="messengerConversationListMessage" name="<%= conversationsData[x].messages[y].messageId %>">
                   <% if(conversationsData[x].messages[y].authorUuid === locals.account.uuid){ %>
@@ -86,6 +95,7 @@
   <script src="/js/common/messenger/initialization.js"></script>
   <script src="/js/common/messenger/socket.js"></script>
   <script src="/js/common/messenger/postMessage.js"></script>
+  <script src="/js/common/messenger/statusChange.js"></script>
   <script src="/js/common/messenger/openAndClose.js"></script>
   <script src="/js/common/messenger/messagesDisplayer.js"></script>
   <script src="/js/common/messenger/createConversation.js"></script>

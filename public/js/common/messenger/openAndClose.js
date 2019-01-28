@@ -36,7 +36,36 @@ function openConversation(conversationUuid)
   if(document.getElementById(conversationUuid) == null) return;
   if(document.getElementById('messengerConversationsContainer') == null) return;
 
+  $.ajax(
+  {
+    method: 'POST', dataType: 'json', data: { conversationUuid: conversationUuid }, timeout: 10000, url: '/api/messenger/conversation-opened',
+
+    error: (xhr, textStatus, errorThrown) => {  }
+
+  }).done((result) => {  });
+
   const conversations = document.getElementById('messengerConversationsContainer').children;
+
+  const conversationHeaders = document.getElementById('messengerHome').children[1].children;
+
+  for(var x = 0; x < conversationHeaders.length; x++)
+  {
+    if(conversationHeaders[x].getAttribute('name') !== conversationUuid) continue;
+
+    if(conversationHeaders[x].children[2] == undefined) break;
+
+    const amountOfUnreadMessagesForThisConversation = parseInt(conversationHeaders[x].children[2].innerText);
+
+    conversationHeaders[x].children[2].remove();
+
+    if(document.getElementById('unreadMessagesCounter') == undefined) break;
+
+    const totalAmountOfUnreadMessages = parseInt(document.getElementById('unreadMessagesCounter').innerText);
+
+    const newTotalAmountOfUnreadMessages = (totalAmountOfUnreadMessages - amountOfUnreadMessagesForThisConversation) < 0 ? 0 : (totalAmountOfUnreadMessages - amountOfUnreadMessagesForThisConversation);
+
+    document.getElementById('unreadMessagesCounter').innerText = newTotalAmountOfUnreadMessages;
+  }
 
   for(var x = 0; x < conversations.length; x++) conversations[x].removeAttribute('style');
 
@@ -45,6 +74,8 @@ function openConversation(conversationUuid)
     document.getElementById(conversationUuid).style.display = 'flex';
 
     $(document.getElementById('messengerConversationsContainer')).slideDown(150);
+
+    document.getElementById(conversationUuid).children[1].scrollTop = document.getElementById(conversationUuid).children[1].scrollHeight;
   });
 }
 

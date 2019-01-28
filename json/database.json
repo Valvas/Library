@@ -200,8 +200,8 @@
     "status":
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "value": "VARCHAR(255) NOT NULL",
-      "color": "VARCHAR(255) NOT NULL"
+      "account": "VARCHAR(255) NOT NULL",
+      "status": "INT NOT NULL"
     }
   }
 }

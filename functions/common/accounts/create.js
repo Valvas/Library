@@ -88,7 +88,7 @@ function createAccountAddRightsInDatabase(accountUuid, accountEmail, unitId, cle
   {
     databaseName: globalParameters.database.root.label,
     tableName: globalParameters.database.root.tables.rights,
-    args: { account: accountUuid, create_articles: 0, update_articles: 0, update_own_articles: 0, remove_articles: 0, remove_own_articles: 0 }
+    args: { account: accountUuid, create_articles: 0, update_articles: 0, update_own_articles: 0, remove_articles: 0, remove_own_articles: 0, update_article_comments: 0, update_article_own_comments: 1, remove_article_comments: 0, remove_article_own_comments: 1 }
 
   }, databaseConnection, (error, result) =>
   {

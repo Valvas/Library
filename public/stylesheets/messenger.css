@@ -7,7 +7,7 @@
 
 .messengerSectionHeaderAside{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
 
-.messengerSectionHeaderStatus{ width:10px; height:10px; border-radius:50%; background-color:#469A1F; margin-right:10px; }
+.messengerSectionHeaderStatus{ width:10px; height:10px; border-radius:50%; margin-right:10px; }
 
 .messengerSectionHeaderTitle{ font-weight:bold; }
 
@@ -89,7 +89,7 @@
 
 .messengerHome{ max-height:600px; height:80vh; }
 
-.messengerHomeTools{ padding:10px; border-bottom:1px solid rgba(0,0,0,0.24); }
+.messengerHomeTools{ padding:5px 10px 10px 10px; border-bottom:1px solid rgba(0,0,0,0.24); }
 
 .messengerHomeToolsStart{ margin:10px 0 10px 0; }
 
@@ -98,9 +98,14 @@
 .messengerHomeToolsStartButton:hover{ background-color:#5593DC; }
 
 
+.messengerStatus{ margin:10px 10px 5px 10px; }
+
+.messengerStatusList{ width:100%; text-align:right; padding:4px; border-radius:2px; }
+
+
 .messengerHomeList{ list-style:none; padding:0; margin:0; overflow-y:auto; }
 
-.messengerHomeListElement{ display:flex; flex-direction:row; align-items:flex-start; cursor:pointer; user-select:none; padding:10px 0 10px 0; }
+.messengerHomeListElement{ display:flex; flex-direction:row; align-items:flex-start; cursor:pointer; user-select:none; padding:10px 0 10px 0; position:relative; }
 
 .messengerHomeListElement:hover{ background-color:rgba(0,0,0,0.06); }
 
@@ -115,6 +120,8 @@
 .messengerHomeListElementAsideReceiver{ font-size:1em; font-weight:bold; }
 
 .messengerHomeListElementAsidePreview{ font-size:0.8em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.messengerHomeListElementCounter{ color:#D9534F; font-size:0.9em; font-weight:bold; position:absolute; top:10px; right:10px; }
 
 
 .messengerConversationsContainer{ background-color:#FFFFFF; display:none; max-height:600px; height:80vh; }

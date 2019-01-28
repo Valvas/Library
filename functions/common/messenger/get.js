@@ -389,7 +389,7 @@ function getAccountsWithWhomStartingAConversationRetrieveAccountsFromDatabase(ac
 
     for(var x = 0; x < accountsList.length; x++)
     {
-      if(accountsNotToRetrieve.includes(accountsList[x].uuid) == false) accountsToReturn.push(accountsList[x]);
+      if(accountsNotToRetrieve.includes(accountsList[x].uuid) == false && accountsList[x].suspended == false) accountsToReturn.push(accountsList[x]);
     }
 
     return callback(null, accountsToReturn);

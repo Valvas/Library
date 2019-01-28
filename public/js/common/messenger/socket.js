@@ -50,9 +50,16 @@ socket.on('messagePosted', (conversationUuid) =>
       if((x + 1) === conversationMessages.length) lastMessage = `<div class="messengerHomeListElementAsidePreview">${conversationMessages[x].authorName} : ${conversationMessages[x].messageContent}</div>`;
     }
 
-    currentConversation.children[1].children[currentConversation.children[1].children.length - 1].scrollIntoView({ behavior: 'instant' });
+    if(currentConversation.style.display === 'flex' || result.accountData.uuid === conversationMessages[conversationMessages.length - 1].authorUuid) currentConversation.children[1].scrollTop = currentConversation.children[1].scrollHeight;
 
+    if(document.getElementById('messengerHidden') == null) return;
     if(document.getElementById('messengerHome') == null) return;
+
+
+    if(document.getElementById('messengerHidden').style.display !== 'block' || (document.getElementById('messengerHidden').style.display === 'block' && currentConversation.style.display !== 'flex'))
+    {
+      if(document.getElementById('unreadMessagesCounter')) document.getElementById('unreadMessagesCounter').innerText = parseInt(document.getElementById('unreadMessagesCounter').innerText) + 1;
+    }
 
     const conversationsList = document.getElementById('messengerHome').children[1].children;
 
@@ -62,7 +69,28 @@ socket.on('messagePosted', (conversationUuid) =>
 
       conversationsList[x].children[1].children[1].remove();
       conversationsList[x].children[1].innerHTML += lastMessage;
+
+      if(currentConversation.style.display === 'flex') break;
+      
+      if(conversationsList[x].children[2] == undefined) conversationsList[x].innerHTML += `<div class="messengerHomeListElementCounter">1</div>`;
+
+      else
+      {
+        const currentAmountOfUnreadMessages = parseInt(conversationsList[x].children[2].innerText) + 1;
+
+        conversationsList[x].children[2].innerText = currentAmountOfUnreadMessages;
+      }
     }
+
+    if(currentConversation.style.display !== 'flex') return;
+
+    $.ajax(
+    {
+      method: 'POST', dataType: 'json', data: { conversationUuid: conversationUuid }, timeout: 10000, url: '/api/messenger/conversation-opened',
+  
+      error: (xhr, textStatus, errorThrown) => {  }
+  
+    }).done((result) => {  });
   });
 });
 

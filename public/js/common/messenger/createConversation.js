@@ -135,6 +135,7 @@ function createNewConversationSendNewMessageToServer(accountUuid)
 
       document.getElementById('messengerHome').removeAttribute('style');
       document.getElementById('messengerCreateConversation').removeAttribute('style');
+      document.getElementById('messengerCreateConversationPickAccount').removeAttribute('style');
 
       displayMessengerInfo(result.message);
     });

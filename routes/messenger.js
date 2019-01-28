@@ -80,4 +80,36 @@ router.get('/get-accounts-with-whom-to-start-a-conversation', (req, res) =>
 
 /****************************************************************************************************/
 
+router.post('/conversation-opened', (req, res) =>
+{
+  const currentAccountData = req.app.locals.account;
+
+  if(req.body.conversationUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Conversation Uuid' });
+
+  commonMessengerUpdate.updateMessageAmountInDatabase(currentAccountData.uuid, req.body.conversationUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({  });
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/update-account-status', (req, res) =>
+{
+  const currentAccountData = req.app.locals.account;
+
+  if(req.body.status == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Status' });
+
+  commonMessengerUpdate.updateAccountStatus(currentAccountData.uuid, parseInt(req.body.status), req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({  });
+  });
+});
+
+/****************************************************************************************************/
+
 module.exports = router;

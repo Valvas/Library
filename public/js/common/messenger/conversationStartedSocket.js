@@ -19,6 +19,7 @@ socket.on('conversationStarted', (conversationUuid) =>
     if(document.getElementById('messengerHome') == null) return;
     if(document.getElementById('messengerConversationsContainer') == null) return;
 
+    if(document.getElementById('unreadMessagesCounter') && accountData.uuid !== conversationData.conversationMessages[0].authorUuid) document.getElementById('unreadMessagesCounter').innerText = parseInt(document.getElementById('unreadMessagesCounter').innerText) + 1;
 
     var receiver = null;
 
@@ -53,6 +54,8 @@ socket.on('conversationStarted', (conversationUuid) =>
 
     newConversationBlock      .innerHTML += `<div class="messengerHomeListElementPicture"><div class="messengerHomeListElementPictureCircle"><img class="messengerHomeListElementPictureContent" src="${receiver.accountPicture}" /></div></div>`;
     newConversationBlock      .innerHTML += `<div class="messengerHomeListElementAside"><div class="messengerHomeListElementAsideReceiver">${receiver.accountFirstname.charAt(0).toUpperCase()}${receiver.accountFirstname.slice(1).toLowerCase()} ${receiver.accountLastname.charAt(0).toUpperCase()}${receiver.accountLastname.slice(1).toLowerCase()}</div><div class="messengerHomeListElementAsidePreview">${conversationData.conversationMessages[conversationData.conversationMessages.length - 1].authorName} : ${conversationData.conversationMessages[conversationData.conversationMessages.length - 1].messageContent}</div></div>`;
+    
+    if(accountData.uuid !== conversationData.conversationMessages[0].authorUuid) newConversationBlock.innerHTML += `<div class="messengerHomeListElementCounter">1</div>`;
 
     document.getElementById('messengerHome').children[1].insertBefore(newConversationBlock, document.getElementById('messengerHome').getElementsByTagName('ul')[0].children[0]);
   
