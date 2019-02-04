@@ -26,7 +26,7 @@ module.exports.startInit = (app, callback) =>
   const init = require(`${__root}/routes/init`);
 
   encryption.getInitPassword((error, password) =>
-  {    
+  {
     fs.open(`${__root}/password`, 'w', (error, fd) =>
     {
       if(error) return callback({ message: error.message });
@@ -89,6 +89,8 @@ module.exports.startApp = (app, callback) =>
 
   app.use('/api/messenger', auth, apiMessenger);
 
+  app.use('/test', auth, require(`${__root}/routes/root/views/test`));
+
   app.use('/', root);
   app.use('/home', auth, messenger, homeViews);
   app.use('/apps', auth, messenger, appsViews);
@@ -134,7 +136,7 @@ module.exports.startApp = (app, callback) =>
     port              : params.database.port,
     password          : params.database.password
   });
-    
+
   const transporter = nodemailer.createTransport(
   {
     host                  : params.transporter.address,
@@ -145,17 +147,17 @@ module.exports.startApp = (app, callback) =>
       user                : params.transporter.user,
       pass                : params.transporter.password
     },
-    tls: 
+    tls:
     {
       rejectUnauthorized  : false
     }
   });
-    
+
   app.set('transporter', transporter);
   app.set('databaseConnectionPool', pool);
-    
+
   database.createDatabases(pool, () =>
-  { 
+  {
     initFolder.createAppFolders(params, (error) =>
     {
       accountsInit.createAdminAccounts(pool, app.get('params'), transporter, (error) =>
@@ -163,7 +165,7 @@ module.exports.startApp = (app, callback) =>
         if(error != null)
         {
           console.log(error);
-        
+
           process.exit(1);
         }
 
@@ -172,7 +174,7 @@ module.exports.startApp = (app, callback) =>
           if(error != null)
           {
             console.log(error);
-          
+
             process.exit(1);
           }
 
@@ -181,7 +183,7 @@ module.exports.startApp = (app, callback) =>
             if(error == null) return callback();
 
             console.log(error);
-          
+
             process.exit(1);
           });
         });

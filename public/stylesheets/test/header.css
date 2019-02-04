@@ -1,0 +1,43 @@
+/****************************************************************************************************/
+
+.headerBlock{ background-color:#171219; display:flex; flex-direction:row; justify-content:center; }
+
+/****************************************************************************************************/
+
+.navigationBar{ margin:0 20px 0 20px; max-width:1000px; width:calc(100% - 40px); display:flex; flex-direction:row; justify-content:space-between; align-items:center; }
+
+
+.navigationBarTitle{ display:flex; flex-direction:row; justify-content:flex-start; margin-right:10px; box-sizing:border-box; }
+
+.navigationBarTitleCompanyName{ font-family:roboto-light; font-size:2em; color:#FFFFFF; text-transform:uppercase; margin-right:5px; }
+
+.navigationBarTitleAppName{ font-family:roboto-light; font-size:2em; color:#759EB8; text-transform:uppercase; }
+
+
+.navigationBarAccount{ font-family:roboto-light; }
+
+.navigationBarAccountBlock{ max-width:100%; cursor:pointer; position:relative; }
+
+.navigationBarAccountBlock:hover .navigationBarAccountBlockDataEmail{ color:#759EB8; }
+
+.navigationBarAccountBlock:hover .navigationBarAccountBlockData{ background-color:rgba(255,255,255,0.1); }
+
+.navigationBarAccountBlockData{ box-sizing:border-box; display:flex; flex-direction:row; justify-content:flex-end; align-items:center;  width:100%; padding:10px; }
+
+.navigationBarAccountBlockDataEmail{ color:#FFFFFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-align:right; margin-right:10px; width:calc(100% - 70px); }
+
+.navigationBarAccountBlockDataCircle{ width:60px; height:60px; border-radius:50%; border:3px solid #759EB8; overflow:hidden; position:relative; box-sizing:border-box; }
+
+.navigationBarAccountBlockDataPicture{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.navigationBarAccountBlockMenu{ background-color:#FFFFFF; position:absolute; display:none; z-index:100; top:80px; right:0; left:0; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); }
+
+.navigationBarAccountBlockMenuList{ list-style:none; padding:0; margin:0; }
+
+.navigationBarAccountBlockMenuListElement{ display:block; padding:10px; text-decoration:none; color:rgba(0,0,0,0.8); text-align:center; font-size:18px; line-height:24px; cursor:pointer; }
+
+.navigationBarAccountBlockMenuListElement:not(:first-child){ border-top:1px solid #E0E0E0; }
+
+.navigationBarAccountBlockMenuListElement:hover{ color:#FFFFFF; background-color:#759EB8; }
+
+/****************************************************************************************************/

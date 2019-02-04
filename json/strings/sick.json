@@ -9,7 +9,7 @@
     },
     "menu":
     {
-      
+      "add": "Ajouter un arrêt"
     },
     "exit": "Quitter"
   },
@@ -17,5 +17,12 @@
   "home":
   {
     "title": "Gestion des AT - Accueil"
+  },
+
+  "at":
+  {
+    "number": "Matricule",
+    "lastname": "Nom",
+    "firstname": "Prénom"
   }
 }

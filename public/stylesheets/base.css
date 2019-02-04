@@ -29,6 +29,10 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); background-color:rgba
 
 .headerBlockNavigationTitle{ width:200px; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; margin-right:10px; }
 
+.headerBlockNavigationTitleCompany{ font-family:roboto-light; font-size:2em; color:#EA2A64; text-transform:uppercase; margin-right:5px; }
+
+.headerBlockNavigationTitleApp{ font-family:roboto-light; font-size:2em; color:#A2C78B; text-transform:uppercase; }
+
 .headerBlockNavigationTitleIcon{ height:50px; }
 
 .headerBlockNavigationTitleValue{ font-size:18px; text-align:center; color:#EA2A64; line-height:24px; }
@@ -266,7 +270,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); background-color:rgba
   .startColumn{ width:160px; margin:0 20px 0 0; }
 
   .centerColumn{ width:calc(100% - 100px); }
-  
+
   .endColumn{ display:none; }
 
   .asideNewsBlock{ display:none; }
@@ -291,7 +295,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); background-color:rgba
   .startColumn{ width:160px; margin:0 20px 0 0; }
 
   .centerColumn{ width:calc(100% - 100px); }
-  
+
   .endColumn{ display:none; }
 
   .asideNewsBlock{ display:none; }
@@ -316,7 +320,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); background-color:rgba
   .startColumn{ width:160px; margin:0 20px 0 0; }
 
   .centerColumn{ width:calc(100% - 100px); }
-  
+
   .endColumn{ display:none; }
 
   .asideNewsBlock{ display:none; }
@@ -341,7 +345,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); background-color:rgba
   .startColumn{ width:180px; margin:0 20px 0 0; }
 
   .centerColumn{ width:calc(100% - 100px); }
-  
+
   .endColumn{ display:none; }
 
   .asideNewsBlock{ display:none; }
@@ -364,7 +368,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); background-color:rgba
   .headerBlockNavigation{ width:calc(100% - 40px); margin:0 20px 10px 20px; }
 
   .centerColumn{ width:calc(100% - 360px); }
-  
+
   .endColumn{ display:none; }
 
   .footerSection{ height:250px; }
@@ -383,7 +387,7 @@ body{ margin:0; position:relative; color:rgba(0,0,0,0.65); background-color:rgba
   .headerBlockNavigation{ width:calc(100% - 40px); margin:0 20px 10px 20px; }
 
   .centerColumn{ width:calc(100% - 360px); }
-  
+
   .endColumn{ display:none; }
 
   .footerSection{ height:250px; }

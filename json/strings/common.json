@@ -169,6 +169,17 @@
 
   "root":
   {
+    "navigationBar":
+    {
+      "companyName": "pei",
+      "appName": "intranet",
+      "accountMenu":
+      {
+        "account": "Mon compte",
+        "logout": "Déconnexion"
+      }
+    },
+
     "account":
     {
       "accountLoadingError":
@@ -256,7 +267,7 @@
     {
       "articleCommentRemovedContent": "Commentaire supprimé",
       "retrieveCommentDataFromServer": "Récupération des données du commentaire en cours. Veuillez patienter...",
-      
+
       "homePage":
       {
         "createArticleSection":

@@ -9,6 +9,13 @@ var router = express.Router();
 
 /****************************************************************************************************/
 
+router.get('/get-account-data', (req, res) =>
+{
+  res.status(200).send(req.app.locals.account);
+});
+
+/****************************************************************************************************/
+
 router.put('/update-email-address', (req, res) =>
 {
   if(req.body.emailAddress == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'emailAddress' });
@@ -16,7 +23,7 @@ router.put('/update-email-address', (req, res) =>
   commonAccountsUpdate.updateEmailAddress(req.body.emailAddress, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-    
+
     return res.status(200).send({  });
   });
 });
