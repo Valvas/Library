@@ -52,6 +52,7 @@
       </div>
       <div id="messengerConversationsContainer" class="messengerConversationsContainer">
         <% for(var x = 0; x < conversationsData.length; x++){ %>
+          <% const currentAccount = conversationsData[x].participants[Object.keys(conversationsData[x].participants)[0]] %>
           <div class="messengerConversation" id="<%= conversationsData[x].uuid %>">
             <div class="messengerConversationHeader">
               <button class="messengerConversationHeaderReturn" onclick="closeConversation('<%= conversationsData[x].uuid %>')"><%= strings.common.messenger.returnButton %></button>

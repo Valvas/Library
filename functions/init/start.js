@@ -63,7 +63,7 @@ module.exports.startApp = (app, callback) =>
   const rootQueriesNews               = require(`${__root}/routes/root/queries/news`);
   const rootQueriesAccount            = require(`${__root}/routes/root/queries/account`);
 
-  const diseaseViewsRoot              = require(`${__root}/routes/disease/views/root`);
+  const sickViewsRoot                 = require(`${__root}/routes/sick/views/root`);
 
   const administrationViewsHome       = require(`${__root}/routes/administration/views/home`);
   const administrationViewsUnits      = require(`${__root}/routes/administration/views/units`);
@@ -91,10 +91,10 @@ module.exports.startApp = (app, callback) =>
 
   app.use('/', root);
   app.use('/home', auth, messenger, homeViews);
-  app.use('/apps', auth, appsViews);
-  app.use('/news', auth, newsViews);
-  app.use('/account', auth, accountViews);
-  app.use('/directory', auth, directoryViews);
+  app.use('/apps', auth, messenger, appsViews);
+  app.use('/news', auth, messenger, newsViews);
+  app.use('/account', auth, messenger, accountViews);
+  app.use('/directory', auth, messenger, directoryViews);
 
   app.use('/queries/strings', auth, stringsQueries);
 
@@ -119,7 +119,7 @@ module.exports.startApp = (app, callback) =>
   app.use('/queries/storage/strings', auth, storageAppAccess, storageQueriesStrings);
   app.use('/queries/storage/services', auth, storageAppAccess, storageQueriesServices);
 
-  app.use('/disease', auth, diseaseViewsRoot);
+  app.use('/sick', auth, sickViewsRoot);
 
   app.use((req, res, next) =>
   {

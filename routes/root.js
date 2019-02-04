@@ -53,14 +53,14 @@ router.put('/', (req, res) =>
 
 router.post('/', (req, res) =>
 {
-  req.body.email == undefined || req.body.lastname == undefined || req.body.firstname == undefined || req.body.service == undefined || req.body.admin == undefined ? 
-  
+  req.body.email == undefined || req.body.lastname == undefined || req.body.firstname == undefined || req.body.service == undefined || req.body.admin == undefined ?
+
   res.status(406).send({ result: false, message: errors[10009] }) :
 
   accountsCreate.createAccount(req.body, req.app.get('databaseConnectionPool'), req.app.get('transporter'), req.app.get('params'), (error) =>
   {
-    error == null ? 
-    res.status(201).send({ result: true, message: success[constants.ACCOUNT_SUCCESSFULLY_CREATED] }) : 
+    error == null ?
+    res.status(201).send({ result: true, message: success[constants.ACCOUNT_SUCCESSFULLY_CREATED] }) :
     res.status(error.status).send({ result: false, message: errors[error.code] });
   });
 });
@@ -97,14 +97,7 @@ router.put('/reset-password', (req, res) =>
 
 router.get('/afk-time', (req, res) =>
 {
-  
-});
 
-/****************************************************************************************************/
-
-router.get('/test', (req, res) =>
-{
-  res.render('test');
 });
 
 /****************************************************************************************************/

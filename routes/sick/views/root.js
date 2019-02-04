@@ -2,7 +2,7 @@
 
 const express = require('express');
 
-const diseaseStrings = require(__root + '/json/strings/disease');
+const sickStrings = require(__root + '/json/strings/sick');
 
 var router = express.Router();
 
@@ -10,7 +10,7 @@ var router = express.Router();
 
 router.get('/', (req, res) =>
 {
-  res.render('disease/home', { account: req.app.locals.account, strings: diseaseStrings });
+  res.render('sick/home', { account: req.app.locals.account, strings: sickStrings });
 });
 
 /****************************************************************************************************/

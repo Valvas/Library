@@ -30,7 +30,8 @@ router.get('/', (req, res) =>
         strings: { common: commonStrings },
         news: news,
         newsSelected: false,
-        intranetRights: rightsData
+        intranetRights: rightsData,
+        conversationsData: req.app.locals.conversationsData
       });
     });
   });
@@ -52,7 +53,7 @@ router.get('/create', (req, res) =>
 
       if(rightsData.create_articles == false && req.app.locals.account.isAdmin == false) return res.render('block', { message: errors[constants.UNAUTHORIZED_TO_CREATE_ARTICLES], detail: null, link: '/' });
 
-      res.render('root/news/create', { account: req.app.locals.account, currentLocation: 'news', strings: { common: commonStrings }, news: news });
+      res.render('root/news/create', { account: req.app.locals.account, currentLocation: 'news', strings: { common: commonStrings }, news: news, conversationsData: req.app.locals.conversationsData });
     });
   });
 });
@@ -79,7 +80,7 @@ router.get('/update/:articleUuid', (req, res) =>
 
         if(rightsData.update_articles == false && req.app.locals.account.isAdmin == false && (rightsData.update_own_articles == false || articleData.authorUuid !== req.app.locals.account.uuid)) return res.render('block', { message: errors[constants.UNAUTHORIZED_TO_UPDATE_THIS_ARTICLE], detail: null, link: '/' });
 
-        res.render('root/news/update', { account: req.app.locals.account, currentLocation: 'news', strings: { common: commonStrings }, news: news, articleData: articleData });
+        res.render('root/news/update', { account: req.app.locals.account, currentLocation: 'news', strings: { common: commonStrings }, news: news, articleData: articleData, conversationsData: req.app.locals.conversationsData });
       });
     });
   });
@@ -113,7 +114,8 @@ router.get('/:newsUuid', (req, res) =>
           strings: { common: commonStrings },
           news: news,
           newsSelected: req.params.newsUuid,
-          intranetRights: rightsData
+          intranetRights: rightsData,
+          conversationsData: req.app.locals.conversationsData
         });
       });
     });

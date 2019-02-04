@@ -98,7 +98,8 @@ router.get('/', (req, res) =>
             strings: { common: commonStrings },
             news: news,
             accounts: accounts,
-            unitsHtml: unitsHtml.join('\n')
+            unitsHtml: unitsHtml.join('\n'),
+            conversationsData: req.app.locals.conversationsData
           });
         });
       });
@@ -132,7 +133,8 @@ router.get('/:accountUuid', (req, res) =>
           currentLocation: 'directory',
           strings: { common: commonStrings },
           news: news,
-          accountData: accountData
+          accountData: accountData,
+          conversationsData: req.app.locals.conversationsData
         });
       });
     });

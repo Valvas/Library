@@ -102,7 +102,7 @@ router.post('/create-article', (req, res) =>
       if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
       commonNewsGet.getNewsData(createdNewsUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsExists, newsData) =>
-      {
+      {console.log(newsExists);
         if(error == null && newsExists) req.app.get('io').in('rootNewsGroup').emit('newsCreated', newsData, commonAppStrings);
       });
 

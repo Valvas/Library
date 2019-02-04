@@ -26,7 +26,8 @@ router.get('/', (req, res) =>
         currentLocation: 'apps',
         strings: { common: commonStrings }, 
         news: news,
-        apps: apps
+        apps: apps,
+        conversationsData: req.app.locals.conversationsData
       });
 
       var index = 0;
@@ -47,7 +48,8 @@ router.get('/', (req, res) =>
             currentLocation: 'apps',
             strings: { common: commonStrings }, 
             news: news,
-            apps: apps
+            apps: apps,
+            conversationsData: req.app.locals.conversationsData
           });
         });
       }
