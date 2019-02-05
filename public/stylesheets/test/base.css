@@ -1,0 +1,43 @@
+/****************************************************************************************************/
+
+@import url('../fonts.css');
+
+body{ background-color:#F9F9F9; margin:0; }
+
+#mainContainer{ min-height:100vh; }
+
+#wrapperContainer{ display:flex; flex-direction:row; justify-content:center; }
+
+#contentContainer{ display:flex; align-items:flex-start; flex-direction:row; justify-content:space-between; max-width:1000px; width:calc(100% - 40px); margin:40px 20px 40px 20px; }
+
+#locationContent{ position:relative; width:calc(100% - 220px); font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
+
+@keyframes spin{ 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/****************************************************************************************************/
+
+#locationLoaderVerticalBlock{ display:flex; flex-direction:column; justify-content:center; position:absolute; top:0; right:0; bottom:0; left:0; background-color:#FFFFFF; }
+
+#locationLoaderHorizontalBlock{ display:flex; flex-direction:row; justify-content:center; }
+
+#locationLoaderSpinner{ border:16px solid #E3E3E3; border-top:16px solid #428BCA; border-radius:50%; width:120px; height:120px; animation:spin 2s linear infinite; }
+
+/****************************************************************************************************/
+
+.locationContentTitle{ font-size:1.3em; font-family:roboto-regular; padding:20px; border-bottom:1px solid rgba(0,0,0,0.25); }
+
+/****************************************************************************************************/
+
+.veilBackground{ position:fixed; top:0; right:0; bottom:0; left:0; z-index:290; background-color:#000000; opacity:0.5; }
+
+.modalBackgroundVertical{ display:flex; flex-direction:column; justify-content:center; position:fixed; top:0; right:0; bottom:0; left:0; z-index:290; }
+
+.modalBackgroundHorizontal{ display:flex; flex-direction:row; justify-content:center; }
+
+.loaderVerticalContainer{ display:flex; position:fixed; top:0; right:0; bottom:0; left:0; z-index:9999; flex-direction:column; justify-content:center; height:100vh; }
+
+.loaderHorizontalContainer{ display:flex; flex-direction:row; justify-content:center; }
+
+.loaderSpinner{ border:24px solid #E3E3E3; border-top:24px solid #428BCA; border-radius:50%; width:180px; height:180px; animation:spin 2s linear infinite; }
+
+/****************************************************************************************************/

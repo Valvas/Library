@@ -7,7 +7,7 @@
 .navigationBar{ margin:0 20px 0 20px; max-width:1000px; width:calc(100% - 40px); display:flex; flex-direction:row; justify-content:space-between; align-items:center; }
 
 
-.navigationBarTitle{ display:flex; flex-direction:row; justify-content:flex-start; margin-right:10px; box-sizing:border-box; }
+.navigationBarTitle{ display:flex; flex-direction:row; justify-content:flex-start; margin-right:10px; box-sizing:border-box; user-select:none; cursor:pointer; }
 
 .navigationBarTitleCompanyName{ font-family:roboto-light; font-size:2em; color:#FFFFFF; text-transform:uppercase; margin-right:5px; }
 
@@ -34,7 +34,7 @@
 
 .navigationBarAccountBlockMenuList{ list-style:none; padding:0; margin:0; }
 
-.navigationBarAccountBlockMenuListElement{ display:block; padding:10px; text-decoration:none; color:rgba(0,0,0,0.8); text-align:center; font-size:18px; line-height:24px; cursor:pointer; }
+.navigationBarAccountBlockMenuListElement{ user-select:none; display:block; padding:10px; text-decoration:none; color:rgba(0,0,0,0.8); text-align:center; font-size:18px; line-height:24px; cursor:pointer; }
 
 .navigationBarAccountBlockMenuListElement:not(:first-child){ border-top:1px solid #E0E0E0; }
 

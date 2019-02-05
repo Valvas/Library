@@ -3,6 +3,10 @@
 var commonStrings = null;
 var accountData = null;
 var articlesData = null;
+var currentLocation = window.location.href.split('/')[3];
+
+//To remove when tests are over
+currentLocation = 'account';
 
 initializeStart();
 
@@ -15,18 +19,26 @@ function initializeStart()
   var loader  = document.createElement('div');
 
   loader      .setAttribute('id', 'initializationLoader');
-  loader      .setAttribute('class', 'initializationVerticalContainer');
-  loader      .innerHTML = '<div class="initializationHorizontalContainer"><div class="initializationLoader"></div></div>';
+  loader      .setAttribute('class', 'loaderVerticalContainer');
+  loader      .innerHTML = '<div class="loaderHorizontalContainer"><div class="loaderSpinner"></div></div>';
 
   document.body.appendChild(loader);
 
   initializeRetrieveStrings((error) =>
   {
-    if(error) return displayInitializationError(error.message, error.detail);
+    if(error) return displayError(error.message, error.detail, 'initializationError');
 
     createHeader(() =>
     {
+      var locationContent = document.createElement('div');
+
+      locationContent.setAttribute('id', 'locationContent');
+
+      document.getElementById('contentContainer').appendChild(locationContent);
+
       loader.remove();
+
+      loadLocation(currentLocation);
     });
   });
 }
@@ -76,25 +88,33 @@ function retrieveAccountData(callback)
   {
     accountData = result;
 
-    return callback(null);
+    return retrieveArticlesData(callback);
   });
 }
 
 /****************************************************************************************************/
-/* Display An Error If One Happens During Initialization */
+/* Retrieve Last Articles From API */
 /****************************************************************************************************/
 
-function displayInitializationError(errorMessage, errorDetail)
+function retrieveArticlesData(callback)
 {
-  if(document.getElementById('initializationLoader')) document.getElementById('initializationLoader').remove();
+  $.ajax(
+  {
+    method: 'GET', dataType: 'json', data: {  }, timeout: 5000, url: '/queries/root/news/get-last-articles',
 
-  var error   = document.createElement('div');
+    error: (xhr, textStatus, errorThrown) =>
+    {
+      xhr.responseJSON != undefined ?
+      callback({ message: xhr.responseJSON.message, detail: xhr.responseJSON.detail }) :
+      callback({ message: 'Une erreur est survenue, veuillez réessayer plus tard', detail: null });
+    }
 
-  error       .setAttribute('id', 'initializationError');
-  error       .setAttribute('class', 'initializationVerticalContainer');
-  error       .innerHTML = `<div class="initializationHorizontalContainer"><div class="initializationError"><div class="initializationErrorMessage"></div><div class="initializationErrorDetail"></div></div></div>`;
+  }).done((result) =>
+  {
+    articlesData = result.articlesData;
 
-  document.body.appendChild(error);
+    return callback(null);
+  });
 }
 
 /****************************************************************************************************/

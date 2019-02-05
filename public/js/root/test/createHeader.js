@@ -25,14 +25,15 @@ function createHeader(callback)
 
   accountBlock      .addEventListener('mouseenter', () => accountMenu.style.display = 'block');
   accountBlock      .addEventListener('mouseleave', () => accountMenu.removeAttribute('style'));
+  navigationTitle   .addEventListener('click', () => loadLocation('home'));
 
   navigationTitle   .innerHTML += `<div class="navigationBarTitleCompanyName">${commonStrings.root.navigationBar.companyName}</div>`;
   navigationTitle   .innerHTML += `<div class="navigationBarTitleAppName">${commonStrings.root.navigationBar.appName}</div>`;
 
-  accountBlockData  .innerHTML += `<div class="navigationBarAccountBlockDataEmail">${accountData.email}</div>`;
-  accountBlockData  .innerHTML += `<div class="navigationBarAccountBlockDataCircle"><img id="headerBlockNavigationAccountBlockPicture" class="navigationBarAccountBlockDataPicture" src="${accountData.picture}" /></div>`;
+  accountBlockData  .innerHTML += `<div id="navigationBarAccountEmail" class="navigationBarAccountBlockDataEmail">${accountData.email}</div>`;
+  accountBlockData  .innerHTML += `<div class="navigationBarAccountBlockDataCircle"><img id="navigationBarAccountPicture" class="navigationBarAccountBlockDataPicture" src="${accountData.picture}" /></div>`;
 
-  accountMenuList   .innerHTML += `<li class="navigationBarAccountBlockMenuListElement">${commonStrings.root.navigationBar.accountMenu.account}</li>`;
+  accountMenuList   .innerHTML += `<li onclick="loadLocation('account')" class="navigationBarAccountBlockMenuListElement">${commonStrings.root.navigationBar.accountMenu.account}</li>`;
   accountMenuList   .innerHTML += `<li class="navigationBarAccountBlockMenuListElement">${commonStrings.root.navigationBar.accountMenu.logout}</li>`;
 
   accountMenu       .appendChild(accountMenuList);

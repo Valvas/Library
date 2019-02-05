@@ -39,11 +39,18 @@
   {
     "home": "Accueil",
     "apps": "Applications",
-    "news": "Nouvelles",
+    "news": "Articles",
     "account": "Mon Compte",
-    "admin": "Administration",
     "directory": "Annuaire",
-    "logon": "Connexion"
+    "admin": "Administration"
+  },
+
+  "articles":
+  {
+    "aside":
+    {
+      "lastArticles": "Derniers articles"
+    }
   },
 
   "global":
@@ -203,25 +210,34 @@
 
       "accountUpdate":
       {
+        "currentValue": "Valeur actuelle",
+
         "pictureLabel": "Nouvelle image",
-        "pictureFormatError": "Cette format de fichier n'est pas autorisé",
+        "pictureFormatError": "Ce format de fichier n'est pas autorisé",
         "pictureHelp": "Accepte les images au format <b>JPG</b> ou <b>PNG</b>",
         "pictureSending": "Enregistrement de la nouvelle image en cours",
+        "pictureSaved": "Nouvelle image enregistrée avec succès",
 
         "emailLabel": "Nouvelle adresse email",
+        "emailPlaceholder": "Entrez la nouvelle adresse email",
         "emailFormatError": "Le format de cette adresse email est incorrect",
         "emailDuplicateError": "Cette adresse email est identique à la précédente",
         "emailSending": "Enregistrement de la nouvelle adresse en cours",
+        "emailSaved": "Nouvelle adresse email enregistrée avec succès",
 
         "lastnameLabel": "Nouveau nom",
+        "lastnamePlaceholder": "Entrez le nouveau nom",
         "lastnameFormatError": "Le format de ce nom est incorrect",
         "lastnameDuplicateError": "Ce nom est identique au précédent",
         "lastnameSending": "Enregistrement du nouveau nom en cours",
+        "lastnameSaved": "Nouveau nom enregistré avec succès",
 
         "firstnameLabel": "Nouveau prénom",
+        "firstnamePlaceholder": "Entrez le nouveau prénom",
         "firstnameFormatError": "Le format de ce prénom est incorrect",
         "firstnameDuplicateError": "Ce prénom est identique au précédent",
         "firstnameSending": "Enregistrement du nouveau prénom en cours",
+        "firstnameSaved": "Nouveau prénom enregistré avec succès",
 
         "contactNumberLabel": "Nouveau numéro de contact",
         "contactNumberFormatError": "Format de l'indicatif ou du numéro incorrect. Veuillez n'entrer que des chiffres.",

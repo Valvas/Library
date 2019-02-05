@@ -1,0 +1,67 @@
+/****************************************************************************************************/
+
+.accountSectionBlock{ box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); overflow:hidden; background-color:#FFFFFF; }
+
+.accountSectionBlockHeader{ display:flex; flex-direction:row; justify-content:space-between; align-items:center; flex-wrap:wrap; padding:20px; }
+
+
+.accountSectionBlockHeaderPicture{ margin-right:20px; }
+
+.accountSectionBlockHeaderPictureCircle{ width:180px; height:180px; border-radius:50%; border:3px solid #FFFFFF; overflow:hidden; position:relative; box-sizing:border-box; }
+
+.accountSectionBlockHeaderPictureContent{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+
+.accountSectionBlockHeaderUpdate{ cursor:pointer; user-select:none; color:#648DA7; background-color:#FFFFFF; border-radius:2px; border:1px solid #648DA7; padding:5px 10px 5px 10px; font-size:0.9em; }
+
+.accountSectionBlockHeaderUpdate:hover{ background-color:rgba(0,0,0,0.05); }
+
+
+.accountSectionData{ display:flex; flex-direction:column; padding:20px; }
+
+.accountSectionDataBlock{ display:flex; flex-direction:row; align-items:flex-start; justify-content:space-between; margin:10px 0 10px 0; }
+
+.accountSectionDataBlockValue{ margin-right:10px; }
+
+.accountSectionDataBlockUpdate{ cursor:pointer; user-select:none; color:#648DA7; background-color:#FFFFFF; border-radius:2px; border:1px solid #648DA7; padding:5px 10px 5px 10px; font-size:0.9em; }
+
+.accountSectionDataBlockUpdate:hover{ background-color:rgba(0,0,0,0.05); }
+
+
+.accountSectionPassword{ display:flex; flex-direction:row; justify-content:center; padding:40px 0 40px 0; }
+
+.accountSectionPasswordButton{ cursor:pointer; user-select:none; color:#D9534F; background-color:#FFFFFF; border-radius:2px; border:1px solid #D9534F; padding:5px 10px 5px 10px; font-size:0.9em; }
+
+.accountSectionPasswordButton:hover{ background-color:rgba(0,0,0,0.05); }
+
+/****************************************************************************************************/
+
+.updateAccountModal{ width:calc(100% - 40px); max-width:400px; background-color:#FFFFFF; overflow:hidden; border-radius:4px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
+
+.updateAccountModalHeader{ display:flex; flex-direction:row; justify-content:space-between; background-color:#171219; padding:20px; }
+
+.updateAccountModalHeaderTitle{ margin-right:10px; color:#FFFFFF; font-size:1em; }
+
+.updateAccountModalHeaderClose{ border:none; background-color:#D9534F; border-radius:2px; color:#FFFFFF; cursor:pointer; padding:4px 8px 4px 8px; }
+
+.updateAccountModalHeaderClose:hover{ background-color:#C8423E; }
+
+.updateAccountModalContent{ padding:20px; }
+
+.updateAccountModalContentCurrent{ display:flex; flex-direction:row; justify-content:space-between; }
+
+.updateAccountModalContentCurrentKey{ font-style:italic; }
+
+.updateAccountModalContentCurrentValue{ font-weight:bold; }
+
+.updateAccountModalContentForm{ margin-top:20px; }
+
+.updateAccountModalContentFormInput{ padding:4px; font-size:0.9em; width:100%; box-sizing:border-box; border:1px solid rgba(0,0,0,0.25); border-radius:4px; }
+
+.updateAccountModalContentFormSubmit{ margin-top:20px; display:flex; flex-direction:row; justify-content:center; }
+
+.updateAccountModalContentFormSubmitButton{ border:none; background-color:#648DA7; border-radius:2px; color:#FFFFFF; cursor:pointer; padding:8px 16px 8px 16px; }
+
+.updateAccountModalContentFormSubmitButton:hover{ background-color:#537C96; }
+
+/****************************************************************************************************/

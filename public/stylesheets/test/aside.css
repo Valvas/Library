@@ -1,8 +1,31 @@
 /****************************************************************************************************/
 
-.asideBlock{ background-color:rgba(0,0,0,0.06); border-radius:4px; }
+.asideBlock{ width:200px; box-sizing:border-box; background-color:rgba(0,0,0,0.08); border-radius:4px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
 
 
-.asideMenu{ list-style:none; padding:0; margin:0; }
+.asideMenu{ list-style:none; padding:20px 0 20px 0; margin:0; font-family:roboto-light; }
+
+.asideMenuElement, .asideMenuElementSelected{ padding:10px 20px 10px 20px; cursor:pointer; user-select:none; font-size:1em; }
+
+.asideMenuElementSelected{ color:#759EB8; background-color:rgba(0,0,0,0.06); }
+
+.asideMenuElement:hover{ color:#759EB8; background-color:rgba(0,0,0,0.06); }
+
+
+.asideArticles{ padding:10px; }
+
+.asideArticlesTitle{ padding:10px; border-bottom:1px solid rgba(0,0,0,0.25); font-size:1.2em; }
+
+.asideArticlesList{ list-style:none; margin:0; padding:0; max-height:300px; overflow-y:scroll; border-bottom:1px solid rgba(0,0,0,0.25); }
+
+.asideArticlesListElement{ margin:10px; border-left:4px solid #97BFDA; cursor:pointer; border-radius:0 4px 4px 0; user-select:none; }
+
+.asideArticlesListElementSelected{ margin:10px; border-left:4px solid #759EB8; cursor:pointer; border-radius:0 4px 4px 0; user-select:none; }
+
+.asideArticlesListElement:hover{ background-color:rgba(0,0,0,0.1); border-left:4px solid #759EB8; }
+
+.asideArticlesListElementDate{ font-size:0.8em; font-style:italic; padding:5px; }
+
+.asideArticlesListElementTitle{ font-size:0.9em; padding:0 5px 10px 5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 /****************************************************************************************************/

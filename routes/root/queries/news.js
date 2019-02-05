@@ -39,6 +39,18 @@ router.put('/get-news-data', (req, res) =>
 
 /****************************************************************************************************/
 
+router.get('/get-last-articles', (req, res) =>
+{
+  commonNewsGet.getLastNewsFromIndex(0, 10, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, articlesData) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({ articlesData: articlesData });
+  });
+});
+
+/****************************************************************************************************/
+
 router.put('/get-news-data-from-index', (req, res) =>
 {
   if(req.body.newsUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newsUuid' });
@@ -158,7 +170,7 @@ router.put('/is-my-article', (req, res) =>
     if(newsExists == false) return res.status(404).send({ message: errors[constants.NEWS_NOT_FOUND], detail: null });
 
     if(req.session.account.uuid === newsData.author) return res.status(200).send({ isMine: true, myRights: req.session.account.rights.intranet });
-    
+
     return res.status(200).send({ isMine: false });
   });
 });

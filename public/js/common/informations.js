@@ -26,17 +26,17 @@ function displayInfo(message, detail, messageTag)
 
   if(messageTag != null) block.setAttribute('tag', messageTag);
 
-  detail == null 
+  detail == null
   ? block.innerHTML += `<div class="informationBlockMessageContent">${message}</div>`
   : block.innerHTML += `<div class="informationBlockMessageContent"><div>${message}</div><div class="informationBlockMessageDetail">${detail}</div></div>`;
-  
+
   block.innerHTML += `<button onclick="closeDisplayedMessage(this.parentNode)" class="informationBlockMessageClose">FERMER</div>`;
 
   $(block).hide().appendTo(document.getElementById('informationBlock'));
 
   $(block).slideDown(250, () =>
   {
-    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 8000);
+    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 10000);
   });
 }
 
@@ -54,7 +54,7 @@ function displayError(message, detail, messageTag)
 
   if(messageTag != null) block.setAttribute('tag', messageTag);
 
-  detail == null 
+  detail == null
   ? block.innerHTML += `<div class="informationBlockMessageContent">${message}</div>`
   : block.innerHTML += `<div class="informationBlockMessageContent"><div>${message}</div><div class="informationBlockMessageDetail">${detail}</div></div>`;
 
@@ -65,7 +65,7 @@ function displayError(message, detail, messageTag)
 
   $(block).slideDown(250, () =>
   {
-    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 60000);
+    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 120000);
   });
 }
 
@@ -90,7 +90,7 @@ function displaySuccess(message, detail, messageTag)
 
   $(block).slideDown(250, () =>
   {
-    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 8000);
+    setTimeout(() => { $(block).slideUp(250, () =>{ block.remove(); }); }, 10000);
   });
 }
 
