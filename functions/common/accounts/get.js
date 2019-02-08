@@ -222,6 +222,7 @@ function getAccountsWithUnitBrowseAccounts(accounts, defaultUnit, unitsTree, dat
       var accountUnit = unitsTree[unitData.id];
 
       accounts[index].unitTags = [];
+      accounts[index].unitName = unitData.name;
 
       while(accountUnit.length > 0)
       {

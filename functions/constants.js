@@ -160,6 +160,7 @@ const A_CONVERSATION_WITH_THESE_PARTICIPANTS_EXISTS                             
 const NO_PARTICIPANTS_FOUND_FOR_THIS_CONVERSATION                                 = 10156;
 const ACCOUNT_IS_NOT_A_PARTICIPANT_OF_THIS_CONVERSATION                           = 10157;
 const MESSENGER_STATUS_NOT_AVAILABLE                                              = 10158;
+const CONVERSATION_MESSAGES_COUNTER_NOT_FOUND                                     = 10159;
 
 /******************************************************************************************
 SUCCESS
@@ -224,7 +225,7 @@ const MESSENGER_MESSAGE_SENT_SUCCESSFULLY                                       
 EXPORTS
 /******************************************************************************************/
 
-module.exports = 
+module.exports =
 {
   SQL_SERVER_ERROR: SQL_SERVER_ERROR,
   ACCOUNT_NOT_FOUND: ACCOUNT_NOT_FOUND,
@@ -384,6 +385,7 @@ module.exports =
   NO_PARTICIPANTS_FOUND_FOR_THIS_CONVERSATION: NO_PARTICIPANTS_FOUND_FOR_THIS_CONVERSATION,
   ACCOUNT_IS_NOT_A_PARTICIPANT_OF_THIS_CONVERSATION: ACCOUNT_IS_NOT_A_PARTICIPANT_OF_THIS_CONVERSATION,
   MESSENGER_STATUS_NOT_AVAILABLE: MESSENGER_STATUS_NOT_AVAILABLE,
+  CONVERSATION_MESSAGES_COUNTER_NOT_FOUND: CONVERSATION_MESSAGES_COUNTER_NOT_FOUND,
 
   FILE_DELETED_FROM_DISK: FILE_DELETED_FROM_DISK,
   FILE_DELETED_FROM_DATABASE: FILE_DELETED_FROM_DATABASE,

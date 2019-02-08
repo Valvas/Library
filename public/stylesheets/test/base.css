@@ -6,7 +6,7 @@ body{ background-color:#F9F9F9; margin:0; }
 
 #mainContainer{ min-height:100vh; }
 
-#wrapperContainer{ display:flex; flex-direction:row; justify-content:center; }
+#wrapperContainer{ display:flex; flex-direction:row; justify-content:center; position:relative; }
 
 #contentContainer{ display:flex; align-items:flex-start; flex-direction:row; justify-content:space-between; max-width:1000px; width:calc(100% - 40px); margin:40px 20px 40px 20px; }
 
@@ -39,5 +39,12 @@ body{ background-color:#F9F9F9; margin:0; }
 .loaderHorizontalContainer{ display:flex; flex-direction:row; justify-content:center; }
 
 .loaderSpinner{ border:24px solid #E3E3E3; border-top:24px solid #428BCA; border-radius:50%; width:180px; height:180px; animation:spin 2s linear infinite; }
+
+/****************************************************************************************************/
+
+@media (max-width: 819.9px)
+{
+  #locationContent{ width:100%; }
+}
 
 /****************************************************************************************************/

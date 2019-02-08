@@ -4,17 +4,17 @@
 
 /****************************************************************************************************/
 
-.navigationBar{ margin:0 20px 0 20px; max-width:1000px; width:calc(100% - 40px); display:flex; flex-direction:row; justify-content:space-between; align-items:center; }
+.navigationBar{ margin:0 20px 0 20px; max-width:1000px; width:calc(100% - 40px); display:flex; flex-direction:row; justify-content:space-between; align-items:center; flex-wrap:nowrap; }
 
 
-.navigationBarTitle{ display:flex; flex-direction:row; justify-content:flex-start; margin-right:10px; box-sizing:border-box; user-select:none; cursor:pointer; }
+.navigationBarTitle{ width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all; min-width:240px; display:flex; flex-direction:row; justify-content:flex-start; margin-right:10px; box-sizing:border-box; user-select:none; cursor:pointer; }
 
 .navigationBarTitleCompanyName{ font-family:roboto-light; font-size:2em; color:#FFFFFF; text-transform:uppercase; margin-right:5px; }
 
 .navigationBarTitleAppName{ font-family:roboto-light; font-size:2em; color:#759EB8; text-transform:uppercase; }
 
 
-.navigationBarAccount{ font-family:roboto-light; }
+.navigationBarAccount{ font-family:roboto-light; min-width:80px; }
 
 .navigationBarAccountBlock{ max-width:100%; cursor:pointer; position:relative; }
 
@@ -22,7 +22,7 @@
 
 .navigationBarAccountBlock:hover .navigationBarAccountBlockData{ background-color:rgba(255,255,255,0.1); }
 
-.navigationBarAccountBlockData{ box-sizing:border-box; display:flex; flex-direction:row; justify-content:flex-end; align-items:center;  width:100%; padding:10px; }
+.navigationBarAccountBlockData{ width:100%; box-sizing:border-box; display:flex; flex-direction:row; justify-content:flex-end; align-items:center; padding:10px; }
 
 .navigationBarAccountBlockDataEmail{ color:#FFFFFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-align:right; margin-right:10px; width:calc(100% - 70px); }
 
@@ -30,7 +30,7 @@
 
 .navigationBarAccountBlockDataPicture{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
 
-.navigationBarAccountBlockMenu{ background-color:#FFFFFF; position:absolute; display:none; z-index:100; top:80px; right:0; left:0; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); }
+.navigationBarAccountBlockMenu{ width:100%; min-width:200px; background-color:#FFFFFF; position:absolute; display:none; z-index:100; top:80px; right:0; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); }
 
 .navigationBarAccountBlockMenuList{ list-style:none; padding:0; margin:0; }
 
@@ -39,5 +39,17 @@
 .navigationBarAccountBlockMenuListElement:not(:first-child){ border-top:1px solid #E0E0E0; }
 
 .navigationBarAccountBlockMenuListElement:hover{ color:#FFFFFF; background-color:#759EB8; }
+
+/****************************************************************************************************/
+
+@media (max-width: 329.9px)
+{
+  .navigationBarTitle{ width:calc(100% - 80px); min-width:calc(100% - 80px); }
+}
+
+@media (max-width: 479.9px)
+{
+  .navigationBarAccountBlockDataEmail{ display:none; }
+}
 
 /****************************************************************************************************/

@@ -115,7 +115,7 @@ router.get('/:accountUuid', (req, res) =>
   {
     if(error != null) return res.render('block', { message: errors[error.code], detail: error.detail, link: req.headers.referer });
 
-    if(accountExists == false) return res.render('block', { message: errors[ConstantSourceNode.ACCOUNT_NOT_FOUND], detail: null, link: req.headers.referer });
+    if(accountExists == false) return res.render('block', { message: errors[constants.ACCOUNT_NOT_FOUND], detail: null, link: req.headers.referer });
 
     commonUnitsGet.getAccountUnit(req.params.accountUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountUnit) =>
     {

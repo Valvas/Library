@@ -50,7 +50,7 @@ module.exports.getLastNewsFromIndex = (startIndex, endIndex, databaseConnection,
           if(error != null) return callback(error);
 
           resultsToKeep[x].timestamp  = stringifyTimestamp;
-          resultsToKeep[x].author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : '??????????';
+          resultsToKeep[x].author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.charAt(0).toUpperCase()}${accountData.lastname.slice(1).toLowerCase()}` : '??????????';
           resultsToKeep[x].authorUuid = accountExists ? accountData.uuid : null;
 
           commonNewsComment.getArticleComments(resultsToKeep[x].uuid, databaseConnection, params, (error, articleComments) =>
@@ -143,7 +143,7 @@ module.exports.getNewsData = (newsUuid, databaseConnection, params, callback) =>
         newsData.content    = result[0].content;
         newsData.timestamp  = stringifyTimestamp;
         newsData.comments   = [];
-        newsData.author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : '??????????';
+        newsData.author     = accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.charAt(0).toUpperCase()}${accountData.lastname.slice(1).toLowerCase()}` : '??????????';
         newsData.authorUuid = accountExists ? accountData.uuid : null;
 
         commonNewsComment.getArticleComments(result[0].uuid, databaseConnection, params, (error, articleComments) =>

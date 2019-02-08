@@ -5,10 +5,23 @@ const errors                = require(`${__root}/json/errors`);
 const success               = require(`${__root}/json/success`);
 const constants             = require(`${__root}/functions/constants`);
 const commonMessengerGet    = require(`${__root}/functions/common/messenger/get`);
+const commonMessengerGetv2  = require(`${__root}/functions/common/messenger/get(v2)`);
 const commonMessengerSend   = require(`${__root}/functions/common/messenger/send`);
 const commonMessengerUpdate = require(`${__root}/functions/common/messenger/update`);
 
 var router = express.Router();
+
+/****************************************************************************************************/
+
+router.get('/get-messenger-data', (req, res) =>
+{
+  commonMessengerGetv2.retrieveMessengerData(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, messengerData) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send({ messengerData: messengerData });
+  });
+});
 
 /****************************************************************************************************/
 
@@ -31,7 +44,7 @@ router.post('/get-conversation-content', (req, res) =>
   const currentAccountData = req.app.locals.account;
 
   if(req.body.conversationUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Conversation Uuid' });
-  
+
   commonMessengerGet.getConversationData(req.body.conversationUuid, currentAccountData, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, conversationData) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });

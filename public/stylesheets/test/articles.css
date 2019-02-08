@@ -2,4 +2,52 @@
 
 .articlesSectionBlock{ box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); overflow:hidden; background-color:#FFFFFF; }
 
+
+.articlesSectionEmpty{ font-size:1.2em; font-style:italic; text-align:center; padding:40px 20px 40px 20px; }
+
+
+.articleBlock{ padding:40px 20px 40px 20px; display:flex; flex-direction:row; justify-content:center; }
+
+.articleBlockFlex{ max-width:600px; }
+
+.articleBlockHeader{ margin-bottom:20px; display:flex; flex-direction:column; justify-content:flex-start; }
+
+.articleBlockHeaderActions{ display:flex; flex-direction:row; justify-content:flex-start; margin-bottom:20px; }
+
+.articleBlockHeaderActionsCreate{ border:1px solid #648DA7; color:#648DA7; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; margin-right:10px; cursor:pointer; }
+
+.articleBlockHeaderActionsUpdate{ border:1px solid #648DA7; color:#648DA7; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; margin-right:10px; cursor:pointer; }
+
+.articleBlockHeaderActionsRemove{ border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; margin-right:10px; cursor:pointer; }
+
+.articleBlockHeaderActionsCreate:hover, .articleBlockHeaderActionsUpdate:hover, .articleBlockHeaderActionsRemove:hover{ background-color:rgba(0,0,0,0.1); }
+
+.articleBlockHeaderTitle{ font-size:2em; word-break:break-word; margin-top:20px; font-family:roboto-regular; }
+
+.articleBlockHeaderInfos{ color:rgba(0,0,0,0.75); font-size:1em; font-style:italic; margin-top:10px; }
+
+.articleBlockContent{ margin:40px 0 40px 0; word-break:break-word; text-align:justify; font-size:0.9em; }
+
+
+.articleBlockComments{ margin-top:40px; }
+
+.articleBlockCommentsAdd{ padding:20px 0 20px 0; }
+
+.articleBlockCommentsAdd button{ border:1px solid #648DA7; color:#648DA7; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; margin-right:10px; cursor:pointer; }
+
+.articleBlockCommentsAdd button:hover{ background-color:rgba(0,0,0,0.1); }
+
+.articleBlockCommentsContainer{ border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:10px 20px 20px 20px; }
+
+.articleBlockCommentsEmpty{ padding-top:20px; font-size:1em; text-align:center; font-style:italic; display:none; }
+
+
+.articleBlockCommentsListElement{ padding-top:20px; }
+
+.articleBlockCommentsListElementHeader{ font-weight:bold; font-size:0.8em; margin-bottom:5px; }
+
+.articleBlockCommentsListElementContent{ border-left:1px solid rgba(0,0,0,0.25); padding:10px 10px 10px 20px; }
+
+.articleBlockCommentsListElementContentMessage{ font-size:0.9em; font-style:italic; }
+
 /****************************************************************************************************/

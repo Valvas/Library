@@ -14,7 +14,7 @@ function createAside(callback)
 
     document.getElementById('contentContainer').appendChild(aside);
 
-    return callback(null);
+    return createMessenger(callback);
   });
 }
 
@@ -43,7 +43,11 @@ function createAsideMenu(callback)
 
     asideMenuElement      .innerText = commonStrings.locations[location];
 
-    asideMenuElement      .addEventListener('click', () => loadLocation(location));
+    asideMenuElement      .addEventListener('click', () =>
+    {
+      urlParameters = [];
+      loadLocation(location);
+    });
 
     asideMenu             .appendChild(asideMenuElement);
   }
@@ -56,18 +60,39 @@ function createAsideMenu(callback)
 function createAsideArticlesSection(asideMenu, callback)
 {
   var asideArticles = document.createElement('div');
+  var articlesEmpty = document.createElement('div');
   var articlesList  = document.createElement('ul');
 
   asideArticles     .setAttribute('class', 'asideArticles');
+  articlesEmpty     .setAttribute('class', 'asideArticlesEmpty');
   articlesList      .setAttribute('class', 'asideArticlesList');
+
+  articlesEmpty     .setAttribute('id', 'asideArticlesEmpty');
+  articlesList      .setAttribute('id', 'asideArticlesList');
 
   asideArticles     .innerHTML += `<div class="asideArticlesTitle">${commonStrings.articles.aside.lastArticles}</div>`;
 
+  articlesEmpty     .innerText = commonStrings.articles.aside.emptyList;
+
+  if(articlesData.length === 0)
+  {
+    articlesEmpty   .style.display = 'block';
+  }
+
   for(var x = 0; x < articlesData.length; x++)
   {
+    const currentArticleUuid = articlesData[x].uuid;
+
     var currentArticle  = document.createElement('li');
 
     currentArticle      .setAttribute('class', 'asideArticlesListElement');
+    currentArticle      .setAttribute('name', currentArticleUuid);
+
+    currentArticle      .addEventListener('click', () =>
+    {
+      urlParameters = ['display', currentArticleUuid];
+      loadLocation('news');
+    });
 
     currentArticle      .innerHTML += `<div class="asideArticlesListElementDate">${articlesData[x].timestamp}</div>`;
     currentArticle      .innerHTML += `<div class="asideArticlesListElementTitle">${articlesData[x].title}</div>`;
@@ -75,6 +100,7 @@ function createAsideArticlesSection(asideMenu, callback)
     articlesList        .appendChild(currentArticle);
   }
 
+  asideArticles     .appendChild(articlesEmpty);
   asideArticles     .appendChild(articlesList);
 
   return callback(null, asideMenu, asideArticles);

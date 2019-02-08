@@ -75,3 +75,49 @@ module.exports.checkIfAccountHasAccessToApp = (appName, accountUuid, databaseCon
 }
 
 /****************************************************************************************************/
+/* Get Apps Data And Account Access Status To Them */
+/****************************************************************************************************/
+
+module.exports.getAccountApps = (accountUuid, databaseConnection, globalParameters, callback) =>
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.apps,
+    args: [ '*' ],
+    where: {  }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+
+    if(result.length === 0) return callback(null, []);
+
+    var appsData = [], index = 0;
+
+    var browseApps = () =>
+    {
+      databaseManager.selectQuery(
+      {
+        databaseName: globalParameters.database[result[index].name].label,
+        tableName: globalParameters.database[result[index].name].tables.accountsList,
+        args: [ '*' ],
+        where: { operator: '=', key: 'account_uuid', value: accountUuid }
+
+      }, databaseConnection, (error, access) =>
+      {
+        if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+        appsData.push({ uuid: result[index].uuid, name: result[index].name, picture: result[index].picture, hasAccess: access.length > 0 });
+
+        if(result[index += 1] == undefined) return callback(null, appsData);
+
+        browseApps();
+      });
+    }
+
+    browseApps();
+  });
+}
+
+/****************************************************************************************************/

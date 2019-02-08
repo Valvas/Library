@@ -2,4 +2,85 @@
 
 .directorySectionBlock{ box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); overflow:hidden; background-color:#FFFFFF; }
 
+
+.directorySectionTree{ list-style:none; padding:20px; margin:0; border-bottom:1px solid rgba(0,0,0,0.25); }
+
+.directorySectionTreeElementSelected{ user-select:none; color:#648DA7; padding:5px 10px 5px 10px; }
+
+.directorySectionTreeElementSelected ul, .directorySectionTreeElement ul{ border-left:1px solid rgba(0,0,0,0.25); }
+
+.directorySectionTreeElement{ user-select:none; padding:5px 10px 5px 10px; color:#000000; }
+
+.directorySectionTreeElement span{ cursor:pointer; }
+
+.directorySectionTreeElement span:hover{ color:#648DA7; }
+
+.directorySectionTreeList{ list-style:none; margin:0; padding:10px 0 10px 20px; }
+
+.directorySectionTreeListHidden{ display:none; }
+
+
+.directorySectionSearch{ width:calc(100% - 40px); max-width:300px; border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:5px; margin:20px; }
+
+
+.directorySectionEmpty{ font-size:1.2em; color:rgba(0,0,0,0.8); text-align:center; padding:40px 20px 0 20px; display:none; }
+
+
+.directorySectionList{ margin:20px 0 40px 0; display:flex; flex-direction:row; align-items:stretch; flex-wrap:wrap; justify-content:space-evenly; }
+
+.directorySectionAccount{ position:relative; margin-bottom:20px; border:1px solid rgba(0,0,0,0.25); width:180px; box-sizing:border-box; border-radius:2px; background-color:#FFFFFF; }
+
+.directorySectionAccountHeader{ position:absolute; top:0; right:0; left:0; height:80px; background-color:#171219; }
+
+.directorySectionAccountPicture{ display:flex; flex-direction:row; justify-content:center; margin:20px 0 20px 0; }
+
+.directorySectionAccountPictureCircle{ width:120px; background-color:#E0E0E0; height:120px; border-radius:50%; overflow:hidden; position:relative; box-sizing:border-box; }
+
+.directorySectionAccountPictureCircle img{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.directorySectionAccountContent{ display:flex; flex-direction:column; justify-content:space-evenly; }
+
+.directorySectionAccountContentIdentity{ padding:0 10px 0 10px; }
+
+.directorySectionAccountContentIdentityName{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:1.1em; text-align:center; }
+
+.directorySectionAccountContentIdentityStatus{ color:rgba(0,0,0,0.6); font-size:0.9em; text-align:center; margin-top:5px; }
+
+.directorySectionAccountContentAccess{ margin-top:40px; font-size:0.9em; font-family:roboto-light; color:#000000; cursor:pointer; width:100%; background-color:#FFFFFF; border:none; border-top:1px solid rgba(0,0,0,0.24); padding:10px; }
+
+.directorySectionAccountContentAccess:hover{ color:#648DA7; }
+
+
+.directoryProfile{ margin:20px; position:relative; }
+
+.directoryProfileHeader{ display:flex; flex-direction:row; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+
+.directoryProfileHeaderPicture{ width:180px; background-color:#E0E0E0; height:180px; border-radius:50%; overflow:hidden; position:relative; box-sizing:border-box; margin:30px 0 0 30px; }
+
+.directoryProfileHeaderPicture img{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.directoryProfileHeaderAside{ box-sizing:border-box; display:flex; flex-direction:row; justify-content:flex-end; margin:20px; max-width:calc(100% - 250px); }
+
+.directoryProfileHeaderAsideIdentity{ display:flex; flex-direction:column; justify-content:flex-start; width:100%; }
+
+.directoryProfileHeaderAsideIdentityName{ font-size:1.4em; text-align:center; }
+
+.directoryProfileHeaderAsideIdentityUnit{ text-align:center; font-size:1.2em; color:rgba(0,0,0,0.6); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+
+.directoryProfileContent{ padding:20px; }
+
+.directoryProfileContentBlock{ margin-top:20px; display:flex; flex-direction:row; justify-content:space-between; align-items:flex-start; width:100%; max-width:400px; }
+
+.directoryProfileContentBlockKey{ margin-right:10px; font-size:1em; font-style:italic; }
+
+.directoryProfileContentBlockValue{ font-size:1em; }
+
+
+.directoryProfileReturn{ display:flex; flex-direction:row; justify-content:flex-end; padding:20px; }
+
+.directoryProfileReturn button{ border:none; border-radius:4px; cursor:pointer; background-color:#FFFFFF; color:#D9534F; border:1px solid #D9534F; padding:5px 15px 5px 15px; font-size:1em; }
+
+.directoryProfileReturn button:hover{ color:#B7312D; border:1px solid #B7312D; }
+
 /****************************************************************************************************/

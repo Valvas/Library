@@ -156,5 +156,6 @@
   "10155": "Cette conversation existe déjà, elle ne peut donc pas être créée",
   "10156": "Aucun participant trouvé pour cette conversation",
   "10157": "Vous n'avez pas accès à cette conversation",
-  "10158": "Ce statut n'est pas disponible"
+  "10158": "Ce statut n'est pas disponible",
+  "10159": "Impossible de trouver le compteur de message pour une conversation"
 }

@@ -45,6 +45,16 @@
         "participant": "participant",
         "status": "status"
       }
+    },
+    "messenger":
+    {
+      "label": "intranet_messenger",
+      "tables":
+      {
+        "message": "message",
+        "conversation": "conversation",
+        "counter": "counter"
+      }
     }
   },
   "passwordRules":

@@ -172,7 +172,7 @@ function getUnitsTree(databaseConnection, globalParameters, callback)
       treeArray.push(childrenArray);
 
       return callback(error, treeArray);
-    }); 
+    });
   });
 }
 
@@ -242,13 +242,13 @@ function getAccountUnit(accountUuid, databaseConnection, globalParameters, callb
         tableName: globalParameters.database.root.tables.units,
         args: [ '*' ],
         where: { operator: '=', key: 'is_root', value: 1 }
-    
+
       }, databaseConnection, (error, result) =>
       {
         if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
-    
+
         if(result.length === 0) return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
-    
+
         return callback(null, result[0]);
       });
     }
@@ -261,16 +261,89 @@ function getAccountUnit(accountUuid, databaseConnection, globalParameters, callb
         tableName: globalParameters.database.root.tables.units,
         args: [ '*' ],
         where: { operator: '=', key: 'id', value: result[0].unit_id }
-    
+
       }, databaseConnection, (error, result) =>
       {
         if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
-    
+
         if(result.length === 0) return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
-    
+
         return callback(null, result[0]);
       });
     }
+  });
+}
+
+/****************************************************************************************************/
+/* Get Directory In Tree View */
+/****************************************************************************************************/
+
+function getDirectory(databaseConnection, globalParameters, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.units,
+    args: [ '*' ],
+    where: { operator: '=', key: 'is_root', value: 1 }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    if(result.length === 0) return callback(null, {});
+
+    console.log(result);
+
+    getDirectoryBrowseCurrentElement(result[0].id, databaseConnection, globalParameters, (error, resultObject) =>
+    {
+      if(error != null) return callback(error);
+
+      var valueToReturn = {};
+
+      valueToReturn[result[0].name] = resultObject;
+
+      return callback(null, valueToReturn);
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function getDirectoryBrowseCurrentElement(currentElement, databaseConnection, globalParameters, callback)
+{
+  var resultObject = {};
+
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.units,
+    args: [ '*' ],
+    where: { operator: '=', key: 'parent_unit', value: currentElement }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    if(result.length === 0) return callback(null, null);
+
+    var index = 0;
+
+    var browseElements = () =>
+    {
+      getDirectoryBrowseCurrentElement(result[index].id, databaseConnection, globalParameters, (error, currentElementChildren) =>
+      {
+        if(error != null) return callback(error);
+
+        resultObject[result[index].name] = currentElementChildren;
+
+        if(result[index += 1] == undefined) return callback(null, resultObject);
+
+        browseElements();
+      });
+    }
+
+    browseElements();
   });
 }
 
@@ -279,6 +352,7 @@ function getAccountUnit(accountUuid, databaseConnection, globalParameters, callb
 module.exports =
 {
   getUnits: getUnits,
+  getDirectory: getDirectory,
   getUnitsTree: getUnitsTree,
   getUnitDetail: getUnitDetail,
   getAccountUnit: getAccountUnit,

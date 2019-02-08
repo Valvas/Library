@@ -1,7 +1,10 @@
 {
+  "notFound": "Cette page est introuvable",
+  
   "messenger":
   {
     "headerTitle": "Messagerie",
+    "headerCounter": "Nouveaux messages",
     "genericErrorMessage": "Une erreur est survenue, sa cause n'a pas été determinée, veuillez réessayer plus tard",
     "closeButton": "Fermer",
     "returnButton": "Retour",
@@ -49,7 +52,8 @@
   {
     "aside":
     {
-      "lastArticles": "Derniers articles"
+      "lastArticles": "Derniers articles",
+      "emptyList": "Aucun article pour le moment"
     }
   },
 
@@ -60,7 +64,8 @@
     "loading": "Chargement",
     "success": "Succès",
     "failure": "Echec",
-    "close": "Fermer"
+    "close": "Fermer",
+    "back": "Retour"
   },
 
   "initSection":
@@ -240,6 +245,8 @@
         "firstnameSaved": "Nouveau prénom enregistré avec succès",
 
         "contactNumberLabel": "Nouveau numéro de contact",
+        "contactNumberPlaceholder": "Ex : 618321869",
+        "contactNumberDuplicateError": "Ce numéro de contact est identique au précédent",
         "contactNumberFormatError": "Format de l'indicatif ou du numéro incorrect. Veuillez n'entrer que des chiffres.",
         "contactNumberIndicativeLabel": "Indicatif",
         "contactNumberContentLabel": "Numéro",
@@ -255,6 +262,7 @@
         "passwordDusplicateError": "Le nouveau mot de passe et sa confirmation ne correspondent pas",
         "passwordOldMismatch": "Le mot de passe actuel est incorrect",
         "passwordSending": "Enregistrement du nouveau mot de passe en cours",
+        "passwordSaved": "Le nouveau mot de passe a été enregistré avec succès",
 
         "passwordRules":
         {
@@ -283,6 +291,8 @@
     {
       "articleCommentRemovedContent": "Commentaire supprimé",
       "retrieveCommentDataFromServer": "Récupération des données du commentaire en cours. Veuillez patienter...",
+
+      "headerInfoMessage": "Article écrit par $[1] le $[2]",
 
       "homePage":
       {
@@ -365,11 +375,13 @@
     {
       "searchBarPlaceholder": "Rechercher un utilisateur",
       "emptySearch": "Aucun utilisateur à afficher",
+      "accessAccount": "Accéder au profil",
 
       "accountDetail":
       {
         "title": "Détail du compte",
         "returnButton": "Retour à l'annuaire",
+        "phoneNumberEmpty": "Non renseigné",
 
         "emailLabel": "Adresse Email",
         "lastnameLabel": "Nom",

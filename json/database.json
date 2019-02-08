@@ -203,5 +203,32 @@
       "account": "VARCHAR(255) NOT NULL",
       "status": "INT NOT NULL"
     }
+  },
+
+  "intranet_messenger":
+  {
+    "message":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "content": "TEXT NOT NULL",
+      "timestamp": "BIGINT UNSIGNED NOT NULL",
+      "author": "VARCHAR(255) NOT NULL",
+      "conversation": "VARCHAR(255) NOT NULL"
+    },
+
+    "conversation":
+    {
+      "uuid": "VARCHAR(255) NOT NULL",
+      "sender": "VARCHAR(255) NOT NULL",
+      "receiver": "VARCHAR(255) NOT NULL"
+    },
+
+    "counter":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "account": "VARCHAR(255) NOT NULL",
+      "conversation": "VARCHAR(255) NOT NULL",
+      "amount": "INT NOT NULL"
+    }
   }
 }

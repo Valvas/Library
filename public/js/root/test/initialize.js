@@ -3,10 +3,15 @@
 var commonStrings = null;
 var accountData = null;
 var articlesData = null;
+var intranetRights = null;
+var messengerData = null;
 var currentLocation = window.location.href.split('/')[3];
+var urlParameters = window.location.href.split('/').slice(4);
+
+urlParameters = ['display', '042ee936-0423-43cd-bb0d-468e2b18ee4e']
 
 //To remove when tests are over
-currentLocation = 'account';
+currentLocation = 'news';
 
 initializeStart();
 
@@ -112,6 +117,56 @@ function retrieveArticlesData(callback)
   }).done((result) =>
   {
     articlesData = result.articlesData;
+
+    return retrieveIntranetRights(callback);
+  });
+}
+
+/****************************************************************************************************/
+/* Retrieve Account Rights On Intranet From API */
+/****************************************************************************************************/
+
+function retrieveIntranetRights(callback)
+{
+  $.ajax(
+  {
+    method: 'GET', dataType: 'json', data: {  }, timeout: 5000, url: '/queries/root/account/get-account-rights-on-intranet',
+
+    error: (xhr, textStatus, errorThrown) =>
+    {
+      xhr.responseJSON != undefined ?
+      callback({ message: xhr.responseJSON.message, detail: xhr.responseJSON.detail }) :
+      callback({ message: 'Une erreur est survenue, veuillez réessayer plus tard', detail: null });
+    }
+
+  }).done((result) =>
+  {
+    intranetRights = result;
+
+    return retrieveMessengerData(callback);
+  });
+}
+
+/****************************************************************************************************/
+/* Retrieve Messenger Data From API */
+/****************************************************************************************************/
+
+function retrieveMessengerData(callback)
+{
+  $.ajax(
+  {
+    method: 'GET', dataType: 'json', data: {  }, timeout: 5000, url: '/api/messenger/get-messenger-data',
+
+    error: (xhr, textStatus, errorThrown) =>
+    {
+      xhr.responseJSON != undefined ?
+      callback({ message: xhr.responseJSON.message, detail: xhr.responseJSON.detail }) :
+      callback({ message: 'Une erreur est survenue, veuillez réessayer plus tard', detail: null });
+    }
+
+  }).done((result) =>
+  {
+    messengerData = result.messengerData;
 
     return callback(null);
   });
