@@ -114,11 +114,12 @@ router.post('/create-article', (req, res) =>
       if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
       commonNewsGet.getNewsData(createdNewsUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsExists, newsData) =>
-      {console.log(newsExists);
+      {
         if(error == null && newsExists) req.app.get('io').in('rootNewsGroup').emit('newsCreated', newsData, commonAppStrings);
+        if(error == null && newsExists) req.app.get('io').in('intranetArticlesRoom').emit('articleCreated', newsData);
       });
 
-      res.status(201).send({  });
+      res.status(201).send({ message: success[constants.ARTICLE_CREATED_SUCCESSFULLY] });
     });
   });
 });
@@ -136,6 +137,7 @@ router.put('/update-article', (req, res) =>
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
     req.app.get('io').in('rootNewsGroup').emit('articleUpdated', { articleUuid: req.body.articleUuid, articleTitle: req.body.articleTitle, articleContent: req.body.articleContent }, commonAppStrings);
+    req.app.get('io').in('intranetArticlesRoom').emit('articleUpdated', { articleUuid: req.body.articleUuid, articleTitle: req.body.articleTitle, articleContent: req.body.articleContent });
 
     res.status(200).send({ message: success[constants.ARTICLE_SUCCESSFULLY_UPDATED] });
   });
@@ -152,6 +154,8 @@ router.put('/remove-article', (req, res) =>
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
     req.app.get('io').in('rootNewsGroup').emit('removedArticle', req.body.articleUuid, commonAppStrings);
+
+    req.app.get('io').in('intranetArticlesRoom').emit('articleRemoved', req.body.articleUuid);
 
     return res.status(200).send({ message: success[constants.ARTICLE_SUCCESSFULLY_REMOVED] });
   });
@@ -206,6 +210,8 @@ router.post('/add-comment-on-article', (req, res) =>
       if(error == null && rightsExist) req.app.get('io').in('rootNewsGroup').emit('commentPostedOnArticle', commentData, req.body.articleUuid, req.app.locals.account, rightsData, commonAppStrings);
     });
 
+    req.app.get('io').in('intranetArticlesRoom').emit('articleCommentPosted', commentData);
+
     res.status(201).send({ message: success[constants.ARTICLE_COMMENT_CREATED_SUCCESSFULLY] });
   });
 });
@@ -221,6 +227,11 @@ router.put('/update-comment-on-article', (req, res) =>
   commonNewsComment.updateComment(req.body.commentUuid, req.body.commentContent, req.app.locals.account, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    commonNewsComment.checkIfCommentExists(req.body.commentUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, commentExists, commentData) =>
+    {
+      if(error == null && commentExists) req.app.get('io').in('intranetArticlesRoom').emit('articleCommentUpdated', commentData);
+    });
 
     req.app.get('io').in('rootNewsGroup').emit('commentUpdatedOnArticle', req.body.commentUuid, req.body.commentContent, req.body.articleUuid, commonAppStrings);
 
@@ -240,6 +251,7 @@ router.delete('/remove-comment-on-article', (req, res) =>
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
     req.app.get('io').in('rootNewsGroup').emit('commentRemovedOnArticle', req.body.commentUuid, req.body.articleUuid, commonAppStrings);
+    req.app.get('io').in('intranetArticlesRoom').emit('articleCommentRemoved', req.body.commentUuid);
 
     res.status(201).send({ message: success[constants.ARTICLE_COMMENT_REMOVED_SUCCESSFULLY] });
   });

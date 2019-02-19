@@ -4,6 +4,8 @@ function loadDirectorySection()
 {
   displayLocationLoader();
 
+  history.pushState(null, null, '/directory/' + urlParameters.join('/'));
+
   urlParameters.length > 0
   ? loadDirectorySectionProfile(urlParameters[0])
   : loadDirectorySectionHome();

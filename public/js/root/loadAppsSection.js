@@ -4,6 +4,8 @@ function loadAppsSection()
 {
   displayLocationLoader();
 
+  history.pushState(null, null, '/apps');
+
   $.ajax(
   {
     type: 'GET', timeout: 10000, dataType: 'JSON', url: '/queries/root/apps/get-account-apps', success: () => {},

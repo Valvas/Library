@@ -21,7 +21,7 @@ function loadLocation(sectionToLoad)
     case 'apps':      loadAppsSection();      break;
     case 'directory': loadDirectorySection(); break;
 
-    case 'admin':     location = 'administration'; break;
+    case 'admin':     window.location = '/administration'; break;
 
     //Put a default with an error showing on the dom
   }

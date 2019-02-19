@@ -22,6 +22,50 @@ module.exports = (io, app, callback) =>
     socket.on('messengerAwaitingNewConversationsJoin', () => { socket.join('messengerAwaitingNewConversations') });
 
     /****************************************************************************************************/
+    /* Events Rooms On Intranet Home */
+    /****************************************************************************************************/
+
+    socket.on('intranetArticlesJoin', () =>
+    {
+      socket.join('intranetArticlesRoom');
+    });
+
+    socket.on('intranetAppsJoin', () =>
+    {
+      socket.join('intranetAppsRoom');
+    });
+
+    socket.on('intranetAccountJoin', (accountUuid) =>
+    {
+      socket.join('intranetAccountRoom' + accountUuid);
+    });
+
+    socket.on('intranetDirectoryJoin', () =>
+    {
+      socket.join('intranetDirectoryRoom');
+    });
+
+    socket.on('intranetArticlesLeave', () =>
+    {
+      socket.leave('intranetArticlesRoom');
+    });
+
+    socket.on('intranetAppsLeave', () =>
+    {
+      socket.leave('intranetAppsRoom');
+    });
+
+    socket.on('intranetAccountLeave', (accountUuid) =>
+    {
+      socket.leave('intranetAccountRoom' + accountUuid);
+    });
+
+    socket.on('intranetDirectoryLeave', () =>
+    {
+      socket.leave('intranetDirectoryRoom');
+    });
+
+    /****************************************************************************************************/
     // EVENTS FOR NEWS ON ROOT APP
     /****************************************************************************************************/
 
@@ -30,7 +74,7 @@ module.exports = (io, app, callback) =>
     /****************************************************************************************************/
     /****************************************************************************************************/
 
-    socket.on('accountCreated', (accountEmail) => 
+    socket.on('accountCreated', (accountEmail) =>
     {
       accountsGet.getAccountUsingEmail(accountEmail, app.get('mysqlConnector'), (error, account) =>
       {

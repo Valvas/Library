@@ -94,7 +94,7 @@
       "transporter":true
     }
   },
-  "ready":true,
+  "ready":false,
   "salt":"$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
   "tokenSecretKey":"qgdsq65qsegf6qezgr46",
   "storage":{

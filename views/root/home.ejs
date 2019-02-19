@@ -3,36 +3,50 @@
   <title>PEI - <%= strings.common.locations[currentLocation] %></title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="/stylesheets/includes.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/fontawesome.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/quill.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/home.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/apps.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/header.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/aside.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/account.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/articles.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/directory.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/root/messenger.css" />
   <body>
-    <% include ../include/informations.ejs %>
-    <div class="mainSection">
-      <div class="subSection">
-        <% include include/header.ejs %>
-        <div class="contentSection">
-          <div class="asideColumn">
-            <% include include/aside.ejs %>
-            <% include include/news.ejs %>
-          </div>
-          <div class="centerColumn">
-            <div class="homeSection">
-              <div class="homeSectionTitle">Accueil</div>
-              <img class="homeSectionPicture" src="/pictures/home.png" />
-              <div class="homeSectionMessage">
-                <div class="homeSectionParagraph"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <% include include/footer.ejs %>
+    <div class="informationBlock" id="informationBlock"></div>
+    <div id="mainContainer">
     </div>
     <% include ../include/common_scripts.ejs %>
-    <% include include/scripts.ejs %>
-    <% include ../messenger.ejs %>
-    <script src='/js/root/news/selectNewsExternal.js'></script>
+    <script src='/js/quill.js'></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='/js/common/informations.js'></script>
+    <script src="/js/root/logout.js"></script>
+    <script src="/js/root/initialize.js"></script>
+    <script src="/js/root/createHeader.js"></script>
+    <script src="/js/root/createMessenger.js"></script>
+    <script src="/js/root/createContainers.js"></script>
+    <script src="/js/root/createAside.js"></script>
+    <script src="/js/root/loadLocation.js"></script>
+    <script src="/js/root/loadHomeSection.js"></script>
+    <script src="/js/root/loadAppsSection.js"></script>
+    <script src="/js/root/loadAccountSection.js"></script>
+    <script src="/js/root/loadArticlesSection.js"></script>
+    <script src="/js/root/loadDirectorySection.js"></script>
+    <script src="/js/root/accountSection/updateEmail.js"></script>
+    <script src="/js/root/accountSection/updatePicture.js"></script>
+    <script src="/js/root/accountSection/updateLastname.js"></script>
+    <script src="/js/root/accountSection/updatePassword.js"></script>
+    <script src="/js/root/accountSection/updateFirstname.js"></script>
+    <script src="/js/root/accountSection/updateContactNumber.js"></script>
+    <script src="/js/root/directorySection/browseUnits.js"></script>
+    <script src="/js/root/articlesSection/socket.js"></script>
+    <script src="/js/root/articlesSection/createArticle.js"></script>
+    <script src="/js/root/articlesSection/updateArticle.js"></script>
+    <script src="/js/root/articlesSection/removeArticle.js"></script>
+    <script src="/js/root/articlesSection/postComment.js"></script>
+    <script src="/js/root/articlesSection/updateComment.js"></script>
+    <script src="/js/root/articlesSection/removeComment.js"></script>
   </body>
 </html>

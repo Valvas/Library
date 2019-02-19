@@ -1,6 +1,6 @@
 {
   "notFound": "Cette page est introuvable",
-  
+
   "messenger":
   {
     "headerTitle": "Messagerie",
@@ -181,6 +181,14 @@
 
   "root":
   {
+    "logoutConfirmation":
+    {
+      "title": "Déconnexion",
+      "message": "Êtes-vous sûr(e) de vouloir vous déconnecter ?",
+      "confirm": "Se déconnecter",
+      "cancel": "Rester"
+    },
+
     "navigationBar":
     {
       "companyName": "pei",
@@ -336,7 +344,9 @@
       "create":
       {
         "header": "Créer un nouvel article",
-        "titleLabel": "Titre de l'article"
+        "titleLabel": "Titre de l'article",
+        "emptyTitle": "Veuillez renseigner un titre pour cet article",
+        "emptyContent": "Veuillez ajouter du contenu à l'article"
       },
 
       "update":
@@ -352,7 +362,25 @@
         "emptyCommentsStack": "Aucun commentaire",
         "answerComment": "Répondre",
         "updateComment": "Modifier",
-        "removeComment": "Supprimer"
+        "removeComment": "Supprimer",
+        "updatedComment": "commentaire modifié",
+        "removedComment": "commentaire supprimé"
+      },
+
+      "createArticlePopup":
+      {
+        "title": "Créer un article",
+        "message": "Êtes-vous sûr(e) de vouloir créer cet article ?",
+        "confirm": "Oui",
+        "cancel": "Annuler"
+      },
+
+      "updateArticlePopup":
+      {
+        "title": "Modifier un article",
+        "message": "Êtes-vous sûr(e) de vouloir modifier cet article ?",
+        "confirm": "Oui",
+        "cancel": "Annuler"
       },
 
       "removeArticlePopup":
@@ -367,7 +395,12 @@
       "socket":
       {
         "updatedArticleMessage": "Un article a été modifié",
-        "removedArticleMessage": "Un article a été supprimé"
+        "removedArticleMessage": "Un article a été supprimé",
+        "articleRemoved": "L'article $[1] a été supprimé",
+        "articleCreated": "L'article $[1] vient d'être créé",
+        "articleUpdated": "L'article $[1] vient d'être mis à jour",
+        "articleCommentRemoved": "Un commentaire sur l'article vient d'être supprimé",
+        "articleCommentUpdated": "Un commentaire sur l'article vient d'être modifié"
       }
     },
 

@@ -92,8 +92,8 @@ function getArticleCommentsBuildCommentData(commentData, databaseConnection, glo
     {
       if(error != null) return callback(error);
 
-      var builtCommentData = { commentUuid: commentData.uuid, commentContent: commentData.is_removed === 1 ? commonAppStrings.root.news.articleCommentRemovedContent : commentData.content, commentDate: stringifyDate, commentAuthorUuid: accountData.uuid, commentAuthor: accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : 'Utilisateur supprimé', commentRemoved: commentData.is_removed === 1, commentChildren: [] };
-    
+      var builtCommentData = { commentUuid: commentData.uuid, commentContent: commentData.is_removed === 1 ? commonAppStrings.root.news.articleCommentRemovedContent : commentData.content, commentDate: stringifyDate, commentAuthorUuid: accountData.uuid, commentAuthor: accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}` : 'Utilisateur supprimé', commentRemoved: commentData.is_removed === 1, commentUpdated: commentData.is_updated === 1, commentChildren: [] };
+
       return callback(null, builtCommentData);
     });
   });
@@ -137,18 +137,33 @@ function checkIfCommentExists(commentUuid, databaseConnection, globalParameters,
 
     if(result.length === 0) return callback(null, false);
 
-    const commentData =
+    commonFormatDate.getStringifyDateFromTimestamp(result[0].timestamp, (error, stringifiedDate) =>
     {
-      commentUuid: result[0].uuid,
-      commentArticle: result[0].article_uuid,
-      commentContent: result[0].is_removed === 1 ? commonAppStrings.root.news.articleCommentRemovedContent : result[0].content,
-      commentAuthor: result[0].account_uuid,
-      commentTimestamp: result[0].timestamp,
-      commentParent: result[0].parent_comment,
-      commentRemoved: result[0].is_removed === 1
-    }
+      if(error != null) return callback(error);
 
-    return callback(null, true, commentData);
+      commonAccountsGet.checkIfAccountExistsFromUuid(result[0].account_uuid, databaseConnection, globalParameters, (error, accountExists, accountData) =>
+      {
+        if(error != null) return callback(error);
+
+        if(accountExists == false) return callback({ status: 404, code: constants.ACCOUNT_NOT_FOUND, detail: null });
+
+        const commentData =
+        {
+          commentUuid: result[0].uuid,
+          commentArticle: result[0].article_uuid,
+          commentContent: result[0].is_removed === 1 ? commonAppStrings.root.news.articleCommentRemovedContent : result[0].content,
+          commentAuthorUuid: result[0].account_uuid,
+          commentAuthor: `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.toUpperCase()}`,
+          commentTimestamp: result[0].timestamp,
+          commentDate: stringifiedDate,
+          commentParent: result[0].parent_comment,
+          commentRemoved: result[0].is_removed === 1,
+          commentUpdated: result[0].is_updated === 1
+        }
+
+        return callback(null, true, commentData);
+      });
+    });
   });
 }
 
@@ -207,7 +222,7 @@ function addCommentOnArticleInsertInDatabase(articleUuid, commentContent, parent
   {
     databaseName: globalParameters.database.root.label,
     tableName: globalParameters.database.root.tables.newsComments,
-    args: { uuid: generatedUuid, account_uuid: accountData.uuid, timestamp: generatedTimestamp, content: commentContent.replace(/\"/g, '\\"'), parent_comment: parentComment, article_uuid: articleUuid, is_removed: 0 }
+    args: { uuid: generatedUuid, account_uuid: accountData.uuid, timestamp: generatedTimestamp, content: commentContent.replace(/\"/g, '\\"'), parent_comment: parentComment, article_uuid: articleUuid, is_removed: 0, is_updated: 0 }
 
   }, databaseConnection, (error) =>
   {
@@ -270,7 +285,7 @@ function updateCommentCheckIfCommentExists(commentUuid, commentContent, accountD
 
     if(commentExists == false) return callback({ status: 404, code: constants.ARTICLE_COMMENT_NOT_FOUND, detail: null });
 
-    if(accountData.isAdmin) return updateCommentInDatabase(commentUuid, commentContent, databaseConnection, globalParameters, callback);
+    if(accountData.isAdmin) return updateCommentInDatabase(commentUuid, commentContent, accountData.uuid, databaseConnection, globalParameters, callback);
 
     return updateCommentCheckIfAccountIsAuthorized(commentData, commentContent, accountData, databaseConnection, globalParameters, callback);
   });
@@ -286,7 +301,7 @@ function updateCommentCheckIfAccountIsAuthorized(commentData, commentContent, ac
 
     if(rightsExist == false) return callback({ status: 404, code: constants.INTRANET_RIGHTS_NOT_FOUND, detail: null });
 
-    if(rightsData.update_article_comments || (rightsData.update_article_own_comments && commentData.commentAuthor === accountData.uuid)) return updateCommentInDatabase(commentData.commentUuid, commentContent, databaseConnection, globalParameters, callback);
+    if(rightsData.update_article_comments || (rightsData.update_article_own_comments && commentData.commentAuthor === accountData.uuid)) return updateCommentInDatabase(commentData.commentUuid, commentContent, accountData.uuid, databaseConnection, globalParameters, callback);
 
     return callback({ status: 403, code: constants.UNAUTHORIZED_TO_UPDATE_THIS_ARTICLE_COMMENT, detail: null });
   });
@@ -294,13 +309,13 @@ function updateCommentCheckIfAccountIsAuthorized(commentData, commentContent, ac
 
 /****************************************************************************************************/
 
-function updateCommentInDatabase(commentUuid, commentContent, databaseConnection, globalParameters, callback)
+function updateCommentInDatabase(commentUuid, commentContent, accountUuid, databaseConnection, globalParameters, callback)
 {
   databaseManager.updateQuery(
   {
     databaseName: globalParameters.database.root.label,
     tableName: globalParameters.database.root.tables.newsComments,
-    args: { content: commentContent.replace(/\"/g, '\\"') },
+    args: { content: commentContent.replace(/\"/g, '\\"'), is_updated: 1, timestamp: Date.now(), account_uuid: accountUuid },
     where: { operator: '=', key: 'uuid', value: commentUuid }
 
   }, databaseConnection, (error) =>

@@ -42,7 +42,7 @@ router.post('/get-account-profile', (req, res) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-    if(accountExists == false) return res.status(error.status).send({ message: errors[constants.ACCOUNT_NOT_FOUND], detail: null });
+    if(accountExists == false) return res.status(404).send({ message: errors[constants.ACCOUNT_NOT_FOUND], detail: null });
 
     commonUnitsGet.getAccountUnit(req.body.accountUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountUnit) =>
     {

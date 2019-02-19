@@ -3,7 +3,13 @@
 .articlesSectionBlock{ box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); overflow:hidden; background-color:#FFFFFF; }
 
 
-.articlesSectionEmpty{ font-size:1.2em; font-style:italic; text-align:center; padding:40px 20px 40px 20px; }
+.articlesSectionEmpty{ font-size:1.2em; font-style:italic; text-align:center; padding:40px 20px 40px 20px; box-sizing:border-box; }
+
+.articlesSectionCreateBlock{ display:flex; flex-direction:row; justify-content:center; padding:20px; }
+
+.articlesSectionCreateBlockButton{ border:1px solid #648DA7; color:#648DA7; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; }
+
+.articlesSectionCreateBlockButton:hover{ background-color:rgba(0,0,0,0.1); }
 
 
 .articleBlock{ padding:40px 20px 40px 20px; display:flex; flex-direction:row; justify-content:center; }
@@ -22,6 +28,8 @@
 
 .articleBlockHeaderActionsCreate:hover, .articleBlockHeaderActionsUpdate:hover, .articleBlockHeaderActionsRemove:hover{ background-color:rgba(0,0,0,0.1); }
 
+.articleBlockHeaderActionsDisabled{ border:1px solid #D0D0D0; color:#D0D0D0; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; margin-right:10px; }
+
 .articleBlockHeaderTitle{ font-size:2em; word-break:break-word; margin-top:20px; font-family:roboto-regular; }
 
 .articleBlockHeaderInfos{ color:rgba(0,0,0,0.75); font-size:1em; font-style:italic; margin-top:10px; }
@@ -37,9 +45,9 @@
 
 .articleBlockCommentsAdd button:hover{ background-color:rgba(0,0,0,0.1); }
 
-.articleBlockCommentsContainer{ border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:10px 20px 20px 20px; }
+.articleBlockCommentsContainer{ padding:10px 0 20px 0; }
 
-.articleBlockCommentsEmpty{ padding-top:20px; font-size:1em; text-align:center; font-style:italic; display:none; }
+.articleBlockCommentsEmpty{ font-size:1em; text-align:center; font-style:italic; display:none; }
 
 
 .articleBlockCommentsListElement{ padding-top:20px; }
@@ -49,5 +57,31 @@
 .articleBlockCommentsListElementContent{ border-left:1px solid rgba(0,0,0,0.25); padding:10px 10px 10px 20px; }
 
 .articleBlockCommentsListElementContentMessage{ font-size:0.9em; font-style:italic; }
+
+.articleBlockCommentsListElementActions{ display:flex; flex-direction:row; padding-bottom:10px; }
+
+.articleBlockCommentsListElementActionsButton{ margin-right:10px; font-size:0.8em; color:#648DA7; user-select:none; cursor:pointer; }
+
+.articleBlockCommentsListElementActionsButton:hover{ color:#426B85; }
+
+.articleBlockCommentsListElementActionsButtonDisabled{ margin-right:10px; font-size:0.8em; color:#C0C0C0; user-select:none; }
+
+
+.articleBlockCommentPopupContent{ border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:8px; font-size:0.9em; min-height:200px; max-height:400px; overflow-y:auto; }
+
+
+.articleBlockForm{ max-width:600px; width:100%; }
+
+.articleBlockFormTitle{ width:100%; padding:8px; margin-bottom:20px; border:1px solid rgba(0,0,0,0.25); border-radius:2px; box-sizing:border-box; }
+
+.articleBlockFormContent{ width:100%; }
+
+.articleBlockFormButtons{ margin-top:20px; display:flex; flex-direction:row; justify-content:flex-end; align-items:center; flex-wrap:wrap; }
+
+.articleBlockFormSubmit{ border:1px solid #648DA7; color:#648DA7; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; margin-left:20px; cursor:pointer; }
+
+.articleBlockFormCancel{ border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; margin-left:20px; cursor:pointer; }
+
+.articleBlockFormSubmit:hover, .articleBlockFormCancel:hover{ background-color:rgba(0,0,0,0.1); }
 
 /****************************************************************************************************/

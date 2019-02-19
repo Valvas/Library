@@ -34,7 +34,7 @@ function createHeader(callback)
   accountBlockData  .innerHTML += `<div class="navigationBarAccountBlockDataCircle"><img id="navigationBarAccountPicture" class="navigationBarAccountBlockDataPicture" src="${accountData.picture}" /></div>`;
 
   accountMenuList   .innerHTML += `<li onclick="loadLocation('account')" class="navigationBarAccountBlockMenuListElement">${commonStrings.root.navigationBar.accountMenu.account}</li>`;
-  accountMenuList   .innerHTML += `<li class="navigationBarAccountBlockMenuListElement">${commonStrings.root.navigationBar.accountMenu.logout}</li>`;
+  accountMenuList   .innerHTML += `<li onclick="logoutOpenPrompt()" class="navigationBarAccountBlockMenuListElement">${commonStrings.root.navigationBar.accountMenu.logout}</li>`;
 
   accountMenu       .appendChild(accountMenuList);
   accountBlock      .appendChild(accountBlockData);

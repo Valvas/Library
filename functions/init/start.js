@@ -91,8 +91,6 @@ module.exports.startApp = (app, callback) =>
 
   app.use('/api/messenger', auth, apiMessenger);
 
-  app.use('/test', auth, require(`${__root}/routes/root/views/test`));
-
   app.use('/', root);
   app.use('/home', auth, messenger, homeViews);
   app.use('/apps', auth, messenger, appsViews);

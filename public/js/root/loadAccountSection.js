@@ -4,6 +4,8 @@ function loadAccountSection()
 {
   displayLocationLoader();
 
+  history.pushState(null, null, '/account');
+
   var accountContainer    = document.createElement('div');
   var accountHeader       = document.createElement('div');
   var accountPicture      = document.createElement('div');

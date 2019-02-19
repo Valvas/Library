@@ -65,7 +65,8 @@
       "content": "TEXT NOT NULL",
       "parent_comment": "VARCHAR(255)",
       "article_uuid": "VARCHAR(255) NOT NULL",
-      "is_removed": "BOOLEAN NOT NULL"
+      "is_removed": "BOOLEAN NOT NULL",
+      "is_updated": "BOOLEAN NOT NULL"
     },
     "rights":
     {

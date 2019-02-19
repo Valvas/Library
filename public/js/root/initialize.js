@@ -1,5 +1,9 @@
 /****************************************************************************************************/
 
+const socket = io();
+
+socket.on('connect', () => { socket.emit('intranetArticlesJoin') });
+
 var commonStrings = null;
 var accountData = null;
 var articlesData = null;
@@ -8,10 +12,7 @@ var messengerData = null;
 var currentLocation = window.location.href.split('/')[3];
 var urlParameters = window.location.href.split('/').slice(4);
 
-urlParameters = ['display', '042ee936-0423-43cd-bb0d-468e2b18ee4e']
-
-//To remove when tests are over
-currentLocation = 'news';
+urlParameters = urlParameters.filter(param => param.length > 0);
 
 initializeStart();
 
