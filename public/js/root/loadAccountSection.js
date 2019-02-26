@@ -29,9 +29,12 @@ function loadAccountSection()
   accountEmail            .innerHTML = `<div id="accountCurrentEmail" class="accountSectionDataBlockValue">${accountData.email}</div><button onclick="updateEmailOpenPopup()" class="accountSectionDataBlockUpdate">${commonStrings.root.account.emailBlockUpdate}</button>`;
   accountLastname         .innerHTML = `<div id="accountCurrentLastname" class="accountSectionDataBlockValue">${accountData.lastname.charAt(0).toUpperCase()}${accountData.lastname.slice(1).toLowerCase()}</div><button onclick="updateLastnameOpenPopup()" class="accountSectionDataBlockUpdate">${commonStrings.root.account.lastnameBlockUpdate}</button>`;
   accountFirstname        .innerHTML = `<div id="accountCurrentFirstname" class="accountSectionDataBlockValue">${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()}</div><button onclick="updateFirstnameOpenPopup()" class="accountSectionDataBlockUpdate">${commonStrings.root.account.firstnameBlockUpdate}</button>`;
-  accountNumber           .innerHTML = `<div id="accountCurrentContactNumber" class="accountSectionDataBlockValue">+${accountData.contactNumber}</div><button onclick="updateContactNumberOpenPopup()" class="accountSectionDataBlockUpdate">${commonStrings.root.account.contactNumberBlockUpdate}</button>`;
 
-  accountPicture          .innerHTML += `<div class="accountSectionBlockHeaderPictureCircle"><img class="accountSectionBlockHeaderPictureContent" id="accountCurrentPicture" src="${accountData.picture}" /></div>`;
+  accountNumber           .innerHTML = accountData.contactNumber == null
+  ? `<div id="accountCurrentContactNumber" class="accountSectionDataBlockValue">${commonStrings.root.account.noContactNumber}</div><button onclick="updateContactNumberOpenPopup()" class="accountSectionDataBlockUpdate">${commonStrings.root.account.contactNumberBlockUpdate}</button>`
+  : `<div id="accountCurrentContactNumber" class="accountSectionDataBlockValue">+${accountData.contactNumber}</div><button onclick="updateContactNumberOpenPopup()" class="accountSectionDataBlockUpdate">${commonStrings.root.account.contactNumberBlockUpdate}</button>`;
+
+  accountPicture          .innerHTML += `<div class="accountSectionBlockHeaderPictureCircle"><img class="accountSectionBlockHeaderPictureContent" id="accountCurrentPicture" alt="" src="${accountData.picture}" /></div>`;
 
   accountHeader           .appendChild(accountPicture);
 

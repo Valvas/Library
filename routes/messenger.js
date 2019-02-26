@@ -5,7 +5,6 @@ const errors                = require(`${__root}/json/errors`);
 const success               = require(`${__root}/json/success`);
 const constants             = require(`${__root}/functions/constants`);
 const commonMessengerGet    = require(`${__root}/functions/common/messenger/get`);
-const commonMessengerGetv2  = require(`${__root}/functions/common/messenger/get(v2)`);
 const commonMessengerSend   = require(`${__root}/functions/common/messenger/send`);
 const commonMessengerUpdate = require(`${__root}/functions/common/messenger/update`);
 
@@ -15,7 +14,7 @@ var router = express.Router();
 
 router.get('/get-messenger-data', (req, res) =>
 {
-  commonMessengerGetv2.retrieveMessengerData(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, messengerData) =>
+  commonMessengerGet.retrieveMessengerData(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, messengerData) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -25,31 +24,17 @@ router.get('/get-messenger-data', (req, res) =>
 
 /****************************************************************************************************/
 
-router.get('/get-conversations', (req, res) =>
-{
-  const currentAccountData = req.app.locals.account;
-
-  commonMessengerGet.getConversations(currentAccountData.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, conversations) =>
-  {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-    return res.status(200).send({ accountData: currentAccountData, conversationsData: conversations });
-  });
-});
-
-/****************************************************************************************************/
-
 router.post('/get-conversation-content', (req, res) =>
 {
-  const currentAccountData = req.app.locals.account;
-
   if(req.body.conversationUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Conversation Uuid' });
 
-  commonMessengerGet.getConversationData(req.body.conversationUuid, currentAccountData, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, conversationData) =>
+  if(req.body.hasBeenOpenned !== 'true' && req.body.hasBeenOpenned !== 'false') return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Openned Conversation Status' });
+
+  commonMessengerGet.retrieveConversationData(req.body.conversationUuid, req.body.hasBeenOpenned === 'true', req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, conversationData) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-    return res.status(200).send({ accountData: currentAccountData, conversationData: conversationData });
+    return res.status(200).send(conversationData);
   });
 });
 
@@ -57,23 +42,22 @@ router.post('/get-conversation-content', (req, res) =>
 
 router.post('/post-message', (req, res) =>
 {
-  const currentAccountData = req.app.locals.account;
+  if(req.body.messageContent == undefined)            return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Message Content' });
+  if(req.body.conversationUuid == undefined)          return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Conversation Uuid' });
+  if(req.body.messageIdentifier == undefined)         return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Message Identifier' });
 
-  if(req.body.messageData == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Message Data' });
+  const accountData = req.app.locals.account;
 
-  const messageData = JSON.parse(req.body.messageData);
-
-  if(messageData.messageContent == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Message Content' });
-
-  commonMessengerSend.addMessageToConversation(messageData.messageContent, messageData.conversationUuid, messageData.participants, currentAccountData.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, conversationUuid) =>
+  commonMessengerSend.addMessageToConversation(req.body.messageContent, req.body.conversationUuid, accountData.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, messageData) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-    req.app.get('io').in(messageData.conversationUuid).emit('messagePosted', messageData.conversationUuid);
+    messageData.identifier = req.body.messageIdentifier;
+    messageData.author = `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.charAt(0).toUpperCase()}${accountData.lastname.slice(1).toLowerCase()}`;
 
-    if(messageData.conversationUuid == null) req.app.get('io').in('messengerAwaitingNewConversations').emit('conversationStarted', conversationUuid);
+    req.app.get('io').in(req.body.conversationUuid).emit('messagePosted', messageData);
 
-    return res.status(200).send({ message: success[constants.MESSENGER_MESSAGE_SENT_SUCCESSFULLY] });
+    return res.status(200).send({  });
   });
 });
 
@@ -81,45 +65,32 @@ router.post('/post-message', (req, res) =>
 
 router.get('/get-accounts-with-whom-to-start-a-conversation', (req, res) =>
 {
-  const currentAccountData = req.app.locals.account;
-
-  commonMessengerGet.getAccountsWithWhomStartingAConversation(currentAccountData.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountsToReturn) =>
+  commonMessengerGet.getAccountsWithWhomToStartConversation(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountsList) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-    return res.status(200).send({ accounts: accountsToReturn });
+    return res.status(200).send({ accountsList: accountsList });
   });
 });
 
 /****************************************************************************************************/
 
-router.post('/conversation-opened', (req, res) =>
+router.post('/create-conversation', (req, res) =>
 {
-  const currentAccountData = req.app.locals.account;
+  if(req.body.receiverUuid == undefined)    return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Receiver Uuid' });
+  if(req.body.messageContent == undefined)  return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Message Content' });
 
-  if(req.body.conversationUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Conversation Uuid' });
+  const accountData = req.app.locals.account;
 
-  commonMessengerUpdate.updateMessageAmountInDatabase(currentAccountData.uuid, req.body.conversationUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  commonMessengerSend.createConversation(req.body.messageContent, req.body.receiverUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, conversationData) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-    return res.status(200).send({  });
-  });
-});
+    conversationData.sender = accountData;
 
-/****************************************************************************************************/
+    req.app.get('io').in('messengerAwaitingNewConversations').emit('conversationCreated', conversationData);
 
-router.post('/update-account-status', (req, res) =>
-{
-  const currentAccountData = req.app.locals.account;
-
-  if(req.body.status == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'Status' });
-
-  commonMessengerUpdate.updateAccountStatus(currentAccountData.uuid, parseInt(req.body.status), req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
-  {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-    return res.status(200).send({  });
+    return res.status(200).send({ message: success[constants.MESSENGER_MESSAGE_SENT_SUCCESSFULLY] });
   });
 });
 

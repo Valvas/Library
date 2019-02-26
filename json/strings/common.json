@@ -1,13 +1,20 @@
 {
   "notFound": "Cette page est introuvable",
 
+  "intranetTitle": "PEI - Intranet",
+
   "messenger":
   {
+    "titleMessage": "nouveau(x) message(s)",
     "headerTitle": "Messagerie",
     "headerCounter": "Nouveaux messages",
+    "sendingFailed": "Echec de l'envoi",
     "genericErrorMessage": "Une erreur est survenue, sa cause n'a pas été determinée, veuillez réessayer plus tard",
     "closeButton": "Fermer",
     "returnButton": "Retour",
+    "searchInputPlaceholder": "Rechercher un utilisateur",
+    "emptySearchResults": "Aucun conversation à afficher avec cette recherche",
+    "emptyConversations": "Aucune conversation",
 
     "startNewConversation":
     {
@@ -22,11 +29,21 @@
       "accountToStartConversationWith": "Commencer une conversation avec",
       "sendButton": "Envoyer ce message",
       "emptyMessageError": "Ce message ne peut pas être vide. Veuillez ajouter du contenu",
-      "sendingMessageLoader": "Message en cours d'envoi. Veuillez patienter..."
+      "sendingMessageLoader": "Message en cours d'envoi. Veuillez patienter...",
+
+      "prompt":
+      {
+        "title": "Commencer une conversation",
+        "message": "Êtes-vous sûr(e) de vouloir envoyer ce message ?",
+        "confirm": "Envoyer",
+        "cancel": "Annuler"
+      }
     },
 
     "conversationBlock":
     {
+      "headerLabel": "Conversation avec",
+      "headerReturn": "Retour",
       "textareaPlaceholder": "Envoyer un message",
       "emptyMessage": "Veuillez entrer un message à envoyer",
       "sendButton": "Envoyer"
@@ -202,6 +219,8 @@
 
     "account":
     {
+      "noContactNumber": "Non renseigné",
+
       "accountLoadingError":
       {
         "title": "Erreur",

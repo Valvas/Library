@@ -23,7 +23,7 @@ module.exports.createDatabaseAndTables = (databasesObject, databaseConnection, c
           if(error != null) return callback(error);
 
           if(Object.keys(databasesObject)[x += 1] == undefined) return callback(null);
-          
+
           createDatabasesLoop(Object.keys(databasesObject)[x], databasesObject[Object.keys(databasesObject)[x]]);
         });
       }
@@ -36,7 +36,7 @@ module.exports.createDatabaseAndTables = (databasesObject, databaseConnection, c
 
     return callback(null);
   }
-  
+
   else
   {
     createDatabasesLoop(Object.keys(databasesObject)[x], databasesObject[Object.keys(databasesObject)[x]]);
@@ -74,9 +74,9 @@ function createAllTables(database, databaseName, pool, callback)
             connection.query(`CREATE TABLE IF NOT EXISTS ${databaseName}.${tableName} (${result})`, function(err, data)
             {
               err ? console.log(`[${databaseName}] : ${err.message} `) : console.log(`[${databaseName}] : table "${tableName}" created !`);
-              
+
               connection.release();
-              
+
               Object.keys(database)[x += 1] == undefined ? callback() : loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
             });
           }
@@ -90,7 +90,7 @@ function createAllTables(database, databaseName, pool, callback)
     console.log(`INFO : no tables to create for this database !`);
     callback();
   }
-  
+
   else
   {
     loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
@@ -163,7 +163,7 @@ module.exports.insertQueryWithUUID = (queryObject, databaseConnection, callback)
 module.exports.selectQuery = (queryObject, databaseConnection, callback) =>
 {
   var sqlQuery = `SELECT ${queryObject.args.join()} FROM ${queryObject.databaseName}.${queryObject.tableName}`;
-  
+
   if(Object.keys(queryObject.where).length > 0)
   {
     sqlQuery += ' WHERE ';
@@ -324,7 +324,7 @@ module.exports.updateQuery = (queryObject, databaseConnection, callback) =>
 module.exports.deleteQuery = (queryObject, databaseConnection, callback) =>
 {
   var sqlQuery = `DELETE FROM ${queryObject.databaseName}.${queryObject.tableName}`;
-  
+
   if(Object.keys(queryObject.where).length > 0)
   {
     sqlQuery += ' WHERE ';

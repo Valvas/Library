@@ -58,6 +58,8 @@ function loadDirectorySectionHome()
 
         for(var x = 0; x < directoryAccounts.length; x++)
         {
+          if(directoryAccounts[x].suspended) continue;
+          
           const currentAccountUuid = directoryAccounts[x].uuid;
 
           var currentAccount  = document.createElement('div');
@@ -78,14 +80,13 @@ function loadDirectorySectionHome()
           accountIdentity     .setAttribute('class', 'directorySectionAccountContentIdentity');
           accountAccess       .setAttribute('class', 'directorySectionAccountContentAccess');
 
-          accountPicture      .innerHTML += `<div class="directorySectionAccountPictureCircle"><img src="${directoryAccounts[x].picture}" /></div>`;
+          accountPicture      .innerHTML += `<div class="directorySectionAccountPictureCircle"><img alt="" src="${directoryAccounts[x].picture}" /></div>`;
           accountIdentity     .innerHTML += `<div class="directorySectionAccountContentIdentityName">${directoryAccounts[x].firstname.charAt(0).toUpperCase()}${directoryAccounts[x].firstname.slice(1).toLowerCase()} ${directoryAccounts[x].lastname.charAt(0).toUpperCase()}${directoryAccounts[x].lastname.slice(1).toLowerCase()}</div>`;
           accountIdentity     .innerHTML += `<div class="directorySectionAccountContentIdentityStatus">${directoryAccounts[x].unitName}</div>`;
           accountAccess       .innerText += `${commonStrings.root.directory.accessAccount}`;
 
           accountAccess       .addEventListener('click', () =>
           {
-            //window.history.pushState(null, '', `/directory/${currentAccountUuid}`);
             urlParameters = [currentAccountUuid];
             loadLocation('directory');
           });

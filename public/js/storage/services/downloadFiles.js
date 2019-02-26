@@ -43,6 +43,7 @@ function downloadSelection(event)
       var content         = document.createElement('div');
       var currentProgress = document.createElement('div');
       var totalProgress   = document.createElement('div');
+      var cancelButton    = document.createElement('button');
 
       box                 .setAttribute('id', 'downloadFileBox');
 
@@ -50,6 +51,7 @@ function downloadSelection(event)
       content             .setAttribute('class', 'downloadFilePopupContent');
       currentProgress     .setAttribute('class', 'downloadFilePopupProgress');
       totalProgress       .setAttribute('class', 'downloadFilePopupProgress');
+      cancelButton        .setAttribute('class', 'downloadFilePopupCancel');
 
       box                 .innerHTML += `<div class="downloadFilePopupTitle">${strings.services.popup.download.title}</div>`;
       content             .innerHTML += `<div id="filesToDownloadCounter" class="downloadFilePopupCounter">${strings.services.popup.download.counter} : 1/${filesToDownload.length}</div>`;
@@ -58,10 +60,24 @@ function downloadSelection(event)
       totalProgress       .innerHTML += `<div class="downloadFilePopupProgressTitle">${strings.services.popup.download.progress.total}</div>`;
       totalProgress       .innerHTML += `<div class="downloadFilePopupProgressBar"><div id="totalProgressLabel" class="downloadFilePopupProgressBarLabel">0 %</div><div id="totalProgressStatus" class="downloadFilePopupProgressBarStatus"></div></div>`;
 
+      cancelButton        .innerText = strings.services.popup.download.cancel;
+
+      cancelButton        .addEventListener('click', () =>
+      {
+        if(currentXhrRequest != null)
+        {
+          currentXhrRequest.abort();
+          currentXhrRequest = null;
+
+          box.remove();
+
+          removeBackground('downloadFilesBackground');
+        }
+      });
+
       content             .appendChild(currentProgress);
       content             .appendChild(totalProgress);
-
-      content             .innerHTML += `<button class="downloadFilePopupCancel">${strings.services.popup.download.cancel}</button>`;
+      content             .appendChild(cancelButton);
 
       box                 .appendChild(content);
 
@@ -92,7 +108,7 @@ function browseFilesToDownload(filesToDownload, index, strings)
 
   currentXhrRequest.onprogress = (event) =>
   {
-    if(event.lengthComputable) 
+    if(event.lengthComputable)
     {
       var currentProgress             = ((event.loaded / event.total) * 100).toFixed(2);
       var totalProgress               = (((100 / filesToDownload.length) * index) + currentProgress / filesToDownload.length).toFixed(2);
@@ -104,7 +120,7 @@ function browseFilesToDownload(filesToDownload, index, strings)
       document.getElementById('totalProgressStatus')    .style.width = `${parseInt(totalProgress)}%`;
     }
 
-    else 
+    else
     {
       document.getElementById('currentProgressLabel')   .innerText = '? %';
       document.getElementById('totalProgressLabel')     .innerText = `? %`;
@@ -132,7 +148,7 @@ function browseFilesToDownload(filesToDownload, index, strings)
 
     const currentFileName = filesToDownload[index].name;
 
-    reader.addEventListener('loadend', (event) => 
+    reader.addEventListener('loadend', (event) =>
     {
       const text = event.srcElement.result;
 
@@ -140,7 +156,7 @@ function browseFilesToDownload(filesToDownload, index, strings)
 
       displayError(json.message, currentFileName, null);
     });
-    
+
     reader.readAsText(currentXhrRequest.response);
 
     if(filesToDownload[index += 1] != undefined) return browseFilesToDownload(filesToDownload, index, strings);

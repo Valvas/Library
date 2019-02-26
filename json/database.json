@@ -173,39 +173,6 @@
     }
   },
 
-  "intranet_chat":
-  {
-    "message":
-    {
-      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "content": "TEXT NOT NULL",
-      "timestamp": "BIGINT UNSIGNED NOT NULL",
-      "author": "VARCHAR(255) NOT NULL",
-      "conversation": "VARCHAR(255) NOT NULL"
-    },
-
-    "conversation":
-    {
-      "uuid": "VARCHAR(255) NOT NULL"
-    },
-
-    "participant":
-    {
-      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "conversation": "VARCHAR(255) NOT NULL",
-      "account": "VARCHAR(255) NOT NULL",
-      "removed": "BOOLEAN NOT NULL",
-      "messages": "INT NOT NULL"
-    },
-
-    "status":
-    {
-      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
-      "account": "VARCHAR(255) NOT NULL",
-      "status": "INT NOT NULL"
-    }
-  },
-
   "intranet_messenger":
   {
     "message":

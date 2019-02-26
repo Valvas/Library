@@ -4,7 +4,6 @@ const fs                  = require('fs');
 const mysql               = require('mysql');
 const nodemailer          = require('nodemailer');
 const auth                = require(`${__root}/auth`);
-const messenger           = require(`${__root}/messenger`);
 const units               = require(`${__root}/json/units`);
 const initAuthentication  = require(`${__root}/initAuthentication`);
 const appsInit            = require(`${__root}/functions/init/apps`);
@@ -92,11 +91,11 @@ module.exports.startApp = (app, callback) =>
   app.use('/api/messenger', auth, apiMessenger);
 
   app.use('/', root);
-  app.use('/home', auth, messenger, homeViews);
-  app.use('/apps', auth, messenger, appsViews);
-  app.use('/news', auth, messenger, newsViews);
-  app.use('/account', auth, messenger, accountViews);
-  app.use('/directory', auth, messenger, directoryViews);
+  app.use('/home', auth, homeViews);
+  app.use('/apps', auth, appsViews);
+  app.use('/news', auth, newsViews);
+  app.use('/account', auth, accountViews);
+  app.use('/directory', auth, directoryViews);
 
   app.use('/queries/strings', auth, stringsQueries);
 

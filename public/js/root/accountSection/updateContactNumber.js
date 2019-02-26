@@ -39,7 +39,10 @@ function updateContactNumberOpenPopup()
   modalHeaderClose      .innerText = commonStrings.global.close;
   modalFormSubmitButton .innerText = commonStrings.global.save;
 
-  modalCurrent          .innerHTML += `<div class="updateAccountModalContentCurrentKey">${commonStrings.root.account.accountUpdate.currentValue} :</div><div class="updateAccountModalContentCurrentValue">+${accountData.contactNumber}</div>`;
+  modalCurrent          .innerHTML += accountData.contactNumber == null
+  ? `<div class="updateAccountModalContentCurrentKey">${commonStrings.root.account.accountUpdate.currentValue} :</div><div class="updateAccountModalContentCurrentValue">${commonStrings.root.account.noContactNumber}</div>`
+  : `<div class="updateAccountModalContentCurrentKey">${commonStrings.root.account.accountUpdate.currentValue} :</div><div class="updateAccountModalContentCurrentValue">+${accountData.contactNumber}</div>`;
+
   modalForm             .innerHTML += `<div class="updateAccountModalContentFormLabel">${commonStrings.root.account.accountUpdate.contactNumberIndicativeLabel}</div>`;
   modalForm             .innerHTML += `<select name="indicative" class="updateAccountModalContentFormInput"><option value="33">33</option></select>`;
   modalForm             .innerHTML += `<div class="updateAccountModalContentFormLabel">${commonStrings.root.account.accountUpdate.contactNumberContentLabel}</div>`;

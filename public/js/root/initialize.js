@@ -1,9 +1,6 @@
 /****************************************************************************************************/
 
-const socket = io();
-
-socket.on('connect', () => { socket.emit('intranetArticlesJoin') });
-
+var pageTitle = document.title;
 var commonStrings = null;
 var accountData = null;
 var articlesData = null;

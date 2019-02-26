@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <title>PEI - <%= strings.common.locations[currentLocation] %></title>
+  <title><%= strings.common.intranetTitle %></title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
@@ -23,7 +23,7 @@
     <script src='/socket.io/socket.io.js'></script>
     <script src='/js/common/informations.js'></script>
     <script src="/js/root/logout.js"></script>
-    <script src="/js/root/initialize.js"></script>
+    <script src="/js/root/initializeSocket.js"></script>
     <script src="/js/root/createHeader.js"></script>
     <script src="/js/root/createMessenger.js"></script>
     <script src="/js/root/createContainers.js"></script>
@@ -48,5 +48,13 @@
     <script src="/js/root/articlesSection/postComment.js"></script>
     <script src="/js/root/articlesSection/updateComment.js"></script>
     <script src="/js/root/articlesSection/removeComment.js"></script>
+    <script src="/js/root/messengerSection/socketMessagePosted.js"></script>
+    <script src="/js/root/messengerSection/socketConversationCreated.js"></script>
+    <script src="/js/root/messengerSection/createNewConversation.js"></script>
+    <script src="/js/root/messengerSection/searchForConversations.js"></script>
+    <script src="/js/root/messengerSection/displayAndHide.js"></script>
+    <script src="/js/root/messengerSection/sendMessage.js"></script>
+    <script src="/js/root/messengerSection/openAndCloseConversation.js"></script>
+    <script src="/js/root/initialize.js"></script>
   </body>
 </html>
