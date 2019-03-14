@@ -69,7 +69,7 @@ router.post('/', (req, res) =>
 
 router.get('/reset-password', (req, res) =>
 {
-  res.render('reset_password', { service: req.app.get('params').init.servicesStarted.transporter });
+  res.render('root/reset', { service: req.app.get('params').init.servicesStarted.transporter });
 });
 
 /****************************************************************************************************/
@@ -91,13 +91,6 @@ router.put('/reset-password', (req, res) =>
       return res.status(200).send({ message: success[constants.NEW_PASSWORD_SENT] });
     });
   });
-});
-
-/****************************************************************************************************/
-
-router.get('/afk-time', (req, res) =>
-{
-
 });
 
 /****************************************************************************************************/

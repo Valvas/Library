@@ -36,7 +36,7 @@ function getServicesData(databaseConnection, params, callback)
         tableName: params.database.storage.tables.serviceElements,
         args: [ '*' ],
         where: { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: services[x].uuid }, 1: { operator: '=', key: 'is_deleted', value: 0 } }
-    
+
       }, databaseConnection, (error, result) =>
       {
         if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
@@ -94,7 +94,7 @@ function checkIfServiceExistsFromUuid(serviceUuid, databaseConnection, params, c
       tableName: params.database.storage.tables.serviceExtensions,
       args: [ '*' ],
       where: { operator: '=', key: 'service_uuid', value: serviceUuid }
-  
+
     }, databaseConnection, (error, result) =>
     {
       if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
@@ -149,7 +149,7 @@ function accessService(serviceUuid, accountUuid, databaseConnection, globalParam
     storageAppServicesRights.getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, globalParameters, (error, serviceRights) =>
     {
       if(error != null) return callback(error);
-      
+
       storageAppFilesGet.getFilesFromService(serviceUuid, null, databaseConnection, globalParameters, (error, filesAndFolders) =>
       {
         if(error != null) return callback(error);
@@ -192,13 +192,13 @@ function getAuthorizedExtensionsForService(serviceUuid, databaseConnection, glob
       tableName: globalParameters.database.storage.tables.serviceExtensions,
       args: [ '*' ],
       where: { operator: '=', key: 'service_uuid', value: serviceUuid }
-  
+
     }, databaseConnection, (error, serviceExtensions) =>
     {
       if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
       if(serviceExtensions.length === 0) return callback({ status: 500, code: constants.NO_EXTENSIONS_FOUND_FOR_SERVICE, detail: null });
-      
+
       var authorizedExtensions = {};
 
       for(var x = 0; x < serviceExtensions.length; x++)
@@ -253,7 +253,8 @@ function getFilesFromService(serviceUuid, databaseConnection, globalParameters, 
     databaseName: globalParameters.database.storage.label,
     tableName: globalParameters.database.storage.tables.serviceElements,
     args: [ '*' ],
-    where: { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: serviceUuid }, 1: { operator: '=', key: 'is_directory', value: 0 }, 2: { operator: '=', key: 'is_deleted', value: 0 } }
+    where: { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: serviceUuid }, 1: { operator: '=', key: 'is_directory', value: 0 }, 2: { operator: '=', key: 'is_deleted', value: 0 } },
+    order: [ { column: 'name', asc: true } ]
 
   }, databaseConnection, (error, result) =>
   {

@@ -1,4 +1,166 @@
 {
+  "pageTitle": "PEI - Intranet",
+
+  "socketMessages":
+  {
+    "currentFolderRemoved": "Le dossier dans lequel vous vous trouviez a été supprimé, vous avez été ramené(e) à la racine du service"
+  },
+
+  "exitPrompt":
+  {
+    "title": "Quitter",
+    "message": "Êtes-vous sûr(e) de vouloir quitter l'application ?",
+    "confirm": "Quitter",
+    "cancel": "Rester"
+  },
+
+  "accountPrompt":
+  {
+    "title": "Redirection",
+    "message": "Vous allez être redirigé(e) vers votre compte. Êtes-vous sûr(e) de vouloir quitter l'application ?",
+    "confirm": "Aller à mon compte",
+    "cancel": "Rester"
+  },
+
+  "navigationBar":
+  {
+    "appName": "Partage Fichiers PEI",
+
+    "menu":
+    {
+      "services": "Mes Services",
+      "admin": "Administration",
+      "exit": "Quitter"
+    },
+
+    "accountMenu":
+    {
+      "account": "Mon Compte",
+      "logout": "Déconnexion"
+    }
+  },
+
+  "homeSection":
+  {
+    "headerTitle": "Liste Des Services",
+
+    "servicesContainer":
+    {
+      "searchPlaceholder": "Rechercher un service",
+      "emptyServices": "Aucun service",
+      "emptySearch": "Aucun résultat pour cette recherche",
+      "amountOfFiles": "Nombre de fichiers",
+      "amountOfFolders": "Nombre de dossiers",
+      "fileMaxSize": "Taille maximale des fichiers",
+      "accessButton": "Accéder au service",
+      "noAccess": "Vous n'avez pas accès à ce service"
+    }
+  },
+
+  "serviceSection":
+  {
+    "header":
+    {
+      "uploadButton": "Envoyer un fichier",
+      "createFolderButton": "Créer un dossier",
+      "unselectFilesButton": "Désélectionner tous les fichiers",
+      "downloadButton": "Télécharger la sélection",
+      "removeButton": "Supprimer la sélection",
+      "counterKey": "Nombre de fichiers sélectionnés",
+      "searchBarPlaceholder": "Rechercher un fichier ou dossier",
+      "largeDisplay": "Grandes icônes",
+      "smallDisplay": "Petites icônes",
+      "listDisplay": "Liste"
+    },
+
+    "elementsContainer":
+    {
+      "emptyFolder": "Aucun fichier ou dossier",
+      "emptySearch": "Aucun résultat pour cette recherche"
+    },
+
+    "pathRoot": "Racine du service",
+
+    "uploadFilePopup":
+    {
+      "retrieveParametersLoader": "Récupération des paramètres depuis le serveur. Veuillez patienter...",
+      "checkingFileLoader": "Vérification du fichier en cours. Veuillez patienter...",
+      "title": "Envoyer un fichier",
+      "help": "Cliquez sur la barre ci-dessous pour choisir un fichier à envoyer",
+      "inputPlaceholder": "Aucun fichier choisi",
+      "maxFileSize": "Taille maximale des fichiers",
+      "authorizedExtensions": "Extensions autorisées",
+      "sendButton": "Envoyer ce fichier",
+      "cancelButton": "Annuler",
+
+      "loaderBlock":
+      {
+        "message": "Envoi du fichier en cours. Veuillez patienter...",
+        "progressKey": "Données transmises"
+      },
+
+      "replaceModal":
+      {
+        "title": "Remplacer un fichier",
+        "message": "Ce fichier est déjà présent dans ce dossier, voulez-vous le remplacer ?",
+        "confirm": "Remplacer le fichier"
+      },
+
+      "errorMessages":
+      {
+        "unauthorizedExtension": "Ce type de fichier n'est pas autorisé",
+        "unauthorizedSize": "La taille du fichier dépasse la limite autorisée",
+        "unauthorizedToReplace": "Ce fichier existe déjà et vous n'êtes pas autorisé(e) à le remplacer"
+      }
+    },
+
+    "removeFilesPopup":
+    {
+      "title": "Supprimer des fichiers",
+      "message": "Êtes-vous sûr(e) de vouloir supprimer ces fichiers ?",
+      "confirm": "Supprimer $[1] fichier(s)",
+      "loader": "Suppression des fichiers en cours. Veuillez patienter..."
+    },
+
+    "downloadFilesPopup":
+    {
+      "retrieveFilesDataLoader": "Vérification des fichiers en cours. Veuillez patienter...",
+      "modalHeader": "Téléchargement de fichiers",
+      "summaryInfo": "La liste des fichiers à télécharger",
+      "summaryFileNotFoundInDatabase": "Aucune référence à ce fichier n'a été trouvé dans la base de données",
+      "summaryFileNotFoundOnStorage": "Ce fichier est introuvable sur le serveur",
+      "startButton": "Télécharger $[1] fichier(s)",
+      "fileSizeProcessed": "Données téléchargées",
+      "downloadSpeed": "Vitesse de téléchargement",
+      "totalHeader": "Total"
+    },
+
+    "folderContextMenu":
+    {
+      "moveFolder": "Déplacer",
+      "renameFolder": "Renommer",
+      "removeFolder": "Supprimer"
+    },
+
+    "renameFolderPopup":
+    {
+      "title": "Renommer ce dossier",
+      "message": "Le nom du dossier ne peut pas contenir les caractères suivants \"<b>\\ / * ! : ? \" < > |</b>\"",
+      "placeholder": "Nouveau nom",
+      "confirm": "Renommer",
+      "loader": "Renommage du dossier en cours. Veuillez patienter..."
+    },
+
+    "removeFolderPopup":
+    {
+      "title": "Supprimer ce dossier",
+      "message": "Attention : tous les fichiers et dossiers contenus dans ce dossier seront également supprimés. Êtes-vous sûr(e) ?",
+      "confirm": "Supprimer le dossier",
+      "loader": "Suppression du dossier en cours. Veuillez patienter..."
+    }
+  },
+
+
   "asideMenu":
   {
     "title": "Partage Fichiers PEI",
@@ -220,7 +382,7 @@
         "informationBlockThirdMessage": "Vous êtes autorisé(e) à modifier le niveau de droits d'un utilisateur pour chaque service cependant vous ne pouvez pas définir un niveau qui excède le vôtre (exemple: si vous êtes niveau 4 pour un service vous pouvez changer le niveau des autres utilisateurs de 0 à 4 pour ce service). Vous ne pouvez également pas modifier le niveau d'un utilisateur ayant un niveau égal ou supérieur au vôtre",
 
         "informationBlockWarning": "Attention: chaque action que vous effectuez ici est enregistrée dans des logs, ceux-ci peuvent être consultés à tout moment par les administrateurs de l'application",
-      
+
         "servicesBlockTitle": "Liste des services",
 
         "isAdminMessage": "Vous êtes administrateur de ce service",
@@ -280,14 +442,6 @@
         }
       }
     }
-  },
-
-  "exitPrompt":
-  {
-    "title": "Quitter",
-    "message": "Êtes-vous sûr(e) de vouloir quitter l'application ?",
-    "validate": "Oui",
-    "cancel": "Non"
   },
 
   "name": "Partage Fichiers PEI",
@@ -515,7 +669,7 @@
       "title": "Détail du fichier",
       "fileName": "Nom du fichier :",
       "events": "Événements",
-      "commentButton": 
+      "commentButton":
       {
         "label": "Ajouter un commentaire",
         "titles":
@@ -605,7 +759,7 @@
       "popupPlaceholder": "Nom du dossier",
       "popupSendButton": "Créer ce dossier",
       "popupCancelButton": "Annuler",
-      "popupHelpMessage": "Le nom ne peut pas contenir de caractères spéciaux, d'accents et commencer ou terminer par un espace",
+      "popupHelpMessage": "Le nom du dossier ne peut pas contenir les caractères suivants \"<b>\\ / * ! : ? \" < > |</b>\". Ce dossier sera créé dans le dossier dans lequel vous vous trouvez actuellement",
       "popupLoader": "Création du nouveau dossier en cours. Veuillez patienter",
       "popupFormatError": "Format du nom incorrect"
     },

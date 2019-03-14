@@ -1,21 +1,19 @@
 /****************************************************************************************************/
 
-updateToken();
-
-/****************************************************************************************************/
-
-function updateToken()
+setInterval(() =>
 {
-  var cookies = document.cookie.split(';');
+  const cookies = document.cookie.split(';');
 
   cookies.forEach((element) =>
   {
-    if(element.split('=')[0] === 'peiauth')
+    const correctedElement = element.trim();
+
+    if(correctedElement.split('=')[0] === 'peiauth')
     {
-      document.cookie = 'peiauth=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-      document.cookie = 'peiauth=' + element.split('=')[1] + '; max-age=' + (60 * 60 * 24);
+      document.cookie = 'peiauth=xxxx;max-age=0;path=/';
+      document.cookie = `peiauth=${correctedElement.split('=')[1]};max-age=${(60 * 60 * 24)};path=/`;
     }
   });
-}
+}, 6000);
 
 /****************************************************************************************************/

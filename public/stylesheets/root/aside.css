@@ -34,7 +34,7 @@
 
 @media (max-width: 819.9px)
 {
-  .asideBlock{ display:none; position:absolute; top:20px; left:0; z-index:10; max-height:calc(100vh - 120px); overflow-y:auto; border-radius:0 4px 4px 0; }
+  .asideBlock{ width:100%; overflow-y:auto; margin-bottom:20px; }
 
   .asideArticles{ display:none; }
 }

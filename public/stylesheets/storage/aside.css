@@ -1,17 +1,17 @@
 /****************************************************************************************************/
 
-.asideMenu{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; margin:0 0 40px 0; align-items:center; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.05); }
+.navigationBar{ display:flex; flex-direction:row; justify-content:flex-start; background-color:#759EB8; padding:20px; }
 
-.asideMenuTitle{ color:#428BCA; padding:10px; text-align:center; }
+.navigationBarContent{ width:100%; display:flex; flex-direction:row; align-items:center; justify-content:space-between; font-family:roboto-light; }
 
-.asideMenuTitleText{ font-size:1.5em; }
+.navigationBarContentAppName{ font-size:1.5em; color:#FFFFFF; text-transform:uppercase; }
 
-.asideMenuContent{ display:flex; flex-direction:row; justify-content:flex-start; flex-wrap:wrap; margin:0 0 0 20px; }
+.navigationBarContentMenu{ font-size:1.25em; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
 
-.asideMenuContentLink, .asideMenuContentLinkSelected{ display:block; padding:10px; cursor:pointer; text-decoration:none; font-size:1.3em; margin:0 20px 0 20px; }
+.navigationBarContentMenuElement, .navigationBarContentMenuElementSelected{ display:block; cursor:pointer; text-decoration:none; margin:0 20px 0 20px; }
 
-.asideMenuContentLink{ color:#000000; }
+.navigationBarContentMenuElement{ color:#FFFFFF; }
 
-.asideMenuContentLinkSelected, .asideMenuContentLink:hover{ color:#428BCA; }
+.navigationBarContentMenuElementSelected, .navigationBarContentMenuElement:hover{ color:#171219; }
 
 /****************************************************************************************************/

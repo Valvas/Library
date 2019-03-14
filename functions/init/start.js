@@ -64,8 +64,6 @@ module.exports.startApp = (app, callback) =>
   const rootQueriesAccount            = require(`${__root}/routes/root/queries/account`);
   const rootQueriesDirectory          = require(`${__root}/routes/root/queries/directory`);
 
-  const sickViewsRoot                 = require(`${__root}/routes/sick/views/root`);
-
   const administrationViewsHome       = require(`${__root}/routes/administration/views/home`);
   const administrationViewsUnits      = require(`${__root}/routes/administration/views/units`);
   const administrationViewsAccess     = require(`${__root}/routes/administration/views/access`);
@@ -116,13 +114,11 @@ module.exports.startApp = (app, callback) =>
 
   app.use('/storage', auth, storageAppAccess, storageViewsHome);
   app.use('/storage/admin', auth, storageAppAccess, storageAppAdminAccess, storageViewsAdmin);
-  app.use('/storage/services', auth, storageAppAccess, storageAppAdminAccess, storageViewsServices);
+  app.use('/storage/service', auth, storageAppAccess, storageAppAdminAccess, storageViewsServices);
 
   app.use('/queries/storage/admin', auth, storageAppAccess, storageAppAdminAccess, storageQueriesAdmin);
   app.use('/queries/storage/strings', auth, storageAppAccess, storageQueriesStrings);
   app.use('/queries/storage/services', auth, storageAppAccess, storageQueriesServices);
-
-  app.use('/sick', auth, sickViewsRoot);
 
   app.use((req, res, next) =>
   {

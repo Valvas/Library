@@ -51,50 +51,6 @@ router.get('/get-last-articles', (req, res) =>
 
 /****************************************************************************************************/
 
-router.put('/get-news-data-from-index', (req, res) =>
-{
-  if(req.body.newsUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newsUuid' });
-
-  commonNewsGet.getNewsIndexFromUuid(req.body.newsUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsIndex) =>
-  {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-    const startIndex = 0;
-    const endIndex = (Math.floor(newsIndex / 10) + 1) * 10;
-
-    commonNewsGet.getLastNewsFromIndex(startIndex, endIndex, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsData) =>
-    {
-      if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-      return res.status(200).send({ newsData: newsData });
-    });
-  });
-});
-
-/****************************************************************************************************/
-
-router.put('/get-news-data-after-index', (req, res) =>
-{
-  if(req.body.newsUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newsUuid' });
-
-  commonNewsGet.getNewsIndexFromUuid(req.body.newsUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsIndex) =>
-  {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-    const startIndex = 0;
-    const endIndex = (Math.floor(newsIndex / 10) + 2) * 10;
-
-    commonNewsGet.getLastNewsFromIndex(startIndex, endIndex, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsData) =>
-    {
-      if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-      return res.status(200).send({ newsData: newsData });
-    });
-  });
-});
-
-/****************************************************************************************************/
-
 router.post('/create-article', (req, res) =>
 {
   if(req.body.articleTitle == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'articleTitle' });
@@ -163,38 +119,6 @@ router.put('/remove-article', (req, res) =>
 
 /****************************************************************************************************/
 
-router.put('/is-my-article', (req, res) =>
-{
-  if(req.body.newsUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'newsUuid' });
-
-  commonNewsGet.getNewsData(req.body.newsUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, newsExists, newsData) =>
-  {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-    if(newsExists == false) return res.status(404).send({ message: errors[constants.NEWS_NOT_FOUND], detail: null });
-
-    if(req.session.account.uuid === newsData.author) return res.status(200).send({ isMine: true, myRights: req.session.account.rights.intranet });
-
-    return res.status(200).send({ isMine: false });
-  });
-});
-
-/****************************************************************************************************/
-
-router.get('/get-rights-on-articles', (req, res) =>
-{
-  commonRightsGet.checkIfRightsExistsForAccount(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rightsExist, accountRights) =>
-  {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-    if(rightsExist == false) return res.status(404).send({ message: errors[constants.INTRANET_RIGHTS_NOT_FOUND], detail: null });
-
-    return res.status(200).send({ accountRights: accountRights, accountData: req.app.locals.account, commonStrings: commonAppStrings });
-  });
-});
-
-/****************************************************************************************************/
-
 router.post('/add-comment-on-article', (req, res) =>
 {
   if(req.body.articleUuid == undefined)     return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'articleUuid' });
@@ -254,22 +178,6 @@ router.delete('/remove-comment-on-article', (req, res) =>
     req.app.get('io').in('intranetArticlesRoom').emit('articleCommentRemoved', req.body.commentUuid);
 
     res.status(201).send({ message: success[constants.ARTICLE_COMMENT_REMOVED_SUCCESSFULLY] });
-  });
-});
-
-/****************************************************************************************************/
-
-router.put('/get-comment-data', (req, res) =>
-{
-  if(req.body.commentUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentUuid' });
-
-  commonNewsComment.checkIfCommentExists(req.body.commentUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, commentExists, commentData) =>
-  {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-    if(commentExists == false) return res.status(404).send({ message: errors[constants.ARTICLE_COMMENT_NOT_FOUND], detail: null });
-
-    return res.status(200).send({ commentData: commentData });
   });
 });
 

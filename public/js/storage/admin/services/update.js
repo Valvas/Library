@@ -72,9 +72,7 @@ function updateService(event)
       {
         removeBackground('updateServiceConfirmationBackground');
 
-        displayError(error.message, error.detail, null);
-
-        return;
+        return displayError(error.message, error.detail, null);
       }
 
       storageStrings = strings;
@@ -129,8 +127,8 @@ function sendServiceDataToServer()
     $.ajax(
     {
       type: 'PUT', timeout: 5000, dataType: 'JSON', data: { serviceData: JSON.stringify({ serviceUuid: serviceUuid, serviceName: serviceName, maxFileSize: maxFileSize, authorizedExtensions: extensionsChecked }) }, url: '/queries/storage/admin/update-service',
-      
-      error: (xhr, status, error) => 
+
+      error: (xhr, status, error) =>
       {
         removeLoader(loader, () =>
         {
@@ -141,7 +139,7 @@ function sendServiceDataToServer()
           displayError('Une erreur est survenue, veuillez réessayer plus tard', null, null);
         });
       }
-                  
+
     }).done((result) =>
     {
       removeLoader(loader, () =>

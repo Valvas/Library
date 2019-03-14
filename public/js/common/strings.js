@@ -11,10 +11,10 @@ function getStorageAppStrings(callback)
       callback({ message: xhr.responseJSON.message, detail: xhr.responseJSON.detail }) :
       callback({ message: 'Une erreur est survenue, veuillez réessayer plus tard', detail: null });
     }
-                        
+
   }).done((result) =>
   {
-    return callback(null, result.strings);
+    return callback(null, result.storage);
   });
 }
 
@@ -31,7 +31,7 @@ function getCommonStrings(callback)
       callback({ message: xhr.responseJSON.message, detail: xhr.responseJSON.detail }) :
       callback({ message: 'Une erreur est survenue, veuillez réessayer plus tard', detail: null });
     }
-                        
+
   }).done((result) =>
   {
     return callback(null, result.strings);
@@ -51,7 +51,7 @@ function getAdministrationAppStrings(callback)
       callback({ message: xhr.responseJSON.message, detail: xhr.responseJSON.detail }) :
       callback({ message: 'Une erreur est survenue, veuillez réessayer plus tard', detail: null });
     }
-                        
+
   }).done((result) =>
   {
     return callback(null, result.strings);

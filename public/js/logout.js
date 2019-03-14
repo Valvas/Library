@@ -1,55 +1,68 @@
 /****************************************************************************************************/
 
-if(document.getElementById('logoutButton')) document.getElementById('logoutButton').addEventListener('click', openLogoutConfirmationPopup);
-
-/****************************************************************************************************/
-
-function logout()
+function logoutOpenPrompt()
 {
-  document.cookie = 'peiauth=xxxx;max-age=0';
+  if(document.getElementById('veilBackground')) return;
 
-  location = '/';
-}
+  document.getElementById('mainContainer').style.filter ='blur(4px)';
 
-/****************************************************************************************************/
+  var veilBackground        = document.createElement('div');
+  var verticalBackground    = document.createElement('div');
+  var horizontalBackground  = document.createElement('div');
+  var modal                 = document.createElement('div');
+  var modalHeader           = document.createElement('div');
+  var modalHeaderTitle      = document.createElement('div');
+  var modalContent          = document.createElement('div');
+  var modalContentButtons   = document.createElement('div');
+  var modalContentConfirm   = document.createElement('button');
+  var modalContentCancel    = document.createElement('button');
 
-function openLogoutConfirmationPopup()
-{
-  if(document.getElementById('logoutBackground')) return;
+  veilBackground        .setAttribute('id', 'veilBackground');
+  verticalBackground    .setAttribute('id', 'modalBackground');
 
-  createBackground('logoutBackground');
+  veilBackground        .setAttribute('class', 'veilBackground');
+  verticalBackground    .setAttribute('class', 'modalBackgroundVertical');
+  horizontalBackground  .setAttribute('class', 'modalBackgroundHorizontal');
+  modal                 .setAttribute('class', 'baseModal');
+  modalHeader           .setAttribute('class', 'baseModalHeader');
+  modalHeaderTitle      .setAttribute('class', 'baseModalHeaderTitle');
+  modalContent          .setAttribute('class', 'baseModalContent');
+  modalContentButtons   .setAttribute('class', 'baseModalContentButtons');
+  modalContentConfirm   .setAttribute('class', 'baseModalContentButtonsConfirm');
+  modalContentCancel    .setAttribute('class', 'baseModalContentButtonsCancel');
 
-  var background  = document.createElement('div');
-  var popup       = document.createElement('div');
-  var buttons     = document.createElement('div');
-  var confirm     = document.createElement('button');
-  var cancel      = document.createElement('button');
+  modalHeaderTitle      .innerText = commonStrings.root.logoutConfirmation.title;
+  modalContentConfirm   .innerText = commonStrings.root.logoutConfirmation.confirm;
+  modalContentCancel    .innerText = commonStrings.root.logoutConfirmation.cancel;
 
-  background      .setAttribute('class', 'logoutBackground');
-  popup           .setAttribute('class', 'logoutPopup');
-  buttons         .setAttribute('class', 'logoutPopupButtons');
-  confirm         .setAttribute('class', 'logoutPopupConfirm');
-  cancel          .setAttribute('class', 'logoutPopupCancel');
+  modalContent          .innerHTML = `<div class="baseModalContentMessage">${commonStrings.root.logoutConfirmation.message}</div>`;
 
-  popup           .innerHTML += `<div class="logoutPopupTitle">Déconnexion</div>`;
-  popup           .innerHTML += `<div class="logoutPopupMessage">Êtes-vous sûr(e) de vouloir vous déconnecter ?</div>`;
-  confirm         .innerText = 'Oui';
-  cancel          .innerText = 'Non';
+  modalHeader           .appendChild(modalHeaderTitle);
+  modalContent          .appendChild(modalContentButtons);
+  modalContentButtons   .appendChild(modalContentConfirm);
+  modalContentButtons   .appendChild(modalContentCancel);
+  modal                 .appendChild(modalHeader);
+  modal                 .appendChild(modalContent);
 
-  confirm         .addEventListener('click', logout);
+  verticalBackground    .appendChild(horizontalBackground);
+  horizontalBackground  .appendChild(modal);
 
-  cancel          .addEventListener('click', () =>
+  modalContentConfirm   .addEventListener('click', () =>
   {
-    background.remove();
-    removeBackground('logoutBackground');
+    document.cookie = 'peiauth=xxxx;max-age=0;path=/';
+
+    window.location = '/';
   });
 
-  buttons         .appendChild(confirm);
-  buttons         .appendChild(cancel);
-  popup           .appendChild(buttons);
-  background      .appendChild(popup);
+  modalContentCancel    .addEventListener('click', () =>
+  {
+    document.getElementById('mainContainer').removeAttribute('style');
+    verticalBackground.remove();
+    veilBackground.remove();
+  });
 
-  document.body   .appendChild(background);
+  document.body         .appendChild(veilBackground);
+  document.body         .appendChild(verticalBackground);
 }
 
 /****************************************************************************************************/

@@ -20,18 +20,18 @@ function sendFormData(event)
     $.ajax(
     {
       type: 'PUT', timeout: 5000, dataType: 'JSON', data: { 'emailAddress': email, 'uncryptedPassword': password }, url: '/', success: () => {},
-      error: (xhr, status, error) => 
+      error: (xhr, status, error) =>
       {
         document.getElementById('background').removeAttribute('style');
         document.getElementById('main').removeAttribute('style');
 
         if(status == 'timeout') document.getElementById('error').innerText = 'Le serveur a mis trop de temps à répondre...';
         else{ document.getElementById('error').innerText = JSON.parse(xhr.responseText).message; }
-      } 
+      }
 
     }).done((json) =>
     {
-      document.cookie = 'peiauth=' + json.token + '; max-age=' + json.maxAge;
+      document.cookie = `peiauth=${json.token};max-age=${json.maxAge};path=/`;
 
       location = '/home';
     });

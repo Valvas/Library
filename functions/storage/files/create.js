@@ -49,7 +49,12 @@ module.exports.createFolder = (newFolderName, parentFolderUuid, serviceUuid, acc
 
   if(newFolderName.length > globalParameters.storage.maxFolderNameSize) return callback({ status: 406, code: constants.NEW_FOLDER_NAME_BAD_FORMAT, detail: null });
 
-  if(new RegExp('^[a-zA-Z0-9]([ ]?[a-zA-Z0-9]+)*$').test(newFolderName) == false) return callback({ status: 406, code: constants.NEW_FOLDER_NAME_BAD_FORMAT, detail: null });
+  newFolderName = newFolderName.trim();
+
+  if(newFolderName.indexOf('*') > -1 || newFolderName.indexOf('!') > -1 || newFolderName.indexOf(':') > -1 || newFolderName.indexOf('?') > -1 || newFolderName.indexOf('"') > -1 || newFolderName.indexOf('<') > -1 || newFolderName.indexOf('>') > -1 || newFolderName.indexOf('|') > -1)
+  {
+    return callback({ status: 406, code: constants.NEW_FOLDER_NAME_BAD_FORMAT, detail: null });
+  }
 
   createFolderCheckIfServiceExists(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, (error, newFolderUuid) =>
   {
@@ -91,9 +96,9 @@ function createFolderCheckAccountRights(newFolderName, parentFolderUuid, service
     storageAppServicesRights.getRightsTowardsService(serviceUuid, accountUuid, databaseConnection, globalParameters, (error, serviceRights) =>
     {
       if(error != null) return callback(error);
-      
+
       if(serviceRights.createFolders == false && serviceRights.isAdmin == false) return callback({ status: 403, code: constants.SERVICE_RIGHTS_LEVEL_TOO_LOW_TO_PERFORM_THIS_REQUEST, detail: null });
-    
+
       return createFolderCheckIfParentFolderExists(newFolderName, parentFolderUuid, serviceUuid, accountUuid, databaseConnection, globalParameters, callback);
     });
   });

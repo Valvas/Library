@@ -86,13 +86,13 @@ function updateFolderNameCheckAccountRightsOnService(folderName, folderData, ser
 /****************************************************************************************************/
 
 function updateFolderNameCheckIfNameIsAvailable(folderName, folderData, serviceUuid, databaseConnection, globalParameters, callback)
-{
+{console.log(folderData);
   databaseManager.selectQuery(
   {
     databaseName: globalParameters.database.storage.label,
     tableName: globalParameters.database.storage.tables.serviceElements,
     args: [ '*' ],
-    where: { condition: 'AND', 0: { operator: '=', key: 'name', value: folderName }, 1: { operator: '=', key: 'parent_folder', value: folderData.parent_folder } }
+    where: { condition: 'AND', 0: { operator: '=', key: 'is_directory', value: 1 }, 1: { operator: '=', key: 'is_deleted', value: 0 }, 2: { operator: '=', key: 'service_uuid', value: serviceUuid }, 3: { operator: '=', key: 'name', value: folderName }, 4: { operator: '=', key: 'parent_folder', value: folderData.parent_folder } }
 
   }, databaseConnection, (error, result) =>
   {

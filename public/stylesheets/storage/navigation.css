@@ -1,0 +1,45 @@
+/****************************************************************************************************/
+
+.navigationBar{ display:flex; flex-direction:row; justify-content:space-between; background-color:#171219; padding:0 20px 0 20px; }
+
+.navigationBarContent{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
+
+.navigationBarContentName{ color:#FFFFFF; font-size:2em; font-family:roboto-light; text-transform:uppercase; margin-right:20px; }
+
+.navigationBarContentName span{ color:#759EB8; }
+
+.navigationBarContentMenu{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; margin-left:20px; font-family:roboto-light; font-size:1.25em; }
+
+.navigationBarContentMenuElement{ margin:0 20px 0 20px; color:#FFFFFF; user-select:none; cursor:pointer; }
+
+.navigationBarContentMenuElementSelected{ margin:0 20px 0 20px; color:#759EB8; user-select:none; cursor:pointer; }
+
+.navigationBarContentMenuElement:hover{ color:#759EB8; }
+
+.navigationBarAccount{ font-family:roboto-light; }
+
+.navigationBarAccountBlock{ max-width:100%; cursor:pointer; position:relative; }
+
+.navigationBarAccountBlock:hover .navigationBarAccountBlockDataEmail{ color:#759EB8; }
+
+.navigationBarAccountBlock:hover .navigationBarAccountBlockData{ background-color:rgba(255,255,255,0.1); }
+
+.navigationBarAccountBlockData{ width:100%; box-sizing:border-box; display:flex; flex-direction:row; justify-content:flex-end; align-items:center; padding:10px; }
+
+.navigationBarAccountBlockDataEmail{ color:#FFFFFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-align:right; margin-right:10px; width:calc(100% - 70px); }
+
+.navigationBarAccountBlockDataPicture{ width:60px; height:60px; border-radius:50%; border:3px solid #759EB8; overflow:hidden; position:relative; box-sizing:border-box; }
+
+.navigationBarAccountBlockDataPicture img{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.navigationBarAccountMenu{ width:100%; min-width:200px; background-color:#FFFFFF; position:absolute; display:none; z-index:100; top:80px; right:0; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); }
+
+.navigationBarAccountMenuList{ list-style:none; padding:0; margin:0; }
+
+.navigationBarAccountMenuListElement{ user-select:none; display:block; padding:10px; text-decoration:none; color:rgba(0,0,0,0.8); text-align:center; font-size:18px; line-height:24px; cursor:pointer; }
+
+.navigationBarAccountMenuListElement:not(:first-child){ border-top:1px solid #E0E0E0; }
+
+.navigationBarAccountMenuListElement:hover{ color:#FFFFFF; background-color:#759EB8; }
+
+/****************************************************************************************************/

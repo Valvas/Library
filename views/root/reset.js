@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <title>PEI - Mot De Passe Oublié</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/reset.css" />
+  <body>
+    <div id='main' class='main'>
+      <div class='title'>Réinitialisation du mot de passe</div>
+      <div class='error' id='error'><% if(service == false){ %>Le transporteur en charge de l'envoi des emails n'est pas activé<% } %></div>
+      <div class='success' id='success'></div>
+      <% if(service == true){ %>
+        <form id='form'>
+          <div class='icon'><i class='fas fa-at'></i></div><!--
+          --><input placeholder='Adresse Email' class='input' id='email' type='text' required />
+          <button type='submit' id='send' class='send'>Envoyer</button>
+        </form>
+      <% } %>
+      <a href='/' class='question'>Accueil</a>
+    </div>
+    <div id='background' class='background'>
+      <div class='loader'>
+        <div class='spinner'><i class='fas fa-circle-notch fa-spin'></i></div>
+        <div class='message'>Vérification en cours...</div>
+      </div>
+    </div>
+    <script src='/js/jQuery.js'></script>
+    <script src='/js/functions.js'></script>
+    <script src='/js/fontawesome.js'></script>
+    <script src='/js/index/reset.js'></script>
+  </body>
+</html>

@@ -1,174 +1,187 @@
 /****************************************************************************************************/
 
-.messengerSection{ display:flex; box-sizing:border-box; flex-direction:column; position:fixed; z-index:100; bottom:0; width:300px; right:40px; background-color:#FFFFFF; border-radius:2px 2px 0 0; border-top:1px solid #CCC; border-right:1px solid #CCC; border-left:1px solid #CCC; box-shadow:0 0 0 1px rgba(0,0,0,.1), 0 4px 6px rgba(0,0,0,.2); }
+.messengerBlock{ position:fixed; bottom:0; overflow:hidden; border-radius:2px 2px 0 0; right:20px; z-index:100; background-color:#FFFFFF; box-shadow:0 0 0 1px rgba(0,0,0,.1), 0 4px 6px rgba(0,0,0,.2); width:calc(100% - 40px); max-width:300px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
 
 
-.messengerSectionHeader{ padding:10px; display:flex; flex-direction:row; justify-content:space-between; cursor:pointer; user-select:none; align-items:center; }
+.messengerHeader{ cursor:pointer; user-select:none; padding:10px; background-color:#171219; display:flex; flex-direction:row; justify-content:space-between; align-items:center; }
 
-.messengerSectionHeaderAside{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
+.messengerHeaderTitle{ color:#FFFFFF; margin-right:10px; font-size:1em; }
 
-.messengerSectionHeaderStatus{ width:10px; height:10px; border-radius:50%; margin-right:10px; }
+.messengerHeaderCounter{ color:#FFFFFF; font-size:0.8em; }
 
-.messengerSectionHeaderTitle{ font-weight:bold; }
 
-.messengerSectionHeaderCounter{ color:#D9534F; border-radius:50%; font-weight:bold; }
+.messengerBlockHidden{ display:none; background-color:#FFFFFF; flex-direction:column; justify-content:flex-start; max-height:80vh; height:600px; }
 
+.messengerConversationsList{ overflow-y:auto; }
 
-.messengerHidden{ display:none; border-top:1px solid rgba(0,0,0,0.24); position:relative; }
 
-.messengerLoader{ background-color:#FFFFFF; padding:20px 10px 20px 10px; position:absolute; top:0; right:0; bottom:0; left:0; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
+.messengerEmptyAccounts{ text-align:center; padding:20px 10px 20px 10px; font-size:0.9em; display:none; }
 
-.messengerLoaderIcon{ font-size:1.5em; margin-right:10px; }
+.messengerEmptySearch{ text-align:center; padding:20px 10px 20px 10px; font-size:0.9em; display:none; }
 
-.messengerError{ background-color:#FFFFFF; padding:20px 10px 20px 10px; position:absolute; top:0; right:0; bottom:0; left:0; display:flex; flex-direction:column; justify-content:center; align-items:center; }
 
-.messengerErrorMessage{ color:#D9534F; font-size:0.9em; font-weight:bold; text-align:center; width:100%; }
+.messengerBlockHeader{ border-bottom:1px solid rgba(0,0,0,0.25); }
 
-.messengerErrorClose{ border:1px solid #D9534F; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#D9534F; background-color:#FFFFFF; cursor:pointer; margin-top:20px; }
+.messengerBlockHeader button{ background-color:#5593DC; border:none; box-sizing:border-box; font-size:1em; padding:5px 15px 5px 15px; color:#FFFFFF; cursor:pointer; width:calc(100% - 20px); margin:10px; border-radius:2px; }
 
-.messengerErrorClose:hover{ color:#A6201C; border:1px solid #A6201C; background-color:rgba(255,0,0,0.4); }
+.messengerBlockHeader button:hover{ background-color:#3371BA; }
 
-.messengerInfo{ background-color:#FFFFFF; padding:20px 10px 20px 10px; position:absolute; top:0; right:0; bottom:0; left:0; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+.messengerBlockHeader input{ width:calc(100% - 20px); border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:5px; box-sizing:border-box; margin:0 10px 10px 10px; }
 
-.messengerInfoMessage{ color:#5593DC; font-size:0.9em; font-weight:bold; text-align:center; width:100%; }
 
-.messengerInfoClose{ border:1px solid #5593DC; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#5593DC; background-color:#FFFFFF; cursor:pointer; margin-top:20px; }
+.messengerConversation{ padding:10px; cursor:pointer; display:flex; flex-direction:row; justify-content:flex-start; align-items:stretch; }
 
-.messengerInfoClose:hover{ color:#3371BA; border:1px solid #3371BA; background-color:rgba(0,0,255,0.2); }
+.messengerConversation:hover{ background-color:rgba(0,0,0,0.05); }
 
+.messengerConversationPicture{ width:60px; height:60px; border-radius:50%; border:3px solid #759EB8; overflow:hidden; position:relative; box-sizing:border-box; }
 
-.messengerCreateConversation{ display:none; }
+.messengerConversationPictureContent{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
 
-.messengerCreateConversationPickAccount{ display:flex; flex-direction:column; justify-content:flex-start; max-height:600px; height:80vh; }
+.messengerConversationResume{ border-bottom:1px solid rgba(0,0,0,0.25); width:calc(100% - 70px); margin-left:10px; position:relative; }
 
-.messengerCreateConversationHeader{ padding:10px; border-bottom:1px solid rgba(0,0,0,0.36); }
+.messengerConversationResumeReceiver{ font-size:1em; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all; width:calc(100% - 25px); }
 
-.messengerCreateConversationReturn{ border:none; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#FFFFFF; background-color:#D9534F; cursor:pointer; width:100px; margin:0 0 0 calc(100% - 100px); }
+.messengerConversationResumeLast{ font-size:0.8em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all; margin-top:5px; }
 
-.messengerCreateConversationReturn:hover{ background-color:#A6201C; }
-
-.messengerCreateConversationMessage{ font-size:0.9em; text-align:justify; margin:5px 0 5px 0; }
-
-.messengerCreateConversationSearch{ border:1px solid rgba(0,0,0,0.24); padding:4px 8px 4px 8px; width:100%; box-sizing:border-box; }
-
-.messengerCreateConversationContent{ border-top:1px solid rgba(0,0,0,0.24); margin-top:10px; height:100%; }
-
-.messengerCreateConversationEmpty{ margin:20px 10px 20px 10px; font-size:0.9em; text-align:center; }
-
-.messengerCreateConversationAccounts{ list-style:none; padding:0; margin:0; overflow-y:auto; }
-
-.messengerCreateConversationAccountsElement{ padding:10px; cursor:pointer; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
-
-.messengerCreateConversationAccountsElement:hover{ background-color:rgba(0,0,0,0.06); }
-
-.messengerCreateConversationAccountsElementCircle{ min-height:32px; min-width:32px; width:32px; height:32px; border-radius:50%; border:1px solid rgba(0,0,0,0.8); overflow:hidden; position:relative; }
-
-.messengerCreateConversationAccountsElementPicture{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
-
-.messengerCreateConversationAccountsElementName{ margin-left:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:bold; }
-
-
-.messengerCreateConversationFirstMessage{ display:flex; flex-direction:column; justify-content:flex-start; max-height:600px; height:80vh; }
-
-.messengerCreateConversationFirstMessageCancel{ border:none; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#FFFFFF; background-color:#D9534F; cursor:pointer; width:100px; margin:10px 10px 10px calc(100% - 110px); }
-
-.messengerCreateConversationFirstMessageHeader{ display:flex; flex-direction:row; flex-wrap:wrap; align-items:center; justify-content:space-between; }
-
-.messengerCreateConversationFirstMessageHeaderLabel{ font-size:0.9em; margin:10px 0 10px 10px; }
-
-.messengerCreateConversationFirstMessageHeaderValue{ font-size:0.9em; font-weight:bold; margin:0 10px 10px 10px; }
-
-.messengerCreateConversationFirstMessageCancel:hover{ background-color:#A6201C; }
-
-.messengerCreateConversationFirstMessageInput{ overflow-y:auto; height:120px; width:calc(100% - 20px); border-radius:4px; border:1px solid rgba(0,0,0,0.24); box-sizing:border-box; padding:8px; margin:0 10px 10px 10px; }
-
-.messengerCreateConversationFirstMessageSend{ width:120px; margin:0 calc(50% - 60px) 10px calc(50% - 60px); border:none; border-radius:4px; cursor:pointer; padding:4px 8px 4px 8px; box-sizing:border-box; color:#FFFFFF; background-color:#66A4ED; }
-
-.messengerCreateConversationFirstMessageSend:hover{ background-color:#3371BA; }
-
-
-.messengerHome{ max-height:600px; height:80vh; }
-
-.messengerHomeTools{ padding:5px 10px 10px 10px; border-bottom:1px solid rgba(0,0,0,0.24); }
-
-.messengerHomeToolsStart{ margin:10px 0 10px 0; }
-
-.messengerHomeToolsStartButton{ border:none; border-radius:4px; background-color:#66A4ED; color:#FFFFFF; padding:4px 8px 4px 8px; width:100%; box-sizing:border-box; cursor:pointer; }
-
-.messengerHomeToolsStartButton:hover{ background-color:#5593DC; }
-
-
-.messengerStatus{ margin:10px 10px 5px 10px; }
-
-.messengerStatusList{ width:100%; text-align:right; padding:4px; border-radius:2px; }
-
-
-.messengerHomeList{ list-style:none; padding:0; margin:0; overflow-y:auto; }
-
-.messengerHomeListElement{ display:flex; flex-direction:row; align-items:flex-start; cursor:pointer; user-select:none; padding:10px 0 10px 0; position:relative; }
-
-.messengerHomeListElement:hover{ background-color:rgba(0,0,0,0.06); }
-
-.messengerHomeListElementPicture{ width:50px; height:50px; margin-left:10px; }
-
-.messengerHomeListElementPictureCircle{ width:100%; height:100%; box-sizing:border-box; border-radius:50%; border:1px solid rgba(0,0,0,0.8); overflow:hidden; position:relative; }
-
-.messengerHomeListElementPictureContent{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
-
-.messengerHomeListElementAside{ height:50px; box-sizing:border-box; display:flex; flex-direction:column; padding-bottom:10px; margin:0 10px 0 10px; width:calc(100% - 80px); border-bottom:1px solid rgba(0,0,0,0.24); }
-
-.messengerHomeListElementAsideReceiver{ font-size:1em; font-weight:bold; }
-
-.messengerHomeListElementAsidePreview{ font-size:0.8em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-
-.messengerHomeListElementCounter{ color:#D9534F; font-size:0.9em; font-weight:bold; position:absolute; top:10px; right:10px; }
-
-
-.messengerConversationsContainer{ background-color:#FFFFFF; display:none; max-height:600px; height:80vh; }
-
-.messengerConversation{ display:none; height:100%; flex-direction:column; justify-content:flex-start; }
-
-.messengerConversationHeader{ border-bottom:1px solid rgba(0,0,0,0.24); padding:10px; }
-
-.messengerConversationHeaderReturn{ border:1px solid #D9534F; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#D9534F; background-color:#FFFFFF; cursor:pointer; width:100px; margin:0 0 0 calc(100% - 100px); }
-
-.messengerConversationHeaderReturn:hover{ color:#A6201C; border:1px solid #A6201C; background-color:rgba(255,0,0,0.4); }
-
-.messengerConversationHeaderReceiver{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; }
-
-.messengerConversationHeaderReceiverCircle{ min-height:32px; min-width:32px; width:32px; height:32px; border-radius:50%; border:1px solid rgba(0,0,0,0.8); overflow:hidden; position:relative; }
-
-.messengerConversationHeaderReceiverPicture{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
-
-.messengerConversationHeaderReceiverName{ font-size:0.9em; font-weight:bold; margin-left:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-
-
-.messengerConversationList{ overflow-y:auto; list-style:none; padding:0 10px 0 10px; margin:0; flex-grow:2; }
-
-.messengerConversationListMessage{ margin:10px 0 10px 0; }
-
-.messengerConversationListMessageRight{ padding:10px; background-color:#5593DC; color:#FFFFFF; border-radius:8px; margin-left:40px; }
-
-.messengerConversationListMessageLeft{ padding:10px; background-color:rgba(0,0,0,0.16); border-radius:8px; margin-right:40px; }
-
-.messengerConversationListMessageDate{ font-size:0.8em; margin-bottom:5px; }
-
-
-.messengerConversationActionsInput{ border-left:none; border-right:none; border-top:1px solid rgba(0,0,0,0.32); outline:none; border-bottom:1px solid rgba(0,0,0,0.32); padding:5px; width:100%; resize:none; box-sizing:border-box; height:80px; overflow-y:auto; }
-
-.messengerConversationActionsEmpty{ color:#D9534F; font-size:0.8em; font-weight:bold; margin:5px 10px 5px 10px; display:none; }
-
-.messengerConversationActionsSender{ padding:10px; display:flex; flex-direction:row; justify-content:flex-end; }
-
-.messengerConversationActionsSenderButton{ font-size:1em; padding:4px 8px 4px 8px; cursor:pointer; border:1px solid #4482CB; border-radius:4px; padding:4px 8px 4px 8px; box-sizing:border-box; color:#4482CB; background-color:#FFFFFF; cursor:pointer; }
-
-.messengerConversationActionsSenderButton:hover{ color:#2260A9; border:1px solid #2260A9; background-color:rgba(0,0,255,0.2); }
-
-.messengerConversationActionsLoader{ font-size:1.5em; display:none; }
+.messengerConversationResumeCounter{ position:absolute; color:#D9534F; font-size:0.9em; top:0; right:0; overflow:hidden; text-overflow:clip; white-space:nowrap; word-break:break-all; width:20px; text-align:right; direction:rtl; }
 
 /****************************************************************************************************/
 
-@media (max-width: 379.9px)
-{
-  .messengerSection{ width:calc(100% - 40px); right:20px; }
-}
+.messengerLoaderVerticalContainer{ display:flex; flex-direction:column; justify-content:center; height:100%; }
+
+.messengerLoaderHorizontalContainer{ display:flex; flex-direction:row; justify-content:center; }
+
+.messengerLoaderSpinner{ border:8px solid #E3E3E3; border-top:8px solid #428BCA; border-radius:50%; width:60px; height:60px; animation:spin 2s linear infinite; }
+
+/****************************************************************************************************/
+
+.messengerConversationBlock{ height:100%; background-color:#FFFFFF; display:flex; flex-direction:column; justify-content:flex-start; }
+
+
+.messengerConversationBlockHeader{ border-bottom:1px solid rgba(0,0,0,0.25); padding:10px; }
+
+.messengerConversationBlockHeaderUpper{ display:flex; flex-direction:row; justify-content:space-between; align-items:center; }
+
+.messengerConversationBlockHeaderUpperLabel{ font-size:0.8em; margin-right:10px; }
+
+.messengerConversationBlockHeaderUpperReturn{ border:none; border-radius:4px; cursor:pointer; background-color:#FFFFFF; color:#D9534F; border:1px solid #D9534F; padding:4px 8px 4px 8px; font-size:0.8em; }
+
+.messengerConversationBlockHeaderUpperReturn:hover{ color:#B7312D; border:1px solid #B7312D; }
+
+.messengerConversationBlockHeaderReceiver{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; margin-top:5px; }
+
+.messengerConversationBlockHeaderReceiverPicture{ width:45px; height:45px; margin-right:10px; border-radius:50%; border:1px solid #171219; overflow:hidden; position:relative; box-sizing:border-box; }
+
+.messengerConversationBlockHeaderReceiverPicture img{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.messengerConversationBlockHeaderReceiverName{ font-size:0.9em; font-weight:bold; }
+
+
+.messengerConversationBlockContent{ display:flex; flex-direction:column; justify-content:flex-start; flex-grow:2; overflow:hidden; }
+
+.messengerConversationBlockContentMessages{ flex-grow:2; overflow-y:auto; padding:10px 10px 0 10px; }
+
+.messengerConversationBlockContentMessagesElementFailed{ font-size:0.8em; color:#C8423E; margin-bottom:5px; text-transform:uppercase; }
+
+.messengerConversationBlockContentMessagesElementSaving{ display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
+
+.messengerConversationBlockContentMessagesElementSavingContent{ margin-right:10px; }
+
+.messengerConversationBlockContentMessagesElementSavingSpinner{ border:2px solid #FFFFFF; border-top:2px solid #5593DC; border-radius:50%; width:15px; height:15px; animation:spin 2s linear infinite; }
+
+.messengerConversationBlockContentMessagesElementSender{ display:flex; flex-direction:row; justify-content:flex-end; }
+
+.messengerConversationBlockContentMessagesElementReceiver{ display:flex; flex-direction:row; justify-content:flex-start; }
+
+.messengerConversationBlockContentMessagesElementSenderBlock{ text-align:right; width:max-content; margin-bottom:10px; padding:8px; background-color:#5593DC; color:#FFFFFF; border-radius:16px; margin-left:20px; }
+
+.messengerConversationBlockContentMessagesElementReceiverBlock{ width:max-content; margin-bottom:10px; padding:8px; background-color:rgba(0,0,0,0.16); border-radius:16px; margin-right:20px; }
+
+.messengerConversationBlockContentMessagesElementDate{ font-size:0.8em; margin-bottom:5px; }
+
+
+.messengerConversationBlockContentSender{ display:flex; flex-direction:column; justify-content:flex-start; height:120px; min-height:120px; }
+
+.messengerConversationBlockContentSenderInput{ border-top:1px solid rgba(0,0,0,0.25); border-right:none; border-bottom:none; border-left:none; width:100%; padding:5px; flex-grow:2; overflow-y:auto; resize:none; outline:none; box-sizing:border-box; }
+
+.messengerConversationBlockContentSenderButton{ background-color:#5593DC; border:none; box-sizing:border-box; font-size:1em; padding:5px 15px 5px 15px; color:#FFFFFF; cursor:pointer; width:100%; }
+
+.messengerConversationBlockContentSenderButton:hover{ background-color:#3371BA; }
+
+/****************************************************************************************************/
+
+.messengerCreateBlock{ display:flex; flex-direction:column; justify-content:flex-start; height:100%; overflow:hidden; }
+
+.messengerCreateBlockHeader{ padding:10px; border-bottom:1px solid rgba(0,0,0,0.25); }
+
+.messengerCreateBlockHeaderReturn{ display:flex; flex-direction:row; justify-content:flex-end; }
+
+.messengerCreateBlockHeaderReturn button{ border:none; border-radius:4px; cursor:pointer; background-color:#FFFFFF; color:#D9534F; border:1px solid #D9534F; padding:4px 8px 4px 8px; font-size:0.8em; }
+
+.messengerCreateBlockHeaderReturn button:hover{ color:#B7312D; border:1px solid #B7312D; }
+
+.messengerCreateBlockHeaderInfo{ margin-top:10px; font-size:0.9em; text-align:justify; }
+
+.messengerCreateBlockHeaderSearch{ margin-top:10px; }
+
+.messengerCreateBlockHeaderSearch input{ width:100%; padding:5px; box-sizing:border-box; border:1px solid rgba(0,0,0,0.25); border-radius:4px; }
+
+.messengerCreateBlockList{ overflow-y:auto; flex-grow:2; }
+
+.messengerCreateBlockEmptyAccounts{ text-align:center; padding:20px 10px 20px 10px; font-size:0.9em; display:none; }
+
+.messengerCreateBlockEmptySearch{ text-align:center; padding:20px 10px 20px 10px; font-size:0.9em; display:none; }
+
+.messengerCreateBlockListAccount{ padding:10px; cursor:pointer; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
+
+.messengerCreateBlockListAccount:hover{ background-color:rgba(0,0,0,0.05); }
+
+.messengerCreateBlockListAccountPicture{ width:45px; height:45px; margin-right:10px; border-radius:50%; border:1px solid #171219; overflow:hidden; position:relative; box-sizing:border-box; }
+
+.messengerCreateBlockListAccountPicture img{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.messengerCreateBlockListAccountName{ font-weight:bold; font-size:0.9em; }
+
+/****************************************************************************************************/
+
+.messengerCreateAccountChosenBlock{ display:flex; flex-direction:column; justify-content:flex-start; height:100%; overflow:hidden; }
+
+.messengerCreateAccountChosenBlockHeader{ border-bottom:1px solid rgba(0,0,0,0.25); padding:10px; }
+
+.messengerCreateAccountChosenBlockHeaderTop{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+
+.messengerCreateAccountChosenBlockHeaderTopMessage{ font-size:0.8em; margin-right:10px; }
+
+.messengerCreateAccountChosenBlockHeaderTopReturn{ border:none; border-radius:4px; cursor:pointer; background-color:#FFFFFF; color:#D9534F; border:1px solid #D9534F; padding:4px 8px 4px 8px; font-size:0.8em; }
+
+.messengerCreateAccountChosenBlockHeaderTopReturn:hover{ color:#B7312D; border:1px solid #B7312D; }
+
+.messengerCreateAccountChosenBlockHeaderAccount{ margin-top:10px; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
+
+.messengerCreateAccountChosenBlockHeaderAccountPicture{ width:45px; height:45px; margin-right:10px; border-radius:50%; border:1px solid #171219; overflow:hidden; position:relative; box-sizing:border-box; }
+
+.messengerCreateAccountChosenBlockHeaderAccountPicture img{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
+
+.messengerCreateAccountChosenBlockHeaderAccountName{ font-weight:bold; font-size:0.9em; }
+
+.messengerCreateAccountChosenBlockForm{ overflow-y:auto; flex-grow:2; padding:20px 10px 20px 10px; }
+
+.messengerCreateAccountChosenBlockFormInput{ resize:none; width:100%; border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:5px; box-sizing:border-box; height:180px; }
+
+.messengerCreateAccountChosenBlockFormSend{ margin-top:20px; border-radius:2px; background-color:#5593DC; border:none; box-sizing:border-box; font-size:1em; padding:5px 15px 5px 15px; color:#FFFFFF; cursor:pointer; width:100%; }
+
+.messengerCreateAccountChosenBlockFormSend:hover{ background-color:#3371BA; }
+
+/****************************************************************************************************/
+
+.messengerCreateSuccess{ display:flex; flex-direction:column; justify-content:center; padding:20px 10px 20px 10px; height:100%; box-sizing:border-box; }
+
+.messengerCreateSuccessMessage{ font-size:0.9em; text-align:center; margin-bottom:10px; }
+
+.messengerCreateSuccessClose{ display:flex; flex-direction:row; justify-content:center; }
+
+.messengerCreateSuccessClose button{ border:none; border-radius:4px; cursor:pointer; background-color:#FFFFFF; color:#5593DC; border:1px solid #5593DC; padding:4px 8px 4px 8px; font-size:0.8em; }
+
+.messengerCreateSuccessClose button:hover{ color:#3371BA; border:1px solid #3371BA; }
+
+/****************************************************************************************************/

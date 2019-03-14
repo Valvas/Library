@@ -1,4 +1,6 @@
 {
+  "noScriptMessage": "Ce site requiert l'utilisation de scripts pour fonctionner. Veuillez utiliser un autre navigateur ou alors vérifier que les scripts sont bien autorisés dans les paramètres de votre navigateur actuel",
+  
   "notFound": "Cette page est introuvable",
 
   "intranetTitle": "PEI - Intranet",

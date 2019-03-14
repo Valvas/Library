@@ -13,7 +13,7 @@ var router = express.Router();
 
 router.get('*', (req, res) =>
 {
-  res.render('root/home', { currentLocation: 'directory', strings: { common: commonStrings }});
+  res.render('root/home', { strings: { common: commonStrings }});
 });
 
 /****************************************************************************************************/

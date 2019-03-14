@@ -13,19 +13,25 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/account.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/articles.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/root/directory.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/root/messenger.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/messenger.css" />
   <body>
     <div class="informationBlock" id="informationBlock"></div>
     <div id="mainContainer">
+      <noscript>
+        <div class="noScriptVerticalContainer">
+          <div class="noScriptHorizontalContainer">
+            <div class="noScriptMessage"><%= strings.common.noScriptMessage %></div>
+          </div>
+        </div>
+      </noscript>
     </div>
-    <% include ../include/common_scripts.ejs %>
+    <% include ../include/scripts.ejs %>
     <script src='/js/quill.js'></script>
     <script src='/socket.io/socket.io.js'></script>
-    <script src='/js/common/informations.js'></script>
-    <script src="/js/root/logout.js"></script>
+    <script src="/js/logout.js"></script>
     <script src="/js/root/initializeSocket.js"></script>
+    <% include ../include/messenger.ejs %>
     <script src="/js/root/createHeader.js"></script>
-    <script src="/js/root/createMessenger.js"></script>
     <script src="/js/root/createContainers.js"></script>
     <script src="/js/root/createAside.js"></script>
     <script src="/js/root/loadLocation.js"></script>
@@ -48,13 +54,6 @@
     <script src="/js/root/articlesSection/postComment.js"></script>
     <script src="/js/root/articlesSection/updateComment.js"></script>
     <script src="/js/root/articlesSection/removeComment.js"></script>
-    <script src="/js/root/messengerSection/socketMessagePosted.js"></script>
-    <script src="/js/root/messengerSection/socketConversationCreated.js"></script>
-    <script src="/js/root/messengerSection/createNewConversation.js"></script>
-    <script src="/js/root/messengerSection/searchForConversations.js"></script>
-    <script src="/js/root/messengerSection/displayAndHide.js"></script>
-    <script src="/js/root/messengerSection/sendMessage.js"></script>
-    <script src="/js/root/messengerSection/openAndCloseConversation.js"></script>
     <script src="/js/root/initialize.js"></script>
   </body>
 </html>

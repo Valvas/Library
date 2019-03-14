@@ -11,7 +11,7 @@ var router = express.Router();
 
 router.get('/get-storage', (req, res) =>
 {
-  res.status(200).send({ strings: storageStrings });
+  res.status(200).send({ common: commonStrings, storage: storageStrings });
 });
 
 /****************************************************************************************************/

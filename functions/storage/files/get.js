@@ -116,7 +116,7 @@ function getFilesFromService(serviceUuid, folderUuid, databaseConnection, global
   if(serviceUuid == undefined)        return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
   if(globalParameters == undefined)   return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'globalParameters' });
   if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
-  
+
   var resultObject = {};
   resultObject.files = [];
   resultObject.folders = [];
@@ -131,6 +131,8 @@ function getFilesFromService(serviceUuid, folderUuid, databaseConnection, global
 
   if(folderUuid != null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: serviceUuid }, 1: { operator: '=', key: 'is_deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: folderUuid } };
   if(folderUuid == null) queryObject.where = { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: serviceUuid }, 1: { operator: '=', key: 'is_deleted', value: 0 }, 2: { operator: '=', key: 'parent_folder', value: '' } };
+
+  queryObject.order = [ { column: 'name', asc: true } ];
 
   databaseManager.selectQuery(queryObject, databaseConnection, (error, result) =>
   {
@@ -179,7 +181,7 @@ function getParentFolder(childUuid, serviceUuid, databaseConnection, params, cal
         tableName: params.database.storage.tables.files,
         args: [ '*' ],
         where: { operator: '=', key: 'uuid', value: childUuid }
-    
+
       }, databaseConnection, (error, result) =>
       {
         if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
@@ -339,12 +341,63 @@ function getFolderPath(folderUuid, currentPath, databaseConnection, globalParame
 }
 
 /****************************************************************************************************/
+/* RETRIEVE FILES DATA */
+/****************************************************************************************************/
+
+function retrieveFilesData(filesToBrowse, serviceUuid, databaseConnection, globalParameters, callback)
+{
+  if(filesToBrowse.length === 0) return callback({ status: 406, code: constants.NO_FILE_PROVIDED, detail: null });
+
+  var index = 0, filesData = {};
+
+  var browseFiles = () =>
+  {
+    getFileFromDatabaseUsingUuid(filesToBrowse[index], databaseConnection, globalParameters, (error, fileExists, fileData) =>
+    {
+      if(error != null) return callback(error);
+
+      if(fileExists == false)
+      {
+        filesData[filesToBrowse[index]] = { fileFoundInDatabase: false };
+
+        if(filesToBrowse[index += 1] == undefined) return callback(null, filesData);
+
+        return browseFiles();
+      }
+
+      checkIfFileExistsOnStorage(filesToBrowse[index], serviceUuid, globalParameters, (error, fileExists, fileStats) =>
+      {
+        if(error != null) return callback(error);
+
+        if(fileExists == false)
+        {
+          filesData[filesToBrowse[index]] = { fileFoundInDatabase: true, fileFoundOnStorage: false };
+
+          if(filesToBrowse[index += 1] == undefined) return callback(null, filesData);
+
+          return browseFiles();
+        }
+
+        filesData[filesToBrowse[index]] = { fileFoundInDatabase: true, fileFoundOnStorage: true, fileName: fileData.name, fileSize: fileStats.size };
+
+        if(filesToBrowse[index += 1] == undefined) return callback(null, filesData);
+
+        return browseFiles();
+      });
+    });
+  }
+
+  browseFiles();
+}
+
+/****************************************************************************************************/
 
 module.exports =
 {
   getFileLogs: getFileLogs,
   getFolderPath: getFolderPath,
   getFolderFromName: getFolderFromName,
+  retrieveFilesData: retrieveFilesData,
   getFilesFromService: getFilesFromService,
   checkIfFileExistsOnStorage: checkIfFileExistsOnStorage,
   checkIfFileExistsInDatabase: checkIfFileExistsInDatabase,

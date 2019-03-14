@@ -8,7 +8,7 @@ body{ background-color:#F9F9F9; margin:0; }
 
 #wrapperContainer{ display:flex; flex-direction:row; justify-content:center; position:relative; }
 
-#contentContainer{ display:flex; align-items:flex-start; flex-direction:row; justify-content:space-between; max-width:1000px; width:calc(100% - 40px); margin:40px 20px 40px 20px; }
+#contentContainer{ display:flex; align-items:flex-start; flex-direction:row; flex-wrap:wrap; justify-content:space-between; max-width:1000px; width:calc(100% - 40px); margin:40px 20px 40px 20px; }
 
 #locationContent{ position:relative; width:calc(100% - 220px); font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
 
@@ -25,40 +25,6 @@ body{ background-color:#F9F9F9; margin:0; }
 /****************************************************************************************************/
 
 .locationContentTitle{ font-size:1.3em; font-family:roboto-regular; padding:20px; border-bottom:1px solid rgba(0,0,0,0.25); }
-
-/****************************************************************************************************/
-
-.veilBackground{ position:fixed; top:0; right:0; bottom:0; left:0; z-index:290; background-color:#000000; opacity:0.5; }
-
-/****************************************************************************************************/
-
-.modalBackgroundVertical{ display:flex; flex-direction:column; justify-content:center; position:fixed; top:0; right:0; bottom:0; left:0; z-index:290; }
-
-.modalBackgroundHorizontal{ display:flex; flex-direction:row; justify-content:center; }
-
-/****************************************************************************************************/
-
-.baseModal{ width:calc(100% - 40px); max-width:400px; max-height:calc(100vh - 40px); background-color:#FFFFFF; overflow-y:auto; border-radius:4px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
-
-.baseModalHeader{ display:flex; flex-direction:row; justify-content:space-between; background-color:#171219; padding:20px; }
-
-.baseModalHeaderTitle{ margin-right:10px; color:#FFFFFF; font-size:1em; }
-
-.baseModalModalHeaderClose{ border:none; background-color:#D9534F; border-radius:2px; color:#FFFFFF; cursor:pointer; padding:4px 8px 4px 8px; }
-
-.baseModalHeaderClose:hover{ background-color:#C8423E; }
-
-.baseModalContent{ padding:20px; }
-
-.baseModalContentMessage{ font-size:0.9em; text-align:justify; }
-
-.baseModalContentButtons{ display:flex; flex-direction:row; align-items:center; justify-content:flex-end; flex-wrap:wrap; margin-top:20px; }
-
-.baseModalContentButtonsConfirm{ border:1px solid #648DA7; color:#648DA7; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; margin-left:20px; }
-
-.baseModalContentButtonsCancel{ border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; margin-left:20px; }
-
-.baseModalContentButtonsConfirm:hover, .baseModalContentButtonsCancel:hover{ background-color:rgba(0,0,0,0.1); }
 
 /****************************************************************************************************/
 

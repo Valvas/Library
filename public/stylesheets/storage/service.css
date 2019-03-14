@@ -1,0 +1,297 @@
+/****************************************************************************************************/
+
+.serviceStorageContainer{ width:calc(100% - 40px); margin:40px 20px 60px 20px; background-color:#FFFFFF; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
+
+
+.serviceStorageContainerHeader{ border-bottom:1px solid rgba(0,0,0,0.25); padding:20px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+
+.serviceStorageContainerHeaderName{ font-size:1.5em; margin-right:20px; font-family:roboto-light; }
+
+.serviceStorageContainerHeaderReturn{ margin-right:20px; border:1px solid #D9534F; background-color:#FFFFFF; color:#D9534F; padding:5px 15px 5px 15px; border-radius:4px; cursor:pointer; }
+
+.serviceStorageContainerHeaderReturn:hover{ border:1px solid #B7312D; color:#B7312D; }
+
+
+.serviceStorageContainerTools{ border-bottom:1px solid rgba(0,0,0,0.25); padding:10px 20px 10px 20px; }
+
+.serviceStorageContainerToolsActions{ display:flex; flex-direction:row; align-items:center; justify-content:flex-start; flex-wrap:wrap; }
+
+
+.serviceStorageContainerToolsActionsLeft{ display:flex; flex-direction:row; align-items:center; justify-content:flex-start; padding:10px 0 10px 0; }
+
+.serviceStorageContainerToolsActionsRight{ display:flex; flex-direction:row; align-items:center; justify-content:flex-start; padding:10px 0 10px 0; }
+
+.serviceStorageContainerToolsActionsActivatedButton{ margin-right:20px; border:1px solid #759EB8; background-color:#FFFFFF; color:#759EB8; padding:5px 15px 5px 15px; border-radius:4px; cursor:pointer; }
+
+.serviceStorageContainerToolsActionsActivatedButton:hover{ border:1px solid #537C96; color:#537C96; }
+
+.serviceStorageContainerToolsActionsRemoveButton{ margin-right:20px; border:1px solid #D9534F; background-color:#FFFFFF; color:#D9534F; padding:5px 15px 5px 15px; border-radius:4px; cursor:pointer; }
+
+.serviceStorageContainerToolsActionsRemoveButton:hover{ border:1px solid #B7312D; color:#B7312D; }
+
+.serviceStorageContainerToolsActionsDisabledButton{ color:rgba(0,0,0,0.5); border:1px solid rgba(0,0,0,0.5); border-radius:4px; padding:5px 15px 5px 15px; outline:none; margin-right:20px; background-color:#FFFFFF; }
+
+
+.serviceStorageContainerToolsCounter{ display:flex; flex-direction:row; justify-content:flex-start; align-items:center; padding:10px 0 10px 0; }
+
+.serviceStorageContainerToolsCounterKey{ font-size:0.9em; margin-right:5px; }
+
+.serviceStorageContainerToolsCounterValue{ font-weight:bold; font-size:0.9em; }
+
+
+.serviceStorageContainerToolsEnd{ padding:10px 0 10px 0; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+
+.serviceStorageContainerToolsEndSearchBar{ width:100%; box-sizing:border-box; max-width:400px; border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:5px; }
+
+.serviceStorageContainerToolsEndDisplay{ border-radius:4px; border:1px solid rgba(0,0,0,0.25); padding:5px; }
+
+
+.serviceStorageContainerPath{ border-bottom:1px solid rgba(0,0,0,0.25); padding:15px 20px 15px 20px; user-select:none; }
+
+.serviceStorageContainerPathElement{ cursor:pointer; padding:5px; }
+
+.serviceStorageContainerPathElement:hover{ color:#759EB8; }
+
+.serviceStorageContainerPathSeparator{ padding:5px; }
+
+/****************************************************************************************************/
+
+.serviceStorageContainerMessage{ padding:60px 20px 60px 20px; font-size:1.25em; text-align:center; display:none; }
+
+.serviceStorageContainerElements{ display:flex; flex-direction:row; align-items:flex-start; justify-content:flex-start; flex-wrap:wrap; }
+
+
+.serviceFolderLarge{ position:relative; width:100px; box-sizing:border-box; margin:5px; padding:5px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
+
+.serviceFolderLarge:hover{ background-color:rgba(0,0,0,0.05); }
+
+.serviceFolderLarge .icon{ text-align:center; font-size:4em; color:#759EB8; }
+
+.serviceFolderLarge .name{ font-size:0.8em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+
+
+.serviceFolderSmall{ position:relative; width:75px; box-sizing:border-box; margin:5px; padding:5px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
+
+.serviceFolderSmall:hover{ background-color:rgba(0,0,0,0.05); }
+
+.serviceFolderSmall .icon{ text-align:center; font-size:3em; color:#759EB8; }
+
+.serviceFolderSmall .name{ font-size:0.7em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+
+
+.serviceFolderList{ position:relative; width:100%; display:flex; flex-direction:row; align-items:center; box-sizing:border-box; margin:5px; padding:5px 20px 5px 20px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
+
+.serviceFolderList:hover{ background-color:rgba(0,0,0,0.05); }
+
+.serviceFolderList .icon{ text-align:center; font-size:2em; color:#759EB8; margin-right:10px; }
+
+.serviceFolderList .name{ font-size:0.9em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+
+
+.serviceFileLarge{ position:relative; width:100px; box-sizing:border-box; margin:5px; padding:5px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
+
+.serviceFileLarge:hover{ background-color:rgba(0,0,0,0.05); }
+
+.serviceFileLarge input{ width:18px; height:18px; position:absolute; top:6px; right:6px; margin:0; cursor:pointer; }
+
+.serviceFileLarge .icon{ text-align:center; font-size:4em; }
+
+.serviceFileLarge .name{ font-size:0.8em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+
+
+.serviceFileSmall{ position:relative; width:75px; box-sizing:border-box; margin:5px; padding:5px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
+
+.serviceFileSmall:hover{ background-color:rgba(0,0,0,0.05); }
+
+.serviceFileSmall input{ width:14px; height:14px; position:absolute; top:4px; right:4px; margin:0; cursor:pointer; }
+
+.serviceFileSmall .icon{ text-align:center; font-size:3em; }
+
+.serviceFileSmall .name{ font-size:0.7em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+
+
+.serviceFileList{ width:100%; display:flex; flex-direction:row; align-items:center; box-sizing:border-box; margin:5px; padding:5px 20px 5px 20px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
+
+.serviceFileList:hover{ background-color:rgba(0,0,0,0.05); }
+
+.serviceFileList input{ width:14px; height:14px; margin-right:10px; cursor:pointer; }
+
+.serviceFileList .icon{ text-align:center; font-size:2em; margin-right:10px; }
+
+.serviceFileList .name{ font-size:0.9em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+
+
+.serviceFileDefault{ color:#34393C; }
+
+.serviceFileArchive{ color:#34393C; }
+
+.serviceFileTxt{ color:#8B9DC3; }
+
+.serviceFileDoc{ color:#428BCA; }
+
+.serviceFileDocx{ color:#428BCA; }
+
+.serviceFilePpt{ color:#EBA432; }
+
+.serviceFilePptx{ color:#EBA432; }
+
+.serviceFileXls{ color:#86AA6D; }
+
+.serviceFileXlsx{ color:#86AA6D; }
+
+.serviceFilePdf{ color:#DB494C; }
+
+.serviceFilePng{ color:#64ADEC; }
+
+.serviceFileJpg{ color:#64ADEC; }
+
+/****************************************************************************************************/
+
+.serviceUploadFilePopup{ width:calc(100% - 40px); max-width:600px; max-height:calc(100vh - 40px); background-color:#FFFFFF; overflow-y:auto; border-radius:4px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
+
+.serviceUploadFilePopupHeader{ background-color:#171219; padding:20px; color:#FFFFFF; font-size:1em; }
+
+
+.serviceUploadFilePopupForm{ padding:20px; }
+
+.serviceUploadFilePopupFormHelp{ font-size:0.9em; }
+
+.serviceUploadFilePopupFormError{ font-size:0.9em; display:none; color:#D9534F; margin:10px 0 10px 0; font-weight:bold; }
+
+.serviceUploadFilePopupFormInput{ display:none; }
+
+.serviceUploadFilePopupFormLabel{ padding:5px; border-radius:4px; border:1px solid rgba(0,0,0,0.25); font-size:0.9em; width:100%; box-sizing:border-box; user-select:none; margin:10px 0 10px 0; cursor:pointer; }
+
+.serviceUploadFilePopupFormLabel:hover{ color:#759EB8; }
+
+.serviceUploadFilePopupFormParams{ display:flex; flex-direction:row; align-items:top; justify-content:flex-start; margin-bottom:10px; }
+
+.serviceUploadFilePopupFormParamsKey{ font-size:0.9em; margin-right:10px; flex-shrink:0; }
+
+.serviceUploadFilePopupFormParamsValue{ font-weight:bold; font-size:0.9em; word-break:break-word; }
+
+.serviceUploadFilePopupFormButtons{ display:flex; flex-direction:row; align-items:center; justify-content:flex-end; margin-top:20px; flex-wrap:wrap; }
+
+.serviceUploadFilePopupFormButtonsSend{ border:1px solid #648DA7; color:#648DA7; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; margin-left:20px; display:none; }
+
+.serviceUploadFilePopupFormButtonsCancel{ border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; margin-left:20px; }
+
+.serviceUploadFilePopupFormButtonsSend:hover, .serviceUploadFilePopupFormButtonsCancel:hover{ background-color:rgba(0,0,0,0.1); }
+
+
+.serviceUploadFilePopupLoader{ padding:20px; }
+
+.serviceUploadFilePopupLoaderMessage{ font-size:0.9em; margin:10px 0 10px 0; }
+
+.serviceUploadFilePopupLoaderProgress{ display:flex; flex-direction:row; align-items:top; justify-content:space-between; font-size:0.9em; margin:10px 0 10px 0; }
+
+.serviceUploadFilePopupLoaderProgressKey{ font-weight:bold; }
+
+.serviceUploadFilePopupLoaderSpeed{ font-weight:bold; font-size:0.9em; margin:10px 0 10px 0; text-align:right; }
+
+.serviceUploadFilePopupLoaderBar{ position:relative; width:100%; text-align:center; border-radius:16px; box-sizing:border-box; border:1px solid rgba(0,0,0,0.25); overflow:hidden; }
+
+.serviceUploadFilePopupLoaderBarStatus{ user-select:none; font-weight:bold; font-size:0.9em; z-index:1; position:relative; }
+
+.serviceUploadFilePopupLoaderBarFiller{ position:absolute; top:0; bottom:0; left:0; background-color:#759EB8; z-index:0; }
+
+.serviceUploadFilePopupLoaderButton{ display:flex; flex-direction:row; justify-content:flex-end; margin-top:20px; }
+
+.serviceUploadFilePopupLoaderButton button{ border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; }
+
+.serviceUploadFilePopupLoaderButton button:hover{ background-color:rgba(0,0,0,0.1); }
+
+
+.serviceRemoveFilesPopupElement{ font-size:0.9em; font-weight:bold; margin-bottom:5px; }
+
+/****************************************************************************************************/
+
+.serviceDownloadFilesPopup{ width:calc(100% - 40px); max-width:600px; max-height:calc(100vh - 40px); background-color:#FFFFFF; overflow-y:auto; border-radius:4px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
+
+.serviceDownloadFilesPopupHeader{ background-color:#171219; padding:20px; color:#FFFFFF; font-size:1em; }
+
+
+.serviceDownloadFilesSummary{ padding:20px; }
+
+.serviceDownloadFilesSummaryInfo{ font-size:1em; margin-bottom:20px; }
+
+.serviceDownloadFilesSummaryFileFound{ margin-bottom:10px; color:#759EB8; }
+
+.serviceDownloadFilesSummaryFileMissing{ margin-bottom:10px; color:#D9534F; }
+
+.serviceDownloadFilesSummaryFileName{ font-size:0.9em; font-weight:bold; }
+
+.serviceDownloadFilesSummaryFileStatus{ font-size:0.8em; }
+
+.serviceDownloadFilesSummaryButtons{ display:flex; flex-direction:row; justify-content:flex-end; margin-top:20px; }
+
+.serviceDownloadFilesSummaryButtonsStart{ border:1px solid #759EB8; color:#759EB8; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; margin-left:20px;  }
+
+.serviceDownloadFilesSummaryButtonsCancel{ border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; margin-left:20px; }
+
+.serviceDownloadFilesSummaryButtonsStart:hover, .serviceDownloadFilesSummaryButtonsCancel:hover{ background-color:rgba(0,0,0,0.1); }
+
+
+.serviceDownloadFilesProcess{ padding:20px; }
+
+.serviceDownloadFilesProcessBlock{ margin-bottom:20px; }
+
+.serviceDownloadFilesProcessBlockHeader{ font-weight:bold; font-size:1em; margin-bottom:20px; }
+
+.serviceDownloadFilesProcessParam{ margin-bottom:10px; font-size:0.9em; display:flex; flex-direction:row; align-items:flex-start; justify-content:space-between; }
+
+.serviceDownloadFilesProcessParamKey{ font-weight:bold; }
+
+.serviceDownloadFilesProcessBar{ overflow:hidden; margin-top:20px; text-align:center; position:relative; border-radius:16px; border:1px solid rgba(0,0,0,0.25); box-sizing:border-box; width:100%; }
+
+.serviceDownloadFilesProcessBarStatus{ user-select:none; font-weight:bold; font-size:0.9em; z-index:1; position:relative; }
+
+.serviceDownloadFilesProcessBarFiller{ position:absolute; top:0; bottom:0; left:0; background-color:#759EB8; z-index:0; }
+
+.serviceDownloadFilesProcessButton{ display:flex; flex-direction:row; justify-content:flex-end; margin-top:40px; }
+
+.serviceDownloadFilesProcessButton button{ border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; }
+
+.serviceDownloadFilesProcessButton button:hover{ background-color:rgba(0,0,0,0.1); }
+
+/****************************************************************************************************/
+
+.serviceCreateFolderForm{ padding:15px 20px 15px 20px; }
+
+.serviceCreateFolderFormMessage{ font-size:0.9em; margin:5px 0 5px 0; text-align:justify; }
+
+.serviceCreateFolderFormInput{ margin:5px 0 5px 0; border-radius:4px; border:1px solid rgba(0,0,0,0.25); padding:5px; width:100%; box-sizing:border-box; }
+
+.serviceCreateFolderFormButtons{ display:flex; flex-direction:row; align-items:center; justify-content:flex-end; flex-wrap:wrap; margin-top:20px; }
+
+.serviceCreateFolderFormButtonsSubmit{ border:1px solid #648DA7; color:#648DA7; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; margin-left:20px; }
+
+.serviceCreateFolderFormButtonsCancel{ border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; margin-left:20px; }
+
+.serviceCreateFolderFormButtonsSubmit:hover, .serviceCreateFolderFormButtonsCancel:hover{ background-color:rgba(0,0,0,0.1); }
+
+/****************************************************************************************************/
+
+.serviceFolderContentLoader{ display:flex; flex-direction:row; justify-content:center; padding:40px 20px 40px 20px; }
+
+.serviceFolderContentLoaderSpinner{ border:8px solid #E3E3E3; border-top:8px solid #428BCA; border-radius:50%; width:60px; height:60px; animation:spin 2s linear infinite; }
+
+/****************************************************************************************************/
+
+.serviceFolderLarge .serviceFolderMenu{ position:absolute; width:150px; top:80%; left:80px; border:1px solid rgba(0,0,0,0.25); margin-right:5px; background-color:#FFFFFF; border-radius:2px; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); z-index:10; }
+
+.serviceFolderSmall .serviceFolderMenu{ position:absolute; width:150px; top:80%; left:50px; border:1px solid rgba(0,0,0,0.25); margin-right:5px; background-color:#FFFFFF; border-radius:2px; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); z-index:10; }
+
+.serviceFolderList .serviceFolderMenu{ position:absolute; width:150px; top:80%; left:50px; border:1px solid rgba(0,0,0,0.25); margin-right:5px; background-color:#FFFFFF; border-radius:2px; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); z-index:10; }
+
+.serviceFolderMenuList{ list-style:none; padding:0; margin:0; }
+
+.serviceFolderMenuListElement:not(:first-child), .serviceFolderMenuListElementDisabled:not(:first-child){ border-top:1px solid #E0E0E0; }
+
+.serviceFolderMenuListElement{ user-select:none; padding:10px; display:block; text-decoration:none; color:rgba(0,0,0,0.85); text-align:center; font-size:18px; line-height:24px; cursor:pointer; }
+
+.serviceFolderMenuListElement:hover{ color:#759EB8; background-color:rgba(0,0,0,0.05); }
+
+.serviceFolderMenuListElementDisabled{ user-select:none; padding:10px; display:block; text-decoration:none; color:rgba(0,0,0,0.25); text-align:center; font-size:18px; line-height:24px; cursor:default; }
+
+/****************************************************************************************************/

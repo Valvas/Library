@@ -21,6 +21,12 @@ module.exports = (io, app, callback) =>
     socket.on('messengerJoinConversation', (conversationUuid) => { socket.join(conversationUuid) });
     socket.on('messengerAwaitingNewConversationsJoin', () => { socket.join('messengerAwaitingNewConversations') });
 
+    socket.on('storageAppHomeJoin', () => { socket.join('storageAppHome') });
+    socket.on('storageAppHomeLeave', () => { socket.leave('storageAppHome') });
+
+    socket.on('storageAppServiceJoin', () => { socket.join('storageAppService') });
+    socket.on('storageAppServiceLeave', () => { socket.leave('storageAppService') });
+
     /****************************************************************************************************/
     /* Events Rooms On Intranet Home */
     /****************************************************************************************************/

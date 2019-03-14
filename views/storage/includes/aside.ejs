@@ -1,8 +1,10 @@
-<aside class="asideMenu">
-  <div class="asideMenuTitle"><div class="asideMenuTitleIcon"><i class="fas fa-3x fa-folder-open"></i></div><div class="asideMenuTitleText"><%= strings.storage.asideMenu.title %></div></div>
-  <div class="asideMenuContent">
-    <a href="/storage" class="<% if(location === 'services'){ %>asideMenuContentLinkSelected<% } else{ %>asideMenuContentLink<% } %>"><%= strings.storage.asideMenu.links.services %></a>
-    <a href="/storage/admin" class="<% if(location === 'administration'){ %>asideMenuContentLinkSelected<% } else{ %>asideMenuContentLink<% } %>"><%= strings.storage.asideMenu.links.administration %></a>
-    <div onclick="openExitPrompt()" class="asideMenuContentLink"><%= strings.storage.asideMenu.links.exit %></div>
+<nav class="navigationBar">
+  <div class="navigationBarContent">
+    <div class="navigationBarContentAppName"><%= strings.storage.asideMenu.title %></div>
+    <div class="navigationBarContentMenu">
+      <a href="/storage" class="<% if(location === 'services'){ %>navigationBarContentMenuElementSelected<% } else{ %>navigationBarContentMenuElement<% } %>"><%= strings.storage.asideMenu.links.services %></a>
+      <a href="/storage/admin" class="<% if(location === 'administration'){ %>navigationBarContentMenuElementSelected<% } else{ %>navigationBarContentMenuElement<% } %>"><%= strings.storage.asideMenu.links.administration %></a>
+      <div onclick="openExitPrompt()" class="navigationBarContentMenuElement"><%= strings.storage.asideMenu.links.exit %></div>
+    </div>
   </div>
-</aside>
+</nav>
