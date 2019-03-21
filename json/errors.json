@@ -158,5 +158,18 @@
   "10157": "Vous n'avez pas accès à cette conversation",
   "10158": "Ce statut n'est pas disponible",
   "10159": "Impossible de trouver le compteur de message pour une conversation",
-  "10160": "Aucun fichier fourni"
+  "10160": "Aucun fichier fourni",
+  "10161": "Ce fichier ou dossier ne fait pas partie de ce service",
+  "10162": "Vous n'êtes pas autorisé(e) à déplacer des dossiers",
+  "10163": "Vous n'êtes pas autorisé(e) à déplacer des fichiers",
+  "10164": "Ce dossier a été supprimé",
+
+  "000-000-001": "Le fichier ou dossier que vous essayez de déplacer a été supprimé",
+  "000-000-002": "Le dossier vers lequel vous souhaitez déplacer le fichier ou dossier a été supprimé",
+  "000-000-003": "Le fichier ou dossier que vous essayez de déplacer est introuvable",
+  "000-000-004": "Le fichier ou dossier que vous essayez de déplacer ne fait pas partie du service transmis dans la requête",
+  "000-000-005": "Le dossier de destination est introuvable",
+  "000-000-006": "Le dossier de destination ne peut pas être le même que le dossier à déplacer",
+  "000-000-007": "Le dossier de destination ne peut pas être le dossier parent actuel",
+  "000-000-008": "Un élément du même nom existe déjà dans le dossier de destination"
 }

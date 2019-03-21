@@ -4,7 +4,13 @@ function fileSelected(event)
 {
   var selectedFile = event.target;
 
-  while(selectedFile.hasAttribute('name') == false) selectedFile = selectedFile.parentNode;
+  if(selectedFile.getAttribute('id') === 'fileContextMenu') return;
+
+  while(selectedFile.hasAttribute('name') == false)
+  {
+    selectedFile = selectedFile.parentNode;
+    if(selectedFile.getAttribute('id') === 'fileContextMenu') return;
+  }
 
   if(event.target.tagName !== 'INPUT')
   {
@@ -92,7 +98,7 @@ function checkFileSelection()
 
 /****************************************************************************************************/
 
-function unselectAllFiles(event)
+function unselectAllFiles()
 {
   const currentFiles = document.getElementById('currentServiceFilesContainer').children;
 

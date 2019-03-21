@@ -66,6 +66,56 @@ function downloadFiles(event)
 
 /****************************************************************************************************/
 
+function downloadSingleFile(fileUuid)
+{
+  if(document.getElementById('veilBackground')) return;
+
+  const serviceUuid = document.getElementById('serviceStorageContainer').getAttribute('name');
+
+  document.getElementById('mainContainer').style.filter ='blur(4px)';
+
+  const modalVeil       = document.createElement('div');
+  const modalBackground = document.createElement('div');
+  const modalContainer  = document.createElement('div');
+
+  modalVeil         .setAttribute('id', 'modalVeil');
+  modalBackground   .setAttribute('id', 'modalBackground');
+  modalContainer    .setAttribute('id', 'modalContainer');
+
+  modalBackground   .appendChild(modalContainer);
+  document.body     .appendChild(modalBackground);
+  document.body     .appendChild(modalVeil);
+
+  displayLoader(storageStrings.serviceSection.downloadFilesPopup.retrieveFilesDataLoader, (loader) =>
+  {
+    $.ajax(
+    {
+      method: 'POST', dataType: 'json', data: { filesToDownload: fileUuid, serviceUuid: serviceUuid }, timeout: 5000, url: '/queries/storage/services/get-files-data',
+      error: (xhr, textStatus, errorThrown) =>
+      {
+        removeLoader(loader, () =>
+        {
+          document.getElementById('modalVeil').remove();
+          document.getElementById('modalBackground').remove();
+
+          document.getElementById('mainContainer').removeAttribute('style');
+
+          xhr.responseJSON != undefined ?
+          displayError(xhr.responseJSON.message, xhr.responseJSON.detail, 'downloadFilesError') :
+          displayError('Une erreur est survenue, veuillez réessayer plus tard', null, 'downloadFilesError');
+        });
+      }
+    }).done((filesData) =>
+    {
+      removeLoader(loader, () => {  });
+
+      return downloadFilesCreateModal(filesData);
+    });
+  });
+}
+
+/****************************************************************************************************/
+
 function downloadFilesCreateModal(filesToDownload)
 {
   var filesThatCanBeDownloadedCounter = 0;
@@ -129,12 +179,16 @@ function downloadFilesCreateModal(filesToDownload)
 
   buttonsNext     .addEventListener('click', () =>
   {
+    event.stopPropagation();
+
     modal.remove();
     return downloadFilesStartProcess(remainingFilesToDownload);
   });
 
   buttonsCancel   .addEventListener('click', () =>
   {
+    event.stopPropagation();
+
     document.getElementById('modalVeil').remove();
     document.getElementById('modalBackground').remove();
     document.getElementById('mainContainer').removeAttribute('style');
@@ -239,6 +293,8 @@ function downloadFilesStartProcess(filesToDownload)
 
   buttonCancel        .addEventListener('click', () =>
   {
+    event.stopPropagation();
+
     clearInterval(speedInterval);
     xhr.abort();
     document.getElementById('modalVeil').remove();

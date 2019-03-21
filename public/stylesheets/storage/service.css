@@ -39,9 +39,15 @@
 .serviceStorageContainerToolsCounterValue{ font-weight:bold; font-size:0.9em; }
 
 
-.serviceStorageContainerToolsEnd{ padding:10px 0 10px 0; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+.serviceStorageContainerToolsEnd{ padding:10px 0 10px 0; display:flex; flex-direction:row; align-items:center; justify-content:space-between; flex-wrap:wrap; }
 
-.serviceStorageContainerToolsEndSearchBar{ width:100%; box-sizing:border-box; max-width:400px; border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:5px; }
+.serviceStorageContainerToolsEndSearchForm{ flex-grow:2; margin-right:20px; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
+
+.serviceStorageContainerToolsEndSearchForm input{ flex-grow:2; margin-right:10px; box-sizing:border-box; max-width:400px; border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:5px; }
+
+.serviceStorageContainerToolsEndSearchForm button{ border:1px solid #759EB8; background-color:#FFFFFF; color:#759EB8; padding:5px 15px 5px 15px; border-radius:4px; cursor:pointer; }
+
+.serviceStorageContainerToolsEndSearchForm button:hover{ border:1px solid #537C96; color:#537C96; }
 
 .serviceStorageContainerToolsEndDisplay{ border-radius:4px; border:1px solid rgba(0,0,0,0.25); padding:5px; }
 
@@ -278,20 +284,138 @@
 
 /****************************************************************************************************/
 
-.serviceFolderLarge .serviceFolderMenu{ position:absolute; width:150px; top:80%; left:80px; border:1px solid rgba(0,0,0,0.25); margin-right:5px; background-color:#FFFFFF; border-radius:2px; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); z-index:10; }
+.serviceFolderLarge .serviceElementMenu, .serviceFileLarge .serviceElementMenu{ position:absolute; width:150px; top:80%; left:80px; border:1px solid rgba(0,0,0,0.25); margin-right:5px; background-color:#FFFFFF; border-radius:2px; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); z-index:10; }
 
-.serviceFolderSmall .serviceFolderMenu{ position:absolute; width:150px; top:80%; left:50px; border:1px solid rgba(0,0,0,0.25); margin-right:5px; background-color:#FFFFFF; border-radius:2px; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); z-index:10; }
+.serviceFolderSmall .serviceElementMenu, .serviceFileSmall .serviceElementMenu{ position:absolute; width:150px; top:80%; left:50px; border:1px solid rgba(0,0,0,0.25); margin-right:5px; background-color:#FFFFFF; border-radius:2px; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); z-index:10; }
 
-.serviceFolderList .serviceFolderMenu{ position:absolute; width:150px; top:80%; left:50px; border:1px solid rgba(0,0,0,0.25); margin-right:5px; background-color:#FFFFFF; border-radius:2px; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); z-index:10; }
+.serviceFolderList .serviceElementMenu, .serviceFileList .serviceElementMenu{ position:absolute; width:150px; top:80%; left:50px; border:1px solid rgba(0,0,0,0.25); margin-right:5px; background-color:#FFFFFF; border-radius:2px; box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); z-index:10; }
 
-.serviceFolderMenuList{ list-style:none; padding:0; margin:0; }
+.serviceElementMenuList{ list-style:none; padding:0; margin:0; }
 
-.serviceFolderMenuListElement:not(:first-child), .serviceFolderMenuListElementDisabled:not(:first-child){ border-top:1px solid #E0E0E0; }
+.serviceElementMenuListElement:not(:first-child), .serviceElementMenuListElementDisabled:not(:first-child){ border-top:1px solid #E0E0E0; }
 
-.serviceFolderMenuListElement{ user-select:none; padding:10px; display:block; text-decoration:none; color:rgba(0,0,0,0.85); text-align:center; font-size:18px; line-height:24px; cursor:pointer; }
+.serviceElementMenuListElement{ user-select:none; padding:10px; display:block; text-decoration:none; color:rgba(0,0,0,0.85); text-align:center; font-size:18px; line-height:24px; cursor:pointer; }
 
-.serviceFolderMenuListElement:hover{ color:#759EB8; background-color:rgba(0,0,0,0.05); }
+.serviceElementMenuListElement:hover{ color:#759EB8; background-color:rgba(0,0,0,0.05); }
 
-.serviceFolderMenuListElementDisabled{ user-select:none; padding:10px; display:block; text-decoration:none; color:rgba(0,0,0,0.25); text-align:center; font-size:18px; line-height:24px; cursor:default; }
+.serviceElementMenuListElementDisabled{ user-select:none; padding:10px; display:block; text-decoration:none; color:rgba(0,0,0,0.25); text-align:center; font-size:18px; line-height:24px; cursor:default; }
+
+/****************************************************************************************************/
+
+.serviceSearchSectionHeader{ border-bottom:1px solid rgba(0,0,0,0.25); padding:20px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+
+.serviceSearchSectionHeaderTerm{ display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
+
+.serviceSearchSectionHeaderTermKey{ font-size:1em; margin-right:10px; }
+
+.serviceSearchSectionHeaderTermValue{ font-weight:bold; font-size:1em; }
+
+.serviceSearchSectionHeader button{ border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; margin-left:20px; }
+
+.serviceSearchSectionHeader button:hover{ color:#B7312D; border:1px solid #B7312D; }
+
+
+.serviceSearchSectionMessage{ display:flex; flex-direction:row; align-items:center; justify-content:center; padding:40px 20px 40px 20px; }
+
+.serviceSearchSectionMessageSpinner{ border:4px solid #E3E3E3; border-top:4px solid #428BCA; border-radius:50%; width:20px; height:20px; animation:spin 2s linear infinite; margin-right:10px; }
+
+.serviceSearchSectionMessageValue{ font-size:0.9em; }
+
+.serviceSearchSectionMessageError{ padding:40px 20px 40px 20px; color:#D9534F; font-weight:bold; font-size:0.9em; text-align:center; }
+
+
+.serviceSearchSectionContainer{ margin:20px; }
+
+.serviceSearchSectionContainerPath{ font-size:1.2em; border-bottom:1px solid rgba(0,0,0,0.25); padding-bottom:5px; }
+
+.serviceSearchSectionContainerElements{ display:flex; flex-direction:row; align-items:flex-start; justify-content:flex-start; flex-wrap:wrap; }
+
+/****************************************************************************************************/
+
+.serviceFileDetailModal{ display:flex; flex-direction:column; justify-content:flex-start; overflow:hidden; background-color:#FFFFFF; border-radius:4px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; width:calc(100% - 40px); box-sizing:border-box; max-width:600px; max-height:90vh; }
+
+.serviceFileDetailModalHeader{ flex-grow:1; padding:20px; font-size:1em; background-color:#171219; color:#FFFFFF; }
+
+.serviceFileDetailModalButtons{ flex-basis:1; flex-grow:1; border-top:1px solid rgba(0,0,0,0.25); display:flex; flex-direction:row; align-items:center; justify-content:flex-end; flex-wrap:wrap; padding:10px 0 10px 0; }
+
+.serviceFileDetailModalButtonsComment{ margin:10px 20px 10px 0; border:1px solid #759EB8; color:#759EB8; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; }
+
+.serviceFileDetailModalButtonsComment:hover{ color:#537C96; border:1px solid #537C96; }
+
+.serviceFileDetailModalButtonsCommentDisabled{ margin:10px 20px 10px 0; outline:none; border:1px solid rgba(0,0,0,0.25); color:rgba(0,0,0,0.25); background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; }
+
+.serviceFileDetailModalButtonsClose{ margin:10px 20px 10px 0; border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; }
+
+.serviceFileDetailModalButtonsClose:hover{ color:#B7312D; border:1px solid #B7312D; }
+
+.serviceFileDetailModalLogs{ flex-grow:2; overflow-y:auto; }
+
+.serviceFileDetailModalLogsElement{ padding:10px 20px 10px 20px; }
+
+.serviceFileDetailModalLogsElementDate{ font-size:0.8em; font-weight:bold; color:#759EB8; }
+
+.serviceFileDetailModalLogsElementMessage{ font-size:0.9em; }
+
+.serviceFileDetailModalLogsElementComment{ background-color:rgba(0,0,0,0.05); padding:10px; border-radius:4px; font-size:0.9em; font-style:italic; margin-top:5px; }
+
+/****************************************************************************************************/
+
+.serviceFileCommentModal{ overflow:hidden; background-color:#FFFFFF; border-radius:4px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; width:calc(100% - 40px); box-sizing:border-box; max-width:400px; max-height:90vh; }
+
+.serviceFileCommentModalHeader{ padding:20px; font-size:1em; background-color:#171219; color:#FFFFFF; }
+
+.serviceFileCommentModalForm{ padding:20px; }
+
+.serviceFileCommentModalFormError{ font-size:0.9em; color:#D9534F; margin-bottom:20px; display:none; }
+
+.serviceFileCommentModalForm textarea{ resize:none; width:100%; box-sizing:border-box; height:200px; border:1px solid rgba(0,0,0,0.25); border-radius:2px; padding:5px; }
+
+.serviceFileCommentModalFormButtons{ display:flex; flex-direction:row; align-items:center; justify-content:flex-end; }
+
+.serviceFileCommentModalFormButtonsSubmit{ margin:10px 20px 10px 0; border:1px solid #759EB8; color:#759EB8; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; }
+
+.serviceFileCommentModalFormButtonsSubmit:hover{ color:#537C96; border:1px solid #537C96; }
+
+.serviceFileCommentModalFormButtonsCancel{ margin:10px 20px 10px 0; border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; }
+
+.serviceFileCommentModalFormButtonsCancel:hover{ color:#B7312D; border:1px solid #B7312D; }
+
+/****************************************************************************************************/
+
+.serviceMoveFileModal{ overflow:hidden; background-color:#FFFFFF; border-radius:4px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; width:calc(100% - 40px); box-sizing:border-box; max-width:600px; max-height:80vh; }
+
+.serviceMoveFileModalHeader{ padding:20px; font-size:1em; background-color:#171219; color:#FFFFFF; }
+
+.serviceMoveFileModalContent{ margin:20px; border-radius:2px; border:1px solid rgba(0,0,0,0.25); }
+
+.serviceMoveFileModalContentPath{ padding:5px; border-bottom:1px solid rgba(0,0,0,0.25); font-size:0.8em; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; flex-wrap:wrap; }
+
+.serviceMoveFileModalContentPath span{ padding:5px; cursor:pointer; user-select:none; -ms-user-select:none; }
+
+.serviceMoveFileModalContentPath span:hover{ color:#759EB8; }
+
+.serviceMoveFileModalContentPathSeparator{ padding:5px; }
+
+.serviceMoveFileModalContentFolders{ flex-grow:2; overflow-y:auto; max-height:600px; min-height:300px; }
+
+.serviceMoveFileModalContentFoldersLoading{ margin:40px 0 40px calc(50% - 38px); border:8px solid #E3E3E3; border-top:8px solid #428BCA; border-radius:50%; width:60px; height:60px; animation:spin 2s linear infinite; }
+
+.serviceMoveFileModalContentFoldersElement{ padding:5px 20px 5px 20px; cursor:pointer; user-select:none; -ms-user-select:none; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; cursor:pointer; }
+
+.serviceMoveFileModalContentFoldersElement:hover{ background-color:rgba(0,0,0,0.05); }
+
+.serviceMoveFileModalContentFoldersElementIcon{ color:#759EB8; font-size:2em; margin-right:10px; }
+
+.serviceMoveFileModalContentFoldersElementName{ font-size:0.9em; word-break:break-word; overflow-wrap:break-word; }
+
+.serviceMoveFileModalButtons{ display:flex; flex-direction:row; align-items:center; justify-content:flex-end; padding-bottom:10px; }
+
+.serviceMoveFileModalButtonsSubmit{ margin:10px 20px 10px 0; border:1px solid #759EB8; color:#759EB8; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; }
+
+.serviceMoveFileModalButtonsSubmit:hover{ color:#537C96; border:1px solid #537C96; }
+
+.serviceMoveFileModalButtonsCancel{ margin:10px 20px 10px 0; border:1px solid #D9534F; color:#D9534F; background-color:#FFFFFF; padding:5px 10px 5px 10px; border-radius:2px; cursor:pointer; }
+
+.serviceMoveFileModalButtonsCancel:hover{ color:#B7312D; border:1px solid #B7312D; }
 
 /****************************************************************************************************/

@@ -2,9 +2,9 @@
 
 function loadHomeSection()
 {
-  socket.emit('storageAppServiceLeave');
-
   displayLocationLoader();
+
+  urlParameters = [];
 
   history.pushState(null, null, '/storage/home');
 
@@ -54,6 +54,9 @@ function loadHomeSection()
 
     const amountOfMo = Math.floor((currentServiceFileMaxSize / 1024) / 1024);
     currentServiceFileMaxSize -= (amountOfMo * 1024 * 1024);
+
+    const amountOfKo = Math.floor((currentServiceFileMaxSize / 1024));
+    currentServiceFileMaxSize -= (amountOfKo * 1024);
 
     var maxFileSize = `${currentServiceFileMaxSize}o`;
 

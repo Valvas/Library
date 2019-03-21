@@ -3,6 +3,8 @@
 
   "socketMessages":
   {
+    "fileMoved": "Le fichier <b>$[1]</b> a été déplacé dans un autre dossier",
+    "currentFolderRenamed": "Le dossier dans lequel vous vous trouvez a été renommé",
     "currentFolderRemoved": "Le dossier dans lequel vous vous trouviez a été supprimé, vous avez été ramené(e) à la racine du service"
   },
 
@@ -70,13 +72,21 @@
       "searchBarPlaceholder": "Rechercher un fichier ou dossier",
       "largeDisplay": "Grandes icônes",
       "smallDisplay": "Petites icônes",
-      "listDisplay": "Liste"
+      "listDisplay": "Liste",
+      "searchButton": "Rechercher"
     },
 
     "elementsContainer":
     {
-      "emptyFolder": "Aucun fichier ou dossier",
-      "emptySearch": "Aucun résultat pour cette recherche"
+      "emptyFolder": "Aucun fichier ou dossier"
+    },
+
+    "searchSection":
+    {
+      "searchLoader": "Recherche en cours. Veuillez patienter...",
+      "currentSearch": "Recherche",
+      "closeSearch": "Fermer la recherche",
+      "emptyResult": "Aucun résultat pour cette recherche"
     },
 
     "pathRoot": "Racine du service",
@@ -140,6 +150,37 @@
       "moveFolder": "Déplacer",
       "renameFolder": "Renommer",
       "removeFolder": "Supprimer"
+    },
+
+    "fileContextMenu":
+    {
+      "moveFile": "Déplacer",
+      "openDetail": "Détail",
+      "downloadFile": "Télécharger",
+      "removeFile": "Supprimer"
+    },
+
+    "fileDetail":
+    {
+      "loaderMessage": "Récupération des données en cours. Veuillez patienter...",
+      "commentButton": "Ajouter un commentaire",
+
+      "commentModal":
+      {
+        "header": "Ajouter un commentaire",
+        "emptyError": "Veuillez entrer un commentaire",
+        "submit": "Poster ce commentaire",
+        "loaderMessage": "Enregistrement du commentaire en cours. Veuillez patienter..."
+      }
+    },
+
+    "moveElementModal":
+    {
+      "loaderMessage": "Récupération des données en cours. Veuillez patienter...",
+      "header": "Déplacer un élément",
+      "pathRoot": "Racine du service",
+      "submit": "Déplacer dans ce dossier",
+      "savingLoader": "Enregistrement en cours. Veuillez patienter..."
     },
 
     "renameFolderPopup":

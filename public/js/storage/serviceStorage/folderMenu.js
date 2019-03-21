@@ -23,6 +23,8 @@ function openFolderMenu(event)
 {
   event.preventDefault();
 
+  if(document.getElementById('fileContextMenu')) document.getElementById('fileContextMenu').remove();
+
   var currentFolder = event.target;
 
   while(currentFolder.hasAttribute('name') == false) currentFolder = currentFolder.parentNode;
@@ -39,17 +41,17 @@ function openFolderMenu(event)
 
   folderMenu        .setAttribute('id', 'folderContextMenu');
 
-  folderMenu        .setAttribute('class', 'serviceFolderMenu');
-  folderMenuList    .setAttribute('class', 'serviceFolderMenuList');
-  folderMenuMove    .setAttribute('class', 'serviceFolderMenuListElementDisabled');
+  folderMenu        .setAttribute('class', 'serviceElementMenu');
+  folderMenuList    .setAttribute('class', 'serviceElementMenuList');
+  folderMenuMove    .setAttribute('class', 'serviceElementMenuListElementDisabled');
 
   (currentServiceAccountRights.isAdmin || currentServiceAccountRights.renameFolders)
-  ? folderMenuRename.setAttribute('class', 'serviceFolderMenuListElement')
-  : folderMenuRename.setAttribute('class', 'serviceFolderMenuListElementDisabled');
+  ? folderMenuRename.setAttribute('class', 'serviceElementMenuListElement')
+  : folderMenuRename.setAttribute('class', 'serviceElementMenuListElementDisabled');
 
   (currentServiceAccountRights.isAdmin || currentServiceAccountRights.removeFolders)
-  ? folderMenuRemove.setAttribute('class', 'serviceFolderMenuListElement')
-  : folderMenuRemove.setAttribute('class', 'serviceFolderMenuListElementDisabled');
+  ? folderMenuRemove.setAttribute('class', 'serviceElementMenuListElement')
+  : folderMenuRemove.setAttribute('class', 'serviceElementMenuListElementDisabled');
 
   folderMenuMove    .innerText = storageStrings.serviceSection.folderContextMenu.moveFolder;
   folderMenuRename  .innerText = storageStrings.serviceSection.folderContextMenu.renameFolder;

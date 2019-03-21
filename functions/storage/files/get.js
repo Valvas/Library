@@ -152,68 +152,6 @@ function getFilesFromService(serviceUuid, folderUuid, databaseConnection, global
 }
 
 /****************************************************************************************************/
-// GET PARENT FOLDER FROM ELEMENT
-/****************************************************************************************************/
-
-function getParentFolder(childUuid, serviceUuid, databaseConnection, params, callback)
-{
-  if(params == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'params' });
-  if(childUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'childUuid' });
-  if(serviceUuid == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'serviceUuid' });
-  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: 'databaseConnection' });
-
-  databaseManager.selectQuery(
-  {
-    databaseName: params.database.storage.label,
-    tableName: params.database.storage.tables.folders,
-    args: [ '*' ],
-    where: { operator: '=', key: 'uuid', value: childUuid }
-
-  }, databaseConnection, (error, result) =>
-  {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-
-    if(result.length == 0)
-    {
-      databaseManager.selectQuery(
-      {
-        databaseName: params.database.storage.label,
-        tableName: params.database.storage.tables.files,
-        args: [ '*' ],
-        where: { operator: '=', key: 'uuid', value: childUuid }
-
-      }, databaseConnection, (error, result) =>
-      {
-        if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-
-        if(result.length == 0) return callback({ status: 404, code: constants.FILE_NOT_FOUND_IN_DATABASE, detail: null });
-
-        storageAppFilesGet.checkIfFolderExistsInDatabase(result[0].parent_folder, databaseConnection, params, (error, folderExists, folderData) =>
-        {
-          if(error != null) return callback(error);
-
-          if(folderExists == false) return callback(null, true);
-
-          return callback(null, false, folderData);
-        });
-      });
-    }
-
-    else
-    {
-      storageAppFilesGet.checkIfFolderExistsInDatabase(result[0].parent_folder, databaseConnection, params, (error, folderExists, folderData) =>
-      {
-        if(error != null) return callback(error);
-
-        if(folderExists == false) return callback(null, true);
-
-        return callback(null, false, folderData);
-      });
-    }
-  });
-}
-
-/****************************************************************************************************/
 // GET FILE LOGS
 /****************************************************************************************************/
 
@@ -392,10 +330,36 @@ function retrieveFilesData(filesToBrowse, serviceUuid, databaseConnection, globa
 
 /****************************************************************************************************/
 
+function getElementPath(elementUuid, currentPath, databaseConnection, globalParameters, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElements,
+    args: [ '*' ],
+    where: { operator: '=', key: 'uuid', value: elementUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    if(result.length === 0) return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
+
+    currentPath.push(result[0].name);
+
+    if(result[0].parent_folder.length === 0) return callback(null, currentPath);
+
+    return getElementPath(result[0].uuid, currentPath, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
 module.exports =
 {
   getFileLogs: getFileLogs,
   getFolderPath: getFolderPath,
+  getElementPath: getElementPath,
   getFolderFromName: getFolderFromName,
   retrieveFilesData: retrieveFilesData,
   getFilesFromService: getFilesFromService,

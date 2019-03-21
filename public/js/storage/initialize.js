@@ -6,6 +6,7 @@ var servicesData = null;
 var messengerData = null;
 var commonStrings = null;
 var storageStrings = null;
+var selectedDisplay = null;
 var currentServiceAccountRights = null;
 var currentLocation = window.location.href.split('/')[4];
 var urlParameters = window.location.href.split('/').slice(5);
@@ -31,6 +32,18 @@ function initializeStart()
   loader      .innerHTML = '<div id="loaderWrapper"><div id="loaderSpinner"></div></div>';
 
   document.body.appendChild(loader);
+
+  const cookies = document.cookie.split(';');
+
+  cookies.forEach((element) =>
+  {
+    const correctedElement = element.trim();
+
+    if(correctedElement.split('=')[0] === 'storageDisplay')
+    {
+      selectedDisplay = correctedElement.split('=')[1];
+    }
+  });
 
   initializeRetrieveStrings((error) =>
   {

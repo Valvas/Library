@@ -4,6 +4,11 @@ function changeDisplay(event)
 {
   const displaySelected = event.target.options[event.target.selectedIndex].value;
 
+  selectedDisplay = displaySelected;
+
+  document.cookie = 'storageDisplay=xxxx;Max-Age=0;path=/';
+  document.cookie = `storageDisplay=${selectedDisplay};Max-Age=${60 * 60 * 24 * 365 * 10};path=/`;
+
   const currentFiles    = document.getElementById('currentServiceFilesContainer').children;
   const currentFolders  = document.getElementById('currentServiceFoldersContainer').children;
 

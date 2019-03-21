@@ -2,6 +2,8 @@
 
 function loadServiceStorageSection()
 {
+  if(selectedDisplay == null) selectedDisplay = 'large';
+
   if(urlParameters.length === 0) return loadLocation('home');
 
   displayLocationLoader();
@@ -52,8 +54,6 @@ function loadServiceStorageSection()
 
       loadServiceSectionCreateHeader(currentServiceUuid, currentServiceData, container, () =>
       {
-        if(currentServiceData.elements.folders.length === 0 && currentServiceData.elements.files.length === 0) document.getElementById('currentServiceEmptyFolder').style.display = 'block';
-
         container.style.display = 'none';
 
         document.getElementById('contentContainer').appendChild(container);
@@ -71,6 +71,8 @@ function loadServiceStorageSection()
         if(document.getElementById('locationLoaderContainer')) document.getElementById('locationLoaderContainer').remove();
 
         $(container).fadeIn(250);
+
+        if(currentServiceData.elements.folders.length === 0 && currentServiceData.elements.files.length === 0) document.getElementById('currentServiceEmptyFolder').style.display = 'block';
       });
     });
   });
@@ -81,8 +83,11 @@ function loadServiceStorageSection()
 function loadServiceSectionCreateHeader(currentServiceUuid, currentServiceData, container, callback)
 {
   const header        = document.createElement('div');
+  const mainBlock     = document.createElement('div');
   const headerName    = document.createElement('div');
   const headerReturn  = document.createElement('button');
+
+  mainBlock           .setAttribute('id', 'currentServiceContent');
 
   header              .setAttribute('class', 'serviceStorageContainerHeader');
   headerName          .setAttribute('class', 'serviceStorageContainerHeaderName');
@@ -93,25 +98,26 @@ function loadServiceSectionCreateHeader(currentServiceUuid, currentServiceData, 
 
   headerReturn        .addEventListener('click', () =>
   {
-    urlParameters = [];
     loadLocation('home');
   });
 
   header              .appendChild(headerName);
   header              .appendChild(headerReturn);
   container           .appendChild(header);
+  container           .appendChild(mainBlock);
 
-  return loadServiceSectionCreateToolbox(currentServiceUuid, currentServiceData, container, callback);
+  return loadServiceSectionCreateToolbox(currentServiceUuid, currentServiceData, mainBlock, callback);
 }
 
 /****************************************************************************************************/
 
 function loadServiceSectionCreateToolbox(currentServiceUuid, currentServiceData, container, callback)
 {
-  const toolbox           = document.createElement('div');
-  const toolboxActions    = document.createElement('div');
-  const toolBoxCounter    = document.createElement('div');
-  const toolBoxSearch     = document.createElement('div');
+  const toolbox                 = document.createElement('div');
+  const toolboxActions          = document.createElement('div');
+  const toolBoxCounter          = document.createElement('div');
+  const toolBoxSearchCounter    = document.createElement('div');
+  const toolBoxSearch           = document.createElement('div');
 
   const actionsLeft       = document.createElement('div');
   const actionsRight      = document.createElement('div');
@@ -123,10 +129,11 @@ function loadServiceSectionCreateToolbox(currentServiceUuid, currentServiceData,
   const rightDownload     = document.createElement('button');
   const rightRemove       = document.createElement('button');
 
-  const searchBar         = document.createElement('input');
-  const searchDisplay     = document.createElement('select');
+  const searchForm        = document.createElement('form');
 
-  searchDisplay           .setAttribute('id', 'serviceStorageSelectedDisplay');
+  const selectDisplay     = document.createElement('select');
+
+  selectDisplay           .setAttribute('id', 'serviceStorageSelectedDisplay');
   rightUnselect           .setAttribute('id', 'serviceStorageUnselectFiles');
   rightDownload           .setAttribute('id', 'serviceStorageDownloadFiles');
   rightRemove             .setAttribute('id', 'serviceStorageRemoveFiles');
@@ -142,16 +149,28 @@ function loadServiceSectionCreateToolbox(currentServiceUuid, currentServiceData,
   rightRemove             .setAttribute('class', 'serviceStorageContainerToolsActionsDisabledButton');
   toolBoxCounter          .setAttribute('class', 'serviceStorageContainerToolsCounter');
   toolBoxSearch           .setAttribute('class', 'serviceStorageContainerToolsEnd');
-  searchBar               .setAttribute('class', 'serviceStorageContainerToolsEndSearchBar');
-  searchDisplay           .setAttribute('class', 'serviceStorageContainerToolsEndDisplay');
+  searchForm              .setAttribute('class', 'serviceStorageContainerToolsEndSearchForm');
+  selectDisplay           .setAttribute('class', 'serviceStorageContainerToolsEndDisplay');
 
-  searchBar               .setAttribute('placeholder', storageStrings.serviceSection.header.searchBarPlaceholder);
+  searchForm              .addEventListener('submit', searchForElementsRetrieveFromServer);
+
+  searchForm              .innerHTML += `<input id="serviceSearchBar" type="text" placeholder="${storageStrings.serviceSection.header.searchBarPlaceholder}" name="search" />`;
+  searchForm              .innerHTML += `<button>${storageStrings.serviceSection.header.searchButton}</button>`;
 
   toolBoxCounter          .innerHTML += `<div class="serviceStorageContainerToolsCounterKey">${storageStrings.serviceSection.header.counterKey} :</div>`;
   toolBoxCounter          .innerHTML += `<div id="serviceStorageContainerToolsCounterValue" class="serviceStorageContainerToolsCounterValue">0</div>`;
-  searchDisplay           .innerHTML += `<option value="large" selected>${storageStrings.serviceSection.header.largeDisplay}</option>`;
-  searchDisplay           .innerHTML += `<option value="small">${storageStrings.serviceSection.header.smallDisplay}</option>`;
-  searchDisplay           .innerHTML += `<option value="list">${storageStrings.serviceSection.header.listDisplay}</option>`;
+
+  selectDisplay           .innerHTML += selectedDisplay === 'large'
+  ? `<option value="large" selected>${storageStrings.serviceSection.header.largeDisplay}</option>`
+  : `<option value="large">${storageStrings.serviceSection.header.largeDisplay}</option>`;
+
+  selectDisplay           .innerHTML += selectedDisplay === 'small'
+  ? `<option value="small" selected>${storageStrings.serviceSection.header.smallDisplay}</option>`
+  : `<option value="small">${storageStrings.serviceSection.header.smallDisplay}</option>`;
+
+  selectDisplay           .innerHTML += selectedDisplay === 'list'
+  ? `<option value="list" selected>${storageStrings.serviceSection.header.listDisplay}</option>`
+  : `<option value="list">${storageStrings.serviceSection.header.listDisplay}</option>`;
 
   leftUploadFile          .innerText = storageStrings.serviceSection.header.uploadButton;
   leftCreateFolder        .innerText = storageStrings.serviceSection.header.createFolderButton;
@@ -161,7 +180,7 @@ function loadServiceSectionCreateToolbox(currentServiceUuid, currentServiceData,
 
   leftUploadFile          .addEventListener('click', uploadFileRetrieveParameters);
   leftCreateFolder        .addEventListener('click', createFolderOpenPrompt);
-  searchDisplay           .addEventListener('change', changeDisplay);
+  selectDisplay           .addEventListener('change', changeDisplay);
 
   if(currentServiceData.serviceRights.uploadFiles || currentServiceData.serviceRights.isAdmin)    actionsLeft.appendChild(leftUploadFile);
   if(currentServiceData.serviceRights.createFolders || currentServiceData.serviceRights.isAdmin)  actionsLeft.appendChild(leftCreateFolder);
@@ -173,8 +192,8 @@ function loadServiceSectionCreateToolbox(currentServiceUuid, currentServiceData,
 
   toolboxActions          .appendChild(actionsLeft);
   toolboxActions          .appendChild(actionsRight);
-  toolBoxSearch           .appendChild(searchBar);
-  toolBoxSearch           .appendChild(searchDisplay);
+  toolBoxSearch           .appendChild(searchForm);
+  toolBoxSearch           .appendChild(selectDisplay);
   toolbox                 .appendChild(toolboxActions);
   toolbox                 .appendChild(toolBoxCounter);
   toolbox                 .appendChild(toolBoxSearch);
@@ -213,19 +232,14 @@ function loadServiceSectionCreatePath(container, callback)
 function loadServiceSectionCreateMessages(container, callback)
 {
   const emptyFolderMessage = document.createElement('div');
-  const emptySearchMessage = document.createElement('div');
 
   emptyFolderMessage      .setAttribute('id', 'currentServiceEmptyFolder');
-  emptySearchMessage      .setAttribute('id', 'currentServiceEmptySearch');
 
   emptyFolderMessage      .setAttribute('class', 'serviceStorageContainerMessage');
-  emptySearchMessage      .setAttribute('class', 'serviceStorageContainerMessage');
 
   emptyFolderMessage      .innerText = storageStrings.serviceSection.elementsContainer.emptyFolder;
-  emptySearchMessage      .innerText = storageStrings.serviceSection.elementsContainer.emptySearch;
 
   container               .appendChild(emptyFolderMessage);
-  container               .appendChild(emptySearchMessage);
 
   return loadServiceSectionCreateElementsContainers(container, callback);
 }

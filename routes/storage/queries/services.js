@@ -19,6 +19,8 @@ const storageAppFilesDownload   = require(`${__root}/functions/storage/files/dow
 const storageAppAdminServices   = require(`${__root}/functions/storage/admin/services`);
 const storageAppServicesRights  = require(`${__root}/functions/storage/services/rights`);
 
+const storageAppServicesMoveElement = require(`${__root}/functions/storage/services/moveElement`);
+
 var router = express.Router();
 
 /****************************************************************************************************/
@@ -267,7 +269,6 @@ router.delete('/remove-files', (req, res) =>
 
     for(var x = 0; x < filesToRemove.length; x++)
     {
-      req.app.get('io').in(req.body.serviceUuid).emit('fileRemoved', filesToRemove[x], storageAppStrings);
       req.app.get('io').in('storageAppService').emit('serviceFileRemoved', filesToRemove[x]);
       req.app.get('io').in('storageAppHome').emit('homeFileRemoved', req.body.serviceUuid);
     }
@@ -381,15 +382,17 @@ router.put('/update-folder-name', (req, res) =>
 
 router.put('/get-file-logs', (req, res) =>
 {
+  const currentAccount = req.app.locals.account;
+
   if(req.body.fileUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'fileUuid' });
 
   if(req.body.serviceUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
 
-  storageAppAdminGet.checkIfAccountIsAdmin(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, isAppAdmin) =>
+  storageAppAdminGet.checkIfAccountIsAdmin(currentAccount.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, isAppAdmin) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-    storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountRightsOnService) =>
+    storageAppServicesRights.getRightsTowardsService(req.body.serviceUuid, currentAccount.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountRightsOnService) =>
     {
       if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
@@ -397,7 +400,7 @@ router.put('/get-file-logs', (req, res) =>
       {
         if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
-        return res.status(200).send({ fileData: fileData, fileLogs: fileLogs, accountRightsOnService: accountRightsOnService, accountData: req.app.locals.account, isAppAdmin: isAppAdmin });
+        return res.status(200).send({ fileData: fileData, fileLogs: fileLogs, accountRightsOnService: accountRightsOnService, accountData: currentAccount, isAppAdmin: isAppAdmin });
       });
     });
   });
@@ -407,17 +410,19 @@ router.put('/get-file-logs', (req, res) =>
 
 router.post('/post-file-comment', (req, res) =>
 {
+  const currentAccount = req.app.locals.account;
+
   if(req.body.fileUuid == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'fileUuid' });
 
   if(req.body.fileComment == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'fileComment' });
 
-  storageAppLogsServices.addCommentFileLog(req.body.fileComment, req.body.fileUuid, req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceUuid, isAppAdmin, accountRightsOnService) =>
+  storageAppLogsServices.addCommentFileLog(req.body.fileComment, req.body.fileUuid, currentAccount.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, serviceUuid, isAppAdmin, accountRightsOnService) =>
   {
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
     storageAppFilesGet.getFileLogs(req.body.fileUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, fileData, fileLogs) =>
     {
-      if(error == null) req.app.get('io').in(serviceUuid).emit('updateFileLogs', req.body.fileUuid, req.app.locals.account.uuid, isAppAdmin, accountRightsOnService, fileLogs, storageAppStrings);
+      if(error == null) req.app.get('io').in(serviceUuid).emit('updateFileLogs', req.body.fileUuid, currentAccount.uuid, isAppAdmin, accountRightsOnService, fileLogs, storageAppStrings);
     });
 
     res.status(200).send({ message: success[constants.FILE_COMMENT_SUCCESSFULLY_ADDED] });
@@ -519,6 +524,41 @@ router.get('/get-services', (req, res) =>
     }
 
     browseServices();
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/search-for-elements', (req, res) =>
+{
+  if(req.body.serviceUuid == undefined)   return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+  if(req.body.searchedValue == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'searchedValue' });
+
+  storageAppServicesGet.searchElementsFromService(req.body.searchedValue.trim().toLowerCase(), req.body.serviceUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, searchResults) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    return res.status(200).send(searchResults);
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/move-element', (req, res) =>
+{
+  const currentAccount = req.app.locals.account;
+
+  if(req.body.elementUuid == undefined)   return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'elementUuid' });
+  if(req.body.serviceUuid == undefined)   return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'serviceUuid' });
+  if(req.body.targetFolder == undefined)  return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'targetFolder' });
+
+  storageAppServicesMoveElement.moveElement(req.body.elementUuid, req.body.targetFolder.length === 0 ? null : req.body.targetFolder, req.body.serviceUuid, currentAccount.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, elementToMoveData, newPath) =>
+  {
+    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+
+    req.app.get('io').in('storageAppService').emit('serviceElementMoved', elementToMoveData, newPath, req.body.serviceUuid);
+
+    return res.status(200).send({ message: success[constants.ELEMENT_MOVED_SUCCESSFULLY] });
   });
 });
 

@@ -265,6 +265,64 @@ function getFilesFromService(serviceUuid, databaseConnection, globalParameters, 
 }
 
 /****************************************************************************************************/
+/* SEARCH ELEMENTS FROM SERVICE */
+/****************************************************************************************************/
+
+function searchElementsFromService(searchedValue, serviceUuid, databaseConnection, globalParameters, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.storage.label,
+    tableName: globalParameters.database.storage.tables.serviceElements,
+    args: [ '*' ],
+    where: { condition: 'AND', 0: { operator: '=', key: 'service_uuid', value: serviceUuid }, 1: { operator: '=', key: 'is_deleted', value: 0 } },
+    order: [ { column: 'name', asc: true } ]
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+
+    var foundElements = [];
+
+    if(result.length === 0) return callback(null, foundElements);
+
+    var index = 0;
+
+    const browseResults = () =>
+    {
+      if(result[index].name.toLowerCase().includes(searchedValue.toLowerCase()) == false && searchedValue.toLowerCase().includes(result[index].name.toLowerCase()) == false)
+      {
+        if(result[index += 1] == undefined) return callback(null, foundElements);
+
+        return browseResults();
+      }
+
+      if(result[index].parent_folder.length === 0)
+      {
+        foundElements.push({ uuid: result[index].uuid, name: result[index].name, parentFolder: null, isDirectory: result[index].is_directory });
+
+        if(result[index += 1] == undefined) return callback(null, foundElements);
+
+        return browseResults();
+      }
+
+      storageAppFilesGet.getElementPath(result[index].parent_folder, [], databaseConnection, globalParameters, (error, currentElementPath) =>
+      {
+        if(error != null) return callback(error);
+
+        foundElements.push({ uuid: result[index].uuid, name: result[index].name, parentFolder: { uuid: result[index].parent_folder, path: currentElementPath }, isDirectory: result[index].is_directory });
+
+        if(result[index += 1] == undefined) return callback(null, foundElements);
+
+        return browseResults();
+      });
+    }
+
+    browseResults();
+  });
+}
+
+/****************************************************************************************************/
 
 module.exports =
 {
@@ -272,6 +330,7 @@ module.exports =
   getServicesData: getServicesData,
   getAllExtensions: getAllExtensions,
   getFilesFromService: getFilesFromService,
+  searchElementsFromService: searchElementsFromService,
   checkIfServiceExistsFromName: checkIfServiceExistsFromName,
   checkIfServiceExistsFromUuid: checkIfServiceExistsFromUuid,
   getAuthorizedExtensionsForService: getAuthorizedExtensionsForService

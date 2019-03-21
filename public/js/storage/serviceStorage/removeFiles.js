@@ -82,6 +82,81 @@ function removeFilesOpenPrompt()
 
 /****************************************************************************************************/
 
+function removeSingleFile(fileUuid, fileName)
+{
+  if(document.getElementById('veilBackground')) return;
+
+  document.getElementById('mainContainer').style.filter ='blur(4px)';
+
+  const modalVeil             = document.createElement('div');
+  const modalBackground       = document.createElement('div');
+  const modalContainer        = document.createElement('div');
+  const modal                 = document.createElement('div');
+  const modalHeader           = document.createElement('div');
+  const modalHeaderTitle      = document.createElement('div');
+  const modalContent          = document.createElement('div');
+  const modalContentFiles     = document.createElement('div');
+  const modalContentButtons   = document.createElement('div');
+  const modalContentConfirm   = document.createElement('button');
+  const modalContentCancel    = document.createElement('button');
+
+  modalVeil             .setAttribute('id', 'modalVeil');
+  modalBackground       .setAttribute('id', 'modalBackground');
+  modalContainer        .setAttribute('id', 'modalContainer');
+
+  modal                 .setAttribute('class', 'baseModal');
+  modalHeader           .setAttribute('class', 'baseModalHeader');
+  modalHeaderTitle      .setAttribute('class', 'baseModalHeaderTitle');
+  modalContent          .setAttribute('class', 'baseModalContent');
+  modalContentButtons   .setAttribute('class', 'baseModalContentButtons');
+  modalContentConfirm   .setAttribute('class', 'baseModalContentButtonsConfirm');
+  modalContentCancel    .setAttribute('class', 'baseModalContentButtonsCancel');
+
+  modalHeaderTitle      .innerText = storageStrings.serviceSection.removeFilesPopup.title;
+  modalContentConfirm   .innerText = storageStrings.serviceSection.removeFilesPopup.confirm.replace('$[1]', '1');
+  modalContentCancel    .innerText = commonStrings.global.cancel;
+
+  modalContent          .innerHTML += `<div class="baseModalContentMessage">${storageStrings.serviceSection.removeFilesPopup.message}</div>`;
+
+  modalContent          .innerHTML += `<div class="serviceRemoveFilesPopupElement">${fileName}</div>`;
+
+  modalHeader           .appendChild(modalHeaderTitle);
+  modalContent          .appendChild(modalContentFiles);
+  modalContent          .appendChild(modalContentButtons);
+  modalContentButtons   .appendChild(modalContentConfirm);
+  modalContentButtons   .appendChild(modalContentCancel);
+  modal                 .appendChild(modalHeader);
+  modal                 .appendChild(modalContent);
+
+  modalContentConfirm   .addEventListener('click', () =>
+  {
+    event.stopPropagation();
+
+    modal.remove();
+
+    const filesToRemove = [];
+    filesToRemove.push({ fileUuid: fileUuid });
+
+    return removeFilesSendToServer(filesToRemove);
+  });
+
+  modalContentCancel    .addEventListener('click', () =>
+  {
+    event.stopPropagation();
+
+    modalVeil.remove();
+    modalBackground.remove();
+    document.getElementById('mainContainer').removeAttribute('style');
+  });
+
+  modalContainer        .appendChild(modal);
+  modalBackground       .appendChild(modalContainer);
+  document.body         .appendChild(modalBackground);
+  document.body         .appendChild(modalVeil);
+}
+
+/****************************************************************************************************/
+
 function removeFilesSendToServer(filesToRemove)
 {
   const serviceUuid = document.getElementById('serviceStorageContainer').getAttribute('name');
