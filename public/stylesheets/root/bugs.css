@@ -1,0 +1,83 @@
+/****************************************************************************************************/
+
+.bugsSectionBlock{ box-shadow:0 0.25rem 0.125rem 0 rgba(0,0,0,0.2); overflow:hidden; background-color:#FFFFFF; }
+
+/****************************************************************************************************/
+
+.bugsListContainer{ display:flex; flex-direction:row; justify-content:center; padding:40px 20px 40px 20px; }
+
+.bugsListContent{ max-width:600px; width:100%; box-sizing:border-box; }
+
+.bugsListHeader{ display:flex; flex-direction:row; justify-content:flex-end; margin-bottom:40px; }
+
+.bugsListHeader button{ padding:5px 15px 5px 15px; background-color:#FFFFFF; color:#759EB8; border:1px solid #759EB8; border-radius:4px; cursor:pointer; }
+
+.bugsListHeader button:hover{ color:#537C96; border:1px solid #537C96; }
+
+.bugsListEmpty{ padding:40px 20px 40px 20px; font-size:1.2em; text-align:center; display:none; }
+
+
+.bugsListElement{ box-shadow:0 0.125rem 0.125rem 0.125rem rgba(0,0,0,0.2); border-radius:4px; overflow:hidden; background-color:#FFFFFF; padding:20px; margin-bottom:20px; }
+
+.bugsListElementHeader{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+
+.bugsListElementHeaderStatus{ font-size:1.25em; margin-right:10px; }
+
+.bugsListElementHeaderStatus.pending{ color:#759EB8; }
+
+.bugsListElementHeaderStatus.resolved{ color:#7FBF7F; }
+
+.bugsListElementHeaderStatus.closed{ color:#D9534F; }
+
+.bugsListElementHeaderDate{ color:rgba(0,0,0,0.75); font-size:1em; font-style:italic; }
+
+.bugsListElementContent{ font-size:0.9em; margin:20px 0 20px 0; text-overflow:ellipsis; white-space:nowrap; word-break:break-word; overflow-wrap:break-word; overflow:hidden; }
+
+.bugsListElementFooter{ display:flex; flex-direction:row; justify-content:flex-end; }
+
+.bugsListElementFooter button{ padding:5px 15px 5px 15px; background-color:#FFFFFF; color:#759EB8; border:1px solid #759EB8; border-radius:4px; cursor:pointer; }
+
+.bugsListElementFooter button:hover{ color:#537C96; border:1px solid #537C96; }
+
+/****************************************************************************************************/
+
+.bugsCreateWrapper{ display:flex; flex-direction:row; justify-content:center; padding:40px 20px 40px 20px; }
+
+.bugsCreateForm{ max-width:600px; width:100%; box-sizing:border-box; }
+
+.bugsCreateFormTitle{ font-size:1em; font-weight:bold; margin-bottom:20px; }
+
+.bugsCreateFormHelp{ font-size:0.9em; font-style:italic; }
+
+.bugsCreateFormInput{ width:100%; box-sizing:border-box; border:1px solid rgba(0,0,0,0.25); border-radius:2px; resize:none; padding:5px; height:200px; margin:20px 0 20px 0; }
+
+.bugsCreateFormButtons{ display:flex; flex-direction:row; align-items:center; justify-content:flex-end; }
+
+.bugsCreateFormButtonsSubmit{ margin-left:20px; padding:5px 15px 5px 15px; background-color:#FFFFFF; color:#759EB8; border:1px solid #759EB8; border-radius:4px; cursor:pointer; }
+
+.bugsCreateFormButtonsSubmit:hover{ color:#537C96; border:1px solid #537C96; }
+
+.bugsCreateFormButtonsCancel{ margin-left:20px; padding:5px 15px 5px 15px; background-color:#FFFFFF; color:#D9534F; border:1px solid #D9534F; border-radius:4px; cursor:pointer; }
+
+.bugsCreateFormButtonsCancel:hover{ color:#B7312D; border:1px solid #B7312D; }
+
+/****************************************************************************************************/
+
+.bugsDetailWrapper{ display:flex; flex-direction:row; justify-content:center; padding:40px 20px 40px 20px; }
+
+.bugsDetailBlock{ max-width:600px; width:100%; box-sizing:border-box; }
+
+.bugsDetailBlockReturn{ display:flex; flex-direction:row; justify-content:flex-end; }
+
+.bugsDetailBlockReturn button{ padding:5px 15px 5px 15px; background-color:#FFFFFF; color:#D9534F; border:1px solid #D9534F; border-radius:4px; cursor:pointer; }
+
+.bugsDetailBlockReturn button:hover{ color:#B7312D; border:1px solid #B7312D; }
+
+
+.bugsDetailBlockInfo{ display:flex; flex-direction:row; align-items:flex-start; justify-content:space-between; margin:20px 0 20px 0; }
+
+.bugsDetailBlockInfoKey{ font-weight:bold; font-size:0.9em; margin-right:10px; }
+
+.bugsDetailBlockInfoValue{ font-size:0.9em; color:rgba(0,0,0,0.75); }
+
+/****************************************************************************************************/

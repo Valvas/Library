@@ -171,5 +171,8 @@
   "000-000-005": "Le dossier de destination est introuvable",
   "000-000-006": "Le dossier de destination ne peut pas être le même que le dossier à déplacer",
   "000-000-007": "Le dossier de destination ne peut pas être le dossier parent actuel",
-  "000-000-008": "Un élément du même nom existe déjà dans le dossier de destination"
+  "000-000-008": "Un élément du même nom existe déjà dans le dossier de destination",
+
+  "001-000-001": "Le contenu de ce rapport de bug est vide",
+  "001-000-002": "Rapport de bug introuvable"
 }

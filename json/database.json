@@ -93,6 +93,28 @@
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "unit_id": "BIGINT UNSIGNED NOT NULL",
       "account_uuid": "VARCHAR(255) NOT NULL"
+    },
+    "bug_report":
+    {
+      "uuid": "VARCHAR(255) NOT NULL",
+      "date": "BIGINT UNSIGNED NOT NULL",
+      "creator": "VARCHAR(255) NOT NULL",
+      "message": "TEXT NOT NULL",
+      "pending": "BOOLEAN NOT NULL",
+      "resolved": "BOOLEAN NOT NULL",
+      "closed": "BOOLEAN NOT NULL"
+    },
+    "bug_logs":
+    {
+      "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
+      "date": "BIGINT UNSIGNED NOT NULL",
+      "account": "VARCHAR(255) NOT NULL",
+      "bug": "VARCHAR(255) NOT NULL",
+      "comment": "BOOLEAN NOT NULL",
+      "pending": "BOOLEAN NOT NULL",
+      "resolved": "BOOLEAN NOT NULL",
+      "closed": "BOOLEAN NOT NULL",
+      "message": "TEXT NOT NULL"
     }
   },
 

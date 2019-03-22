@@ -156,7 +156,7 @@ function uploadFileCheckFormat(uploadParams)
 
   document.getElementById('currentModalFormLabel').innerText = currentFileName;
 
-  if(currentFileName.split('.').length < 2 || Object.values(uploadParams.authorizedExtensions).includes(currentFileName.split('.')[1].toLowerCase()) == false)
+  if(currentFileName.split('.').length < 2 || Object.values(uploadParams.authorizedExtensions).includes(currentFileName.split('.')[currentFileName.split('.').length - 1].toLowerCase()) == false)
   {
     document.getElementById('currentModalFormLabel').style.color = '#D9534F';
 

@@ -20,6 +20,7 @@ function loadLocation(sectionToLoad)
     case 'news':      loadArticlesSection();  break;
     case 'apps':      loadAppsSection();      break;
     case 'directory': loadDirectorySection(); break;
+    case 'bugs':      loadBugsSection();      break;
 
     case 'admin':     window.location = '/administration'; break;
 

@@ -52,7 +52,7 @@ function prepareUploadCheckAutorizedExtensions(fileName, parentFolderUuid, accou
 
     for(var element in authorizedExtensions)
     {
-      if(authorizedExtensions[element] === fileName.split('.')[fileName.split('.').length - 1]) extensionFound = true;
+      if(authorizedExtensions[element] === fileName.split('.')[fileName.split('.').length - 1].toLowerCase()) extensionFound = true;
     }
 
     if(extensionFound == false) return callback({ status: 406, code: constants.UNAUTHORIZED_FILE, detail: null });
@@ -189,7 +189,7 @@ function uploadFileCheckIfUserHasRightsToUpload(tmpFilePath, fileName, serviceUu
     if(error != null) return callback(error);
 
     if(serviceRights.uploadFiles == false && serviceRights.isAdmin == false && isGlobalAdmin == false) return callback({ status: 403, code: constants.UNAUTHORIZED_TO_ADD_FILES, detail: null });
-    
+
     return uploadFileCheckIfParentFolderExists(tmpFilePath, fileName, serviceUuid, parentFolderUuid, accountUuid, isGlobalAdmin, databaseConnection, globalParameters, serviceRights, callback);
   });
 }

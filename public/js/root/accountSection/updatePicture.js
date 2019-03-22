@@ -73,12 +73,12 @@ function updatePictureCheckFormat(event)
   const newPictureFile = event.target.elements['picture'].files[0];
   const newPictureName = event.target.elements['picture'].files[0].name;
 
-  if(newPictureName.split('.').length !== 2)
+  if(newPictureName.split('.').length < 2)
   {
     return displayError(commonStrings.root.account.accountUpdate.pictureFormatError, null, 'updatePictureError');
   }
 
-  if(newPictureName.split('.')[1].toLowerCase() !== 'png' && newPictureName.split('.')[1].toLowerCase() !== 'jpg' && newPictureName.split('.')[1].toLowerCase() !== 'jpeg')
+  if(newPictureName.split('.')[newPictureName.split('.').length - 1].toLowerCase() !== 'png' && newPictureName.split('.')[newPictureName.split('.').length - 1].toLowerCase() !== 'jpg' && newPictureName.split('.')[newPictureName.split('.').length - 1].toLowerCase() !== 'jpeg')
   {
     return displayError(commonStrings.root.account.accountUpdate.pictureFormatError, null, 'updatePictureError');
   }
@@ -87,7 +87,30 @@ function updatePictureCheckFormat(event)
 
   fileReader.addEventListener('load', (event) =>
   {
-    return updatePictureSendToServer(event.target.result);
+    const picture = new Image;
+
+    picture.onload = () =>
+    {
+      const newWidth = picture.width > picture.height ? picture.height : picture.width;
+      const newHeight = picture.height > picture.width ? picture.width : picture.height;
+
+      const canvas = document.createElement('canvas');
+      const canvasContext = canvas.getContext('2d');
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+
+      const bufferCanvas = document.createElement('canvas');
+      const bufferCanvasContext = bufferCanvas.getContext('2d');
+      bufferCanvas.width = picture.width;
+      bufferCanvas.height = picture.height;
+      bufferCanvasContext.drawImage(picture, 0, 0);
+
+      canvasContext.drawImage(bufferCanvas, ((picture.width - newWidth) / 2), ((picture.height - newHeight) / 2), newWidth, newHeight, 0, 0, newWidth, newHeight);
+
+      return updatePictureSendToServer(canvas.toDataURL());
+    }
+
+    picture.src = event.target.result;
   });
 
   fileReader.readAsDataURL(newPictureFile);

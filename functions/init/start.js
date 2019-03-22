@@ -56,11 +56,13 @@ module.exports.startApp = (app, callback) =>
   const homeViews                     = require(`${__root}/routes/root/views/home`);
   const appsViews                     = require(`${__root}/routes/root/views/apps`);
   const newsViews                     = require(`${__root}/routes/root/views/news`);
+  const bugsViews                     = require(`${__root}/routes/root/views/bugs`);
   const accountViews                  = require(`${__root}/routes/root/views/account`);
   const directoryViews                = require(`${__root}/routes/root/views/directory`);
 
   const rootQueriesNews               = require(`${__root}/routes/root/queries/news`);
   const rootQueriesApps               = require(`${__root}/routes/root/queries/apps`);
+  const rootQueriesBugs               = require(`${__root}/routes/root/queries/bugs`);
   const rootQueriesAccount            = require(`${__root}/routes/root/queries/account`);
   const rootQueriesDirectory          = require(`${__root}/routes/root/queries/directory`);
 
@@ -92,6 +94,7 @@ module.exports.startApp = (app, callback) =>
   app.use('/home', auth, homeViews);
   app.use('/apps', auth, appsViews);
   app.use('/news', auth, newsViews);
+  app.use('/bugs', auth, bugsViews);
   app.use('/account', auth, accountViews);
   app.use('/directory', auth, directoryViews);
 
@@ -99,6 +102,7 @@ module.exports.startApp = (app, callback) =>
 
   app.use('/queries/root/news', auth, rootQueriesNews);
   app.use('/queries/root/apps', auth, rootQueriesApps);
+  app.use('/queries/root/bugs', auth, rootQueriesBugs);
   app.use('/queries/root/account', auth, rootQueriesAccount);
   app.use('/queries/root/directory', auth, rootQueriesDirectory);
 

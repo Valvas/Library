@@ -64,6 +64,7 @@
     "news": "Articles",
     "account": "Mon Compte",
     "directory": "Annuaire",
+    "bugs": "Rapports De Bug",
     "admin": "Administration"
   },
 
@@ -447,6 +448,50 @@
         "firstnameLabel": "Prénom",
         "phoneLabel": "Téléphone",
         "unitLabel": "Groupe"
+      }
+    },
+
+    "bugs":
+    {
+      "createNewReportButton": "Signaler un bug",
+      "emptyListMessage": "Aucun rapport de bug pour le moment",
+
+      "detail":
+      {
+        "dateKey": "Date de création du rapport",
+        "creatorKey": "Personne ayant créé le rapport",
+        "unknownCreator": "Compte supprimé"
+      },
+
+      "logs":
+      {
+        "pendingMessage": "Statut du rapport défini comme \"En cours\"",
+        "resolvedMessage": "Statut du rapport défini comme \"Résolu\"",
+        "closedMessage": "Statut du rapport défini comme \"Fermé\""
+      },
+
+      "status":
+      {
+        "pending": "En cours",
+        "resolved": "Résolu",
+        "closed": "Fermé"
+      },
+
+      "displayReportDetail": "Afficher le détail",
+
+      "createForm":
+      {
+        "title": "Créer un rapport de bug",
+        "help": "Veuillez renseigner toutes les informations concernant le bug rencontré : où l'avez-vous constaté, quelles étapes doit-on suivre pour que celui-ci se produise, etc.",
+        "submit": "Envoyer ce rapport",
+        "loader": "Enregistrement du rapport en cours. Veuillez patienter...",
+
+        "confirmModal":
+        {
+          "title": "Confirmation",
+          "message": "Êtes-vous sûr(e) de vouloir créer ce rapport de bug ?",
+          "confirm": "Créer le rapport"
+        }
       }
     }
   },
