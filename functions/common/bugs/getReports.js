@@ -11,7 +11,7 @@ const databaseManager   = require(`${__root}/functions/database/MySQLv3`);
 /* GET REPORTS LIST */
 /****************************************************************************************************/
 
-function getReportsList(databaseConnection, globalParameters, callback)
+function getReportsList(accountUuid, databaseConnection, globalParameters, callback)
 {
   databaseManager.selectQuery(
   {
@@ -23,39 +23,35 @@ function getReportsList(databaseConnection, globalParameters, callback)
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback(null, []);
+    if(result.length === 0)
+    {
+      return callback(null, []);
+    }
 
-    var index = 0, reportsList = [];
+    let index = 0, reportsList = [];
 
     const browseReports = () =>
     {
-      commonFormatDate.getStringifyDateFromTimestamp(result[index].date, (error, stringifiedDate) =>
+      getReportsListFormatCurrentReport(result[index], accountUuid, databaseConnection, globalParameters, (error, currentReport) =>
       {
-        if(error != null) return callback(error);
-
-        commonAccountsGet.checkIfAccountExistsFromUuid(result[index].creator, databaseConnection, globalParameters, (error, accountExists, accountData) =>
+        if(error !== null)
         {
-          if(error != null) return callback(error);
+          return callback(error);
+        }
 
-          const currentReport =
-          {
-            uuid: result[index].uuid,
-            date: stringifiedDate,
-            creator: accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1)} ${accountData.lastname.charAt(0).toUpperCase()}${accountData.lastname.slice(1)}` : null,
-            message: result[index].message,
-            pending: result[index].pending === 1,
-            resolved: result[index].resolved === 1,
-            closed: result[index].closed === 1
-          }
+        reportsList.push(currentReport);
 
-          reportsList.push(currentReport);
+        if(result[index += 1] === undefined)
+        {
+          return callback(null, reportsList);
+        }
 
-          if(result[index += 1] == undefined) return callback(null, reportsList);
-
-          browseReports();
-        });
+        browseReports();
       });
     }
 
@@ -64,10 +60,80 @@ function getReportsList(databaseConnection, globalParameters, callback)
 }
 
 /****************************************************************************************************/
+
+function getReportsListFormatCurrentReport(currentReportData, accountUuid, databaseConnection, globalParameters, callback)
+{
+  commonFormatDate.getStringifyDateFromTimestamp(currentReportData.date, (error, stringifiedDate) =>
+  {
+    if(error !== null)
+    {
+      return callback(error);
+    }
+
+    commonAccountsGet.checkIfAccountExistsFromUuid(currentReportData.creator, databaseConnection, globalParameters, (error, accountExists, accountData) =>
+    {
+      if(error !== null)
+      {
+        return callback(error);
+      }
+
+      getReportsListCheckNotifications(currentReportData.uuid, accountUuid, databaseConnection, globalParameters, (error, unseenNotifications) =>
+      {
+        if(error !== null)
+        {
+          return callback(error);
+        }
+
+        const currentReport =
+        {
+          uuid: currentReportData.uuid,
+          date: stringifiedDate,
+          creator: accountExists ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1)} ${accountData.lastname.charAt(0).toUpperCase()}${accountData.lastname.slice(1)}` : null,
+          message: currentReportData.message,
+          pending: currentReportData.pending === 1,
+          resolved: currentReportData.resolved === 1,
+          closed: currentReportData.closed === 1,
+          unseenNotifications: unseenNotifications
+        }
+
+        return callback(null, currentReport);
+      });
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function getReportsListCheckNotifications(currentReportUuid, accountUuid, databaseConnection, globalParameters, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.bugNotifications,
+    args: [ '*' ],
+    where: { condition: 'AND', 0: { operator: '=', key: 'report', value: currentReportUuid }, 1: { operator: '=', key: 'account', value: accountUuid } }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
+
+    if(result.length === 0)
+    {
+      return callback(null, false);
+    }
+
+    return callback(null, result[0].amount > 0);
+  });
+}
+
+/****************************************************************************************************/
 /* GET REPORT DETAIL AND LOGS */
 /****************************************************************************************************/
 
-function getReportDetail(reportUuid, databaseConnection, globalParameters, callback)
+function getReportDetail(reportUuid, accountUuid, databaseConnection, globalParameters, callback)
 {
   databaseManager.selectQuery(
   {
@@ -82,7 +148,7 @@ function getReportDetail(reportUuid, databaseConnection, globalParameters, callb
 
     if(result.length === 0) return callback({ status: 404, code: constants.BUG_REPORT_NOT_FOUND, detail: null });
 
-    getReportDetailFormatData(result[0], databaseConnection, globalParameters, (error, reportDetail) =>
+    getReportDetailFormatData(result[0], accountUuid, databaseConnection, globalParameters, (error, reportDetail) =>
     {
       return callback(error, reportDetail);
     });
@@ -91,7 +157,7 @@ function getReportDetail(reportUuid, databaseConnection, globalParameters, callb
 
 /****************************************************************************************************/
 
-function getReportDetailFormatData(reportData, databaseConnection, globalParameters, callback)
+function getReportDetailFormatData(reportData, accountUuid, databaseConnection, globalParameters, callback)
 {
   commonFormatDate.getStringifyDateFromTimestamp(reportData.date, (error, stringifiedDate) =>
   {
@@ -113,8 +179,30 @@ function getReportDetailFormatData(reportData, databaseConnection, globalParamet
         logs: []
       }
 
-      return getReportDetailRetrieveLogs(currentReport, databaseConnection, globalParameters, callback);
+      return getReportDetailResetNotifications(currentReport, accountUuid, databaseConnection, globalParameters, callback);
     });
+  });
+}
+
+/****************************************************************************************************/
+
+function getReportDetailResetNotifications(currentReport, accountUuid, databaseConnection, globalParameters, callback)
+{
+  databaseManager.updateQuery(
+  {
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.bugNotifications,
+    args: { amount: 0 },
+    where: { condition: 'AND', 0: { operator: '=', key: 'report', value: currentReport.uuid }, 1: { operator: '=', key: 'account', value: accountUuid } }
+
+  }, databaseConnection, (error) =>
+  {
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
+
+    return getReportDetailRetrieveLogs(currentReport, databaseConnection, globalParameters, callback);
   });
 }
 
@@ -127,7 +215,7 @@ function getReportDetailRetrieveLogs(reportDetail, databaseConnection, globalPar
     databaseName: globalParameters.database.root.label,
     tableName: globalParameters.database.root.tables.bugLogs,
     args: [ '*' ],
-    where: { operator: '=', key: 'bug', value: reportDetail.uuid },
+    where: { operator: '=', key: 'report', value: reportDetail.uuid },
     order: [ { column: 'date', asc: false } ]
 
   }, databaseConnection, (error, result) =>
@@ -193,11 +281,36 @@ function getReportDetailFormatLog(currentLog, databaseConnection, globalParamete
 }
 
 /****************************************************************************************************/
+/* CHECK IF A REPORT EXISTS */
+/****************************************************************************************************/
+
+function getReportExists(reportUuid, databaseConnection, globalParameters, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.bugReports,
+    args: [ 'uuid' ],
+    where: { operator: '=', key: 'uuid', value: reportUuid }
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
+
+    return callback(null, result.length > 0);
+  });
+}
+
+/****************************************************************************************************/
 
 module.exports =
 {
   getReportsList: getReportsList,
-  getReportDetail: getReportDetail
+  getReportDetail: getReportDetail,
+  getReportExists: getReportExists
 }
 
 /****************************************************************************************************/

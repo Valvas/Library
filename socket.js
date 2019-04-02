@@ -27,6 +27,8 @@ module.exports = (io, app, callback) =>
     socket.on('storageAppServiceJoin', () => { socket.join('storageAppService') });
     socket.on('storageAppServiceLeave', () => { socket.leave('storageAppService') });
 
+    socket.on('intranetBugsJoin', () => { socket.join('intranetBugs') });
+
     /****************************************************************************************************/
     /* Events Rooms On Intranet Home */
     /****************************************************************************************************/

@@ -30,6 +30,8 @@ function loadAppsSection()
 
     for(var x = 0; x < result.accountApps.length; x++)
     {
+      if(result.accountApps[x].name === 'sick') continue;
+      
       var currentApp        = document.createElement('div');
       var currentAppAside   = document.createElement('div');
       var currentAppData    = document.createElement('div');

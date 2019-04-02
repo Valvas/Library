@@ -153,7 +153,7 @@ function retrieveMessengerData(callback)
 {
   $.ajax(
   {
-    method: 'GET', dataType: 'json', data: {  }, timeout: 5000, url: '/api/messenger/get-messenger-data',
+    method: 'GET', dataType: 'json', timeout: 5000, url: '/api/messenger/get-messenger-data',
 
     error: (xhr, textStatus, errorThrown) =>
     {

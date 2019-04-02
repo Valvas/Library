@@ -54,7 +54,8 @@
 
   "apps":
   {
-    "storage": "Partage Fichiers PEI"
+    "storage": "Partage Fichiers PEI",
+    "sick": "Gestion des AT"
   },
 
   "locations":
@@ -318,7 +319,8 @@
 
       "descriptions":
       {
-        "storage": "Cette application permet de partager des fichiers entre utilisateurs et par service"
+        "storage": "Cette application permet de partager des fichiers entre utilisateurs et par service",
+        "sick": "Cette application permet d'avoir un suivi des AT des salariés de l'entreprise"
       }
     },
 
@@ -455,12 +457,39 @@
     {
       "createNewReportButton": "Signaler un bug",
       "emptyListMessage": "Aucun rapport de bug pour le moment",
+      "unseenNotifications": "Mis à jour",
 
       "detail":
       {
+        "status":
+        {
+          "closed": "Fermé",
+          "resolved": "Résolu",
+          "pending": "En cours"
+        },
+        "updateStatus": "Changer le statut",
         "dateKey": "Date de création du rapport",
         "creatorKey": "Personne ayant créé le rapport",
-        "unknownCreator": "Compte supprimé"
+        "unknownCreator": "Compte supprimé",
+        "logsSubmitButton": "Publier ce message",
+        "logsInputPlaceholder": "Entrez ici une précision à apporter au rapport",
+        "emptyLogs": "Rien à afficher",
+        "commentConfirmationTitle": "Poster un commentaire",
+        "commentConfirmationMessage": "Êtes-vous sûr(e) de vouloir poster ce commentaire ?",
+        "commentConfirmationSubmit": "Publier ce message",
+        "commentConfirmationLoader": "Enregistrement du commentaire en cours. Veuillez patienter...",
+        "updateStatusPrompt":
+        {
+          "title": "Changement de statut",
+          "message": "Veuillez choisir le nouveau statut du rapport",
+          "confirm": "Appliquer ce statut"
+        },
+        "logs":
+        {
+          "closed": "Rapport passé au statut $[1]Fermé$[2]",
+          "resolved": "Rapport passé au statut $[1]Résolu$[2]",
+          "pending": "Rapport passé au statut $[1]En cours$[2]"
+        }
       },
 
       "logs":

@@ -1,0 +1,11 @@
+/****************************************************************************************************/
+
+.asideMenu{ list-style:none; margin:0; font-family:roboto-light; padding:20px 0 20px 0; }
+
+.asideMenu li{ padding:10px 20px 10px 20px; cursor:pointer; user-select:none; font-size:1em; }
+
+.asideMenu li.selected{ padding:10px 20px 10px 20px; user-select:none; font-size:1em; color:#759EB8; }
+
+.asideMenu li:hover{ color:#759EB8; background-color:rgba(0,0,0,0.06); }
+
+/****************************************************************************************************/

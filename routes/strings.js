@@ -1,6 +1,7 @@
 'use strict'
 
 const express                 = require('express');
+const sickStrings             = require(`${__root}/json/strings/sick`);
 const commonStrings           = require(`${__root}/json/strings/common`);
 const storageStrings          = require(`${__root}/json/strings/storage`);
 const administrationStrings   = require(`${__root}/json/strings/administration`);
@@ -26,6 +27,13 @@ router.get('/get-common', (req, res) =>
 router.get('/get-administration', (req, res) =>
 {
   res.status(200).send({ strings: administrationStrings });
+});
+
+/****************************************************************************************************/
+
+router.get('/get-sick', (req, res) =>
+{
+  res.status(200).send({ common: commonStrings, app: sickStrings });
 });
 
 /****************************************************************************************************/

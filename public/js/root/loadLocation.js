@@ -24,7 +24,7 @@ function loadLocation(sectionToLoad)
 
     case 'admin':     window.location = '/administration'; break;
 
-    //Put a default with an error showing on the dom
+    default:          loadHomeSection();      break;
   }
 }
 

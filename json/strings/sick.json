@@ -1,0 +1,17 @@
+{
+  "appName": "Gestion des $[1]AT$[2]",
+
+  "asideMenu":
+  {
+    "home": "Accueil",
+    "at": "AT",
+    "tas": "TAS",
+    "admin": "Administration",
+    "exit": "Quitter"
+  },
+
+  "home":
+  {
+    "locationLabel": "Accueil"
+  }
+}

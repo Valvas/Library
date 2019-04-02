@@ -73,7 +73,7 @@
 
 .serviceFolderLarge .icon{ text-align:center; font-size:4em; color:#759EB8; }
 
-.serviceFolderLarge .name{ font-size:0.8em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+.serviceFolderLarge .name{ font-size:0.8em; text-align:center; word-break:break-word; overflow-wrap:break-word; hyphens:auto; -ms-hyphens:auto; }
 
 
 .serviceFolderSmall{ position:relative; width:75px; box-sizing:border-box; margin:5px; padding:5px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
@@ -82,7 +82,7 @@
 
 .serviceFolderSmall .icon{ text-align:center; font-size:3em; color:#759EB8; }
 
-.serviceFolderSmall .name{ font-size:0.7em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+.serviceFolderSmall .name{ font-size:0.7em; text-align:center; word-break:break-word; overflow-wrap:break-word; hyphens:auto; -ms-hyphens:auto; }
 
 
 .serviceFolderList{ position:relative; width:100%; display:flex; flex-direction:row; align-items:center; box-sizing:border-box; margin:5px; padding:5px 20px 5px 20px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
@@ -91,7 +91,7 @@
 
 .serviceFolderList .icon{ text-align:center; font-size:2em; color:#759EB8; margin-right:10px; }
 
-.serviceFolderList .name{ font-size:0.9em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+.serviceFolderList .name{ font-size:0.9em; text-align:center; word-break:break-word; overflow-wrap:break-word;}
 
 
 .serviceFileLarge{ position:relative; width:100px; box-sizing:border-box; margin:5px; padding:5px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
@@ -102,7 +102,7 @@
 
 .serviceFileLarge .icon{ text-align:center; font-size:4em; }
 
-.serviceFileLarge .name{ font-size:0.8em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+.serviceFileLarge .name{ font-size:0.8em; text-align:center; word-break:break-word; overflow-wrap:break-word; hyphens:auto; -ms-hyphens:auto; }
 
 
 .serviceFileSmall{ position:relative; width:75px; box-sizing:border-box; margin:5px; padding:5px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }
@@ -113,7 +113,7 @@
 
 .serviceFileSmall .icon{ text-align:center; font-size:3em; }
 
-.serviceFileSmall .name{ font-size:0.7em; text-align:center; word-break:break-word; overflow-wrap:break-word; }
+.serviceFileSmall .name{ font-size:0.7em; text-align:center; word-break:break-word; overflow-wrap:break-word; hyphens:auto; -ms-hyphens:auto; }
 
 
 .serviceFileList{ width:100%; display:flex; flex-direction:row; align-items:center; box-sizing:border-box; margin:5px; padding:5px 20px 5px 20px; user-select:none; -ms-user-select:none; cursor:pointer; border-radius:4px; }

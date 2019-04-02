@@ -25,6 +25,6 @@
 
 .appsSectionListElementAccessTrue:hover{ background-color:#537C96; }
 
-.appsSectionListElementAccessFalse{ font-size:0.8em; font-weight:bold; color:#D9534F; }
+.appsSectionListElementAccessFalse{ font-size:0.8em; font-weight:bold; color:#D9534F; text-align:right; }
 
 /****************************************************************************************************/

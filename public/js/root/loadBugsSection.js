@@ -95,9 +95,13 @@ function loadBugsSectionList(bugsContainer, callback)
 
     const container             = document.createElement('div');
     const containerContent      = document.createElement('div');
+    const containerContentList  = document.createElement('div');
     const contentHeader         = document.createElement('div');
     const contentHeaderButton   = document.createElement('button');
     const contentEmpty          = document.createElement('div');
+
+    contentEmpty          .setAttribute('id', 'bugsListEmpty');
+    containerContentList  .setAttribute('id', 'bugsList');
 
     container             .setAttribute('class', 'bugsListContainer');
     containerContent      .setAttribute('class', 'bugsListContent');
@@ -119,27 +123,48 @@ function loadBugsSectionList(bugsContainer, callback)
 
     containerContent      .appendChild(contentHeader);
     containerContent      .appendChild(contentEmpty);
+    containerContent      .appendChild(containerContentList);
 
     for(var x = 0; x < reportsList.length; x++)
     {
       const currentReportUuid = reportsList[x].uuid;
 
+      const reportStatusClass = reportsList[x].pending
+      ? 'pending'
+      : reportsList[x].resolved
+        ? 'resolved'
+        : 'closed';
+
+      const reportStatusMessage = reportsList[x].pending
+      ? commonStrings.root.bugs.status.pending
+      : reportsList[x].resolved
+        ? commonStrings.root.bugs.status.resolved
+        : commonStrings.root.bugs.status.closed;
+
       const currentReport         = document.createElement('div');
       const currentReportHeader   = document.createElement('div');
+      const currentReportStatus   = document.createElement('div');
       const currentReportContent  = document.createElement('div');
       const currentReportFooter   = document.createElement('div');
       const currentReportAccess   = document.createElement('button');
+
+      currentReport               .setAttribute('name', reportsList[x].uuid);
 
       currentReport               .setAttribute('class', 'bugsListElement');
       currentReportHeader         .setAttribute('class', 'bugsListElementHeader');
       currentReportContent        .setAttribute('class', 'bugsListElementContent');
       currentReportFooter         .setAttribute('class', 'bugsListElementFooter');
 
-      currentReportHeader         .innerHTML += reportsList[x].pending
-      ? `<div class="bugsListElementHeaderStatus pending">${commonStrings.root.bugs.status.pending}</div>`
-      : reportsList[x].resolved
-        ? `<div class="bugsListElementHeaderStatus resolved">${commonStrings.root.bugs.status.resolved}</div>`
-        : `<div class="bugsListElementHeaderStatus closed">${commonStrings.root.bugs.status.closed}</div>`;
+      currentReportStatus         .setAttribute('class', `bugsListElementHeaderStatus ${reportStatusClass}`);
+
+      currentReportStatus         .innerText = reportStatusMessage;
+
+      if(reportsList[x].unseenNotifications === true)
+      {
+        currentReportStatus.innerHTML += `<span>[${commonStrings.root.bugs.unseenNotifications}]</span>`;
+      }
+
+      currentReportHeader         .appendChild(currentReportStatus);
 
       currentReportHeader         .innerHTML += `<div class="bugsListElementHeaderDate">${reportsList[x].date}</div>`;
 
@@ -160,7 +185,7 @@ function loadBugsSectionList(bugsContainer, callback)
       currentReport               .appendChild(currentReportContent);
       currentReport               .appendChild(currentReportFooter);
 
-      containerContent            .appendChild(currentReport);
+      containerContentList         .appendChild(currentReport);
     }
 
     container             .appendChild(containerContent);
@@ -242,8 +267,6 @@ function loadBugsSectionDetail(reportUuid, bugsContainer, callback)
 
   }).done((reportData) =>
   {
-    console.log(reportData);
-
     const wrapper             = document.createElement('div');
     const detail              = document.createElement('div');
     const detailReturn        = document.createElement('div');
@@ -255,15 +278,35 @@ function loadBugsSectionDetail(reportUuid, bugsContainer, callback)
     const detailCreator       = document.createElement('div');
     const detailContent       = document.createElement('div');
     const detailLogs          = document.createElement('div');
+    const detailLogsInput     = document.createElement('textarea');
     const detailLogsComment   = document.createElement('button');
     const detailLogsEmpty     = document.createElement('div');
     const detailLogsList      = document.createElement('div');
 
+    const currentReportStatus = reportData.closed
+    ? 'closed'
+    : reportData.resolved
+      ? 'resolved'
+      : 'pending';
+
     wrapper             .setAttribute('class', 'bugsDetailWrapper');
     detail              .setAttribute('class', 'bugsDetailBlock');
     detailReturn        .setAttribute('class', 'bugsDetailBlockReturn');
+    detailStatus        .setAttribute('class', 'bugsDetailStatus');
+    detailStatusValue   .setAttribute('class', `bugsDetailStatusValue ${currentReportStatus}`);
     detailDate          .setAttribute('class', 'bugsDetailBlockInfo');
     detailCreator       .setAttribute('class', 'bugsDetailBlockInfo');
+    detailContent       .setAttribute('class', 'bugsDetailContent');
+    detailLogs          .setAttribute('class', 'bugDetailLogs');
+    detailLogsInput     .setAttribute('class', 'bugDetailLogsInput');
+    detailLogsComment   .setAttribute('class', 'bugDetailLogsSubmit');
+    detailLogsEmpty     .setAttribute('class', 'bugDetailLogsEmpty');
+    detailLogsList      .setAttribute('class', 'bugDetailLogsList');
+
+    detail              .setAttribute('id', 'reportUuid');
+    detailLogsInput     .setAttribute('id', 'reportComment');
+
+    detail              .setAttribute('name', reportData.uuid)
 
     detailDate          .innerHTML += `<div class="bugsDetailBlockInfoKey">${commonStrings.root.bugs.detail.dateKey} :</div>`;
     detailDate          .innerHTML += `<div class="bugsDetailBlockInfoValue">${reportData.date}</div>`;
@@ -272,6 +315,21 @@ function loadBugsSectionDetail(reportUuid, bugsContainer, callback)
     detailCreator       .innerHTML += `<div class="bugsDetailBlockInfoValue">${reportData.creator == null ? commonStrings.root.bugs.detail.unknownCreator : reportData.creator}</div>`;
 
     detailReturnButton  .innerText = commonStrings.global.back;
+    detailStatusValue   .innerText = commonStrings.root.bugs.detail.status[currentReportStatus];
+    detailStatusUpdate  .innerText = commonStrings.root.bugs.detail.updateStatus;
+    detailLogsComment   .innerText = commonStrings.root.bugs.detail.logsSubmitButton;
+
+    detailLogsInput     .setAttribute('placeholder', commonStrings.root.bugs.detail.logsInputPlaceholder);
+
+    detailContent       .innerText = reportData.message;
+    detailLogsEmpty     .innerText = commonStrings.root.bugs.detail.emptyLogs;
+
+    if(reportData.logs.length === 0)
+    {
+      detailLogsEmpty.style.display = 'block';
+    }
+
+    detailStatusUpdate  .addEventListener('click', updateReportStatusOpenPrompt);
 
     detailReturnButton  .addEventListener('click', () =>
     {
@@ -279,9 +337,48 @@ function loadBugsSectionDetail(reportUuid, bugsContainer, callback)
       loadLocation('bugs');
     });
 
+    detailLogsComment   .addEventListener('click', postReportCommentOpenPrompt);
+
     detailReturn        .appendChild(detailReturnButton);
 
+    detailStatus        .appendChild(detailStatusValue);
+
+    if(accountData.isAdmin)
+    {
+      detailStatus      .appendChild(detailStatusUpdate);
+    }
+
+    for(let x = 0; x < reportData.logs.length; x++)
+    {
+      const currentLogData = reportData.logs[x];
+
+      const logType = currentLogData.pending
+      ? 'pending'
+      : currentLogData.resolved
+        ? 'resolved'
+        : currentLogData.closed
+          ? 'closed'
+          : 'comment';
+
+      const currentLog  = document.createElement('div');
+
+      currentLog        .setAttribute('class', `bugDetailLogsListElement ${logType}`);
+
+      currentLog        .innerHTML += `<div class="bugDetailLogsListElementHeader">${currentLogData.date} - ${currentLogData.creator}</div>`;
+
+      currentLog        .innerHTML += currentLogData.pending
+      ? `<div class="bugDetailLogsListElementMessage">${commonStrings.root.bugs.detail.logs.pending.replace('$[1]', '<span class="pending">').replace('$[2]', '</span>')}</div>`
+      : currentLogData.resolved
+        ? `<div class="bugDetailLogsListElementMessage">${commonStrings.root.bugs.detail.logs.resolved.replace('$[1]', '<span class="resolved">').replace('$[2]', '</span>')}</div>`
+        : currentLogData.closed
+          ? `<div class="bugDetailLogsListElementMessage">${commonStrings.root.bugs.detail.logs.closed.replace('$[1]', '<span class="closed">').replace('$[2]', '</span>')}</div>`
+          : `<div class="bugDetailLogsListElementComment">${currentLogData.message}</div>`;
+
+      detailLogsList    .appendChild(currentLog);
+    }
+
     detailLogs          .appendChild(detailLogsComment);
+    detailLogs          .appendChild(detailLogsInput);
     detailLogs          .appendChild(detailLogsEmpty);
     detailLogs          .appendChild(detailLogsList);
 

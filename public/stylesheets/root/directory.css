@@ -28,7 +28,7 @@
 
 .directorySectionList{ margin:20px 20px 40px 20px; display:flex; flex-direction:row; align-items:stretch; flex-wrap:wrap; justify-content:space-between; }
 
-.directorySectionAccount{ position:relative; margin-bottom:20px; border:1px solid rgba(0,0,0,0.25); width:180px; box-sizing:border-box; border-radius:2px; background-color:#FFFFFF; }
+.directorySectionAccount{ position:relative; margin-bottom:20px; border:1px solid rgba(0,0,0,0.25); width:180px; box-sizing:border-box; border-radius:2px; background-color:#FFFFFF; display:flex; flex-direction:column; }
 
 .directorySectionAccountHeader{ position:absolute; top:0; right:0; left:0; height:80px; background-color:#171219; }
 
@@ -38,9 +38,9 @@
 
 .directorySectionAccountPictureCircle img{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
 
-.directorySectionAccountContent{ display:flex; flex-direction:column; justify-content:space-evenly; }
+.directorySectionAccountContent{ display:flex; flex-direction:column; justify-content:space-evenly; flex-grow:2; }
 
-.directorySectionAccountContentIdentity{ padding:0 10px 0 10px; }
+.directorySectionAccountContentIdentity{ padding:0 10px 0 10px; flex-grow:2; }
 
 .directorySectionAccountContentIdentityName{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:1.1em; text-align:center; }
 

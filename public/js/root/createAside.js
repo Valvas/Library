@@ -33,7 +33,7 @@ function createAsideMenu(callback)
 
     if(location === 'admin' && accountData.isAdmin == false) continue;
 
-    var asideMenuElement  = document.createElement('li');
+    const asideMenuElement  = document.createElement('li');
 
     currentLocation === location
     ? asideMenuElement    .setAttribute('class', 'asideMenuElementSelected')

@@ -21,13 +21,15 @@
 
 .bugsListElementHeader{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
 
-.bugsListElementHeaderStatus{ font-size:1.25em; margin-right:10px; }
+.bugsListElementHeaderStatus{ text-transform:uppercase; font-size:1.25em; margin-right:10px; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
 
 .bugsListElementHeaderStatus.pending{ color:#759EB8; }
 
 .bugsListElementHeaderStatus.resolved{ color:#7FBF7F; }
 
 .bugsListElementHeaderStatus.closed{ color:#D9534F; }
+
+.bugsListElementHeaderStatus span{ margin-left:5px; color:#D9534F; font-size:0.6em; }
 
 .bugsListElementHeaderDate{ color:rgba(0,0,0,0.75); font-size:1em; font-style:italic; }
 
@@ -74,10 +76,63 @@
 .bugsDetailBlockReturn button:hover{ color:#B7312D; border:1px solid #B7312D; }
 
 
+.bugsDetailStatus{ margin:40px 0 40px 0; display:flex; flex-direction:row; align-items:flex-end; justify-content:space-between; }
+
+.bugsDetailStatusValue{ font-size:1.25em; margin-right:10px; }
+
+.bugsDetailStatusValue.pending{ color:#759EB8; }
+
+.bugsDetailStatusValue.closed{ color:#D9534F; }
+
+.bugsDetailStatusValue.resolved{ color:#7FBF7F; }
+
+.bugsDetailStatus button{ padding:5px 15px 5px 15px; background-color:#FFFFFF; color:#759EB8; border:1px solid #759EB8; border-radius:4px; cursor:pointer; }
+
+.bugsDetailStatus button:hover{ color:#537B96; border:1px solid #537B96; }
+
+.bugsDetailStatusList{ width:100%; border:1px solid rgba(0,0,0,0.25); border-radius:2px; padding:4px; }
+
+
 .bugsDetailBlockInfo{ display:flex; flex-direction:row; align-items:flex-start; justify-content:space-between; margin:20px 0 20px 0; }
 
 .bugsDetailBlockInfoKey{ font-weight:bold; font-size:0.9em; margin-right:10px; }
 
 .bugsDetailBlockInfoValue{ font-size:0.9em; color:rgba(0,0,0,0.75); }
+
+
+.bugsDetailContent{ background-color:rgba(0,0,0,0.05); border-radius:2px; padding:20px; margin:40px 0 40px 0; font-size:0.9em; }
+
+
+.bugDetailLogs{ margin:20px 0 20px 0; }
+
+.bugDetailLogsSubmit{ padding:5px 15px 5px 15px; margin-bottom:10px; background-color:#FFFFFF; color:#759EB8; border:1px solid #759EB8; border-radius:4px; cursor:pointer; }
+
+.bugDetailLogsSubmit:hover{ color:#537B96; border:1px solid #537B96; }
+
+.bugDetailLogsInput{ width:100%; height:80px; overflow-y:auto; border:1px solid rgba(0,0,0,0.25); border-radius:2px; padding:10px; box-sizing:border-box; resize:none; }
+
+.bugDetailLogsEmpty{ margin-top:20px; text-align:center; font-size:1em; color:rgba(0,0,0,0.75); display:none; }
+
+.bugDetailLogsListElement{ margin:10px 0 10px 0; padding:10px 20px 10px 20px; background-color:rgba(0,0,0,0.05); overflow:hidden; border-radius:2px; }
+
+.bugDetailLogsListElement.pending{ border-left:4px solid #759EB8; }
+
+.bugDetailLogsListElement.closed{ border-left:4px solid #D9534F; }
+
+.bugDetailLogsListElement.resolved{ border-left:4px solid #7FBF7F; }
+
+.bugDetailLogsListElement.comment{ border-left:4px solid #EED28E; }
+
+.bugDetailLogsListElementHeader{ font-size:0.9em; font-style:italic; color:rgba(0,0,0,0.75); }
+
+.bugDetailLogsListElementMessage{ font-size:0.9em; margin-top:10px; }
+
+.bugDetailLogsListElementMessage .pending{ color:#759EB8; font-weight:bold; }
+
+.bugDetailLogsListElementMessage .closed{ color:#D9534F; font-weight:bold; }
+
+.bugDetailLogsListElementMessage .resolved{ color:#7FBF7F; font-weight:bold; }
+
+.bugDetailLogsListElementComment{ font-size:0.9em; margin-top:10px; font-style:italic; color:rgba(0,0,0,0.75); }
 
 /****************************************************************************************************/

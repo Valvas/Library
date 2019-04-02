@@ -178,6 +178,7 @@ const MOVE_ELEMENT_FUNCTION_DUPLICATE_NAME                                      
 
 const BUG_REPORT_EMPTY_MESSAGE                                                    = '001-000-001';
 const BUG_REPORT_NOT_FOUND                                                        = '001-000-002';
+const BUG_REPORT_EMPTY_COMMENT                                                    = '001-000-003';
 
 /******************************************************************************************
 SUCCESS
@@ -240,6 +241,8 @@ const MESSENGER_MESSAGE_SENT_SUCCESSFULLY                                       
 const ARTICLE_CREATED_SUCCESSFULLY                                                = 20055;
 const ELEMENT_MOVED_SUCCESSFULLY                                                  = 20056;
 const BUG_REPORT_CREATED_SUCCESSFULLY                                             = 20057;
+const BUG_REPORT_COMMENT_POSTED_SUCCESSFULLY                                      = 20058;
+const BUG_REPORT_STATUS_UPDATED_SUCCESSFULLY                                      = 20059;
 
 /******************************************************************************************
 EXPORTS
@@ -468,6 +471,8 @@ module.exports =
   ARTICLE_CREATED_SUCCESSFULLY: ARTICLE_CREATED_SUCCESSFULLY,
   ELEMENT_MOVED_SUCCESSFULLY: ELEMENT_MOVED_SUCCESSFULLY,
   BUG_REPORT_CREATED_SUCCESSFULLY: BUG_REPORT_CREATED_SUCCESSFULLY,
+  BUG_REPORT_COMMENT_POSTED_SUCCESSFULLY: BUG_REPORT_COMMENT_POSTED_SUCCESSFULLY,
+  BUG_REPORT_STATUS_UPDATED_SUCCESSFULLY: BUG_REPORT_STATUS_UPDATED_SUCCESSFULLY,
 
   MOVE_ELEMENT_FUNCTION_ELEMENT_REMOVED: MOVE_ELEMENT_FUNCTION_ELEMENT_REMOVED,
   MOVE_ELEMENT_FUNCTION_TARGET_FOLDER_REMOVED: MOVE_ELEMENT_FUNCTION_TARGET_FOLDER_REMOVED,
@@ -479,5 +484,6 @@ module.exports =
   MOVE_ELEMENT_FUNCTION_DUPLICATE_NAME: MOVE_ELEMENT_FUNCTION_DUPLICATE_NAME,
 
   BUG_REPORT_EMPTY_MESSAGE: BUG_REPORT_EMPTY_MESSAGE,
-  BUG_REPORT_NOT_FOUND: BUG_REPORT_NOT_FOUND
+  BUG_REPORT_NOT_FOUND: BUG_REPORT_NOT_FOUND,
+  BUG_REPORT_EMPTY_COMMENT: BUG_REPORT_EMPTY_COMMENT
 }

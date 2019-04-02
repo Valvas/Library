@@ -174,5 +174,6 @@
   "000-000-008": "Un élément du même nom existe déjà dans le dossier de destination",
 
   "001-000-001": "Le contenu de ce rapport de bug est vide",
-  "001-000-002": "Rapport de bug introuvable"
+  "001-000-002": "Rapport de bug introuvable",
+  "001-000-003": "Le commentaire posté sur ce rapport ne peut pas être vide"
 }

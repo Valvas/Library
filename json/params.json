@@ -23,7 +23,8 @@
         "unitsMembers": "units_members",
         "newsComments": "news_comments",
         "bugReports": "bug_report",
-        "bugLogs": "bug_logs"
+        "bugLogs": "bug_logs",
+        "bugNotifications": "bug_notifications"
       }
     },
     "storage":{
@@ -56,6 +57,14 @@
         "message": "message",
         "conversation": "conversation",
         "counter": "counter"
+      }
+    },
+    "sick":
+    {
+      "label": "sick",
+      "tables":
+      {
+        "accountsList":"accounts_list"
       }
     }
   },
@@ -96,7 +105,7 @@
       "transporter":true
     }
   },
-  "ready":true,
+  "ready":false,
   "salt":"$2a$10$Wx.tVVK0PQ.zG8RRmIQo3e",
   "tokenSecretKey":"qgdsq65qsegf6qezgr46",
   "storage":{
