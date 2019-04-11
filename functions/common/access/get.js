@@ -45,7 +45,7 @@ function checkAccessToProvidedApp(apps, index, appsAccess, accountUuid, database
     result.length === 0
     ? appsAccess.push({ name: apps[index].name, hasAccess: false })
     : appsAccess.push({ name: apps[index].name, hasAccess: true });
-    
+
     if(apps[index += 1] == undefined) return callback(null, appsAccess);
 
     return checkAccessToProvidedApp(apps, index, appsAccess, accountUuid, databaseConnection, globalParameters, callback);

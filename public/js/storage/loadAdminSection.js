@@ -1,12 +1,12 @@
 /****************************************************************************************************/
 
-function loadHomeSection()
+function loadAdminSection()
 {
   displayLocationLoader();
 
-  history.pushState(null, null, '/sick/home');
+  urlParameters = [];
 
-  document.getElementById('locationContainer').innerHTML = `<div class="locationContentTitle">${appStrings.home.locationLabel}</div>`;
+  history.pushState(null, null, '/storage/admin');
 }
 
 /****************************************************************************************************/

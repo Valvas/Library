@@ -1,13 +1,15 @@
 /****************************************************************************************************/
 
-var pageTitle = document.title;
-var commonStrings = null;
-var accountData = null;
-var articlesData = null;
-var intranetRights = null;
-var messengerData = null;
-var currentLocation = window.location.href.split('/')[3];
-var urlParameters = window.location.href.split('/').slice(4);
+'use strict'
+
+let pageTitle = document.title;
+let commonStrings = null;
+let accountData = null;
+let articlesData = null;
+let intranetRights = null;
+let messengerData = null;
+let currentLocation = window.location.href.split('/')[3];
+let urlParameters = window.location.href.split('/').slice(4);
 
 urlParameters = urlParameters.filter(param => param.length > 0);
 
@@ -17,9 +19,12 @@ initializeStart();
 
 function initializeStart()
 {
-  if(document.getElementById('initializationError')) document.getElementById('initializationError').remove();
+  if(document.getElementById('initializationError'))
+  {
+    document.getElementById('initializationError').remove();
+  }
 
-  var loader  = document.createElement('div');
+  const loader  = document.createElement('div');
 
   loader      .setAttribute('id', 'initializationLoader');
   loader      .setAttribute('class', 'loaderVerticalContainer');
@@ -29,19 +34,25 @@ function initializeStart()
 
   initializeRetrieveStrings((error) =>
   {
-    if(error) return displayError(error.message, error.detail, 'initializationError');
-
-    createHeader(() =>
+    if(error !== null)
     {
-      var locationContent = document.createElement('div');
+      return displayError(error.message, error.detail, 'initializationError');
+    }
 
-      locationContent.setAttribute('id', 'locationContent');
-
-      document.getElementById('contentContainer').appendChild(locationContent);
-
+    $(loader).fadeOut(500, () =>
+    {
       loader.remove();
 
-      loadLocation(currentLocation);
+      createHeader(() =>
+      {
+        const locationContent = document.createElement('div');
+
+        locationContent.setAttribute('id', 'locationContent');
+
+        document.getElementById('contentContainer').appendChild(locationContent);
+
+        loadLocation(currentLocation);
+      });
     });
   });
 }

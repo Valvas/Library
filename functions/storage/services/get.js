@@ -21,10 +21,10 @@ function getServicesData(databaseConnection, params, callback)
   {
     if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-    var x = 0;
-    var servicesObject = {};
+    let x = 0;
+    let servicesObject = {};
 
-    var loop = () =>
+    let loop = () =>
     {
       servicesObject[services[x].uuid] = {};
       servicesObject[services[x].uuid].name = services[x].name;
@@ -44,7 +44,7 @@ function getServicesData(databaseConnection, params, callback)
         servicesObject[services[x].uuid].amountOfFiles = 0;
         servicesObject[services[x].uuid].amountOfFolders = 0;
 
-        for(var i = 0; i < result.length; i++)
+        for(let i = 0; i < result.length; i++)
         {
           result[i].is_directory
           ? servicesObject[services[x].uuid].amountOfFolders += 1
@@ -80,7 +80,7 @@ function checkIfServiceExistsFromUuid(serviceUuid, databaseConnection, params, c
 
     if(result.length === 0) return callback(null, false);
 
-    var serviceData = {};
+    let serviceData = {};
 
     serviceData.serviceUuid   = result[0].uuid;
     serviceData.serviceName   = result[0].name;
@@ -99,7 +99,7 @@ function checkIfServiceExistsFromUuid(serviceUuid, databaseConnection, params, c
     {
       if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
-      for(var x = 0; x < result.length; x++)
+      for(let x = 0; x < result.length; x++)
       {
         serviceData.authorizedExtensions.push(result[x].extension_uuid);
       }
@@ -179,9 +179,9 @@ function getAuthorizedExtensionsForService(serviceUuid, databaseConnection, glob
 
     if(result.length === 0) return callback({ status: 500, code: constants.NO_EXTENSIONS_FOUND, detail: null });
 
-    var allExtensions = {};
+    let allExtensions = {};
 
-    for(var x = 0; x < result.length; x++)
+    for(let x = 0; x < result.length; x++)
     {
       allExtensions[result[x].uuid] = result[x].value;
     }
@@ -199,9 +199,9 @@ function getAuthorizedExtensionsForService(serviceUuid, databaseConnection, glob
 
       if(serviceExtensions.length === 0) return callback({ status: 500, code: constants.NO_EXTENSIONS_FOUND_FOR_SERVICE, detail: null });
 
-      var authorizedExtensions = {};
+      let authorizedExtensions = {};
 
-      for(var x = 0; x < serviceExtensions.length; x++)
+      for(let x = 0; x < serviceExtensions.length; x++)
       {
         authorizedExtensions[serviceExtensions[x].extension_uuid] = allExtensions[serviceExtensions[x].extension_uuid];
       }
@@ -231,7 +231,7 @@ function getAllExtensions(databaseConnection, globalParameters, callback)
   {
     if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    var allExtensions = {};
+    let allExtensions = {};
 
     result.forEach((element) =>
     {
@@ -280,19 +280,19 @@ function searchElementsFromService(searchedValue, serviceUuid, databaseConnectio
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    var foundElements = [];
+    let foundElements = [];
 
     if(result.length === 0) return callback(null, foundElements);
 
-    var index = 0;
+    let index = 0;
 
     const browseResults = () =>
     {
-      if(result[index].name.toLowerCase().includes(searchedValue.toLowerCase()) == false && searchedValue.toLowerCase().includes(result[index].name.toLowerCase()) == false)
+      if(result[index].name.toLowerCase().includes(searchedValue.toLowerCase()) === false && searchedValue.toLowerCase().includes(result[index].name.toLowerCase()) === false)
       {
-        if(result[index += 1] == undefined) return callback(null, foundElements);
+        if(result[index += 1] === undefined) return callback(null, foundElements);
 
         return browseResults();
       }
@@ -301,18 +301,18 @@ function searchElementsFromService(searchedValue, serviceUuid, databaseConnectio
       {
         foundElements.push({ uuid: result[index].uuid, name: result[index].name, parentFolder: null, isDirectory: result[index].is_directory });
 
-        if(result[index += 1] == undefined) return callback(null, foundElements);
+        if(result[index += 1] === undefined) return callback(null, foundElements);
 
         return browseResults();
       }
 
       storageAppFilesGet.getElementPath(result[index].parent_folder, [], databaseConnection, globalParameters, (error, currentElementPath) =>
       {
-        if(error != null) return callback(error);
+        if(error !== null) return callback(error);
 
         foundElements.push({ uuid: result[index].uuid, name: result[index].name, parentFolder: { uuid: result[index].parent_folder, path: currentElementPath }, isDirectory: result[index].is_directory });
 
-        if(result[index += 1] == undefined) return callback(null, foundElements);
+        if(result[index += 1] === undefined) return callback(null, foundElements);
 
         return browseResults();
       });

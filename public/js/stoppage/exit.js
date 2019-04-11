@@ -1,21 +1,21 @@
 /****************************************************************************************************/
 
-function logoutOpenPrompt()
+function openExitPrompt()
 {
   if(document.getElementById('veilBackground')) return;
 
-  document.getElementById('mainContainer').style.filter = 'blur(4px)';
+  document.getElementById('mainContainer').style.filter ='blur(4px)';
 
-  var veilBackground        = document.createElement('div');
-  var verticalBackground    = document.createElement('div');
-  var horizontalBackground  = document.createElement('div');
-  var modal                 = document.createElement('div');
-  var modalHeader           = document.createElement('div');
-  var modalHeaderTitle      = document.createElement('div');
-  var modalContent          = document.createElement('div');
-  var modalContentButtons   = document.createElement('div');
-  var modalContentConfirm   = document.createElement('button');
-  var modalContentCancel    = document.createElement('button');
+  const veilBackground        = document.createElement('div');
+  const verticalBackground    = document.createElement('div');
+  const horizontalBackground  = document.createElement('div');
+  const modal                 = document.createElement('div');
+  const modalHeader           = document.createElement('div');
+  const modalHeaderTitle      = document.createElement('div');
+  const modalContent          = document.createElement('div');
+  const modalContentButtons   = document.createElement('div');
+  const modalContentConfirm   = document.createElement('button');
+  const modalContentCancel    = document.createElement('button');
 
   veilBackground        .setAttribute('id', 'veilBackground');
   verticalBackground    .setAttribute('id', 'modalBackground');
@@ -31,11 +31,11 @@ function logoutOpenPrompt()
   modalContentConfirm   .setAttribute('class', 'baseModalContentButtonsConfirm');
   modalContentCancel    .setAttribute('class', 'baseModalContentButtonsCancel');
 
-  modalHeaderTitle      .innerText = commonStrings.root.logoutConfirmation.title;
-  modalContentConfirm   .innerText = commonStrings.root.logoutConfirmation.confirm;
-  modalContentCancel    .innerText = commonStrings.root.logoutConfirmation.cancel;
+  modalHeaderTitle      .innerText = appStrings.exitPrompt.title;
+  modalContentConfirm   .innerText = appStrings.exitPrompt.confirm;
+  modalContentCancel    .innerText = appStrings.exitPrompt.cancel;
 
-  modalContent          .innerHTML = `<div class="baseModalContentMessage">${commonStrings.root.logoutConfirmation.message}</div>`;
+  modalContent          .innerHTML = `<div class="baseModalContentMessage">${appStrings.exitPrompt.message}</div>`;
 
   modalHeader           .appendChild(modalHeaderTitle);
   modalContent          .appendChild(modalContentButtons);
@@ -49,9 +49,7 @@ function logoutOpenPrompt()
 
   modalContentConfirm   .addEventListener('click', () =>
   {
-    document.cookie = 'peiauth=xxxx;max-age=0;path=/';
-
-    window.location = '/';
+    window.location = '/home';
   });
 
   modalContentCancel    .addEventListener('click', () =>

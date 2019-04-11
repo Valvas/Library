@@ -45,7 +45,7 @@ module.exports.updateEmailAddress = (newEmailAddress, accountUuid, databaseConne
 
       if(accountData.uuid === accountUuid) return callback({ status: 406, code: constants.SAME_EMAIL_ADDRESS, detail: null });
 
-      return callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE, detail: null });    
+      return callback({ status: 406, code: constants.EMAIL_ALREADY_IN_USE, detail: null });
     });
   });
 }
@@ -74,7 +74,7 @@ module.exports.updateLastname = (newLastname, accountUuid, databaseConnection, p
       if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
       return callback(null);
-    });    
+    });
   });
 }
 
@@ -102,7 +102,7 @@ module.exports.updateFirstname = (newFirstname, accountUuid, databaseConnection,
       if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
 
       return callback(null);
-    });    
+    });
   });
 }
 
@@ -190,11 +190,11 @@ module.exports.updateSuspensionStatus = (accountUuid, isToBeSuspended, databaseC
       tableName: globalParameters.database.root.tables.accounts,
       args: { suspended: isToBeSuspended ? 1 : 0 },
       where: { operator: '=', key: 'uuid', value: accountUuid }
-  
+
     }, databaseConnection, (error, result) =>
     {
       if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
-  
+
       return callback(null);
     });
   });
@@ -216,11 +216,11 @@ module.exports.updateAdminStatus = (accountUuid, isToBeAdmin, databaseConnection
       tableName: globalParameters.database.root.tables.accounts,
       args: { is_admin: isToBeAdmin ? 1 : 0 },
       where: { operator: '=', key: 'uuid', value: accountUuid }
-  
+
     }, databaseConnection, (error, result) =>
     {
       if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
-  
+
       return callback(null);
     });
   });
@@ -232,30 +232,41 @@ module.exports.resetPassword = (accountUuid, accountEmail, databaseConnection, e
 {
   encryption.generateRandomPassword(globalParameters, (error, clearPassword, encryptedPassword) =>
   {
-    if(error != null) return callback(error);
-
-    databaseManager.updateQuery(
+    if(error !== null)
     {
-      databaseName: globalParameters.database.root.label,
-      tableName: globalParameters.database.root.tables.accounts,
-      args: { password: encryptedPassword },
-      where: { operator: '=', key: 'uuid', value: accountUuid }
+      return callback({ status: 500, code: constants.RESET_PASSWORD_GENERATION_FAILED, detail: null });
+    }
 
-    }, databaseConnection, (error, result) =>
+    const emailObject =
     {
-      if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+      template: 'resetPassword',
+      receiver: accountEmail,
+      subject: commonStrings.emailTemplates.resetAccountPassword,
+      locals: { clearPassword: clearPassword }
+    };
 
-      var emailObject =
+    commonEmailSend.sendTemplateEmail(emailObject, emailTransporter, globalParameters, (error) =>
+    {
+      if(error !== null)
       {
-        template: 'resetPassword',
-        receiver: accountEmail,
-        subject: commonStrings.emailTemplates.resetAccountPassword,
-        locals: { clearPassword: clearPassword }
-      };
+        return callback({ status: 500, code: constants.RESET_PASSWORD_EMAIL_NOT_SENT, detail: null });
+      }
 
-      commonEmailSend.sendTemplateEmail(emailObject, emailTransporter, globalParameters, (error) =>
+      databaseManager.updateQuery(
       {
-        return callback(error);
+        databaseName: globalParameters.database.root.label,
+        tableName: globalParameters.database.root.tables.accounts,
+        args: { password: encryptedPassword },
+        where: { operator: '=', key: 'uuid', value: accountUuid }
+
+      }, databaseConnection, (error) =>
+      {
+        if(error !== null)
+        {
+          return callback({ status: 500, code: constants.RESET_PASSWORD_DATABASE_UPDATE_FAILED, detail: error });
+        }
+
+        return callback(null);
       });
     });
   });
@@ -277,11 +288,11 @@ module.exports.updatePicture = (base64Picture, accountUuid, databaseConnection, 
       tableName: globalParameters.database.root.tables.accounts,
       args: { picture: base64Picture },
       where: { operator: '=', key: 'uuid', value: accountUuid }
-  
+
     }, databaseConnection, (error, result) =>
     {
       if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
-  
+
       return callback(null);
     });
   });

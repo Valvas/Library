@@ -20,7 +20,7 @@ function retrieveMessengerData(accountUuid, databaseConnection, globalParameters
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
     if(result.length === 0) return callback(null, {});
 
@@ -30,11 +30,14 @@ function retrieveMessengerData(accountUuid, databaseConnection, globalParameters
     {
       retrieveMessengerDataGetReceiverData(result[index].uuid, accountUuid, result[index].sender === accountUuid ? result[index].receiver : result[index].sender, databaseConnection, globalParameters, (error, receiverData, counter, messages) =>
       {
-        if(error != null) return callback(error);
+        if(error !== null) return callback(error);
 
-        messengerData[result[index].uuid] = { receiver: receiverData, counter: counter, messages: messages };
+        if(receiverData.suspended === false)
+        {
+          messengerData[result[index].uuid] = { receiver: receiverData, counter: counter, messages: messages };
+        }
 
-        if(result[index += 1] == undefined) return callback(null, messengerData);
+        if(result[index += 1] === undefined) return callback(null, messengerData);
 
         browseConversations();
       });
@@ -50,9 +53,9 @@ function retrieveMessengerDataGetReceiverData(conversationUuid, accountUuid, rec
 {
   commonAccountsGet.checkIfAccountExistsFromUuid(receiverUuid, databaseConnection, globalParameters, (error, accountExists, accountData) =>
   {
-    if(error != null) return callback(error);
+    if(error !== null) return callback(error);
 
-    if(accountExists) return retrieveMessengerDataGetCounter(conversationUuid, accountUuid, { email: accountData.email, lastname: accountData.lastname, firstname: accountData.firstname, picture: accountData.picture }, databaseConnection, globalParameters, callback);
+    if(accountExists) return retrieveMessengerDataGetCounter(conversationUuid, accountUuid, { email: accountData.email, lastname: accountData.lastname, firstname: accountData.firstname, picture: accountData.picture, suspended: accountData.suspended === 1 }, databaseConnection, globalParameters, callback);
 
     return retrieveMessengerDataGetCounter(conversationUuid, accountUuid, null, databaseConnection, globalParameters, callback);
   });

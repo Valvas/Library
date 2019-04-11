@@ -341,7 +341,7 @@ function getElementPath(elementUuid, currentPath, databaseConnection, globalPara
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
     if(result.length === 0) return callback({ status: 404, code: constants.FOLDER_NOT_FOUND, detail: null });
 
@@ -349,7 +349,7 @@ function getElementPath(elementUuid, currentPath, databaseConnection, globalPara
 
     if(result[0].parent_folder.length === 0) return callback(null, currentPath);
 
-    return getElementPath(result[0].uuid, currentPath, databaseConnection, globalParameters, callback);
+    return getElementPath(result[0].parent_folder, currentPath, databaseConnection, globalParameters, callback);
   });
 }
 

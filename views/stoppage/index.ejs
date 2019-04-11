@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/common.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/sick/base.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/stoppage/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/messenger.css" />
   <body>
     <div class="informationBlock" id="informationBlock"></div>
@@ -19,14 +19,17 @@
     </div>
     <% include ../include/scripts.ejs %>
     <script src='/socket.io/socket.io.js'></script>
-    <script src="/js/sick/initializeSocket.js"></script>
+    <script src="/js/stoppage/initializeSocket.js"></script>
     <script src="/js/logout.js"></script>
     <% include ../include/messenger.ejs %>
-    <script src="/js/sick/createHeader.js"></script>
-    <script src="/js/sick/createContainer.js"></script>
-    <script src="/js/sick/createAside.js"></script>
-    <script src="/js/sick/loadHomeSection.js"></script>
-    <script src="/js/sick/loadLocation.js"></script>
-    <script src="/js/sick/initialize.js"></script>
+    <script src="/js/stoppage/exit.js"></script>
+    <script src="/js/stoppage/createHeader.js"></script>
+    <script src="/js/stoppage/createContainer.js"></script>
+    <script src="/js/stoppage/createAside.js"></script>
+    <script src="/js/stoppage/stoppageManagement/createStoppage.js"></script>
+    <script src="/js/stoppage/loadHomeSection.js"></script>
+    <script src="/js/stoppage/loadStoppageSection.js"></script>
+    <script src="/js/stoppage/loadLocation.js"></script>
+    <script src="/js/stoppage/initialize.js"></script>
   </body>
 </html>

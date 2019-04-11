@@ -6,7 +6,7 @@ function loadHomeSection()
 
   history.pushState(null, null, '/home');
 
-  var homeContainer       = document.createElement('div');
+  const homeContainer     = document.createElement('div');
 
   homeContainer           .innerHTML += `<div class="locationContentTitle">${commonStrings.locations.home}</div>`;
   homeContainer           .innerHTML += `<div class="homePagePictureContainer"><img class="homePagePictureContent" src="/pictures/home.png" /></div>`;
@@ -17,9 +17,12 @@ function loadHomeSection()
 
   document.getElementById('locationContent').appendChild(homeContainer);
 
-  if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+  $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+  {
+    document.getElementById('locationLoaderVerticalBlock').remove();
 
-  $(homeContainer).fadeIn(250);
+    $(homeContainer).fadeIn(250);
+  });
 }
 
 /****************************************************************************************************/

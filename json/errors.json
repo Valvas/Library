@@ -175,5 +175,26 @@
 
   "001-000-001": "Le contenu de ce rapport de bug est vide",
   "001-000-002": "Rapport de bug introuvable",
-  "001-000-003": "Le commentaire posté sur ce rapport ne peut pas être vide"
+  "001-000-003": "Le commentaire posté sur ce rapport ne peut pas être vide",
+
+  "001-001-001": "Échec de la création d'un nouveau mot de passe",
+  "001-001-002": "Le mot de passe reste inchangé car une erreur est survenue pendant l'envoi de l'email",
+  "001-001-003": "L'email contenant le nouveau mot de passe a été envoyé avec succès cependant une erreur est survenue pendant la mise à jour de celui-ci, le mot de passe reste donc inchangé",
+
+  "002-000-001": "La valeur du sexe de l'employé(e) est invalide",
+  "002-000-002": "La valeur du type d'arrêt est invalide",
+  "002-000-003": "Le format du matricule est incorrect",
+  "002-000-004": "Le format du prénom est incorrect",
+  "002-000-005": "Le format du nom est incorrect",
+  "002-000-006": "Le format de la date de début est incorrect",
+  "002-000-007": "Le format de la date de réception est incorrect",
+  "002-000-008": "Le format de la date de fin est incorrect",
+  "002-000-009": "La date de début de l'arrêt ne peut pas être suppérieure à la date de réception de celui-ci",
+  "002-000-010": "La date de début de l'arrêt ne peut pas être suppérieure à la date de fin de celui-ci",
+  "002-000-011": "Au moins une pièce jointe est requise pour la création d'un arrêt",
+  "002-000-012": "Les pièces jointes ne peuvent être que des fichiers au format PDF",
+  "002-000-013": "Établissement introuvable",
+  "002-000-014": "Une des correspondances utilise un type non autorisé",
+  "002-000-015": "Une pièce jointe pour l'arrêt initial est requise",
+  "002-000-016": "Il ne peut pas y avoir plus d'une pièce jointe pour l'arrêt initial"
 }

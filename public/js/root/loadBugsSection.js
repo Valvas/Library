@@ -8,7 +8,7 @@ function loadBugsSection()
 
   history.pushState(null, null, '/bugs/' + urlParameters.join('/'));
 
-  var bugsContainer    = document.createElement('div');
+  const bugsContainer  = document.createElement('div');
 
   bugsContainer        .innerHTML += `<div class="locationContentTitle">${commonStrings.locations.bugs}</div>`;
 
@@ -28,9 +28,12 @@ function loadBugsSection()
       {
         if(error != null) displayError(error.message, error.detail, 'loadBugsSectionError');
 
-        if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+        $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+        {
+          document.getElementById('locationLoaderVerticalBlock').remove();
 
-        $(bugsContainer).fadeIn(250);
+          $(bugsContainer).fadeIn(250);
+        });
       });
 
     break;
@@ -41,9 +44,12 @@ function loadBugsSection()
       {
         if(error != null) displayError(error.message, error.detail, 'loadBugsSectionError');
 
-        if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+        $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+        {
+          document.getElementById('locationLoaderVerticalBlock').remove();
 
-        $(bugsContainer).fadeIn(250);
+          $(bugsContainer).fadeIn(250);
+        });
       });
 
     break;
@@ -66,9 +72,12 @@ function loadBugsSection()
           return loadLocation('bugs');
         }
 
-        if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+        $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+        {
+          document.getElementById('locationLoaderVerticalBlock').remove();
 
-        $(bugsContainer).fadeIn(250);
+          $(bugsContainer).fadeIn(250);
+        });
       });
 
     break;

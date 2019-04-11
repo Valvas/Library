@@ -18,9 +18,15 @@ function checkIfUnitExists(unitId, databaseConnection, globalParameters, callbac
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback(null, false);
+    if(result.length === 0)
+    {
+      return callback(null, false);
+    }
 
     const unitDetail = { unitId: result[0].id, unitName: result[0].name, unitParent: result[0].parent_unit };
 
@@ -44,28 +50,43 @@ function getUnits(databaseConnection, globalParameters, callback)
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
-
-    if(result.length === 0) return callback(null, []);
-
-    var index = 0, unitsArray = [];
-
-    var browseUnitsLoop = () =>
+    if(error !== null)
     {
-      var unitParent = null;
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-      for(var x = 0; x < result.length; x++)
+    if(result.length === 0)
+    {
+      return callback(null, []);
+    }
+
+    let index = 0, unitsArray = [];
+
+    const browseUnitsLoop = () =>
+    {
+      let unitParent = null;
+
+      for(let x = 0; x < result.length; x++)
       {
-        if(result[x].id === result[index].parent_unit) unitParent = { parentId: result[x].id, parentName: result[x].name };
+        if(result[x].id === result[index].parent_unit)
+        {
+          unitParent = { parentId: result[x].id, parentName: result[x].name };
+        }
       }
 
       getUnitsGetChildren(result[index].id, databaseConnection, globalParameters, (error, childrenArray) =>
       {
-        if(error != null) return callback(error);
+        if(error !== null)
+        {
+          return callback(error);
+        }
 
         unitsArray.push({ unitId: result[index].id, unitName: result[index].name, unitParent: unitParent, unitChildren: childrenArray });
 
-        if(result[index += 1] == undefined) return callback(null, unitsArray);
+        if(result[index += 1] === undefined)
+        {
+          return callback(null, unitsArray);
+        }
 
         browseUnitsLoop();
       });
@@ -88,23 +109,38 @@ function getUnitsGetChildren(currentUnit, databaseConnection, globalParameters, 
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback(null, []);
+    if(result.length === 0)
+    {
+      return callback(null, []);
+    }
 
-    var index = 0, childrenArray = [];
+    let index = 0, childrenArray = [];
 
-    var browseChildren = () =>
+    const browseChildren = () =>
     {
       childrenArray.push(result[index].id);
 
       getUnitsGetChildren(result[index].id, databaseConnection, globalParameters, (error, currentUnitChildren) =>
       {
-        if(error != null) return callback(error);
+        if(error !== null)
+        {
+          return callback(error);
+        }
 
-        for(var x = 0; x < currentUnitChildren.length; x++) childrenArray.push(currentUnitChildren[x]);
+        for(let x = 0; x < currentUnitChildren.length; x++)
+        {
+          childrenArray.push(currentUnitChildren[x]);
+        }
 
-        if(result[index += 1] == undefined) return callback(null, childrenArray);
+        if(result[index += 1] === undefined)
+        {
+          return callback(null, childrenArray);
+        }
 
         browseChildren();
       });
@@ -129,13 +165,22 @@ function getUnitDetail(unitId, databaseConnection, globalParameters, callback)
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
+    if(result.length === 0)
+    {
+      return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
+    }
 
     getUnitsGetChildren(result[0].id, databaseConnection, globalParameters, (error, childrenArray) =>
     {
-      if(error != null) return callback(error);
+      if(error !== null)
+      {
+        return callback(error);
+      }
 
       const unitDetail = { unitId: result[0].id, unitName: result[0].name, unitParent: result[0].parent_unit, unitChildren: childrenArray };
 
@@ -159,11 +204,17 @@ function getUnitsTree(databaseConnection, globalParameters, callback)
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback(null, []);
+    if(result.length === 0)
+    {
+      return callback(null, []);
+    }
 
-    var treeArray = [];
+    let treeArray = [];
 
     treeArray.push(result[0].name);
 
@@ -189,25 +240,40 @@ function getUnitsTreeRetrieveCurrentUnitChildren(currentUnitId, databaseConnecti
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback(null, []);
+    if(result.length === 0)
+    {
+      return callback(null, []);
+    }
 
-    var childrenArray = [];
+    let childrenArray = [];
 
-    var index = 0;
+    let index = 0;
 
-    var browseFoundUnits = () =>
+    const browseFoundUnits = () =>
     {
       childrenArray.push(result[index].name);
 
       getUnitsTreeRetrieveCurrentUnitChildren(result[index].id, databaseConnection, globalParameters, (error, resultArray) =>
       {
-        if(error != null) return callback(error);
+        if(error !== null)
+        {
+          return callback(error);
+        }
 
-        if(resultArray.length > 0) childrenArray.push(resultArray);
+        if(resultArray.length > 0)
+        {
+          childrenArray.push(resultArray);
+        }
 
-        if(result[index += 1] == undefined) return callback(null, childrenArray);
+        if(result[index += 1] === undefined)
+        {
+          return callback(null, childrenArray);
+        }
 
         browseFoundUnits();
       });
@@ -232,7 +298,10 @@ function getAccountUnit(accountUuid, databaseConnection, globalParameters, callb
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
     if(result.length === 0)
     {
@@ -245,9 +314,15 @@ function getAccountUnit(accountUuid, databaseConnection, globalParameters, callb
 
       }, databaseConnection, (error, result) =>
       {
-        if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+        if(error !== null)
+        {
+          return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+        }
 
-        if(result.length === 0) return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
+        if(result.length === 0)
+        {
+          return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
+        }
 
         return callback(null, result[0]);
       });
@@ -264,9 +339,15 @@ function getAccountUnit(accountUuid, databaseConnection, globalParameters, callb
 
       }, databaseConnection, (error, result) =>
       {
-        if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+        if(error !== null)
+        {
+          return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+        }
 
-        if(result.length === 0) return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
+        if(result.length === 0)
+        {
+          return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
+        }
 
         return callback(null, result[0]);
       });
@@ -289,17 +370,24 @@ function getDirectory(databaseConnection, globalParameters, callback)
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback(null, {});
-
-    console.log(result);
+    if(result.length === 0)
+    {
+      return callback(null, {});
+    }
 
     getDirectoryBrowseCurrentElement(result[0].id, databaseConnection, globalParameters, (error, resultObject) =>
     {
-      if(error != null) return callback(error);
+      if(error !== null)
+      {
+        return callback(error);
+      }
 
-      var valueToReturn = {};
+      let valueToReturn = {};
 
       valueToReturn[result[0].name] = resultObject;
 
@@ -312,7 +400,7 @@ function getDirectory(databaseConnection, globalParameters, callback)
 
 function getDirectoryBrowseCurrentElement(currentElement, databaseConnection, globalParameters, callback)
 {
-  var resultObject = {};
+  let resultObject = {};
 
   databaseManager.selectQuery(
   {
@@ -323,21 +411,33 @@ function getDirectoryBrowseCurrentElement(currentElement, databaseConnection, gl
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback(null, null);
+    if(result.length === 0)
+    {
+      return callback(null, null);
+    }
 
-    var index = 0;
+    let index = 0;
 
-    var browseElements = () =>
+    const browseElements = () =>
     {
       getDirectoryBrowseCurrentElement(result[index].id, databaseConnection, globalParameters, (error, currentElementChildren) =>
       {
-        if(error != null) return callback(error);
+        if(error !== null)
+        {
+          return callback(error);
+        }
 
         resultObject[result[index].name] = currentElementChildren;
 
-        if(result[index += 1] == undefined) return callback(null, resultObject);
+        if(result[index += 1] === undefined)
+        {
+          return callback(null, resultObject);
+        }
 
         browseElements();
       });

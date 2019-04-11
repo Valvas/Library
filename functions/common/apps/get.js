@@ -5,27 +5,37 @@ const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 /****************************************************************************************************/
 
-module.exports.getAppsData = (databaseConnection, params, callback) =>
+module.exports.getAppsData = (databaseConnection, globalParameters, callback) =>
 {
-  if(params == undefined)             return callback({ status: 406, code: constants.MISSING_DATA_FROM_REQUEST, detail: 'params' });
-  if(databaseConnection == undefined) return callback({ status: 406, code: constants.MISSING_DATA_FROM_REQUEST, detail: 'databaseConnection' });
+  if(globalParameters === undefined)
+  {
+    return callback({ status: 406, code: constants.MISSING_DATA_FROM_REQUEST, detail: 'globalParameters' });
+  }
+
+  if(databaseConnection === undefined)
+  {
+    return callback({ status: 406, code: constants.MISSING_DATA_FROM_REQUEST, detail: 'databaseConnection' });
+  }
 
   databaseManager.selectQuery(
   {
-    databaseName: params.database.root.label,
-    tableName: params.database.root.tables.apps,
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.apps,
     args: [ '*' ],
     where: {  }
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
-
-    var appsData = [];
-
-    for(var x = 0; x < result.length; x++)
+    if(error !== null)
     {
-      appsData.push({ uuid: result[x].uuid, name: result[x].name, picture: result[x].picture });
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
+
+    let appsData = [];
+
+    for(let x = 0; x < result.length; x++)
+    {
+      appsData.push({ uuid: result[x].uuid, name: result[x].name });
     }
 
     return callback(null, appsData);
@@ -34,20 +44,26 @@ module.exports.getAppsData = (databaseConnection, params, callback) =>
 
 /****************************************************************************************************/
 
-module.exports.checkIfAppExistsFromName = (appName, databaseConnection, params, callback) =>
+module.exports.checkIfAppExistsFromName = (appName, databaseConnection, globalParameters, callback) =>
 {
   databaseManager.selectQuery(
   {
-    databaseName: params.database.root.label,
-    tableName: params.database.root.tables.apps,
+    databaseName: globalParameters.database.root.label,
+    tableName: globalParameters.database.root.tables.apps,
     args: [ '*' ],
     where: { operator: '=', key: 'name', value: appName }
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback(null, false);
+    if(result.length === 0)
+    {
+      return callback(null, false);
+    }
 
     return callback(null, true, result[0]);
   });
@@ -57,7 +73,10 @@ module.exports.checkIfAppExistsFromName = (appName, databaseConnection, params, 
 
 module.exports.checkIfAccountHasAccessToApp = (appName, accountUuid, databaseConnection, globalParameters, callback) =>
 {
-  if(globalParameters.database[appName] == undefined) return callback({ status: 404, code: constants.APP_NOT_FOUND, detail: null });
+  if(globalParameters.database[appName] === undefined)
+  {
+    return callback({ status: 404, code: constants.APP_NOT_FOUND, detail: null });
+  }
 
   databaseManager.selectQuery(
   {
@@ -68,7 +87,10 @@ module.exports.checkIfAccountHasAccessToApp = (appName, accountUuid, databaseCon
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
     return callback(null, result.length > 0);
   });
@@ -89,13 +111,19 @@ module.exports.getAccountApps = (accountUuid, databaseConnection, globalParamete
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
-    if(result.length === 0) return callback(null, []);
+    if(result.length === 0)
+    {
+      return callback(null, []);
+    }
 
-    var appsData = [], index = 0;
+    let appsData = [], index = 0;
 
-    var browseApps = () =>
+    const browseApps = () =>
     {
       databaseManager.selectQuery(
       {
@@ -106,11 +134,17 @@ module.exports.getAccountApps = (accountUuid, databaseConnection, globalParamete
 
       }, databaseConnection, (error, access) =>
       {
-        if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+        if(error !== null)
+        {
+          return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+        }
 
         appsData.push({ uuid: result[index].uuid, name: result[index].name, picture: result[index].picture, hasAccess: access.length > 0 });
 
-        if(result[index += 1] == undefined) return callback(null, appsData);
+        if(result[index += 1] === undefined)
+        {
+          return callback(null, appsData);
+        }
 
         browseApps();
       });

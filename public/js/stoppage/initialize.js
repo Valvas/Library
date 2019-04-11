@@ -1,16 +1,16 @@
+/****************************************************************************************************/
+
 'use strict'
 
+let pageTitle = document.title;
 let appStrings = null;
 let commonStrings = null;
 let accountData = null;
 let messengerData = null;
-let currentLocation = window.location.href.split('/')[4];
+let currentLocation = window.location.href.split('/').length > 4 ? window.location.href.split('/')[4] : 'home';
+let urlParameters = window.location.href.split('/').slice(5);
 
-if(currentLocation === undefined || currentLocation.length === 0)
-{
-  history.pushState(null, null, '/sick/home');
-  currentLocation = 'home';
-}
+urlParameters = urlParameters.filter(param => param.length > 0);
 
 initializeStart();
 
@@ -38,16 +38,19 @@ function initializeStart()
       return displayError(error.message, error.detail, 'initializationError');
     }
 
-    createHeader((error) =>
+    $(loader).fadeOut(500, () =>
     {
-      if(error !== null)
-      {
-        return displayError(error.message, error.detail, 'initializationError');
-      }
-
       loader.remove();
 
-      console.log(true);
+      createHeader((error) =>
+      {
+        if(error !== null)
+        {
+          return displayError(error.message, error.detail, 'initializationError');
+        }
+
+        loadLocation(currentLocation);
+      });
     });
   });
 }

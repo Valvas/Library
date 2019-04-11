@@ -1,88 +1,47 @@
-body{ margin:0; background-color:#F9F9F9; }
-
-.main{ background-color:#FFFFFF; border:1px solid #E0E0E0; border-radius:4px; width:500px; margin:80px calc(50% - 250px) 80px calc(50% - 250px); padding:0; box-sizing:border-box; }
-
-.title{ border-bottom:1px solid #E0E0E0; padding:20px 40px 10px 40px; font-size:20px; line-height:24px; font-family:barlow; margin:0 0 20px 0; }
-
-.icon{ margin:10px 0 10px 40px; padding:8px 0 0 0; border-radius:4px 0 0 4px; background-color:#428BCA; display:inline-block; height:32px; width:64px; text-align:center; color:#F9F9F9; box-sizing:border-box; font-size:16px; }
-
-.input{ margin:10px 40px 10px 0; border-radius:0 4px 4px 0; width:calc(100% - 144px); display:inline-block; vertical-align:top; box-sizing:border-box; height:32px; padding:0 0 0 10px; border:1px solid #E0E0E0; }
-
-.send{ width:120px; padding:4px 0 4px 0; cursor:pointer; border-radius:4px; margin:10px 40px 20px calc(100% - 160px); border:none; background-color:#D9534F; color:#FFFFFF; font-family:barlow; line-height:24px; font-size:16px; }
-
-.send:hover{ color:#000000; background-color:#B7312D; }
-
-.background{ display:none; top:0; bottom:0; left:0; right:0; position:fixed; z-index:10; }
-
-.loader{ position:fixed; z-index:20; width:250px; background-color:#384046; border-radius:4px; box-sizing:border-box; margin:164px calc(50% - 125px) 164px calc(50% - 125px); }
-
-.loader .spinner{ font-size:24px; line-height:32px; text-align:center; padding:20px; color:#5CB85C; }
-
-.loader .message{ font-size:20px; line-height:24px; padding:0 20px 20px 20px; text-align:center; color:#FFFFFF; font-family:barlow; }
-
-.error{ padding:0 40px 10px 40px; font-size:16px; line-height:24px; color:#FF0F0F; font-family:barlow; }
-
-.question{ font-size:16px; line-height:23px; text-decoration:underline; font-style:italic; font-family:Arial; color:#667788; cursor:pointer; display:block; width:max-content; padding:0 0 20px 0; margin:0 40px 0 40px; }
-
-.question:hover{ color:#223344; }
-
-/****************************************************************************************************/
-/* NO SCRIPT BLOCK */
 /****************************************************************************************************/
 
-.noScriptWarningBlock{ width:100%; background-color:#D9534F; font-family:roboto-light; color:#FFFFFF; }
+@keyframes spin{ 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.noScriptWarningBlockMessage{ font-size:18px; line-height:24px; padding:20px; }
+#main{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; background-color:#171219; }
+
+#wrapper{ display:flex; flex-direction:row; justify-content:center; }
 
 /****************************************************************************************************/
 
-.cookiesWarningBlock{ background-color:#0277BD; position:fixed; right:0; bottom:0; left:0; border-radius:2px 2px 0 0; }
+.logonBlock{ background-color:#FFFFFF; border-radius:2px; width:calc(100% - 40px); max-width:500px; }
 
-.cookiesWarningBlockMessage{ width:calc(100% - 100px); box-sizing:border-box; color:#FFFFFF; font-family:roboto-light; font-size:1em; padding:20px 10px 20px 10px; display:inline-block; vertical-align:top; }
+.logonBlockTitle{ text-transform:uppercase; font-size:1.5em; padding:20px; border-bottom:1px solid rgba(0,0,0,0.25); color:rgba(0,0,0,0.75); }
 
-.cookiesWarningBlockClose{ width:80px; text-align:center; box-sizing:border-box; color:#FFFFFF; font-family:roboto-light; text-decoration:underline; font-size:1.20em; display:inline-block; vertical-align:top; margin:18px 10px 18px 10px; cursor:pointer; }
+.logonBlockTitle span{ margin-left:5px; color:#759EB8; }
 
-.cookiesWarningBlockClose:hover{ color:#CCC; }
+.logonBlockForm{ padding:20px; }
+
+.logonBlockFormError{ color:#D9534F; margin-bottom:10px; font-weight:bold; font-size:0.9em; display:none; }
+
+.logonBlockForm input{ margin-top:15px; border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:6px; width:100%; box-sizing:border-box; }
+
+.logonBlockFormFieldError{ font-size:0.8em; color:#D9534F; display:none; margin-left:4px; }
+
+.logonBlockFormFooter{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; margin-top:35px; }
+
+.logonBlockFormFooterForgottenPassword{ display:block; color:rgba(0,0,0,0.6); cursor:pointer; text-decoration:underline; font-style:italic; font-size:1em; margin-right:10px; user-select:none; -ms-user-select:none; -moz-user-select:none; -webkit-user-select:none; }
+
+.logonBlockFormFooterForgottenPassword:hover{ color:rgba(0,0,0,0.8); }
+
+.logonBlockFormFooter button{ color:#759EB8; border:1px solid #759EB8; background-color:#FFFFFF; padding:5px 15px 5px 15px; border-radius:4px; cursor:pointer; }
+
+.logonBlockFormFooter button:hover{ color:#537C96; border:1px solid #537C96; }
 
 /****************************************************************************************************/
 
-@media all and (max-width: 319.9px)
-{
-  .main{ width:calc(100% - 40px); margin:40px 20px 40px 20px; }
+.loaderVeil{ position:fixed; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.5; }
 
-  .title{ padding:20px 20px 10px 20px; }
+.loaderWrapper{ display:flex; flex-direction:column; justify-content:center; position:fixed; top:0; right:0; bottom:0; left:0; }
 
-  .icon{ display:none; }
+.loaderContainer{ display:flex; flex-direction:row; justify-content:center; }
 
-  .input{ width:calc(100% - 40px); margin:10px 20px 10px 20px; border-radius:4px; }
+.loaderBlock{ padding:40px; border-radius:2px; background-color:#FFFFFF; }
 
-  .send{ margin:10px 20px 20px calc(100% - 140px); }
-}
-
-@media all and (min-width: 320px) and (max-width: 479px)
-{
-  .main{ width:calc(100% - 40px); margin:40px 20px 40px 20px; }
-
-  .title{ padding:20px 20px 10px 20px; }
-
-  .icon{ display:none; }
-
-  .input{ width:calc(100% - 40px); margin:10px 20px 10px 20px; border-radius:4px; }
-
-  .send{ margin:10px 20px 20px calc(100% - 140px); }
-}
-
-@media all and (min-width: 480px) and (max-width: 639px)
-{
-  .main{ width:calc(100% - 40px); margin:40px 20px 40px 20px; }
-
-  .title{ padding:20px 20px 10px 20px; }
-
-  .icon{ display:none; }
-
-  .input{ width:calc(100% - 40px); margin:10px 20px 10px 20px; border-radius:4px; }
-
-  .send{ margin:10px 20px 20px calc(100% - 140px); }
-}
+.loaderBlockSpinner{ box-sizing:border-box; border:4px solid #D2D2D2; border-top:4px solid #428BCA; border-radius:50%; width:80px; height:80px; animation:spin 2s linear infinite; }
 
 /****************************************************************************************************/

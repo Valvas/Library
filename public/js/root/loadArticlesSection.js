@@ -6,7 +6,7 @@ function loadArticlesSection()
 
   history.pushState(null, null, '/news/' + urlParameters.join('/'));
 
-  var articlesContainer    = document.createElement('div');
+  let articlesContainer    = document.createElement('div');
 
   articlesContainer        .innerHTML += `<div class="locationContentTitle">${commonStrings.locations.news}</div>`;
 
@@ -30,9 +30,12 @@ function loadArticlesSection()
           ? articlesContainer.appendChild(content)
           : displayError(error.message, error.detail, 'loadArticlesSectionError');
 
-          if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+          $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+          {
+            document.getElementById('locationLoaderVerticalBlock').remove();
 
-          $(articlesContainer).fadeIn(250);
+            $(articlesContainer).fadeIn(250);
+          });
         });
       }
 
@@ -48,17 +51,20 @@ function loadArticlesSection()
           ? articlesContainer.appendChild(content)
           : displayError(error.message, error.detail, 'loadArticlesSectionError');
 
-          if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+          $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+          {
+            document.getElementById('locationLoaderVerticalBlock').remove();
 
-          $(articlesContainer).fadeIn(250);
+            $(articlesContainer).fadeIn(250);
+          });
         });
       }
 
       else
       {
-        var articleBlock  = document.createElement('div');
-        var articleCreate = document.createElement('div');
-        var createButton  = document.createElement('button');
+        let articleBlock  = document.createElement('div');
+        let articleCreate = document.createElement('div');
+        let createButton  = document.createElement('button');
 
         articleBlock      .setAttribute('id', 'articleBlock');
         articleCreate     .setAttribute('class', 'articlesSectionCreateBlock');
@@ -80,9 +86,12 @@ function loadArticlesSection()
 
         articlesContainer .appendChild(articleBlock);
 
-        if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+        $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+        {
+          document.getElementById('locationLoaderVerticalBlock').remove();
 
-        $(articlesContainer).fadeIn(250);
+          $(articlesContainer).fadeIn(250);
+        });
       }
 
     break;
@@ -106,9 +115,12 @@ function loadArticlesSection()
           });
         }
 
-        if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+        $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+        {
+          document.getElementById('locationLoaderVerticalBlock').remove();
 
-        $(articlesContainer).fadeIn(250);
+          $(articlesContainer).fadeIn(250);
+        });
       });
 
     break;
@@ -135,9 +147,12 @@ function loadArticlesSection()
           document.getElementById('articleFormContent').children[0].innerHTML = articleData.content;
         }
 
-        if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+        $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+        {
+          document.getElementById('locationLoaderVerticalBlock').remove();
 
-        $(articlesContainer).fadeIn(250);
+          $(articlesContainer).fadeIn(250);
+        });
       });
 
     break;
@@ -170,18 +185,18 @@ function loadArticlesSectionDisplayArticle(articleUuid, callback)
   {
     const currentArticle = result.newsData;
 
-    var articleBlock    = document.createElement('div');
-    var articleFlex     = document.createElement('div');
-    var blockHeader     = document.createElement('div');
-    var headerActions   = document.createElement('div');
-    var actionsCreate   = document.createElement('button');
-    var actionsUpdate   = document.createElement('button');
-    var actionsRemove   = document.createElement('button');
-    var headerTitle     = document.createElement('div');
-    var headerInfos     = document.createElement('div');
-    var blockContent    = document.createElement('div');
-    var blockComments   = document.createElement('div');
-    var commentsAdd     = document.createElement('div');
+    let articleBlock    = document.createElement('div');
+    let articleFlex     = document.createElement('div');
+    let blockHeader     = document.createElement('div');
+    let headerActions   = document.createElement('div');
+    let actionsCreate   = document.createElement('button');
+    let actionsUpdate   = document.createElement('button');
+    let actionsRemove   = document.createElement('button');
+    let headerTitle     = document.createElement('div');
+    let headerInfos     = document.createElement('div');
+    let blockContent    = document.createElement('div');
+    let blockComments   = document.createElement('div');
+    let commentsAdd     = document.createElement('div');
 
     articleBlock        .setAttribute('class', 'articleBlock');
     articleFlex         .setAttribute('class', 'articleBlockFlex');
@@ -276,9 +291,9 @@ function loadArticlesSectionDisplayArticle(articleUuid, callback)
 
 function loadArticlesSectionBuildCommentSection(currentArticleUuid, comments, callback)
 {
-  var commentSection    = document.createElement('div');
-  var commentsEmpty     = document.createElement('div');
-  var commentsList      = document.createElement('div');
+  let commentSection    = document.createElement('div');
+  let commentsEmpty     = document.createElement('div');
+  let commentsList      = document.createElement('div');
 
   commentSection        .setAttribute('class', 'articleBlockCommentsContainer');
   commentsEmpty         .setAttribute('class', 'articleBlockCommentsEmpty');
@@ -287,11 +302,11 @@ function loadArticlesSectionBuildCommentSection(currentArticleUuid, comments, ca
   commentsEmpty         .setAttribute('id', 'articleBlockCommentsEmpty');
   commentsList          .setAttribute('id', 'articleBlockCommentsList');
 
-  var browseComments = (browsedComments, index, parentElement) =>
+  let browseComments = (browsedComments, index, parentElement) =>
   {
-    var currentComment  = document.createElement('div');
-    var commentContent  = document.createElement('div');
-    var commentActions  = document.createElement('div');
+    let currentComment  = document.createElement('div');
+    let commentContent  = document.createElement('div');
+    let commentActions  = document.createElement('div');
 
     currentComment      .setAttribute('id', browsedComments[index].commentUuid);
 
@@ -351,12 +366,12 @@ function loadArticlesSectionBuildCommentSection(currentArticleUuid, comments, ca
 
 function loadArticleSectionBuildCreationBlock(callback)
 {
-  var container     = document.createElement('div');
-  var containerForm = document.createElement('form');
-  var formContent   = document.createElement('div');
-  var formButtons   = document.createElement('div');
-  var buttonsSubmit = document.createElement('button');
-  var buttonsCancel = document.createElement('button');
+  let container     = document.createElement('div');
+  let containerForm = document.createElement('form');
+  let formContent   = document.createElement('div');
+  let formButtons   = document.createElement('div');
+  let buttonsSubmit = document.createElement('button');
+  let buttonsCancel = document.createElement('button');
 
   formContent       .setAttribute('id', 'articleFormContent');
 
@@ -407,12 +422,12 @@ function loadArticleSectionBuildUpdateBlock(articleUuid, callback)
 
   }).done((result) =>
   {
-    var container     = document.createElement('div');
-    var containerForm = document.createElement('form');
-    var formContent   = document.createElement('div');
-    var formButtons   = document.createElement('div');
-    var buttonsSubmit = document.createElement('button');
-    var buttonsCancel = document.createElement('button');
+    let container     = document.createElement('div');
+    let containerForm = document.createElement('form');
+    let formContent   = document.createElement('div');
+    let formButtons   = document.createElement('div');
+    let buttonsSubmit = document.createElement('button');
+    let buttonsCancel = document.createElement('button');
 
     formContent       .setAttribute('id', 'articleFormContent');
 

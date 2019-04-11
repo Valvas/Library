@@ -1,0 +1,15 @@
+/****************************************************************************************************/
+
+.listMainContainer{ padding:20px; }
+
+.listMainContainerAdd{ display:flex; flex-direction:row; justify-content:flex-end; margin-bottom:20px; }
+
+.listMainContainerAdd button{ border:1px solid #428BCA; border-radius:4px; padding:5px 15px 5px 15px; background-color:#FFFFFF; color:#428BCA; cursor:pointer; }
+
+.listMainContainerAdd button:hover{ color:#2069A8; border:1px solid #2069A8; }
+
+.listMainContainerEmpty{ margin:60px 0 60px 0; text-align:center; font-size:1.5em; color:rgba(0,0,0,0.75); display:none; }
+
+.listMainContainerList{  }
+
+/****************************************************************************************************/

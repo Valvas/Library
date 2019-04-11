@@ -13,8 +13,8 @@ function checkIfAccountHasAccessToTheApp(accountUuid, databaseConnection, global
 
   databaseManager.selectQuery(
   {
-    databaseName: globalParameters.database.sick.label,
-    tableName: globalParameters.database.sick.tables.accountsList,
+    databaseName: globalParameters.database.stoppage.label,
+    tableName: globalParameters.database.stoppage.tables.accountsList,
     args: [ '*' ],
     where: { operator: '=', key: 'account_uuid', value: accountUuid }
 
@@ -37,8 +37,8 @@ function getAccountsThatHaveAccessToTheApp(databaseConnection, globalParameters,
 
   databaseManager.selectQuery(
   {
-    databaseName: globalParameters.database.sick.label,
-    tableName: globalParameters.database.sick.tables.accountsList,
+    databaseName: globalParameters.database.stoppage.label,
+    tableName: globalParameters.database.stoppage.tables.accountsList,
     args: [ '*' ],
     where: {  }
 

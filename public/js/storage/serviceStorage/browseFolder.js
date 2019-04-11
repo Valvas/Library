@@ -191,7 +191,7 @@ function appendFileToContainer(fileData, serviceRights)
   document.getElementById('currentServiceEmptyFolder').removeAttribute('style');
 
   const fileName      = fileData.name.split('.')[0]
-  const fileExtension = fileData.name.split('.').length > 1 ? fileData.name.split('.')[1] : null;
+  const fileExtension = fileData.name.split('.')[fileData.name.split('.').length - 1];
 
   var display = null, icon = null;
 

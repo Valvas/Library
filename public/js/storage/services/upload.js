@@ -44,18 +44,18 @@ function getUploadParameters()
 
 function openUploadFilePopup(storageAppStrings, uploadParameters)
 {
-  var popup             = document.createElement('div');
-  var popupTitle        = document.createElement('div');
-  var popupContent      = document.createElement('div');
-  var popupError        = document.createElement('div');
-  var popupHelp         = document.createElement('div');
-  var popupInput        = document.createElement('input');
-  var popupLabel        = document.createElement('div');
-  var popupSize         = document.createElement('div');
-  var popupExtensions   = document.createElement('div');
-  var popupButtons      = document.createElement('div');
-  var popupClose        = document.createElement('button');
-  var popupSend         = document.createElement('button');
+  const popup             = document.createElement('div');
+  const popupTitle        = document.createElement('div');
+  const popupContent      = document.createElement('div');
+  const popupError        = document.createElement('div');
+  const popupHelp         = document.createElement('div');
+  const popupInput        = document.createElement('input');
+  const popupLabel        = document.createElement('div');
+  const popupSize         = document.createElement('div');
+  const popupExtensions   = document.createElement('div');
+  const popupButtons      = document.createElement('div');
+  const popupClose        = document.createElement('button');
+  const popupSend         = document.createElement('button');
 
   popup                 .setAttribute('id', 'uploadFilePopup');
   popupSend             .setAttribute('id', 'uploadFilePopupSend');
@@ -201,10 +201,10 @@ function checkBeforeUpload(storageAppStrings)
 
 function displayReplaceFilePopup(storageAppStrings)
 {
-  var replacePopup          = document.createElement('div');
-  var replacePopupButtons   = document.createElement('div');
-  var replacePopupConfirm   = document.createElement('button');
-  var replacePopupCancel    = document.createElement('button');
+  const replacePopup          = document.createElement('div');
+  const replacePopupButtons   = document.createElement('div');
+  const replacePopupConfirm   = document.createElement('button');
+  const replacePopupCancel    = document.createElement('button');
 
   replacePopup              .setAttribute('class', 'standardPopup');
   replacePopupButtons       .setAttribute('class', 'replaceFilePopupButtons');
@@ -222,7 +222,7 @@ function displayReplaceFilePopup(storageAppStrings)
     replacePopup.remove();
     uploadFile(storageAppStrings);
   });
-  
+
   replacePopupCancel        .addEventListener('click', () =>
   {
     replacePopup.remove();
@@ -241,8 +241,8 @@ function displayReplaceFilePopup(storageAppStrings)
 
 function uploadFile(storageAppStrings)
 {
-  var xhr   = new XMLHttpRequest();
-  var data  = new FormData();
+  const xhr   = new XMLHttpRequest();
+  const data  = new FormData();
 
   xhr.responseType = 'json';
 
@@ -253,13 +253,13 @@ function uploadFile(storageAppStrings)
   document.getElementById('uploadFilePopupContent').style.display = 'none';
   document.getElementById('uploadFilePopup').removeAttribute('style');
 
-  var progressBlock                 = document.createElement('div');
-  var progressBlockStatus           = document.createElement('div');
-  var progressBlockStatusCog        = document.createElement('div');
-  var progressBlockStatusBar        = document.createElement('div');
-  var progressBlockStatusBarFill    = document.createElement('div');
-  var progressBlockStatusBarValue   = document.createElement('div');
-  var progressBlockCancel           = document.createElement('button');
+  const progressBlock                 = document.createElement('div');
+  const progressBlockStatus           = document.createElement('div');
+  const progressBlockStatusCog        = document.createElement('div');
+  const progressBlockStatusBar        = document.createElement('div');
+  const progressBlockStatusBarFill    = document.createElement('div');
+  const progressBlockStatusBarValue   = document.createElement('div');
+  const progressBlockCancel           = document.createElement('button');
 
   progressBlock               .setAttribute('class', 'uploadFilePopupProgressBlock');
   progressBlockStatus         .setAttribute('class', 'uploadFilePopupProgressBlockStatus');
@@ -289,18 +289,18 @@ function uploadFile(storageAppStrings)
 
   document.getElementById('uploadFilePopup').appendChild(progressBlock);
 
-  xhr.upload.addEventListener('progress', (event) => 
+  xhr.upload.addEventListener('progress', (event) =>
   {
-    if(event.lengthComputable) 
+    if(event.lengthComputable)
     {
-      var percentComplete = ((event.loaded / event.total) * 100).toFixed(2);
-      
+      const percentComplete = ((event.loaded / event.total) * 100).toFixed(2);
+
       progressBlockStatusBarValue.innerText = `${percentComplete} %`;
 
       progressBlockStatusBarFill.style.width = `${percentComplete}%`;
     }
 
-    else 
+    else
     {
       progressBlockStatusBarValue.innerText = '?';
     }

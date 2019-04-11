@@ -20,29 +20,29 @@ function loadAppsSection()
 
   }).done((result) =>
   {
-    var appsContainer       = document.createElement('div');
-    var appsContainerList   = document.createElement('div');
+    const appsContainer       = document.createElement('div');
+    const appsContainerList   = document.createElement('div');
 
     appsContainer           .innerHTML += `<div class="locationContentTitle">${commonStrings.locations.apps}</div>`;
 
     appsContainer           .setAttribute('class', 'appsSectionBlock');
     appsContainerList       .setAttribute('class', 'appsSectionList');
 
-    for(var x = 0; x < result.accountApps.length; x++)
+    for(let x = 0; x < result.accountApps.length; x++)
     {
-      if(result.accountApps[x].name === 'sick') continue;
-      
-      var currentApp        = document.createElement('div');
-      var currentAppAside   = document.createElement('div');
-      var currentAppData    = document.createElement('div');
-      var currentAppAccess  = document.createElement('div');
+      //if(result.accountApps[x].name === 'stoppage') continue; // To remove when stoppage app is ended
+
+      const currentApp        = document.createElement('div');
+      const currentAppAside   = document.createElement('div');
+      const currentAppData    = document.createElement('div');
+      const currentAppAccess  = document.createElement('div');
 
       currentApp            .setAttribute('class', 'appsSectionListElement');
       currentAppAside       .setAttribute('class', 'appsSectionListElementAside');
       currentAppData        .setAttribute('class', 'appsSectionListElementData');
       currentAppAccess      .setAttribute('class', 'appsSectionListElementAccess');
 
-      currentApp            .innerHTML += `<div class="appsSectionListElementPicture"><img src="data:image/png;base64,${result.accountApps[x].picture}" /></div>`;
+      currentApp            .innerHTML += `<div class="appsSectionListElementPicture"><img src="/pictures/apps/${result.accountApps[x].name}.png" /></div>`;
       currentAppData        .innerHTML += `<div class="appsSectionListElementDataTitle">${commonStrings.apps[result.accountApps[x].name]}</div>`;
       currentAppData        .innerHTML += `<div class="appsSectionListElementDataDescription">${commonStrings.root.apps.descriptions[result.accountApps[x].name]}</div>`;
 
@@ -62,9 +62,12 @@ function loadAppsSection()
 
     document.getElementById('locationContent').appendChild(appsContainer);
 
-    if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+    $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+    {
+      document.getElementById('locationLoaderVerticalBlock').remove();
 
-    $(appsContainer).fadeIn(250);
+      $(appsContainer).fadeIn(250);
+    });
   });
 }
 

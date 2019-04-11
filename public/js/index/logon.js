@@ -1,41 +1,109 @@
 /****************************************************************************************************/
 
-document.getElementById('form').addEventListener('submit', sendFormData);
+if(document.getElementById('logonForm'))
+{
+  document.getElementById('logonForm').addEventListener('submit', logonFormSubmit);
+}
+
+if(document.getElementById('emailInput'))
+{
+  document.getElementById('emailInput').addEventListener('focus', () =>
+  {
+    if(document.getElementById('emailError') === null) return;
+
+    document.getElementById('emailError').removeAttribute('style');
+  });
+}
+
+if(document.getElementById('passwordInput'))
+{
+  document.getElementById('passwordInput').addEventListener('focus', () =>
+  {
+    if(document.getElementById('passwordError') === null) return;
+
+    document.getElementById('passwordError').removeAttribute('style');
+  });
+}
 
 /****************************************************************************************************/
 
-function sendFormData(event)
+function logonFormSubmit(event)
 {
   event.preventDefault();
 
-  document.getElementById('error').innerText = '';
-  document.getElementById('main').style.filter = 'blur(3px)';
-  document.getElementById('background').style.display = 'block';
+  if(document.getElementById('formError') === null) return;
 
-  if(document.getElementById('email').value.length > 0 && document.getElementById('password').value.length > 0)
+  document.getElementById('formError').removeAttribute('style');
+  document.getElementById('emailError').removeAttribute('style');
+  document.getElementById('passwordError').removeAttribute('style');
+  document.getElementById('formError').innerText = '';
+
+  const username = event.target.elements['email'].value.trim();
+  const password = event.target.elements['password'].value.trim();
+
+  if(username.length === 0)
   {
-    var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
+    return document.getElementById('emailError').style.display = 'block';
+  }
 
-    $.ajax(
+  if(password.length === 0)
+  {
+    return document.getElementById('passwordError').style.display = 'block';
+  }
+
+  /**************************************************/
+
+  const loaderVeil      = document.createElement('div');
+  const loaderWrapper   = document.createElement('div');
+  const loaderContainer = document.createElement('div');
+  const loaderBlock     = document.createElement('div');
+
+  loaderVeil      .setAttribute('class', 'loaderVeil');
+  loaderWrapper   .setAttribute('class', 'loaderWrapper');
+  loaderContainer .setAttribute('class', 'loaderContainer');
+  loaderBlock     .setAttribute('class', 'loaderBlock');
+
+  loaderBlock     .innerHTML += `<div class="loaderBlockSpinner"></div>`;
+
+  loaderWrapper   .appendChild(loaderContainer);
+  loaderContainer .appendChild(loaderBlock);
+
+  document.getElementById('main').style.filter = 'blur(4px)';
+
+  document.body   .appendChild(loaderVeil);
+  document.body   .appendChild(loaderWrapper);
+
+  /**************************************************/
+
+  $.ajax(
+  {
+    method: 'PUT', timeout: 10000, dataType: 'JSON', data: { 'emailAddress': username, 'uncryptedPassword': password }, url: '/', success: () => {},
+
+    error: (xhr, status, error) =>
     {
-      type: 'PUT', timeout: 5000, dataType: 'JSON', data: { 'emailAddress': email, 'uncryptedPassword': password }, url: '/', success: () => {},
-      error: (xhr, status, error) =>
-      {
-        document.getElementById('background').removeAttribute('style');
-        document.getElementById('main').removeAttribute('style');
+      loaderVeil.remove();
+      loaderWrapper.remove();
+      document.getElementById('main').removeAttribute('style');
 
-        if(status == 'timeout') document.getElementById('error').innerText = 'Le serveur a mis trop de temps à répondre...';
-        else{ document.getElementById('error').innerText = JSON.parse(xhr.responseText).message; }
+      if(xhr.responseJSON !== undefined)
+      {
+        document.getElementById('formError').innerText = xhr.responseJSON.message;
+        document.getElementById('formError').style.display = 'block';
       }
 
-    }).done((json) =>
-    {
-      document.cookie = `peiauth=${json.token};max-age=${json.maxAge};path=/`;
+      else
+      {
+        document.getElementById('formError').innerText = 'Échec de communication avec le serveur. Celui-ci est peut-être indisponible ou alors votre connexion rencontre des difficultés. Veuillez réessayer plus tard';
+        document.getElementById('formError').style.display = 'block';
+      }
+    }
 
-      location = '/home';
-    });
-  }
+  }).done((result) =>
+  {
+    document.cookie = `peiauth=${result.token};max-age=${result.maxAge};path=/`;
+
+    window.location = '/home';
+  });
 }
 
 /****************************************************************************************************/

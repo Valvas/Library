@@ -25,11 +25,19 @@ function createAside(callback)
 
     asideMenuElement      .innerText = appStrings.asideMenu[location];
 
-    asideMenuElement      .addEventListener('click', () =>
+    if(location === 'exit')
     {
-      urlParameters = [];
-      loadLocation(location);
-    });
+      asideMenuElement    .addEventListener('click', openExitPrompt);
+    }
+
+    else
+    {
+      asideMenuElement    .addEventListener('click', () =>
+      {
+        urlParameters = [];
+        loadLocation(location);
+      });
+    }
 
     asideMenu             .appendChild(asideMenuElement);
   }
@@ -38,7 +46,7 @@ function createAside(callback)
 
   document.getElementById('asideContainer').appendChild(asideMenu);
 
-  return callback(null);
+  return createMessenger(callback);
 }
 
 /****************************************************************************************************/

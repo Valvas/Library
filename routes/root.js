@@ -69,24 +69,41 @@ router.post('/', (req, res) =>
 
 router.get('/reset-password', (req, res) =>
 {
-  res.render('root/reset', { service: req.app.get('params').init.servicesStarted.transporter });
+  res.render('root/reset', { strings: { common: commonStrings } });
 });
 
 /****************************************************************************************************/
 
 router.put('/reset-password', (req, res) =>
 {
-  if(req.body.email == undefined) return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'emailAddress' });
+  if(req.body.email === undefined)
+  {
+    return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'emailAddress' });
+  }
 
   commonAccountsGet.checkIfAccountExistsFromEmail(req.body.email, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountExists, accountData) =>
   {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    if(error !== null)
+    {
+      return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    }
 
-    if(accountExists == false) return res.status(200).send({ message: success[constants.NEW_PASSWORD_SENT] });
+    if(accountExists === false)
+    {
+      return res.status(404).send({ message: errors[constants.ACCOUNT_NOT_FOUND], detail: null });
+    }
+
+    if(accountData.suspended === 1)
+    {
+      return res.status(403).send({ message: errors[constants.ACCOUNT_SUSPENDED], detail: null });
+    }
 
     commonAccountsUpdate.resetPassword(accountData.uuid, req.body.email, req.app.get('databaseConnectionPool'), req.app.get('transporter'), req.app.get('params'), (error) =>
     {
-      if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+      if(error !== null)
+      {
+        return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+      }
 
       return res.status(200).send({ message: success[constants.NEW_PASSWORD_SENT] });
     });

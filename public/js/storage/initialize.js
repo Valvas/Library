@@ -11,7 +11,7 @@ var currentServiceAccountRights = null;
 var currentLocation = window.location.href.split('/')[4];
 var urlParameters = window.location.href.split('/').slice(5);
 
-if(currentLocation == undefined || currentLocation.length === 0) currentLocation = 'home';
+if(currentLocation === undefined || currentLocation.length === 0) currentLocation = 'home';
 
 //TO REMOVE WHEN ADMIN SECTION IS DONE
 if(currentLocation === 'admin') window.location = '/storage/admin';
@@ -26,10 +26,10 @@ function initializeStart()
 {
   if(document.getElementById('initializationError')) document.getElementById('initializationError').remove();
 
-  var loader  = document.createElement('div');
+  const loader  = document.createElement('div');
 
-  loader      .setAttribute('id', 'loaderContainer');
-  loader      .innerHTML = '<div id="loaderWrapper"><div id="loaderSpinner"></div></div>';
+  loader        .setAttribute('id', 'loaderContainer');
+  loader        .innerHTML = '<div id="loaderWrapper"><div id="loaderSpinner"></div></div>';
 
   document.body.appendChild(loader);
 
@@ -51,15 +51,18 @@ function initializeStart()
 
     createNavigation(() =>
     {
-      var contentContainer = document.createElement('div');
+      const contentContainer = document.createElement('div');
 
       contentContainer.setAttribute('id', 'contentContainer');
 
       document.getElementById('wrapperContainer').appendChild(contentContainer);
 
-      loader.remove();
+      $(loader).fadeOut(250, () =>
+      {
+        loader.remove();
 
-      loadLocation(currentLocation);
+        loadLocation(currentLocation);
+      });
     });
   });
 }

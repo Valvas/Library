@@ -36,8 +36,7 @@
     "apps":
     {
       "uuid": "VARCHAR(255) NOT NULL",
-      "name": "VARCHAR(255) NOT NULL",
-      "picture": "MEDIUMTEXT NOT NULL"
+      "name": "VARCHAR(255) NOT NULL"
     },
     "errors":
     {
@@ -202,12 +201,42 @@
     }
   },
 
-  "sick":
+  "stoppage":
   {
     "accounts_list":
     {
       "id": "BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY",
       "account_uuid": "VARCHAR(255) NOT NULL"
+    },
+
+    "list":
+    {
+      "uuid": "VARCHAR(255) NOT NULL",
+      "establishment": "VARCHAR(255) NOT NULL",
+      "identifier": " VARCHAR(255) NOT NULL",
+      "firstname": "VARCHAR(255) NOT NULL",
+      "lastname": "VARCHAR(255) NOT NULL",
+      "gender": "BOOLEAN NOT NULL",
+      "start": "BIGINT UNSIGNED NOT NULL",
+      "received": "BIGINT UNSIGNED NOT NULL",
+      "end": "BIGINT UNSIGNED NOT NULL",
+      "type": "VARCHAR(255) NOT NULL",
+      "cpam": "VARCHAR(255) NOT NULL"
+    },
+
+    "establishment":
+    {
+      "uuid": "VARCHAR(255) NOT NULL",
+      "name": "VARCHAR(255) NOT NULL"
+    },
+
+    "attachment":
+    {
+      "uuid": "VARCHAR(255) NOT NULL",
+      "record": "VARCHAR(255) NOT NULL",
+      "name": "VARCHAR(255) NOT NULL",
+      "comment": "TEXT NOT NULL",
+      "type": "VARCHAR(255) NOT NULL"
     }
   },
 

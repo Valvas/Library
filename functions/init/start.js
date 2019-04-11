@@ -15,7 +15,7 @@ const accountsInit        = require(`${__root}/functions/init/accounts`);
 
 const stringsQueries      = require(`${__root}/routes/strings`);
 
-const sickAppAccess           = require(`${__root}/functions/sick/checkAccess`);
+const stoppageAppAccess       = require(`${__root}/functions/stoppage/checkAccess`);
 const storageAppAccess        = require(`${__root}/functions/storage/checkAccess`);
 const storageAppAdminAccess   = require(`${__root}/functions/storage/checkAdminAccess`);
 
@@ -85,7 +85,9 @@ module.exports.startApp = (app, callback) =>
   const storageQueriesStrings         = require(`${__root}/routes/storage/queries/strings`);
   const storageQueriesServices        = require(`${__root}/routes/storage/queries/services`);
 
-  const sickViewsHome                 = require(`${__root}/routes/sick/views/home`);
+  const stoppageViewsHome             = require(`${__root}/routes/stoppage/views/home`);
+
+  const stoppageQueriesStoppage       = require(`${__root}/routes/stoppage/queries/stoppage`);
 
   const apiMessenger                  = require(`${__root}/routes/messenger`);
 
@@ -127,7 +129,8 @@ module.exports.startApp = (app, callback) =>
   app.use('/queries/storage/strings', auth, storageAppAccess, storageQueriesStrings);
   app.use('/queries/storage/services', auth, storageAppAccess, storageQueriesServices);
 
-  app.use('/sick', auth, sickAppAccess, sickViewsHome);
+  app.use('/stoppage', auth, stoppageAppAccess, stoppageViewsHome);
+  app.use('/queries/stoppage', auth, stoppageAppAccess, stoppageQueriesStoppage);
 
   app.use((req, res, next) =>
   {

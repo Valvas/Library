@@ -16,7 +16,7 @@ body{ background-color:#F9F9F9; margin:0; }
 
 #locationLoaderHorizontalBlock{ display:flex; flex-direction:row; justify-content:center; }
 
-#locationLoaderSpinner{ border:16px solid #E3E3E3; border-top:16px solid #428BCA; border-radius:50%; width:120px; height:120px; animation:spin 2s linear infinite; }
+#locationLoaderSpinner{ border:6px solid #E3E3E3; border-top:6px solid #428BCA; border-radius:50%; width:120px; height:120px; animation:spin 2s linear infinite; }
 
 /****************************************************************************************************/
 
@@ -24,7 +24,7 @@ body{ background-color:#F9F9F9; margin:0; }
 
 #loaderWrapper{ display:flex; flex-direction:row; justify-content:center; }
 
-#loaderSpinner{ border:24px solid #E3E3E3; border-top:24px solid #428BCA; border-radius:50%; width:180px; height:180px; animation:spin 2s linear infinite; }
+#loaderSpinner{ border:8px solid #E3E3E3; border-top:8px solid #428BCA; border-radius:50%; width:180px; height:180px; animation:spin 2s linear infinite; }
 
 /****************************************************************************************************/
 
@@ -32,6 +32,6 @@ body{ background-color:#F9F9F9; margin:0; }
 
 #locationLoaderWrapper{ display:flex; flex-direction:row; justify-content:center; }
 
-#locationLoaderSpinner{ border:16px solid #E3E3E3; border-top:16px solid #428BCA; border-radius:50%; width:120px; height:120px; animation:spin 2s linear infinite; }
+#locationLoaderSpinner{ border:6px solid #E3E3E3; border-top:6px solid #428BCA; border-radius:50%; width:120px; height:120px; animation:spin 2s linear infinite; }
 
 /****************************************************************************************************/

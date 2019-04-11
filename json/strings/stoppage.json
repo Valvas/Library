@@ -1,0 +1,92 @@
+{
+  "appName": "Gestion des $[1]AT$[2]",
+
+  "exitPrompt":
+  {
+    "title": "Quitter l'application",
+    "message": "Êtes-vous sûr(e) de vouloir quitter l'application ?",
+    "confirm": "Quitter",
+    "cancel": "Rester"
+  },
+
+  "asideMenu":
+  {
+    "home": "Accueil",
+    "list": "AT",
+    "tas": "TAS",
+    "admin": "Administration",
+    "exit": "Quitter"
+  },
+
+  "home":
+  {
+    "locationLabel": "Accueil"
+  },
+
+  "stoppageslist":
+  {
+    "locationLabel": "Liste des arrêts de travail",
+    "addStoppageButton": "Ajouter un arrêt de travail",
+    "emptyList": "Aucun arrêt de travail"
+  },
+
+  "addStoppage":
+  {
+    "locationLabel": "Ajouter un arrêt de travail",
+
+    "formFields":
+    {
+      "registrationNumber": "Matricule du salarié",
+      "lastname": "Nom du salarié",
+      "firstname": "Prénom du salarié",
+      "gender": "Sexe du salarié",
+      "establishment": "Établissement",
+      "incidentType": "Type d'incident",
+      "startDate": "Date de l'incident",
+      "communicationDate": "Date de communication de l'incident",
+      "endDate": "Date de fin de l'arrêt",
+      "addAttachment": "Ajouter une correspondance",
+      "emptyAttachments": "Aucune correspondance",
+      "submitForm": "Ajouter cet arrêt de travail",
+      "attachmentType": "Type de correspondance",
+      "attachmentFile": "Fichier asssocié",
+      "attachmentComment": "Commentaire",
+      "submitAtatchment": "Ajouter",
+      "cancelAttachment": "Annuler",
+      "removeAttachment": "Supprimer",
+
+      "genders":
+      {
+        "0": "Homme",
+        "1": "Femme"
+      },
+
+      "incidentTypes":
+      {
+        "commuting": "Accident de trajet",
+        "work": "Accident de travail",
+        "sick": "Maladie"
+      }
+    },
+
+    "formErrors":
+    {
+      "emptyField": "Veuillez remplir ce champ",
+      "communicationDateBeforeStartDate": "La date de réception de l'arrêt ne peut pas précéder son début",
+      "endDateBeforeStartDate": "La fin de l'arrêt ne peut pas précéder son début",
+      "attachmentRequired": "Vous devez joindre au moins un document à cet arrêt",
+      "initialRequired": "Un arrêt initial est requis dans les correspondances",
+      "initialOverflow": "Il ne peut y avoir qu'un seul arrêt initial dans les correspondances"
+    },
+
+    "correspondences":
+    {
+      "started": "Arrêt initial",
+      "rejected": "Rejet de l'arrêt",
+      "delayed": "Délais complémentaire",
+      "closed": "Clôture",
+      "questionary": "Questionnaire employeur",
+      "disputed": "Contestation"
+    }
+  }
+}

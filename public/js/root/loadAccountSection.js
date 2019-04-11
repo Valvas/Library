@@ -6,14 +6,14 @@ function loadAccountSection()
 
   history.pushState(null, null, '/account');
 
-  var accountContainer    = document.createElement('div');
-  var accountHeader       = document.createElement('div');
-  var accountPicture      = document.createElement('div');
-  var accountSectionData  = document.createElement('div');
-  var accountEmail        = document.createElement('div');
-  var accountLastname     = document.createElement('div');
-  var accountFirstname    = document.createElement('div');
-  var accountNumber       = document.createElement('div');
+  const accountContainer    = document.createElement('div');
+  const accountHeader       = document.createElement('div');
+  const accountPicture      = document.createElement('div');
+  const accountSectionData  = document.createElement('div');
+  const accountEmail        = document.createElement('div');
+  const accountLastname     = document.createElement('div');
+  const accountFirstname    = document.createElement('div');
+  const accountNumber       = document.createElement('div');
 
   accountContainer        .innerHTML += `<div class="locationContentTitle">${commonStrings.locations.account}</div>`;
 
@@ -54,9 +54,12 @@ function loadAccountSection()
 
   document.getElementById('locationContent').appendChild(accountContainer);
 
-  if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+  $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+  {
+    document.getElementById('locationLoaderVerticalBlock').remove();
 
-  $(accountContainer).fadeIn(250);
+    $(accountContainer).fadeIn(250);
+  });
 }
 
 /****************************************************************************************************/

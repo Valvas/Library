@@ -8,14 +8,14 @@ function loadHomeSection()
 
   history.pushState(null, null, '/storage/home');
 
-  var homeContainer       = document.createElement('div');
-  var servicesContainer   = document.createElement('div');
-  var containerHeader     = document.createElement('div');
-  var containerMessages   = document.createElement('div');
-  var messageEmptyList    = document.createElement('div');
-  var messageEmptySearch  = document.createElement('div');
-  var headerSearch        = document.createElement('input');
-  var containerList       = document.createElement('div');
+  const homeContainer       = document.createElement('div');
+  const servicesContainer   = document.createElement('div');
+  const containerHeader     = document.createElement('div');
+  const containerMessages   = document.createElement('div');
+  const messageEmptyList    = document.createElement('div');
+  const messageEmptySearch  = document.createElement('div');
+  const headerSearch        = document.createElement('input');
+  const containerList       = document.createElement('div');
 
   messageEmptyList        .setAttribute('id', 'emptyServicesList');
   messageEmptySearch      .setAttribute('id', 'emptyServicesSearch');
@@ -39,12 +39,12 @@ function loadHomeSection()
 
   homeContainer           .innerHTML = `<div class="homeSectionBlockHeader">${storageStrings.homeSection.headerTitle}</div>`;
 
-  for(var service in servicesData)
+  for(let service in servicesData)
   {
     const currentServiceUuid = service;
     const currentServiceData = servicesData[service];
 
-    var currentServiceFileMaxSize = parseInt(currentServiceData.fileLimit);
+    let currentServiceFileMaxSize = parseInt(currentServiceData.fileLimit);
 
     const amountOfTo = Math.floor((((currentServiceFileMaxSize / 1024) / 1024) / 1024) / 1024);
     currentServiceFileMaxSize -= (amountOfTo * 1024 * 1024 * 1024 * 1024);
@@ -58,7 +58,7 @@ function loadHomeSection()
     const amountOfKo = Math.floor((currentServiceFileMaxSize / 1024));
     currentServiceFileMaxSize -= (amountOfKo * 1024);
 
-    var maxFileSize = `${currentServiceFileMaxSize}o`;
+    let maxFileSize = `${currentServiceFileMaxSize}o`;
 
     if(amountOfTo > 0) maxFileSize = `${amountOfTo},${(amountOfGo / 1024).toFixed(2).split('.')[1]}To`;
 
@@ -68,12 +68,12 @@ function loadHomeSection()
 
     else if(amountOfKo > 0) maxFileSize = `${amountOfKo},${(currentServiceFileMaxSize / 1024).toFixed(2).split('.')[1]}Ko`;
 
-    var serviceBlock        = document.createElement('div');
-    var serviceBlockName    = document.createElement('div');
-    var serviceBlockContent = document.createElement('div');
-    var contentStats        = document.createElement('div');
-    var contentAccess       = document.createElement('div');
-    var accessButton        = document.createElement('button');
+    const serviceBlock        = document.createElement('div');
+    const serviceBlockName    = document.createElement('div');
+    const serviceBlockContent = document.createElement('div');
+    const contentStats        = document.createElement('div');
+    const contentAccess       = document.createElement('div');
+    const accessButton        = document.createElement('button');
 
     serviceBlock          .setAttribute('id', service);
 
@@ -119,9 +119,12 @@ function loadHomeSection()
 
   document.getElementById('contentContainer').appendChild(homeContainer);
 
-  if(document.getElementById('locationLoaderContainer')) document.getElementById('locationLoaderContainer').remove();
+  $(document.getElementById('locationLoaderContainer')).fadeOut(250, () =>
+  {
+    document.getElementById('locationLoaderContainer').remove();
 
-  $(homeContainer).fadeIn(250);
+    $(homeContainer).fadeIn(250);
+  });
 }
 
 /****************************************************************************************************/

@@ -55,7 +55,7 @@
   "apps":
   {
     "storage": "Partage Fichiers PEI",
-    "sick": "Gestion des AT"
+    "stoppage": "Gestion des AT"
   },
 
   "locations":
@@ -87,10 +87,12 @@
     "failure": "Echec",
     "close": "Fermer",
     "back": "Retour",
+    "error": "Erreur",
+    "remove": "Supprimer",
 
     "xhrErrors":
     {
-      "timeout": "Le serveur a mis trop de temps à répondre, celui-ci est peut-être indisponible ou alors votre connexion rencontre des difficultés"
+      "timeout": "Echec de communication avec le serveur, celui-ci est peut-être indisponible ou alors votre connexion rencontre des difficultés"
     }
   },
 
@@ -207,6 +209,24 @@
 
   "root":
   {
+    "logonPage":
+    {
+      "emailPlaceholder": "Adresse email",
+      "passwordPlaceholder": "Mot de passe",
+      "emptyError": "Veuillez renseigner ce champ",
+      "forgottenPassword": "Mot de passe oublié ?",
+      "submitButton": "Se connecter"
+    },
+
+    "resetPasswordPage":
+    {
+      "infoMessage": "Veuillez entrer votre adresse email pour recevoir un nouveau mot de passe",
+      "emailPlaceholder": "Adresse email",
+      "emptyError": "Veuillez renseigner ce champ",
+      "returnLink": "Retour à la page de connexion",
+      "submitButton": "Recevoir un nouveau mot de passe"
+    },
+
     "logoutConfirmation":
     {
       "title": "Déconnexion",
@@ -320,7 +340,7 @@
       "descriptions":
       {
         "storage": "Cette application permet de partager des fichiers entre utilisateurs et par service",
-        "sick": "Cette application permet d'avoir un suivi des AT des salariés de l'entreprise"
+        "stoppage": "Ouverture prévue fin 2056"
       }
     },
 

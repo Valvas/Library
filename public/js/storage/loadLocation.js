@@ -18,6 +18,7 @@ function loadLocation(sectionToLoad)
     case 'home':    loadHomeSection();            break;
     case 'service': loadServiceStorageSection();  break;
     case 'admin':   window.location = '/storage/admin'; break;
+    //case 'admin':   loadAdminSection();           break;
     default:        loadHomeSection();            break;
   }
 }

@@ -59,7 +59,7 @@ function loadDirectorySectionHome()
         for(var x = 0; x < directoryAccounts.length; x++)
         {
           if(directoryAccounts[x].suspended) continue;
-          
+
           const currentAccountUuid = directoryAccounts[x].uuid;
 
           var currentAccount  = document.createElement('div');
@@ -126,9 +126,12 @@ function loadDirectorySectionHome()
 
         document.getElementById('locationContent').appendChild(directoryContainer);
 
-        if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+        $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+        {
+          document.getElementById('locationLoaderVerticalBlock').remove();
 
-        $(directoryContainer).fadeIn(250);
+          $(directoryContainer).fadeIn(250);
+        });
       });
     });
   });
@@ -209,9 +212,12 @@ function loadDirectorySectionProfile(accountUuid)
 
     document.getElementById('locationContent').appendChild(directoryContainer);
 
-    if(document.getElementById('locationLoaderVerticalBlock')) document.getElementById('locationLoaderVerticalBlock').remove();
+    $(document.getElementById('locationLoaderVerticalBlock')).fadeOut(250, () =>
+    {
+      document.getElementById('locationLoaderVerticalBlock').remove();
 
-    $(directoryContainer).fadeIn(250);
+      $(directoryContainer).fadeIn(250);
+    });
   });
 }
 
@@ -219,9 +225,9 @@ function loadDirectorySectionProfile(accountUuid)
 
 function buildDirectoryTree(currentUnit, tag, callback)
 {
-  var resultArray = [], index = 0;
+  let resultArray = [], index = 0;
 
-  var browseUnit = () =>
+  const browseUnit = () =>
   {
     tag = `${tag.slice(0, -1)}${index}`;
 

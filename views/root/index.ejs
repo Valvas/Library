@@ -5,32 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/stylesheets/base.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/logon.css" />
-  <body class='logon-body'>
-    <noscript>
-      <div class="noScriptWarningBlock">
-        <div class="noScriptWarningBlockMessage">Attention : Ce site requiert Javascript pour fonctionner. Votre navigateur ne le supporte pas ou alors il n'est pas activé dans les paramètres</div>
-      </div>
-    </noscript>
-    <div id='main' class='main'>
-      <div class='title'>Connexion</div>
-      <div class='error' id='error'></div>
-      <form id='form'>
-        <div class='icon'><i class='fas fa-at'></i></div><!--
-        --><input placeholder='Adresse Email' class='input' id='email' type='text' required />
-        <div class='icon'><i class='fas fa-lock'></i></div><!--
-        --><input placeholder='Mot De Passe' class='input' id='password' type='password' required />
-        <button type='submit' id='send' class='send'>Envoyer</button>
-      </form>
-      <a href='/reset-password' class='question'>Mot de passe oublié ?</a>
-    </div>
-    <div id='background' class='background'>
-      <div class='loader'>
-        <div class='spinner'><i class='fas fa-circle-notch fa-spin'></i></div>
-        <div class='message'>Vérification en cours...</div>
+  <body>
+    <div id="main">
+      <div id="wrapper">
+        <div class="logonBlock">
+          <div class="logonBlockTitle"><%= strings.common.root.navigationBar.companyName %><span><%= strings.common.root.navigationBar.appName %></span></div>
+          <form class="logonBlockForm" id="logonForm">
+            <div id="formError" class="logonBlockFormError"></div>
+            <input id="emailInput" name="email" type="email" placeholder="<%= strings.common.root.logonPage.emailPlaceholder %>" />
+            <div id="emailError" class="logonBlockFormFieldError"><%= strings.common.root.logonPage.emptyError %></div>
+            <input id="passwordInput" name="password" type="password" placeholder="<%= strings.common.root.logonPage.passwordPlaceholder %>" />
+            <div id="passwordError" class="logonBlockFormFieldError"><%= strings.common.root.logonPage.emptyError %></div>
+            <div class="logonBlockFormFooter">
+              <a href="/reset-password" class="logonBlockFormFooterForgottenPassword"><%= strings.common.root.logonPage.forgottenPassword %></a>
+              <button type="submit"><%= strings.common.root.logonPage.submitButton %></button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
     <script src="/js/jQuery.js"></script>
     <script src='/js/index/logon.js'></script>
-    <script src='/js/fontawesome.js'></script>
   </body>
 </html>
