@@ -16,7 +16,10 @@ module.exports.getAccountAccessForAllApps = (accountUuid, databaseConnection, gl
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
     if(result.length === 0) return callback(null, []);
 
