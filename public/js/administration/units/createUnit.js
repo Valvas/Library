@@ -1,8 +1,11 @@
 /****************************************************************************************************/
 
-var administrationAppStrings = null;
+let administrationAppStrings = null;
 
-if(document.getElementById('createUnitForm')) document.getElementById('createUnitForm').addEventListener('submit', createUnit);
+if(document.getElementById('createUnitForm'))
+{
+  document.getElementById('createUnitForm').addEventListener('submit', createUnit);
+}
 
 /****************************************************************************************************/
 
@@ -10,13 +13,13 @@ function createUnit(event)
 {
   event.preventDefault();
 
-  if(document.getElementById('createUnitNameInput') == null) return;
-  if(document.getElementById('createUnitNameError') == null) return;
-  if(document.getElementById('createUnitParentInput') == null) return;
+  if(document.getElementById('createUnitNameInput') === null) return;
+  if(document.getElementById('createUnitNameError') === null) return;
+  if(document.getElementById('createUnitParentInput') === null) return;
 
   document.getElementById('createUnitNameError').removeAttribute('style');
 
-  if(new RegExp(`^[a-zéàèâêîôûäëïöüñ]+((')?([a-zéàèâêîôûäëïöüñ]+))*(( )?[a-zéàèâêîôûäëïöüñ]+)*((')?([a-zéàèâêîôûäëïöüñ]+))*$`).test(document.getElementById('createUnitNameInput').value.toLowerCase()) == false)
+  if(new RegExp(`^(\\S)+(( )?(\\S)+)*$`).test(document.getElementById('createUnitNameInput').value.toLowerCase()) === false)
   {
     return document.getElementById('createUnitNameError').style.display = 'block';
   }
@@ -25,7 +28,10 @@ function createUnit(event)
 
   createBackground('createUnitBackground');
 
-  if(administrationAppStrings != null) return createUnitOpenConfirmation();
+  if(administrationAppStrings !== null)
+  {
+    return createUnitOpenConfirmation();
+  }
 
   displayLoader('', (loader) =>
   {
@@ -41,10 +47,10 @@ function createUnitGetStrings(loader)
   {
     removeLoader(loader, () => {  });
 
-    if(error != null)
+    if(error !== null)
     {
       removeBackground('createUnitBackground');
-      
+
       return displayError(error.message, error.detail, 'createUnitError');
     }
 

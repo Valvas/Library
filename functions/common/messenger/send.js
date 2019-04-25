@@ -90,7 +90,7 @@ function createConversationInsertMessageIntoDatabase(messageContent, conversatio
   {
     if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    commonFormatDate.getStringifyDateFromTimestamp(currentTimestamp, (error, stringifiedDate) =>
+    commonFormatDate.getStringifiedDateTimeFromTimestampAsync(currentTimestamp, (error, stringifiedDate) =>
     {
       if(error != null) return callback(error);
 
@@ -200,7 +200,7 @@ function addMessageToConversationInsertIntoDatabase(messageContent, conversation
   {
     if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
 
-    commonFormatDate.getStringifyDateFromTimestamp(currentTimestamp, (error, stringifiedDate) =>
+    commonFormatDate.getStringifiedDateTimeFromTimestampAsync(currentTimestamp, (error, stringifiedDate) =>
     {
       if(error != null) return callback(error);
 

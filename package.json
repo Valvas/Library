@@ -1,9 +1,10 @@
 {
-  "name": "library",
-  "version": "0.0.0",
+  "name": "intranetPEI",
+  "version": "0.6.1",
   "private": true,
   "scripts": {
-    "start": "node-dev ./bin/www"
+    "start": "node-dev ./bin/www",
+    "test": "mocha"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",

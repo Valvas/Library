@@ -121,17 +121,23 @@ router.put('/remove-article', (req, res) =>
 
 router.post('/add-comment-on-article', (req, res) =>
 {
-  if(req.body.articleUuid == undefined)     return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'articleUuid' });
-  if(req.body.commentParent == undefined)   return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentParent' });
-  if(req.body.commentContent == undefined)  return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentContent' });
+  if(req.body.articleUuid === undefined)     return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'articleUuid' });
+  if(req.body.commentParent === undefined)   return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentParent' });
+  if(req.body.commentContent === undefined)  return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'commentContent' });
 
-  commonNewsComment.addCommentOnArticle(req.body.articleUuid, req.body.commentContent, req.body.commentParent.length === 0 ? null : req.body.commentParent, req.app.locals.account, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, commentData) =>
+  commonNewsComment.addCommentOnArticle(req.body.articleUuid, req.body.commentContent.trim(), req.body.commentParent.length === 0 ? null : req.body.commentParent, req.app.locals.account, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, commentData) =>
   {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    if(error !== null)
+    {
+      return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    }
 
     commonRightsGet.checkIfRightsExistsForAccount(req.app.locals.account.uuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, rightsExist, rightsData) =>
     {
-      if(error == null && rightsExist) req.app.get('io').in('rootNewsGroup').emit('commentPostedOnArticle', commentData, req.body.articleUuid, req.app.locals.account, rightsData, commonAppStrings);
+      if(error === null && rightsExist)
+      {
+        req.app.get('io').in('rootNewsGroup').emit('commentPostedOnArticle', commentData, req.body.articleUuid, req.app.locals.account, rightsData, commonAppStrings);
+      }
     });
 
     req.app.get('io').in('intranetArticlesRoom').emit('articleCommentPosted', commentData);

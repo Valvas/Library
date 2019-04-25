@@ -1,0 +1,43 @@
+/****************************************************************************************************/
+
+.stoppageDetailWrapper{ display:flex; flex-direction:row; justify-content:center; width:100%; padding:40px 20px 40px 20px; box-sizing:border-box; }
+
+.stoppageDetailContainer{ width:100%; max-width:500px; }
+
+.stoppageDetailContainerData{ margin:10px 0 10px 0; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
+
+.stoppageDetailContainerDataKey{ margin-right:10px; font-weight:bold; font-size:0.9em; }
+
+.stoppageDetailContainerDataValue{ font-size:1em; font-style:italic; }
+
+.stoppageDetailContainerAttachments{ margin:20px 0 20px 0; }
+
+.stoppageDetailContainerAttachmentsTitle{ font-size:1.25em; font-weight:lighter; border-bottom:1px solid rgba(0,0,0,0.25); padding-bottom:5px; }
+
+.stoppageDetailContainerAttachmentsEmpty{ font-style:italic; font-size:1em; text-align:center; margin-top:20px; display:none; }
+
+.stoppageDetailContainerAttachmentsAdd{ width:100%; font-size:0.9em; box-sizing:border-box; border:none; background-color:#759EB8; color:#FFFFFF; padding:5px 15px 5px 15px; cursor:pointer; border-radius:2px; margin-top:20px; }
+
+.stoppageDetailContainerAttachmentsAdd:hover{ background-color:#537C96; }
+
+
+.stoppageDetailContainerAttachment{ border-bottom:1px solid rgba(0,0,0,0.25); margin:20px 0 20px 0; }
+
+.stoppageDetailContainerAttachmentLabel{ font-size:1.25em; color:rgba(0,0,0,0.75); border-bottom:1px solid rgba(0,0,0,0.25); padding-bottom:10px; }
+
+.stoppageDetailContainerAttachmentFile{ font-size:1em; text-decoration:underline; color:#759EB8; margin:10px 0 10px 0; cursor:pointer; user-select:none; -ms-user-select:none; -moz-user-select:none; -webkit-user-select:none; }
+
+.stoppageDetailContainerAttachmentComment{ color:rgba(0,0,0,0.5); font-size:0.9em; font-style:italic; width:100%; box-sizing:border-box; border-radius:2px; border:1px solid rgba(0,0,0,0.25); padding:10px; background-color:rgba(0,0,0,0.05); }
+
+.stoppageDetailContainerAttachmentDownload{ background-color:#759EB8; color:#FFFFFF; padding:5px 15px 5px 15px; border-radius:2px; border:none; margin:10px 0 10px 0; cursor:pointer; }
+
+.stoppageDetailContainerAttachmentDownload:hover{ background-color:#537C96; }
+
+
+.stoppageDetailEvents{ border-bottom:1px solid rgba(0,0,0,0.25); margin:40px 0 20px 0; }
+
+.stoppageDetailEventsHeader{ font-size:1.25em; color:rgba(0,0,0,0.75); border-bottom:1px solid rgba(0,0,0,0.25); padding-bottom:10px; }
+
+.stoppageDetailEventsEmpty{ text-align:center; margin:20px; font-size:0.9em; font-style:italic; }
+
+/****************************************************************************************************/

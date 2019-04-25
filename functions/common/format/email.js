@@ -1,6 +1,6 @@
 'use strict'
 
-const constants = require(`${__root}/functions/constants`);
+const constants = require(`../../constants`);
 
 /****************************************************************************************************/
 

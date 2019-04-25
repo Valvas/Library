@@ -33,7 +33,7 @@ function createReport(reportMessage, accountData, databaseConnection, globalPara
       return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
     }
 
-    commonFormatDate.getStringifyDateFromTimestamp(currentTimestamp, (error, stringifiedDate) =>
+    commonFormatDate.getStringifiedDateTimeFromTimestampAsync(currentTimestamp, (error, stringifiedDate) =>
     {
       if(error !== null)
       {

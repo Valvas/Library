@@ -231,7 +231,7 @@ function getAccountLinkedToEachLog(fileData, logsData, databaseConnection, globa
         case 4: message = `${storageStrings.services.fileDetail.logs.commented} ${accountName}`; break;
       }
 
-      commonFormatDate.getStringifyDateFromTimestamp(logsData[index].date, (error, stringifyTimestamp) =>
+      commonFormatDate.getStringifiedDateTimeFromTimestampAsync(logsData[index].date, (error, stringifyTimestamp) =>
       {
         if(error != null) return callback(error);
 

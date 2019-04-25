@@ -1,9 +1,11 @@
 'use strict'
 
+const fs          = require('fs');
 const express     = require('express');
 const formidable  = require('formidable');
 
 const errors          = require(`${__root}/json/errors`);
+const success         = require(`${__root}/json/success`);
 const constants       = require(`${__root}/functions/constants`);
 const getStoppage     = require(`${__root}/functions/stoppage/getStoppage`);
 const createStoppage  = require(`${__root}/functions/stoppage/createStoppage`);
@@ -22,6 +24,26 @@ router.get('/get-stoppages-list', (req, res) =>
     }
 
     return res.status(200).send({ stoppagesList: stoppagesList });
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/get-stoppage-detail', (req, res) =>
+{
+  if(req.body.stoppageUuid === undefined)
+  {
+    return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null });
+  }
+
+  getStoppage.getStoppageDetail(req.body.stoppageUuid, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, stoppageDetail) =>
+  {
+    if(error !== null)
+    {
+      return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    }
+
+    return res.status(200).send(stoppageDetail);
   });
 });
 
@@ -100,24 +122,43 @@ router.post('/create-stoppage', (req, res) =>
       return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'endDate' });
     }
 
-    const attachments = [];
-    const attachmentsData = JSON.parse(fields.attachmentsData);
-
-    for(let x = 0; x < Object.keys(files).length; x++)
+    const attachment =
     {
-      attachments.push({ name: files[Object.keys(files)[x]].name, path: files[Object.keys(files)[x]].path, type: files[Object.keys(files)[x]].type, comment: attachmentsData[x].comment, correspondence: attachmentsData[x].correspondence });
+      name: files.attachmentFile.name,
+      path: files.attachmentFile.path,
+      type: files.attachmentFile.type,
+      comment: fields.attachmentComment
     }
 
-    createStoppage.createStoppage(fields.registrationNumber, fields.employeeFirstname.toLowerCase(), fields.employeeLastname.toLowerCase(), fields.employeeIsMale === 'true', fields.establishment, fields.incidentType, fields.startDate, fields.sentDate, fields.endDate, attachments, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, stoppageData) =>
+    createStoppage.createStoppage(fields.registrationNumber, fields.employeeFirstname.toLowerCase(), fields.employeeLastname.toLowerCase(), fields.employeeIsMale === 'true', fields.establishment, fields.incidentType, fields.startDate, fields.sentDate, fields.endDate, attachment, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, stoppageData) =>
     {
       if(error !== null)
       {
         return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
       }
 
-      return res.status(201).send(stoppageData);
+      return res.status(201).send({ message: success[constants.STOPPAGE_CREATED_SUCCESSFULLY] });
     });
   });
+});
+
+/****************************************************************************************************/
+
+router.get('/visualize-attachment/:recordUuid/:attachmentUuid', (req, res) =>
+{
+  res.set('Content-Type', 'application/pdf');
+
+  fs.readFile(`${req.app.get('params').storage.root}/${req.app.get('params').storage.stoppage}/${req.params.recordUuid}/${req.params.attachmentUuid}.pdf`, (error, data) =>
+  {
+    return res.send(data);
+  });
+});
+
+/****************************************************************************************************/
+
+router.get('/download-attachment/:recordUuid/:attachmentUuid/:attachmentName', (req, res) =>
+{
+  return res.download(`${req.app.get('params').storage.root}/${req.app.get('params').storage.stoppage}/${req.params.recordUuid}/${req.params.attachmentUuid}.pdf`, `${req.params.attachmentName}.pdf`);
 });
 
 /****************************************************************************************************/

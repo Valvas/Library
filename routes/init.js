@@ -18,10 +18,23 @@ const router = express.Router();
 
 router.get('/logon', (req, res) =>
 {
-  if(req.app.get('params').ready) return res.render('block', { message: errors[constants.PAGE_NOT_FOUND], detail: null, link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url ? '/' : req.headers.referer });
-  
-  if(req.app.locals.hasInitSession) return res.redirect('/init/form');
-  
+  if(req.app.get('params').ready === true)
+  {
+    return res.render('block',
+    {
+      message: errors[constants.PAGE_NOT_FOUND],
+      detail: null,
+      link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url
+      ? '/'
+      : req.headers.referer
+    });
+  }
+
+  if(req.app.locals.hasInitSession)
+  {
+    return res.redirect('/init/form');
+  }
+
   return res.render('init/logon', { strings: { common: commonStrings } });
 });
 
@@ -29,18 +42,34 @@ router.get('/logon', (req, res) =>
 
 router.put('/logon', (req, res) =>
 {
-  if(req.app.get('params').ready) return res.status(404).send({ message: errors[constants.PAGE_NOT_FOUND], detail: null });
-
-  if(req.body.password == undefined) return res.status(406).send({ message: 'Mot de passe manquant dans la requête' });
-
-  fs.readFile(`${__root}/password`, 'utf8', (error, data) => 
+  if(req.app.get('params').ready === true)
   {
-    if(req.body.password !== data) return res.status(406).send({ message: 'Le mot de passe est incorrect' });
+    return res.render('block',
+    {
+      message: errors[constants.PAGE_NOT_FOUND],
+      detail: null,
+      link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url
+      ? '/'
+      : req.headers.referer
+    });
+  }
+
+  if(req.body.password === undefined)
+  {
+    return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'password' });
+  }
+
+  fs.readFile(`${__root}/password`, 'utf8', (error, data) =>
+  {
+    if(req.body.password !== data)
+    {
+      return res.status(406).send({ message: 'Le mot de passe est incorrect', detail: null });
+    }
 
     jwt.sign({ isAuthenticated: true }, req.app.get('params').tokenSecretKey, (error, token) =>
     {
-      if(error != null) return res.status(406).send({ message: error.message, detail: null });
-      
+      if(error !== null) return res.status(406).send({ message: error.message, detail: null });
+
       return res.status(200).send({ token: token, maxAge: (60 * 60) });
     });
   });
@@ -50,9 +79,22 @@ router.put('/logon', (req, res) =>
 
 router.get('/form', (req, res) =>
 {
-  if(req.app.get('params').ready) return res.render('block', { message: errors[constants.PAGE_NOT_FOUND], detail: null, link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url ? '/' : req.headers.referer });
+  if(req.app.get('params').ready === true)
+  {
+    return res.render('block',
+    {
+      message: errors[constants.PAGE_NOT_FOUND],
+      detail: null,
+      link: req.headers.referer.slice(req.headers.referer.length - req.url.length) === req.url
+      ? '/'
+      : req.headers.referer
+    });
+  }
 
-  if(req.app.locals.hasInitSession == false) return res.redirect('/init/logon');
+  if(req.app.locals.hasInitSession === false)
+  {
+    return res.redirect('/init/logon');
+  }
 
   return res.render('init/form', { data: req.app.get('params'), strings: { common: commonStrings } });
 });
@@ -61,13 +103,22 @@ router.get('/form', (req, res) =>
 
 router.put('/form', (req, res) =>
 {
-  if(req.app.get('params').ready) return res.status(404).send({ message: errors[constants.PAGE_NOT_FOUND], detail: null });
+  if(req.app.get('params').ready === true)
+  {
+    return res.status(404).send({ message: errors[constants.PAGE_NOT_FOUND], detail: null });
+  }
 
-  if(req.app.locals.hasInitSession == false) return res.status(401).send({ message: errors[constants.AUTHENTICATION_REQUIRED], detail: null });
+  if(req.app.locals.hasInitSession === false)
+  {
+    return res.status(401).send({ message: errors[constants.AUTHENTICATION_REQUIRED], detail: null });
+  }
 
   initFormat.checkConfigDataFormat(req.body, req.app.get('params'), (error) =>
   {
-    if(error != null) return res.status(error.status).send({ message: error.message });
+    if(error !== null)
+    {
+      return res.status(error.status).send({ message: error.message, detail: null });
+    }
 
     return res.status(200).send({  });
   });
@@ -99,7 +150,7 @@ router.get('/test/database', (req, res) =>
       req.app.get('params').init.servicesStarted.database = true;
       res.status(200).send({  });
     }
-  
+
     else
     {
       req.app.get('params').init.servicesStarted.database = false;
@@ -172,7 +223,7 @@ router.get('/end', (req, res) =>
 
   var params = req.app.get('params');
   params.ready = true;
-  
+
   fs.writeFile(`${__root}/json/params.json`, JSON.stringify(params), (error) =>
   {
     if(error) return res.status(500).send({ message: 'Could not write new configuration in file' });

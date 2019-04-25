@@ -29,18 +29,24 @@ module.exports.startInit = (app, callback) =>
   {
     fs.open(`${__root}/password`, 'w', (error, fd) =>
     {
-      if(error) return callback({ message: error.message });
+      if(error !== null)
+      {
+        return callback({ message: error.message });
+      }
 
       fs.write(fd, password, (error) =>
       {
-        if(error) return callback({ message: err.message });
+        if(error !== null)
+        {
+          return callback({ message: error.message });
+        }
 
         app.use('/init', initAuthentication, init);
         app.use('/queries/strings', stringsQueries);
 
         app.use((req, res, next) =>
         {
-          app.get('params').ready == false ? res.redirect('/init/logon') : next();
+          app.get('params').ready === false ? res.redirect('/init/logon') : next();
         });
 
         return callback();
@@ -171,29 +177,32 @@ module.exports.startApp = (app, callback) =>
     {
       accountsInit.createAdminAccounts(pool, app.get('params'), transporter, (error) =>
       {
-        if(error != null)
+        if(error !== null)
         {
-          console.log(error);
+          console.error(new Error(error.message));
 
           process.exit(1);
         }
 
         unitsInit.createUnits(units, pool, app.get('params'), (error) =>
         {
-          if(error != null)
+          if(error !== null)
           {
-            console.log(error);
+            console.error(new Error(error.message));
 
             process.exit(1);
           }
 
           appsInit.createApps(pool, app.get('params'), (error) =>
           {
-            if(error == null) return callback();
+            if(error !== null)
+            {
+              console.error(new Error(error.message));
 
-            console.log(error);
+              process.exit(1);
+            }
 
-            process.exit(1);
+            return callback(null);
           });
         });
       });

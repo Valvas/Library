@@ -7,31 +7,31 @@ const constants         = require(`${__root}/functions/constants`);
 
 module.exports.checkConfigDataFormat = (object, params, callback) =>
 {
-  object                      == undefined ||
+  object                      === undefined ||
 
-  object.other                == undefined ||
-  object.storage              == undefined ||
-  object.database             == undefined ||
-  object.transporter          == undefined ||
+  object.other                === undefined ||
+  object.storage              === undefined ||
+  object.database             === undefined ||
+  object.transporter          === undefined ||
 
-  object.database.port        == undefined ||
-  object.database.user        == undefined ||
-  object.database.host        == undefined ||
-  object.database.manager     == undefined ||
-  object.database.password    == undefined ||
+  object.database.port        === undefined ||
+  object.database.user        === undefined ||
+  object.database.host        === undefined ||
+  object.database.manager     === undefined ||
+  object.database.password    === undefined ||
 
-  object.storage.root         == undefined ||
+  object.storage.root         === undefined ||
 
-  object.transporter.port     == undefined ||
-  object.transporter.user     == undefined ||
-  object.transporter.address  == undefined ||
-  object.transporter.password == undefined ||
+  object.transporter.port     === undefined ||
+  object.transporter.user     === undefined ||
+  object.transporter.address  === undefined ||
+  object.transporter.password === undefined ||
 
-  object.other.port           == undefined ||
-  object.other.salt           == undefined ||
-  object.other.timeout        == undefined ?
+  object.other.port           === undefined ||
+  object.other.salt           === undefined ||
+  object.other.timeout        === undefined ?
 
-  callback({ status: 406, message: errors[constants.MISSING_DATA_IN_REQUEST] }) :
+  callback({ status: 406, message: errors[constants.MISSING_DATA_IN_REQUEST], detail: null }) :
 
   checkAppTimeout(object.other.timeout, params, (newTimeout) =>
   {
@@ -51,13 +51,13 @@ module.exports.checkConfigDataFormat = (object, params, callback) =>
 
       params.transporter.user     = object.transporter.user;
       params.transporter.port     = object.transporter.port;
-      params.transporter.secure   = object.transporter.secure == 'true' ? true : false;
+      params.transporter.secure   = object.transporter.secure === 'true' ? true : false;
       params.transporter.address  = object.transporter.address;
       params.transporter.password = object.transporter.password;
 
       params.timeout              = object.other.timeout;
       params.port                 = object.other.port;
-      params.init.keepSalt        = object.other.salt == 'true' ? true : false;
+      params.init.keepSalt        = object.other.salt === 'true' ? true : false;
 
       return callback(null);
     });
@@ -78,9 +78,17 @@ function checkAppTimeout(timeout, params, callback)
 
 function checkAppPort(port, params, callback)
 {
-  if(parseInt(port) < 0) callback(params.init.defaultPort);
-  else if(parseInt(port) > 65535) callback(params.init.defaultPort);
-  else{ callback(parseInt(port)); }
+  if(parseInt(port) < 0)
+  {
+    return callback(params.init.defaultPort);
+  }
+
+  if(parseInt(port) > 65535)
+  {
+    return callback(params.init.defaultPort);
+  }
+
+  return callback(parseInt(port));
 }
 
 /****************************************************************************************************/

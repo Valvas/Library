@@ -22,6 +22,14 @@ function loadStoppageSection()
 
     break;
 
+    case 'detail':
+
+      history.pushState(null, null, `/stoppage/detail/${urlParameters[0]}`);
+
+      loadStoppageDetail(urlParameters[0]);
+
+    break;
+
     default:
 
       history.pushState(null, null, '/stoppage/list');
@@ -48,7 +56,6 @@ function loadStoppagesList()
 
   }).done((result) =>
   {
-    console.log(result);
     const stoppagesList = result.stoppagesList;
 
     const mainContainer           = document.createElement('div');
@@ -85,11 +92,61 @@ function loadStoppagesList()
 
     for(let x = 0; x < stoppagesList.length; x++)
     {
-      const currentStoppage   = document.createElement('div');
+      const currentStoppage                     = document.createElement('div');
+      const currentStoppageHeader               = document.createElement('div');
+      const currentStoppageHeaderData           = document.createElement('div');
+      const currentStoppageHeaderDataNumber     = document.createElement('div');
+      const currentStoppageHeaderDataLastname   = document.createElement('div');
+      const currentStoppageHeaderDataFirstname  = document.createElement('div');
+      const currentStoppageHeaderNumber         = document.createElement('div');
+      const currentStoppageHeaderDates          = document.createElement('div');
+      const currentStoppageHeaderDatesStart     = document.createElement('div');
+      const currentStoppageHeaderDatesEnd       = document.createElement('div');
+      const currentStoppageAccess               = document.createElement('div');
+      const currentStoppageAccessButton         = document.createElement('button');
 
-      currentStoppage         .innerHTML += `<div>${stoppagesList[x].uuid}</div>`;
+      currentStoppage                     .setAttribute('class', 'listStoppage');
+      currentStoppageHeader               .setAttribute('class', 'listStoppageHeader');
+      currentStoppageHeaderData           .setAttribute('class', 'listStoppageHeaderData');
+      currentStoppageHeaderDataNumber     .setAttribute('class', 'listStoppageHeaderDataElement');
+      currentStoppageHeaderDataLastname   .setAttribute('class', 'listStoppageHeaderDataElement');
+      currentStoppageHeaderDataFirstname  .setAttribute('class', 'listStoppageHeaderDataElement');
+      currentStoppageHeaderDates          .setAttribute('class', 'listStoppageHeaderDates');
+      currentStoppageHeaderDatesStart     .setAttribute('class', 'listStoppageHeaderDatesElement');
+      currentStoppageHeaderDatesEnd       .setAttribute('class', 'listStoppageHeaderDatesElement');
+      currentStoppageAccess               .setAttribute('class', 'listStoppageAccess');
 
-      stoppagesListContainer  .appendChild(currentStoppage);
+      currentStoppageHeaderDataNumber     .innerHTML += `<div class="listStoppageHeaderDataElementKey">${appStrings.stoppageslist.registrationNumberKey} :</div>`;
+      currentStoppageHeaderDataNumber     .innerHTML += `<div class="listStoppageHeaderDataElementValue">${stoppagesList[x].registrationNumber}</div>`;
+      currentStoppageHeaderDataLastname   .innerHTML += `<div class="listStoppageHeaderDataElementKey">${appStrings.stoppageslist.employeeLastname} :</div>`;
+      currentStoppageHeaderDataLastname   .innerHTML += `<div class="listStoppageHeaderDataElementValue">${stoppagesList[x].employeeLastname.charAt(0).toUpperCase()}${stoppagesList[x].employeeLastname.slice(1)}</div>`;
+      currentStoppageHeaderDataFirstname  .innerHTML += `<div class="listStoppageHeaderDataElementKey">${appStrings.stoppageslist.employeeFirstname} :</div>`;
+      currentStoppageHeaderDataFirstname  .innerHTML += `<div class="listStoppageHeaderDataElementValue">${stoppagesList[x].employeeFirstname.charAt(0).toUpperCase()}${stoppagesList[x].employeeFirstname.slice(1)}</div>`;
+      currentStoppageHeaderDatesStart     .innerHTML += `<div class="listStoppageHeaderDatesElementKey">${appStrings.stoppageslist.startDateKey} :</div>`;
+      currentStoppageHeaderDatesStart     .innerHTML += `<div class="listStoppageHeaderDatesElementValue">${stoppagesList[x].startDate}</div>`;
+      currentStoppageHeaderDatesEnd       .innerHTML += `<div class="listStoppageHeaderDatesElementKey">${appStrings.stoppageslist.endDateKey} :</div>`;
+      currentStoppageHeaderDatesEnd       .innerHTML += `<div class="listStoppageHeaderDatesElementValue">${stoppagesList[x].endDate}</div>`;
+
+      currentStoppageAccessButton         .innerText = appStrings.stoppageslist.accessStoppage;
+
+      currentStoppageAccessButton         .addEventListener('click', () =>
+      {
+        urlParameters = [ stoppagesList[x].uuid ];
+        currentLocation = 'detail';
+        loadLocation(currentLocation);
+      });
+
+      currentStoppageHeader               .appendChild(currentStoppageHeaderData);
+      currentStoppageHeaderData           .appendChild(currentStoppageHeaderDataNumber);
+      currentStoppageHeaderData           .appendChild(currentStoppageHeaderDataLastname);
+      currentStoppageHeaderData           .appendChild(currentStoppageHeaderDataFirstname);
+      currentStoppageHeaderDates          .appendChild(currentStoppageHeaderDatesStart);
+      currentStoppageHeaderDates          .appendChild(currentStoppageHeaderDatesEnd);
+      currentStoppageHeader               .appendChild(currentStoppageHeaderDates);
+      currentStoppageAccess               .appendChild(currentStoppageAccessButton);
+      currentStoppage                     .appendChild(currentStoppageHeader);
+      currentStoppage                     .appendChild(currentStoppageAccess);
+      stoppagesListContainer              .appendChild(currentStoppage);
     }
 
     $(document.getElementById('locationWrapper')).fadeOut(250, () =>
@@ -135,8 +192,8 @@ function loadStoppageForm()
     const formStartDate         = document.createElement('div');
     const formSentDate          = document.createElement('div');
     const formEndDate           = document.createElement('div');
-    const formAttachments       = document.createElement('div');
-    const formAttachmentsAdd    = document.createElement('div');
+    const formAttachmentFile    = document.createElement('div');
+    const formAttachmentComment = document.createElement('div');
     const formSubmit            = document.createElement('button');
 
     formIdentifier        .innerHTML += `<label>${appStrings.addStoppage.formFields.registrationNumber} :</label><input name="identifier" type="text" placeholder="${appStrings.addStoppage.formFields.registrationNumber}" required /><div id="identifierError" class="addStoppageFormFieldError">${appStrings.addStoppage.formErrors.emptyField}</div>`;
@@ -148,8 +205,8 @@ function loadStoppageForm()
     formStartDate         .innerHTML += `<label>${appStrings.addStoppage.formFields.startDate} :</label><input name="start" type="date" required /><div class="addStoppageFormFieldError">${appStrings.addStoppage.formErrors.emptyField}</div>`;
     formSentDate          .innerHTML += `<label>${appStrings.addStoppage.formFields.communicationDate} :</label><input name="sent" type="date" required /><div class="addStoppageFormFieldError">${appStrings.addStoppage.formErrors.emptyField}</div><div id="sentError" class="addStoppageFormFieldError">${appStrings.addStoppage.formErrors.communicationDateBeforeStartDate}</div>`;
     formEndDate           .innerHTML += `<label>${appStrings.addStoppage.formFields.endDate} :</label><input name="end" type="date" required /><div class="addStoppageFormFieldError">${appStrings.addStoppage.formErrors.emptyField}</div><div id="endError" class="addStoppageFormFieldError">${appStrings.addStoppage.formErrors.endDateBeforeStartDate}</div>`;
-    formAttachments       .innerHTML += `<div id="attachmentsError" class="addStoppageFormBoxError">${appStrings.addStoppage.formErrors.attachmentRequired}</div>`;
-    formAttachments       .innerHTML += `<div id="attachmentsEmpty" class="addStoppageFormBoxEmpty">${appStrings.addStoppage.formFields.emptyAttachments}</div>`;
+    formAttachmentFile    .innerHTML += `<label>${appStrings.addStoppage.formFields.attachmentFile} :</label><input name="attachmentFile" type="file" required /><div id="attachmentError" class="addStoppageFormFieldError">${appStrings.addStoppage.formErrors.emptyField}</div>`;
+    formAttachmentComment .innerHTML += `<label>${appStrings.addStoppage.formFields.attachmentComment} :</label><textarea name="attachmentComment" placeholder="${appStrings.addStoppage.formFields.attachmentComment}"></textarea>`;
 
     for(let option in appStrings.addStoppage.formFields.genders)
     {
@@ -166,7 +223,6 @@ function loadStoppageForm()
       formIncidentTypeList.innerHTML += `<option value="${option}">${appStrings.addStoppage.formFields.incidentTypes[option]}</option>`;
     }
 
-    formAttachmentsAdd    .innerText = appStrings.addStoppage.formFields.addAttachment;
     formSubmit            .innerText = appStrings.addStoppage.formFields.submitForm;
 
     formGenderList        .setAttribute('name', 'gender');
@@ -175,7 +231,6 @@ function loadStoppageForm()
 
     formSubmit            .setAttribute('type', 'submit');
 
-    formAttachments       .setAttribute('id', 'stoppageAttachments');
     formError             .setAttribute('id', 'formError');
 
     formContainer         .setAttribute('class', 'addStoppageForm');
@@ -189,15 +244,13 @@ function loadStoppageForm()
     formStartDate         .setAttribute('class', 'addStoppageFormField');
     formSentDate          .setAttribute('class', 'addStoppageFormField');
     formEndDate           .setAttribute('class', 'addStoppageFormField');
-    formAttachments       .setAttribute('class', 'addStoppageFormBox');
-    formAttachmentsAdd    .setAttribute('class', 'addStoppageFormBoxAdd');
+    formAttachmentFile    .setAttribute('class', 'addStoppageFormField');
+    formAttachmentComment .setAttribute('class', 'addStoppageFormField');
     formSubmit            .setAttribute('class', 'addStoppageFormSubmit');
 
     formGender            .appendChild(formGenderList);
     formEstablishment     .appendChild(formEstablishmentList);
     formIncidentType      .appendChild(formIncidentTypeList);
-
-    formAttachments       .appendChild(formAttachmentsAdd);
 
     formContainer         .appendChild(formIdentifier);
     formContainer         .appendChild(formLastname);
@@ -208,12 +261,12 @@ function loadStoppageForm()
     formContainer         .appendChild(formStartDate);
     formContainer         .appendChild(formSentDate);
     formContainer         .appendChild(formEndDate);
-    formContainer         .appendChild(formAttachments);
+    formContainer         .appendChild(formAttachmentFile);
+    formContainer         .appendChild(formAttachmentComment);
     formContainer         .appendChild(formError);
     formContainer         .appendChild(formSubmit);
 
     formContainer         .addEventListener('submit', createStoppageCheckForm);
-    formAttachmentsAdd    .addEventListener('click', createStoppageAddAttachment);
 
     $(document.getElementById('locationWrapper')).fadeOut(250, () =>
     {
@@ -224,6 +277,131 @@ function loadStoppageForm()
       $(document.getElementById('locationWrapper')).fadeIn(250);
     });
   });
+}
+
+/****************************************************************************************************/
+
+function loadStoppageDetail(stoppageUuid)
+{
+  $.ajax(
+  {
+    method: 'POST', data: { stoppageUuid: stoppageUuid }, timeout: 10000, dataType: 'JSON', url: '/queries/stoppage/get-stoppage-detail', success: () => {},
+    error: (xhr, status, error) =>
+    {
+      xhr.responseJSON !== undefined
+      ? displayLocationError(xhr.responseJSON.message, xhr.responseJSON.detail)
+      : displayLocationError();
+    }
+
+  }).done((stoppageDetail) =>
+  {
+    console.log(stoppageDetail);
+
+    const detailWrapper         = document.createElement('div');
+    const detailContainer       = document.createElement('div');
+    const detailRegistration    = document.createElement('div');
+    const detailLastname        = document.createElement('div');
+    const detailFirstname       = document.createElement('div');
+    const detailStartDate       = document.createElement('div');
+    const detailReceivedDate    = document.createElement('div');
+    const detailEndDate         = document.createElement('div');
+    const detailInitial         = document.createElement('div');
+    const detailInitialFile     = document.createElement('div');
+    const detailInitialButton   = document.createElement('button');
+
+    detailWrapper       .setAttribute('class', 'stoppageDetailWrapper');
+    detailContainer     .setAttribute('class', 'stoppageDetailContainer');
+    detailRegistration  .setAttribute('class', 'stoppageDetailContainerData');
+    detailLastname      .setAttribute('class', 'stoppageDetailContainerData');
+    detailFirstname     .setAttribute('class', 'stoppageDetailContainerData');
+    detailStartDate     .setAttribute('class', 'stoppageDetailContainerData');
+    detailReceivedDate  .setAttribute('class', 'stoppageDetailContainerData');
+    detailEndDate       .setAttribute('class', 'stoppageDetailContainerData');
+    detailInitial       .setAttribute('class', 'stoppageDetailContainerAttachment');
+    detailInitialFile   .setAttribute('class', 'stoppageDetailContainerAttachmentFile');
+    detailInitialButton .setAttribute('class', 'stoppageDetailContainerAttachmentDownload');
+
+    detailRegistration  .innerHTML += `<div class="stoppageDetailContainerDataKey">${appStrings.stoppageDetail.dataLabels.registrationNumber} :</div>`;
+    detailRegistration  .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.registrationNumber}</div>`;
+
+    detailLastname      .innerHTML += `<div class="stoppageDetailContainerDataKey">${appStrings.stoppageDetail.dataLabels.lastname} :</div>`;
+    detailLastname      .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.employeeLastname.charAt(0).toUpperCase()}${stoppageDetail.employeeLastname.slice(1)}</div>`;
+
+    detailFirstname     .innerHTML += `<div class="stoppageDetailContainerDataKey">${appStrings.stoppageDetail.dataLabels.firstname} :</div>`;
+    detailFirstname     .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.employeeFirstname.charAt(0).toUpperCase()}${stoppageDetail.employeeFirstname.slice(1)}</div>`;
+
+    detailStartDate     .innerHTML += `<div class="stoppageDetailContainerDataKey">${appStrings.stoppageDetail.dataLabels.startDate} :</div>`;
+    detailStartDate     .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.startDate.split(' - ')[0]}</div>`;
+
+    detailReceivedDate  .innerHTML += `<div class="stoppageDetailContainerDataKey">${appStrings.stoppageDetail.dataLabels.receivedDate} :</div>`;
+    detailReceivedDate  .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.sentDate.split(' - ')[0]}</div>`;
+
+    detailEndDate       .innerHTML += `<div class="stoppageDetailContainerDataKey">${appStrings.stoppageDetail.dataLabels.endDate} :</div>`;
+    detailEndDate       .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.endDate.split(' - ')[0]}</div>`;
+
+    detailInitial       .innerHTML += `<div class="stoppageDetailContainerAttachmentLabel">${appStrings.addStoppage.correspondences.started}</div>`;
+    detailInitial       .innerHTML += stoppageDetail.attachments.initial.comment.length === 0
+    ? `<div class="stoppageDetailContainerAttachmentComment">${appStrings.stoppageDetail.emptyAttachmentComment}</div>`
+    : `<div class="stoppageDetailContainerAttachmentComment">${stoppageDetail.attachments.initial.comment}</div>`;
+
+    detailInitialFile   .innerText = `${stoppageDetail.attachments.initial.name}.pdf`;
+    detailInitialButton .innerText = appStrings.stoppageDetail.downloadAttachment;
+
+    detailInitialFile   .addEventListener('click', () =>
+    {
+      window.open(`/queries/stoppage/visualize-attachment/${stoppageDetail.uuid}/${stoppageDetail.attachments.initial.uuid}`);
+    });
+
+    detailInitialButton .addEventListener('click', () =>
+    {
+      window.open(`/queries/stoppage/download-attachment/${stoppageDetail.uuid}/${stoppageDetail.attachments.initial.uuid}/${stoppageDetail.attachments.initial.name}`);
+    });
+
+    detailInitial       .insertBefore(detailInitialFile, detailInitial.children[1]);
+    detailInitial       .appendChild(detailInitialButton);
+
+    detailContainer     .appendChild(detailRegistration);
+    detailContainer     .appendChild(detailLastname);
+    detailContainer     .appendChild(detailFirstname);
+    detailContainer     .appendChild(detailStartDate);
+    detailContainer     .appendChild(detailReceivedDate);
+    detailContainer     .appendChild(detailEndDate);
+    detailContainer     .appendChild(detailInitial);
+
+    loadStoppageDetailBuildEventsSection(detailContainer, stoppageDetail);
+
+    detailWrapper       .appendChild(detailContainer);
+
+    $(document.getElementById('locationWrapper')).fadeOut(250, () =>
+    {
+      document.getElementById('locationContainer').innerHTML = `<div class="locationContentTitle">${appStrings.stoppageDetail.locationLabel}</div>`;
+
+      document.getElementById('locationContainer').appendChild(detailWrapper);
+
+      $(document.getElementById('locationWrapper')).fadeIn(250);
+    });
+  });
+}
+
+/****************************************************************************************************/
+
+function loadStoppageDetailBuildEventsSection(detailContainer, stoppageDetail)
+{
+  const eventsBlock       = document.createElement('div');
+  const eventsBlockHeader = document.createElement('div');
+
+  eventsBlock         .setAttribute('class', 'stoppageDetailEvents');
+  eventsBlockHeader   .setAttribute('class', 'stoppageDetailEventsHeader');
+
+  eventsBlockHeader   .innerText = appStrings.stoppageDetail.eventsBlock.header;
+
+  if(stoppageDetail.attachments.events.length === 0)
+  {
+    eventsBlock       .innerHTML += `<div class="stoppageDetailEventsEmpty">${appStrings.stoppageDetail.eventsBlock.empty}</div>`;
+  }
+
+  eventsBlock         .insertBefore(eventsBlockHeader, eventsBlock.children[0]);
+  detailContainer     .appendChild(eventsBlock);
 }
 
 /****************************************************************************************************/

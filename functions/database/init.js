@@ -1,130 +1,128 @@
 'use strict';
 
-let databases = require(`../../json/database`);
+const databases = require(`${__root}/json/database`);
 
 /****************************************************************************************************/
 
-module.exports.createDatabases = (pool, callback) =>
+function createDatabases(pool, callback)
 {
   let x = 0;
 
-  let loop = (databaseName, databaseContent) =>
+  const browseDatabases = (databaseName, databaseContent, connection) =>
   {
-    pool.getConnection((err, connection) =>
+    connection.query(`CREATE DATABASE IF NOT EXISTS ${databaseName}`, (error, result) =>
     {
-      if(err)
+      if(error !== null)
       {
-        console.log(err.message);
-        callback();
+        return callback({ message: error.message });
       }
 
-      else
+      console.log(`INFO : database "${databaseName}" created !`);
+
+      createAllTables(databaseContent, databaseName, connection, () =>
       {
-        connection.query(`CREATE DATABASE IF NOT EXISTS ${databaseName}`, (err, result) =>
+        if(Object.keys(databases)[x += 1] === undefined)
         {
-          if(err)
-          {
-            console.log(err.message);
-            callback();
-          }
+          connection.release();
+          return callback(null);
+        }
 
-          else
-          {
-            console.log(`INFO : database "${databaseName}" created !`);
-
-            connection.release();
-
-            createAllTables(databaseContent, databaseName, pool, () =>
-            {      
-              Object.keys(databases)[x += 1] == undefined ? callback() : loop(Object.keys(databases)[x], databases[Object.keys(databases)[x]]);
-            });
-          }
-        });
-      }
+        browseDatabases(Object.keys(databases)[x], databases[Object.keys(databases)[x]], connection);
+      });
     });
   };
 
-  if(Object.keys(databases)[x] == undefined)
+  if(Object.keys(databases)[x] === undefined)
   {
     console.log('INFO : no database to create !');
-    callback()
+    return callback(null);
   }
-  
-  else
+
+  pool.getConnection((error, connection) =>
   {
-    loop(Object.keys(databases)[x], databases[Object.keys(databases)[x]]);
-  }
+    if(error !== null)
+    {
+      return callback({ message: error.message });
+    }
+
+    browseDatabases(Object.keys(databases)[x], databases[Object.keys(databases)[x]], connection);
+  });
 }
 
 /****************************************************************************************************/
 
-function createAllTables(database, databaseName, pool, callback)
+function createAllTables(database, databaseName, connection, callback)
 {
   let x = 0;
 
-  let loop = (tableName, tableContent) =>
+  const browseTables = (tableName, tableContent) =>
   {
-    createTable(tableContent, (result) =>
+    buildTable(tableContent, (result) =>
     {
-      if(result == false)
+      if(result === false)
       {
-        console.log(`[${databaseName}] : Error - you cannot create a table "${tableName}" with no columns !`);
-        Object.keys(database)[x += 1] == undefined ? callback() : loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
-      }
+        console.log(`[${databaseName}] : Error - cannot create a table "${tableName}" with no columns !`);
 
-      else
-      {
-        pool.getConnection((err, connection) =>
+        if(Object.keys(database)[x += 1] === undefined)
         {
-          if(err)
-          {
-            console.log(`[${databaseName}] : ${err.message} `);
-            callback();
-          }
+          return callback(null);
+        }
 
-          else
-          {
-            connection.query(`CREATE TABLE IF NOT EXISTS ${databaseName}.${tableName} (${result})`, function(err, data)
-            {
-              err ? console.log(`[${databaseName}] : ${err.message} `) : console.log(`[${databaseName}] : table "${tableName}" created !`);
-              
-              connection.release();
-              
-              Object.keys(database)[x += 1] == undefined ? callback() : loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
-            });
-          }
-        });
+        return browseTables(Object.keys(database)[x], database[Object.keys(database)[x]]);
       }
+
+      connection.query(`CREATE TABLE IF NOT EXISTS ${databaseName}.${tableName} (${result})`, (error, data) =>
+      {
+        error !== null
+        ? console.log(`[${databaseName}] : ${error.message} `)
+        : console.log(`[${databaseName}] : table "${tableName}" created !`);
+
+        if(Object.keys(database)[x += 1] === undefined)
+        {
+          return callback(null);
+        }
+
+        browseTables(Object.keys(database)[x], database[Object.keys(database)[x]]);
+      });
     });
   };
 
-  if(Object.keys(database)[x] == undefined)
+  if(Object.keys(database)[x] === undefined)
   {
     console.log(`INFO : no tables to create for this database !`);
-    callback();
+
+    return callback(null);
   }
-  
-  else
-  {
-    loop(Object.keys(database)[x], database[Object.keys(database)[x]]);
-  }
+
+  browseTables(Object.keys(database)[x], database[Object.keys(database)[x]]);
 }
 
 /****************************************************************************************************/
 
-function createTable(table, callback)
+function buildTable(table, callback)
 {
   let x = 0;
   let array = [];
 
-  let loop = (field, args) =>
+  const loop = (field, args) =>
   {
     array.push(`${field} ${args}`);
 
-    Object.keys(table)[x += 1] == undefined ? callback(array.join()) : loop(Object.keys(table)[x], table[Object.keys(table)[x]]);
+    Object.keys(table)[x += 1] === undefined
+    ? callback(array.join())
+    : loop(Object.keys(table)[x], table[Object.keys(table)[x]]);
   };
 
-  Object.keys(table)[x] == undefined ? callback(true) : loop(Object.keys(table)[x], table[Object.keys(table)[x]]);
+  Object.keys(table)[x] === undefined
+  ? callback(true)
+  : loop(Object.keys(table)[x], table[Object.keys(table)[x]]);
+}
+
+/****************************************************************************************************/
+
+module.exports =
+{
+  createDatabases: createDatabases
 }
 
 /****************************************************************************************************/

@@ -27,12 +27,20 @@
   {
     "locationLabel": "Liste des arrêts de travail",
     "addStoppageButton": "Ajouter un arrêt de travail",
-    "emptyList": "Aucun arrêt de travail"
+    "emptyList": "Aucun arrêt de travail",
+    "accessStoppage": "Accéder au détail",
+
+    "registrationNumberKey": "Matricule",
+    "employeeLastname": "Nom du salarié",
+    "employeeFirstname": "Prénom du salarié",
+    "startDateKey": "Début",
+    "endDateKey": "Fin"
   },
 
   "addStoppage":
   {
     "locationLabel": "Ajouter un arrêt de travail",
+    "loaderMessage": "Enregistrement de l'arrêt en cours. Veuillez patienter...",
 
     "formFields":
     {
@@ -48,12 +56,8 @@
       "addAttachment": "Ajouter une correspondance",
       "emptyAttachments": "Aucune correspondance",
       "submitForm": "Ajouter cet arrêt de travail",
-      "attachmentType": "Type de correspondance",
-      "attachmentFile": "Fichier asssocié",
-      "attachmentComment": "Commentaire",
-      "submitAtatchment": "Ajouter",
-      "cancelAttachment": "Annuler",
-      "removeAttachment": "Supprimer",
+      "attachmentFile": "Arrêt initial",
+      "attachmentComment": "Commentaire sur la pièce jointe",
 
       "genders":
       {
@@ -88,5 +92,29 @@
       "questionary": "Questionnaire employeur",
       "disputed": "Contestation"
     }
+  },
+
+  "stoppageDetail":
+  {
+    "locationLabel": "Détail d'un arrêt de travail",
+
+    "dataLabels":
+    {
+      "registrationNumber": "Matricule du salarié",
+      "lastname": "Nom du salarié",
+      "firstname": "Prénom du salarié",
+      "startDate": "Début de l'arrêt",
+      "receivedDate": "Date de réception de l'arrêt",
+      "endDate": "Fin de l'arrêt"
+    },
+
+    "eventsBlock":
+    {
+      "header": "Liste des évènements",
+      "empty": "Aucun évènement"
+    },
+
+    "emptyAttachmentComment": "Aucun commentaire",
+    "downloadAttachment": "Télécharger la pièce jointe"
   }
 }

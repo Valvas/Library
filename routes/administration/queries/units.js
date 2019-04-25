@@ -15,14 +15,17 @@ var router = express.Router();
 
 router.post('/create-unit', (req, res) =>
 {
-  if(req.body.unitName == undefined)    return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'unitName' });
-  if(req.body.unitParent == undefined)  return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'unitParent' });
+  if(req.body.unitName === undefined)    return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'unitName' });
+  if(req.body.unitParent === undefined)  return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'unitParent' });
 
-  if(req.app.locals.account.isAdmin == false) return res.status(403).send({ message: errors[constants.USER_IS_NOT_ADMIN], detail: null });
+  if(req.app.locals.account.isAdmin === false) return res.status(403).send({ message: errors[constants.USER_IS_NOT_ADMIN], detail: null });
 
   commonUnitsCreate.createUnit(req.body.unitName, req.body.unitParent, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
   {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    if(error !== null)
+    {
+      return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    }
 
     res.status(200).send({ message: success[constants.UNIT_SUCCESSFULLY_CREATED] });
   });
@@ -64,6 +67,36 @@ router.put('/update-account-unit', (req, res) =>
     if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
 
     return res.status(200).send({ message: success[constants.UNIT_MEMBER_SUCCESSFULLY_ADDED] });
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/rename-unit', (req, res) =>
+{
+  if(req.app.locals.account.isAdmin === false)
+  {
+    return res.status(403).send({ message: errors[constants.USER_IS_NOT_ADMIN], detail: null });
+  }
+
+  if(req.body.newName === undefined)
+  {
+    return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'newName' });
+  }
+
+  if(req.body.unitId === undefined)
+  {
+    return res.status(406).send({ message: errors[constants.MISSIGN_DATA_IN_REQUEST], detail: 'unitId' });
+  }
+
+  commonUnitsUpdate.updateUnitRename(req.body.unitId, req.body.newName, req.app.get('databaseConnectionPool'), req.app.get('params'), (error) =>
+  {
+    if(error !== null)
+    {
+      return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    }
+
+    return res.status(200).send({ message: success[constants.UNIT_NAME_UPDATED_SUCCESSFULLY] });
   });
 });
 

@@ -196,5 +196,7 @@
   "002-000-013": "Établissement introuvable",
   "002-000-014": "Une des correspondances utilise un type non autorisé",
   "002-000-015": "Une pièce jointe pour l'arrêt initial est requise",
-  "002-000-016": "Il ne peut pas y avoir plus d'une pièce jointe pour l'arrêt initial"
+  "002-000-016": "Il ne peut pas y avoir plus d'une pièce jointe pour l'arrêt initial",
+
+  "002-001-001": "Le détail de cet arrêt de travail est introuvable"
 }

@@ -63,7 +63,7 @@ function getReportsList(accountUuid, databaseConnection, globalParameters, callb
 
 function getReportsListFormatCurrentReport(currentReportData, accountUuid, databaseConnection, globalParameters, callback)
 {
-  commonFormatDate.getStringifyDateFromTimestamp(currentReportData.date, (error, stringifiedDate) =>
+  commonFormatDate.getStringifiedDateTimeFromTimestampAsync(currentReportData.date, (error, stringifiedDate) =>
   {
     if(error !== null)
     {
@@ -159,7 +159,7 @@ function getReportDetail(reportUuid, accountUuid, databaseConnection, globalPara
 
 function getReportDetailFormatData(reportData, accountUuid, databaseConnection, globalParameters, callback)
 {
-  commonFormatDate.getStringifyDateFromTimestamp(reportData.date, (error, stringifiedDate) =>
+  commonFormatDate.getStringifiedDateTimeFromTimestampAsync(reportData.date, (error, stringifiedDate) =>
   {
     if(error != null) return callback(error);
 
@@ -248,7 +248,7 @@ function getReportDetailRetrieveLogs(reportDetail, databaseConnection, globalPar
 
 function getReportDetailFormatLog(currentLog, databaseConnection, globalParameters, callback)
 {
-  commonFormatDate.getStringifyDateFromTimestamp(currentLog.date, (error, stringifiedDate) =>
+  commonFormatDate.getStringifiedDateTimeFromTimestampAsync(currentLog.date, (error, stringifiedDate) =>
   {
     if(error != null) return callback(error);
 

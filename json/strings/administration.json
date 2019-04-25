@@ -165,7 +165,7 @@
     "addAccessSavingMessage": "Ajout de l'accès en cours. Veuillez patienter",
     "removeAccessSavingMessage": "Suppression de l'accès en cours. Veuillez patienter"
   },
-  
+
   "unitsHome":
   {
     "title": "Gestion des groupes",
@@ -189,7 +189,19 @@
 
     "rootUnit": "Non modifiable",
     "renameButton": "Renommer ce groupe",
-    "removeButton": "Supprimer ce groupe"
+    "removeButton": "Supprimer ce groupe",
+
+    "renameUnit":
+    {
+      "popupHeader": "Renommer ce groupe",
+      "currentNameLabel": "Nom actuel",
+      "newNameLabel": "Nouveau nom",
+      "submitButton": "Renommer",
+      "cancelButton": "Annuler",
+      "formatError": "Le format du nom est incorrect",
+      "loaderMessage": "Enregistrement en cours. Veuillez patienter...",
+      "genericRequestError": "Échec de communication avec le serveur. Celui-ci est peut-être indisponible. Veuillez réessayer plus tard"
+    }
   },
 
   "unitsCreate":
@@ -226,7 +238,7 @@
       "message": "Êtes-vous sûr(e) de vouloir déplacer cet utilisateur dans le groupe [$1$] ?",
       "confirm": "Oui",
       "cancel": "Annuler",
-      "loader": "Mise à jour du compte en cours. Veuillez patienter..." 
+      "loader": "Mise à jour du compte en cours. Veuillez patienter..."
     }
   },
 

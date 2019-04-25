@@ -1,7 +1,5 @@
 'use strict'
 
-const UUIDModule = require('uuid');
-
 /****************************************************************************************************/
 
 module.exports.createDatabaseAndTables = (databasesObject, databaseConnection, callback) =>
@@ -138,23 +136,6 @@ module.exports.insertQuery = (queryObject, databaseConnection, callback) =>
     if(error) return callback(error.message);
 
     return callback(null, result);
-  });
-}
-
-/****************************************************************************************************/
-
-module.exports.insertQueryWithUUID = (queryObject, databaseConnection, callback) =>
-{
-  const uuid = UUIDModule.v4();
-
-  var keys = Object.keys(queryObject.args).join() + ',uuid';
-  var values = `"${Object.values(queryObject.args).join('","')}", "${uuid}"`;
-
-  databaseConnection.query(`INSERT INTO ${queryObject.databaseName}.${queryObject.tableName} (${keys}) VALUES (${values})`, (error, result) =>
-  {
-    if(error) return callback(error.message);
-
-    return callback(null, result, uuid);
   });
 }
 

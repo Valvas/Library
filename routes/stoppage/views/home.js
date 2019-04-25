@@ -36,4 +36,11 @@ router.get('/add', (req, res) =>
 
 /****************************************************************************************************/
 
+router.get('/detail/:stoppageUuid', (req, res) =>
+{
+  res.render('stoppage/index', { commonStrings: commonStrings, stoppageAppStrings: stoppageAppStrings });
+});
+
+/****************************************************************************************************/
+
 module.exports = router;

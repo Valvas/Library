@@ -10,7 +10,9 @@ const bodyParser        = require('body-parser');
 const favicon           = require('serve-favicon');
 const cookieParser      = require('cookie-parser');
 
-var app = express();
+const initLauncher      = require(`${__root}/functions/init/start`);
+
+const app = express();
 
 module.exports = (callback) =>
 {
@@ -18,19 +20,28 @@ module.exports = (callback) =>
 
   fs.readFile('./json/params.json', (error, data) =>
   {
-    if(error)
+    if(error !== null)
     {
-      console.log('[ERROR] - could not read config file !');
-      process.exit(0);
+      console.error(new Error('Could not read config file'));
+      process.exit(1);
     }
 
     const params = JSON.parse(data);
+
+    if(params === null)
+    {
+      console.error(new Error('Could not parse config data to JSON'));
+      process.exit(1);
+    }
 
     app.set('params', params);
 
     app.set('view engine', 'ejs');
     app.set('views', `${__root}/views`);
-    app.set('port', params.init.defaultPort);
+
+    params.init.defaultPort < 0 || params.init.defaultPort > 65535
+    ? app.set('port', 3000)
+    : app.set('port', params.init.defaultPort);
 
     app.use(morgan('dev'));
     app.use(cookieParser());
@@ -38,17 +49,15 @@ module.exports = (callback) =>
     app.use(bodyParser.json({ limit: 5242880 }));
     app.use(bodyParser.urlencoded({ extended: false, limit: 5242880 }));
 
-    app.use(favicon(path.join(__dirname,'public', 'pictures', 'logo.ico')));
+    app.use(favicon(path.join(__dirname, 'public', 'pictures', 'logo.ico')));
 
-    const initLauncher = require(`${__root}/functions/init/start`);
-
-    if(params.ready == false)
+    if(params.ready === false)
     {
-      initLauncher.startInit(app, (errorObjectOrNull) =>
+      initLauncher.startInit(app, (error) =>
       {
-        if(errorObjectOrNull != null)
+        if(error !== null)
         {
-          console.log(`[ERROR] - ${errorObjectOrNull.message}`);
+          console.error(new Error(error.message));
           process.exit(1);
         }
 
@@ -60,9 +69,9 @@ module.exports = (callback) =>
     {
       initLauncher.startApp(app, (error) =>
       {
-        if(error != null)
+        if(error !== null)
         {
-          console.log(`[ERROR] - ${error.message}`);
+          console.error(new Error(error.message));
           process.exit(1);
         }
 

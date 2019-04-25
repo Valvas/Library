@@ -21,6 +21,7 @@ function loadLocation(sectionToLoad)
     case 'home':      loadHomeSection();          break;
     case 'list':      loadStoppageSection();      break;
     case 'add':       loadStoppageSection();      break;
+    case 'detail':    loadStoppageSection();      break;
 
     default:          loadHomeSection();          break;
   }

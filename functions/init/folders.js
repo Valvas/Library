@@ -1,7 +1,6 @@
 'use strict'
 
 const fs            = require('fs');
-const config        = require(`${__root}/json/config`);
 const constants     = require(`${__root}/functions/constants`);
 
 /****************************************************************************************************/
@@ -18,7 +17,7 @@ module.exports.createAppFolders = (params, callback) =>
 
 function createTmpFolder(params, callback)
 {
-  fs.mkdir(`${params.storage.root}/${config.path_to_temp_storage}`, (error) =>
+  fs.mkdir(`${params.storage.root}/${params.storage.tmp}`, (error) =>
   {
     if(error && error.code !== 'EEXIST') return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
 
@@ -30,19 +29,7 @@ function createTmpFolder(params, callback)
 
 function createBinFolder(params, callback)
 {
-  fs.mkdir(`${params.storage.root}/${config.path_to_bin_storage}`, (error) =>
-  {
-    if(error && error.code !== 'EEXIST') return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
-
-    createLogsFolder(params, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function createLogsFolder(params, callback)
-{
-  fs.mkdir(`${params.storage.root}/${config.path_to_logs_storage}`, (error) =>
+  fs.mkdir(`${params.storage.root}/${params.storage.bin}`, (error) =>
   {
     if(error && error.code !== 'EEXIST') return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
 

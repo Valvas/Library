@@ -9,21 +9,30 @@ const commonAccountsUpdate  = require(`${__root}/functions/common/accounts/updat
 
 module.exports.createAdminAccounts = (databaseConnection, globalParameters, emailTransporter, callback) =>
 {
-  var index = 0;
+  let index = 0;
 
-  var browseAccountsToCreate = () =>
+  const browseAccountsToCreate = () =>
   {
     createAdminAccountsCheckIfExists(accountsToCreate[index], databaseConnection, globalParameters, emailTransporter, (error) =>
     {
-      if(error != null) return callback(error);
+      if(error !== null)
+      {
+        return callback(error);
+      }
 
-      if(accountsToCreate[index += 1] == undefined) return callback(null);
+      if(accountsToCreate[index += 1] === undefined)
+      {
+        return callback(null);
+      }
 
       browseAccountsToCreate();
     });
   }
 
-  if(accountsToCreate[index] == undefined) return callback(null);
+  if(accountsToCreate[index] === undefined)
+  {
+    return callback(null);
+  }
 
   browseAccountsToCreate();
 }
@@ -34,9 +43,15 @@ function createAdminAccountsCheckIfExists(accountData, databaseConnection, globa
 {
   commonAccountsGet.checkIfAccountExistsFromEmail(accountData.email, databaseConnection, globalParameters, (error, accountExists, existingAccountData) =>
   {
-    if(error != null) return callback(error);
+    if(error !== null)
+    {
+      return callback(error);
+    }
 
-    if(accountExists) return createAdminAccountsUpdateAdminStatus(existingAccountData.uuid, databaseConnection, globalParameters, callback);
+    if(accountExists)
+    {
+      return createAdminAccountsUpdateAdminStatus(existingAccountData.uuid, databaseConnection, globalParameters, callback);
+    }
 
     return createAdminAccountsInsertIntoDatabase(accountData, databaseConnection, globalParameters, emailTransporter, callback);
   });
@@ -48,7 +63,10 @@ function createAdminAccountsInsertIntoDatabase(accountData, databaseConnection, 
 {
   commonAccountsCreate.createAccount(accountData.email, accountData.lastname, accountData.firstname, databaseConnection, globalParameters, emailTransporter, (error, accountUuid) =>
   {
-    if(error != null) return callback(null);
+    if(error !== null)
+    {
+      return callback(null);
+    }
 
     return createAdminAccountsUpdateAdminStatus(accountUuid, databaseConnection, globalParameters, callback);
   });

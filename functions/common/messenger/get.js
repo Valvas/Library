@@ -96,25 +96,30 @@ function retrieveMessengerDataGetMessages(conversationUuid, receiverData, counte
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
-
-    if(result.length === 0) return callback(null, receiverData, counter, []);
-
-    var index = 0, messages = [];
-
-    var browseMessages = () =>
+    if(error !== null)
     {
-      commonFormatDate.getStringifyDateFromTimestamp(result[index].timestamp, (error, stringifiedDate) =>
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
+
+    if(result.length === 0)
+    {
+      return callback(null, receiverData, counter, []);
+    }
+
+    let messages = [];
+
+    for(let x = 0; x < result.length; x++)
+    {
+      messages.push(
       {
-        messages.push({ timestamp: result[index].timestamp, date: stringifiedDate, content: result[index].content, author: result[index].author });
-
-        if(result[index += 1] == undefined) return callback(null, receiverData, counter, messages);
-
-        browseMessages();
+        timestamp: result[x].timestamp,
+        date: commonFormatDate.getStringifiedDateTimeFromTimestampSync(result[x].timestamp),
+        content: result[x].content,
+        author: result[x].author
       });
     }
 
-    browseMessages();
+    return callback(null, receiverData, counter, messages);
   });
 }
 

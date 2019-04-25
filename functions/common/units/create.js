@@ -10,7 +10,7 @@ const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 function createUnit(unitName, unitParent, databaseConnection, globalParameters, callback)
 {
-  if(new RegExp(`^[a-zéàèâêîôûäëïöüñ]+((')?([a-zéàèâêîôûäëïöüñ]+))*(( )?[a-zéàèâêîôûäëïöüñ]+)*((')?([a-zéàèâêîôûäëïöüñ]+))*$`).test(unitName.toLowerCase()) == false)
+  if(new RegExp(`^(\\S)+(( )?(\\S)+)*$`).test(unitName) === false)
   {
     return callback({ status: 406, code: constants.INCORRECT_UNIT_NAME_FORMAT, detail: null });
   }
@@ -27,9 +27,15 @@ function createUnitCheckIfParentExists(unitName, unitParent, databaseConnection,
 {
   commonUnitsGet.checkIfUnitExists(unitParent, databaseConnection, globalParameters, (error, unitExists) =>
   {
-    if(error != null) return callback(error);
+    if(error !== null)
+    {
+      return callback(error);
+    }
 
-    if(unitExists == false) return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
+    if(unitExists === false)
+    {
+      return callback({ status: 404, code: constants.UNIT_NOT_FOUND, detail: null });
+    }
 
     return createUnitInsertInDatabase(unitName, unitParent, databaseConnection, globalParameters, callback);
   });
@@ -47,7 +53,10 @@ function createUnitInsertInDatabase(unitName, unitParent, databaseConnection, gl
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
     return callback(null);
   });

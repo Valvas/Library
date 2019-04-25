@@ -236,7 +236,17 @@
       "record": "VARCHAR(255) NOT NULL",
       "name": "VARCHAR(255) NOT NULL",
       "comment": "TEXT NOT NULL",
-      "type": "VARCHAR(255) NOT NULL"
+      "type": "VARCHAR(255) NOT NULL",
+      "date": "BIGINT UNSIGNED NOT NULL"
+    },
+
+    "prolongation":
+    {
+      "uuid": "VARCHAR(255) NOT NULL",
+      "record": "VARCHAR(255) NOT NULL",
+      "attachment": "VARCHAR(255) NOT NULL",
+      "start": "BIGINT UNSIGNED NOT NULL",
+      "end": "BIGINT UNSIGNED NOT NULL"
     }
   },
 

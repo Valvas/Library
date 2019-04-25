@@ -67,7 +67,8 @@
         "accountsList":"accounts_list",
         "list": "list",
         "establishment": "establishment",
-        "attachment": "attachment"
+        "attachment": "attachment",
+        "prolongation": "prolongation"
       }
     }
   },

@@ -401,7 +401,7 @@ function updateReportSetNotifications(reportUuid, databaseConnection, globalPara
 
 function updateReportFormatData(logDate, logCreator, databaseConnection, globalParameters, callback)
 {
-  commonFormatDate.getStringifyDateFromTimestamp(logDate, (error, stringifiedDate) =>
+  commonFormatDate.getStringifiedDateTimeFromTimestampAsync(logDate, (error, stringifiedDate) =>
   {
     if(error !== null)
     {

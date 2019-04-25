@@ -45,7 +45,7 @@ module.exports.getLastNewsFromIndex = (startIndex, endIndex, databaseConnection,
       {
         if(error != null) return callback(error);
 
-        commonFormatDate.getStringifyDateFromTimestamp(resultsToKeep[x].timestamp, (error, stringifyTimestamp) =>
+        commonFormatDate.getStringifiedDateTimeFromTimestampAsync(resultsToKeep[x].timestamp, (error, stringifyTimestamp) =>
         {
           if(error != null) return callback(error);
 
@@ -134,7 +134,7 @@ module.exports.getNewsData = (newsUuid, databaseConnection, params, callback) =>
     {
       if(error != null) return callback(error);
 
-      commonFormatDate.getStringifyDateFromTimestamp(result[0].timestamp, (error, stringifyTimestamp) =>
+      commonFormatDate.getStringifiedDateTimeFromTimestampAsync(result[0].timestamp, (error, stringifyTimestamp) =>
       {
         if(error != null) return callback(error);
 
@@ -187,7 +187,7 @@ module.exports.getAllNewsData = (databaseConnection, params, callback) =>
       {
         if(error != null) return callback(error);
 
-        commonFormatDate.getStringifyDateFromTimestamp(result[index].timestamp, (error, stringifyTimestamp) =>
+        commonFormatDate.getStringifiedDateTimeFromTimestampAsync(result[index].timestamp, (error, stringifyTimestamp) =>
         {
           if(error != null) return callback(error);
 

@@ -84,7 +84,7 @@ function getArticleCommentsBrowse(currentComments, databaseConnection, globalPar
 
 function getArticleCommentsBuildCommentData(commentData, databaseConnection, globalParameters, callback)
 {
-  commonFormatDate.getStringifyDateFromTimestamp(commentData.timestamp, (error, stringifyDate) =>
+  commonFormatDate.getStringifiedDateTimeFromTimestampAsync(commentData.timestamp, (error, stringifyDate) =>
   {
     if(error != null) return callback(error);
 
@@ -137,7 +137,7 @@ function checkIfCommentExists(commentUuid, databaseConnection, globalParameters,
 
     if(result.length === 0) return callback(null, false);
 
-    commonFormatDate.getStringifyDateFromTimestamp(result[0].timestamp, (error, stringifiedDate) =>
+    commonFormatDate.getStringifiedDateTimeFromTimestampAsync(result[0].timestamp, (error, stringifiedDate) =>
     {
       if(error != null) return callback(error);
 
@@ -173,7 +173,10 @@ function checkIfCommentExists(commentUuid, databaseConnection, globalParameters,
 
 function addCommentOnArticle(articleUuid, commentContent, parentComment, accountData, databaseConnection, globalParameters, callback)
 {
-  if(new RegExp('^(\\S)+((\\s*)?(\\S)+)*$').test(commentContent) == false) return callback({ status: 406, code: constants.ARTICLE_COMMENT_INCORRECT_FORMAT, detail: null });
+  if(new RegExp('^(\\S)+((\\s*)?(\\S)+)*$').test(commentContent) === false)
+  {
+    return callback({ status: 406, code: constants.ARTICLE_COMMENT_INCORRECT_FORMAT, detail: null });
+  }
 
   addCommentOnArticleCheckIfArticleExists(articleUuid, commentContent, parentComment, accountData, databaseConnection, globalParameters, (error, commentData) =>
   {
@@ -187,11 +190,20 @@ function addCommentOnArticleCheckIfArticleExists(articleUuid, commentContent, pa
 {
   commonNewsGet.getNewsData(articleUuid, databaseConnection, globalParameters, (error, articleExists, articleData) =>
   {
-    if(error != null) return callback(error);
+    if(error !== null)
+    {
+      return callback(error);
+    }
 
-    if(articleExists == false) return callback({ status: 404, code: constants.NEWS_NOT_FOUND, detail: null });
+    if(articleExists === false)
+    {
+      return callback({ status: 404, code: constants.NEWS_NOT_FOUND, detail: null });
+    }
 
-    if(parentComment == null) return addCommentOnArticleInsertInDatabase(articleUuid, commentContent, parentComment, accountData, databaseConnection, globalParameters, callback);
+    if(parentComment === null)
+    {
+      return addCommentOnArticleInsertInDatabase(articleUuid, commentContent, parentComment, accountData, databaseConnection, globalParameters, callback);
+    }
 
     return addCommentOnArticleCheckIfParentCommentExists(articleUuid, commentContent, parentComment, accountData, databaseConnection, globalParameters, callback);
   });
@@ -203,9 +215,15 @@ function addCommentOnArticleCheckIfParentCommentExists(articleUuid, commentConte
 {
   checkIfCommentExists(parentComment, databaseConnection, globalParameters, (error, commentExists, commentData) =>
   {
-    if(error != null) return callback(error);
+    if(error !== null)
+    {
+      return callback(error);
+    }
 
-    if(commentExists == false) return callback({ status: 404, code: constants.ARTICLE_PARENT_COMMENT_NOT_FOUND, detail: null });
+    if(commentExists === false)
+    {
+      return callback({ status: 404, code: constants.ARTICLE_PARENT_COMMENT_NOT_FOUND, detail: null });
+    }
 
     return addCommentOnArticleInsertInDatabase(articleUuid, commentContent, parentComment, accountData, databaseConnection, globalParameters, callback);
   });
@@ -226,7 +244,10 @@ function addCommentOnArticleInsertInDatabase(articleUuid, commentContent, parent
 
   }, databaseConnection, (error) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
 
     const commentData =
     {
@@ -247,7 +268,7 @@ function addCommentOnArticleInsertInDatabase(articleUuid, commentContent, parent
 
 function addCommentOnArticleBuildDataFromInsertedComment(commentData, accountData, globalParameters, callback)
 {
-  commonFormatDate.getStringifyDateFromTimestamp(commentData.commentTimestamp, (error, stringifyDate) =>
+  commonFormatDate.getStringifiedDateTimeFromTimestampAsync(commentData.commentTimestamp, (error, stringifyDate) =>
   {
     if(error != null) return callback(error);
 

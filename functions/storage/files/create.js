@@ -12,6 +12,8 @@ const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
 
 module.exports.createFileInDatabase = (fileName, fileExtension, parentFolder, accountId, serviceUuid, databaseConnection, params, callback) =>
 {
+  const generatedUuid = uuid.v4();
+
   fileName            == undefined ||
   fileExtension       == undefined ||
   accountId           == undefined ||
@@ -21,15 +23,18 @@ module.exports.createFileInDatabase = (fileName, fileExtension, parentFolder, ac
 
   callback({ status: 406, code: constants.MISSING_DATA_IN_REQUEST, detail: null }) :
 
-  databaseManager.insertQueryWithUUID(
+  databaseManager.insertQuery(
   {
     databaseName: params.database.storage.label,
     tableName: params.database.storage.tables.files,
-    args: { name: fileName, ext: fileExtension, account: accountId, service: serviceUuid, deleted: 0, parent_folder: parentFolder }
+    args: { uuid: generatedUuid, name: fileName, ext: fileExtension, account: accountId, service: serviceUuid, deleted: 0, parent_folder: parentFolder }
 
   }, databaseConnection, (error, result) =>
   {
-    if(error != null) return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.SQL_SERVER_ERROR, detail: error });
+    }
 
     return callback(null, result);
   });

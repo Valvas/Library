@@ -10,7 +10,7 @@ const commonFilesMove     = require(`${__root}/functions/common/files/move`);
 
 /****************************************************************************************************/
 
-function createStoppage(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachments, databaseConnection, globalParameters, callback)
+function createStoppage(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback)
 {
   const newStartDate = new Date(startDate);
   const newSentDate  = new Date(sentDate);
@@ -66,40 +66,9 @@ function createStoppage(registrationNumber, employeeFirstname, employeeLastname,
     return callback({ status: 406, code: constants.CREATE_STOPPAGE_START_DATE_AFTER_END_DATE, detail: null });
   }
 
-  if(attachments.length === 0)
+  if(attachment.type !== 'application/pdf')
   {
-    return callback({ status: 406, code: constants.CREATE_STOPPAGE_ATTACHMENT_REQUIRED, detail: null });
-  }
-
-  let amountOfInitialAttachment = 0;
-
-  const correspondencesTypes = Object.keys(stoppageStrings.addStoppage.correspondences);
-
-  for(let x = 0; x < attachments.length; x++)
-  {
-    if(correspondencesTypes.includes(attachments[x].correspondence) === false)
-    {
-      return callback({ status: 406, code: constants.CREATE_STOPPAGE_CORRESPONDENCE_TYPE_NOT_FOUND, detail: attachments[x].correspondence });
-    }
-
-    if(attachments[x].correspondence === 'started')
-    {
-      amountOfInitialAttachment += 1;
-    }
-
-    if(attachments[x].type === 'application/pdf') continue;
-
     return callback({ status: 406, code: constants.CREATE_STOPPAGE_UNAUTHORIZED_ATTACHMENTS, detail: null });
-  }
-
-  if(amountOfInitialAttachment === 0)
-  {
-    return callback({ status: 406, code: constants.CREATE_STOPPAGE_INITIAL_ATTACHMENT_REQUIRED, detail: null });
-  }
-
-  if(amountOfInitialAttachment > 1)
-  {
-    return callback({ status: 406, code: constants.CREATE_STOPPAGE_INITIAL_ATTACHMENT_OVERFLOW, detail: null });
   }
 
   databaseManager.selectQuery(
@@ -121,13 +90,13 @@ function createStoppage(registrationNumber, employeeFirstname, employeeLastname,
       return callback({ status: 404, code: constants.CREATE_STOPPAGE_ESTABLISHMENT_NOT_FOUND, detail: null });
     }
 
-    return createStoppageCheckStorageFolder(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachments, databaseConnection, globalParameters, callback);
+    return createStoppageCheckStorageFolder(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
   });
 }
 
 /****************************************************************************************************/
 
-function createStoppageCheckStorageFolder(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachments, databaseConnection, globalParameters, callback)
+function createStoppageCheckStorageFolder(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback)
 {
   fs.stat(`${globalParameters.storage.root}/${globalParameters.storage.stoppage}`, (error, stats) =>
   {
@@ -145,7 +114,7 @@ function createStoppageCheckStorageFolder(registrationNumber, employeeFirstname,
           return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
         }
 
-        return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachments, databaseConnection, globalParameters, callback);
+        return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
       });
     }
 
@@ -153,7 +122,7 @@ function createStoppageCheckStorageFolder(registrationNumber, employeeFirstname,
     {
       if(stats.isDirectory() === true)
       {
-        return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachments, databaseConnection, globalParameters, callback);
+        return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
       }
 
       fs.mkdir(`${globalParameters.storage.root}/${globalParameters.storage.stoppage}`, (error) =>
@@ -163,7 +132,7 @@ function createStoppageCheckStorageFolder(registrationNumber, employeeFirstname,
           return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
         }
 
-        return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachments, databaseConnection, globalParameters, callback);
+        return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
       });
     }
   });
@@ -171,46 +140,9 @@ function createStoppageCheckStorageFolder(registrationNumber, employeeFirstname,
 
 /****************************************************************************************************/
 
-function createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachments, databaseConnection, globalParameters, callback)
+function createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback)
 {
   const recordUuid = uuid.v4();
-
-  let index = 0;
-
-  const browseAttachments = () =>
-  {
-    const attachmentUuid = uuid.v4();
-
-    databaseManager.insertQuery(
-    {
-      databaseName: globalParameters.database.stoppage.label,
-      tableName: globalParameters.database.stoppage.tables.attachment,
-      args:
-      {
-        uuid: attachmentUuid,
-        record: recordUuid,
-        name: attachments[index].name.split('.').slice(0, attachments[index].name.split('.').length - 1).join(''),
-        comment: attachments[index].comment,
-        type: attachments[index].correspondence
-      }
-
-    }, databaseConnection, (error) =>
-    {
-      if(error !== null)
-      {
-        return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
-      }
-
-      attachments[index].uuid = attachmentUuid;
-
-      if(attachments[index += 1] === undefined)
-      {
-        return createStoppageProcessAttachments(recordUuid, registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachments, databaseConnection, globalParameters, callback);
-      }
-
-      browseAttachments();
-    });
-  }
 
   databaseManager.insertQuery(
   {
@@ -238,39 +170,40 @@ function createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname,
       return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
     }
 
-    browseAttachments();
+    const attachmentUuid = uuid.v4();
+
+    databaseManager.insertQuery(
+    {
+      databaseName: globalParameters.database.stoppage.label,
+      tableName: globalParameters.database.stoppage.tables.attachment,
+      args:
+      {
+        uuid: attachmentUuid,
+        record: recordUuid,
+        name: attachment.name.split('.').slice(0, attachment.name.split('.').length - 1).join(''),
+        comment: attachment.comment,
+        date: Date.now(),
+        type: 'started'
+      }
+
+    }, databaseConnection, (error) =>
+    {
+      if(error !== null)
+      {
+        return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+      }
+
+      attachment.uuid = attachmentUuid;
+
+      return createStoppageProcessAttachment(recordUuid, registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
+    });
   });
 }
 
 /****************************************************************************************************/
 
-function createStoppageProcessAttachments(recordUuid, registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachments, databaseConnection, globalParameters, callback)
+function createStoppageProcessAttachment(recordUuid, registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback)
 {
-  let index = 0;
-
-  const browseAttachments = () =>
-  {
-    commonFilesMove.moveFile(attachments[index].path, `${globalParameters.storage.root}/${globalParameters.storage.stoppage}/${recordUuid}/${attachments[index].uuid}.pdf`, (error) =>
-    {
-      if(error !== null)
-      {
-        return callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.message });
-      }
-
-      if(attachments[index += 1] === undefined)
-      {
-        const recordData =
-        {
-
-        }
-
-        return callback(null, recordData);
-      }
-
-      browseAttachments();
-    });
-  }
-
   fs.mkdir(`${globalParameters.storage.root}/${globalParameters.storage.stoppage}/${recordUuid}`, (error) =>
   {
     if(error !== null && error.code !== 'EEXIST')
@@ -278,7 +211,20 @@ function createStoppageProcessAttachments(recordUuid, registrationNumber, employ
       return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
     }
 
-    browseAttachments();
+    commonFilesMove.moveFile(attachment.path, `${globalParameters.storage.root}/${globalParameters.storage.stoppage}/${recordUuid}/${attachment.uuid}.pdf`, (error) =>
+    {
+      if(error !== null)
+      {
+        return callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.message });
+      }
+
+      const recordData =
+      {
+
+      }
+
+      return callback(null, recordData);
+    });
   });
 }
 

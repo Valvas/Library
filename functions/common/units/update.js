@@ -12,13 +12,22 @@ function updateUnitParent(unitId, newParentId, databaseConnection, globalParamet
 {
   commonUnitsGet.getUnitDetail(unitId, databaseConnection, globalParameters, (error, unitDetail) =>
   {
-    if(error != null) return callback(error);
+    if(error !== null)
+    {
+      return callback(error);
+    }
 
-    if(unitDetail.unitChildren.includes(newParentId)) return callback({ status: 406, code: constants.UNIT_CANNOT_BE_CHILD_OF_ITS_OWN_CHILDREN, detail: null });
+    if(unitDetail.unitChildren.includes(newParentId))
+    {
+      return callback({ status: 406, code: constants.UNIT_CANNOT_BE_CHILD_OF_ITS_OWN_CHILDREN, detail: null });
+    }
 
     commonUnitsGet.getUnitDetail(newParentId, databaseConnection, globalParameters, (error, newParentUnitDetail) =>
     {
-      if(error != null) return callback(error);
+      if(error !== null)
+      {
+        return callback(error);
+      }
 
       databaseManager.updateQuery(
       {
@@ -29,10 +38,50 @@ function updateUnitParent(unitId, newParentId, databaseConnection, globalParamet
 
       }, databaseConnection, (error, result) =>
       {
-        if(error != null) return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
-        
+        if(error !== null)
+        {
+          return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+        }
+
         return callback(null);
       });
+    });
+  });
+}
+
+/****************************************************************************************************/
+/* UPDATE UNIT NAME */
+/****************************************************************************************************/
+
+function updateUnitRename(unitId, newName, databaseConnection, globalParameters, callback)
+{
+  if(new RegExp(`^(\\S)+(( )?(\\S)+)*$`).test(newName) === false)
+  {
+    return callback({ status: 406, code: constants.INCORRECT_UNIT_NAME_FORMAT, detail: null });
+  }
+
+  commonUnitsGet.getUnitDetail(unitId, databaseConnection, globalParameters, (error, unitDetail) =>
+  {
+    if(error !== null)
+    {
+      return callback(error);
+    }
+
+    databaseManager.updateQuery(
+    {
+      databaseName: globalParameters.database.root.label,
+      tableName: globalParameters.database.root.tables.units,
+      args: { name: newName },
+      where: { operator: '=', key: 'id', value: unitId }
+
+    }, databaseConnection, (error, result) =>
+    {
+      if(error !== null)
+      {
+        return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+      }
+
+      return callback(null);
     });
   });
 }
@@ -41,7 +90,8 @@ function updateUnitParent(unitId, newParentId, databaseConnection, globalParamet
 
 module.exports =
 {
-  updateUnitParent: updateUnitParent
+  updateUnitParent: updateUnitParent,
+  updateUnitRename: updateUnitRename
 }
 
 /****************************************************************************************************/

@@ -1,0 +1,259 @@
+/****************************************************************************************************/
+/* Home */
+/****************************************************************************************************/
+
+.unitsContainer
+{
+  margin: 40px 20px 40px 20px;
+  background-color: #FFFFFF;
+  border-radius: 2px;
+  padding: 20px;
+}
+
+.unitsTable
+{
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.unitsTableHeader
+{
+  background-color: rgba(0,0,0,0.9);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.unitsTableHeaderColumn
+{
+  padding: 10px;
+}
+
+.unitsTableHeaderColumn.large
+{
+  flex-basis: 40%;
+}
+
+.unitsTableHeaderColumn.medium
+{
+  flex-basis: 20%;
+}
+
+.unitsTableHeaderColumn.small
+{
+  flex-basis: 10%;
+}
+
+.unitsTableElement
+{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  background-color: rgba(0,0,0,0.01);
+}
+
+.unitsTableElement.odd
+{
+  background-color: rgba(0,0,0,0.05);
+}
+
+.unitsTableElementColumn
+{
+  padding: 10px;
+}
+
+.unitsTableElementColumn.large
+{
+  flex-basis: 40%;
+}
+
+.unitsTableElementColumn.medium
+{
+  flex-basis: 20%;
+}
+
+.unitsTableElementColumn.small
+{
+  flex-basis: 10%;
+}
+
+.unitsTableElementColumn select
+{
+  border: 1px solid rgba(0,0,0,0.25);
+  border-radius: 4px;
+  padding: 5px;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #FFFFFF;
+}
+
+.unitsTableElementColumn.name
+{
+  font-size: 1em;
+  color: rgba(0,0,0,0.75);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.unitsTableElementColumn.static
+{
+  font-size: 0.9em;
+  color: rgba(0,0,0,0.75);
+  font-style: italic;
+  text-align: center;
+}
+
+.unitsTableElementColumn.rename
+{
+  color: rgba(0,0,0,0.6);
+  font-size: 1em;
+  text-decoration: underline;
+  cursor: pointer;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+.unitsTableElementColumn.rename:hover
+{
+  color: #6184D8;
+}
+
+.unitsTableElementColumn.remove
+{
+  color: rgba(0,0,0,0.6);
+  font-size: 1em;
+  text-decoration: underline;
+  cursor: pointer;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+.unitsTableElementColumn.remove:hover
+{
+  color: #D9534F;
+}
+
+/****************************************************************************************************/
+/* Rename unit */
+/****************************************************************************************************/
+
+.renameUnitWrapper
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 300;
+}
+
+.renameUnitContainer
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.renameUnitPopup
+{
+  width: calc(100% - 40px);
+  margin: 20px;
+  max-width: 400px;
+  background-color: #FFFFFF;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.renameUnitPopupHeader
+{
+  padding: 10px 20px 10px 20px;
+  font-size: 1em;
+  color: rgba(0,0,0,0.75);
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+.renameUnitPopupForm
+{
+  padding: 10px 20px 10px 20px;
+}
+
+.renameUnitPopupFormElement
+{
+  margin: 10px 0 10px 0;
+}
+
+.renameUnitPopupFormElement label
+{
+  display: block;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.renameUnitPopupFormElement input
+{
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(0,0,0,0.25);
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.renameUnitPopupFormButtons
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.renameUnitPopupFormButtonsSubmit
+{
+  margin: 10px 0 0 10px;
+  border: 1px solid #428BCA;
+  background-color: #FFFFFF;
+  color: #428BCA;
+  font-size: 0.9em;
+  padding: 5px 15px 5px 15px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.renameUnitPopupFormButtonsSubmit:hover
+{
+  color: #317AB9;
+  border: 1px solid #317AB9;
+  background-color: rgba(0,0,0,0.05);
+}
+
+.renameUnitPopupFormButtonsCancel
+{
+  margin: 10px 0 0 10px;
+  border: 1px solid #D9534F;
+  background-color: #FFFFFF;
+  color: #D9534F;
+  font-size: 0.9em;
+  padding: 5px 15px 5px 15px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.renameUnitPopupFormButtonsCancel:hover
+{
+  color: #C8423E;
+  border: 1px solid #C8423E;
+  background-color: rgba(0,0,0,0.05);
+}
+
+/****************************************************************************************************/
