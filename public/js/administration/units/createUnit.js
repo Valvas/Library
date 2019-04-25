@@ -1,6 +1,6 @@
 /****************************************************************************************************/
 
-let administrationAppStrings = null;
+let appStrings = null;
 
 if(document.getElementById('createUnitForm'))
 {
@@ -28,7 +28,7 @@ function createUnit(event)
 
   createBackground('createUnitBackground');
 
-  if(administrationAppStrings !== null)
+  if(appStrings !== null)
   {
     return createUnitOpenConfirmation();
   }
@@ -54,7 +54,7 @@ function createUnitGetStrings(loader)
       return displayError(error.message, error.detail, 'createUnitError');
     }
 
-    administrationAppStrings = strings;
+    appStrings = strings;
 
     return createUnitOpenConfirmation();
   });
@@ -76,11 +76,11 @@ function createUnitOpenConfirmation()
   confirm     .setAttribute('class', 'confirmationAccountPopupSave');
   cancel      .setAttribute('class', 'confirmationAccountPopupCancel');
 
-  popup       .innerHTML += `<div class="confirmationAccountPopupTitle">${administrationAppStrings.unitsCreate.confirmationPopup.title}</div>`;
-  popup       .innerHTML += `<div class="confirmationAccountPopupMessage">${administrationAppStrings.unitsCreate.confirmationPopup.message}</div>`;
+  popup       .innerHTML += `<div class="confirmationAccountPopupTitle">${appStrings.unitsCreate.confirmationPopup.title}</div>`;
+  popup       .innerHTML += `<div class="confirmationAccountPopupMessage">${appStrings.unitsCreate.confirmationPopup.message}</div>`;
 
-  confirm     .innerText = administrationAppStrings.unitsCreate.confirmationPopup.confirm;
-  cancel      .innerText = administrationAppStrings.unitsCreate.confirmationPopup.cancel;
+  confirm     .innerText = appStrings.unitsCreate.confirmationPopup.confirm;
+  cancel      .innerText = appStrings.unitsCreate.confirmationPopup.cancel;
 
   confirm     .addEventListener('click', sendUnitDataToServer);
 
@@ -109,7 +109,7 @@ function sendUnitDataToServer()
   const unitName = document.getElementById('createUnitNameInput').value;
   const unitParent = parseInt(document.getElementById('createUnitParentInput').value);
 
-  displayLoader(administrationAppStrings.unitsCreate.savingLoaderMessage, (loader) =>
+  displayLoader(appStrings.unitsCreate.savingLoaderMessage, (loader) =>
   {
     $.ajax(
     {
