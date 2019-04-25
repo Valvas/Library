@@ -43,7 +43,7 @@
 
 .messengerConversationResumeReceiver .name{ font-size:1em; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all; margin-right:5px; }
 
-.messengerConversationResumeReceiver span{ width:8px; height:8px; border-radius:50%; display:block; }
+.messengerConversationResumeReceiver span{ width:10px; height:10px; border-radius:50%; display:block; }
 
 .messengerConversationResumeReceiver span.offline{ background-color:#D9534F; }
 

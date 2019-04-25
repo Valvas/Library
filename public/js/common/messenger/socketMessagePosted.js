@@ -116,6 +116,19 @@ function handleReceiverProcess(messageData)
       }
     }
   }
+
+  if('Notification' in window)
+  {
+    if(Notification.permission === 'granted')
+    {
+      new Notification(commonStrings.intranetTitle,
+      {
+        body: commonStrings.messenger.notifications.newMessage,
+        icon: '/pictures/logo.ico',
+        tag: 'newMessageNotification'
+      });
+    }
+  }
 }
 
 /****************************************************************************************************/

@@ -18,6 +18,11 @@
     "emptySearchResults": "Aucun conversation à afficher avec cette recherche",
     "emptyConversations": "Aucune conversation",
 
+    "notifications":
+    {
+      "newMessage": "Vous avez reçu un message"
+    },
+
     "startNewConversation":
     {
       "title": "Nouvelle conversation",
@@ -278,6 +283,7 @@
         "pictureHelp": "Accepte les images au format <b>JPG</b> ou <b>PNG</b>",
         "pictureSending": "Enregistrement de la nouvelle image en cours",
         "pictureSaved": "Nouvelle image enregistrée avec succès",
+        "pictureTooBig": "La taille de l'image dépasse la limite autorisée par le serveur. Veuillez utiliser une image plus légère",
 
         "emailLabel": "Nouvelle adresse email",
         "emailPlaceholder": "Entrez la nouvelle adresse email",

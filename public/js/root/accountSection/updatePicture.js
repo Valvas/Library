@@ -91,8 +91,14 @@ function updatePictureCheckFormat(event)
 
     picture.onload = () =>
     {
-      const newWidth = picture.width > picture.height ? picture.height : picture.width;
-      const newHeight = picture.height > picture.width ? picture.width : picture.height;
+      let newWidth = picture.width > picture.height ? picture.height : picture.width;
+      let newHeight = picture.height > picture.width ? picture.width : picture.height;
+
+      if(newWidth > 800 || newHeight > 800)
+      {
+        newWidth = 800;
+        newHeight = 800;
+      }
 
       const canvas = document.createElement('canvas');
       const canvasContext = canvas.getContext('2d');
@@ -138,9 +144,17 @@ function updatePictureSendToServer(newPicture)
 
       document.getElementById('modalBackground').removeAttribute('style');
 
-      xhr.responseJSON != undefined ?
-      displayError(xhr.responseJSON.message, xhr.responseJSON.detail, 'updatePictureError') :
-      displayError('Une erreur est survenue, veuillez réessayer plus tard', null, 'updatePictureError');
+      if(xhr.status === 413)
+      {
+        return displayError(commonStrings.root.account.accountUpdate.pictureTooBig, null, 'updatePictureError');
+      }
+
+      if(xhr.responseJSON === undefined)
+      {
+        return displayError(commonStrings.global.xhrErrors.timeout, null, 'updatePictureError');
+      }
+
+      displayError(xhr.responseJSON.message, xhr.responseJSON.detail, 'updatePictureError');
     }
 
   }).done((result) =>

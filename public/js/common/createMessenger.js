@@ -123,6 +123,11 @@ function createMessenger(callback)
 
   updateReceiversStatus();
 
+  if('Notification' in window)
+  {
+    Notification.requestPermission();
+  }
+
   return callback(null);
 }
 
