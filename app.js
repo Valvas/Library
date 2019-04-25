@@ -55,7 +55,7 @@ module.exports = (callback) =>
     {
       initLauncher.startInit(app, (error) =>
       {
-        if(error !== null)
+        if(error)
         {
           console.error(new Error(error.message));
           process.exit(1);
@@ -69,7 +69,7 @@ module.exports = (callback) =>
     {
       initLauncher.startApp(app, (error) =>
       {
-        if(error !== null)
+        if(error)
         {
           console.error(new Error(error.message));
           process.exit(1);
