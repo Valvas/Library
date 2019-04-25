@@ -7,8 +7,55 @@ const storageAppFilesGet          = require(`${__root}/functions/storage/files/g
 
 module.exports = (io, app, callback) =>
 {
+  let connectedUsers = 0;
+
   io.on('connection', (socket) =>
   {
+    /**************************************************/
+
+    socket.on('availableOnMessenger', (accountUuid) =>
+    {
+      socket.identifier = accountUuid;
+      socket.join('availableUsersOnMessenger');
+
+      const interval = setInterval(() =>
+      {
+        if(socket.connected === false)
+        {
+          socket.leave('availableUsersOnMessenger');
+        }
+
+      }, 1000);
+    });
+
+    /**************************************************/
+
+    socket.on('getAvailableUsersOnMessenger', (fn) =>
+    {
+      let connectedUsers = [];
+
+      for(let client in io.sockets.clients().sockets)
+      {
+        if(Object.values(io.sockets.clients().sockets[client].rooms).includes('availableUsersOnMessenger') === false) continue;
+
+        connectedUsers.push(io.sockets.clients().sockets[client].identifier);
+      }
+
+      return fn(connectedUsers);
+    });
+    /*connectedUsers += 1;
+    const test = setInterval(() =>
+    {
+      console.log(socket.connected);
+      if(socket.connected === false)
+      {
+        clearInterval(test);
+        connectedUsers -= 1;
+      }
+
+      console.log(`Connected users : ${connectedUsers}`);
+    }, 1000);*/
+
     socket.on('adminAppAccountsHomeJoin', () => { socket.join('adminAppAccountsHome'); });
     socket.on('adminAppAccountsDetailJoin', (accountUUID) => { socket.join(accountUUID); })
     socket.on('storageAppServicesDetailJoin', (serviceUuid) => { socket.join(serviceUuid); });

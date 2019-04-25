@@ -39,7 +39,15 @@
 
 .messengerConversationResume{ border-bottom:1px solid rgba(0,0,0,0.25); width:calc(100% - 70px); margin-left:10px; position:relative; }
 
-.messengerConversationResumeReceiver{ font-size:1em; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all; width:calc(100% - 25px); }
+.messengerConversationResumeReceiver{ width:calc(100% - 25px); display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
+
+.messengerConversationResumeReceiver .name{ font-size:1em; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all; margin-right:5px; }
+
+.messengerConversationResumeReceiver span{ width:8px; height:8px; border-radius:50%; display:block; }
+
+.messengerConversationResumeReceiver span.offline{ background-color:#D9534F; }
+
+.messengerConversationResumeReceiver span.online{ background-color:#5CB85C; }
 
 .messengerConversationResumeLast{ font-size:0.8em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all; margin-top:5px; }
 

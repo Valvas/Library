@@ -75,6 +75,7 @@ function createMessenger(callback)
     });
 
     currentConversation       .setAttribute('name', currentConversationUuid);
+    conversationReceiver      .setAttribute('name', messengerData[conversation].receiver.uuid);
 
     currentConversation       .setAttribute('class', 'messengerConversation');
     conversationPicture       .setAttribute('class', 'messengerConversationPicture');
@@ -85,7 +86,9 @@ function createMessenger(callback)
 
     conversationPicture       .innerHTML = `<img class="messengerConversationPictureContent" src="${messengerData[conversation].receiver.picture}" alt="" />`;
 
-    conversationReceiver      .innerText = `${messengerData[conversation].receiver.firstname.charAt(0).toUpperCase()}${messengerData[conversation].receiver.firstname.slice(1).toLowerCase()} ${messengerData[conversation].receiver.lastname.charAt(0).toUpperCase()}${messengerData[conversation].receiver.lastname.slice(1).toLowerCase()}`;
+    conversationReceiver      .innerHTML += `<div class="name">${messengerData[conversation].receiver.firstname.charAt(0).toUpperCase()}${messengerData[conversation].receiver.firstname.slice(1).toLowerCase()} ${messengerData[conversation].receiver.lastname.charAt(0).toUpperCase()}${messengerData[conversation].receiver.lastname.slice(1).toLowerCase()}</div>`;
+
+    conversationReceiver      .innerHTML += `<span class="offline"></span>`;
 
     conversationLast          .innerHTML = messengerData[conversation].messages[0].author === accountData.uuid
     ? `${accountData.firstname.charAt(0).toUpperCase()}${accountData.firstname.slice(1).toLowerCase()} ${accountData.lastname.charAt(0).toUpperCase()}${accountData.lastname.slice(1).toLowerCase()} : ${messengerData[conversation].messages[0].content}`
@@ -116,8 +119,43 @@ function createMessenger(callback)
   document.getElementById('mainContainer').appendChild(messenger);
 
   socket.emit('messengerAwaitingNewConversationsJoin');
+  socket.emit('availableOnMessenger', accountData.uuid);
+
+  updateReceiversStatus();
 
   return callback(null);
+}
+
+/****************************************************************************************************/
+
+function updateReceiversStatus()
+{
+  let connectedUsers = [];
+
+  setInterval(() =>
+  {
+    socket.emit('getAvailableUsersOnMessenger', (result) =>
+    {
+      connectedUsers = result;
+
+      const currentConversations = document.getElementById('messengerConversationsList').children;
+
+      for(let x = 0; x < currentConversations.length; x++)
+      {
+        const currentConversationReceiver = currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].getAttribute('name');
+
+        if(connectedUsers.includes(currentConversationReceiver))
+        {
+          currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].children[1].setAttribute('class', 'online');
+        }
+
+        else
+        {
+          currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].children[1].setAttribute('class', 'offline');
+        }
+      }
+    });
+  }, 2000);
 }
 
 /****************************************************************************************************/
