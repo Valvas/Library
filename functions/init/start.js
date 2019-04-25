@@ -31,14 +31,14 @@ module.exports.startInit = (app, callback) =>
     {
       if(error !== null)
       {
-        return callback({ message: error.message });
+        return callback(error);
       }
 
       fs.write(fd, password, (error) =>
       {
         if(error !== null)
         {
-          return callback({ message: error.message });
+          return callback(error);
         }
 
         app.use('/init', initAuthentication, init);
