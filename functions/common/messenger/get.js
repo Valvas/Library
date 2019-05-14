@@ -55,9 +55,12 @@ function retrieveMessengerDataGetReceiverData(conversationUuid, accountUuid, rec
   {
     if(error !== null) return callback(error);
 
-    if(accountExists) return retrieveMessengerDataGetCounter(conversationUuid, accountUuid, { uuid: accountData.uuid, email: accountData.email, lastname: accountData.lastname, firstname: accountData.firstname, picture: accountData.picture, suspended: accountData.suspended === 1 }, databaseConnection, globalParameters, callback);
+    if(accountExists === false)
+    {
+      return retrieveMessengerDataGetCounter(conversationUuid, accountUuid, null, databaseConnection, globalParameters, callback);
+    }
 
-    return retrieveMessengerDataGetCounter(conversationUuid, accountUuid, null, databaseConnection, globalParameters, callback);
+    return retrieveMessengerDataGetCounter(conversationUuid, accountUuid, { uuid: accountData.uuid, email: accountData.email, lastname: accountData.lastname, firstname: accountData.firstname, picture: accountData.picture, suspended: accountData.suspended }, databaseConnection, globalParameters, callback);
   });
 }
 

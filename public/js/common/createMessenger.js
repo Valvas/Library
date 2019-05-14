@@ -31,6 +31,7 @@ function createMessenger(callback)
   messengerBlockHome      .setAttribute('id', 'messengerBlockHome');
   homeEmptyAccounts       .setAttribute('id', 'messengerEmptyAccounts');
   homeEmptySearch         .setAttribute('id', 'messengerBlockEmptySearch');
+  blockHeaderStatus       .setAttribute('id', 'messengerUpdateStatus');
 
   messenger               .setAttribute('class', 'messengerBlock');
   messengerHeader         .setAttribute('class', 'messengerHeader');
@@ -151,6 +152,8 @@ function createMessenger(callback)
   {
     updateReceiversStatus();
   }, 2000);
+
+  detectInactivity();
 
   if('Notification' in window)
   {
