@@ -109,7 +109,7 @@ module.exports.startApp = (app, callback) =>
   app.use('/account', auth, accountViews);
   app.use('/directory', auth, directoryViews);
 
-  app.use('/queries/strings', auth, stringsQueries);
+  app.use('/queries/strings', stringsQueries);
 
   app.use('/queries/root/news', auth, rootQueriesNews);
   app.use('/queries/root/apps', auth, rootQueriesApps);

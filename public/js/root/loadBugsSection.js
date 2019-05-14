@@ -134,7 +134,7 @@ function loadBugsSectionList(bugsContainer, callback)
     containerContent      .appendChild(contentEmpty);
     containerContent      .appendChild(containerContentList);
 
-    for(var x = 0; x < reportsList.length; x++)
+    for(let x = 0; x < reportsList.length; x++)
     {
       const currentReportUuid = reportsList[x].uuid;
 
@@ -177,7 +177,7 @@ function loadBugsSectionList(bugsContainer, callback)
 
       currentReportHeader         .innerHTML += `<div class="bugsListElementHeaderDate">${reportsList[x].date}</div>`;
 
-      currentReportContent        .innerText = reportsList[x].message;
+      currentReportContent        .innerText = reportsList[x].message.replace(/\r?\n|\r/g, ' ');
       currentReportAccess         .innerText = commonStrings.root.bugs.displayReportDetail;
 
       currentReportAccess         .addEventListener('click', () =>
@@ -352,7 +352,7 @@ function loadBugsSectionDetail(reportUuid, bugsContainer, callback)
 
     detailStatus        .appendChild(detailStatusValue);
 
-    if(accountData.isAdmin)
+    if(accountData.isAdmin === true)
     {
       detailStatus      .appendChild(detailStatusUpdate);
     }

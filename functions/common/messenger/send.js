@@ -136,6 +136,8 @@ function createConversationUpdateReceiverCounter(conversationUuid, senderUuid, c
 
 function addMessageToConversation(messageContent, conversationUuid, senderUuid, databaseConnection, globalParameters, callback)
 {
+  //ER_TRUNCATED_WRONG_VALUE_FOR_FIELD: Incorrect string value: '\xF0\x9F\x99\x84' for column 'content' at row 1
+  console.log(messageContent);
   addMessageToConversationCheckIfConversationExists(messageContent, conversationUuid, senderUuid, databaseConnection, globalParameters, (error, messageData) =>
   {
     return callback(error, messageData);

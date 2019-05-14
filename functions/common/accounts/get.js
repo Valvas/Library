@@ -25,7 +25,20 @@ function checkIfAccountExistsFromUuid(accountUuid, databaseConnection, params, c
 
     if(result.length == 0) return callback(null, false);
 
-    return callback(null, true, result[0]);
+    const accountData =
+    {
+      uuid: result[0].uuid,
+      email: result[0].email,
+      lastname: result[0].lastname,
+      firstname: result[0].firstname,
+      password: result[0].password,
+      suspended: result[0].suspended === 1,
+      picture: result[0].picture,
+      contact_number: result[0].contact_number,
+      is_admin: result[0].is_admin === 1
+    }
+
+    return callback(null, true, accountData);
   });
 }
 

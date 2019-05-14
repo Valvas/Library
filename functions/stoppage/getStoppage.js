@@ -109,7 +109,8 @@ function getStoppageDetail(stoppageUuid, databaseConnection, globalParameters, c
       sentDate: commonFormatDate.getStringifiedDateFromTimestampSync(result[0].received),
       endDate: commonFormatDate.getStringifiedDateFromTimestampSync(result[0].end),
       employeeLastname: result[0].lastname,
-      employeeFirstname: result[0].firstname
+      employeeFirstname: result[0].firstname,
+      prolongations: []
     }
 
     return getStoppageDetailRetrieveAttachments(stoppageData, databaseConnection, globalParameters, callback);
@@ -168,6 +169,40 @@ function getStoppageDetailRetrieveAttachments(stoppageData, databaseConnection, 
 
         break;
       }
+    }
+
+    return getStoppageDetailRetrieveProlongations(stoppageData, databaseConnection, globalParameters, callback);
+  });
+}
+
+/****************************************************************************************************/
+
+function getStoppageDetailRetrieveProlongations(stoppageData, databaseConnection, globalParameters, callback)
+{
+  databaseManager.selectQuery(
+  {
+    databaseName: globalParameters.database.stoppage.label,
+    tableName: globalParameters.database.stoppage.tables.prolongation,
+    args: [ '*' ],
+    where: { operator: '=', key: 'record', value: stoppageData.uuid },
+    order: [ { column: 'end', asc: true } ]
+
+  }, databaseConnection, (error, result) =>
+  {
+    if(error !== null)
+    {
+      return callback({ status: 500, code: constants.DATABASE_QUERY_FAILED, detail: error });
+    }
+
+    for(let x = 0; x < result.length; x++)
+    {
+      stoppageData.prolongations.push(
+      {
+        startDate: commonFormatDate.getStringifiedDateFromTimestampSync(result[x].start),
+        endDate: commonFormatDate.getStringifiedDateFromTimestampSync(result[x].end),
+        attachmentUuid: result[x].uuid,
+        attachmentName: result[x].attachment
+      });
     }
 
     return callback(null, stoppageData);

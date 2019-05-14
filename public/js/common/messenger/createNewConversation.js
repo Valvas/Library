@@ -1,5 +1,9 @@
 /****************************************************************************************************/
 
+let createConversationStatusInterval = null;
+
+/****************************************************************************************************/
+
 function createNewConversationSearchForAccounts()
 {
   const searchedValue = event.target.value.toLowerCase().trim();
@@ -97,10 +101,14 @@ function createNewConversationOpenAccountsList()
       var currentAccount  = document.createElement('div');
       var accountPicture  = document.createElement('div');
       var accountName     = document.createElement('div');
+      var accountStatus   = document.createElement('span');
+
+      currentAccount      .setAttribute('name', currentAccountData.uuid);
 
       currentAccount      .setAttribute('class', 'messengerCreateBlockListAccount');
       accountPicture      .setAttribute('class', 'messengerCreateBlockListAccountPicture');
       accountName         .setAttribute('class', 'messengerCreateBlockListAccountName');
+      accountStatus       .setAttribute('class', 'offline');
 
       accountPicture      .innerHTML = `<img src="${accounts[x].picture}" alt="" />`;
 
@@ -113,11 +121,17 @@ function createNewConversationOpenAccountsList()
 
       currentAccount      .appendChild(accountPicture);
       currentAccount      .appendChild(accountName);
+      currentAccount      .appendChild(accountStatus);
       blockList           .appendChild(currentAccount);
     }
 
     returnButton      .addEventListener('click', () =>
     {
+      if(createConversationStatusInterval !== null)
+      {
+        clearInterval(createConversationStatusInterval);
+      }
+
       createBlock     .remove();
 
       document.getElementById('messengerBlockHome').removeAttribute('style');
@@ -133,6 +147,13 @@ function createNewConversationOpenAccountsList()
     createBlock       .appendChild(blockList);
 
     loader            .remove();
+
+    createConversationUpdateAccountStatus();
+
+    createConversationStatusInterval = setInterval(() =>
+    {
+      createConversationUpdateAccountStatus();
+    }, 2000);
 
     document.getElementById('messengerBlockHidden').appendChild(createBlock);
   });
@@ -313,6 +334,11 @@ function createNewConversationSendToServer(messageToSend, receiverUuid)
   {
     loader.remove();
 
+    if(createConversationStatusInterval !== null)
+    {
+      clearInterval(createConversationStatusInterval);
+    }
+
     document.getElementById('messengerCreateBlock').remove();
     document.getElementById('messengerCreateAccountChosenBlock').remove();
 
@@ -337,6 +363,44 @@ function createNewConversationSendToServer(messageToSend, receiverUuid)
     createSuccess       .appendChild(successClose);
 
     document.getElementById('messengerBlockHidden').appendChild(createSuccess);
+  });
+}
+
+/****************************************************************************************************/
+
+function createConversationUpdateAccountStatus()
+{
+  socket.emit('getUsersStatusOnMessenger', (result) =>
+  {
+    let connectedUsers = result;
+
+    const accountsList = document.getElementById('messengerCreateBlockList').children;
+
+    for(let x = 0; x < accountsList.length; x++)
+    {
+      if(connectedUsers[accountsList[x].getAttribute('name')] === undefined)
+      {
+        accountsList[x].children[2].setAttribute('class', 'offline');
+      }
+
+      else
+      {
+        switch(connectedUsers[accountsList[x].getAttribute('name')])
+        {
+          case 'available':
+            accountsList[x].children[2].setAttribute('class', 'online');
+            break;
+
+          case 'busy':
+            accountsList[x].children[2].setAttribute('class', 'busy');
+            break;
+
+          case 'away':
+            accountsList[x].children[2].setAttribute('class', 'away');
+            break;
+        }
+      }
+    }
   });
 }
 

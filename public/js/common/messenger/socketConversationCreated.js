@@ -27,6 +27,11 @@ socket.on('conversationCreated', (conversationData) =>
   });
 
   currentConversation       .setAttribute('name', currentConversationUuid);
+  conversationReceiver      .setAttribute('name', conversationData.receiver.uuid);
+
+  accountData.uuid === conversationData.sender.uuid
+  ? conversationReceiver    .setAttribute('name', conversationData.receiver.uuid)
+  : conversationReceiver    .setAttribute('name', conversationData.sender.uuid);
 
   currentConversation       .setAttribute('class', 'messengerConversation');
   conversationPicture       .setAttribute('class', 'messengerConversationPicture');
@@ -39,9 +44,11 @@ socket.on('conversationCreated', (conversationData) =>
   ? `<img class="messengerConversationPictureContent" src="${messengerData[currentConversationUuid].receiver.picture}" alt="" />`
   : `<img class="messengerConversationPictureContent" src="${conversationData.sender.picture}" alt="" />`;
 
-  conversationReceiver      .innerText = conversationData.sender.uuid === accountData.uuid
-  ? `${conversationData.receiver.firstname.charAt(0).toUpperCase()}${conversationData.receiver.firstname.slice(1).toLowerCase()} ${conversationData.receiver.lastname.charAt(0).toUpperCase()}${conversationData.receiver.lastname.slice(1).toLowerCase()}`
-  : `${conversationData.sender.firstname.charAt(0).toUpperCase()}${conversationData.sender.firstname.slice(1).toLowerCase()} ${conversationData.sender.lastname.charAt(0).toUpperCase()}${conversationData.sender.lastname.slice(1).toLowerCase()}`;
+  conversationReceiver      .innerHTML += conversationData.sender.uuid === accountData.uuid
+  ? `<div class="name">${conversationData.receiver.firstname.charAt(0).toUpperCase()}${conversationData.receiver.firstname.slice(1).toLowerCase()} ${conversationData.receiver.lastname.charAt(0).toUpperCase()}${conversationData.receiver.lastname.slice(1).toLowerCase()}</div>`
+  : `<div class="name">${conversationData.sender.firstname.charAt(0).toUpperCase()}${conversationData.sender.firstname.slice(1).toLowerCase()} ${conversationData.sender.lastname.charAt(0).toUpperCase()}${conversationData.sender.lastname.slice(1).toLowerCase()}</div>`;
+
+  conversationReceiver      .innerHTML += `<span class="offline"></span>`;
 
   conversationLast          .innerHTML = messengerData[currentConversationUuid].messages[0].author === conversationData.receiver.uuid
   ? `${conversationData.receiver.firstname.charAt(0).toUpperCase()}${conversationData.receiver.firstname.slice(1).toLowerCase()} ${conversationData.receiver.lastname.charAt(0).toUpperCase()}${conversationData.receiver.lastname.slice(1).toLowerCase()} : ${messengerData[currentConversationUuid].messages[0].content}`

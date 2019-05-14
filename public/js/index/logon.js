@@ -31,6 +31,8 @@ function logonFormSubmit(event)
 {
   event.preventDefault();
 
+  if(navigator.cookieEnabled === false) return;
+
   if(document.getElementById('formError') === null) return;
 
   document.getElementById('formError').removeAttribute('style');
@@ -38,8 +40,9 @@ function logonFormSubmit(event)
   document.getElementById('passwordError').removeAttribute('style');
   document.getElementById('formError').innerText = '';
 
-  const username = event.target.elements['email'].value.trim();
-  const password = event.target.elements['password'].value.trim();
+  const username  = event.target.elements['email'].value.trim();
+  const password  = event.target.elements['password'].value.trim();
+  const keep      = event.target.elements['keep'].checked;
 
   if(username.length === 0)
   {
@@ -68,8 +71,6 @@ function logonFormSubmit(event)
   loaderWrapper   .appendChild(loaderContainer);
   loaderContainer .appendChild(loaderBlock);
 
-  document.getElementById('main').style.filter = 'blur(4px)';
-
   document.body   .appendChild(loaderVeil);
   document.body   .appendChild(loaderWrapper);
 
@@ -77,13 +78,12 @@ function logonFormSubmit(event)
 
   $.ajax(
   {
-    method: 'PUT', timeout: 10000, dataType: 'JSON', data: { 'emailAddress': username, 'uncryptedPassword': password }, url: '/', success: () => {},
+    method: 'PUT', timeout: 10000, dataType: 'JSON', data: { 'emailAddress': username, 'uncryptedPassword': password, 'keepLogged': keep }, url: '/',
 
     error: (xhr, status, error) =>
     {
       loaderVeil.remove();
       loaderWrapper.remove();
-      document.getElementById('main').removeAttribute('style');
 
       if(xhr.responseJSON !== undefined)
       {

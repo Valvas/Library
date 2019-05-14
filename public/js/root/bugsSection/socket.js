@@ -114,6 +114,21 @@ socket.on('reportLogsUpdated', (logData) =>
         reportsList[x].getElementsByClassName('bugsListElementHeader')[0].innerHTML += `<div class="bugsListElementHeaderDate">${currentReportData}</div>`;
       }
     }
+
+    else
+    {
+      for(let x = 0; x < reportsList.length; x++)
+      {
+        if(reportsList[x].getAttribute('name') !== logData.report) continue;
+
+        const currentReportData = reportsList[x].getElementsByClassName('bugsListElementHeader')[0].children[1].innerText;
+
+        if(reportsList[x].getElementsByClassName('bugsListElementHeader')[0].children[0].children.length === 0)
+        {
+          reportsList[x].getElementsByClassName('bugsListElementHeader')[0].children[0].innerHTML += `<span>[${commonStrings.root.bugs.unseenNotifications}]</span>`;
+        }
+      }
+    }
   }
 
   /**************************************************/

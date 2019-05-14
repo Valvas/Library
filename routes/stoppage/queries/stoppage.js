@@ -8,6 +8,7 @@ const errors          = require(`${__root}/json/errors`);
 const success         = require(`${__root}/json/success`);
 const constants       = require(`${__root}/functions/constants`);
 const getStoppage     = require(`${__root}/functions/stoppage/getStoppage`);
+const prolongations   = require(`${__root}/functions/stoppage/prolongations`);
 const createStoppage  = require(`${__root}/functions/stoppage/createStoppage`);
 
 let router = express.Router();
@@ -138,6 +139,53 @@ router.post('/create-stoppage', (req, res) =>
       }
 
       return res.status(201).send({ message: success[constants.STOPPAGE_CREATED_SUCCESSFULLY] });
+    });
+  });
+});
+
+/****************************************************************************************************/
+
+router.post('/add-stoppage-prolongation', (req, res) =>
+{
+  const form = new formidable.IncomingForm();
+
+  form.uploadDir = `${req.app.get('params').storage.root}/${req.app.get('params').storage.tmp}`;
+
+  form.parse(req, (error, fields, files) =>
+  {
+    if(error !== null)
+    {
+      return res.status(500).send({ message: errors[constants.COULD_NOT_PARSE_INCOMING_FORM], detail: error.message });
+    }
+
+    if(fields.stoppageUuid === undefined)
+    {
+      return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'stoppageUuid' });
+    }
+
+    if(fields.endDate === undefined)
+    {
+      return res.status(406).send({ message: errors[constants.MISSING_DATA_IN_REQUEST], detail: 'endDate' });
+    }
+
+    const attachment =
+    {
+      name: files.attachmentFile.name,
+      path: files.attachmentFile.path,
+      type: files.attachmentFile.type,
+      comment: fields.attachmentComment
+    }
+
+    prolongations.addProlongation(fields.stoppageUuid, fields.endDate, attachment, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, prolongationData) =>
+    {
+      if(error !== null)
+      {
+        return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+      }
+
+      req.app.get('io').in('stoppageDetail').emit('prolongationAddedOnStoppage', prolongationData);
+
+      return res.status(201).send({ message: success[constants.PROLONGATION_ADDED_SUCCESSFULLY] });
     });
   });
 });

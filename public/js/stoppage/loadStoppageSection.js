@@ -295,7 +295,7 @@ function loadStoppageDetail(stoppageUuid)
 
   }).done((stoppageDetail) =>
   {
-    console.log(stoppageDetail);
+    document.getElementById('locationContainer').setAttribute('name', stoppageDetail.uuid);
 
     const detailWrapper         = document.createElement('div');
     const detailContainer       = document.createElement('div');
@@ -331,18 +331,21 @@ function loadStoppageDetail(stoppageUuid)
     detailFirstname     .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.employeeFirstname.charAt(0).toUpperCase()}${stoppageDetail.employeeFirstname.slice(1)}</div>`;
 
     detailStartDate     .innerHTML += `<div class="stoppageDetailContainerDataKey">${appStrings.stoppageDetail.dataLabels.startDate} :</div>`;
-    detailStartDate     .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.startDate.split(' - ')[0]}</div>`;
+    detailStartDate     .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.startDate}</div>`;
 
     detailReceivedDate  .innerHTML += `<div class="stoppageDetailContainerDataKey">${appStrings.stoppageDetail.dataLabels.receivedDate} :</div>`;
-    detailReceivedDate  .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.sentDate.split(' - ')[0]}</div>`;
+    detailReceivedDate  .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.sentDate}</div>`;
 
     detailEndDate       .innerHTML += `<div class="stoppageDetailContainerDataKey">${appStrings.stoppageDetail.dataLabels.endDate} :</div>`;
-    detailEndDate       .innerHTML += `<div class="stoppageDetailContainerDataValue">${stoppageDetail.endDate.split(' - ')[0]}</div>`;
+
+    detailEndDate       .innerHTML += stoppageDetail.prolongations.length > 0
+    ? `<div id="stoppageEndDate" class="stoppageDetailContainerDataValue">${stoppageDetail.prolongations[stoppageDetail.prolongations.length - 1].endDate}</div>`
+    : `<div id="stoppageEndDate" class="stoppageDetailContainerDataValue">${stoppageDetail.endDate}</div>`;
 
     detailInitial       .innerHTML += `<div class="stoppageDetailContainerAttachmentLabel">${appStrings.addStoppage.correspondences.started}</div>`;
     detailInitial       .innerHTML += stoppageDetail.attachments.initial.comment.length === 0
-    ? `<div class="stoppageDetailContainerAttachmentComment">${appStrings.stoppageDetail.emptyAttachmentComment}</div>`
-    : `<div class="stoppageDetailContainerAttachmentComment">${stoppageDetail.attachments.initial.comment}</div>`;
+    ? `<div id="stoppageEndDate" class="stoppageDetailContainerAttachmentComment">${appStrings.stoppageDetail.emptyAttachmentComment}</div>`
+    : `<div id="stoppageEndDate" class="stoppageDetailContainerAttachmentComment">${stoppageDetail.attachments.initial.comment}</div>`;
 
     detailInitialFile   .innerText = `${stoppageDetail.attachments.initial.name}.pdf`;
     detailInitialButton .innerText = appStrings.stoppageDetail.downloadAttachment;
@@ -368,7 +371,9 @@ function loadStoppageDetail(stoppageUuid)
     detailContainer     .appendChild(detailEndDate);
     detailContainer     .appendChild(detailInitial);
 
+    loadStoppageDetailBuildProlongationsBlock(detailContainer, stoppageDetail);
     loadStoppageDetailBuildEventsSection(detailContainer, stoppageDetail);
+    loadStoppageDetailBuildActionsSection(detailContainer, stoppageDetail.attachments.events.length === 0 ? null : stoppageDetail.attachments.events[stoppageDetail.attachments.events.length - 1].type);
 
     detailWrapper       .appendChild(detailContainer);
 
@@ -400,8 +405,137 @@ function loadStoppageDetailBuildEventsSection(detailContainer, stoppageDetail)
     eventsBlock       .innerHTML += `<div class="stoppageDetailEventsEmpty">${appStrings.stoppageDetail.eventsBlock.empty}</div>`;
   }
 
+  for(let x = 0; x < stoppageDetail.attachments.events.length; x++)
+  {
+
+  }
+
   eventsBlock         .insertBefore(eventsBlockHeader, eventsBlock.children[0]);
   detailContainer     .appendChild(eventsBlock);
+}
+
+/****************************************************************************************************/
+
+function loadStoppageDetailBuildActionsSection(detailContainer, lastEventType)
+{
+  const actionsBlock          = document.createElement('div');
+  const actionsBlockDelayed   = document.createElement('button');
+  const actionsBlockRejected  = document.createElement('button');
+  const actionsBlockClosed    = document.createElement('button');
+  const actionsBlockQuestion  = document.createElement('button');
+  const actionsBlockDisputed  = document.createElement('button');
+
+  actionsBlock            .setAttribute('class', 'stoppageDetailActions');
+
+  actionsBlock            .innerHTML += `<div class="header">${appStrings.stoppageDetail.actionsBlockHeader}</div>`;
+
+  actionsBlockDelayed     .innerText = appStrings.addStoppage.correspondences.delayed;
+  actionsBlockRejected    .innerText = appStrings.addStoppage.correspondences.rejected;
+  actionsBlockClosed      .innerText = appStrings.addStoppage.correspondences.closed;
+  actionsBlockQuestion    .innerText = appStrings.addStoppage.correspondences.questionary;
+  actionsBlockDisputed    .innerText = appStrings.addStoppage.correspondences.disputed;
+
+  switch(lastEventType)
+  {
+    case 'rejected':
+      actionsBlock.appendChild(actionsBlockDelayed);
+      actionsBlock.appendChild(actionsBlockQuestion);
+    break;
+
+    case 'delayed':
+      actionsBlock.appendChild(actionsBlockRejected);
+      actionsBlock.appendChild(actionsBlockClosed);
+      actionsBlock.appendChild(actionsBlockQuestion);
+    break;
+
+    case 'closed':
+      actionsBlock.appendChild(actionsBlockDisputed);
+    break;
+
+    case 'questionary':
+      actionsBlock.appendChild(actionsBlockRejected);
+      actionsBlock.appendChild(actionsBlockDelayed);
+      actionsBlock.appendChild(actionsBlockClosed);
+    break;
+
+    case 'disputed':
+
+    break;
+
+    default:
+      actionsBlock.appendChild(actionsBlockDelayed);
+      actionsBlock.appendChild(actionsBlockRejected);
+      actionsBlock.appendChild(actionsBlockClosed);
+      actionsBlock.appendChild(actionsBlockQuestion);
+    break;
+  }
+
+  detailContainer.appendChild(actionsBlock);
+}
+
+/****************************************************************************************************/
+
+function loadStoppageDetailBuildProlongationsBlock(detailContainer, stoppageDetail)
+{
+  const prolongationsBlock      = document.createElement('div');
+  const prolongationsBlockEmpty = document.createElement('div');
+  const prolongationsBlockList  = document.createElement('div');
+  const prolongationsBlockAdd   = document.createElement('button');
+
+  prolongationsBlock      .setAttribute('class', 'stoppageDetailProlongations');
+  prolongationsBlockEmpty .setAttribute('class', 'empty');
+  prolongationsBlockList  .setAttribute('class', 'list');
+
+  prolongationsBlockEmpty .setAttribute('id', 'prolongationsEmpty');
+  prolongationsBlockList  .setAttribute('id', 'prolongationsList');
+
+  prolongationsBlock      .innerHTML += `<div class="header">${appStrings.stoppageDetail.prolongationsBlock.header}</div>`;
+
+  prolongationsBlockEmpty .innerText = appStrings.stoppageDetail.prolongationsBlock.emptyList;
+  prolongationsBlockAdd   .innerText = appStrings.stoppageDetail.prolongationsBlock.add;
+
+  if(stoppageDetail.prolongations.length === 0)
+  {
+    prolongationsBlockEmpty.style.display = 'block';
+    prolongationsBlockList.style.display = 'none';
+  }
+
+  for(let x = 0; x < stoppageDetail.prolongations.length; x++)
+  {
+    const currentProlongation             = document.createElement('div');
+    const currentProlongationDates        = document.createElement('div');
+    const currentProlongationAttachment   = document.createElement('div');
+
+    currentProlongation                   .setAttribute('class', 'element');
+    currentProlongationDates              .setAttribute('class', 'dates');
+    currentProlongationAttachment         .setAttribute('class', 'attachment');
+
+    currentProlongationDates              .innerHTML += `<div class="date"><div class="label">${appStrings.stoppageDetail.prolongationsBlock.datesSection.startDate} :</div><div class="value">${stoppageDetail.prolongations[x].startDate}</div></div>`;
+    currentProlongationDates              .innerHTML += `<div class="date"><div class="label">${appStrings.stoppageDetail.prolongationsBlock.datesSection.endDate} :</div><div class="value">${stoppageDetail.prolongations[x].endDate}</div></div>`;
+
+    currentProlongationAttachment         .innerText = stoppageDetail.prolongations[x].attachmentName;
+
+    currentProlongationAttachment         .addEventListener('click', () =>
+    {
+      window.open(`/queries/stoppage/visualize-attachment/${stoppageDetail.uuid}/${stoppageDetail.prolongations[x].attachmentUuid}`);
+    });
+
+    currentProlongation                   .appendChild(currentProlongationDates);
+    currentProlongation                   .appendChild(currentProlongationAttachment);
+    prolongationsBlockList                .appendChild(currentProlongation);
+  }
+
+  prolongationsBlockAdd   .addEventListener('click', () =>
+  {
+    stoppageDetail.prolongations.length === 0
+    ? addProlongationOpenPopup(stoppageDetail.uuid, stoppageDetail.endDate)
+    : addProlongationOpenPopup(stoppageDetail.uuid, stoppageDetail.prolongations[stoppageDetail.prolongations.length - 1].endDate);
+  });
+
+  prolongationsBlock      .appendChild(prolongationsBlockEmpty);
+  prolongationsBlock      .appendChild(prolongationsBlockList);
+  prolongationsBlock      .appendChild(prolongationsBlockAdd);
+  detailContainer         .appendChild(prolongationsBlock);
 }
 
 /****************************************************************************************************/

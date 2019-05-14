@@ -20,9 +20,15 @@
 
 .logonBlockForm input{ margin-top:15px; border:1px solid rgba(0,0,0,0.25); border-radius:4px; padding:6px; width:100%; box-sizing:border-box; }
 
+.logonBlockFormKeepLogged{ margin:20px 0 0 10px; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; }
+
+.logonBlockFormKeepLogged input[type="checkbox"]{ height:16px; width:16px; margin:0 10px 0 0; cursor:pointer; }
+
+.logonBlockFormKeepLogged label{ font-size:0.9em; color:rgba(0,0,0,0.75); font-style:italic; }
+
 .logonBlockFormFieldError{ font-size:0.8em; color:#D9534F; display:none; margin-left:4px; }
 
-.logonBlockFormFooter{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; margin-top:35px; }
+.logonBlockFormFooter{ display:flex; flex-direction:row; align-items:center; justify-content:space-between; margin-top:20px; }
 
 .logonBlockFormFooterForgottenPassword{ display:block; color:rgba(0,0,0,0.6); cursor:pointer; text-decoration:underline; font-style:italic; font-size:1em; margin-right:10px; user-select:none; -ms-user-select:none; -moz-user-select:none; -webkit-user-select:none; }
 
@@ -43,5 +49,19 @@
 .loaderBlock{ padding:40px; border-radius:2px; background-color:#FFFFFF; }
 
 .loaderBlockSpinner{ box-sizing:border-box; border:4px solid #D2D2D2; border-top:4px solid #428BCA; border-radius:50%; width:80px; height:80px; animation:spin 2s linear infinite; }
+
+/****************************************************************************************************/
+
+.cookieWarningVeil{ position:fixed; top:0; right:0; bottom:0; left:0; background-color:#000000; opacity:0.5; }
+
+.cookieWarningWrapper{ display:flex; flex-direction:column; justify-content:center; position:fixed; top:0; right:0; bottom:0; left:0; }
+
+.cookieWarningContainer{ display:flex; flex-direction:row; justify-content:center; }
+
+.cookieWarningBlock{ text-align:justify; border-radius:2px; background-color:#FFFFFF; width:calc(100% - 40px); margin:20px; max-width:600px; }
+
+.cookieWarningBlockMessage{ font-size:1em; padding:40px 20px 40px 20px; color:rgba(0,0,0,0.75); }
+
+.cookieWarningBlockError{ font-size:1em; padding:40px 20px 40px 20px; color:#D9534F; }
 
 /****************************************************************************************************/

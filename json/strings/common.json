@@ -1,4 +1,5 @@
 {
+  "cookieWarningMessage": "Ce site requiert l'activation des cookies pour fonctionner. Ces cookies sont destinés à établir la connexion avec le serveur ainsi qu'à stocker des préférences sur la disposition de certains éléments. Pour accéder au site vous devez d'abord activer les cookies dans votre navigateur puis recharger cette page.",
   "noScriptMessage": "Ce site requiert l'utilisation de scripts pour fonctionner. Veuillez utiliser un autre navigateur ou alors vérifier que les scripts sont bien autorisés dans les paramètres de votre navigateur actuel",
 
   "notFound": "Cette page est introuvable",
@@ -54,6 +55,13 @@
       "textareaPlaceholder": "Envoyer un message",
       "emptyMessage": "Veuillez entrer un message à envoyer",
       "sendButton": "Envoyer"
+    },
+
+    "status":
+    {
+      "available": "En ligne",
+      "busy": "Occupé(e)",
+      "away": "Absent"
     }
   },
 
@@ -220,6 +228,7 @@
       "passwordPlaceholder": "Mot de passe",
       "emptyError": "Veuillez renseigner ce champ",
       "forgottenPassword": "Mot de passe oublié ?",
+      "keepLogged": "Maintenir la connexion",
       "submitButton": "Se connecter"
     },
 

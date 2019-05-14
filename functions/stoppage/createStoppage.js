@@ -1,12 +1,13 @@
 'use strict'
 
-const fs                  = require('fs');
-const uuid                = require('uuid');
+const fs                    = require('fs');
+const uuid                  = require('uuid');
 
-const stoppageStrings     = require(`${__root}/json/strings/stoppage`);
-const constants           = require(`${__root}/functions/constants`);
-const databaseManager     = require(`${__root}/functions/database/MySQLv3`);
-const commonFilesMove     = require(`${__root}/functions/common/files/move`);
+const stoppageStrings       = require(`${__root}/json/strings/stoppage`);
+const constants             = require(`${__root}/functions/constants`);
+const databaseManager       = require(`${__root}/functions/database/MySQLv3`);
+const commonFilesMove       = require(`${__root}/functions/common/files/move`);
+const stoppageCreateFolders = require(`${__root}/functions/stoppage/createFolders`);
 
 /****************************************************************************************************/
 
@@ -41,17 +42,17 @@ function createStoppage(registrationNumber, employeeFirstname, employeeLastname,
     return callback({ status: 406, code: constants.CREATE_STOPPAGE_INVALID_TYPE, detail: null });
   }
 
-  if(startDate.toString() === 'Invalid Date')
+  if(newStartDate.toString() === 'Invalid Date')
   {
     return callback({ status: 406, code: constants.CREATE_STOPPAGE_INVALID_START_DATE, detail: null });
   }
 
-  if(sentDate.toString() === 'Invalid Date')
+  if(newSentDate.toString() === 'Invalid Date')
   {
     return callback({ status: 406, code: constants.CREATE_STOPPAGE_INVALID_SENT_DATE, detail: null });
   }
 
-  if(endDate.toString() === 'Invalid Date')
+  if(newEndDate.toString() === 'Invalid Date')
   {
     return callback({ status: 406, code: constants.CREATE_STOPPAGE_INVALID_END_DATE, detail: null });
   }
@@ -90,51 +91,7 @@ function createStoppage(registrationNumber, employeeFirstname, employeeLastname,
       return callback({ status: 404, code: constants.CREATE_STOPPAGE_ESTABLISHMENT_NOT_FOUND, detail: null });
     }
 
-    return createStoppageCheckStorageFolder(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
-  });
-}
-
-/****************************************************************************************************/
-
-function createStoppageCheckStorageFolder(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback)
-{
-  fs.stat(`${globalParameters.storage.root}/${globalParameters.storage.stoppage}`, (error, stats) =>
-  {
-    if(error !== null && error.code !== 'ENOENT')
-    {
-      return callback({ status: 500, code: constants.FILE_SYSTEM_ERROR, detail: error.message });
-    }
-
-    else if(error !== null && error.code === 'ENOENT')
-    {
-      fs.mkdir(`${globalParameters.storage.root}/${globalParameters.storage.stoppage}`, (error) =>
-      {
-        if(error !== null && error.code !== 'EEXIST')
-        {
-          return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
-        }
-
-        return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
-      });
-    }
-
-    else
-    {
-      if(stats.isDirectory() === true)
-      {
-        return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
-      }
-
-      fs.mkdir(`${globalParameters.storage.root}/${globalParameters.storage.stoppage}`, (error) =>
-      {
-        if(error !== null && error.code !== 'EEXIST')
-        {
-          return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
-        }
-
-        return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
-      });
-    }
+    return createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback);
   });
 }
 
@@ -204,11 +161,11 @@ function createStoppageInsertIntoDatabase(registrationNumber, employeeFirstname,
 
 function createStoppageProcessAttachment(recordUuid, registrationNumber, employeeFirstname, employeeLastname, employeeIsMale, establishmentUuid, incidentType, startDate, sentDate, endDate, attachment, databaseConnection, globalParameters, callback)
 {
-  fs.mkdir(`${globalParameters.storage.root}/${globalParameters.storage.stoppage}/${recordUuid}`, (error) =>
+  stoppageCreateFolders.createRecordFolder(recordUuid, globalParameters, (error) =>
   {
-    if(error !== null && error.code !== 'EEXIST')
+    if(error !== null)
     {
-      return callback({ status: 500, code: constants.COULD_NOT_CREATE_FOLDER, detail: error.message });
+      return callback(error);
     }
 
     commonFilesMove.moveFile(attachment.path, `${globalParameters.storage.root}/${globalParameters.storage.stoppage}/${recordUuid}/${attachment.uuid}.pdf`, (error) =>

@@ -1,10 +1,14 @@
 /****************************************************************************************************/
 
+let conversationStatusInterval = null;
+
+/****************************************************************************************************/
+
 function openConversation(conversationUuid)
 {
   document.getElementById('messengerBlockHome').style.display = 'none';
 
-  var loader  = document.createElement('div');
+  const loader  = document.createElement('div');
 
   loader      .setAttribute('class', 'messengerLoaderVerticalContainer');
   loader      .innerHTML = '<div class="messengerLoaderHorizontalContainer"><div class="messengerLoaderSpinner"></div></div>';
@@ -29,9 +33,9 @@ function openConversation(conversationUuid)
   {
     messengerData[conversationUuid].counter = 0;
 
-    var counter = 0;
+    let counter = 0;
 
-    for(var conversation in messengerData) counter += messengerData[conversation].counter;
+    for(let conversation in messengerData) counter += messengerData[conversation].counter;
 
     document.getElementById('messengerHeaderCounter').innerText = `${commonStrings.messenger.headerCounter} : ${counter}`;
 
@@ -39,25 +43,27 @@ function openConversation(conversationUuid)
 
     const conversationsList = document.getElementById('messengerConversationsList').children;
 
-    for(var x = 0; x < conversationsList.length; x++)
+    for(let x = 0; x < conversationsList.length; x++)
     {
       if(conversationsList[x].getAttribute('name') !== conversationUuid) continue;
 
       conversationsList[x].children[1].children[2].innerText = '';
     }
 
-    var conversation          = document.createElement('div');
-    var conversationHeader    = document.createElement('div');
-    var headerUpperBlock      = document.createElement('div');
-    var headerReturn          = document.createElement('button');
-    var headerReceiver        = document.createElement('div');
-    var receiverPicture       = document.createElement('div');
-    var receiverName          = document.createElement('div');
-    var conversationContent   = document.createElement('div');
-    var contentMessages       = document.createElement('div');
-    var contentSender         = document.createElement('form');
-    var senderInput           = document.createElement('textarea');
-    var senderButton          = document.createElement('button');
+    const conversation          = document.createElement('div');
+    const conversationHeader    = document.createElement('div');
+    const headerUpperBlock      = document.createElement('div');
+    const headerReturn          = document.createElement('button');
+    const headerReceiver        = document.createElement('div');
+    const receiverPicture       = document.createElement('div');
+    const receiverName          = document.createElement('div');
+    const receiverStatus        = document.createElement('span');
+    const conversationContent   = document.createElement('div');
+    const contentMessages       = document.createElement('div');
+    const contentSender         = document.createElement('form');
+    const senderTools           = document.createElement('div');
+    const senderInput           = document.createElement('textarea');
+    const senderButton          = document.createElement('button');
 
     conversation              .setAttribute('class', 'messengerConversationBlock');
     conversationHeader        .setAttribute('class', 'messengerConversationBlockHeader');
@@ -65,8 +71,10 @@ function openConversation(conversationUuid)
     headerReceiver            .setAttribute('class', 'messengerConversationBlockHeaderReceiver');
     receiverPicture           .setAttribute('class', 'messengerConversationBlockHeaderReceiverPicture');
     receiverName              .setAttribute('class', 'messengerConversationBlockHeaderReceiverName');
+    receiverStatus            .setAttribute('class', 'offline');
     headerReturn              .setAttribute('class', 'messengerConversationBlockHeaderUpperReturn');
     contentSender             .setAttribute('class', 'messengerConversationBlockContentSender');
+    senderTools               .setAttribute('class', 'messengerConversationBlockContentSenderTools');
     senderInput               .setAttribute('class', 'messengerConversationBlockContentSenderInput');
     senderButton              .setAttribute('class', 'messengerConversationBlockContentSenderButton');
     conversationContent       .setAttribute('class', 'messengerConversationBlockContent');
@@ -83,6 +91,7 @@ function openConversation(conversationUuid)
 
     headerUpperBlock          .innerHTML += `<div class="messengerConversationBlockHeaderUpperLabel">${commonStrings.messenger.conversationBlock.headerLabel} :</div>`;
     receiverPicture           .innerHTML += `<img src="${conversationData.receiver.picture}" alt="" />`;
+    senderTools               .innerHTML += `<span onclick="messengerPickEmoji()">&#x1F642;</span>`;
 
     headerReturn              .innerText = commonStrings.messenger.conversationBlock.headerReturn;
     receiverName              .innerText = `${conversationData.receiver.firstname.charAt(0).toUpperCase()}${conversationData.receiver.firstname.slice(1).toLowerCase()} ${conversationData.receiver.lastname.charAt(0).toUpperCase()}${conversationData.receiver.lastname.slice(1).toLowerCase()}`;
@@ -92,9 +101,9 @@ function openConversation(conversationUuid)
 
     const messages = conversationData.messages.reverse();
 
-    for(var x = 0; x < messages.length; x++)
+    for(let x = 0; x < messages.length; x++)
     {
-      var currentMessage      = document.createElement('div');
+      const currentMessage      = document.createElement('div');
 
       currentMessage          .setAttribute('name', messages[x].timestamp);
 
@@ -111,6 +120,11 @@ function openConversation(conversationUuid)
 
     headerReturn              .addEventListener('click', () =>
     {
+      if(conversationStatusInterval !== null)
+      {
+        clearInterval(conversationStatusInterval);
+      }
+
       conversation.remove();
       document.getElementById('messengerBlockHome').removeAttribute('style');
     });
@@ -120,6 +134,8 @@ function openConversation(conversationUuid)
     headerUpperBlock          .appendChild(headerReturn);
     headerReceiver            .appendChild(receiverPicture);
     headerReceiver            .appendChild(receiverName);
+    headerReceiver            .appendChild(receiverStatus);
+    //contentSender             .appendChild(senderTools);
     contentSender             .appendChild(senderInput);
     contentSender             .appendChild(senderButton);
     conversationContent       .appendChild(contentMessages);
@@ -130,6 +146,46 @@ function openConversation(conversationUuid)
     loader                    .remove();
 
     document.getElementById('messengerBlockHidden').appendChild(conversation);
+
+    const checkCurrentReceiverStatus = () =>
+    {
+      socket.emit('getUsersStatusOnMessenger', (connectedUsers) =>
+      {
+        connectedUsers[conversationData.receiver.uuid]
+        ? receiverStatus.setAttribute('class', 'online')
+        : receiverStatus.setAttribute('class', 'offline');
+
+        if(connectedUsers[conversationData.receiver.uuid] === undefined)
+        {
+          receiverStatus.setAttribute('class', 'offline');
+        }
+
+        else
+        {
+          switch(connectedUsers[conversationData.receiver.uuid])
+          {
+            case 'available':
+              receiverStatus.setAttribute('class', 'online');
+              break;
+
+            case 'busy':
+              receiverStatus.setAttribute('class', 'busy');
+              break;
+
+            case 'away':
+              receiverStatus.setAttribute('class', 'away');
+              break;
+          }
+        }
+      });
+    }
+
+    checkCurrentReceiverStatus();
+
+    conversationStatusInterval = setInterval(() =>
+    {
+      checkCurrentReceiverStatus();
+    }, 2000);
 
     contentMessages.scrollTop = contentMessages.scrollHeight;
   });

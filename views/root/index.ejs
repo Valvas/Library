@@ -16,6 +16,10 @@
             <div id="emailError" class="logonBlockFormFieldError"><%= strings.common.root.logonPage.emptyError %></div>
             <input id="passwordInput" name="password" type="password" placeholder="<%= strings.common.root.logonPage.passwordPlaceholder %>" />
             <div id="passwordError" class="logonBlockFormFieldError"><%= strings.common.root.logonPage.emptyError %></div>
+            <div class="logonBlockFormKeepLogged">
+              <input type="checkbox" name="keep">
+              <label><%= strings.common.root.logonPage.keepLogged %></label>
+            </div>
             <div class="logonBlockFormFooter">
               <a href="/reset-password" class="logonBlockFormFooterForgottenPassword"><%= strings.common.root.logonPage.forgottenPassword %></a>
               <button type="submit"><%= strings.common.root.logonPage.submitButton %></button>
@@ -26,5 +30,6 @@
     </div>
     <script src="/js/jQuery.js"></script>
     <script src='/js/index/logon.js'></script>
+    <script src='/js/index/checkCookiesEnabled.js'></script>
   </body>
 </html>

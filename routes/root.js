@@ -12,6 +12,7 @@ const commonAccountsUpdate  = require(`${__root}/functions/common/accounts/updat
 
 const commonTokenGet        = require(`${__root}/functions/common/token/get`);
 const commonTokenCheck      = require(`${__root}/functions/common/token/check`);
+const commonTokenRefresh    = require(`${__root}/functions/common/token/refresh`);
 
 var router = express.Router();
 
@@ -38,14 +39,36 @@ router.put('/', (req, res) =>
 {
   commonAccountsCheck.checkIfAccountExistsFromCredentials(req.body.emailAddress, req.body.uncryptedPassword, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, accountData) =>
   {
-    if(error != null) return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
-
-    jwt.sign({ uuid: accountData.uuid }, req.app.get('params').tokenSecretKey, (error, token) =>
+    if(error !== null)
     {
-      error != null
-      ? res.status(406).send({ message: error.message, detail: null })
-      : res.status(200).send({ token: token, maxAge: (60 * 60 * 24) });
-    });
+      return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    }
+
+    if(req.body.keepLogged === 'true')
+    {
+      jwt.sign({ uuid: accountData.uuid, keepLogged: req.body.keepLogged === 'true' }, req.app.get('params').tokenSecretKey, { expiresIn: (60 * 60 * 24 * 365 * 10) }, (error, token) =>
+      {
+        if(error !== null)
+        {
+          return res.status(406).send({ message: errors[constants.ERROR_WHILE_GENERATING_TOKEN], detail: error.message });
+        }
+
+        return res.status(200).send({ token: token, maxAge: (60 * 60 * 24 * 365 * 10) });
+      });
+    }
+
+    else
+    {
+      jwt.sign({ uuid: accountData.uuid, keepLogged: req.body.keepLogged === 'true' }, req.app.get('params').tokenSecretKey, { expiresIn: (60 * 60 * 24) }, (error, token) =>
+      {
+        if(error !== null)
+        {
+          return res.status(406).send({ message: errors[constants.ERROR_WHILE_GENERATING_TOKEN], detail: error.message });
+        }
+
+        return res.status(200).send({ token: token, maxAge: (60 * 60 * 24) });
+      });
+    }
   });
 });
 
@@ -107,6 +130,23 @@ router.put('/reset-password', (req, res) =>
 
       return res.status(200).send({ message: success[constants.NEW_PASSWORD_SENT] });
     });
+  });
+});
+
+/****************************************************************************************************/
+
+router.get('/refresh-token', (req, res) =>
+{
+  commonTokenRefresh.refreshToken(req.headers.cookie, req.app.get('databaseConnectionPool'), req.app.get('params'), (error, token, keepLogged) =>
+  {
+    if(error !== null)
+    {
+      return res.status(error.status).send({ message: errors[error.code], detail: error.detail });
+    }
+
+    keepLogged === true
+    ? res.status(201).send({ token: token, maxAge: (60 * 60 * 24 * 365 * 10) })
+    : res.status(201).send({ token: token, maxAge: (60 * 60 * 24) });
   });
 });
 

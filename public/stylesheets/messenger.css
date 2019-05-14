@@ -22,6 +22,8 @@
 
 .messengerBlockHeader{ border-bottom:1px solid rgba(0,0,0,0.25); }
 
+.messengerBlockHeader select{ width:calc(100% - 20px); box-sizing:border-box; border-radius:2px; border:1px solid rgba(0,0,0,0.25); margin:5px 10px 5px 10px; padding:4px; }
+
 .messengerBlockHeader button{ background-color:#5593DC; border:none; box-sizing:border-box; font-size:1em; padding:5px 15px 5px 15px; color:#FFFFFF; cursor:pointer; width:calc(100% - 20px); margin:10px; border-radius:2px; }
 
 .messengerBlockHeader button:hover{ background-color:#3371BA; }
@@ -45,9 +47,13 @@
 
 .messengerConversationResumeReceiver span{ width:10px; height:10px; border-radius:50%; display:block; }
 
-.messengerConversationResumeReceiver span.offline{ background-color:#D9534F; }
+.messengerConversationResumeReceiver span.offline{ background-color:#B0B0B0; }
 
 .messengerConversationResumeReceiver span.online{ background-color:#5CB85C; }
+
+.messengerConversationResumeReceiver span.busy{ background-color:#D9534F; }
+
+.messengerConversationResumeReceiver span.away{ background-color:#EEBA30; }
 
 .messengerConversationResumeLast{ font-size:0.8em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-all; margin-top:5px; }
 
@@ -63,7 +69,7 @@
 
 /****************************************************************************************************/
 
-.messengerConversationBlock{ height:100%; background-color:#FFFFFF; display:flex; flex-direction:column; justify-content:flex-start; }
+.messengerConversationBlock{ height:100%; position:relative; background-color:#FFFFFF; display:flex; flex-direction:column; justify-content:flex-start; }
 
 
 .messengerConversationBlockHeader{ border-bottom:1px solid rgba(0,0,0,0.25); padding:10px; }
@@ -82,7 +88,17 @@
 
 .messengerConversationBlockHeaderReceiverPicture img{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
 
-.messengerConversationBlockHeaderReceiverName{ font-size:0.9em; font-weight:bold; }
+.messengerConversationBlockHeaderReceiverName{ font-size:0.9em; font-weight:bold; margin-right:5px; }
+
+.messengerConversationBlockHeaderReceiver span{ width:10px; height:10px; border-radius:50%; display:block; }
+
+.messengerConversationBlockHeaderReceiver span.offline{ background-color:#B0B0B0; }
+
+.messengerConversationBlockHeaderReceiver span.online{ background-color:#5CB85C; }
+
+.messengerConversationBlockHeaderReceiver span.busy{ background-color:#D9534F; }
+
+.messengerConversationBlockHeaderReceiver span.away{ background-color:#EEBA30; }
 
 
 .messengerConversationBlockContent{ display:flex; flex-direction:column; justify-content:flex-start; flex-grow:2; overflow:hidden; }
@@ -108,7 +124,11 @@
 .messengerConversationBlockContentMessagesElementDate{ font-size:0.8em; margin-bottom:5px; }
 
 
-.messengerConversationBlockContentSender{ display:flex; flex-direction:column; justify-content:flex-start; height:120px; min-height:120px; }
+.messengerConversationBlockContentSender{ display:flex; flex-direction:column; justify-content:flex-start; height:140px; min-height:140px; }
+
+.messengerConversationBlockContentSenderTools{ display:flex; flex-direction:row; align-items:center; justify-content:flex-start; border-top:1px solid rgba(0,0,0,0.25); }
+
+.messengerConversationBlockContentSenderTools span{ margin:4px; font-size:1em; cursor:pointer; user-select:none; -ms-user-select:none; -moz-user-select:none; -webkit-user-select:none; }
 
 .messengerConversationBlockContentSenderInput{ border-top:1px solid rgba(0,0,0,0.25); border-right:none; border-bottom:none; border-left:none; width:100%; padding:5px; flex-grow:2; overflow-y:auto; resize:none; outline:none; box-sizing:border-box; }
 
@@ -148,7 +168,17 @@
 
 .messengerCreateBlockListAccountPicture img{ max-height:100%; min-height:100%; position:absolute; top:-9999px; bottom:-9999px; left:-9999px; right:-9999px; margin:auto; }
 
-.messengerCreateBlockListAccountName{ font-weight:bold; font-size:0.9em; }
+.messengerCreateBlockListAccountName{ font-weight:bold; font-size:0.9em; margin-right:5px; }
+
+.messengerCreateBlockListAccount span{ width:10px; height:10px; border-radius:50%; display:block; }
+
+.messengerCreateBlockListAccount span.offline{ background-color:#B0B0B0; }
+
+.messengerCreateBlockListAccount span.online{ background-color:#5CB85C; }
+
+.messengerCreateBlockListAccount span.busy{ background-color:#D9534F; }
+
+.messengerCreateBlockListAccount span.away{ background-color:#EEBA30; }
 
 /****************************************************************************************************/
 
@@ -191,5 +221,71 @@
 .messengerCreateSuccessClose button{ border:none; border-radius:4px; cursor:pointer; background-color:#FFFFFF; color:#5593DC; border:1px solid #5593DC; padding:4px 8px 4px 8px; font-size:0.8em; }
 
 .messengerCreateSuccessClose button:hover{ color:#3371BA; border:1px solid #3371BA; }
+
+/****************************************************************************************************/
+
+.messenger__sender__tools__emoji-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.messenger__sender__tools__emoji-container__wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.messenger__sender__tools__emoji-container__wrapper__list {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 5px 5px 0 5px;
+  width: 262px;
+}
+
+.messenger__sender__tools__emoji-container__wrapper__list span {
+  margin: 2px;
+  font-size: 1.5rem;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  display: block;
+}
+
+.messenger__sender__tools__emoji-container__return {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(0,0,0,0.25);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.messenger__sender__tools__emoji-container__return button {
+  color: #D9534F;
+  border: 1px solid #D9534F;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  padding: 4px 8px 4px 8px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.messenger__sender__tools__emoji-container__return button:hover {
+  color: #B7312D;
+  border: 1px solid #B7312D;
+}
 
 /****************************************************************************************************/

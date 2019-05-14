@@ -20,6 +20,7 @@ function createMessenger(callback)
   var homeEmptyAccounts       = document.createElement('div');
   var homeEmptySearch         = document.createElement('div');
   var messengerBlockHeader    = document.createElement('div');
+  var blockHeaderStatus       = document.createElement('select');
   var blockHeaderNew          = document.createElement('button');
   var blockHeaderSearch       = document.createElement('input');
   var messengerList           = document.createElement('div');
@@ -47,12 +48,19 @@ function createMessenger(callback)
 
   blockHeaderNew          .addEventListener('click', createNewConversationOpenAccountsList);
   blockHeaderSearch       .addEventListener('input', searchForConversations);
+  blockHeaderStatus       .addEventListener('change', updateMessengerStatus);
 
   messengerHeaderTitle    .innerText = commonStrings.messenger.headerTitle;
   messengerHeaderCounter  .innerText = `${commonStrings.messenger.headerCounter} : ${counter}`;
   blockHeaderNew          .innerText = commonStrings.messenger.startNewConversation.title;
   homeEmptyAccounts       .innerText = commonStrings.messenger.emptyConversations;
   homeEmptySearch         .innerText = commonStrings.messenger.emptySearchResults;
+
+  blockHeaderStatus       .innerHTML += `<option value="available">${commonStrings.messenger.status.available}</option>`;
+  blockHeaderStatus       .innerHTML += `<option value="busy">${commonStrings.messenger.status.busy}</option>`;
+  blockHeaderStatus       .innerHTML += `<option value="away">${commonStrings.messenger.status.away}</option>`;
+
+  blockHeaderStatus       .value = getMessengerStatusFromCookie();
 
   if(Object.keys(messengerData).length === 0) homeEmptyAccounts.style.display = 'block';
 
@@ -106,6 +114,7 @@ function createMessenger(callback)
 
   messengerHeader         .appendChild(messengerHeaderTitle);
   messengerHeader         .appendChild(messengerHeaderCounter);
+  messengerBlockHeader    .appendChild(blockHeaderStatus);
   messengerBlockHeader    .appendChild(blockHeaderNew);
   messengerBlockHeader    .appendChild(blockHeaderSearch);
   messengerBlockHome      .appendChild(messengerBlockHeader);
@@ -119,9 +128,29 @@ function createMessenger(callback)
   document.getElementById('mainContainer').appendChild(messenger);
 
   socket.emit('messengerAwaitingNewConversationsJoin');
-  socket.emit('availableOnMessenger', accountData.uuid);
+  socket.emit('messengerJoin', accountData.uuid);
+
+  switch(getMessengerStatusFromCookie())
+  {
+    case 'available':
+      socket.emit('messengerSetStatusToAvailable');
+      break;
+
+    case 'busy':
+      socket.emit('messengerSetStatusToBusy');
+      break;
+
+    case 'away':
+      socket.emit('messengerSetStatusToAway');
+      break;
+  }
 
   updateReceiversStatus();
+
+  setInterval(() =>
+  {
+    updateReceiversStatus();
+  }, 2000);
 
   if('Notification' in window)
   {
@@ -137,30 +166,40 @@ function updateReceiversStatus()
 {
   let connectedUsers = [];
 
-  setInterval(() =>
+  socket.emit('getUsersStatusOnMessenger', (result) =>
   {
-    socket.emit('getAvailableUsersOnMessenger', (result) =>
+    connectedUsers = result;
+
+    const currentConversations = document.getElementById('messengerConversationsList').children;
+
+    for(let x = 0; x < currentConversations.length; x++)
     {
-      connectedUsers = result;
+      const currentConversationReceiver = currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].getAttribute('name');
 
-      const currentConversations = document.getElementById('messengerConversationsList').children;
-
-      for(let x = 0; x < currentConversations.length; x++)
+      if(connectedUsers[currentConversationReceiver] === undefined)
       {
-        const currentConversationReceiver = currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].getAttribute('name');
+        currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].children[1].setAttribute('class', 'offline');
+      }
 
-        if(connectedUsers.includes(currentConversationReceiver))
+      else
+      {
+        switch(connectedUsers[currentConversationReceiver])
         {
-          currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].children[1].setAttribute('class', 'online');
-        }
+          case 'available':
+            currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].children[1].setAttribute('class', 'online');
+            break;
 
-        else
-        {
-          currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].children[1].setAttribute('class', 'offline');
+          case 'busy':
+            currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].children[1].setAttribute('class', 'busy');
+            break;
+
+          case 'away':
+            currentConversations[x].getElementsByClassName('messengerConversationResumeReceiver')[0].children[1].setAttribute('class', 'away');
+            break;
         }
       }
-    });
-  }, 2000);
+    }
+  });
 }
 
 /****************************************************************************************************/

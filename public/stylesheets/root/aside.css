@@ -35,8 +35,6 @@
 @media (max-width: 819.9px)
 {
   .asideBlock{ width:100%; overflow-y:auto; margin-bottom:20px; }
-
-  .asideArticles{ display:none; }
 }
 
 /****************************************************************************************************/

@@ -33,11 +33,11 @@ module.exports = (req, res, next) =>
 
         accountObject.uuid = accountData.uuid;
         accountObject.email = accountData.email;
-        accountObject.isAdmin = accountData.is_admin === 1;
+        accountObject.isAdmin = accountData.is_admin;
         accountObject.picture = accountData.picture;
         accountObject.lastname = accountData.lastname;
         accountObject.firstname = accountData.firstname;
-        accountObject.suspended = accountData.suspended === 1;
+        accountObject.suspended = accountData.suspended;
         accountObject.contactNumber = accountData.contact_number;
 
         req.app.locals.account = accountObject;

@@ -113,6 +113,7 @@ function createStoppageCheckForm(event)
   const data  = new FormData();
 
   createStoppageXhr.responseType = 'json';
+  createStoppageXhr.timeout = 10000;
 
   data.append('registrationNumber', employeeIdentifier);
   data.append('employeeFirstname', employeeFirstname);

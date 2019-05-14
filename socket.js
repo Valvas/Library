@@ -13,6 +13,88 @@ module.exports = (io, app, callback) =>
   {
     /**************************************************/
 
+    socket.on('messengerJoin', (accountUuid) =>
+    {
+      socket.identifier = accountUuid;
+      socket.join('usersOnMessenger');
+      socket.join('availableUsersOnMessenger');
+
+      const interval = setInterval(() =>
+      {
+        if(socket.connected === false)
+        {
+          socket.leave('usersOnMessenger');
+          socket.leave('busyUsersOnMessenger');
+          socket.leave('awayUsersOnMessenger');
+          socket.leave('availableUsersOnMessenger');
+        }
+
+      }, 1000);
+    });
+
+    /**************************************************/
+
+    socket.on('messengerSetStatusToAway', () =>
+    {
+      socket.leave('busyUsersOnMessenger');
+      socket.leave('availableUsersOnMessenger');
+
+      socket.join('awayUsersOnMessenger');
+    });
+
+    /**************************************************/
+
+    socket.on('messengerSetStatusToBusy', () =>
+    {
+      socket.leave('awayUsersOnMessenger');
+      socket.leave('availableUsersOnMessenger');
+
+      socket.join('busyUsersOnMessenger');
+    });
+
+    /**************************************************/
+
+    socket.on('messengerSetStatusToAvailable', () =>
+    {
+      socket.leave('awayUsersOnMessenger');
+      socket.leave('busyUsersOnMessenger');
+
+      socket.join('availableUsersOnMessenger');
+    });
+
+    /**************************************************/
+
+    socket.on('getUsersStatusOnMessenger', (fn) =>
+    {
+      let connectedUsers = {};
+
+      for(let client in io.sockets.clients().sockets)
+      {
+        const currentClientIdentifier = io.sockets.clients().sockets[client].identifier;
+
+        if(Object.values(io.sockets.clients().sockets[client].rooms).includes('usersOnMessenger') === false) continue;
+
+        if(Object.values(io.sockets.clients().sockets[client].rooms).includes('availableUsersOnMessenger'))
+        {
+          connectedUsers[currentClientIdentifier] = 'available';
+        }
+
+        if(Object.values(io.sockets.clients().sockets[client].rooms).includes('awayUsersOnMessenger'))
+        {
+          connectedUsers[currentClientIdentifier] = 'away';
+        }
+
+        if(Object.values(io.sockets.clients().sockets[client].rooms).includes('busyUsersOnMessenger'))
+        {
+          connectedUsers[currentClientIdentifier] = 'busy';
+        }
+      }
+
+      return fn(connectedUsers);
+    });
+
+    /**************************************************/
+
     socket.on('availableOnMessenger', (accountUuid) =>
     {
       socket.identifier = accountUuid;
@@ -43,18 +125,6 @@ module.exports = (io, app, callback) =>
 
       return fn(connectedUsers);
     });
-    /*connectedUsers += 1;
-    const test = setInterval(() =>
-    {
-      console.log(socket.connected);
-      if(socket.connected === false)
-      {
-        clearInterval(test);
-        connectedUsers -= 1;
-      }
-
-      console.log(`Connected users : ${connectedUsers}`);
-    }, 1000);*/
 
     socket.on('adminAppAccountsHomeJoin', () => { socket.join('adminAppAccountsHome'); });
     socket.on('adminAppAccountsDetailJoin', (accountUUID) => { socket.join(accountUUID); })
@@ -75,6 +145,15 @@ module.exports = (io, app, callback) =>
     socket.on('storageAppServiceLeave', () => { socket.leave('storageAppService') });
 
     socket.on('intranetBugsJoin', () => { socket.join('intranetBugs') });
+
+    /****************************************************************************************************/
+    /* Events Rooms On Stoppage App */
+    /****************************************************************************************************/
+
+    socket.on('stoppageAppJoinStoppageDetail', () =>
+    {
+      socket.join('stoppageDetail');
+    });
 
     /****************************************************************************************************/
     /* Events Rooms On Intranet Home */
@@ -133,7 +212,7 @@ module.exports = (io, app, callback) =>
     {
       accountsGet.getAccountUsingEmail(accountEmail, app.get('mysqlConnector'), (error, account) =>
       {
-        if(error == null) io.in('adminAppAccountsHome').emit('accountCreated', null, account);
+        if(error === null) io.in('adminAppAccountsHome').emit('accountCreated', null, account);
       });
     });
 
@@ -141,7 +220,7 @@ module.exports = (io, app, callback) =>
     {
       accountsGet.getAccountUsingUUID(accountUUID, app.get('mysqlConnector'), (error, account) =>
       {
-        if(error == null) io.in('adminAppAccountsHome').emit('accountModified', null, account);
+        if(error === null) io.in('adminAppAccountsHome').emit('accountModified', null, account);
       });
     });
 
@@ -165,7 +244,7 @@ module.exports = (io, app, callback) =>
     {
       storageAppFilesGet.checkIfFolderExistsInDatabase(folderUuid, app.get('databaseConnectionPool'), app.get('params'), (error, folderExists, folderData) =>
       {
-        if(error == null && folderExists) io.in(serviceUuid).emit('folderCreated', folderData, parentFolderUuid);
+        if(error === null && folderExists) io.in(serviceUuid).emit('folderCreated', folderData, parentFolderUuid);
       });
     });
 
@@ -182,9 +261,9 @@ module.exports = (io, app, callback) =>
     {
       storageAppFilesGet.getFileFromDatabaseUsingUuid(fileUuid, app.get('databaseConnectionPool'), app.get('params'), (error, fileExists, fileData) =>
       {
-        if(error != null) return;
+        if(error !== null) return;
 
-        if(fileExists == false) return;
+        if(fileExists === false) return;
 
         io.in(serviceUuid).emit('fileUploaded', fileData, folderUuid);
       });
@@ -203,7 +282,7 @@ module.exports = (io, app, callback) =>
     {
       storageAppFilesGet.getFileLogs(fileUuid, app.get('databaseConnectionPool'), app.get('params'), (error, fileData, fileLogs) =>
       {
-        if(error == null) io.in(serviceUuid).emit('updateFileLogs', fileUuid, fileLogs);
+        if(error === null) io.in(serviceUuid).emit('updateFileLogs', fileUuid, fileLogs);
       });
     });
 
@@ -213,7 +292,7 @@ module.exports = (io, app, callback) =>
     {
       storageAppFilesGet.getFileLogs(fileUuid, app.get('databaseConnectionPool'), app.get('params'), (error, fileData, fileLogs) =>
       {
-        if(error == null) io.in(serviceUuid).emit('updateFileLogs', fileUuid, fileLogs);
+        if(error === null) io.in(serviceUuid).emit('updateFileLogs', fileUuid, fileLogs);
       });
     });
 

@@ -114,6 +114,36 @@
       "empty": "Aucun évènement"
     },
 
+    "actionsBlockHeader": "Actions",
+
+    "prolongationsBlock":
+    {
+      "header": "Prolongations",
+      "emptyList": "Aucune prolongation",
+      "datesSection":
+      {
+        "startDate": "Début de la prolongation",
+        "receivedDate": "Réception de la prolongation",
+        "endDate": "Date de fin de la prolongation"
+      },
+      "add": "Ajouter une prolongation"
+    },
+
+    "addProlongation":
+    {
+      "title": "Ajouter une prolongation",
+      "endDateLabel": "Date de fin",
+      "attachmentLabel": "Pièce jointe",
+      "submitButton": "Ajouter cette prolongation",
+      "cancelButton": "Annuler",
+      "loaderMessage": "Ajout de la prolongation en cours. Veuillez patienter...",
+      "formErrors":
+      {
+        "cannotEndBeforeStartDate": "La date de fin de la prolongation ne doit pas arriver avant la date de fin de l'arrêt ou de sa dernière prolongation",
+        "attachmentMustBePdf": "La pièce jointe doit obligatoirement être au format PDF"
+      }
+    },
+
     "emptyAttachmentComment": "Aucun commentaire",
     "downloadAttachment": "Télécharger la pièce jointe"
   }
