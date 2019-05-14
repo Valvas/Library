@@ -60,6 +60,11 @@ function retrieveMessengerDataGetReceiverData(conversationUuid, accountUuid, rec
       return retrieveMessengerDataGetCounter(conversationUuid, accountUuid, null, databaseConnection, globalParameters, callback);
     }
 
+    if(accountData.suspended === true)
+    {
+      return callback(null, accountData);
+    }
+
     return retrieveMessengerDataGetCounter(conversationUuid, accountUuid, { uuid: accountData.uuid, email: accountData.email, lastname: accountData.lastname, firstname: accountData.firstname, picture: accountData.picture, suspended: accountData.suspended }, databaseConnection, globalParameters, callback);
   });
 }
