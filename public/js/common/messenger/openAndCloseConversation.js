@@ -114,8 +114,8 @@ function openConversation(conversationUuid)
       contentMessages         .appendChild(currentMessage);
 
       currentMessage.innerHTML += messages[x].author === accountData.uuid
-      ? `<div class="messengerConversationBlockContentMessagesElementSenderBlock"><div class="messengerConversationBlockContentMessagesElementDate">${messages[x].date}</div><div>${messages[x].content}</div></div>`
-      : `<div class="messengerConversationBlockContentMessagesElementReceiverBlock"><div class="messengerConversationBlockContentMessagesElementDate">${messages[x].date}</div><div>${messages[x].content}</div></div>`;
+      ? `<div class="messengerConversationBlockContentMessagesElementSenderBlock"><div class="messengerConversationBlockContentMessagesElementDate">${messages[x].date}</div><div class="messengerConversationBlockContentMessagesElementContent">${messages[x].content}</div></div>`
+      : `<div class="messengerConversationBlockContentMessagesElementReceiverBlock"><div class="messengerConversationBlockContentMessagesElementDate">${messages[x].date}</div><div class="messengerConversationBlockContentMessagesElementContent">${messages[x].content}</div></div>`;
     }
 
     headerReturn              .addEventListener('click', () =>

@@ -10,7 +10,7 @@
 .messengerHeaderCounter{ color:#FFFFFF; font-size:0.8em; }
 
 
-.messengerBlockHidden{ display:none; background-color:#FFFFFF; flex-direction:column; justify-content:flex-start; max-height:80vh; height:600px; }
+.messengerBlockHidden{ display:none; background-color:#FFFFFF; flex-direction:column; justify-content:flex-start; max-height:80vh; height:800px; }
 
 .messengerConversationsList{ overflow-y:auto; }
 
@@ -22,7 +22,7 @@
 
 .messengerBlockHeader{ border-bottom:1px solid rgba(0,0,0,0.25); }
 
-.messengerBlockHeader select{ width:calc(100% - 20px); box-sizing:border-box; border-radius:2px; border:1px solid rgba(0,0,0,0.25); margin:5px 10px 5px 10px; padding:4px; }
+.messengerBlockHeader select{ width:calc(100% - 20px); box-sizing:border-box; border-radius:2px; border:1px solid rgba(0,0,0,0.25); margin:5px 10px 0 10px; padding:4px; }
 
 .messengerBlockHeader button{ background-color:#5593DC; border:none; box-sizing:border-box; font-size:1em; padding:5px 15px 5px 15px; color:#FFFFFF; cursor:pointer; width:calc(100% - 20px); margin:10px; border-radius:2px; }
 
@@ -119,12 +119,14 @@
 
 .messengerConversationBlockContentMessagesElementSenderBlock{ text-align:right; width:max-content; margin-bottom:10px; padding:8px; background-color:#5593DC; color:#FFFFFF; border-radius:16px; margin-left:20px; }
 
-.messengerConversationBlockContentMessagesElementReceiverBlock{ width:max-content; margin-bottom:10px; padding:8px; background-color:rgba(0,0,0,0.16); border-radius:16px; margin-right:20px; }
+.messengerConversationBlockContentMessagesElementReceiverBlock{ width:max-content; margin-bottom:10px; padding:8px; background-color:rgba(0,0,0,0.16); color:rgba(0,0,0,0.8); border-radius:16px; margin-right:20px; }
 
 .messengerConversationBlockContentMessagesElementDate{ font-size:0.8em; margin-bottom:5px; }
 
+.messengerConversationBlockContentMessagesElementContent{ font-family:roboto-regular; font-size:0.9rem; }
 
-.messengerConversationBlockContentSender{ display:flex; flex-direction:column; justify-content:flex-start; height:140px; min-height:140px; }
+
+.messengerConversationBlockContentSender{ display:flex; flex-direction:column; justify-content:flex-start; height:120px; min-height:140px; }
 
 .messengerConversationBlockContentSenderTools{ display:flex; flex-direction:row; align-items:center; justify-content:flex-start; border-top:1px solid rgba(0,0,0,0.25); }
 

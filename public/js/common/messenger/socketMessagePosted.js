@@ -162,7 +162,7 @@ function appendNewMessageToTheList(messageData)
   : blockContent      .setAttribute('class', 'messengerConversationBlockContentMessagesElementReceiverBlock');
 
   blockContent        .innerHTML += `<div class="messengerConversationBlockContentMessagesElementDate">${messageData.date}</div>`;
-  blockContent        .innerHTML += `<div>${messageData.content}</div>`;
+  blockContent        .innerHTML += `<div class="messengerConversationBlockContentMessagesElementContent">${messageData.content}</div>`;
 
   newMessageBlock     .appendChild(blockContent);
 
