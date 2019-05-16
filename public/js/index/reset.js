@@ -54,8 +54,6 @@ function resetPasswordSubmit(event)
   loaderWrapper   .appendChild(loaderContainer);
   loaderContainer .appendChild(loaderBlock);
 
-  document.getElementById('main').style.filter = 'blur(4px)';
-
   document.body   .appendChild(loaderVeil);
   document.body   .appendChild(loaderWrapper);
 
@@ -69,7 +67,6 @@ function resetPasswordSubmit(event)
     {
       loaderVeil.remove();
       loaderWrapper.remove();
-      document.getElementById('main').removeAttribute('style');
 
       if(xhr.responseJSON !== undefined)
       {
@@ -88,7 +85,6 @@ function resetPasswordSubmit(event)
   {
     loaderVeil.remove();
     loaderWrapper.remove();
-    document.getElementById('main').removeAttribute('style');
 
     event.target.reset();
 

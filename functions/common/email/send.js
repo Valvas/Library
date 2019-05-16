@@ -39,7 +39,7 @@ module.exports.sendEmail = (emailObject, transporter, globalParameters, callback
       attachments: emailObject.attachments
     };
 
-    transporter.sendMail(mailOptions, (error, info) => 
+    transporter.sendMail(mailOptions, (error, info) =>
     {
       if(error) return callback({ status: 500, code: constants.COULD_NOT_SEND_EMAIL, detail: error.message });
 
@@ -55,19 +55,20 @@ module.exports.sendTemplateEmail = (emailObject, transporter, globalParameters, 
   const email = new emailTemplate(
   {
     transport: transporter,
-    views: 
+    preview: false,
+    views:
     {
-      options: 
+      options:
       {
         extension: 'ejs'
       }
     }
   });
-  
+
   email.send(
   {
     template: `${__root}/templates/${emailObject.template}`,
-    message: 
+    message:
     {
       from: globalParameters.transporter.from,
       subject: emailObject.subject,
