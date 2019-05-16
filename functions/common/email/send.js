@@ -56,6 +56,7 @@ module.exports.sendTemplateEmail = (emailObject, transporter, globalParameters, 
   {
     transport: transporter,
     preview: false,
+    send: true,
     views:
     {
       options:
@@ -76,11 +77,11 @@ module.exports.sendTemplateEmail = (emailObject, transporter, globalParameters, 
     },
     locals: emailObject.locals
   })
-  .then(() =>
+  .then((res) =>
   {
     return callback(null);
   })
-  .catch(() =>
+  .catch((error) =>
   {
     return callback({ status: 500, code: constants.COULD_NOT_SEND_EMAIL, detail: null });
   });
